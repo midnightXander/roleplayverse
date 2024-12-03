@@ -1,0 +1,1750 @@
+{% extends "core/base.html" %}
+
+
+
+{% block content %}
+<style>
+    .rule-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #2d3748;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+    }
+
+    .rule-item button {
+        background-color: #f56565;
+        color: white;
+        border: none;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+    }
+
+    .rule-item button:hover {
+        background-color: #e53e3e;
+    }
+</style>
+
+<style>
+    /* ... previous styles ... */
+
+    .star-rating {
+        font-size: 24px;
+        color: #ccc;
+        cursor: pointer;
+        /* display: flex;
+        flex-direction: row-reverse; */
+    }
+
+
+    .star-rating .star {
+        transition: color 0.2s;
+    }
+
+    .star-rating .star.active {
+        color: #fbbf24;
+    }
+
+    .star-rating .star:hover,
+    .star-rating .star:hover ~ .star {
+        color: #fbbf24;
+    }
+</style>
+
+
+
+
+<div id="battleRoom" class="bg-gray-800 p-4 mb-8 mt-20">
+    
+    
+    <div class="max-w-5xl mx-auto">
+        <div class="flex justify-between items-center mb-1">
+            <h1 class="text-3xl font-bold text-orange-500 mb-6">Battle Room</h1>
+            <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-sm">{{battle.status}}</span>
+        </div>
+        
+        
+        <!-- Battle Information -->
+        <div class="bg-gray-700 rounded-lg p-4 mb-6">
+            <!-- <h2 class="text-2xl font-semibold text-orange-300 mb-2">Battle Information</h2> -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                <div>
+                    <!-- {{battle.i_character}} vs {{battle.o_character}} -->
+                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Fighters:</span> <a href="{% url 'users:player' battle.initiator.user.username %}" class=""><span class="font-bold hover:text-orange-600" id="fighter1">{{battle.initiator}}</span></a> vs <a href="{% url 'users:player' battle.opponent.user.username %}"><span class="font-bold hover:text-orange-600" id="fighter2">{{battle.opponent}}</span></a></p>
+                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Characters:</span> <a href="#" class=""><span class="" >{{battle.i_character}}</span></a> vs <a href="#">{{battle.o_character}}</span></a></p>
+                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Referee:</span> <a href="/users/{{battle.refree.user.username}}"><span class="font-bold hover:text-orange-600" id="referee">{{battle.refree}}</span></a></p>
+                </div>
+                <div>
+                    <!-- <p class="text-gray-300"><span class="font-semibold text-orange-200">Status:</span> <span id="battleStatus">{{battle.status}}</span></p> -->
+                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Winner:</span> 
+                        <span class="font-bold" id="winner">
+                        {% if battle.winner %}
+                        <a class="hover:text-orange-600" href="{% url 'users:player' battle.winner.user.username %}">
+                        
+                        {{battle.winner}}
+                    </a>
+                        {% else %}
+                        TBD
+                        {% endif %}
+                    </span>
+                    </p>
+                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Type: </span>{{battle.type}}</p>
+                    <p class="text-gray-300"><span class="font-semibold text-orange-200"><i class="fas fa-eye mr-2"></i>: </span>{{spectators}}</p>
+                </div>
+                <div>
+                    
+                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Date started:</span> <span class="font-bold" id="fighter1">{{battle.date_started | date:'d M Y'}}</span> </p>
+                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Date ended:</span> <span class="font-bold" id="referee">{{battle.date_ended | date:'d M Y' }}</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Battle Rules -->
+        <div class="bg-gray-700 rounded-lg p-4 mb-6">
+            <h2 class="text-3xl font-bold text-orange-500 mb-6">Battle Rules</h2>
+            <ul id="battleRules" class="list-disc list-inside text-gray-300">
+                <!-- <li>No god-modding or auto-hitting</li>
+                <li>Respect the character's known abilities</li>
+                <li>Minimum of 300 words per post</li>
+                <li>Maximum of 3 actions per post</li>
+                <li>72-hour time limit for responses</li> -->
+            {% for rule in rules %}
+                
+                <li>{{rule}}</li>
+
+                {% empty %}
+                {% if player != battle.refree %}
+                <div>The  Rules for the battle has not yet being set!</div>
+                <div>Message the refree <a class="font-bold text-xl hover:text-orange-600" href="/chats/dm/{{battle.refree.user.username}}">{{battle.refree}}</a> to set the rules now</div>
+            
+                <button class="mt-4" onclick="copyLink('https:\/\/roleplayverse.com/battles/battle_room/{{battle.id}}')">
+                    <i class="fas fa-copy mr-2"></i>Copy link to battle</button>
+                {% else %}
+               
+                <div class="container px-4 py-8">
+                    
+                    <h2 class="text-xl font-semibold text-white mb-4">Set the rules of the battle</h2>
+                    <!-- Standard Rules -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold text-orange-400 mb-4">Standard Rules</h3>
+                        <div class="flex space-x-4">
+                            <input type="text" id="standardRuleInput" placeholder="Enter standard rule" class="flex-grow bg-gray-800 text-white rounded p-2">
+                            <button onclick="addRule('standard')" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                                <i class="fas fa-plus "></i>
+                            </button>
+                        </div>
+                        <ul id="standardRulesList" class="mt-4 space-y-2"></ul>
+                    </div>
+                
+                    <!-- Specific Rules 1 -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold text-orange-400 mb-4">Specific Rules {{battle.i_character}}</h3>
+                        <div class="flex space-x-4">
+                            <input type="text" id="specific1RuleInput" placeholder="Enter specific rule for {{battle.i_character}}" class="flex-grow bg-gray-800 text-white rounded p-2">
+                            <button onclick="addRule('specific1')" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                                <i class="fas fa-plus "></i>
+                            </button>
+                        </div>
+                        <ul id="specific1RulesList" class="mt-4 space-y-2"></ul>
+                    </div>
+                
+                    <!-- Specific Rules 2 -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-semibold text-orange-400 mb-4">Specific Rules {{battle.o_character}}</h3>
+                        <div class="flex space-x-4">
+                            <input type="text" id="specific2RuleInput" placeholder="Enter specific rule for {{battle.o_character}}" class="flex-grow bg-gray-800 text-white rounded p-2">
+                            <button onclick="addRule('specific2')" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                                <i class="fas fa-plus "></i>
+                            </button>
+                        </div>
+                        <ul id="specific2RulesList" class="mt-4 space-y-2"></ul>
+                    </div>
+                
+                    <!-- Save Rules Button -->
+                    <button onclick="saveRules()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-8">
+                        Save All Rules
+                    </button>
+                </div>
+                {% endif %}
+        {% endfor %}
+            </ul>
+        </div>
+        
+        <!-- Battle Textpads -->
+        <div id="textPads" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        </div>
+
+        
+
+        {% if battle.refree != player and   battle.can_send_textpad and last_sender != player %}
+        
+
+        <!-- Submit Textpad -->
+        <div class="my-6 bg-gray-700 rounded-lg p-4">
+            <h3 class="text-xl font-semibold text-orange-300 mb-2">Submit Your Move</h3>
+            <form id="submitTextpadForm">
+                <textarea id="newTextpad" rows="6" class="w-full bg-gray-800 text-white rounded-lg p-3 mb-3 focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Enter your move here..."></textarea>
+                <div class="flex justify-between items-center">
+                    <span id="wordCount" class="text-gray-400">Words: 0</span>
+                    <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                        Submit Move
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        
+
+        {% elif battle.refree == player and battle.status == "ongoing" and not battle.can_send_textpad %}
+        <!--evaluate a textpad only if there are textpads and players can't send a new textpad(when a player just sent a new textpad)-->
+
+        <!-- Referee Actions -->
+        <div class="referee-actions my-6 bg-gray-700 rounded-lg p-4">
+            <h3 class="text-xl font-semibold text-orange-300 mb-2">Referee Actions</h3>
+            <div class="flex flex-wrap gap-2">
+                <button id="validateBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                    Validate Post
+                </button>
+                <button id="invalidateBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                    Invalidate Post
+                </button>
+                <!-- <button id="endBattleBtn" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                    End Battle
+                </button> -->
+            </div>
+        </div>
+        
+        
+        {%endif%}
+
+
+{% if can_rate %}
+        <!-- Referee Rating Section -->
+<div id="refereeRatingSection" class="mt-8 bg-gray-800 rounded-lg p-6 hidden">
+    <h2 class="text-2xl font-semibold text-orange-400 mb-4">Rate the Referee</h2>
+    <p class="text-white mb-4">Please rate your experience with the referee for this battle:</p>
+    <div class="flex items-center mb-4">
+        <span class="text-white mr-2">Fairness:</span>
+        <div class="star-rating" data-category="fairness">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+        </div>
+    </div>
+    <div class="flex items-center mb-4">
+        <span class="text-white mr-2">Communication:</span>
+        <div class="star-rating" data-category="communication">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+        </div>
+    </div>
+    <div class="flex items-center mb-4">
+        <span class="text-white mr-2">Timeliness:</span>
+        <div class="star-rating" data-category="timeliness">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+        </div>
+    </div>
+    <textarea id="refereeComment" class="w-full bg-gray-700 text-white rounded p-2 mb-4" rows="3" placeholder="Additional comments (optional)"></textarea>
+    <button id="submitRefereeRating" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+        Submit Rating
+    </button>
+</div>
+
+{% elif referee_rated %}
+
+<!-- <h1 class="text-2xl font-bold mb-6 text-orange-500">Referee Ratings</h1> -->
+        
+        <div id="referee-ratings" class="bg-gray-800 text-white rounded-lg p-4 shadow-md animate-fadeIn">
+            <h2 class="text-lg text-orange-500 font-semibold mb-4">Ratings for Referee:<span class="text-white"> {{battle.refree}}</span>  </h2>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-700">
+                            <th class="p-2 text-left">Category</th>
+                            <th class="p-2 text-center">{{battle.initiator}}</th>
+                            <th class="p-2 text-center">{{battle.opponent}}</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ratings-body">
+                        <!-- Ratings will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+{% endif %}
+    </div>
+</div>
+
+<!-- Popup for accepting battle -->
+<div id="endBattlePopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 animate-scaleIn">
+    <div class="bg-gray-800 text-white rounded-lg p-8 max-w-md w-full mx-4">
+        <h2 class="text-2xl font-bold mb-4">End battle</h2>
+        <div class="mb-2">
+            <h3 class="font-bold">Comment on this textpad:</h3>
+            <textarea  id="invalidTextpadComment" rows="4" class="w-full bg-gray-600 mt-2 text-white rounded-lg p-3 mb-3 focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Say why this textpad is not valid"></textarea>
+        </div>
+        
+        <div class="mb-6">
+            <p class="text-yellow-500"><i class="fas fa-exclamation-triangle mr-2"></i>Notice: <span id="winner-notice" class="text-blue-400"></span> <br>
+                <a href="#" class="text-blue-400">Learn more</a>
+            </p>
+        </div>
+        <div class="flex justify-between">
+            <button id="confirmEndbattle" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
+                <i class="fas fa-check mr-2"></i>Confirm
+            </button>
+            <button id="cancelEndBattle" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
+                <i class="fas fa-times mr-2"></i>Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% for message in messages %}
+<h5>{{message}}</h5>
+{% endfor %}
+
+{{battle.id|json_script:"battle_id" }}
+{{player.user.username|json_script:"username"}}
+{{battle.initiator.user.username|json_script:"initiator"}}
+{{battle.opponent.user.username|json_script:"opponent"}}
+{{ratings|json_script:'ratings'}}
+<script>
+const ratings = JSON.parse(document.getElementById('ratings').textContent)
+
+        // const ratings = [
+        //     { category: "Timeliness", player1: 5, player2: 4 },
+        //     { category: "Fairness", player1: 4, player2: 5 },
+        //     { category: "Communication", player1: 5, player2: 4 }
+        // ];
+
+        function createStarRating(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                stars += `<i class="fas fa-star ${i <= rating ? 'text-yellow-400' : 'text-gray-600'}"></i>`;
+            }
+            return stars;
+        }
+
+        function populateRatings() {
+            const tbody = document.getElementById('ratings-body');
+            ratings.forEach((rating, index) => {
+                const row = document.createElement('tr');
+                row.className = index % 2 === 0 ? 'bg-gray-750' : 'bg-gray-800';
+                row.innerHTML = `
+                    <td class="p-2 font-medium">${rating.category}</td>
+                    <td class="p-2 text-center">${createStarRating(rating.initiator)}</td>
+                    <td class="p-2 text-center">${createStarRating(rating.opponent)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        if(document.getElementById('referee-ratings')){
+            populateRatings();
+        }
+       
+    
+</script>
+<script>
+    
+    
+    let refereeRatings = {
+        fairness: 0,
+        communication: 0,
+        timeliness: 0
+    };
+    
+    function showRefereeRatingSection() {
+        document.getElementById('refereeRatingSection').classList.remove('hidden');
+    }
+    
+    function hideRefereeRatingSection() {
+        document.getElementById('refereeRatingSection').classList.add('hidden');
+    }
+    
+    function initializeStarRating() {
+        const starRatings = document.querySelectorAll('.star-rating');
+        starRatings.forEach(rating => {
+            const stars = rating.querySelectorAll('.star');
+            const category = rating.dataset.category;
+    
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const value = parseInt(star.dataset.value);
+                    refereeRatings[category] = value;
+                    updateStarRating(rating, value);
+                });
+            });
+        });
+    }
+    
+    function updateStarRating(ratingElement, value) {
+        const stars = ratingElement.querySelectorAll('.star');
+        stars.forEach((star, index) => {
+            if (index < value) {
+                star.classList.add('active');
+            } else {
+                star.classList.remove('active');
+            }
+        });
+    }
+    
+    function submitRefereeRating() {
+        const comment = document.getElementById('refereeComment').value;
+        const ratingData = {
+            ...refereeRatings,
+            comment: comment
+        };
+    
+        if(ratingData.fairness>0 && ratingData.communication>0 && ratingData.timeliness>0){
+            $.ajax({
+            url: `/battles/referee/rate/{{battle.id}}`,
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: '{{csrf_token}}',
+                comment: comment,
+                fairness: ratingData.fairness,
+                communication: ratingData.communication,
+                timeliness: ratingData.timeliness,
+            },
+            beforeSend: function(){
+                $('#loading-overlay').toggleClass('active')
+            },
+            success: function(res){
+                if(res.status == 'success'){
+                    showMyToast(res.message, 'success')
+                    hideRefereeRatingSection();
+                }else{
+                    showMyToast(res.message)
+                }
+                
+            },
+            complete: function(){
+                $('#loading-overlay').toggleClass('active')
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                showMyToast('An error occured','error')
+            }
+        })
+        }else{
+            showMyToast('Please set all the ratings')
+        }
+    }
+    
+    // Initialize star rating functionality
+    document.addEventListener('DOMContentLoaded', initializeStarRating);
+    
+    if(document.getElementById('refereeRatingSection')){
+        // Add event listener for the submit button
+    document.getElementById('submitRefereeRating').addEventListener('click', submitRefereeRating);
+    showRefereeRatingSection();
+    }
+    
+    
+
+    
+    
+    
+    </script>
+<script>
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     // Sample battle data (replace with actual data from your backend)
+    //     const battleData = {
+    //         fighter1: "Naruto Uzumaki",
+    //         fighter2: "Sasuke Uchiha",
+    //         referee: "Kakashi Hatake",
+    //         status: "In Progress",
+    //         winner: "TBD",
+    //         fighter1Textpad: "Naruto crouched low, his blue eyes scanning the forest clearing for any sign of movement. The weight of the kunai in his hand was reassuring as he prepared for Sasuke's inevitable attack. 'I won't lose this time,' he thought, determination coursing through his veins.\n\nSuddenly, a flicker of movement caught his attention. Naruto's muscles tensed as he readied himself, forming the hand sign for his signature technique. 'Shadow Clone Jutsu!' he called out, and in an instant, a dozen copies of himself appeared, surrounding the clearing.\n\nEach clone was poised for action, ready to defend or attack at a moment's notice. Naruto knew that Sasuke's Sharingan would be a formidable obstacle, but he had a plan. He would use the clones as a distraction while he prepared his next move...",
+    //         fighter2Textpad: "Sasuke stood motionless atop a high branch, his Sharingan activated as he observed Naruto and his clones below. A smirk played across his lips; he had anticipated this move. 'Always so predictable, Naruto,' he thought, his hand moving to the hilt of his sword.\n\nIn one fluid motion, Sasuke leapt from the tree, his body a blur as he descended upon the clearing. His Sharingan allowed him to distinguish the real Naruto from the clones instantly. As he landed, he unleashed a barrage of shuriken, each one aimed with deadly precision at the shadow clones.\n\nWithout pausing, Sasuke charged forward, his sword now drawn and crackling with the electric energy of his Chidori. He moved with incredible speed, weaving through the remaining clones and heading straight for the real Naruto. 'Let's see how you handle this,' Sasuke thought, preparing to engage his rival in close combat..."
+    //     };
+    
+   
+    const endBattlePopup = $('#endBattlePopup');
+    const confirmEndBattleBtn = $('#confirmEndbattle')
+    const cancelEndBattleBtn = $('#cancelEndBattle')
+    //     // Referee action buttons
+    $('#validateBtn').on('click', function() {
+        $.ajax({
+                url: "{% url 'battles:evaluate_textpad' battle.id  %}",
+                type: "POST",
+                data: {csrfmiddlewaretoken: "{{csrf_token}}", "validity":1},
+                beforeSend: function(){
+                    $("#loading-overlay").toggleClass('active')
+                },
+                success:function(res){
+                    if(res.status == 'success'){
+                        showMyToast(res.message, 'success')
+                        $(".referee-actions").empty()
+                    }else{
+                        showMyToast(res.message, 'info')
+                    }
+                    
+                },
+                complete: function(){
+                    $("#loading-overlay").toggleClass('active')
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+            })
+        
+    });
+
+    $('#invalidateBtn').on('click', function() {
+        endBattlePopup.removeClass('hidden')
+        
+    });
+    confirmEndBattleBtn.on('click', (e) => {  
+        console.log('battle ended')
+        comment = $("#invalidTextpadComment").val()
+        if(comment.trim() != ''){
+            $.ajax({
+                url: "{% url 'battles:evaluate_textpad' battle.id  %}",
+                type: "POST",
+                
+                data: {
+                    csrfmiddlewaretoken: "{{csrf_token}}", 
+                "validity":0,
+                "comment":comment,
+                },
+                beforeSend: function(){
+                    endBattlePopup.addClass('hidden')
+                    $("#loading-overlay").toggleClass('active')
+                },
+                success:function(res){
+                    showMyToast('The battle has been ended')
+                    $(".validate-textpad").empty()
+                },
+                complete: function(){
+                    $("#loading-overlay").toggleClass('active')
+                    $(".referee-actions").empty()
+                    
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+            })
+        }else{
+            showMyToast('Add your comment', 'error')
+        }    
+        
+            
+    });
+    cancelEndBattleBtn.on('click', () => {
+        endBattlePopup.addClass('hidden');
+    });
+    
+    //     document.getElementById('endBattleBtn').addEventListener('click', function() {
+    //         alert('Battle ended!');
+    //         // Add your battle ending logic here
+    //     });
+    // });
+    </script>
+
+<script>
+    
+    $(()=>{
+
+       
+
+        const initiator = JSON.parse(document.querySelector("#initiator").textContent)
+        const opponent = JSON.parse(document.querySelector("#opponent").textContent)
+
+        const battleId = JSON.parse(document.querySelector("#battle_id").textContent)
+        const username = JSON.parse(document.querySelector("#username").textContent)
+       // const playerName = JSON.parse(document.querySelector("#player_name").textContent)
+        const battleSocket = new WebSocket(
+            'ws://' + 
+            window.location.host + 
+            '/ws/battle/one_v_one/'+
+            battleId +  "/"
+        )
+        // battleSocket.onmessage = function(e){
+        //     const data = JSON.parse(e.data)
+        //     getTextpads()
+          
+        // }
+         // New Textpad Submission
+         const submitTextpadForm = document.getElementById('submitTextpadForm');
+            const newTextpad = document.getElementById('newTextpad');
+            const wordCount = document.getElementById('wordCount');
+        
+            // Word count function
+            function updateWordCount() {
+                const words = newTextpad.value.trim().split(/\s+/).length;
+                wordCount.textContent = `Words: ${words}`;
+            }
+            if(newTextpad){
+                newTextpad.addEventListener('input', updateWordCount);
+            }
+            
+            if(submitTextpadForm){
+                submitTextpadForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const textpadContent = newTextpad.value.trim();
+                if (textpadContent.length === 0) {
+                    showMyToast('Please enter your move before submitting.', 'info')
+                    return;
+                }
+        
+                
+                
+                // battleSocket.send(JSON.stringify({
+                //     "text": textpadContent,
+                //     "sender": username,
+                // })    
+                // )
+                $.ajax({
+                    url: '/battles/textpads/send/{{battle.id}}',
+                    type: "POST",
+                    data: {csrfmiddlewaretoken: '{{csrf_token}}',
+                        'text': textpadContent,
+                    },
+                    success: function(res){
+                        if(res.status == 'success'){
+                            getTextpads()
+                            showMyToast('Move submitted successfully!', 'success')
+                            // Clear the input after submission
+                            newTextpad.value = '';
+                        }else{
+                            showMyToast(res.message,'info',5000)
+                        }
+                        
+                    },
+                    error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    
+                }
+                })
+
+                updateWordCount();
+                
+                
+            });
+            }
+           
+        
+        
+        
+        $("#send-text").on("click",(e)=>{
+            var text = document.querySelector("#text-pad")
+            newText = $('#new-text').val();
+            if (newText.trim() !== "") {
+            battleSocket.send(JSON.stringify({
+                "text": newText,
+                "sender": username,
+            })    
+            )
+            }else{
+                console.log("textpad can't be empty")
+            }
+            
+            
+        $('#new-text').val('');
+        getTextpads()
+        })
+
+
+        //for the refree
+        $("#btn-textpad-accepted").on("click",(e)=>{
+            $.ajax({
+                url: "{% url 'battles:evaluate_textpad' battle.id  %}",
+                type: "POST",
+                data: {csrfmiddlewaretoken: "{{csrf_token}}", "validity":1},
+                success:function(res){
+                    console.log("validated")
+                    $(".validate-textpad").empty()
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+            })
+        })
+        
+        $("#btn-textpad-not-accepted").on("click",(e)=>{
+            comment = $("#refree-comment").val()
+            $.ajax({
+                url: "{% url 'battles:evaluate_textpad' battle.id  %}",
+                type: "POST",
+                data: {csrfmiddlewaretoken: "{{csrf_token}}", 
+                "validity":0,
+                "comment":comment,
+            },
+                success:function(res){
+                    console.log("End of fight")
+                    $(".validate-textpad").empty()
+
+                    
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+            })
+        })
+
+
+
+
+        function getTextpads(){
+            $.ajax({
+                url: "{% url 'battles:get_textpads' battle.id %}",
+                type: "GET",
+                beforeSend: function(){
+                    $("#loading-overlay").toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                        $("#text-pads").empty()
+
+                        $('#textPads').empty()
+                        console.log(res.textpads)
+
+                        
+                        if(res.textpads.length>0){
+                            lastTextPad = res.textpads[res.textpads.length - 1]
+                            
+                            //get The temporal winner in case the 
+                        //last textpad is refused by refree
+                        const tempWinner = (lastTextPad.owner == initiator)
+                        ?opponent:initiator;
+                        $("#winner-notice").text(`${tempWinner} will be declared winner`)
+                        
+                        
+                            res.textpads.forEach(textpad => {
+                             fighterClass = (textpad.owner == username)?"my-textpad":""
+                             validText = (textpad.valid)?"validated":"Not validated"
+                             
+                             $('#textPads').append(
+                                `
+                                <div class=" rounded-lg p-4">
+                                    <h3 class="text-xl font-semibold text-orange-300 mb-2">${textpad.owner}: <span id="">${textpad.character}</span></h3>
+                                    <div id="fighterTextpad" class="body bg-gray-800 text-gray-300 p-3 rounded-lg max-h-64 overflow-y-auto">
+                                        ${textpad.text}
+                                    </div>
+                                    <div class="text-gray-300 text-sm p-3 flex justify-between">
+                                        <span>${textpad.time_since}</span>
+                                        <span class = '${textpad.valid? 'text-green-500':'text-red-500'} '>${validText}</span>
+                                    </div>
+                                    
+                                </div>
+                                `
+                             )
+                             
+                             $("#battle-room").prepend(`
+                                <div class="${fighterClass} fighter-text">
+                                <h3>->${textpad.character} - <small>${textpad.owner}</small>:</h3>
+                                <p>${textpad.text}</p>
+                                <span>${validText}</span>
+                                </div>
+                                `)
+                            if(textpad.owner == username){
+                                
+                                $("#text-pads").append(
+                                `<p class="my-textpad">${textpad.text} -> ${textpad.owner}</p>`
+                                )
+                            } else{
+                                $("#text-pads").append(
+                                `<p>${textpad.text} -> ${textpad.owner}</p>`
+                                )
+                            }                           
+                        });
+                        document.querySelectorAll('.body').forEach((element)=>{
+                    element.innerHTML = linkifyHtml(element.textContent, {
+                    target:"_blank",
+                    className: 'link'
+                    })
+                
+                    })
+                        }else{
+                            $("#text-pads").append(
+                                `<p>Send a textpad to start</p>`
+                            )
+                        }
+                    }else{
+                        console.log("error")
+                    }
+                },
+                complete: function(){
+                    $("#loading-overlay").toggleClass('active')
+                    
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+            })
+        }
+        getTextpads()
+
+        battleSocket.onmessage = function(e){
+            const data = JSON.parse(e.data)
+            getTextpads()
+          
+        }
+
+        //add an input button for the rules
+        $(".add-rule-btn").on("click",(e)=>{
+            
+            $(e.target).before(`
+            <div class="rule">
+                    <input data-section = "${e.target.dataset.section}" class="ruleInput" placeholder="rule " type="text">
+                    <button class="btn btn-danger remove-rule-btn">-</button>
+            </div>
+            `)
+
+            console.log($(e.target).parent())
+            //add listener for remove rules button, here so that all  buttons listen to the event
+
+            $(".remove-rule-btn").on("click",(e)=>{
+
+                parent = $(e.target).parent(".rule")
+                //remove his .rule parent
+                $(parent).remove()   
+            }) 
+        })
+        /*
+        $(".remove-rule-btn").on("click",()=>{
+            $(".standard-rules").remove("")
+        })
+        */
+
+        function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+        $(".btn-save-rules").on("click",(e)=>{
+            //inputs = $(e.target).parent().find("input")
+            inputs = $(".rules input").toArray()
+        
+            console.log("inputs: ",inputs)
+            var rules = []
+
+            //3 lists, to store each section's rules for display
+            var standardRules = []
+            var specificRules1 = []
+            var specificRules2 = []
+            
+            inputs.forEach((input)=>{
+                if( input.value.trim() != ""){
+                   
+                   const data = {
+                        section:input.dataset.section,
+                        value:input.value,
+                    }
+                    rules.push(data) 
+                    //fill the sections rule list for display later 
+                    if (data.section == "standard-rules"){
+                        standardRules.push(data.value)
+                    }else if(data.section == "specific-rules-1"){
+                        specificRules1.push(data.value)
+                    }else if(data.section == "specific-rules-2"){
+                        specificRules2.push(data.value)
+                    }
+                }
+            })
+            console.log(rules) 
+            console.log(standardRules,specificRules1,specificRules2)
+            
+            //send to server
+            if (rules[0]){
+
+               data = JSON.stringify(rules)
+
+                $.ajax({
+                type: "POST",
+                url: "/battles/rules/{{battle.id}}",
+                data: JSON.stringify(rules),   
+                contentType: "application/json",
+                headers: {
+                'X-CSRFToken': "{{csrf_token}}" //getCookie('csrftoken')  Include the CSRF token
+            },
+                //dataType: "json",
+                success: function(res){
+                    if(res.status == "success"){
+                        console.log("rules set!!")
+                        console.log(res.rules)
+                        
+                        container = $(".rules .standard-rules")[0]
+                        $(container).empty()
+                        standardRules.forEach((rule)=>{
+                            $(container).append(`
+                            <p>${rule}</p>
+                            `)
+
+                        })
+                        container = $(".rules .specific-rules")[0]
+                        $(container).empty()
+                        specificRules1.forEach((rule)=>{
+                            $(container).append(`
+                            <p>${rule}</p>
+                            `)
+
+                        })
+
+                        container = $(".rules .specific-rules")[1]
+                        $(container).empty()
+                        specificRules2.forEach((rule)=>{
+                            $(container).append(`
+                            <p>${rule}</p>
+                            `)
+
+                        })
+
+
+                    }else{
+                        console.log(res.message)
+                    }
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+            })
+            }
+           
+            
+                
+        })
+
+    })
+</script>
+<script>
+    
+        const rules = {
+        standard: [],
+        specific1: [],
+        specific2: []
+    };
+    
+    function addRule(type) {
+        const input = document.getElementById(`${type}RuleInput`);
+        const ruleText = input.value.trim();
+    
+        if (ruleText) {
+            rules[type].push(ruleText);
+            updateRulesList(type);
+            input.value = '';
+            
+        } else {
+            showMyToast('Please enter a rule');
+        }
+    }
+    
+    function removeRule(type, index) {
+        rules[type].splice(index, 1);
+        updateRulesList(type);
+        // showMyToast(`Removed ${type} rule`, 'info');
+    }
+    
+    function updateRulesList(type) {
+        const list = document.getElementById(`${type}RulesList`);
+        list.innerHTML = '';
+    
+        rules[type].forEach((rule, index) => {
+            const li = document.createElement('li');
+            li.className = 'rule-item';
+            li.innerHTML = `
+                <span>${rule}</span>
+                <button onclick="removeRule('${type}', ${index})">
+                <i class="fas fa-minus"></i>
+                    </button>
+            `;
+            list.appendChild(li);
+        });
+    }
+    
+    function saveRules() {
+        console.log('Saving rules:', rules);
+        if(rules.standard.length>0 && rules.specific1.length>0 && rules.specific2.length>0 ){
+            $.ajax({
+                type: "POST",
+                url: "/battles/rules/{{battle.id}}",
+                data: JSON.stringify(rules),   
+                contentType: "application/json",
+                headers: {
+                'X-CSRFToken': "{{csrf_token}}" //getCookie('csrftoken')  Include the CSRF token
+            },
+                //dataType: "json",
+                beforeSend: function(){
+                    $('#loading-overlay').toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                        showMyToast('Rules set successfully!, now players can send their textpads', 'success', 5000);
+            
+                        container = $("#battleRules")
+                        $(container).empty()
+                        rules.standard.forEach((rule)=>{
+                            $(container).append(`
+                            <li>${rule}</li>
+                            `)
+
+                        })
+                        // container = $(".rules .specific-rules")[0]
+                        // $(container).empty()
+                        rules.specific1.forEach((rule)=>{
+                            $(container).append(`
+                            <li>${rule}</li>
+                            `)
+
+                        })
+
+                        // container = $(".rules .specific-rules")[1]
+                        // $(container).empty()
+                        rules.specific2.forEach((rule)=>{
+                            $(container).append(`
+                            <li>${rule}</li>
+                            `)
+
+                        })
+
+
+                    }else{
+                        showMyToast(res.message)
+                    }
+                },
+                complete: function(){
+                    $('#loading-overlay').toggleClass('active')
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                }
+            })
+        }else{
+            showMyToast('Please set all rules');
+        }
+        
+        
+    }
+
+   
+    
+    
+    
+    </script>
+
+{% endblock content %}
+
+
+
+{% block not_content %}
+<!--
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-7">
+            <form>
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1" class="h4 pt-5">Chatbox</label>
+                    <textarea class="form-control" id="chat-text" readonly rows="10"></textarea><br>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" placeholder="Enter text here" id="input" type="text"></br>
+                </div>
+                <input class="btn btn-primary btn-lg btn-block" id="submit" type="button" value="Send">
+            </form>
+        </div>
+    </div>
+</div>
+-->
+<style>
+    body{
+        background:#333;
+        color: #ccc;
+    }
+     .container-battle-room {
+            width: 90%;
+            margin: 1rem auto;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+        }
+
+        .battle-room {
+            flex: 2;
+            /*background: white;*/
+            /*overflow-y: scroll;
+            height: 500px;*/
+            background: inherit;
+            border: 1px solid gray;
+            padding: 20px;
+            border-radius: 10px;
+            /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+        }
+
+        .rules-card {
+            flex: 1;
+            /*background: white;*/
+            background: rgba(0, 0, 0, 0.1);
+            border: 1px solid grey;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .fighter-text {
+            margin-bottom: 20px;
+        }
+
+        .fighter-text h3 {
+            margin-top: 0;
+        }
+
+        .add-text {
+            display: flex;
+            gap: 10px;
+
+        }
+
+        .add-text textarea {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #333;
+            color: white;
+        }
+
+        .add-text button {
+            padding: 10px 20px;
+            border: none;
+            /*background: #007bff;
+            color: white;*/
+            background: white;
+            color: #333;
+           
+
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-text button:hover {
+            background: #0056b3;
+        }
+
+        @media (max-width: 768px) {
+            .container-battle-room {
+                flex-direction: column-reverse;
+            }
+
+            .rules-card {
+                max-height: none;
+            }
+        }
+        .btn-send-text{
+            height: 40px;
+            align-self:flex-end;
+        }
+</style>
+
+
+
+
+
+
+
+<style>
+    .my-textpad{
+        background-color: rgba(50, 20, 40, 0.8);
+    }
+</style>
+
+<div class="modal fade" id="textPadModal" tabindex="-1" aria-labelledby="textPadModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title fs-5" id="textPadModal">Feed back on this textpad</h3>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <label style="color: #333;" for="refree-comment">Why is this textpad not valid? ex: Bad Counter, Madara can't use suiton...</label>
+            <textarea id="refree-comment" rows="5" cols="30">
+
+            </textarea>
+
+            <div id="winner-alert" class="winner-alert">
+            </div>
+            <form>
+                <button id="btn-textpad-not-accepted" type="submit" class="btn btn-primary">
+                    Declare Winner
+                </button>
+            </form>
+            
+
+        </div>
+        <!--
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Ok</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          
+        </div>
+        -->
+        
+      </div>
+    </div>
+  </div>      
+{% if role == "Refree" %}
+<div>
+    <h4>You are the Refree of this battle</h4>
+</div>
+{% else %}
+<div>
+    <h4>You are a {{role}} in this battle</h4>
+</div>
+{% endif %}
+<h3>{{battle.i_character}}({{battle.initiator}}) vs {{battle.o_character}}({{battle.opponent}})</h3>
+<small>started: {{battle.date_started}}</small>
+<small>Ended: 
+    {{battle.date_ended}}
+</small>
+<a href="">How to make a great textpad?</a>
+<div>
+    <div>Once you send a textpad, your textpad is set for validation by the refree, 
+    <p>once validated your opponent sends his own and  the process goes on until the refree declines a texpad</p>
+    </div>
+</div>
+
+<h4>This fight is {{battle.status}}</h4>
+{% if battle.status == "finished" %}
+<small><a href="{% url 'users:player' battle.winner.user.username %}">{{battle.winner}}</a> won this fight</small>
+{% endif %}
+
+    <div class="container-battle-room">
+    
+    <div class="battle-room" id="battle-room">
+        <div class="loader-circle" style="display: none;" class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <!-- Fighter texts will be appended here -->
+        
+        
+        <!--
+        {% for textpad in textpads %}
+         <div class="fighter-text">
+            <h3>->{{textpad.character}}-<small>{{textpad.textpad.owner}}</small>:</h3>
+            <p>{{textpad.textpad.text}}</p>
+        </div>
+         {% empty %}
+            <div>Fight did not start yet</div>
+         {% endfor %}
+        --> 
+        
+        <!--ensure player is  not a refree, its his turn to send a textpad and there is no unvalidated textpads and also the battle is either not started or ongoing -->
+        {% if battle.refree != player and   battle.can_send_textpad and last_sender != player %}
+        
+        
+        <div class="add-text">
+            <textarea id="new-text" rows="3" placeholder="Enter your text..."></textarea>
+            <button class="btn-send-text" id="send-text">Send</button>
+        </div>
+
+        
+        
+
+        {% elif battle.refree == player and battle.status == "ongoing" and not battle.can_send_textpad %}
+        <!--evaluate a textpad only if there are textpads and players can't send a new textpad(when a player just sent a new textpad)-->
+        
+        
+        <div class="validate-textpad">
+            <h5>Is the textpad valid?</h5>
+            <button class="btn btn-success" id="btn-textpad-accepted">Yes</button>
+            <button type="button"  type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#textPadModal">No</button>
+        </div>
+
+        
+
+
+        
+<!--
+<div>
+            <form method="post" action="{% url 'battles:declare_winner' battle.id %}">
+                {% csrf_token %}
+                <h4>Who won?</h4>
+                <div><b>{{battle.i_character}}</b><input id="player1-checkbox" name="player1" type="radio" checked></div>
+                <div><b>{{battle.o_character}}</b><input id="player2-checkbox" name="player2" type="radio"></div>
+            <button type="submit">Declare winner</button>
+            </form>
+        </div>        
+-->
+        
+        
+        {%endif%}
+    </div>
+    <div class="rules-card">
+        <h2>Battle Rules</h2>
+        <!--
+         <p>1. Each fighter must take turns to send their text.</p>
+        <p>2. No offensive language is allowed.</p>
+        <p>3. The battle ends when a winner is declared by the referee.</p>
+        <p>4. All participants must adhere to the platform's general rules and guidelines.</p>
+        -->
+        
+        
+        {% for rule in rules %}
+        <p>{{rule}}</p>
+
+        {% empty %}
+        {% if player != battle.refree %}
+        <div>The  Rules for the battle has not yet being set!</div>
+        <div>Message the refree <a href="{% url 'users:player' battle.refree.user.username %}">{{battle.refree}}</a> to set the rules now</div>
+        <div>Link to battle: <span>{% url 'battles:battle_room' battle.id %}</span></div>
+        <button class="btn btn-primary">Copy link to battle</button>
+        
+        {% endif %}
+        
+        {% endfor %}
+        
+        
+        {% if battle.refree == player and not rules_set %}
+        <div class="rules" style="display: flex; flex-direction: column;">
+            
+            <div class="standard-rules" style="display: flex; flex-direction: column;">
+                <h4>Standard Rules</h4>
+                <small>Here you set the turn of the players and the rules both players should respect for their characters example....</small>
+                <div class="rule">
+                    <input data-section="standard-rules" class="ruleInput" placeholder="rule" value="1." type="text">
+                </div>
+
+                <button data-section="standard-rules" class="add-rule-btn">+</button>
+            </div>
+            
+
+            <div class="specific-rules" style="display: flex; flex-direction: column;">
+                <h6>Specific Rules({{battle.i_character}})</h6>
+                <div class="rule">
+                    <input data-section="specific-rules-1" class="ruleInput" placeholder="rule " value="" type="text">
+                </div>
+
+                <button data-section="specific-rules-1" class="add-rule-btn">+</button>
+                
+                
+            </div>
+
+            <div class="specific-rules" style="display: flex; flex-direction: column;">
+                <h6>Specific Rules({{battle.o_character}})</h6>
+                <div class="rule">
+                    <input data-section="specific-rules-2" class="ruleInput" placeholder="rule" value="" type="text">
+                </div>
+                
+                <button data-section="specific-rules-2" class="add-rule-btn">+</button>
+                
+                
+            </div>
+
+            <button class="btn-save-rules">Save Rules</button>
+            
+            
+        </div>
+        {% endif %}
+        
+       
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    /*
+    $(document).ready(function() {
+        $('#send-text-t').on('click', function() {
+            let newText = $('#new-text').val();
+            if (newText.trim() !== "") {
+                let newTextHtml = `
+                    <div class="fighter-text">
+                        <h3>Fighter:</h3>
+                        <p>${newText}</p>
+                    </div>
+                `;
+                $('#battle-room').prepend(newTextHtml);
+                $('#new-text').val('');
+            }
+        });
+    });
+    */
+</script>
+
+
+
+<div>
+    <div id="text-pads">
+    </div>
+    
+</div>
+
+
+<!--
+{% if battle.refree == player %}
+<b>Validate this textpad?</b>
+<button id="btn-textpad-accepted">Yes</button><button id="btn-textpad-not-accepted">No</button>
+<textarea placeholder="say why ex: Bad Counter, Madara can't use suiton...  " id="refree-comment"></textarea>
+<button>confirm</button>
+<div>
+
+    <form method="post" action="{% url 'battles:declare_winner' battle.id %}">
+        {% csrf_token %}
+        <h4>Who won?</h4>
+        <div><b>{{battle.i_character}}</b><input id="player1-checkbox" name="player1" type="radio" checked></div>
+        <div><b>{{battle.o_character}}</b><input id="player2-checkbox" name="player2" type="radio"></div>
+    <button type="submit">Declare winner</button>
+    </form>
+    
+</div>
+{% endif %}
+{% if battle.can_send_textpad %}
+        <textarea rows="3" cols="30" id="text-pad" placeholder="your text-pad"></textarea>
+
+        <button id="send-text">Send</button>
+{% endif %}
+
+-->
+
+{% for message in messages %}
+<h5>{{message}}</h5>
+{% endfor %}
+
+{{battle.id|json_script:"battle_id" }}
+{{player.user.username|json_script:"username"}}
+{{battle.initiator.user.username|json_script:"initiator"}}
+{{battle.opponent.user.username|json_script:"opponent"}}
+
+<script>
+    
+    $(()=>{
+
+        /*
+        const p1Checkbox = document.querySelector("#player1-checkbox")
+        const p2Checkbox = document.querySelector("#player2-checkbox")
+        if(p1Checkbox && p2Checkbox){
+            p1Checkbox.addEventListener("change",(e)=>{
+            if(p1Checkbox.checked){
+                p2Checkbox.checked =false
+            }
+        })
+
+        p2Checkbox.addEventListener("change",(e)=>{
+            if(p2Checkbox.checked){
+                p1Checkbox.checked =false
+            }
+        })
+        }
+        */
+
+        const initiator = JSON.parse(document.querySelector("#initiator").textContent)
+        const opponent = JSON.parse(document.querySelector("#opponent").textContent)
+
+        const battleId = JSON.parse(document.querySelector("#battle_id").textContent)
+        const username = JSON.parse(document.querySelector("#username").textContent)
+       // const playerName = JSON.parse(document.querySelector("#player_name").textContent)
+        const battleSocket = new WebSocket(
+            'ws://' + 
+            window.location.host + 
+            '/ws/battle/one_v_one/'+
+            battleId +  "/"
+        )
+        $("#send-text").on("click",(e)=>{
+            var text = document.querySelector("#text-pad")
+            newText = $('#new-text').val();
+            if (newText.trim() !== "") {
+            battleSocket.send(JSON.stringify({
+                "text": newText,
+                "sender": username,
+            })    
+            )
+            }else{
+                console.log("textpad can't be empty")
+            }
+            
+            
+        $('#new-text').val('');
+        getTextpads()
+        })
+
+        //for the refree
+        $("#btn-textpad-accepted").on("click",(e)=>{
+            $.ajax({
+                url: "{% url 'battles:evaluate_textpad' battle.id  %}",
+                type: "POST",
+                data: {csrfmiddlewaretoken: "{{csrf_token}}", "validity":1},
+                success:function(res){
+                    console.log("validated")
+                    $(".validate-textpad").empty()
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+            })
+        })
+        
+        $("#btn-textpad-not-accepted").on("click",(e)=>{
+            comment = $("#refree-comment").val()
+            $.ajax({
+                url: "{% url 'battles:evaluate_textpad' battle.id  %}",
+                type: "POST",
+                data: {csrfmiddlewaretoken: "{{csrf_token}}", 
+                "validity":0,
+                "comment":comment,
+            },
+                success:function(res){
+                    console.log("End of fight")
+                    $(".validate-textpad").empty()
+
+                    
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+            })
+        })
+
+
+
+
+        function getTextpads(){
+            $.ajax({
+                url: "{% url 'battles:get_textpads' battle.id %}",
+                type: "GET",
+                beforeSend: function(){
+                    $(".loader-circle").show()
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                        $("#text-pads").empty()
+                        console.log(res.textpads)
+                        
+                        if(res.textpads.length>0){
+                            lastTextPad = res.textpads[res.textpads.length - 1]
+                        
+                        //get The temporal winner in case the 
+                        //last textpad is refused by refree
+                        tempWinner = (lastTextPad.owner == initiator)
+                        ?opponent:initiator;
+                        
+                        $("#winner-alert").append(`
+                        <b><i class='fa fa-bell'></i>${tempWinner} will be declared winner</b>
+                        `)
+
+                            res.textpads.forEach(textpad => {
+                             fighterClass = (textpad.owner == username)?"my-textpad":""
+                             validText = (textpad.valid)?"validated":"Not yet validated"   
+                             $("#battle-room").prepend(`
+                                <div class="${fighterClass} fighter-text">
+                                <h3>->${textpad.character} - <small>${textpad.owner}</small>:</h3>
+                                <p>${textpad.text}</p>
+                                <span>${validText}</span>
+                                </div>
+                                `)
+                            if(textpad.owner == username){
+                                
+                                $("#text-pads").append(
+                                `<p class="my-textpad">${textpad.text} -> ${textpad.owner}</p>`
+                                )
+                            } else{
+                                $("#text-pads").append(
+                                `<p>${textpad.text} -> ${textpad.owner}</p>`
+                                )
+                            }                           
+                        });
+                        }else{
+                            $("#text-pads").append(
+                                `<p>Send a textpad to start</p>`
+                            )
+                        }
+                    }else{
+                        console.log("error")
+                    }
+                },
+                complete: function(){
+                    $(".loader-circle").hide()
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+            })
+        }
+        getTextpads()
+
+        battleSocket.onmessage = function(e){
+            const data = JSON.parse(e.data)
+            getTextpads()
+          
+        }
+
+        //add an input button for the rules
+        $(".add-rule-btn").on("click",(e)=>{
+            
+            $(e.target).before(`
+            <div class="rule">
+                    <input data-section = "${e.target.dataset.section}" class="ruleInput" placeholder="rule " type="text">
+                    <button class="btn btn-danger remove-rule-btn">-</button>
+            </div>
+            `)
+
+            console.log($(e.target).parent())
+            //add listener for remove rules button, here so that all  buttons listen to the event
+
+            $(".remove-rule-btn").on("click",(e)=>{
+
+                parent = $(e.target).parent(".rule")
+                //remove his .rule parent
+                $(parent).remove()   
+            }) 
+        })
+        /*
+        $(".remove-rule-btn").on("click",()=>{
+            $(".standard-rules").remove("")
+        })
+        */
+
+        function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
+
+    //First version of adding rules 
+        $(".btn-save-rules").on("click",(e)=>{
+            //inputs = $(e.target).parent().find("input")
+            inputs = $(".rules input").toArray()
+        
+            console.log("inputs: ",inputs)
+            var rules = []
+
+            //3 lists, to store each section's rules for display
+            var standardRules = []
+            var specificRules1 = []
+            var specificRules2 = []
+            
+            inputs.forEach((input)=>{
+                if( input.value.trim() != ""){
+                   
+                   const data = {
+                        section:input.dataset.section,
+                        value:input.value,
+                    }
+                    rules.push(data) 
+                    //fill the sections rule list for display later 
+                    if (data.section == "standard-rules"){
+                        standardRules.push(data.value)
+                    }else if(data.section == "specific-rules-1"){
+                        specificRules1.push(data.value)
+                    }else if(data.section == "specific-rules-2"){
+                        specificRules2.push(data.value)
+                    }
+                }
+            })
+            console.log(rules) 
+            console.log(standardRules,specificRules1,specificRules2)
+            
+            //send to server
+            if (rules[0]){
+
+               data = JSON.stringify(rules)
+
+                $.ajax({
+                type: "POST",
+                url: "/battles/rules/{{battle.id}}",
+                data: JSON.stringify(rules),   
+                contentType: "application/json",
+                headers: {
+                'X-CSRFToken': "{{csrf_token}}" //getCookie('csrftoken')  Include the CSRF token
+            },
+                //dataType: "json",
+                success: function(res){
+                    if(res.status == "success"){
+                        console.log("rules set!!")
+                        console.log(res.rules)
+                        
+                        container = $(".rules .standard-rules")[0]
+                        $(container).empty()
+                        standardRules.forEach((rule)=>{
+                            $(container).append(`
+                            <p>${rule}</p>
+                            `)
+
+                        })
+                        container = $(".rules .specific-rules")[0]
+                        $(container).empty()
+                        specificRules1.forEach((rule)=>{
+                            $(container).append(`
+                            <p>${rule}</p>
+                            `)
+
+                        })
+
+                        container = $(".rules .specific-rules")[1]
+                        $(container).empty()
+                        specificRules2.forEach((rule)=>{
+                            $(container).append(`
+                            <p>${rule}</p>
+                            `)
+
+                        })
+
+
+                    }else{
+                        console.log(res.message)
+                    }
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+            })
+            }
+           
+            
+                
+        })
+
+    })
+</script>
+{% endblock not_content %}

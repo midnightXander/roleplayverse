@@ -1,0 +1,149 @@
+{% extends "users/user/user_page.html"%}
+{% load static %}
+{% block filterContent %}
+<!-- Content area for filtered results -->
+<div id="filteredContent" class="bg-gray-700 rounded-lg p-6">
+    <div id="battlesList" class="hidden">
+        <h2 class="text-2xl font-bold mb-4">{{req_player}} Battles</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Battle cards will be dynamically inserted here -->
+            <div class="flex text-gray-300 flex-col justify-center items-center">
+                <img src="{% static 'svg/khanda.svg'  %}" alt="khanda" class="h-64 w-64" >
+                <p>Aucun combat pour l'instant</p>
+                <a class="text-blue-500 hover:text-blue-600" href="#">comment faire un combat</a>
+            </div>
+        </div>
+    </div>
+    <p id="defaultMessage" class="text-center text-gray-400">Select a filter to view content</p>
+</div>
+
+
+{% block active %}
+<script>
+$(()=>{
+    $('.filter-button').removeClass('active')
+    $('.filter-button')[1].classList.add('active')
+})
+</script>
+{% endblock active %}
+
+{% block fetchContent %}
+<script>
+    $(()=>{
+        // Filter functionality
+    const filterButtons = document.querySelectorAll('.bg-gray-600');
+    const filteredContent = document.getElementById('filteredContent');
+    const battlesList = document.getElementById('battlesList');
+    const defaultMessage = document.getElementById('defaultMessage');
+
+    // filterButtons.forEach(button => {
+    //     button.addEventListener('click', () => {
+    //         const filter = button.textContent.trim();
+    //         if (filter === 'Battles') {
+    //             showBattles();
+    //         } else {
+    //             // Handle other filters
+    //             battlesList.classList.add('hidden');
+    //             defaultMessage.classList.remove('hidden');
+    //             defaultMessage.textContent = `${filter} content coming soon...`;
+    //         }
+    //     });
+    // });
+
+    function showBattles() {
+        const loader = document.getElementById('loading-overlay');
+        battlesList.classList.remove('hidden');
+        defaultMessage.classList.add('hidden');
+        $.ajax({
+        url: "",
+        type: "POST",
+        data:{ csrfmiddlewaretoken: "{{csrf_token}}"},
+        beforeSend:()=>{
+            $('#loading-overlay').toggleClass('active')
+            //loader.classList.add('active')
+        },
+        success: function(res){
+        const battles = res.battles
+        if(res.battles.length > 0){
+            const battleCards = battles.map(battle => createBattleCard(battle)).join('');
+            battlesList.querySelector('.grid').innerHTML = battleCards;
+        }
+        
+        },
+        complete: ()=>{
+            $('#loading-overlay').toggleClass('active')
+        }
+    })
+       
+
+        
+    }
+
+    function createBattleCard(battle) {
+        player_id = parseInt('{{req_player.id}}');
+        const isParticipant = battle.isFighter;
+        const cardColor = isParticipant ? 'bg-gray-800' : 'bg-teal-800';
+        var resultColor = 'text-yellow-400';
+        var winner = false;
+        const opponent = battle.initiator.id == player_id ? { "player":battle.opponent.player,"username":battle.opponent.username }: {"player":battle.initiator.player, "username":battle.initiator.username}
+        //const resultColor =  battle.winner.id === parseInt('{{req_player.id}}') ? 'text-green-400' : battle.result === 'Defeat' ? 'text-red-400' : 'text-yellow-400';
+       
+        if(isParticipant){
+            if(battle.winner){
+                if(battle.winner.id == player_id ){
+                    resultColor = 'text-green-400'
+                    winner = true
+                    
+                }else{
+                    resultColor = 'text-red-400'
+                }
+            }
+        }
+        return `
+            <div class="battle-card ${cardColor} rounded-lg p-4 shadow-lg">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm font-semibold">${isParticipant ? battle.type: 'Refree'}</span>
+                    <span class="text-sm">${battle.date}</span>
+                </div>
+                ${isParticipant ? `
+                    <a href='/users/${opponent.username}'>
+                    <p class="text-lg font-bold mb-1">vs. ${opponent.player}</p>
+                    </a>
+                    ${battle.winner ? `
+                    <p class="text-lg ${resultColor} font-semibold">${winner ? 'Victoire': 'Defaite'}</p>
+                    `:`
+                    <p class="text-lg ${resultColor} font-semibold">${battle.status}</p>
+                    `}
+                    
+                    
+                ` : `
+                    <p class="text-lg font-bold mb-1"><a href='/users/${battle.initiator.username}'>${battle.initiator.player}</a> vs. <a href='/users/${battle.opponent.username}'>${battle.opponent.player}</a></p>
+                    <p class="text-sm ${battle.status === 'finished' ? 'text-green-400' : 'text-yellow-400'}">
+                        ${battle.status}
+                    </p>
+                `}
+                ${battle.refree ? ` 
+                 <a href = '/battles/battle_room/${battle.id}'>
+                <button class="mt-2 bg-gray-600 hover:bg-gray-500 text-white px-3 py-1 rounded text-sm transition duration-300">
+                    Aller au combat
+                </button>
+                </a>
+                `: `
+                `}
+                
+            </div>
+        `;
+    }
+    
+    // Initialize with battles shown
+    showBattles();
+
+
+    })
+
+    
+</script>
+{% endblock fetchContent %}
+
+
+{% endblock filterContent %}

@@ -1,0 +1,152 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<style>
+    .bg-orange-custom {
+        background-color: #ff6600;
+    }
+    .text-orange-custom {
+        color: #ff6600;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn {
+        animation: fadeIn 0.3s ease-out;
+    }
+</style>
+
+<header class="mt-20 bg-gray-800 p-4 sticky top-0 z-10 shadow-md" style="padding-bottom: 70px;">
+    <div class="container mx-auto">
+        <div class="flex justify-between mb-4 items-center">
+            <div class="text-2xl font-bold text-orange-custom">Arbitres RPV</div>
+            <a href="{% url 'battles:new_refree' %}" class="inline-block bg-orange-600 px-3  text-white text-xs py-2  rounded-full hover:bg-orange-500  transition duration-300" >    
+                    <i class="fas fa-gavel font-bold mr-1"></i> {% trans "Devenir arbitre" %} 
+            </a>
+        </div>
+        
+        <div class="relative">
+            <input type="text" id="search-input" placeholder="Rechercher un arbitre..." 
+                   class="w-full text-white p-2 pl-10 rounded bg-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500">
+            <i class="fas fa-search absolute right-3 top-3 text-gray-400"></i>
+        </div>
+    </div>
+</header>
+<main class="container referee-container  text-white mx-auto p-4" >
+    <!-- Ad Placement 
+    
+    <div class="ad-container animate-fadeIn">
+        <span class="ad-label">Advertisement</span>
+        <button class="ad-close">&times;</button>
+        <a href='#' target='_blank' class="ad-content">
+            <p class="text-center">Your ad content here (300x90)</p>
+        </a>
+    </div> -->
+
+    <div id="referee-list" class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- Referees will be dynamically inserted here -->
+        <p class = 'text-white p-4 text-center'>Aucun arbitre enregistré pour le moment<a href="" class="text-orange-500 text-underline ">Devenir un arbitre</a></p>
+    </div>
+</main>
+
+{{ referees | json_script:"referees" }}
+<script>
+function createAdElement(url="#"){
+    const addElement = document.createElement('div')
+    addElement.className = 'ad-container animate-fadeIn'
+    addElement.innerHTML = `
+            <span class="ad-label">Advertisement</span>
+            <button class="ad-close">&times;</button>
+            <a href='${url}' target='_blank' class="ad-content">
+                <p class="text-center">Your ad content here (300x90)</p>
+            </a>
+    `  
+    return addElement
+}
+    const referees = JSON.parse(document.getElementById("referees").textContent) 
+    
+    function createRefereeCard(referee) {
+        const card = document.createElement('div');
+        card.className = 'bg-gray-700 rounded-lg p-4 shadow-md animate-fadeIn flex flex-col items-center';
+        card.innerHTML = `
+            <img src="${referee.profile_picture}" alt="${referee.player.username}" class="myImg w-24 h-24 rounded-full mb-4">
+            <a href='/users/${referee.player.username}' class="text-xl hover:text-orange-500 font-semibold mb-2">${referee.player.player}</a>
+            <div class="flex flex-col space-y-2 items-center mb-2">
+                <div>
+                <span>T : </span>    
+                <i class="fas fa-star text-yellow-400 mr-1"></i>
+                <span>${referee.ratings.timeliness.toFixed(1)}</span>
+                </div>
+
+                <div>
+                <span>F : </span>
+                <i class="fas fa-star text-yellow-400 mr-1"></i>
+                <span>${referee.ratings.fairness.toFixed(1)}</span>
+                </div> 
+
+                <div>
+                <span>C : </span>
+                <i class="fas fa-star text-yellow-400 mr-1"></i>
+                <span>${referee.ratings.communication.toFixed(1)}</span>
+                </div>    
+                
+            
+            <p class="text-gray-400">${referee.battles} battles refereed</p>
+             <a href="/chats/dm/${referee.player.username}">
+                            <button class="action-btn border border-orange-500 py-2 px-4 flex items-center justify-center
+                                text-orange-500 font-bold  
+                                rounded-full transition duration-300 ease-in-out">
+                                <i class="fas fa-envelope mr-2"></i>
+                                <span>Message</span>
+                            </button>
+            </a>
+        `;
+        return card;
+    }
+
+    function displayReferees(referees) {
+        const mainContainer = document.querySelector('.referee-container');
+        const container = document.getElementById('referee-list');
+            container.innerHTML = '';
+            // const adElement = createAdElement('https://sophisticatedappearance.com/b/3KVh0.P/3VpuvzbOmpVEJBZND_0O1bNTj/Yx0/NzTtAE4oLLT-Ur2ONAjoQt1/M/DFkB')
+
+            
+            // mainContainer.prepend(adElement)
+            referees.forEach(referee => {
+            container.appendChild(createRefereeCard(referee));
+        });
+        
+        
+    }
+
+    function searchReferees(query) {
+        return referees.filter(referee => 
+            referee.player.player.toLowerCase().includes(query.toLowerCase())
+        );
+    }
+
+    document.getElementById('search-input').addEventListener('input', function(e) {
+        const searchResults = searchReferees(e.target.value);
+        if(searchResults.length>0){
+            displayReferees(searchResults);
+        }else{
+            const container = document.getElementById('referee-list');
+            container.innerHTML = '';
+            const message = document.createElement('p');
+            message.className = 'text-white p-4 text-center';
+            message.textContent = `
+            No Referee of that name found
+            `
+            container.appendChild(message)
+        }
+        
+    });
+
+    // Initial display
+    displayReferees(referees);
+</script>
+
+
+{% endblock content %}

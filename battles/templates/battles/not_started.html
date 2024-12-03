@@ -1,0 +1,126 @@
+{% extends "core/base.html" %}
+{% block content %}
+<style>
+    .rule-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #2d3748;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+    }
+
+    .rule-item button {
+        background-color: #f56565;
+        color: white;
+        border: none;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        cursor: pointer;
+    }
+
+    .rule-item button:hover {
+        background-color: #e53e3e;
+    }
+</style>
+<div class="container mx-auto px-4 py-8">
+    <h2 class="text-3xl font-bold text-orange-500 mb-6">Battle Rules</h2>
+    
+    <!-- Standard Rules -->
+    <div class="mb-8">
+        <h3 class="text-xl font-semibold text-orange-400 mb-4">Standard Rules</h3>
+        <div class="flex space-x-4">
+            <input type="text" id="standardRuleInput" placeholder="Enter standard rule" class="flex-grow bg-gray-700 text-white rounded p-2">
+            <button onclick="addRule('standard')" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                Add
+            </button>
+        </div>
+        <ul id="standardRulesList" class="mt-4 space-y-2"></ul>
+    </div>
+
+    <!-- Specific Rules 1 -->
+    <div class="mb-8">
+        <h3 class="text-xl font-semibold text-orange-400 mb-4">Specific Rules 1</h3>
+        <div class="flex space-x-4">
+            <input type="text" id="specific1RuleInput" placeholder="Enter specific rule 1" class="flex-grow bg-gray-700 text-white rounded p-2">
+            <button onclick="addRule('specific1')" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                <i class="fas fa-plus "></i>
+            </button>
+        </div>
+        <ul id="specific1RulesList" class="mt-4 space-y-2"></ul>
+    </div>
+
+    <!-- Specific Rules 2 -->
+    <div class="mb-8">
+        <h3 class="text-xl font-semibold text-orange-400 mb-4">Specific Rules 2</h3>
+        <div class="flex space-x-4">
+            <input type="text" id="specific2RuleInput" placeholder="Enter specific rule 2" class="flex-grow bg-gray-700 text-white rounded p-2">
+            <button onclick="addRule('specific2')" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
+                Add
+            </button>
+        </div>
+        <ul id="specific2RulesList" class="mt-4 space-y-2"></ul>
+    </div>
+
+    <!-- Save Rules Button -->
+    <button onclick="saveRules()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-8">
+        Save All Rules
+    </button>
+</div>
+
+<script>
+    const rules = {
+        standard: [],
+        specific1: [],
+        specific2: []
+    };
+    
+    function addRule(type) {
+        const input = document.getElementById(`${type}RuleInput`);
+        const ruleText = input.value.trim();
+    
+        if (ruleText) {
+            rules[type].push(ruleText);
+            updateRulesList(type);
+            input.value = '';
+            showMyToast(`Added ${type} rule`, 'success');
+        } else {
+            showMyToast('Please enter a rule', 'error');
+        }
+    }
+    
+    function removeRule(type, index) {
+        rules[type].splice(index, 1);
+        updateRulesList(type);
+        showToast(`Removed ${type} rule`, 'info');
+    }
+    
+    function updateRulesList(type) {
+        const list = document.getElementById(`${type}RulesList`);
+        list.innerHTML = '';
+    
+        rules[type].forEach((rule, index) => {
+            const li = document.createElement('li');
+            li.className = 'rule-item';
+            li.innerHTML = `
+                <span>${rule}</span>
+                <button onclick="removeRule('${type}', ${index})">
+                <i class="fas fa-minus "></i>
+                    </button>
+            `;
+            list.appendChild(li);
+        });
+    }
+    
+    function saveRules() {
+        // Here you would typically send the rules to your backend
+        console.log('Saving rules:', rules);
+        showToast('Rules saved successfully!', 'success');
+    }
+    
+    // Assuming you have the showToast function from the previous conversation
+    function showToast(message, type = 'info', duration = 3000) {
+        // ... (previous showToast implementation)
+    }
+    </script>
+{% endblock content %}

@@ -1,0 +1,330 @@
+{% extends "core/base.html" %}
+{% load static %}
+<!--<img src="{{post.image.url}}" width="100px" height="100px">
+-->
+{% block content %}
+<style>
+.post-box{
+    position: absolute;
+    z-index: 3;
+    margin: auto;
+    width: 50%;
+    border: 1px solid black;
+    background-color: bisque;
+    display: none;
+}
+</style>
+<style>
+    
+    .post-card {
+        /*width: 400px;*/
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        overflow: hidden;
+    }
+    .post-card .post-header {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+    }
+    .post-card .post-header img {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    .post-card .post-header .post-info {
+        flex: 1;
+    }
+    .post-card .post-header .post-info .user-name {
+        font-weight: bold;
+    }
+    .post-card .post-header .post-info .post-time {
+        font-size: 12px;
+        color: #888;
+    }
+    .post-card .post-header .post-options {
+        cursor: pointer;
+    }
+    .post-card .post-content {
+        padding: 15px;
+    }
+    .post-card .post-content .post-text {
+        margin-bottom: 10px;
+    }
+    .post-card .post-content .post-image {
+        width: 100%;
+        border-radius: 8px;
+    }
+    .post-card .post-actions {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 15px;
+        border-top: 1px solid #ddd;
+    }
+    .post-card .post-actions button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    .post-card .post-actions button:hover {
+        background-color: #0056b3;
+    }
+    .post-card .comment-section {
+        display: flex;
+        padding: 10px 15px;
+        border-top: 1px solid #ddd;
+    }
+    .post-card .comment-section input[type="text"] {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-right: 10px;
+    }
+    .post-card .comment-section button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    .post-card .comment-section button:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+
+<!-- popup style -->
+<style>
+     
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 80%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+  
+</style>
+<!--
+<button type="button" class="btn btn-lg btn-danger" data-bs-toggle="popover" data-bs-title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?">
+    Click to toggle popover</button>
+-->
+
+
+
+    
+  <div id="comments" class="comments-area popup">
+    <button id="close-btn" class="close-button"><i class="fa fa-times"></i></button>
+  </div>
+
+
+{% for post in posts  %}
+<div class="post-card">
+    <div class="post-header">
+        <img src="{{post.author.profile_picture.url}}" alt="Profile Picture">
+        <div class="post-info">
+            <div class="user-name">{{post.author}}</div>
+            <div class="post-time">2 hours ago</div>
+        </div>
+        <div class="post-options">
+            <i class="fa fa-ellipsis-h"></i>
+        </div>
+    </div>
+    <div class="post-content">
+        <div class="post-text">{{post.body}}</div>
+        {% if post.image %}
+        <img src="{{post.image.url}}" width="100%" height="100%" alt="Post Image" class="post-image">
+        {% endif %}
+    </div>
+    <div class="post-actions">
+        <button class="like-btn" data-post_id="{{post.id}}" data-link="{% url 'core:react' post.id %}">
+            {% if post.reacted %}
+            <i id="like-icon" class="fa fa-thumbs-up"></i>
+            {% else %}
+            <i id="like-icon" class="fa fa-thumbs-o-up"></i>
+            {% endif %}
+            <span id="post-likes-{{post.id}}">{{post.likes}}</span></button>
+        <button class="comment-btn" data-link="{% url 'core:post' post.id %}" data-post_id="{{post.id}}"><i class="fa fa-comment"></i></button>
+    </div>
+    <div class="comment-section">
+        <input id="input-comment-{{post.id}}"  type="text" placeholder="Write a comment...">
+        <button class="send-comment" data-post_id="{{post.id}}"  data-link="{% url 'core:comment' post.id %}"><i class="fa fa-paper-plane"></i></button>
+    </div>
+</div>
+{% endfor %}
+
+<a href="{% url 'core:create_post' %}">Create a post</a>
+
+<!--
+{% for post in posts  %}
+<div class="post-box">
+    <!--
+    <div class="main">
+        <p class="body"></p>
+    </div>
+    <div id="comments">
+
+    </div>
+
+<div id="comments">
+
+</div>
+<textarea id="input-comment" name="comment" cols="30" rows="2" placeholder="write your comment"></textarea>
+<button id="send-comment" data-link="{% url 'core:comment' post.id %}">Send</button>
+</div>
+
+<h3>{{post.author}}</h3>
+<p>{{post.body}}</p>
+{% if post.image %}
+<img src="{{post.image.url}}" width="100px" height="100px">
+{% endif %}
+<span id="post-likes-{{post.id}}">{{post.likes}}</span><button class="like-btn" data-post_id="{{post.id}}" data-link="{% url 'core:react' post.id %}">Like</button>
+<span>
+    <button class="comment-btn" data-link="{% url 'core:post' post.id %}" data-post_id="{{post.id}}">Comment</button></span>
+{% if post.author.user == request.user %}
+<form action="{% url 'core:delete_post' post.id %}" method="post">
+    {% csrf_token %}
+    <button type="submit">DELETE</button>
+</form>
+
+<a href="{% url 'core:modify_post' post.id %}">Edit</a>
+{% endif %}
+-->
+{% endfor %}
+
+
+<script>
+     
+
+    $(()=>{
+        const popup = document.getElementById('comments');
+    const closeButton = document.querySelector('#close-btn');
+    $(".close-button").on('click', (e) => {
+            
+            popup.style.display = 'none';
+            $("#comments").empty()
+            });
+    
+        $(".like-btn").on("click",(e)=>{
+           
+            const post_id = String(e.target.dataset.post_id)
+            $.ajax({
+                url: e.target.dataset.link,
+                type: "POST",
+                data: { csrfmiddlewaretoken:"{{ csrf_token }}" },
+                beforeSend: function(){
+                    $(e.target).hide()
+                    //show loader
+                },
+                success: function(res){
+                    if(res.status == 'success'){
+                        let likes_span = $(`#post-likes-${post_id}`)
+                        let likes = parseInt(likes_span.text())
+                        let like_icon = $(e.target).children().eq(0)
+                        if(res.message == 'liked'){
+                            like_icon.removeClass("fa fa-thumbs-o-up")
+                            like_icon.addClass("fa fa-thumbs-up")
+
+                            likes_span.text(likes+1)
+                            
+                        }else{
+                            like_icon.removeClass("fa fa-thumbs-up")
+                            like_icon.addClass("fa fa-thumbs-o-up")
+                            likes_span.text(likes-1)
+                            
+                        }
+                        
+
+                    }
+
+                },
+                complete: function(){
+                    $(e.target).show()
+                    //remove loader
+                }
+
+            })
+        })
+
+        $(".comment-btn").on("click",(e)=>{
+            popup.style.display = 'block';
+
+            let url = e.target.dataset.link
+            $.ajax({
+                url:url,
+                type:"GET",
+                beforeSend: function(){
+                    console.log("wait..")
+                },
+                success:function(res){
+                    if(res.status == "success"){
+                        console.log(res.post.comments)
+                        $("#comments").append(
+                        `<button id="close-btn" class="close-button"><i class="fa fa-times"></i></button>`
+                        )
+                        res.post.comments.forEach(comment => {
+                            $("#comments").append(`
+                            <div class="comment">
+                                <b>${comment.author}</b>
+                                <p>${comment.body}</p>
+                            </div>    
+                            `)
+                            $(".close-button").on('click', (e) => {
+                                popup.style.display = 'none';
+                                $("#comments").empty()
+                            });
+    
+                            
+                        });
+                            
+                    }
+                }
+            })
+        })
+
+        $(".send-comment").on("click",(e)=>{
+            console.log("clicked")
+            let post_id = e.target.dataset.post_id
+
+            $.ajax({
+                url: e.target.dataset.link,
+                type:"POST",
+                data:{csrfmiddlewaretoken:"{{csrf_token}}","comment":$(`#input-comment-${post_id}`).val()},
+                success: function(res){
+                    console.log(res)
+                }
+
+            })
+        })
+        
+    })
+</script>
+
+{% endblock content %}

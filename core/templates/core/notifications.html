@@ -1,0 +1,824 @@
+{% extends "core/base.html" %}
+
+
+{% block content %}
+<style>
+  body {
+      background-color: #1a202c;
+      color: #e2e8f0;
+  }
+  .notification-card {
+      transition: all 0.3s ease;
+  }
+  .notification-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .dropdown-menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background-color: #2d3748;
+      border-radius: 0.375rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+  }
+  .dropdown-menu.active {
+      display: block;
+  }
+</style>
+<style>
+  .request-card {
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  .request-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .btn-accept {
+      background-color: #48bb78;
+  }
+  .btn-accept:hover {
+      background-color: #38a169;
+  }
+  .btn-refuse {
+      background-color: #f56565;
+  }
+  .btn-refuse:hover {
+      background-color: #e53e3e;
+  }
+</style>
+
+<header class="bg-gray-800 text-white p-4 mt-20">
+  <h1 class="text-2xl text-orange-500 font-bold">Notifications</h1>
+</header>
+
+<main class="flex-grow container  md:w-full mx-auto px-4 py-8">
+  <div id="p-notifications-container" class="space-y-4 my-2">
+    
+    {% if player_notifications|length > 0 %}
+    <!-- <h1 class="text-2xl text-center text-orange-500 font-semibold">Requests and Invites to join <a href="/users/family/{{player.family.id}}" class="text-white font-bold">{{player.family}}</a></h1> -->
+    <h1 class="text-2xl text-center text-orange-500 font-semibold">Requests and Invites</h1>
+    {% endif %} 
+    
+    {% if challenges|length > 0 %}
+    <h1 class="text-2xl text-center text-orange-500 font-semibold">Challenges</h1>
+    {% for challenge in challenges  %}
+
+    <div id="challenge-card-{{challenge.id}}" class="challenge-card bg-gray-700 rounded-lg shadow-lg p-6 my-2 mx-auto max-w-md w-full mb-4">
+
+      <div class="text-center mb-6">
+          <i class="fas fa-fire text-4xl text-orange-600 mb-4"></i>
+          <h2 class="text-2xl font-semibold">On t'as lancé un challenge!</h2>
+      </div>
+      
+      <div class="bg-gray-700 rounded-lg p-4 mb-6">
+          <div class="flex items-center mb-4">
+            <a href="{% url 'users:player' challenge.sender.user.username %}">
+              <img src="{{challenge.sender.profile_picture.url}}" alt="{{challenge.sender}} profile picture" class="w-16 h-16 rounded-full mr-4">
+            </a>  
+            
+              <div>
+                  <a href="{% url 'users:player' challenge.sender.user.username %}" class="font-semibold text-xl text-lg">{{Challenge.sender}}</a>
+                  <p class="text-gray-400">Perso: <a href="#" class="font-semibold" >{{challenge.sender_character}}</a></p>
+              </div>
+          </div>
+          <p class="text-gray-300">{{challenge.sender}} t'as lancé un challenge</p>
+      </div>
+
+      <div class="mb-4">
+        <label for="character" class="block mb-2">Choisi ton perso:</label>
+        <select id="character" name="character" class="character-select w-full bg-gray-700 text-white p-2 rounded-lg">
+            <option value="">Choisi to perso</option>
+                        {% for character in characters %}
+                        {% if player.p_character == character.name %}
+                        <option selected value="{{character.name}}" data-img_link="{{character.images.0}}">
+                          {{character.name}}
+                        </option>
+                        {% else %}
+                        <option value="{{character.name}}" data-img_link="{{character.images.0}}">
+                          {{character.name}}
+                        </option>
+                        {% endif %}
+                        {% endfor %}
+        </select>
+    </div>
+
+      <div class="flex flex-col space-y-3">
+        <button onclick="answerChallenge(this,'{{challenge.id}}', 'accept')" class="bg-green-600 mb-2 hover:bg-green-700 text-white py-3 px-4 rounded-full transition duration-300 pulse-animation">
+            <i class="fas fa-check mr-2"></i>Accepter le Challenge
+        </button>
+        <button onclick="answerChallenge(this,'{{challenge.id}}', 'decline')" class="bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-full transition duration-300">
+            <i class="fas fa-times mr-2"></i>Refuser le Challenge
+        </button>
+    </div>
+  </div>
+    {% endfor %}
+    {% endif %}
+
+    {% for notif in player_notifications %}
+     {% if notif.notif_type == 'request' %}
+     <div class="text-center flex mb-6">
+      <!-- <i class="fas fa-users text-4xl text-blue-500 mb-4"></i> -->
+      <h2 class="text-2xl font-semibold">Un joueur veut rejoindre ta famille !</h2>
+    </div>
+     <div class="request-card bg-gray-700 rounded-lg p-4 mb-4 flex flex-col md:flex-row items-center justify-between">
+      
+      <div class="flex items-center mb-4 md:mb-0">
+        <a href="{% url 'users:player' notif.sender.user.username %}"> 
+          <img src="{{notif.sender.profile_picture.url}}" alt="User Avatar" class="w-12 h-12 rounded-full mr-4">
+        </a>  
+       
+          <div>
+              <a href="{% url 'users:player' notif.sender.user.username %}" class="font-semibold">{{notif.sender}}</a>
+              <p class="text-gray-400 text-sm">Rank: {{notif.sender.rank}} | Progress: {{notif.sender.progression}}%</p>
+          </div>
+      </div>
+      <div class="flex space-x-2">
+          <button  onclick="handleRequest(this,'{{notif.id}}', 'accept')" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-full transition duration-300">
+              <i class="fas fa-check mr-2"></i>Accept
+          </button>
+          <button onclick="handleRequest(this,'{{notif.id}}', 'refuse')" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-full transition duration-300">
+              <i class="fas fa-times mr-2"></i>Refuse
+          </button>
+      </div>
+    </div>
+
+    {% elif notif.notif_type == 'invite' %}
+    <div class="invite-card bg-gray-700 rounded-lg shadow-lg p-6 my-2 mx-auto max-w-md w-full mb-4">
+      <div class="text-center mb-6">
+          <i class="fas fa-users text-4xl text-blue-500 mb-4"></i>
+          <h2 class="text-2xl font-semibold">Tu as été invité!</h2>
+      </div>
+      
+      <div class="bg-gray-700 rounded-lg p-4 mb-6">
+          <div class="flex items-center mb-4">
+            <a href="{% url 'users:family_page' notif.family.id %}">
+              <img src="{{notif.family.profile_picture.url}}" alt="Family Leader Avatar" class="w-16 h-16 rounded-full mr-4">
+            </a>  
+            
+              <div>
+                  <a href="{% url 'users:family_page' notif.family.id %}" class="font-semibold text-xl text-lg">{{notif.family}}</a>
+                  <p class="text-gray-400">GodFather: <a href="{% url 'users:player' notif.family.god_father.username %}" class="font-semibold" >{{notif.family.god_father}}</a></p>
+              </div>
+          </div>
+          <p class="text-gray-300">You've been invited to join the {{notif.family}} family. Will you accept their invitation?</p>
+      </div>
+      
+      <div class="flex flex-col space-y-3">
+        <button onclick="handleInvite(this,'{{notif.id}}', 'accept')" class="bg-green-600 mb-2 hover:bg-green-700 text-white py-3 px-4 rounded-full transition duration-300 pulse-animation">
+            <i class="fas fa-check mr-2"></i>Accept Invitation
+        </button>
+        <button onclick="handleInvite(this,'{{notif.id}}', 'decline')" class="bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-full transition duration-300">
+            <i class="fas fa-times mr-2"></i>Decline Invitation
+        </button>
+    </div>
+  </div>
+    {% endif %}
+
+    
+     {% endfor %}
+</div>
+<h1 class="text-2xl text-center text-orange-500 mb-3 font-semibold">Personal</h1>
+  <div id="notifications-container" class="space-y-4">
+      <!-- Notifications will be dynamically inserted here -->
+  </div>
+</main>
+
+<!-- Popup for accepting battle -->
+<div id="ChallengePopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 animate-scaleIn">
+  <div class="bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4">
+      <h2 class="text-2xl font-bold mb-4">Accept Battle Request</h2>
+      <div class="mb-4">
+          <h3 class="font-bold">Opponent:</h3>
+          <p id="opponentName" class="mb-1"></p>
+          <p id="opponentCharacter" class="mb-1"></p>
+          <p  class=" mb-1">Type: <span id="requestType" class="text-2xl font-bold"></span></p>
+      </div>
+      <div class="mb-4">
+          <label for="character" class="block mb-2">Choose your character:</label>
+          <select id="character" name="character" class="w-full bg-gray-700 text-white p-2 rounded-lg">
+              <option value="">Select a character</option>
+                          {% for character in characters %}
+                          {% if player.p_character == character.name %}
+                          <option selected value="{{character.name}}" data-img_link="{{character.images.0}}">{{character.name}} </option>
+                          {% else %}
+                          <option value="{{character.name}}" data-img_link="{{character.images.0}}">{{character.name}} </option>
+                          {% endif %}
+                          {% endfor %}
+          </select>
+      </div>
+      <div class="mb-6">
+          <p class="text-yellow-500"><i class="fas fa-exclamation-triangle mr-2"></i>Notice: Battle Points will be deducted upon accepting this request. <br><a href="#" class="text-blue-400">See how it works</a></p>
+      </div>
+      <div class="flex justify-between">
+          <button id="confirmChallenge" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
+              <i class="fas fa-check mr-2"></i>Confirm
+          </button>
+          <button id="cancelChallenge" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
+              <i class="fas fa-times mr-2"></i>Cancel
+          </button>
+      </div>
+  </div>
+</div>
+
+
+
+
+<script>
+
+function showChallengePopup(){
+
+}
+
+function answerChallenge(element, challengeId, answer){
+  const card = document.getElementById(`challenge-card-${challengeId}`)
+  const character = $(card).find("select").val()
+  if(answer == "accept"){
+    if(character){
+      $.ajax({
+                url: `/battles/challenge/answer/${challengeId}`,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}", character: character, response: answer},
+                beforeSend: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                      showMyToast(res.message, 'success')
+                      
+                      //$(requestCard).hide(300)
+                      card.classList.add('opacity-0', 'scale-95');
+                      card.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+                      
+                    }else{
+                        showMyToast(res.message)
+                    }
+                },
+                complete: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                  showMyToast("An error occured", 'error')
+                }
+            })
+  }else{
+    showMyToast('Please choose a character to accept the challenge')
+  }
+  }else{
+    $.ajax({
+                url: `/battles/challenge/answer/${challengeId}`,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}", character: character, response: answer},
+                beforeSend: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                      showMyToast(res.message, 'success')
+                      
+                      //$(requestCard).hide(300)
+                      card.classList.add('opacity-0', 'scale-95');
+                      card.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+                      
+                    }else{
+                        showMyToast(res.message)
+                    }
+                },
+                complete: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                  showMyToast("An error occured", 'error')
+                }
+            })
+  }
+ 
+}
+
+function handleInvite(btn,inviteId, action) {
+            // Simulated API call (replace with actual API call)
+            const inviteCard = btn.closest('.invite-card')
+            if(action == 'accept'){
+              $.ajax({
+                url: `users/join_family/${inviteId}`,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+                beforeSend: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                      showMyToast(res.message, 'success')
+                      
+                      $(requestCard).hide()
+                      // inviteCard.classList.add('opacity-0', 'scale-95');
+                      // inviteCard.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+                      
+                    }else{
+                        showMyToast(res.message)
+                    }
+                },
+                complete: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                  showMyToast("An error occured", 'error')
+                }
+            })
+            }else if(action == 'decline'){
+              $.ajax({
+                url: `/users/notification/${inviteId}/game`,
+                type : "DELETE",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+                beforeSend: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                      showMyToast(res.message, 'success')
+                     
+                      //$(requestCard).hide(300)
+                      inviteCard.classList.add('opacity-0', 'scale-95');
+                      inviteCard.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+                      
+                    }else{
+                        showMyToast(res.message)
+                    }
+                },
+                complete: function(){
+                  $('#loading-overlay').toggleClass('active')
+                  
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                  showMyToast("An error occured", 'error')
+                }
+            })
+            }
+           
+           
+      }
+
+function handleRequest(btn,requestId, action) {
+            // Simulated API call (replace with actual API call)
+            if(action == 'accept'){
+              $.ajax({
+                url: `users/accept_request/${requestId}`,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+                beforeSend: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                      showMyToast(res.message, 'success')
+                      const requestCard = btn.closest('.request-card')
+                      //$(requestCard).hide(300)
+                      requestCard.classList.add('opacity-0', 'scale-95');
+                      requestCard.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+                      
+                    }else{
+                        showMyToast(res.message)
+                    }
+                },
+                complete: function(){
+                  
+                  $('#loading-overlay').toggleClass('active')
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                  showMyToast("An error occured", 'error')
+                }
+            })
+            }else if(action == 'refuse'){
+              $.ajax({
+                url: `/users/notification/${requestId}/game`,
+                type : "DELETE",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+                beforeSend: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                      showMyToast(res.message, 'success')
+                      const requestCard = btn.closest('.request-card')
+                      //$(requestCard).hide(300)
+                      requestCard.classList.add('opacity-0', 'scale-95');
+                      requestCard.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+                      
+                    }else{
+                        showMyToast(res.message)
+                    }
+                },
+                complete: function(){
+                  $('#loading-overlay').toggleClass('active')
+                  
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                  showMyToast("An error occured", 'error')
+                }
+            })
+            }
+            
+      }
+
+
+  function createNotificationCard(notification) {
+      const card = document.createElement('div');
+      card.className = 'notification-card bg-gray-700 rounded-lg p-4 shadow-md relative';
+      card.innerHTML = `
+          <a href="${notification.url}" class="block px-2">
+              
+              <p class="text-gray-300  mb-2">${notification.content}</p>
+              <p class="text-sm text-gray-400">${notification.timestamp}</p>
+          </a>
+          <div class="absolute top-2 right-2">
+              <button class="text-gray-300 hover:text-white focus:outline-none dropdown-toggle" data-notification-id="${notification.id}">
+                  <i class="fas fa-ellipsis-v"></i>
+              </button>
+              <div class="dropdown-menu w-48 py-2">
+                  <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600" onclick="markAsRead(${notification.id})"><i class = 'fas fa-circle-thin mr-2'></i> Mark as read</a>
+                  <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-600"  onclick="deleteNotification(${notification.id},'${notification.type}')"><i class = 'fas fa-trash mr-2'></i>Delete</a>
+              </div>
+          </div>
+      `;
+      return card;
+  }
+
+  function createPlayerNotificationCard(notification) {
+      const card = document.createElement('div');
+      card.className = 'notification-card bg-gray-700 rounded-lg p-4 shadow-md relative';
+      card.innerHTML = `
+          <a href="${notification.url}" class="block px-2">
+              
+              <p class="text-gray-300  mb-2">${notification.content}</p>
+              <p class="text-sm text-gray-400">${notification.timestamp}</p>
+          </a>
+          <div class="absolute top-2 right-2">
+              <button class="text-gray-300 hover:text-white focus:outline-none dropdown-toggle" data-notification-id="${notification.id}">
+                  <i class="fas fa-ellipsis-v"></i>
+              </button>
+              <div class="dropdown-menu w-48 py-2">
+                  <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600" onclick="markAsRead(${notification.id})"><i class = 'fas fa-circle-thin mr-2'></i> Mark as read</a>
+                  <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-600"  onclick="deleteNotification(${notification.id},'${notification.type}')"><i class = 'fas fa-trash mr-2'></i>Delete</a>
+              </div>
+          </div>
+      `;
+      return card;
+  }
+
+  function renderNotifications() {
+    $.ajax({
+      url: '/notifications/all',
+      type:'GET',
+      data: {csrfmiddlewaretoken:'{{csrf_token}}'},
+      success: function(res){
+        
+          if(res.status == 'success'){
+            const notifications = res.notifications
+            const container = document.getElementById('notifications-container');
+            container.innerHTML = '';
+            if(notifications.length > 0){
+              notifications.forEach(notification => {
+                container.appendChild(createNotificationCard(notification));
+      });
+            }else{
+              // <svg class="m-auto w-[48px] h-[48px] dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              //   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="m10.827 5.465-.435-2.324m.435 2.324a5.338 5.338 0 0 1 6.033 4.333l.331 1.769c.44 2.345 2.383 2.588 2.6 3.761.11.586.22 1.171-.31 1.271l-12.7 2.377c-.529.099-.639-.488-.749-1.074C5.813 16.73 7.538 15.8 7.1 13.455c-.219-1.169.218 1.162-.33-1.769a5.338 5.338 0 0 1 4.058-6.221Zm-7.046 4.41c.143-1.877.822-3.461 2.086-4.856m2.646 13.633a3.472 3.472 0 0 0 6.728-.777l.09-.5-6.818 1.277Z"/>
+              //   </svg>
+              $(container).append(`
+              <div id="no-notifications" class="">
+              <div class="no-notifications rounded-lg p-8 text-center">
+                <p class="text-xl text-gray-400">No personal notifications</p>
+               <i class = 'fas fa-bell-slash text-3xl'></i>
+                <p class="text-sm text-gray-500 mt-2">You're all caught up!</p>
+              </div>
+            </div>
+              `)
+            }
+            
+      addDropdownListeners();
+          }
+      },
+      error: function(jqXHR, textstatus, errorThrown){
+        console.log('Error: ',errorThrown)
+        showMyToast('An error occured','error')
+      }
+    })  
+    
+  }
+
+  function addDropdownListeners() {
+      document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+          toggle.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const dropdown = toggle.nextElementSibling;
+              dropdown.classList.toggle('active');
+          });
+      });
+
+      document.addEventListener('click', () => {
+          document.querySelectorAll('.dropdown-menu').forEach(menu => {
+              menu.classList.remove('active');
+          });
+      });
+  }
+
+  function markAsRead(id) {
+      console.log(`Marking notification ${id} as read`);
+      // Implement your logic here
+  }
+
+  function deleteNotification(id,type) {
+      console.log(`Deleting notification ${id}, ${type}`);
+          $.ajax({
+            url: `/users/notification/${id}/${type}`,
+            type: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{csrf_token}}' // Include CSRF token in headers
+              },
+              data:{ 
+                csrfmiddlewaretoken : "{{ csrf_token }}",
+
+              },
+              beforeSend: function(){
+                $('#loading-overlay').toggleClass('active')
+              },
+              success: function(res){
+                if(res.status == 'success'){
+                  showMyToast('Deleted','success')
+                }
+              },
+              complete: function(){
+                $('#loading-overlay').toggleClass('active')
+                
+                renderNotifications();
+              },
+              error: function(jqXHR, textstatus, errorThrown){
+                console.log('error', errorThrown)
+                showMyToast('An error occured please try again','error')
+              }
+          })
+          
+      
+  }
+
+  renderNotifications();
+</script>
+
+
+{% endblock content %}
+
+
+
+
+{% block not_content %}
+<style>
+  .notifications{
+    width: 80%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+
+    .box{
+      border-radius: 8px;
+      padding: 10px;
+    }
+    .empty{
+      align-self: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items:center ;
+      color: crimson;
+
+      i{
+        display: inline-block;
+        color: crimson;
+        font-size: 120px;
+      }
+    }
+  }
+  .notification{
+    width: 100%;
+    background-color: azure;
+    .action-buttons{
+      position: relative;
+      form{
+        display: inline; 
+      }
+    }
+
+  }
+</style>
+
+
+
+
+  
+</div>
+
+<h1>Notifications</h1>
+<div class="notifications">
+  {% for notification in player_notifications%}
+
+   <!--private messages-->
+  {% if notification.notif_type == "private_message" %}
+  
+  <div class="notification box">
+    <a href="{% url 'chats:private_chat' notification.sender.user.username %}">
+    {{notification}}
+  </a>
+  <button class="btn btn-danger delete-btn" data-notif_id="{{notification.id}}" data-url="{% url 'users:notif' notification.id %}">Delete</button>
+  </div> 
+
+ 
+
+  
+  <!--Requests to join family-->
+  {%  elif notification.notif_type == "request" %}
+    <div class="notification box" id="notification_{{notification.id}}">
+      New Request from <a href="{% url 'users:player' notification.sender %}">{{notification.sender}}</a> to join <a href="{% url 'users:family_page' notification.family.id %}">{{notification.family}}</a>
+    <div class="action-buttons">
+      <form method="post" action="{% url 'users:accept_request' notification.sender.id %}">
+        <input type="hidden" value="{{notification.id}}">
+        <button type="submit" class="btn btn-success add-player-btn" data-type="accept_request">Add player to family</button>
+      </form>
+      
+    <button class="btn btn-danger refuse-btn" data-notif_id="{{notification.id}}" data-url="{% url 'users:refuse_request' notification.id %}">Refuse</button>
+    </div>
+      {%for msg in messages%}
+      <h5 style="color: red; background: rgba(200, 0, 0, 0.1);">{{msg}}</h5>
+      {% endfor %}
+    </div>
+    
+    {%  elif notification.notif_type == "battle_accepted" %}
+    <div class="notification box" id="notification_{{notification.id}}">
+      <a href="{% url 'users:player' notification.sender %}">{{notification.sender}}</a> accepted your battle request <a href="{% url 'users:battle_requests' %}">details</a>
+      <button class="btn btn-danger delete-btn" data-notif_id="{{notification.id}}" data-url="{% url 'users:notif' notification.id %}">Delete</button>
+    </div>
+
+    {%  elif notification.notif_type == "refree_proposal" %}
+    <div class="notification box" id="notification_{{notification.id}}">
+      <a href="{% url 'users:player' notification.sender %}">{{notification.sender}}</a> wants  to refree your battle  <a href="{% url 'users:battle_requests' %}">details</a>
+      <button class="btn btn-danger delete-btn" data-notif_id="{{notification.id}}" data-url="{% url 'users:notif' notification.id %}">Delete</button>
+    </div>
+
+     <!--other notifications-->
+    {% else %}
+    <div class="notification box" id="notification_{{notification.id}}">
+      {{notification}}
+      <button class="btn btn-danger delete-btn" data-notif_id="{{notification.id}}" data-url="{% url 'users:notif' notification.id %}">Delete</button>
+    </div>
+      {% endif %}
+  {% empty %}
+  <div class="empty box">
+    <i class="fa fa-archive"></i>
+    No new notification
+  </div>
+  {% endfor %}
+   
+
+</div>
+
+<script>
+  $(()=>{
+        function sendInvite(url){
+            $.ajax({
+                url: url,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+                success: function(res){
+                    console.log(res.message)
+                    if(res.message == "success"){
+                        console.log("Invite sent to ")
+                    }else{
+                        console.log("Invite not sent")
+                    }
+                }
+            })
+
+        }
+
+        function sendRequest(url){
+            $.ajax({
+                url: url,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+                success: function(res){
+                    console.log(res.message)
+                    if(res.message == "success"){
+                        console.log("Request sent to join family")
+                    }else{
+                        console.log("request not send")
+                    }
+                }
+            })
+        }
+
+        function accept_request(url){
+            $.ajax({
+                url: url,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+                success: function(res){
+                    console.log(res.message)
+                    if(res.message == "success"){
+                        console.log("player added to family")
+                    }else{
+                        console.log("player not added")
+                    }
+                }
+            })
+        }
+
+        function join_family(url){
+            $.ajax({
+                url: url,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+                success: function(res){
+                    console.log(res.message)
+                    if(res.message == "success"){
+                        console.log("Joined family")
+                    }else{
+                        console.log("Error joining family")
+                    }
+                }
+            })
+        }
+
+        $(".refuse-btn").on("click",(e)=>{
+          let url = e.target.dataset.url
+          let notif_id  = e.target.dataset.notif_id
+          $.ajax({
+                url: url,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+                success: function(res){
+                    console.log(res.message)
+                    if(res.status == "success"){
+                        console.log(res.message)
+                        $(`#notification_${notif_id}`).remove()
+                    }else{
+                        console.log("Error refusing player")
+                    }
+                }
+            })
+        })
+
+        $(".delete-btn").on("click",(e)=>{
+          let url = e.target.dataset.url
+          let notif_id  = e.target.dataset.notif_id
+          $.ajax({
+                url: url,
+                type : "DELETE",
+                headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{csrf_token}}' // Include CSRF token in headers
+              },
+                data:{ csrfmiddlewaretoken:"{{ csrf_token }}"},
+                success: function(res){
+                    console.log(res.message)
+                    if(res.status == "success"){
+                        console.log(res.message)
+                        $(`#notification_${notif_id}`).remove()
+                    }else{
+                        console.log(res.message)
+                    }
+                }
+            })
+        })
+
+        /*
+        $(".add-player-btn").on("click",(e)=>{
+            let url = e.target.dataset.url
+            let type = e.target.dataset.type
+            console.log(url)
+            if(type == "invite"){
+                sendInvite(url) 
+                e.target.disabled = true
+            }else if (type == "request"){
+                sendRequest(url)
+                e.target.disabled = true
+            }else if(type = "accept_request"){
+                accept_request(url)
+                e.target.disabled = true
+            }else if(type = "join_family"){
+                join_family(url)
+                e.target.disabled = true
+            }else{
+                console.log("Nothing done...")
+            }
+            
+            
+                
+        })
+*/
+        
+    })
+</script>
+{%  endblock not_content %}

@@ -1,0 +1,105 @@
+
+
+*25/09/24
+- payment methods feasibilities
+- ad sources feasibilities
+- test meme APIs
+
+*26/09/24
+- new users tests
+- initialize blog app
+- challenges
+- new battles tests
+- referee ratings
+
+*27/09/24
+- finish tournaments
+- Implement Quizz events -- Soon
+
+*28/09/24
+- Add tailwind internally
+- Add google auth(and see what it takes to make it professionally)
+- Define celery tasks(send emails, delete expired objects,login code for moderators)
+- setup referall program
+
+*29/09/24
+- Finish the blog app
+
+*30/09/24
+- review ad placements(places to put ads, the store)
+- Set the brand designs
+
+*31/09/24
+- Language settings
+
+*01/10/24
+- set the amounts(BP prizes, different costs for battles)
+- Final Tests and refactoring(e.g comeback on friendly battles:friendlies won't consume battle points but will also not change anything to the winner or from the loser, seperate the static files)
+
+
+*02/10/24
+- family actions(invite, join)
+- challenges finalisation
+- make the business plan
+- Make the become a referee questions and situations 
+
+introspectro cc: 6763226582
+
+- DM messages
+
+
+- Loading Posts(with feed algorithm)
+- put the data on the user page
+- protect routes
+- language conversion
+- celery
+- landing page
+- manage family page
+- Account page
+- reset passwords
+
+- privacy policies and terms/conditions
+- email sending(after buying domain)
+- payment methods
+- moderator finish
+- Referee quizz questions and situations
+
+- 2FA auth
+
+
+- implement google(and maybe facebook) signIn/signUp
+- add languages(fr & en to start)
+
+- Add family actions(remove players, add roles...)
+
+
+- IMPLEMENT automatic meme posting
+- protect routes
+- optimize search engine  
+- referrall program
+
+
+- add payment methods for battle points
+- create blog/tutorial
+- implement email sending
+
+- final tests and checks(battle requests and acceptances)
+
+- DEPLOY
+- ENSURE ALL KEYS ARE SECURELY STORED
+- Production tests
+
+<!-- If there is time -->
+- Add push notifications
+- Add install as app functionality
+
+- finish tournaments and add other events
+<!-- 
+- Try restrictive tournaments -->
+
+
+
+<!-- Future features-->
+- Comment Replies
+- message replies
+- battle points usage history

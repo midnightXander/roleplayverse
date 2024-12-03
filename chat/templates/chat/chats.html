@@ -1,0 +1,314 @@
+{% extends "core/base.html" %}
+{% block content %}
+{% load static %}
+
+{% block style %}
+
+<style>
+   
+        .message-options {
+            transition: opacity 0.3s ease-in-out;
+        }
+
+    @media (max-width: 768px) {
+        .messages-container{
+            display: none;
+        }
+        .chats-container{
+            margin-top: 60px;
+            min-height: 100%;
+        }
+        .chats-main{
+            padding: 0 0;
+        }
+       
+        
+    }
+    
+</style>
+{% endblock style %}
+
+<main class="chats-main  bg-gray-700 rounded-lg p-6 md:mt-16 text-gray-300 flex-grow flex flex-col md:flex-row overflow-hidden" >
+    <!-- Sidebar -->
+    <aside class="chats-container  w-full md:w-1/4 bg-gray-800 rounded-lg  border-gray-200 overflow-y-auto">
+        <div class="p-4">
+            <input id="searchChats" type="text" placeholder="Rechercher une conversation..." oninput="searchChats()" class="w-full p-2  rounded-full bg-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500">
+        </div>
+
+        <ul id="chatList" class="">
+            <!-- Chats will be added here -->
+            
+            {% if player.family %}
+            <!-- border-b border-gray-700 -->
+            <li class='chat  p-2  hover:bg-gray-700 cursor-pointer transition duration-300'>
+                <a href="{% url 'chat:family_chat' player.family %}">
+                    
+                    <div class="flex items-center">
+                        <img src="{{player.family.profile_picture.url}}" alt="{{player.family}} profile picture" class="w-12 h-12 rounded-full mr-4">
+                        <div class="flex-grow">
+                            <h3 class="font-semibold"> {{player.family}}</h3>
+                            <p class="text-gray-500 text-sm ellipsed max-w-64 truncate">
+                                {{family_last_message.sender}}: {{family_last_message.content}}
+                            </p>
+                        </div>
+                        <span class="text-xs text-gray-400">{{family_last_message.date_sent}}</span>
+                    </div>
+                </a>
+            </li>
+            {% endif %}
+
+            {% for chat in chats %}
+            <!-- border-b border-gray-700 -->
+        <li class='chat  p-2  hover:bg-gray-700 cursor-pointer transition duration-300'>
+            
+            
+            {% if chat.chat.recipient == player %}
+            <a href="{%  url 'chat:private_chat' chat.chat.initiator.user.username %}">
+                <div class="flex items-center ">
+                <img src="{{chat.chat.initiator.profile_picture.url}}" alt="{{chat.chat.initiator}} profile picture" class="w-12 h-12 rounded-full mr-4">
+                <div class="flex-grow">
+                    <h3 class="font-semibold">{{chat.chat.initiator}}</h3>
+                    <p class="text-gray-500 text-sm ellipsed max-w-64 truncate">
+                        
+                        {% if chat.last_message.image %}
+                        <i class="fas fa-camera mr-2"></i> sent an image
+                        {% else %}
+                        {{ chat.last_message.content }}
+                        {% endif %}
+                        
+                    </p>
+                    
+                </div>
+                <span class="text-xs text-gray-400">{{chat.last_message.date_sent}}</span>
+                <!-- <div class="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">1</div> -->
+            </div>
+            </a>
+
+            {% else %}
+            <a href="{%  url 'chat:private_chat' chat.chat.recipient.user.username %}">
+                <div class="flex items-center">
+                    <img src="{{chat.chat.recipient.profile_picture.url}}" alt="{{chat.chat.recipient}} profile picture" class="w-12 h-12 rounded-full mr-4">
+                    <div class="flex-grow">
+                        <h3 class="font-semibold">{{chat.chat.recipient}}</h3>
+                        <p class="text-gray-500 ellipsed max-w-64 text-sm truncate">
+                            {% if chat.last_message.image %}
+                            <i class="fas fa-camera mr-2"></i> sent an image
+                            {% else %}
+                            {{ chat.last_message.content }}
+                            {% endif %}
+                        </p>
+                    </div>
+                    <span class="text-xs text-gray-400">{{chat.last_message.date_sent}}</span>
+                </div>
+                
+            </a>
+            {% endif %}
+        </li>
+        {% empty %}
+        <div  class="p-4 flex flex-col justify-center items-center">
+            <img src="{% static 'svg/no-chats.svg'  %}" alt="no-chats" class="h-24 w-24" >
+            Aucune conversation privée pour le moment 
+        </div>
+        {% endfor %}
+
+             
+
+        </ul>
+        
+    </aside>
+
+    <!-- Chat area -->
+    <section style="border-radius:10px; " class="messages-container w-full md:w-3/4  flex flex-col overflow-hidden">
+        
+
+         
+        {% block messages %}
+        <div class="flex flex-col items-center justify-center" style="width: 50%; margin:auto;">
+            <img src="{% static 'svg/empty-message.svg'  %}" alt="empty-message" class="h-32 w-32" >
+            
+            <p style="text-align: center;">
+                Choisissez une conversation pour commencer a discuter
+            </p>
+        </div>
+        
+        {% endblock messages %}
+        
+        
+        
+       
+        
+    </section>
+</main>
+{% block main_active %}
+<script>
+    $(()=>{
+        
+        $('.bottom-nav-link').removeClass('bg-gray-700')
+        $('.bottom-nav-link')[1].classList.add('bg-gray-700')
+    })
+</script>
+{% endblock main_active  %}
+
+<script>
+    function searchChats() {
+        const searchValue = document.getElementById('searchChats').value.toLowerCase();
+        const chatList = document.getElementById('chatList');
+        const chats = chatList.getElementsByClassName('chat');
+
+        for (let i = 0; i < chats.length; i++) {
+            const chatName = chats[i].getElementsByTagName('h3')[0].innerText.toLowerCase();
+            if (chatName.includes(searchValue)) {
+                chats[i].style.display = '';
+            } else {
+                chats[i].style.display = 'none';
+            }
+        }
+    }
+
+</script>
+
+
+<script>
+
+
+function messageOptionsListener(){
+        
+        const optionsButton = document.querySelectorAll('.optionsButton');
+       //const optionsMenu = document.querySelectorAll('.optionsMenu');
+       
+        // optionsButton.forEach(optionButton=>{
+        //     optionButton.addEventListener('click', (e) => {
+        //     e.target.closest('.optionsMenu').classList.toggle('hidden')
+        // });
+        // })
+        $(".optionsButton").on('click',(e)=>{
+           
+            const optionsMenu  = $(e.target).parent().parent().find('.optionsMenu')
+            optionsMenu.toggleClass('hidden')
+            
+            document.addEventListener('click', (event) => {
+            if (!e.target.contains(event.target) && !optionsMenu[0].contains(event.target)) {
+                optionsMenu[0].classList.add('hidden');
+            }
+            });
+        })
+       
+
+        
+    }
+
+    function deleteFamilyMessage(element, messageId){
+        
+        $.ajax({
+                url: `/chats/messages/delete/family/${messageId}`,
+                type: 'DELETE',
+                data: {csrfmiddlewaretoken:"{{ csrf_token }}"},
+                beforeSend: function(){
+                    $("#loading-overlay").toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status === 'success'){
+                        showMyToast(res.message, 'success')
+                        //element.closest('.message').classList.add('hidden')
+                        $(element.closest('.message')).hide(500)
+
+                    }else{
+                        showMyToast(res.message)
+                    }
+                },
+                complete: function(){
+                    $("#loading-overlay").toggleClass('active')
+                },
+                error: function(jqXHR, textstatus,  errorThrown){
+                    showMyToast('an error occured','error')
+                }
+            })
+        }
+        function deletePrivateMessage(element, messageId){
+        
+        $.ajax({
+                url: `/chats/messages/delete/private/${messageId}`,
+                type: 'DELETE',
+                data: {csrfmiddlewaretoken:"{{ csrf_token }}"},
+                beforeSend: function(){
+                    $("#loading-overlay").toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status === 'success'){
+                        showMyToast(res.message, 'success')
+                        console.log($(element).parent('.message'))
+                        
+                        //element.closest('.message').classList.add('hidden')
+                        $(element.closest('.message')).hide(500)
+
+                    }else{
+                        showMyToast(res.message)
+                    }
+                },
+                complete: function(){
+                    $("#loading-overlay").toggleClass('active')
+                },
+                error: function(jqXHR, textstatus,  errorThrown){
+                    showMyToast('an error occured','error')
+                }
+            })
+        }
+</script>
+
+
+
+
+
+<script>
+    $(()=>{
+        const searchForm = $("#search-users")
+        const inputName = $("#input-name")
+        inputName.on("input",(e)=>{
+           if(e.target.value != ""){
+            $.ajax({
+                url: "{% url 'chat:search' %}",
+                type: 'POST',
+                data: {"username":e.target.value, csrfmiddlewaretoken:"{{ csrf_token }}"},
+                success: function(res){
+                    if(res.status === 'success'){
+                        console.log(res.searched_players)
+                        $("#users-list").removeClass("searched-players")
+                        $("#user-list").empty()
+                        
+                        res.searched_players.forEach(player => {
+                            $("#user-list").append(`
+                            <a href = "dm/${player.username}">${player.username}</a><br>
+                            `)
+                        });
+                        $("#users-list").addClass("searched-players")
+                    }else{
+                        console.log("Error searching")
+                    }
+                }
+            })
+           }else{
+            $("#user-list").empty()
+           }
+            
+        })
+        searchForm.on("submit",(e)=>{
+            e.preventDefault()
+            $.ajax({
+                url: "{% url 'chat:search' %}",
+                type: 'POST',
+                data: {"username":"f", csrfmiddlewaretoken:"{{ csrf_token }}"},
+                success: function(res){
+                    if(res.status === 'success'){
+                        console.log(res.searched_players)
+                    }else{
+                        console.log("Error searching")
+                    }
+                }
+            })
+            
+        })
+    })
+    
+</script>
+
+{% endblock content %}

@@ -1,0 +1,1613 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="fr">
+    {% load pwa %}
+    {% progressive_web_app_meta %}
+    <link rel="manifest" href="manifest.json">
+    
+    <head>
+        <title>{% block title %}Home-RolePlay Verse{% endblock title %}</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="{% block meta_description %} page d'acceuille de la plateforme roleplay verse  {% endblock meta_description %}">
+        
+        <meta name="keywords" content="{% block meta_keywords %} Naruto Text Pave Anime Manga RPG jeux en ligne communauté messagerie privée jeu de role naruto shippuden réseau social RPG Anime role-playing rolleur community {% endblock meta_keywords %}">
+        <meta property = "og:image" content = "{% static 'images/logo/logo_1.png' %}" >
+        <meta property = "og:url" content = "https://roleplayverse.com">
+        <link rel="icon" type="image/x-icon" href="{% static 'images/logo/logo_1.png' %}">
+        
+        <!-- <link rel="stylesheet" href="{% static 'css/home.css' %}" /> -->
+        
+
+        <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/linkifyjs/dist/linkify.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/linkify-html/dist/linkify-html.min.js' %}"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        
+        
+        
+       
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/output.css' %}" >
+        <link rel="stylesheet" href="{% static 'css/effects.css' %}" >
+        <link rel="stylesheet" href="{% static 'css/ads.css' %}" >
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.0/gsap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.2/sharer.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <script src="https://cdn.cinetpay.com/seamless/main.js"></script>
+
+        <!-- <style>
+            body {
+                font-family: 'Nunito', sans-serif;
+            }
+            .scroll-indicator {
+                height: 3px;
+                background: #ff4500;
+                width: 0%;
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 50;
+                transition: width 0.3s ease;
+            }
+    
+            
+        </style> -->
+
+        <!--Navbar-->
+<style>
+    
+
+    /* Navbar styles */
+    .nav-icon {
+        font-size: 1.25rem;
+    }
+    
+    /* Profile dropdown animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    #profileMenu {
+        animation: fadeIn 0.2s ease-out;
+    }
+</style>
+
+
+    <style>
+
+            body {
+                margin: 0;
+                font-family: 'Nunito','inter','Roboto Mono','Gill Sans';
+                
+                
+            }
+            *{
+                font-family: 'Nunito','inter','Roboto Mono','Gill Sans';
+            }
+            .link{
+                color: #1a7feb;
+                font-weight: bold;
+            }
+            .link:hover{
+                color: #207cdd;
+            }
+            .round-btn{
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 5px;
+                width: 20px;
+                height: 20px;
+            }
+            .ellipsed{
+                overflow: hidden;
+                word-wrap: break-word;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            
+        .search-area{
+            border-radius: 5px;
+            width: 100%;
+            background-color: #f0f0f0;
+            input{
+                outline: none;
+                background-color: #f0f0f0;
+                border:0; 
+                width: 85%;
+            }
+            i:hover{
+                cursor: pointer;
+
+            }
+        }
+        .toggle-btn {
+            display: none;
+            color: white;
+            background-color: #333;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+            @media (max-width: 768px) {
+                .navbar-center {
+                    display: none;
+                }
+                .toggle-btn {
+                display: block;
+            }
+            
+            }
+            /* @media (min-width: 768px){
+                #mobile-search{
+                display: block;
+            }
+            } */
+
+        </style>
+
+
+<!--battles style-->
+<style>
+/*---notif---*/
+.notifier{
+    font-size: small;
+    /* padding: 4px; */
+}
+</style>
+
+<style>
+    .search-result{
+        padding: 1rem;
+        min-height: 100vh;
+        background-color: #ddd;
+        position: absolute;
+
+    }
+</style>
+<style>
+    .options{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: absolute;
+        z-index: 99;
+    }
+    /* i{
+        font-size: larger;
+    } */
+</style>
+<style>
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(10, 10, 10, 0.5);
+        z-index: 30;
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .loading-overlay.active {
+        display: flex;
+    }
+
+</style>
+
+
+<style>
+    .filter-button.active {
+        background-color: #e67010;
+        /* color: #1a202c; */
+    }
+    .filter-container::-webkit-scrollbar {
+            height: 6px;
+        }
+    .filter-container::-webkit-scrollbar-thumb {
+            background-color: #4a5568;
+            border-radius: 3px;
+        }
+    *::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+    *::-webkit-scrollbar-thumb {
+            background-color: #4a5568;
+            border-radius: 3px;
+        }
+        
+    @media (max-width: 640px) {
+        .fab{
+            display: block;
+        }
+
+        .filter-container {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+        .filter-button {
+            flex: 0 0 auto;
+        }
+        
+    }
+    @media (min-width: 640px){
+        .filter-container {
+        justify-content: center;
+        }
+        /* .bottom-nav{
+            display: none;
+        } */
+    }
+</style>
+
+<style>
+    .my-toast {
+               max-width: 350px;
+               min-width: 150px;
+               padding: 12px 16px;
+               border-radius: 4px;
+               margin-bottom: 10px;
+               margin: auto;
+               box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+               display: flex;
+               align-items: center;
+               justify-content: space-between;
+               animation: fadeInDown 0.5s forwards;
+               /* animation-duration: 0.5s;
+               animation-fill-mode: forwards;  */
+           }
+
+   .my-toast-success {
+       background-color: #10B981;
+       color: #ffffff;
+   }
+
+   .my-toast-error {
+       background-color: #EF4444;
+       color: #ffffff;
+   }
+
+   .my-toast-warning {
+       background-color: #F59E0B;
+       color: #ffffff;
+   }
+
+   .my-toast-info {
+       background-color: #3B82F6;
+       color: #ffffff;
+   }
+
+   .my-toast-close {
+       background: none;
+       border: none;
+       color: #ffffff;
+       cursor: pointer;
+       font-size: 16px;
+       margin-left: 10px;
+   }
+
+   @keyframes slideIn {
+       from {
+           transform: translateX(100%);
+           opacity: 0;
+       }
+       to {
+           transform: translateX(0);
+           opacity: 1;
+       }
+   }
+
+   @keyframes fadeOut {
+       from {
+           opacity: 1;
+       }
+       to {
+           opacity: 0;
+       }
+   }
+   @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .animate-scaleIn {
+            animation: scaleIn 0.3s ease-out;
+        }
+</style>
+
+
+<!--Modal for images-->
+<style>
+   .myImg{
+    cursor: pointer;
+   }
+    
+    /* The Modal (background) */
+    .img-modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1000; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+
+        /* Modal Content (image) */
+    .modal-content {
+      margin: auto;
+      display: block;
+      width: 80%;
+      max-width: 700px;
+    }
+       
+    
+    /* Add Animation */
+    .modal-content, #caption {  
+      /* min-height: 300px; */
+        animation-name: zoom 2s;
+      animation-duration: 0.6s;
+    }
+    
+    
+    /* The Close Button */
+    .close {
+      position: absolute;
+      top: 135px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    
+    .close:hover,
+    .close:focus {
+      color: #bbb;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    
+    /* 100% Image Width on Smaller Screens */
+    @media only screen and (max-width: 700px){
+      .modal-content {
+        width: 70%; 
+      }
+
+      #mobile-search{
+                display: block;
+            }
+    }
+    @keyframes zoom {
+      from {transform: scale(0.1)} 
+      to {transform: scale(1)}
+    }
+    
+    }
+</style>
+
+<style>
+    .v-divider{
+        height: 100%;
+        width: 2px;
+        background-color: #ccc;
+        color: white;
+        margin: 0 10px;
+    }
+    /* .reply-box {
+            border-left: 2px solid #4B5563;
+            margin-left: 2rem;
+        } */
+</style>
+<!-- <style>
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(31, 41, 55, 0.95);
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+    }
+    .nav-item {
+        transition: all 0.3s ease;
+    }
+    .nav-item:hover, .nav-item.active {
+        color: #F97316;
+        transform: translateY(-5px);
+    }
+    .content-area {
+        padding-bottom: 80px;
+    }
+</style> -->
+
+    </head>
+    <body class="bg-gray-800 h-screen flex flex-col">
+        
+        <div id="top-toastContainer" class="flex justify-center w-full fixed top-4 right-4 z-50"></div>
+
+        <div class="scroll-indicator"></div>
+        
+        <div id="imgModal" class="img-modal">
+            <span class="close">&times;</span>
+            <img class="modal-content" id="img01">
+        </div>
+        
+        
+
+    <!-- Navigation style ='background: transparent;'  -->
+    <nav class="bg-gray-800 fixed w-full z-10 py-2" style="margin-bottom: 1rem;">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Left side: Logo and Search -->
+                <div class="flex items-center">
+                    <a href="/home" class="logo-container flex-shrink-0">    
+                    <img class="h-20 w-auto" src="{% static 'images/logo/logo_1.png' %}" alt="Roleplay Verse Logo">
+                    </a>
+                    <div id="mobile-search" class="hidden md:block ml-4 ">
+                        <div class="relative">
+                            <input type="text" id="searchInput" style="width:100%;" class="bg-gray-700  w-64 text-white px-4 py-2 rounded-full  focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Search...">
+                            <button  class="absolute right-3 top-2 text-gray-400 hover:text-white">
+                                <!-- <i class="fas fa-search"></i> -->
+                                <svg class="h-6 w-6 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                                
+                            </button>
+                            <button id="hide-search-btn" class="absolute right-3 top-2 text-gray-400 hover:text-white hidden">
+                                <!-- <i class="fas fa-search"></i> -->
+                                <svg  class="w-6 h-6 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
+                                </svg>
+                            </button>
+                            <div id="searchResults" data-scope="global" class="searchResults absolute left-0 right-0 text-white mt-2 mx-0 p-3 bg-gray-900 rounded-lg shadow-lg z-10 overflow-y-auto hidden" style="max-height: 300px; min-width:250px;">
+                                <h2 class="font-bold">Résultat de la recherche</h2>
+                                <div id="results">
+
+                                </div>
+                                
+                                    <div id="searchLoader" class="text-center py-4 hidden">
+                                        <i style="font-size: 20pt;" class="fas fa-spinner fa-spin text-orange-500"></i> 
+                                    </div> 
+                                
+                           </div>
+                        </div>
+                    </div>
+                    <div class="md:hidden ml-4">
+                        <button id="mobile-search-btn" class="text-gray-400 hover:text-white">
+                            <i class="fas fa-search text-2xl"></i>
+                                <!-- <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg> -->
+                        </button>
+                    </div>
+                </div>
+    
+                <!-- Middle: Navigation Icons -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="{% url 'core:home' %}" class="text-gray-300 hover:text-white"><i class="fas fa-home text-2xl"></i> {% trans "Accueil" %}</a>
+                    <a href="{% url 'chats:all' %}" class="text-gray-300 hover:text-white"><i class="fas fa-comments text-2xl"></i> {% trans "Inbox" %}</a>
+                    <a href="{% url 'battles:index' %}" class="text-gray-300 hover:text-white"><i class="fas fa-khanda text-2xl"></i> {% trans "Combats" %} </a>
+                </div>
+    
+                <!-- Right: Notifications, Profile, and Battle Points -->
+                <div class="flex items-center">
+                    <div class="flex items-center">
+                        <a href="{% url 'core:notifications' %}">
+                            <button class="text-gray-300 hover:text-white mr-4">
+                            <i class="fas fa-bell text-2xl position-relative">
+                            
+                                {% if n_notifs|length > 0 %}
+                                <!-- <span id="notifier" class="position-absolute top-0 start-100 translate-middle px-1 rounded-pill  bg-danger notifier">    
+                                    {{n_notifs}}
+                                </span> -->
+                                <div id="notifier" class="notifier absolute top-0 start-100 translate-middle bg-red-500 text-gray-200  rounded-full w-6 h-6 flex items-center justify-center"> {{n_notifs}}</div>
+                                {% endif %}
+                            </i>
+                            
+                        </button>
+                        </a>
+                        
+                        <div class="relative" id="profileDropdown">
+                            <button class="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                                <img class="h-8 w-8 rounded-full" src="{{player.profile_picture.url}}" alt="{{player}} profile">
+                            </button>
+                            <div class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 hidden" id="profileMenu">
+                                <a href="{% url 'users:player' player.user.username %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-user mr-2"></i>  Profile</a>
+                                
+                                <!-- <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-gear mr-2"></i>Settings</a> -->
+                                <a href="{% url 'users:logout' %}" class="block px-4 py-2 text-sm text-orange-600 hover:bg-gray-100"><i class="fas fa-sign-out mr-2"></i>Se déconnecter</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ml-4 flex items-center bg-gray-700 rounded-full px-3 py-1">
+                        <span class="text-orange-500 font-bold mr-2">{{player.battle_points}} JC</span>
+                        <a href="{% url 'core:battle_points' %}">
+                            <button class="bg-orange-500 text-white rounded-full px-2 py-1 text-xs hover:bg-orange-600 transition duration-300">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        </a>
+                        
+                    </div>
+                </div>
+    
+                <!-- Mobile menu button -->
+                <!-- <div class="md:hidden flex items-center">
+                    <button id="mobileMenuBtn" class="text-gray-400 hover:text-white focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div> -->
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="md:hidden hidden" id="mobileMenu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="{% url 'core:home' %}" class="text-gray-300 text-xl hover:text-white block px-3 py-2"><i class="fas fa-home mr-2"></i>Home</a>
+                <a href="{% url 'chats:all' %}" class="text-gray-300 text-xl hover:text-white block px-3 py-2"><i class="fas fa-comments mr-2"></i>Chats</a>
+                <a href="{% url 'battles:index' %}" class="text-gray-300 text-xl hover:text-white block px-3 py-2"><i class="fas fa-khanda mr-2"></i>Battles</a>
+            </div>
+        </div>
+    </nav>
+        
+        <!--Search result area-->
+        <div id="user-list">
+            
+            <div id="loading-indicator" class="loader-circle" style="display: none;" class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+        </div>
+        </div>
+              
+              <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="liveNotificationToast" class="toast text-white bg-gray-800" role="alert" aria-live="assertive" aria-atomic="true">
+                  <div class="toast-header text-white bg-gray-800">
+                    <img id="notif-sender-img" src="{{player.profile_picture.url}}" style="width: 40px;height: 40px;border-radius: 50%;margin-right: 1rem;" alt="notification sender profile pic">
+                    <strong id="notif-sender" class="me-auto">sender</strong>
+                    <small id="notif-time">11 mins ago</small>
+                    <button type="button" class="btn-close text-2xl text-orange-500" data-bs-dismiss="toast" aria-label="Close"></button>
+                  </div>
+                  <a id="notif-link" href="#">
+                  <div  class="toast-body">
+                    content
+                  </div>
+                </a>
+                </div>
+            </div>
+        
+        </div>
+
+        <!-- loading Overlay  -->
+<div id="loading-overlay" class="loading-overlay">
+    <div class="text-center py-4">
+        <i style="font-size: 30pt;" class="fas fa-spinner fa-spin text-orange-500"></i> 
+        <!-- <span>Loading text...</span> -->
+    </div>
+</div>
+
+
+
+<!-- Popup for Challenging player -->
+<div id="sharePopup" class="fixed inset-0 text-white bg-black bg-opacity-50 flex items-center justify-center hidden z-50 animate-scaleIn">
+    <div class="relative bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4">
+        <div class="flex justify-between mb-4">
+        <span class="text-2xl font-bold mb-4">Partager sur</span>
+        <button id="cancelShare" class="absolute top-2 right-2 text-white px-3 py-2 rounded-full border-1 border-gray-600 transition duration-300">
+            <i class="fas fa-times"></i>
+        </button>
+        </div>
+       
+        <div class="mb-6 flex flex-col space-y-2">
+            <button class="button flex justify-center social-btn bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300" data-sharer="facebook" data-hashtag="hashtag" data-url="">
+                <svg class="w-6 h-6 mr-2 " fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                </svg>Facebook
+            </button>
+            
+            <button class=" button flex justify-center social-btn bg-black text-white  px-4 py-2 rounded-lg hover:bg-white hover:text-black transition duration-300" data-sharer="x" data-title="regarde, c'est incroyable!" data-hashtags="awesome, sharer.js" data-url="">
+                <svg class="w-6 h-6 mr-2 " fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M13.795 10.533 20.68 2h-3.073l-5.255 6.517L7.69 2H1l7.806 10.91L1.47 22h3.074l5.705-7.07L15.31 22H22l-8.205-11.467Zm-2.38 2.95L9.97 11.464 4.36 3.627h2.31l4.528 6.317 1.443 2.02 6.018 8.409h-2.31l-4.934-6.89Z"/>
+                </svg>Twitter      
+            </button>
+
+            <button class="button flex justify-center social-btn bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300" data-sharer="whatsapp" data-title="regarde, c'est incroyable!" data-url="">
+                <svg class="w-6 h-6 mr-2 " fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill="currentColor" fill-rule="evenodd" d="M12 4a8 8 0 0 0-6.895 12.06l.569.718-.697 2.359 2.32-.648.379.243A8 8 0 1 0 12 4ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10a9.96 9.96 0 0 1-5.016-1.347l-4.948 1.382 1.426-4.829-.006-.007-.033-.055A9.958 9.958 0 0 1 2 12Z" clip-rule="evenodd"/>
+                    <path fill="currentColor" d="M16.735 13.492c-.038-.018-1.497-.736-1.756-.83a1.008 1.008 0 0 0-.34-.075c-.196 0-.362.098-.49.291-.146.217-.587.732-.723.886-.018.02-.042.045-.057.045-.013 0-.239-.093-.307-.123-1.564-.68-2.751-2.313-2.914-2.589-.023-.04-.024-.057-.024-.057.005-.021.058-.074.085-.101.08-.079.166-.182.249-.283l.117-.14c.121-.14.175-.25.237-.375l.033-.066a.68.68 0 0 0-.02-.64c-.034-.069-.65-1.555-.715-1.711-.158-.377-.366-.552-.655-.552-.027 0 0 0-.112.005-.137.005-.883.104-1.213.311-.35.22-.94.924-.94 2.16 0 1.112.705 2.162 1.008 2.561l.041.06c1.161 1.695 2.608 2.951 4.074 3.537 1.412.564 2.081.63 2.461.63.16 0 .288-.013.4-.024l.072-.007c.488-.043 1.56-.599 1.804-1.276.192-.534.243-1.117.115-1.329-.088-.144-.239-.216-.43-.308Z"/>
+                </svg>whatsapp
+            </button>
+
+             
+            <button class="button flex justify-center social-btn bg-orange-400 text-white px-4 py-2 rounded-lg hover:bg-orange-500 transition duration-300" data-sharer="reddit" data-url="https://ellisonleao.github.io/sharer.js/">
+                <svg class="w-6 h-6 mr-2 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M12.008 16.521a3.84 3.84 0 0 0 2.47-.77v.04a.281.281 0 0 0 .005-.396.281.281 0 0 0-.395-.005 3.291 3.291 0 0 1-2.09.61 3.266 3.266 0 0 1-2.081-.63.27.27 0 0 0-.38.381 3.84 3.84 0 0 0 2.47.77Z"/>
+                    <path fill="currentColor" fill-rule="evenodd" d="M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10Zm-4.845-1.407A1.463 1.463 0 0 1 18.67 12a1.46 1.46 0 0 1-.808 1.33c.01.146.01.293 0 .44 0 2.242-2.61 4.061-5.829 4.061s-5.83-1.821-5.83-4.061a3.25 3.25 0 0 1 0-.44 1.458 1.458 0 0 1-.457-2.327 1.458 1.458 0 0 1 2.063-.064 7.163 7.163 0 0 1 3.9-1.23l.738-3.47v-.006a.31.31 0 0 1 .37-.236l2.452.49a1 1 0 1 1-.132.611l-2.14-.45-.649 3.12a7.11 7.11 0 0 1 3.85 1.23c.259-.246.6-.393.957-.405Z" clip-rule="evenodd"/>
+                    <path fill="currentColor" d="M15.305 13a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm-4.625 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>
+                  </svg>
+                  Reddit
+            </button>
+            
+        </div>
+
+        <!-- <button id="cancelShare" class="absolute top-2 right-2 text-white px-4 py-2 rounded-lg transition duration-300">
+            <i class="fas fa-times mr-2"></i>
+        </button> -->
+        
+    </div>
+    
+</div>
+
+        
+
+        {% block content %}
+        {% endblock content %}
+        
+        <!-- <nav class="bottom-nav">
+            <div class="container mx-auto px-4 py-3">
+                <div class="flex justify-around items-center">
+                    <a href="#home" class="nav-item flex flex-col items-center">
+                        <i class="fas fa-home text-2xl"></i>
+                        <span class="text-xs mt-1">Home</span>
+                    </a>
+                    <a href="#battle" class="nav-item flex flex-col items-center">
+                        <i class="fas fa-sword text-2xl"></i>
+                        <span class="text-xs mt-1">Battle</span>
+                    </a>
+                    <a href="#inventory" class="nav-item flex flex-col items-center">
+                        <i class="fas fa-backpack text-2xl"></i>
+                        <span class="text-xs mt-1">Inventory</span>
+                    </a>
+                    <a href="#profile" class="nav-item flex flex-col items-center">
+                        <i class="fas fa-user text-2xl"></i>
+                        <span class="text-xs mt-1">Profile</span>
+                    </a>
+                </div>
+            </div>
+        </nav>    -->
+        <!--Bottom navigation bar-->
+        <div class="mb-4 md:hidden"></div>
+            <span class="opacity-0">element to create margin</span>
+        </div>
+         <div class="bottom-nav bg-gray-900 flex justify-center  space-x-6 bg-opacity-90 fixed bottom-0 w-full z-10 py-2 md:hidden animate-scaleIn">
+            <a href="{% url 'core:home' %}" class="bottom-nav-link text-gray-300 px-4 py-2 rounded-full hover:bg-gray-700">
+                <svg class="w-18 h-18 text-orange-500 text-4xl" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5"/>
+                </svg>
+            </a>
+            <a href="{% url 'chats:all' %}" class="bottom-nav-link text-gray-300 px-4 py-2 rounded-full hover:bg-gray-700">
+                <svg class="w-18 h-18 text-orange-500 text-4xl" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 10.5h.01m-4.01 0h.01M8 10.5h.01M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-6.6a1 1 0 0 0-.69.275l-2.866 2.723A.5.5 0 0 1 8 18.635V17a1 1 0 0 0-1-1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
+                </svg>
+            </a>
+            <a href="{% url 'battles:index' %}" class="bottom-nav-link text-orange-500 px-4 py-2 rounded-full hover:bg-gray-700">
+                <i class="fas fa-khanda text-xl"></i>
+            </a>
+            <a href="{% url 'users:player' player.user.username %}" class="bottom-nav-link text-gray-300 bottom-nav-link px-4 py-2 rounded-full hover:bg-gray-700">
+                <svg class="w-18 h-18 text-orange-500 text-4xl" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                </svg>
+            </a>
+    
+        </div>     
+        {% block main_active %}
+        {% endblock main_active  %}
+        <!--Linkify js-->
+        
+<!--Image Modal script-->
+        <script>
+        //    const currentPlayerData = {
+        //     player: '{{player}}',
+        //     username: '{{player.user.username}}',
+        //     profile_picture: '{{player.profile_picture.url}}'
+        //     }
+                // Get the modal
+            function imgModalListener(){
+                var modal = document.getElementById('imgModal');
+            
+            // Get the image and insert it inside the modal - use its "alt" text as a caption
+            // var img = document.getElementById('myImg');
+            
+            $('.myImg').on('click',(e)=>{
+
+                var modalImg = document.getElementById("img01");
+                modal.style.display = "block";
+                modalImg.src = e.target.src;
+                
+                
+
+            })
+            
+            
+            // Get the <span> element that closes the modal
+            var close = document.getElementsByClassName("close")[0];
+            
+            // When the user clicks on <span> (x), close the modal
+            close.onclick = function() { 
+              modal.style.display = "none";
+            }
+
+            }    
+            imgModalListener()
+            </script>
+
+<!--Sending Comments-->            
+<script>
+    function createAdElement(url="#"){
+    const addElement = document.createElement('div')
+    addElement.className = 'ad-container animate-fadeIn'
+    addElement.innerHTML = `
+            <span class="ad-label">Ad</span>
+            <button onclick = 'closeAd(this)' class="ad-close">&times;</button>
+            <a href='${url}' target='_blank' class="ad-content">
+                <p class="text-center">Your ad content here (300x90)</p>
+            </a>
+
+    `  
+    return addElement
+}
+
+        function toggleDropdown(toggle){  
+              
+              const dropdown = toggle.nextElementSibling;
+              dropdown.classList.toggle('active');
+              
+              document.addEventListener('click', function(event) {
+              if (!event.target.closest('.post-dropdown-menu') && !event.target.closest('.post-dropdown-toggle')) {
+                  dropdown.classList.remove('active');
+              }
+          });      
+      
+              }
+    function createComment(comment){
+        var c_player = {
+            'username': '{{player.user.username}}',
+            'player':'{{player}}',
+        }
+        // <button data-comment-id="${comment.id}" class='text-xs'><i class="fas fa-mail-reply text-xs ml-2 mr-1"></i><span class=''>2 replies</span></button>
+   /*
+        return `
+            <div  class="flex flex-col comment bg-gray-600 rounded p-2 " data-toggle="tooltip" data-placement='top' title = '${comment.body}' >
+                <a class = "font-semibold flex items-center hover:text-orange-500" href='/users/${comment.author.username}'>
+                    <img src="${comment.author.profile_picture}" alt="${comment.author.username}" class="w-5 h-5 rounded-full mr-1"> <span>${comment.author.player}</span> 
+                </a>
+                <span class='body text-gray-300 pl-6'>${comment.body}<span>
+            </div>
+            <div>
+                <span class='font-semi-bold text-xs text-gray-400'>${comment.timestamp}</span> 
+                <button data-comment-id="${comment.id}" class='text-xs comment-like-button  rounded-full ${comment.liked ? 'liked' : ''}'><i class="far fa-heart  ml-2 mr-1"></i><span class='comment-likes-count'>${comment.likes}</span></button>                
+            </div>
+           
+            <br>
+    `
+    */
+    
+    // return `
+    //     <div class="max-w-2xl  space-y-4">
+    //     <!-- Original Comment -->
+    //     <div class="rounded-lg p-2">
+    //         <div class="flex items-start space-x-4">
+    //             <a class = "font-semibold inline-block flex items-center hover:text-orange-500" href='/users/${comment.author.username}'>
+    //                 <img src="${comment.author.profile_picture}" alt="${comment.author.username}" class="w-10 h-10 rounded-full"> 
+    //             </a>
+    //             <div class="flex-1">
+    //                 <div class="flex items-center space-x-2">
+    //                     <a href='/users/${comment.author.username}' class="text-orange-500 font-semibold inline-block hover:text-orange-500 ">${comment.author.player}</a>
+    //                     <span class="text-gray-400 text-sm">${comment.timestamp}</span>
+    //                 </div>
+    //                 <p class="body text-white mt-1">${comment.body}</p>
+                    
+    //                 <!-- Comment Actions -->
+    //                 <div class="flex items-center space-x-4 mt-2">
+    //                     <button class="text-gray-400 hover:text-orange-500 text-sm flex items-center space-x-1">
+    //                         <i class="fas fa-reply"></i>
+    //                         <span>Reply</span>
+    //                     </button>
+    //                     <button data-comment-id="${comment.id}" class='text-xs comment-like-button hover:text-orange-500  rounded-full ${comment.liked ? 'liked' : ''}'>
+    //                         <i class="far fa-heart "></i>
+    //                         <span class='comment-likes-count'>${comment.likes}</span>
+    //                     </button>                
+    //                 </div>
+    //             </div>
+    //         </div>
+
+    //         <!-- Replies Container -->
+    //         <div class="reply-box hidden border-l border-gray-900 pl-4  mt-4 space-y-4">
+    //             <!-- Reply 1 -->
+    //             <div class="reply-enter bg-gray-700 rounded-lg p-2">
+    //                 <div class="flex items-start space-x-3">
+    //                     <a class = "font-semibold inline-block flex items-center hover:text-orange-500" href='/users/${comment.author.username}'>
+    //                   <img src="${comment.author.profile_picture}" alt="${comment.author.username}" class="w-5 h-5 rounded-full mr-1"> <span>${comment.author.player}</span> 
+    //                   </a>
+    //                     <div class="flex-1">
+    //                         <div class="flex items-center space-x-2">
+    //                             <span class="text-orange-500 font-semibold">ShadowMage</span>
+    //                             <span class="text-gray-400 text-xs">1 hour ago</span>
+    //                         </div>
+    //                         <p class="text-white text-sm mt-1">Totally agree! The graphics are incredible.</p>
+                            
+    //                         <!-- Reply Actions -->
+    //                         <div class="flex items-center space-x-4 mt-2">
+    //                             <button class="text-gray-400 hover:text-orange-500 text-xs flex items-center space-x-1">
+    //                                 <i class="fas fa-reply"></i>
+    //                                 <span>Reply</span>
+    //                             </button>
+    //                             <button class="like-button text-gray-400 hover:text-orange-500 text-xs flex items-center space-x-1">
+    //                                 <i class="fas fa-heart"></i>
+    //                                 <span>5</span>
+    //                             </button>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>
+
+    //             <!-- Reply 2 -->
+    //             <div class="reply-enter bg-gray-700 rounded-lg p-3">
+    //                 <div class="flex items-start space-x-3">
+    //                     <img src="https://placehold.co/32x32" alt="Reply User Avatar" class="w-8 h-8 rounded-full">
+    //                     <div class="flex-1">
+    //                         <div class="flex items-center space-x-2">
+    //                             <span class="text-orange-500 font-semibold">StormBringer</span>
+    //                             <span class="text-gray-400 text-xs">30 mins ago</span>
+    //                         </div>
+    //                         <p class="text-white text-sm mt-1">Have you tried the new update? It's even better now!</p>
+                            
+    //                         <!-- Reply Actions -->
+    //                         <div class="flex items-center space-x-4 mt-2">
+    //                             <button class="text-gray-400 hover:text-orange-500 text-xs flex items-center space-x-1">
+    //                                 <i class="fas fa-reply"></i>
+    //                                 <span>Reply</span>
+    //                             </button>
+    //                             <button class="like-button text-gray-400 hover:text-orange-500 text-xs flex items-center space-x-1">
+    //                                 <i class="fas fa-heart"></i>
+    //                                 <span>3</span>
+    //                             </button>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>
+
+                
+                
+    //         </div>
+    //     </div>
+    // </div>
+
+    // `
+   
+    return `
+    
+                        <div class="flex comment items-start space-x-3" data-toggle="tooltip" data-placement='top' title = '${comment.body}'>
+                            <a class = "font-semibold inline-block  hover:text-orange-500" href='/users/${comment.author.username}'>
+                                     <img src="${comment.author.profile_picture}" alt="${comment.author.username}" class="w-8 h-8 rounded-full"> 
+                            </a>
+                            <div class="flex-1  rounded-lg p-1">
+                                <div class="flex items-center justify-between mb-1 relative">
+                                    <div class="flex items-center space-x-2">
+                                        <a href='/users/${comment.author.username}' class="text-orange-500 text-sm font-semibold inline-block hover:text-orange-600 ">${comment.author.player}</a>
+                                        <!--
+                                        <span class="text-xs text-gray-400">${comment.timestamp}</span>
+                                        -->
+                                    </div>
+                                    <div class="absolute top-0 right-2">
+                                        <button onclick = 'toggleDropdown(this)' class="text-gray-400 hover:text-white post-dropdown-toggle">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </button>
+
+                                        <div class="post-dropdown-menu w-48 py-2">
+                                            <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('${comment.body}')"><i class = 'fas fa-copy mr-2'></i>copier</div>
+                                            <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick=""><i class = 'fas fa-flag mr-2'></i> signaler</div>
+                                            
+                                            ${comment.author.username == c_player.username ?  `
+                                            
+                                            <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deleteComment(this,'${comment.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
+                                            `:``}
+                                        </div>
+                                    </div>    
+                            </div>
+                            <p class="body text-sm text-gray-300">${comment.body}</p>
+                            <div class="flex items-center space-x-4 mt-2 text-sm">
+                                    
+                                    <span class="text-xs text-gray-400">${comment.timestamp}</span>
+                                    <button data-comment-id="${comment.id}" class='text-xs comment-like-button  rounded-full ${comment.liked ? 'liked' : ''}'>
+                                        <i class="far fa-heart  mr-1"></i>
+                                        <span class='comment-likes-count'>${comment.likes}</span>
+                                    </button>
+                                    <button data-comment-id="${comment.id}" class="reply-button text-gray-400 text-xs hover:text-orange-500">Reply</button>
+                                    <!--
+                                    <span class="text-gray-400">5 likes</span>
+                                    -->
+                                </div>
+                            </div>
+                        </div>
+    `
+    
+}
+    function sendComment(element, e){
+    e.preventDefault()
+    //const commentForm = $('.comment-form')
+    
+    e.preventDefault()
+    const postId = e.target.dataset.postId
+    const commentSection = $(e.target).siblings('.comments')
+
+    const body = $(e.target).find('input').val().trim()
+    if(body){
+    $.ajax({
+            url: `/post/comment/new/${postId}`,
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: '{{csrf_token}}',
+                body: body,
+            },
+            beforeSend: function(){
+                $('#loading-overlay').toggleClass('active')
+            },
+            success: function(res){
+                commentsCount = res.comment.comments
+                comment = res.comment
+               
+                $(e.target).find('input').val('')
+                $(commentSection).prepend(createComment(res.comment))
+                
+            //Update the comments count
+            $(e.target).siblings('.post-infos').find('.comment-count').text(commentsCount)
+
+            //scroll to bottom of the comment section
+            commentSection.animate({
+                //scrollTop: commentSection[0].scrollHeight
+                scrollTop: 0
+            },'smooth')
+
+            },
+            complete: function(){
+                $('#loading-overlay').toggleClass('active')
+                document.querySelectorAll('.body').forEach((element)=>{
+                element.innerHTML = linkifyHtml(element.textContent, {
+                target:"_blank",
+                className: 'link'
+                })
+                })
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                showMyToast('An Error occurred, please try again','error')
+            }
+        })
+       
+    }else{
+        showMyToast('please add content', 'info')
+    }
+ 
+}
+
+function deleteComment(element, id){
+    $.ajax({
+            url:`/comment/${id}`,
+            type: "DELETE",
+            data: {csrfmiddlewaretoken:'{{csrf_token}}'},
+            beforeSend: function(){
+                $('#loading-overlay').toggleClass('active')
+            },
+            success: function(res){
+                console.log(res)
+                if(res.status == "success"){
+                    //remove comment
+                    const comment = element.closest('.comment')
+                    // const postsFeed = document.getElementById('postsFeed');
+                    // postsFeed.removeChild(post)
+                    $(comment).remove()
+                    showMyToast(`Supprimé`)
+                }
+            },
+            complete: function(){
+                $('#loading-overlay').toggleClass('active')
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                showMyToast('An error occured','error')
+            }
+        })
+}
+</script>
+
+<!-- toast management -->
+<script>
+    const toastContainer = document.getElementById('top-toastContainer');
+    
+    function showMyToast(message, type = 'info', duration = 3000) {
+        
+        document.querySelectorAll('.my-toast').forEach(el =>{
+            el.remove()
+        })
+        
+        const toast = document.createElement('div');
+        toast.className = `my-toast my-toast-${type}`;
+        
+        const messageSpan = document.createElement('span');
+        messageSpan.textContent = message;
+        
+        const closeButton = document.createElement('button');
+        closeButton.className = 'my-toast-close';
+        closeButton.innerHTML = '&times;';
+        closeButton.onclick = () => removeToast(toast);
+        
+        toast.appendChild(messageSpan);
+        toast.appendChild(closeButton);
+        
+        toastContainer.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.animation = 'fadeOut 0.3s ease-out forwards';
+            setTimeout(() => removeToast(toast), 300);
+        }, duration);
+    }
+    
+    function removeToast(toast) {
+        if(toast.parentNode == toastContainer){
+            toastContainer.removeChild(toast);
+        }
+        
+    }
+    
+   
+    </script>
+        
+
+        <!--Navbar script-->
+        <script>
+        
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if(mobileMenuBtn){
+            mobileMenuBtn.addEventListener('click', () => {
+            //mobileMenu.classList.toggle('hidden');
+            $(mobileMenu).toggle(300)
+        });
+        }
+        
+        
+        // Profile dropdown toggle
+        const profileDropdown = document.getElementById('profileDropdown');
+        const profileMenu = document.getElementById('profileMenu');
+        
+        profileDropdown.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileMenu.classList.toggle('hidden');
+        });
+        
+        // Close profile dropdown when clicking outside
+        document.addEventListener('click', () => {
+            if (!profileMenu.classList.contains('hidden')) {
+                profileMenu.classList.add('hidden');
+            }
+        });
+        
+        // Prevent closing when clicking inside the dropdown
+        profileMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+
+        });
+
+        const mobileSearchBtn = $('#mobile-search-btn')
+        const mobileSearch = $('#mobile-search')
+        const logoContainer = $('.logo-container')
+        //const hideSearchBtn = $('#hide-search-btn')
+        var hide_time = 200
+        function showSearch(){
+            const screenWidth = document.body.clientWidth
+
+            logoContainer.addClass('hidden')
+            mobileSearchBtn.hide()
+            mobileSearch.show(200)
+            mobileSearch.find('button').eq(0).addClass('hidden')
+            
+            const hideSearchBtn =  mobileSearch.find('button').eq(1).removeClass('hidden')
+            console.log(screenWidth)
+            
+            if(screenWidth< 510 ){
+                mobileSearch.addClass('absolute top-5 z-50')
+                hide_time = 0
+            }else{
+                hide_time = 300
+            }
+            mobileSearch.css('max-width','150px')
+            //mobileSearch.addClass('absolute top-5 z-50 bg-gray-900')
+            hideSearchBtn.removeClass('hidden')
+            hideSearchBtn.on('click',hideSearch)
+        }
+
+        function hideSearch(){
+            
+            logoContainer.removeClass('hidden')
+            mobileSearch.hide(hide_time)
+            
+            
+
+            mobileSearch.find('button').eq(0).removeClass('hidden')
+            mobileSearch.find('button').eq(1).addClass('hidden')
+            mobileSearch.removeClass('absolute top-5 z-50 bg-gray-900')
+            mobileSearchBtn.show()
+        }
+
+        mobileSearchBtn.on('click',showSearch)
+        
+        //post dropdown
+        function togglePostDropdown(toggle){  
+              
+            const dropdown = toggle.nextElementSibling;
+            dropdown.classList.toggle('active');
+            
+            document.addEventListener('click', function(event) {
+            if (!event.target.closest('.post-dropdown-menu') && !event.target.closest('.post-dropdown-toggle')) {
+                dropdown.classList.remove('active');
+            }
+        });      
+    
+            }
+            
+    
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        
+        <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+        <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+        
+        <script>
+            //filter buttons
+            const filterButtons = document.querySelectorAll('.filter-button');
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            // Add logic to filter battles based on the selected category
+        });
+    });
+        </script>
+        
+        <script>
+            $(()=>{
+                 notificationSocket = new WebSocket(
+                'ws://' + window.location.host + '/ws/notifications/'
+            )
+            console.log("connected to receive notifications")
+            notificationSocket.onmessage = function(event){
+                data = JSON.parse(event.data)
+                const sender = data.sender
+                const content = data.content
+                const profile_picture = data.profile_picture
+                const timestamp = data.timestamp
+                const message_type =  data.message_type
+                var link = '#'
+
+                console.log("New notification")
+                
+                let n_notifs = parseInt($("#notifier").text())
+                if(n_notifs){
+                    n_notifs++
+                $("#notifier").text(n_notifs)
+                }else if(n_notifs == 9){
+                    $("#notifier").text("9+")
+                }else{
+                    $("#notifier").text("1")
+                }
+                console.log(n_notifs)
+                
+                
+                if (message_type == 'private'){
+                    link = `/chats/dm/${sender}`
+                }else if(message_type == 'family'){
+                    link = `/chats/group/${sender}`
+                }
+                const toastLiveExample = document.getElementById('liveNotificationToast')
+                $("#notif-link").attr("href", link)
+                $(".toast-header #notif-sender").text(sender)
+                $(".toast-body").text(content)
+                $('#notif-sender-img').attr('src', profile_picture)
+                $('#notif-time').text(timestamp)
+
+                const NotificationToast = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+                NotificationToast.show()
+            
+            }
+
+            
+
+            })
+           
+
+        </script>
+        <script>
+        //      function sendInvite(url){
+        //     $.ajax({
+        //         url: url,
+        //         type : "POST",
+        //         data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+        //         beforeSend: function(){
+                    
+        //         },
+        //         success: function(res){
+        //             console.log(res.message)
+        //             if(res.message == "success"){
+        //                 console.log("Invite sent")
+        //             }else{
+        //                 console.log("Invite not sent")
+        //             }
+        //         },
+        //         complete: function(){
+        //             //$(e.target).text("sent")
+        //             //e.target.disabled = true
+        //         },
+        //         error: function(jqXHR, textstatus, errorThrown){
+        //             showMyToast('An error occured! try reloading page', 'error')
+        //             console.log(textstatus, errorThrown)
+        //         }
+        //     })
+
+        // }
+        function makeRequest(url){
+            $.ajax({
+                url : url,
+                type: "POST",
+                data: { csrfmiddlewaretoken:"{{csrf_token}}" },
+                success: function(res){
+                    if(res.status == "success"){
+                        console.log(res.message)
+                    }else{
+                        console.log(res.message)
+                    }
+                    
+                }
+            })
+        
+        }
+        
+        $(".send-invite-btn").on("click",(e)=>{
+            sendInvite(e.target.dataset.url)
+        })
+        </script>
+        <script>
+            //popover trigger
+            const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+            const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+            
+
+            //toast trigger
+            const toastTrigger = document.getElementById('liveToastBtn')
+            const toastLiveExample = document.getElementById('liveToast')
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+            if (toastTrigger) {
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+            toastTrigger.addEventListener('click', () => {
+            toastBootstrap.show()
+            })
+            }
+
+            
+
+
+
+             function toggleMenu2() {
+            var leftColumn = document.getElementById('left-column');
+            if (leftColumn.style.display === 'block') {
+                leftColumn.style.display = 'none';
+            } else {
+                leftColumn.style.display = 'block';
+            }
+        }
+
+
+            function toggleMenu() {
+                var navbarCenter = document.getElementById('navbar-center');
+                console.log(navbarCenter)
+                if (navbarCenter.classList.contains('show')) {
+                    navbarCenter.classList.remove('show');
+                } else {
+                    navbarCenter.classList.add('show');
+                }
+            }
+        </script>
+        <script>
+            $(()=>{
+                const searchForm = $("#search-all")
+                // const inputName = $("#input-text")
+                const searchInput = $("#searchInput")
+                
+                
+                /*Change character image*/
+        $("#character-select").on("change",(e)=>{
+            //console.log('changed')
+        document.getElementById("char-img").src = e.target.selectedOptions[0].dataset.img_link
+    })
+    $("#character-select-accept").on("change",(e)=>{
+        console.log("changed")
+        document.getElementById("char-img-accept").src = e.target.selectedOptions[0].dataset.img_link
+    })
+                
+                searchInput.on("input",(e)=>{
+                    let scope = e.target.dataset.scope
+                    let url = `/search/${scope}`
+                    if(e.target.value != "" ){
+                        
+                         $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: {"text":e.target.value, csrfmiddlewaretoken:"{{ csrf_token }}"},
+                        beforeSend: function(){
+                           
+                            $("#searchResults").removeClass('hidden')
+                            $("#searchResults #searchLoader").removeClass('hidden')
+                        },
+                        success: function(res){
+                            if(res.status === 'success'){
+                                //$("#users-list").removeClass("searched-players")
+                                // $("#user-list").empty()
+                                // $("#user-list").addClass("search-result")
+                                
+                                const container = $('#searchResults #results').empty()
+                                let search_list = res.search_list
+                                if(search_list.length == 0){
+                                    $(container).append(`<p class="p-2 text-gray-500">No results found</p>`)
+                                }else{
+                                    search_list.forEach(entity => {
+                                    if(entity.etype == "family"){
+                                        $(container).append(
+                                            `
+                                        <a href = "/users/family/${entity.id}">
+                                        <div class = 'p-2 hover:bg-gray-700 my-1 cursor-pointer transition duration-300'>
+                                        <div class="flex items-center">
+                                           <img src="${entity.profile_picture}" alt="${entity.name} profile picture" class="w-8 h-8 rounded-full mr-2"> 
+                                            <h4 class="font-semibold mr-2">${entity.name}</h4>
+                                            <p class="text-gray-500 text-xs text-center truncate">${entity.etype}</p>
+                                        </div>
+                                            
+                                        </div>
+                                        </a>
+                                        
+                                        `
+                                        )
+                                    }else if(entity.etype == "player"){
+                                        $(container).append(`
+                                        
+                                        
+                                        <a href = "/users/${entity.username}">
+                                        <div class = 'p-2 hover:bg-gray-700 my-1 cursor-pointer transition duration-300'>
+                                        <div class="flex items-center">
+                                           <img src="${entity.profile_picture}" alt="${entity.username} profile picture" class="w-8 h-8 rounded-full mr-2"> 
+                                            <h4 class="font-semibold mr-2">${entity.username}</h4>
+                                            <small class="text-gray-500 text-xs text-center truncate">${entity.etype}</small>
+                                        </div>
+                                        </div>
+                                        </a>
+                                        `)
+                                        
+                                    
+                                    }else if(entity.etype == 'battle'){
+                                        $(container).append(`
+                                        <a href = "/battles/battle_room/${entity.id}">
+                                        <div class = 'p-2 hover:bg-gray-700 my-1 cursor-pointer transition duration-300'>
+                                        <div class="flex space-x-2 items-center">
+                                           <h4 class="font-semibold text-xs mr-2">${entity.initiator.username}</h4>
+                                           <span>vs</span> 
+                                           <h4 class="font-semibold text-xs mr-2">${entity.opponent.username}</h4>
+                                           <small class="text-gray-500 text-xs text-center">${entity.type}</small>
+                                        </div>
+                                        </div>
+                                        </a>
+                                        `)
+                                    }
+                                    
+                                });
+                                // Close search results when clicking outside
+                                document.addEventListener('click', (e) => {
+
+                                    if (!document.getElementById('searchResults').contains(e.target) && $(e.target) !== searchInput) {
+                                        $("#searchResults").addClass('hidden');
+                                    }
+                                });
+                                }
+                                
+                                //$("#users-list").addClass("searched-players")
+                            }else{
+                                console.log("Error searching")
+                            }
+                        },
+                        complete: function(){
+                            // $("#loading-indicator").hide()
+                            $("#searchResults #searchLoader").addClass('hidden')
+                        }
+                    })
+                    }else{
+                        // $("#user-list").empty()
+                        // $("#user-list").removeClass("search-result")
+
+                        $('#searchResults #results').empty()
+                        $("#searchResults").addClass('hidden')
+
+                    }
+                   
+                })
+                searchForm.on("submit",(e)=>{
+                    e.preventDefault()
+                    $.ajax({
+                        url: "{% url 'chat:search' %}",
+                        type: 'POST',
+                        data: {"username":"f", csrfmiddlewaretoken:"{{ csrf_token }}"},
+                        success: function(res){
+                            if(res.status === 'success'){
+                                console.log(res.searched_players)
+                            }else{
+                                console.log("Error searching")
+                            }
+                        }
+                    })
+                    
+                })
+
+                //manage post options
+        $(".options-toggle").on("click",(e)=>{
+            $(e.target).siblings(".options").toggle()
+            
+        }
+        )
+
+        $(".option-btn").on("click", (e)=>{
+            option = e.target.dataset.option
+            parent = $(e.target).parent();
+            toggleBtn = $(parent).siblings('.options-toggle')
+            
+            postID = toggleBtn[0].dataset.post_id
+            
+            if(option == "favorite"){
+                $.ajax({
+                    url:`/post/favorite/${postID}`,
+                    type: "POST",
+                    data: {csrfmiddlewaretoken:'{{csrf_token}}'},
+                    success: function(res){
+                        console.log(res)
+                        if(res.status == "success"){
+                            //show toast 
+                        }
+                    }
+                })
+            }else if(option == "delete"){
+                $.ajax({
+                    url:`/post/${postID}`,
+                    type: "DELETE",
+                    data: {csrfmiddlewaretoken:'{{csrf_token}}'},
+                    success: function(res){
+                        console.log(res)
+                        if(res.status == "success"){
+                            //remove post
+                        }
+                    }
+                })
+            }else if(option == "copy-link"){
+                    console.log(e.target.dataset.link)
+            }else if(option == "reply"){
+                    console.log(e.target)
+            }
+
+        })
+        
+            })
+        function toggleToFavorites(id){
+    
+                $.ajax({
+                    url:`/post/favorite/${id}`,
+                    type: "POST",
+                    data: {csrfmiddlewaretoken:'{{csrf_token}}'},
+                    beforeSend: function(){
+
+                    },
+                    success: function(res){
+                        console.log(res)
+                        if(res.status == "success"){
+                            showMyToast(res.message, 'info')
+                        }
+                    },
+                    complete: function(){
+
+                    },
+                    error: function(jqXHR, textstatus, errorThrown){
+                        showMyToast('An error occured','error')
+                    }
+                })
+    
+}
+function socialShare(btn,url){
+const sharePopup = $("#sharePopup")
+const cancelshareBtn = sharePopup.find('#cancelShare')
+sharePopup.removeClass('hidden')
+// const socialButtons = sharePopup[0].document.querySelectorAll('.social-btn')
+const socialButtons = sharePopup.find('.social-btn').toArray()
+
+socialButtons.forEach(button => {
+    // button.setAttribute('data-url',url)
+    button.dataset.url = url
+})
+cancelshareBtn.on('click',()=>{
+    sharePopup.addClass('hidden')
+})
+
+document.addEventListener('click', function(event) {
+    if (!event.target.closest('#sharePopup') && !btn) {
+        sharePopup.addClass('hidden')
+    }
+});
+        
+        // Prevent closing when clicking inside the dropdown
+        // profileMenu.addEventListener('click', (e) => {
+        //     e.stopPropagation();
+
+
+           
+        // });
+
+
+
+}
+
+function deletePost(element,id){
+       
+        
+        $.ajax({
+            url:`/post/${id}`,
+            type: "DELETE",
+            data: {csrfmiddlewaretoken:'{{csrf_token}}'},
+            beforeSend: function(){
+                $('#loading-overlay').toggleClass('active')
+            },
+            success: function(res){
+                console.log(res)
+                if(res.status == "success"){
+                    //remove post
+                    const post = element.closest('.post')
+                    const postsFeed = document.getElementById('postsFeed');
+                    postsFeed.removeChild(post)
+                    showMyToast(`Your post has been deleted`)
+                }
+            },
+            complete: function(){
+                $('#loading-overlay').toggleClass('active')
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                showMyToast('An error occured','error')
+            }
+        })
+    
+}
+function copyLink(link){
+    navigator.clipboard.writeText(link)
+    .then(()=>{
+        showMyToast('copied to clipboard')
+    })
+    .catch((err)=>{
+        showMyToast('Failed to copy','error')
+    })
+}
+        </script>
+
+
+
+    </body>
+</html>

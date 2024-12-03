@@ -1,0 +1,15 @@
+{% extends "feed/base.html" %}
+{% block content %}
+
+<div>
+    <form method="post" action="{% url 'core:create_post' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <textarea name="body"></textarea>
+        <input type="file" name = "image">
+        <button type="submit">Publish</button>
+
+    </form>
+</div>
+
+
+{% endblock content %}

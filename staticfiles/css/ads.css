@@ -1,0 +1,63 @@
+
+    .ad-container {
+        background-color: rgba(26, 32, 44, 0.8); /* Dark background with some transparency */
+        border: 1px solid #ff6600;
+        border-radius: 8px;
+        padding: 12px;
+        margin: 16px 0;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        /* box-shadow: 0 0 15px rgba(255, 102, 0, 0.3); */
+    }
+
+    .ad-container:hover {
+        box-shadow: 0 0 15px rgba(255, 102, 0, 0.3);
+    }
+
+    .ad-container.game{
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-image: url('ads/eat_cells_1.png');
+    }
+
+    .ad-label {
+        position: absolute;
+        top: 4px;
+        left: 4px;
+        background-color: rgba(255, 102, 0, 0.8);
+        color: white;
+        font-size: 10px;
+        padding: 2px 4px;
+        border-radius: 4px;
+    }
+
+    .ad-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 90px;
+    }
+
+    .ad-close {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        background-color: rgba(26, 32, 44, 0.8);
+        color: #ff6600;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .animate-fadeIn {
+        animation: fadeIn 0.5s ease-out;
+    }

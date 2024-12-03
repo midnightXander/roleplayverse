@@ -1,0 +1,800 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+
+{% block content %}
+<style>
+    .member-card {
+        background-color: #2d3748;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        transition: transform 0.2s;
+        position: relative;
+    }
+
+    .member-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .member-options {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        cursor: pointer;
+    }
+
+    .battle-item {
+        background-color: #2d3748;
+        border-radius: 0.25rem;
+        padding: 0.5rem;
+    }
+
+    .dropdown-active {
+        display: block;
+    }
+    .win{
+        color: #45c55b;
+    }
+    .defeat{
+        color: #fc4242;
+    }
+</style>
+<style>
+    .popup-overlay {
+        background-color: rgba(0, 0, 0, 0.8);
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    .popup-content {
+        animation: slideIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+        from { 
+            transform: translateY(-20px);
+            opacity: 0;
+        }
+        to { 
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .player-card {
+        transition: all 0.3s ease;
+    }
+
+    .player-card:hover {
+        transform: translateY(-2px);
+    }
+
+    .player-card.selected {
+        border: 2px solid #F97316;
+        background: rgba(249, 115, 22, 0.1);
+    }
+
+    .custom-checkbox {
+        display: none;
+    }
+
+    .checkbox-icon {
+        transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+        box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.3);
+    }
+</style>
+
+<div class="container mx-auto py-8">
+    <div class="bg-gray-800 rounded-lg ">
+        <!-- Family Header -->
+        <div class="relative">
+            <!-- bg-gradient-to-r from-orange-500 to-orange-500 -->
+            <div class="h-48 bg-gray-900"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent">
+                <div class="flex items-end">
+                    <img id="familyProfilePic" src="{{family.profile_picture.url}}" alt="Family Profile" class="myImg w-24 h-24 rounded-full border-4 border-white mr-4">
+                    <div>
+                        <h1 id="familyName" class="text-3xl font-bold text-white">Famille {{family}}</h1>
+                        <p id="familyRanking" class="text-xl text-orange-300">{% trans "Classement" %}: {{ranking}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Family Info -->
+        <div class="py-6 px-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Family Stats -->
+                <div>
+                    <h2 class="text-2xl font-semibold text-orange-500 mb-4">{% trans "Infos Géneral" %}</h2>
+                    <p id="familyPoints" class="text-white mb-2">{% trans "Points" %}: {{family.points}}</p>
+                    <p id="familyMembers" class="text-white mb-2">{% trans  "Membres" %}: {{n_members}}</p>
+                    <p id="familyGodfather" class="text-white">{% trans "Parrain" %}: 
+                        <a href="{% url 'users:player' family.god_father.username %}">
+                            <span class="font-bold text-2xl">{{family.god_father}}</span>
+                        </a>
+                        
+                    </p>
+                    {% if player.family == family %}
+                    <a href="{% url 'chats:family_chat' family.name %}" class="inline-block">
+                        <button class="mt-2 border shadow-lg text-white px-4 py-2 flex items-center justify-center
+                            hover:text-orange-600 font-bold  
+                            rounded-full transition duration-300 ease-in-out">
+                            <i class="fas fa-comment text-2xl mr-2"></i> Conversation de Famille 
+                            <!-- <span>Message</span> -->
+                        </button>
+                    </a>
+                    
+                    <button onclick="showMyToast('Vous ne pouvez pas encore quitter la famille')" class="mt-2 text-red-500 border-1 border-red-600 px-4 py-2 flex items-center justify-center
+                            hover:text-red-600 font-bold  
+                            rounded-full transition duration-300 ease-in-out">
+                            <i class="fas fa-sign-out text-2xl mr-2"></i> Quitter la famille
+                            <!-- <span>Message</span> -->
+                    </button>
+                    {% endif %}
+                </div>
+
+                <!-- Recent Battles -->
+                <div>
+                    <h2 class="text-2xl font-semibold text-orange-500 mb-4">{% trans "Combats Récents" %} </h2>
+                    <ul id="recentBattlesList" class="space-y-2">
+                        <!-- Recent battles will be inserted here -->
+                        {% for battle in recent_battles %}
+                        
+                            <li class="battle-item text-white">
+                                <a href="{% url 'battles:battle_room' battle.id %}">
+                                <span class="font-bold">{{battle.initiator.player}}</span>
+                                vs
+                                <span class="font-bold">{{battle.opponent.player}}</span>
+                                 : <span class="font-bold {{battle.result}}">{{battle.result}}</span>
+                                </a> 
+                            </li>
+                        
+
+                        
+                        
+                         {% empty %}
+                         <h3 class="text-xl  text-gray-300 mb-4">{% trans "Aucun combat récent dans cette famille" %}</h3>
+                        {% endfor %}
+                        
+                        
+                    </ul>
+                </div>
+            </div>
+
+            <div class="filter-container justify-center text-white w-full mx-auto flex space-x-3 my-6 overflow-x-auto pb-2">
+                <a href="{% url 'users:family_page' family.id %}">
+                    <button data-url="" data-=""  class="filter-button bg-gray-600 px-4 py-2 rounded-full hover:bg-gray-500 transition duration-300">
+                        <i class="fas fa-users mr-2"></i>{% trans "Members" %}
+                    </button>
+                </a>
+                
+                <a href="{% url 'users:family_battles' family.id %}">
+                    <button  data-url="" class="filter-button bg-gray-600 px-4 py-2 rounded-full hover:bg-gray-500 transition duration-300">
+                        <i class="fas fa-user-shield mr-2"></i>{% trans "Battles" %} 
+                    </button>
+                </a>
+                
+                
+                <!-- <button  data-url="" class="filter-button bg-gray-600 px-4 py-2 rounded-full hover:bg-gray-500 transition duration-300">
+                    <i class="fas fa-hourglass-start mr-2"></i>Activity
+                </button>
+                <button  data-url="" class="filter-button bg-gray-600 px-4 py-2 rounded-full hover:bg-gray-500 transition duration-300">
+                    <i class="fas fa-fire mr-2"></i>Stats
+                </button> -->
+                
+            </div>
+            {% block container %}
+            <!-- Family Members -->
+            <div class="mt-8">
+                <div class="flex justify-between">
+                <h2 class="text-2xl font-semibold text-orange-500 mb-4">{% trans "Membres"  %}</h2>
+                <a href="#">
+                    {% if can_add %}
+                    <button onclick="openAddPopup()" class="bg-orange-500 flex justify-center items-center text-white px-3 py-1 rounded-full hover:bg-orange-600  transition duration-300">
+                        <i class="fas fa-plus font-bold text-xl mr-2"></i>{% trans "Ajouter des Membres"  %}
+                    </button>
+                    {% endif %}
+                </a>
+
+                
+                </div>
+               
+                <div id="familyMembersList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <!-- Family members will be inserted here -->
+                    
+                    {% for member in members %}
+                    
+                    <div class="member-card">
+                        {% if player.user == family.god_father %}
+                        <div class="member-options">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" onclick="toggleMemberActions(event, '{{member.id}}')">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                            </svg>
+                        </div>
+                        {% endif %}
+                        <a href="{% url 'users:player' member.user.username %}">
+                            <img src="{{member.profile_picture.url}}" alt="{{member}}" class="w-16 h-16 rounded-full mx-auto mb-2">
+                        </a>
+                        <a href="{% url 'users:player' member.user.username %}">
+                            <h3 class="text-white text-center font-semibold">{{member.user.username}}</h3>
+                        </a>
+                        
+                        <p class="text-gray-400 text-center text-sm">role</p>
+
+                     </div>
+                    
+                    
+                     {% empty %}
+                     <a href="#">
+                        <button onclick="openAddPopup()" class="bg-orange-600 px-3  text-white py-2 mx-auto rounded-full hover:bg-orange-500  transition duration-300">
+                            <i class="fas fa-plus font-bold  text-xl mr-2"></i> {% trans "Ajouter des Membres" %} 
+                        </button>
+                    </a>
+                     {% endfor %}
+                     
+                     
+                    
+                </div>
+            </div>
+            {% endblock container %}
+
+
+            <!-- Dropdown Menu Template (hidden) -->
+<div id="memberActionMenu" class="hidden bg-gray-700 rounded-md shadow-lg py-1 absolute z-10">
+    <a href="#" class="promote block px-4 py-2 text-sm text-white hover:bg-gray-600" onclick="promoteMember(event)">Promote</a>
+    <a href="#" class="demote block px-4 py-2 text-sm text-white hover:bg-gray-600" onclick="demoteMember(event)">Demote</a>
+    <a href="#" class="remove block px-4 py-2 text-sm text-red-500 hover:bg-gray-600" onclick="removeMember(event)">
+        <i class="fas fa-user-minus mr-2"></i>Remove from Family</a>
+</div>
+        </div>
+    </div>
+</div>
+
+<!-- Popup for accepting battle -->
+
+<div id="addMemberPopup" class="popup-overlay hidden fixed inset-0 flex items-center justify-center z-50 p-4 ">
+    <!-- Popup Content -->
+    <div class="popup-content bg-gray-900 rounded-lg shadow-2xl w-full max-w-3xl">
+        <!-- Header -->
+        <div class="p-4 border-b border-gray-700 flex justify-between items-center">
+            <h2 class="text-xl font-bold text-orange-500">
+                <i class="fas fa-users mr-2"></i>
+                Inviter des joueurs a rejoindre  {{family}}
+            </h2>
+            <button onclick="closeAddPopup()" class="text-gray-400 hover:text-white transition">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="p-4 border-b border-gray-700">
+            <div class="flex gap-4">
+                <div class="flex-1">
+                    <div class="relative">
+                        <input type="text" 
+                               placeholder="rechercher des joueurs..." 
+                               class="search-input w-full bg-gray-800 text-white rounded-lg pl-10 pr-4 py-2 focus:outline-none">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+                <!-- <select class="bg-gray-800 text-white rounded-lg px-4 py-2 focus:outline-none">
+                    <option value="level">Level: High to Low</option>
+                    <option value="rank">Rank: High to Low</option>
+                    <option value="name">Name: A to Z</option>
+                </select> -->
+            </div>
+        </div>
+
+        <!-- Players List -->
+        <div class="py-4 px-2 h-64 overflow-y-auto">
+            <div id="invite-players-list" class="space-y-3">
+                <div class="text-center py-4">
+                    <i class="fas fa-spinner fa-spin text-4xl text-orange-500"></i> 
+                    <!-- <span>Loading text...</span> -->
+                </div>
+                <!-- Player Card Template - Repeat for each player -->
+                <!-- <div class="player-card bg-gray-800 rounded-lg p-3 flex items-center justify-between cursor-pointer">
+                    <div class="flex items-center flex-1">
+                        <input type="checkbox" class="custom-checkbox" id="player1">
+                        <label for="player1" class="checkbox-icon w-6 h-6 bg-gray-700 rounded-md flex items-center justify-center mr-4">
+                            <i class="fas fa-check text-orange-500 hidden"></i>
+                        </label>
+                        <img src="https://placehold.co/50x50/orange/dark" alt="Player Avatar" class="w-12 h-12 rounded-full border-2 border-gray-700">
+                        <div class="ml-4">
+                            <div class="flex items-center">
+                                <span class="text-white font-semibold">DragonSlayer</span>
+                                <span class="ml-2 px-2 py-1 bg-orange-500 text-xs text-white rounded-full">VIP</span>
+                            </div>
+                            <div class="text-gray-400 text-sm">Level 75 • Warrior</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-orange-400 font-semibold">Rank #12</div>
+                        <div class="text-gray-400 text-sm">Power: 15,000</div>
+                    </div>
+                </div> -->
+
+                <!-- More player cards with different data
+                <div class="player-card bg-gray-800 rounded-lg p-3 flex items-center justify-between cursor-pointer">
+                    <div class="flex items-center flex-1">
+                        <input type="checkbox" class="custom-checkbox" id="player2">
+                        <label for="player2" class="checkbox-icon w-6 h-6 bg-gray-700 rounded-md flex items-center justify-center mr-4">
+                            <i class="fas fa-check text-orange-500 hidden"></i>
+                        </label>
+                        <img src="https://placehold.co/50x50/purple/dark" alt="Player Avatar" class="w-12 h-12 rounded-full border-2 border-gray-700">
+                        <div class="ml-4">
+                            <div class="flex items-center">
+                                <span class="text-white font-semibold">ShadowMage</span>
+                                <span class="ml-2 px-2 py-1 bg-purple-500 text-xs text-white rounded-full">Elite</span>
+                            </div>
+                            <div class="text-gray-400 text-sm">Level 82 • Mage</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-orange-400 font-semibold">Rank #8</div>
+                        <div class="text-gray-400 text-sm">Power: 18,500</div>
+                    </div>
+                </div> -->
+
+                <!-- Add more player cards here -->
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="p-4 border-t border-gray-700 flex flex-wrap justify-between items-center">
+            <div class="text-gray-400">
+                <span class="text-orange-500 font-bold" id="selectedCount">0</span> joueurs selectionnés
+            </div>
+            <div class="flex gap-3">
+                <button onclick="closeAddPopup()" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition">
+                    Annuler
+                </button>
+                <button onclick="sendInvites()" class="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition flex items-center">
+                    <i class="fas fa-paper-plane mr-2"></i>
+                    Envoyer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Popup for accepting battle -->
+<div id="promoteMemberPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 animate-scaleIn">
+    <div class="bg-gray-800 text-white rounded-lg p-8 max-w-md w-full mx-4">
+        <h2 class="text-2xl font-bold mb-4">{% trans "Promote member to a role" %}</h2>
+        <div class="mb-4">
+            <label for="role" class="block mb-2">{% trans "Choose the role to promote to" %}:</label>
+            <select id="role" name="role" class="role w-full bg-gray-700 text-white p-2 rounded-lg">
+                <option value="">{% trans "Select a role" %}</option>
+                            {% for role in roles %}
+                            <option value="{{role}}">{{role}} </option>
+                            {% endfor %}
+            </select>
+        </div>
+        <div class="mb-6">
+            <a href="#" class="text-blue-400">Read what each role member can do</a>
+        </div>
+        <div class="flex justify-between">
+            <button id="confirmPromote" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
+                <i class="fas fa-check mr-2"></i>Confirm
+            </button>
+            <button id="cancelPromote" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
+                <i class="fas fa-times mr-2"></i>Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Popup for demoting a player -->
+<div id="demoteMemberPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50  animate-scaleIn">
+    <div class="bg-gray-800 text-white rounded-lg p-8 max-w-md w-full mx-4">
+        <h2 class="text-2xl font-bold mb-4">Demote <span class="player-name">The Player</span> from a role</h2>
+        <div class="mb-4">
+            <label for="role" class="block mb-2">{% trans "Choose the role to promote to" %}:</label>
+            <select id="role" name="role" class="role w-full bg-gray-700 text-white p-2 rounded-lg">
+                <option value="">{% trans "Select a role" %}</option>
+                            {% for role in roles %}
+                            <option value="{{role}}">{{role}} </option>
+                            {% endfor %}
+            </select>
+        </div>
+        <div class="mb-6">
+            <a href="#" class="text-blue-400">{% trans "Read what each role member can do" %} </a>
+        </div>
+        <div class="flex justify-between">
+            <button id="confirmDemote" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
+                <i class="fas fa-check mr-2"></i>Confirm
+            </button>
+            <button id="cancelDemote" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
+                <i class="fas fa-times mr-2"></i>Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Popup for removing a player -->
+<div id="removeMemberPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50  animate-scaleIn">
+    <div class="bg-gray-800 rounded-lg p-8 text-white max-w-md w-full mx-4">
+        <h2 class="text-2xl font-bold mb-4">You are about to remove <span class="player-name">the player</span> from {{family}}</h2>
+        
+        <div class="mb-6">
+            <p class="text-yellow-500"><i class="fas fa-exclamation-triangle mr-2"></i>Notice: The player will be removed from your family.</p>
+        </div>
+        <div class="flex justify-between">
+            <button id="confirmRemove" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
+                <i class="fas fa-check mr-2"></i>Confirm
+            </button>
+            <button id="cancelRemove" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
+                <i class="fas fa-times mr-2"></i>Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+{% block active %}
+<script>
+    $(()=>{
+        $('.filter-button').removeClass('active')
+        $('.filter-button')[0].classList.add('active')
+    })
+</script>
+{% endblock active %}
+
+<!--Member invites-->
+<script>
+
+        function openAddPopup() {
+            document.getElementById('addMemberPopup').classList.remove('hidden')
+            renderPlayersList();
+        }
+
+        function closeAddPopup() {
+            document.getElementById('addMemberPopup').classList.add('hidden')
+            //selectedPlayers.clear();
+        }
+
+        function createPlayer(player){
+            const rank = player.rank
+            let rankColor =  rank == 'E' ? 'blue' : 'green'
+
+            const playerElement = document.createElement('div')
+            playerElement.className = 'player-card mb-2 bg-gray-800 rounded-lg p-3  flex items-center justify-between cursor-pointer'
+            playerElement.innerHTML = `
+                    <div class="flex items-center flex-1">
+                        <input type='hidden' name = 'playerId' value='${player.id}' >
+                        <input type="checkbox" class="custom-checkbox"  id="player-${player.id}">
+                        <label for="player-${player.id}" class="checkbox-icon w-6 h-6 bg-gray-700 rounded-md flex items-center justify-center mr-4">
+                            <i class="fas fa-check text-orange-500 hidden"></i>
+                        </label>
+                        <img src="${player.profile_picture}" alt="${player.username} avatar" class="w-12 h-12 rounded-full border-gray-700">
+                        <div class="ml-4">
+                            <div class="flex items-center">
+                                <span class="text-white font-semibold">${player.name}</span>
+                                <span class="ml-2 px-2 py-1 bg-${rankColor}-500 text-xs text-white rounded-full">${player.rank}</span>
+                            </div>
+                            <div class="text-gray-400 text-sm">${player.progression}% • ${player.wins} Victoires</div>
+                        </div>
+                    </div>
+                    
+            
+            `
+            
+            // <div class="text-right md:hidden">
+            //             <div class="text-orange-400  font-semibold"> ${player.progression}%</div>
+                        
+            //         </div>
+            return playerElement
+        }
+        var player_ids = []
+        
+        function sendInvites(){
+            var selectedCards = document.querySelectorAll('.player-card.selected')
+            successCount = 0
+            
+            selectedCards.forEach((element,index) => {
+                const player_id = element.querySelector('input[type=hidden]').value
+                player_ids.push({
+                    id : player_id,
+                    index : index   })
+            });
+
+            
+            closeAddPopup()
+            player_ids.forEach(data =>{
+                sendInvite(data.id,data.index)
+            })
+        }
+
+        function sendInvite(player_id,index){
+            $.ajax({
+                url: `/users/send_invite/${player_id}`,
+                type: 'POST',
+                data: { csrfmiddlewaretoken : '{{csrf_token}}' },
+                beforeSend: function(){
+
+                },
+                success: function(res){
+                    console.log(res.message)
+                    if(res.status == 'success'){
+                        successCount += 1
+                    }
+                    if( successCount == player_ids.length ){
+                        
+                        showMyToast("Invitations Envoyées",'success')
+                        
+                    }else if(index == player_ids.length-1 && successCount < player_ids.length ){
+                        showMyToast("Certaines invitations n'ont pas été envoyé")
+                    }
+                },
+                complete: function(){
+
+                },
+                error: function(jqXHR,textstatus,errorThrown){
+                    
+                }
+            })
+        }
+
+        // Update selected count
+    function updateSelectedCount() {
+        const selectedCount = document.querySelectorAll('.player-card.selected').length;
+        document.getElementById('selectedCount').textContent = selectedCount;
+
+    }
+
+    function textElement(text){
+        const pragraph = document.createElement('p')
+        pragraph.className = 'text-gray-300 text-center'
+        
+    }
+
+        function renderPlayersList(){
+            $.ajax({
+                url:'/users/players',
+                type:'POST',
+                data: { csrfmiddlewaretoken:'{{csrf_token}}', filter:'invite-family', family_id: '{{family.id}}'  },
+                beforeSend: function(){
+
+                },
+                success: function(res){
+                    const container = document.getElementById('invite-players-list')
+                    const players = res.players
+                    console.log(players)
+                    container.innerHTML = ''
+                    if(players.length>0){
+                        players.forEach(player => {
+                        container.append(createPlayer(player)) 
+                    });
+                    }else{
+                        // container.append(textElement())
+                        container.innerHTML = `<p class='text-gray-300 text-center'>Les Joueurs que vous avez invités a rejoindre votre famille doivent répondre avant d'envoyer plus d'invitations</p>`
+                    }
+                    
+                },
+                complete: function(){
+                    document.querySelectorAll('.player-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        const checkbox = this.querySelector('input[type="checkbox"]');
+                        const checkIcon = this.querySelector('.fa-check');
+                        checkbox.checked = !checkbox.checked;
+                        this.classList.toggle('selected');
+                        checkIcon.classList.toggle('hidden');
+                        updateSelectedCount();
+                        
+                    });
+                });
+                },
+                error: function(jqXHR, errorThrown, textstatus){
+                    showMyToast('Une erreur est survenu','error')
+                }
+            })
+        }
+
+    // Handle player selection
+    
+
+    
+
+    // Search functionality
+    document.querySelector('.search-input').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        document.querySelectorAll('.player-card').forEach(card => {
+            const playerName = card.querySelector('.font-semibold').textContent.toLowerCase();
+            card.style.display = playerName.includes(searchTerm) ? 'flex' : 'none';
+        });
+    });
+</script>
+
+
+<script>
+   
+    // Sample family data (replace with actual data from your backend)
+    
+    function toggleMemberActions(event, memberId) {
+    event.stopPropagation();
+    const menu = document.getElementById('memberActionMenu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    
+    const rect = event.target.getBoundingClientRect();
+    const screenWidth = document.body.clientWidth
+    
+    //console.log(window.Innerwidth)
+    //console.log(document.body.clientWidth)
+    menu.style.top = `${rect.bottom + window.scrollY}px`;
+    // menu.style.left = `${rect.left + window.scrollX}px`;
+    menu.style.right = `${screenWidth - rect.right }px`;
+
+    // Set current member index as a data attribute
+    menu.setAttribute('data-member-id', memberId);
+}
+
+function promoteMember(event) {
+    event.preventDefault();
+    const memberId = event.target.closest('#memberActionMenu').getAttribute('data-member-id');
+    const promoteMemberPopup = $('#promoteMemberPopup');
+    const confirmPromoteMemberBtn = $('#confirmPromote');
+    const cancelPromoteMemberBtn = $('#cancelPromote');
+    // Implement promotion logic here
+    
+    hideActionMenu();
+   
+    promoteMemberPopup.removeClass('hidden');
+    confirmPromoteMemberBtn.on("click",(e)=>{
+        
+        const role = promoteMemberPopup.find('.role').val()
+        if(role){
+            $.ajax({
+                url: `/users/family/promote/${memberId}`,
+                type: 'POST',
+                data: {csrfmiddlewaretoken: '{{csrf_token}}', role:role},
+                beforeSend: function(){
+                    $("#loading-overlay").toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                        showMyToast(res.message, 'success')
+                        
+                    }else{
+                        showMyToast(res.message)
+                    }
+                },
+                complete: function(){
+                    $("#loading-overlay").toggleClass('active')
+                    promoteMemberPopup.addClass('hidden');
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+
+                }
+
+
+            })
+
+        }else{
+            showMyToast("Select the role to promote to")
+        }
+        
+        
+    })
+    cancelPromoteMemberBtn.on("click",(e)=>{
+        promoteMemberPopup.addClass('hidden');
+    })
+
+}
+
+function demoteMember(event) {
+    event.preventDefault();
+    const memberId = event.target.closest('#memberActionMenu').getAttribute('data-member-id');
+    const demoteMemberPopup = $('#demoteMemberPopup');
+    const confirmDemoteMemberBtn = $('#confirmDemote');
+    const cancelDemoteMemberBtn = $('#cancelDemote');
+    
+    hideActionMenu();
+   
+    demoteMemberPopup.removeClass('hidden');
+    confirmDemoteMemberBtn.on("click",(e)=>{
+        const role = demoteMemberPopup.find('.role').val()
+        if(role){
+            $.ajax({
+                url: `/users/family/demote/${memberId}`,
+                type: 'POST',
+                data: {csrfmiddlewaretoken: '{{csrf_token}}', role:role},
+                beforeSend: function(){
+                    $("#loading-overlay").toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                        showMyToast(res.message, 'success')
+                    }else{
+                        showMyToast(res.message)
+                    }
+                },
+                complete: function(){
+                    $("#loading-overlay").toggleClass('active')
+                    demoteMemberPopup.addClass('hidden');
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+
+                }
+
+
+            })
+            
+            
+        }else{
+            showMyToast("Select the role to promote to")
+        }
+    })
+    cancelDemoteMemberBtn.on("click",(e)=>{
+        demoteMemberPopup.addClass('hidden');
+        demoteMemberPopup.addClass('hidden');
+    })
+}
+
+function removeMember(event) {
+    event.preventDefault();
+    const memberId = event.target.closest('#memberActionMenu').getAttribute('data-member-id');
+    const playerName = event.target.closest('.player-name')
+    
+    const removeMemberPopup = $('#removeMemberPopup');
+    const confirmRemoveMemberBtn = $('#confirmRemove');
+    const cancelRemoveMemberBtn = $('#cancelRemove');
+    
+    hideActionMenu();
+   
+    removeMemberPopup.removeClass('hidden');
+    confirmRemoveMemberBtn.on("click",(e)=>{
+        $.ajax({
+                url: `/users/family/remove/${memberId}`,
+                type: 'POST',
+                data: {csrfmiddlewaretoken: '{{csrf_token}}'},
+                beforeSend: function(){
+                    $("#loading-overlay").toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                        showMyToast(res.message, 'success')
+                    }else{
+                        showMyToast(res.message,'info',6000)
+                    }
+                },
+                complete: function(){
+                    $("#loading-overlay").toggleClass('active')
+                    removeMemberPopup.addClass('hidden');
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured','error')
+                }
+
+
+            })
+        
+    })
+    cancelRemoveMemberBtn.on("click",(e)=>{
+        removeMemberPopup.addClass('hidden');
+    })
+}
+
+function hideActionMenu() {
+    document.getElementById('memberActionMenu').style.display = 'none';
+}
+
+// Hide the action menu when clicking outside
+document.addEventListener('click', function(event) {
+    if (!event.target.closest('#memberActionMenu') && !event.target.closest('.member-options')) {
+        hideActionMenu();
+    }
+});
+
+    
+    </script>
+{% endblock content %}

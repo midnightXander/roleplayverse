@@ -1,0 +1,90 @@
+{% extends "moderator/base.html" %}
+{% load static %}
+
+{% block content %}
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">Welcome, {{moderator.user.last_name}}</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="dashboard-card bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Create Blog Post</h2>
+                <p class="text-gray-600 mb-4">Write and publish new blog posts for Shinobi Chronicles.</p>
+                <a href="{% url 'moderator:create_post' %}">
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                        <i class="fas fa-pen-to-square mr-2"></i>New Post
+                    </button>
+                </a>
+                
+            </div>
+
+            <div class="dashboard-card bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Create Tournament</h2>
+                <p class="text-gray-600 mb-4">Set up and manage new tournaments for players.</p>
+                <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                    <i class="fas fa-trophy mr-2"></i>New Tournament
+                </button>
+            </div>
+
+            <div class="dashboard-card bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Moderate Users</h2>
+                <p class="text-gray-600 mb-4">Review and manage user accounts and activities.</p>
+                <button class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded">
+                    <i class="fas fa-users-gear mr-2"></i>User Management
+                </button>
+            </div>
+
+            <div class="dashboard-card bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Player Statistics</h2>
+                <p class="text-gray-600 mb-4">View detailed player statistics and analytics.</p>
+                <div class="mt-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-medium text-gray-600">Active Players</span>
+                        <span class="text-sm font-semibold text-gray-800">1,234</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-blue-600 h-2.5 rounded-full animate-pulse" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-card bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Recent Reports</h2>
+                <ul class="space-y-2">
+                    <li class="flex items-center">
+                        <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+                        <span class="text-sm text-gray-600">Inappropriate behavior (3 new)</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="w-2 h-2 bg-yellow-500 rounded-full mr-2"></span>
+                        <span class="text-sm text-gray-600">Bug reports (7 new)</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                        <span class="text-sm text-gray-600">Feedback (12 new)</span>
+                    </li>
+                </ul>
+                <button class="mt-4 text-blue-500 hover:text-blue-600 text-sm font-semibold">
+                    View All Reports
+                </button>
+            </div>
+
+            <div class="dashboard-card bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <button class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded">
+                        <i class="fas fa-bullhorn mr-2"></i>Announcements
+                    </button>
+                    <button class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded">
+                        <i class="fas fa-cog mr-2"></i>Settings
+                    </button>
+                    <button class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded">
+                        <i class="fas fa-chart-line mr-2"></i>Reports
+                    </button>
+                    <button class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded">
+                        <i class="fas fa-envelope mr-2"></i>Messages
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+    {% endblock content %}

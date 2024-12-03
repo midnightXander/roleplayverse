@@ -1,0 +1,107 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+<style>
+    .blog-content img {
+        max-width: 100%;
+        height: auto;
+        margin: 1rem 0;
+    }
+    .blog-content h2 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .blog-content p {
+        margin-bottom: 1rem;
+    }
+    .blog-content a {
+        color: #3182ce;
+        text-decoration: underline;
+    }
+    .blog-content blockquote {
+        border-left: 4px solid #e2e8f0;
+        padding-left: 1rem;
+        font-style: italic;
+        margin: 1rem 0;
+    }
+</style>
+
+<main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <article class="bg-white shadow-lg rounded-lg overflow-hidden">
+        <img id="coverImage" src="{{post.image.url}}" alt="Blog post cover" class="w-full h-64 object-cover">
+        <div class="p-6">
+            <h1 id="blogTitle" class="text-3xl font-bold text-gray-900 mb-2">{{post.title}}</h1>
+            <div class="flex items-center text-sm text-gray-600 mb-4">
+                <span id="authorName" class="mr-4"></span>
+                <span id="publishDate">{{post.date_added |date:'M d, Y'}}</span>
+            </div>
+            <p id="leadingText" class="text-xl text-gray-700 mb-6">{{post.leading}}</p>
+            <div id="blogContent" class="blog-content prose max-w-none">
+                {{post.text | safe}}
+            </div>
+        </div>
+    </article>
+
+    <div class="mt-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Comments</h2>
+        <div id="commentsSection" class="space-y-4"></div>
+    </div>
+</main>
+
+<script>
+    // Simulated blog post data (replace with actual data fetching logic)
+    const blogPost = {
+        title: "The Art of Ninjutsu: Mastering the Shadow Clone Technique",
+        author: "Kakashi Hatake",
+        date: "2023-05-15",
+        coverImage: "https://via.placeholder.com/1200x400",
+        leadingText: "Discover the secrets behind one of the most versatile jutsu in the ninja world.",
+        content: `
+            <p>The Shadow Clone Technique is a fundamental skill that every aspiring ninja should master. Unlike basic clones, shadow clones are physical duplicates of the user, capable of performing jutsu and engaging in combat.</p>
+            <h2>Origins of the Technique</h2>
+            <p>Developed by the Second Hokage, Tobirama Senju, the Shadow Clone Technique was initially created as a means of gathering intelligence. Its versatility, however, quickly made it a staple in many ninja's arsenals.</p>
+            <blockquote>
+                "The key to mastering the Shadow Clone Technique lies not in the creation of the clones, but in effectively managing and utilizing them in battle." - Third Hokage, Hiruzen Sarutobi
+            </blockquote>
+            <h2>Mastering the Technique</h2>
+            <p>To master the Shadow Clone Technique, one must:</p>
+            <ol>
+                <li>Develop a strong chakra reserve</li>
+                <li>Perfect chakra control</li>
+                <li>Learn to distribute consciousness among clones</li>
+                <li>Practice strategic deployment in various scenarios</li>
+            </ol>
+            <p>With dedication and practice, even genin-level ninja can become proficient in this powerful jutsu.</p>
+            <img src="https://via.placeholder.com/800x400" alt="Shadow Clone Technique demonstration">
+            <p>Remember, while the Shadow Clone Technique is powerful, it comes with risks. Overuse can lead to chakra exhaustion, so always use it judiciously in battle.</p>
+        `,
+        comments: [
+            { author: "Naruto Uzumaki", content: "Shadow Clone Jutsu is my favorite technique! Believe it!" },
+            { author: "Sasuke Uchiha", content: "Hn. It's a useful technique, but it has its limitations." }
+        ]
+    };
+
+    // Populate the blog post content
+    // document.getElementById('coverImage').src = blogPost.coverImage;
+    // document.getElementById('blogTitle').textContent = blogPost.title;
+    // document.getElementById('authorName').textContent = `By ${blogPost.author}`;
+    // document.getElementById('publishDate').textContent = `Published on ${blogPost.date}`;
+    // document.getElementById('leadingText').textContent = blogPost.leadingText;
+    // document.getElementById('blogContent').innerHTML = blogPost.content;
+
+    // Populate comments
+    const commentsSection = document.getElementById('commentsSection');
+    blogPost.comments.forEach(comment => {
+        const commentElement = document.createElement('div');
+        commentElement.className = 'bg-gray-50 p-4 rounded-lg';
+        commentElement.innerHTML = `
+            <p class="font-semibold">${comment.author}</p>
+            <p>${comment.content}</p>
+        `;
+        commentsSection.appendChild(commentElement);
+    });
+</script>
+
+{% endblock content %}

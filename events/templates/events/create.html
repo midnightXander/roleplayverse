@@ -1,0 +1,396 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+<!-- <html lang="en" class="scroll-smooth"></html> -->
+{% block content %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: white;
+        }
+        .scroll-indicator {
+            height: 3px;
+            background: #ff4500;
+            width: 0%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 50;
+            transition: width 0.3s ease;
+        }
+
+        
+    </style>
+<style>
+    /* ... (previous styles) ... */
+
+    .bracket {
+        display: flex;
+        flex-direction: row;
+    }
+    .round {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+    .match {
+        padding: 10px;
+        border: 1px solid #ff4500;
+        margin: 5px;
+        min-width: 100px;
+        text-align: center;
+        background-color: rgba(255, 69, 0, 0.1);
+    }
+    /* @media (max-width: 768px) {
+        #tournamentPreview {
+            display: none !important;
+        }
+    } */
+</style>
+
+
+<!--Navbar-->
+<style>
+    /* ... (previous styles) ... */
+
+    /* Navbar styles */
+    .nav-icon {
+        font-size: 1.25rem;
+    }
+    
+    /* Profile dropdown animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    #profileMenu {
+        animation: fadeIn 0.2s ease-out;
+    }
+</style>
+
+
+
+<!-- <body class="bg-gray-900 text-white"> -->
+    <div class="scroll-indicator"></div>
+
+    
+
+    <!-- Create Event Header -->
+    <header class="pt-20 pb-10 px-4 bg-gray-800">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-4xl font-bold mb-4">Create a Shinobi Event</h1>
+            <p class="text-xl mb-8">Choose your event type and set up an epic experience for fellow ninjas!</p>
+        </div>
+    </header>
+
+    <!-- Event Type Selection -->
+    <section class="py-12 bg-gray-900">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-2xl font-bold mb-6 text-center">Select Event Type</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <button id="tournamentBtn" class="event-type-btn bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+                    <i class="fas fa-trophy text-3xl mb-2"></i>
+                    <span class="block text-xl">Tournament</span>
+                </button>
+                <button id="storyBtn" class="event-type-btn bg-purple-500 hover:bg-purple-600 text-white font-bold py-4 px-6 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+                    <i class="fas fa-book-open text-3xl mb-2"></i>
+                    <span class="block text-xl">Story</span>
+                </button>
+                <button id="royalRumbleBtn" class="event-type-btn bg-red-500 hover:bg-red-600 text-white font-bold py-4 px-6 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+                    <i class="fas fa-fist-raised text-3xl mb-2"></i>
+                    <span class="block text-xl">Royal Rumble</span>
+                </button>
+                <button id="quizBtn" class="event-type-btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+                    <i class="fas fa-question-circle text-3xl mb-2"></i>
+                    <span class="block text-xl">Quiz</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Creation Forms -->
+    <section id="eventForms" class="py-12 bg-gray-800 hidden">
+        <div class="max-w-4xl mx-auto px-4">
+            <!-- Tournament Form -->
+            <form action="{% url 'events:create' %}" method="post" id="tournamentForm" class="event-form hidden">
+                {% csrf_token %}
+                <input type="hidden" name="event_type" value="tournament">
+                <h3 class="text-2xl font-bold mb-6">Create a Tournament</h3>
+                <div class="mb-4">
+                    <label for="tournamentName" class="block mb-2">Tournament Name</label>
+                    <input type="text" name="name" id="tournamentName" class="w-full px-3 py-2 bg-gray-700 rounded-md" required>
+                </div>
+                <div class="mb-4">
+                    <label for="tournamentDate" class="block mb-2">Starting Date</label>
+                    <input type="date" name = "start_date" id="tournamentDate" class="w-full px-3 py-2 bg-gray-700 rounded-md" min="today" required>
+                </div>
+                <div class="mb-4">
+                    <label for="tournamentParticipants" class="block mb-2">Number of Participants</label>
+                    <input type="number" name = "n_participants" id="tournamentParticipants" min="4" class="w-full px-3 py-2 bg-gray-700 rounded-md" required>
+                </div>
+                <div class="mb-4">
+                    <label for="tournamentRules" class="block mb-2">Tournament Rules</label>
+                    <textarea id="tournamentRules" name="rules" class="w-full px-3 py-2 bg-gray-700 rounded-md" rows="4" required></textarea>
+                </div>
+
+                <button type="submit" id="submitEventBtn" class="mt-6 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+                    Create Event
+                </button>
+            </form>
+
+            <div id="tournamentPreview" class="hidden mt-8 p-4 bg-gray-700 rounded-lg">
+                <h4 class="text-xl font-bold mb-4">Tournament Bracket Preview</h4>
+                <div id="bracketContainer" class="overflow-x-auto">
+                    <!-- The bracket will be generated here -->
+                </div>
+            </div>
+
+            <!-- Story Form -->
+            <form action="{% url 'events:create' %}" method="post" id="storyForm" class="event-form hidden">
+                
+                {% csrf_token %}
+
+                <input type="hidden" name="event_type" value="story">
+                <h3 class="text-2xl font-bold mb-6">Create a Story Event</h3>
+                <div class="mb-4">
+                    <label for="storyTitle" class="block mb-2">Story Title</label>
+                    <input type="text" id="storyTitle" class="w-full px-3 py-2 bg-gray-700 rounded-md" required>
+                </div>
+                <div class="mb-4">
+                    <label for="storyDescription" class="block mb-2">Story Description</label>
+                    <textarea id="storyDescription" class="w-full px-3 py-2 bg-gray-700 rounded-md" rows="4" required></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="storyDuration" class="block mb-2">Estimated Duration (in days)</label>
+                    <input type="number" id="storyDuration" class="w-full px-3 py-2 bg-gray-700 rounded-md" required>
+                </div>
+
+                <button type="submit" id="submitEventBtn" class="mt-6 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+                    Create Event
+                </button>
+            </form>
+
+            <!-- Royal Rumble Form -->
+            <form action="{% url 'events:create' %}" method="post" id="royalRumbleForm" class="event-form hidden">
+                {% csrf_token %}
+
+                <input type="hidden" name="event_type" value="royal_rumble">
+                <h3 class="text-2xl font-bold mb-6">Create a Royal Rumble</h3>
+                <div class="mb-4">
+                    <label for="rumbleName" class="block mb-2">Royal Rumble Name</label>
+                    <input type="text" id="rumbleName" class="w-full px-3 py-2 bg-gray-700 rounded-md" required>
+                </div>
+                <div class="mb-4">
+                    <label for="rumbleDate" class="block mb-2">Date</label>
+                    <input type="date" id="rumbleDate" class="w-full px-3 py-2 bg-gray-700 rounded-md" required>
+                </div>
+                <div class="mb-4">
+                    <label for="rumbleParticipants" class="block mb-2">Number of Participants</label>
+                    <input type="number" id="rumbleParticipants" class="w-full px-3 py-2 bg-gray-700 rounded-md" required>
+                </div>
+                <div class="mb-4">
+                    <label for="rumbleRules" class="block mb-2">Royal Rumble Rules</label>
+                    <textarea id="rumbleRules" class="w-full px-3 py-2 bg-gray-700 rounded-md" rows="4" required></textarea>
+                </div>
+
+                <button type="submit" id="submitEventBtn" class="mt-6 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+                    Create Event
+                </button>
+            </form>
+
+            <!-- Quiz Form -->
+            <form action="{% url 'events:create' %}" method="post" id="quizForm" class="event-form hidden">
+                {% csrf_token %}
+
+                <input type="hidden" name="event_type" value="quizz">
+                <h3 class="text-2xl font-bold mb-6">Create a Quiz</h3>
+                <div class="mb-4">
+                    <label for="quizName" class="block mb-2">Quiz Name</label>
+                    <input type="text" id="quizName" class="w-full px-3 py-2 bg-gray-700 rounded-md" required>
+                </div>
+                <div class="mb-4">
+                    <label for="quizDate" class="block mb-2">Date</label>
+                    <input type="date" id="quizDate" class="w-full px-3 py-2 bg-gray-700 rounded-md" required>
+                </div>
+                <div class="mb-4">
+                    <label for="quizDuration" class="block mb-2">Duration (in minutes)</label>
+                    <input type="number" id="quizDuration" class="w-full px-3 py-2 bg-gray-700 rounded-md" required>
+                </div>
+                <div class="mb-4">
+                    <label for="quizQuestions" class="block mb-2">Number of Questions</label>
+                    <input type="number" id="quizQuestions" class="w-full px-3 py-2 bg-gray-700 rounded-md" required>
+                </div>
+
+                <button type="submit" id="submitEventBtn" class="mt-6 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+                    Create Event
+                </button>
+            </form>
+
+            <!-- <button type="submit" id="submitEventBtn" class="mt-6 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+                Create Event
+            </button> -->
+        </div>
+    </section>
+
+    <!-- Footer (same as before) -->
+    <footer class="bg-gray-900 text-white py-8">
+        <!-- ... (footer content) ... -->
+    </footer>
+
+
+
+
+
+
+
+
+    <script>
+
+    //register the scrolltoplugin    
+    gsap.registerPlugin(ScrollToPlugin);
+
+
+        // Scroll Progress Indicator
+        window.addEventListener('scroll', () => {
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            const windowScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (windowScroll / height) * 100;
+            scrollIndicator.style.width = scrolled + '%';
+        });
+
+        //Tournament tree
+        // ... (previous JavaScript) ...
+
+// Tournament bracket preview
+const tournamentParticipants = document.getElementById('tournamentParticipants');
+const tournamentPreview = document.getElementById('tournamentPreview');
+const bracketContainer = document.getElementById('bracketContainer');
+
+tournamentParticipants.addEventListener('input', updateBracket);
+
+function updateBracket() {
+    const participants = parseInt(tournamentParticipants.value);
+    if (participants && participants > 1) {
+        tournamentPreview.classList.remove('hidden');
+        generateBracket(participants);
+    } else {
+        tournamentPreview.classList.add('hidden');
+    }
+}
+
+function generateBracket(participants) {
+    bracketContainer.innerHTML = '';
+    const rounds = Math.ceil(Math.log2(participants));
+    const bracket = document.createElement('div');
+    bracket.className = 'bracket';
+
+    for (let round = 0; round < rounds; round++) {
+        const roundDiv = document.createElement('div');
+        roundDiv.className = 'round';
+        const matches = Math.pow(2, rounds - round - 1);
+
+        for (let match = 0; match < matches; match++) {
+            const matchDiv = document.createElement('div');
+            matchDiv.className = 'match';
+            matchDiv.textContent = round === 0 ? `Match ${match + 1}` : (round === rounds - 1 ? 'Final' : `Round ${round + 1}`);
+            roundDiv.appendChild(matchDiv);
+        }
+
+        bracket.appendChild(roundDiv);
+    }
+
+    bracketContainer.appendChild(bracket);
+
+    // Animate the bracket appearance
+    gsap.from('.round', {
+        x: 100,
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.1,
+        ease: 'power2.out'
+    });
+}
+
+// Update the tournament button click event
+document.getElementById('tournamentBtn').addEventListener('click', () => {
+    // ... (previous code) ...
+    updateBracket(); // Call this to initialize the bracket if there's a value
+});
+
+// ... (rest of the JavaScript) ...
+
+
+        // GSAP Animations
+        gsap.from('.event-type-btn', {
+            y: 50,
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: 'back.out(1.7)',
+        });
+
+        // Event Type Selection
+        const eventTypeBtns = document.querySelectorAll('.event-type-btn');
+        const eventForms = document.querySelectorAll('.event-form');
+        const eventFormsSection = document.getElementById('eventForms');
+        
+
+        eventTypeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tournamentPreview.classList.add('hidden');
+                const formId = btn.id.replace('Btn', 'Form');
+                eventForms.forEach(form => form.classList.add('hidden'));
+                document.getElementById(formId).classList.remove('hidden');
+                eventFormsSection.classList.remove('hidden');
+
+                gsap.from('#' + formId, {
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.5,
+                    ease: 'power2.out'
+                });
+
+                
+                gsap.to(window, {duration: 0.3, scrollTo: eventFormsSection});
+                
+                // gsap.to(window, {
+                // duration: 1,
+                // scrollTo: {
+                //     y: eventFormsSection.offsetTop, // Calculate the top position
+                //     //behavior: "smooth" // Optional: For smooth scrolling
+                //     }
+                // });
+            });
+        });
+
+        // Submit Event Button
+        // const submitEventBtn = document.getElementById('submitEventBtn');
+        // submitEventBtn.addEventListener('click', (e) => {
+        //     e.preventDefault();
+        //     // Here you would typically handle form submission
+        //     alert('Event created successfully!');
+        // });
+
+        // Floating kunai cursor effect
+        const kunai = document.createElement('div');
+        kunai.innerHTML = '<i class="fas fa-khanda text-orange-500 text-2xl"></i>';
+        kunai.style.position = 'fixed';
+        kunai.style.pointerEvents = 'none';
+        kunai.style.zIndex = '9999';
+        document.body.appendChild(kunai);
+
+        document.addEventListener('mousemove', (e) => {
+            gsap.to(kunai, {
+                x: e.clientX + 10,
+                y: e.clientY + 10,
+                duration: 0.1
+            });
+        });
+    </script>
+{% endblock content %}

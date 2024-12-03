@@ -1,0 +1,522 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<style>
+
+.container-family {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1200px;
+            
+            margin: 1rem auto;
+            .navbar {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            background: #f9f9f9;
+            color: #333;
+            padding: 10px 0;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        .navbar a {
+            color: #333;
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        .navbar a:hover {
+            background: #0056b3;
+            border-radius: 5px;
+        }
+
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            position: relative;
+        }
+
+        .profile img:hover {
+            cursor: pointer;
+        }
+
+        .profile .icon {
+            position: absolute;
+            bottom: 10px;
+            left: 70px;
+            background: #007bff;
+            border-radius: 50%;
+            padding: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .profile .info {
+            margin-left: 20px;
+        }
+
+        .profile .info h2 {
+            margin: 0;
+        }
+
+        .profile .info p {
+            margin-top: 5px;
+        }
+
+        .profile .info button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .profile .info button:hover {
+            background: #0056b3;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .actions div {
+            margin-bottom: 10px;
+        }
+
+        .actions button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+            margin-top: 1rem;
+        }
+        .actions a{
+            width: fit-content;
+        }
+
+        .actions button:hover {
+            background: #0056b3;
+        }
+
+        
+        .content {
+            margin-top: 20px;
+        }
+
+        .content .section {
+            margin-bottom: 20px;
+        }
+
+        .content .section h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .content .posts {
+            width: 100%;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .content .posts .post {
+            background: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content .posts .post .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content .posts .post .post-header h4 {
+            margin: 0;
+        }
+
+        .content .posts .post .post-body {
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .top-section {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .profile {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .profile .info {
+                margin-left: 0;
+                text-align: center;
+            }
+
+            .actions {
+                align-items: center;
+                margin-top: 20px;
+            }
+
+            .actions div {
+                margin-bottom: 5px;
+            }
+
+            .actions button {
+                margin: 5px 0;
+                width: 100%;
+            }
+
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .navbar a {
+                margin: 5px 0;
+                width: 100%;
+                text-align: center;
+            }
+        }
+</style>
+<style>
+    .users {
+        .user{
+            margin: 1rem;
+        }
+    }
+</style>
+
+
+<div class="container-family">
+   
+      
+      <!-- Modals -->
+      <div class="modal fade" id="membersModal" tabindex="-1" aria-labelledby="membersModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="membersModalLabel">Members of {{family.name}} family</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!--
+                <input type="text" class="search-user-modal">
+                <div class="searched-users">
+                </div>
+                -->
+                
+
+            <div class="members">
+                <ul>
+
+                </ul>
+            </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="addMemberModal">Invite  Players to join your family</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+             <div>
+                <input type="text" class="search-user-modal">
+                <div class="searched-users">
+
+                </div>
+             </div>
+                <div class="users">
+            <ul>
+                
+             </ul>
+             </div>
+                
+            </div>
+            <div class="modal-footer">
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      
+    <div class="top-section">
+        <div class="profile">
+
+            <div>
+                <img src="{{family.profile_picture.url}}" alt="Family Profile Picture">
+                <!-- <div class="icon" onclick="modifyProfilePicture()">✎</div>
+                
+             <<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Launch demo modal
+      </button> 
+    -->  
+            </div>
+            <div class="info">
+                <h2>{{family.name}}</h2>
+                <p>{{family.description}}</p>
+                <button onclick="modifyBio()">Modify Bio</button>
+            </div>
+        </div>
+        <div class="actions">
+            <div>Points: <strong>{{family.points}}</strong></div>
+            <div>Position: <strong>{{family.position}}</strong></div>
+            <div>God Father: <strong>{{family.god_father}}</strong></div>
+
+            <div>
+                <a href="{% url 'chats:family_chat' family.name %}">
+                    <button>Go to Family Chat</button>
+                </a>
+                <button id="viewMembersBtn" data-bs-toggle="modal" data-bs-target="#membersModal">View Members</button>
+                <button id="addMemberBtn" data-bs-toggle="modal" data-bs-target="#addMemberModal">Add Members</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="navbar">
+        <a href="#posts" onclick="showSection('posts')">Posts</a>
+        <a href="#battles" onclick="showSection('battles')">Battles</a>
+        <a href="#points" onclick="showSection('points')">Stats</a>
+    </div>
+
+    <div class="content" id="posts">
+        <div class="section">
+            <h3>Posts by Family Members</h3>
+            <div class="posts">
+                <div class="post">
+                    <div class="post-header">
+                        <h4>Post Title</h4>
+                        <span>Posted by Member Name</span>
+                    </div>
+                    <div class="post-body">
+                        <p>Post content goes here...</p>
+                    </div>
+                </div>
+                <!-- More posts can be added here -->
+            </div>
+        </div>
+    </div>
+
+    <div class="content" id="battles" style="display: none;">
+        <div class="section">
+            <h3>Battles by Family Members</h3>
+            <ul>
+                <li>Battle 1 details...</li>
+                <!-- More battles can be added here -->
+            </ul>
+        </div>
+    </div>
+
+    <div class="content" id="points" style="display: none;">
+        <div class="section">
+            <h3>Points History/Stats</h3>
+            <ul>
+                <li>Points event 1 details...</li>
+                <!-- More points history can be added here -->
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(()=>{
+
+        $("#viewMembersBtn").on("click",(e)=>{
+            membersList = $("#membersModal .members ul")
+            $.ajax({
+                url: "{% url 'users:family_members' family.id %}",
+                type: "GET",
+                success: function(res){
+                    membersList.empty()
+                    res.members.forEach(member => {
+                        membersList.append(`
+                        <li class='user'><a href='/users/${member.username}'>${member.player}</a>
+                            </li> 
+                        `)
+                    });
+                }
+            })
+        })
+
+
+        $("#addMemberBtn").on("click",(e)=>{
+            userList = $("#addMemberModal .modal-body .users ul")
+            $.ajax({
+                url: "{% url 'users:players' %}",
+                type: "GET",
+                success: function(res){
+                    userList.empty()
+                    res.players.forEach(player => {
+                        userList.append(`
+                        <li class='user'><a href='/users/${player.username}'>${player.player}</a> 
+        <button class='btn btn-primary send-invite-btn' onclick = sendInvite("/users/send_invite/${player.id}")  data-url="{%  url 'users:send_invite' player.id %}">invite</button></li>
+                        `)
+                    });
+                }
+            })
+        })
+
+        //search for a user
+        inputName = $(".search-user-modal")
+        inputName.on("input",(e)=>{
+                    if(e.target.value != "" ){
+                         $.ajax({
+                        url: "{% url 'core:search' %}",
+                        type: 'POST',
+                        data: {"text":e.target.value, csrfmiddlewaretoken:"{{ csrf_token }}"},
+                        beforeSend: function(){
+                            //$("#loading-indicator").show()
+                        },
+                        success: function(res){
+                            if(res.status === 'success'){
+                                //$("#users-list").removeClass("searched-players")
+                                $(".searched-users").empty()
+                                
+                                res.search_list.forEach(entity => {
+                                    if(entity.type == "family"){
+                                        //$(".searched-users").append(`
+                                    //<a href = "/users/family/${entity.id}">${entity.name}</a><br>
+                                    //`)
+                                    console.log("it's a family")
+                                    }else if(entity.type == "player"){
+                                        $(".searched-users").append(`
+                                    <a href = "/users/${entity.username}">${entity.username}</a><br>
+                                    `)
+                                    }
+                                    
+                                });
+                                //$("#users-list").addClass("searched-players")
+                            }else{
+                                console.log("Error searching")
+                            }
+                        },
+                        complete: function(){
+                            //$("#loading-indicator").hide()
+                        }
+                    })
+                    }else{
+                        $(".searched-users").empty()
+                    }
+                   
+                })
+    })
+</script>
+
+<script>
+    function modifyBio() {
+        alert('Modify Bio button clicked.');
+        // Add your logic here
+    }
+
+    function modifyProfilePicture() {
+        alert('Modify Profile Picture button clicked.');
+        // Add your logic here
+    }
+
+    function addFamilyMember() {
+        alert('Add Family Member button clicked.');
+        // Add your logic here
+    }
+
+    function quitFamily() {
+        alert('Quit Family button clicked.');
+        // Add your logic here
+    }
+
+    function goToFamilyChat() {
+        alert('Go to Family Chat button clicked.');
+        // Add your logic here
+    }
+
+    function viewMembers() {
+        alert('View Members button clicked.');
+        // Add your logic here
+    }
+
+    function showSection(sectionId) {
+        document.getElementById('posts').style.display = 'none';
+        document.getElementById('battles').style.display = 'none';
+        document.getElementById('points').style.display = 'none';
+        document.getElementById(sectionId).style.display = 'block';
+    }
+</script>
+
+
+
+
+
+
+
+
+
+<!--
+<h1>Your Family</h1>
+
+{% for msg in messages  %}
+<span>{{msg}}</span>
+{% endfor %}
+
+<div>
+    <span>Name: {{family.name}}</span>
+    <span>position: {{family.position}}</span>
+    <span>points: {{family.points}}</span>
+    
+    <span>God Father: {{family.god_father}}</span>
+
+    <h2>Members</h2>
+    <ul>
+        {% for member in members %}
+        <li>{{member}}  - {{member.rank}} <span><a href="#">Chat</a></span></li>
+        {% endfor %}
+    </ul>
+</div>
+
+
+-->
+
+
+
+{% endblock content %}

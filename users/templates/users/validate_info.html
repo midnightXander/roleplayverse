@@ -1,0 +1,21 @@
+{% extends "users/base.html" %}
+{% load static %}
+
+ 
+        {% block content %}
+        
+        <h1>Registering</h1>
+        <div>
+        <form action="{% url 'users:validate' %}" method="post">
+                {% csrf_token %}
+        <input type="text" name="username"  placeholder="Enter your Username"/><br>
+        <br><input type="text" name="email"  placeholder="Enter your email"/>
+        <br><br><input type="text" name="password1"  placeholder="Enter your password"/>
+        <br><br><input type="text" name="password2"  placeholder="Enter again password"/>
+        <br><br>
+        <button type="submit">Submit</button>
+
+        </form>
+
+        </div>
+        {% endblock content %}

@@ -1,0 +1,55 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-09-23 16:48+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: .\core\templates\core\base.html:437
+msgid "Home"
+msgstr ""
+
+#: .\core\templates\core\base.html:438 .\core\views.py:160
+msgid "Chats"
+msgstr ""
+
+#: .\core\templates\core\base.html:439
+msgid "Battles"
+msgstr ""
+
+#: .\core\templates\core\home.html:205
+msgid "Families"
+msgstr ""
+
+#: .\core\templates\core\home.html:206
+msgid "Favorites"
+msgstr ""
+
+#: .\core\templates\core\home.html:207
+msgid "Events"
+msgstr ""
+
+#: .\core\templates\core\home.html:208
+msgid "Characters"
+msgstr ""
+
+#: .\core\templates\core\home.html:209
+msgid "Rankings"
+msgstr ""
+
+#: .\core\templates\core\home.html:210
+msgid "Tutorials"
+msgstr ""

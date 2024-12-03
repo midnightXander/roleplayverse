@@ -1,0 +1,30 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<style>
+.container-post{
+    width: 50%;
+    margin: 1rem auto;
+
+    form{
+        display: flex;
+        gap: 10px;
+        flex-direction: column;
+    }
+}
+</style>
+
+<div class="container-post">
+    <form action="{% url 'core:modify_post' post.id %}" method="post" enctype="multipart/form-data" >
+    {% csrf_token %}
+    <textarea name="body">{{post.body}}</textarea>
+
+    <input type="file" name="new_image" value="{{post.image}}">
+    <button type="submit" class="btn btn-secondary">Save</button>
+
+</form>
+
+</div>
+
+
+{% endblock content %}

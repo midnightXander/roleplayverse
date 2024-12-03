@@ -1,0 +1,40 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+
+{% block content %}
+<style>
+    .bg-orange-custom {
+        background-color: #ff6600;
+    }
+    .hover\:bg-orange-custom:hover {
+        background-color: #ff8533;
+    }
+    .text-orange-custom {
+        color: #ff6600;
+    }
+</style>
+<header class="bg-gray-800 text-orange-500 p-4 mt-20">
+    <div class="container mx-auto">
+        <h1 class="text-2xl font-bold">Classement - RPV</h1>
+    </div>
+</header>
+<main class="flex flex-col space-y-4 flex-grow container text-white mx-auto px-4 py-8">
+    <a href="/users/families/rankings" class="bg-gray-700 rounded-lg p-4 shadow-md animate-fadeIn flex flex-col items-center">
+        <div class="p-4 font-bold text-lg items-center bg-gray-700">
+            <h2 class="text-2xl font-bold mb-4 text-orange-custom">Familles</h2>
+        </div>
+    </a>
+
+    <a href="/users/players/rankings" class="bg-gray-700 rounded-lg p-4 shadow-md animate-fadeIn flex flex-col items-center">
+        <div class="p-4 font-bold text-lg items-center bg-gray-700">
+            <h2 class="text-2xl font-bold mb-4 text-orange-custom">Joueurs</h2>
+        </div>
+    </a>
+
+
+</main>
+
+
+
+{% endblock content %}

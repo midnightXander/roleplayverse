@@ -1,0 +1,156 @@
+{% extends "users/user/user_page.html"%}
+{% load static %}
+
+{% block filterContent %}
+<style>
+    .proposal-card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .proposal-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+</style>
+{% for battle in battles %}
+<div class="bg-gray-700 rounded-lg shadow-md p-6 mb-8">
+    <div class="py-2">vs <a href="/users/{{battle.opponent.username}}" class="text-2xl font-semibold text-orange-500 mb-4">{{battle.opponent.player}}</a></div>
+    <p class="text-gray-200 mb-2 ">Persos : {{battle.i_character}}(Toi) vs {{battle.o_character}}({{battle.opponent.username}})</p>
+    <!-- <p class="text-gray-200 mb-2">Participants : Toi vs <a href="/users/{{battle.opponent.username}}" class="font-semibold hover:text-orange-500 " >{{battle.opponent.player}}</a></p> -->
+    
+    {% if battle.status != 'waiting_refree' %}
+    <div  class="my-2 border rounded-lg inline px-4 py-2">
+        <a href="/battles/battle_room/{{battle.id}}" class=" font-semibold hover:text-orange-500 " >Aller au combat</a>
+    </div>
+    
+    {% endif %}
+
+
+    <div class="space-y-6" id="referee-proposals">
+        <h4 class="text-lg text-orange-500 font-semibold my-4">Propositions d'arbitrage:</h4>
+        {% for proposal in battle.referee_proposals %}
+        <div class="border border-orange-500 text-white rounded-lg p-4 flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div class="flex space-x-2">
+                <a href="/users/{{proposal.player.username}}" >
+                    <img src="{{proposal.player.profile_picture}}" alt="{{proposal.player.player}} Profile Picture" class="w-20 h-20 rounded-full mb-2">
+                </a>
+                <div>
+                  <a href="/users/{{proposal.player.username}}" class="text-xl font-semibold hover:text-orange-500">{{proposal.player.player}}</a>
+                <p class="text-gray-500 text-sm ">Rang : {{proposal.player.rank}}</p>
+                <p class="">Note d'arbitrage: <i class="fas fa-star text-yellow-500" ></i> {{proposal.ratings}}/5</p>
+                <p class="text-gray-500 text-sm ">{{proposal.date_sent}}</p>  
+                </div>
+                
+            </div>
+            <div class="mt-4 md:mt-0 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                {% if proposal.player.id == battle.refree.id %}
+                <button disabled class="bg-green-600  text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+                    <i class="fas fa-check-circle mr-2"></i> Validé
+                </button>
+                {% else %}
+                <button onclick="answerProposal('{{proposal.id}}','accepted')" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+                    <i class="fas fa-check"></i>
+                </button>
+                <button onclick="answerProposal('{{proposal.id}}','declined')" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+                    <i class="fas fa-times"></i>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        {% endfor %}
+    </div>
+    
+    
+</div>
+{% empty %}
+
+<div class="flex text-gray-300 flex-col justify-center items-center">
+    <img src="{% static 'svg/sword-spin.svg'  %}" alt="sword-spin" class="h-64 w-64" >
+    <p>Aucune proposition de  challenges pour l'instant</p>
+</div>
+
+
+{% endfor %}
+<!-- {% for proposal in proposals %}
+<div class="bg-gray-700 rounded-lg shadow-md p-6 mb-6">
+    <div class="py-2">vs <a href="/users/{{proposal.opponent.username}}" class="text-2xl font-semibold text-orange-500 mb-4">{{battle.opponent.player}}</a></div>
+    <p class="text-gray-200 mb-4">Date du combat : 15 Juillet 2023</p>
+    <p class="text-gray-200 mb-4">Participants : Toi vs <a href="/users/{{battle.opponent.username}}" class="font-semibold hover:text-orange-500 " >{{battle.opponent.player}}</a></p>
+
+    <div class="space-y-6" id="referee-proposals">
+        
+        
+        <div class="border border-orange-500 text-white rounded-lg p-4 flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div class="flex space-x-2">
+                <a href="/users/{{proposal.player.username}}" >
+                    <img src="{{proposal.player.profile_picture}}" alt="{{proposal.player.player}} Profile Picture" class="w-20 h-20 rounded-full mb-2">
+                </a>
+                <div>
+                  <a href="/users/{{proposal.player.username}}" class="text-xl font-semibold hover:text-orange-500">{{proposal.player.player}}</a>
+                <p class="">Rang : {{proposal.player.rank}}</p>
+                <p class="">Note : {{proposal.ratings}}/5</p>
+                <p class="">{{proposal.date_sent}}</p>  
+                </div>
+                
+            </div>
+            <div class="mt-4 md:mt-0 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                <button onclick="answerProposal('{{proposal.id}}','accepted')" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+                    <i class="fas fa-check"></i> (if validated indicate)
+                </button>
+                <button onclick="answerProposal('{{proposal.id}}','declined')" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% empty %}
+
+{% endfor %} -->
+{% block active %}
+<script>
+    $(()=>{
+        $('.filter-button').removeClass('active')
+        $('.filter-button')[4].classList.add('active')
+    })
+</script>
+{% endblock active %}
+
+{% block fetchContent %}
+
+{% endblock fetchContent %}
+
+<script>
+    function answerProposal(proposal_id, response){
+        $.ajax({
+            url: `/battles/refree/validate/${proposal_id}`,
+            type:"POST",
+            data:{csrfmiddlewaretoken:"{{csrf_token}}", response:response},
+            beforeSend: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+            success: function(res){
+                if(res.status == "success"){
+                    showMyToast(res.message, 'success')
+                    // if(response != 'accepted'){
+                    //     $(btn).parent('li').remove()
+                    // }
+                }else{
+                    showMyToast(res.message)
+                    
+                }
+            },
+            complete: function(){
+                  $('#loading-overlay').toggleClass('active')
+                  
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                  showMyToast("An error occured", 'error')
+                }
+        })
+    
+    }
+</script>
+
+{% endblock filterContent %}

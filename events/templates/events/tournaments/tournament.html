@@ -1,0 +1,474 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+
+{% block content %}
+<style>
+    .msg-error{
+        color: red;
+     }
+     .msg-success{
+        color: #3bdd43;
+     }
+</style>
+<style>
+    .battle-item {
+        background-color: #2d3748;
+        border-radius: 0.25rem;
+        padding: 0.5rem;
+    }
+
+    .bracket-round {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+
+    .bracket-match {
+        background-color: #2d3748;
+        border-radius: 0.25rem;
+        padding: 0.5rem;
+        margin: 0.5rem;
+        min-width: 200px;
+    }
+</style>
+<style>
+    /* ... (previous styles) ... */
+
+    .bracket {
+        display: flex;
+        flex-direction: row;
+        /* justify-content: center;
+        align-items: center; */
+        
+    }
+    .round {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+    .match {
+        padding: 15px;
+        border: 1px solid #ff4500;
+        /* border-radius: 5px; */
+        display: flex;
+        gap: 5px;
+        /* flex-direction: column; */
+        margin: 5px;
+        min-width: 100px;
+        text-align: center;
+        background-color: rgba(255, 69, 0, 0.1);
+    }
+    /* @media (max-width: 768px) {
+        #tournamentPreview {
+            display: none !important;
+        }
+    } */
+     /* .msg{
+        border: 1px solid;
+
+     } */
+     
+</style>
+<style>
+    /* ... previous styles ... */
+
+    .participant-card {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+        border-bottom: 1px solid #4a5568;
+    }
+
+    .participant-card:last-child {
+        border-bottom: none;
+    }
+
+    .participant-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 1rem;
+    }
+
+    .participant-info {
+        flex-grow: 1;
+    }
+
+    .participant-name {
+        font-weight: bold;
+        color: #ffffff;
+    }
+
+    .participant-rank {
+        font-size: 0.875rem;
+        color: #a0aec0;
+    }
+</style>
+
+<div class="container mx-auto py-18 mt-20">
+    <div class="bg-gray-800 w-full rounded-lg">
+        <!-- Tournament Header -->
+        <div class="bg-gradient-to-r from-orange-500 to-red-500 p-6">
+            <h1 id="tournamentName" class="text-3xl font-bold text-white">{{tournament.name}}</h1>
+            <p id="tournamentDate" class="text-xl text-white mt-2">Date de début: {{tournament.start_date}}</p>
+            
+            {% for message in messages %}
+            <h5 class="text-green-400 font-semibold text-xl msg msg-{{message.tags}}">{{message}}</h5>
+            {% endfor %}
+            <!-- <h5 class="text-green-400">{{messages}}</h5> -->
+        </div>
+
+        <!-- Tournament Info -->
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Tournament Details -->
+                <div>
+                    <h2 class="text-2xl font-semibold text-orange-400 mb-4">Details du tournois</h2>
+                    <p id="tournamentStatus" class="text-white mb-2">Status: {{tournament.status}}</p>
+                    <p id="tournamentPlayers" class="text-white mb-2">Joueurs: {{fighters|length}}/{{tournament.n_participants}}</p>
+                    <p id="tournamentReferees" class="text-white mb-2">Arbitres: {{referees|length}}/{{allowed_referees}}</p>
+                    
+                    {% if can_participate.can %}
+
+                    <button id="joinTournamentBtn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-4">
+                        Rejoindre le Tournois
+                    </button>
+                    
+                    <button id="refereeTournamentBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded mt-4">
+                        Arbitrer le Tournois
+                    </button>
+                    {% else %}
+                    <p class="text-white text-center ">{{can_participate.message}}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Recent/Upcoming Battles -->
+                <div>
+                    <h2 class="text-2xl font-semibold text-orange-400 mb-4">Combats Recents/A venir </h2>
+                    <ul id="battlesList" class="space-y-2">
+                        <!-- Battles will be inserted here -->
+                         {% for battle in battles %}
+                        <li class="battle-item text-white">
+                            <p>{{battle.initiator.player}} vs {{battle.opponent.player}}</p>
+                            <p class="text-sm text-gray-400">Status: {{battle.status}}</p>
+                            <p class="text-sm text-green-400">Gagnant: 
+                                {% if battle.winner %}
+                                {{battle.winner.player}}
+                                {% else %}
+                                TBD
+                                {% endif %}
+                            </p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div id="tournamentPreview" class="hidden mt-8 p-4 bg-gray-700 rounded-lg">
+
+                <h4 class="text-2xl font-semibold text-orange-400 mb-4">Tournament Bracket</h4>
+                
+                <div id="bracketContainer" class="overflow-x-auto text-white">
+                    <!-- The bracket will be generated here -->
+                    <div id="preview-loader" class="text-center p-4 hidden">
+                        <i style="font-size: 30pt;" class="fas fa-spinner fa-spin text-orange-500"></i> 
+                        <!-- <span>Loading text...</span> -->
+                    </div>
+                </div>
+            </div>
+            <!-- Tournament Bracket -->
+            <!-- <div class="mt-8">
+                <h2 class="text-2xl font-semibold text-orange-400 mb-4">Tournament Bracket</h2>
+                <div id="tournamentBracket" class="overflow-x-auto">
+                     Bracket will be inserted here 
+                </div>
+            </div> -->
+
+            <!-- Registered Players and Referees -->
+            <div class="mt-8">
+                <h2 class="text-2xl font-semibold text-orange-400 mb-4">Participants Enregistrés</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-white mb-2">Arbitres</h3>
+                        <small class="text-gray-300">
+                            {% if remaining_referees > 0 %}
+                            Maximum  {{remaining_referees}} a  rejoindre
+                            {% else %}
+                            Plus d'arbitres n'est accepter
+                            {% endif %}
+                        </small>
+                        <div id="refereesList" class="bg-gray-700 rounded-lg p-4 max-h-96 overflow-y-auto">
+                            <!-- Referees will be inserted here -->
+                            {% for player in referees %}
+                            <div class="participant-card">
+                                <a href="{% url 'users:player' player.user.username %}">
+                                    <img src="{{player.profile_picture.url}}" alt="{{player}}" class="participant-avatar">
+                                </a>
+                                
+                                <div class="participant-info">
+                                    <a href="{% url 'users:player' player.user.username %}" class="participant-name">{{player}}</a>
+                                    <div class="participant-rank">Rang: {{player.rank}}</div>
+                                </div>
+                             </div>
+                             {% empty %}
+                             <div class="participant-card">
+                                <div>Aucun arbitre pour l'instant</div>
+                             </div>
+                             
+                             {% endfor %}
+                            
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold text-white mb-2">Joueurs </h3>
+                        <small class="text-gray-300">
+                            {% if remaining_referees > 0 %}
+                            {{remaining_fighters}}  a rejoindre
+                            {% else %}
+                            Plus aucun joueurs ne peut participer
+                            {% endif %}
+                            </small>
+                        <div id="playersList" class="bg-gray-700 rounded-lg p-4 max-h-96 overflow-y-auto">
+                            
+                            <!-- Players will be inserted here -->
+                            {% for player in fighters %} 
+                            <div  class="participant-card"> 
+                                <a href="{% url 'users:player' player.user.username %}">
+                                    <img src="{{player.profile_picture.url}}" alt="{{player}}" class="participant-avatar">
+                                </a>
+                                
+                                <div class="participant-info">
+                                    <a href="{% url 'users:player' player.user.username %}" class="participant-name">{{player}}</a>
+                                    <div class="participant-rank">Rang: {{player.rank}}</div>
+                                </div>
+
+                            </div>
+                            
+                            {% empty %}
+                             <div class="participant-card">
+                                <div>Aucun joueur enregistré</div>
+                             </div>
+                             
+                             
+                             {% endfor %}
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Join Tournament Popup -->
+<div id="joinPopup" class="fixed inset-0 text-white bg-black bg-opacity-50 flex items-center justify-center animate-scaleIn hidden">
+    <form action="{% url 'events:tournament' tournament.id %}" method="post" class="bg-gray-800 p-6 rounded-lg">
+        {% csrf_token %}
+        <h2 class="text-2xl font-semibold text-orange-400 mb-4">rejoindre le tournois</h2>
+        <!-- <p class="text-white mb-4">Are you sure you want to join this tournament?</p> -->
+            <input type="hidden" name="join_type" value="fighter">
+            <h2 class="text-2xl font-bold mb-4">Choisis ton personnage</h2>
+            
+            <div class="mb-4">
+                <label for="yourCharacter" class="block mb-2">Choisis un personnage</label>
+                <select id="yourCharacter" name="character" class="w-full bg-gray-700 text-white p-2 rounded-lg">
+                    <option value="">Selectionne un personnage</option>
+                                {% for character in characters %}
+                                {% if player.p_character == character.name %}
+                                <option selected value="{{character.name}}" data-img_link="{{character.images.0}}">{{character.name}} </option>
+                                {% else %}
+                                <option value="{{character.name}}" data-img_link="{{character.images.0}}">{{character.name}} </option>
+                                {% endif %}
+                                {% endfor %}
+                </select>
+            </div>
+            <div class="mb-6">
+                <p class="text-yellow-500"><i class="fas fa-exclamation-triangle mr-2"></i>Notice: <span class="text-orange-500" >{{tournament.participation_cost}} Jetons de combat</span> vont étre deduit pour s'inscrire au tournois<br><a href="#" class="text-blue-400">Voir comment ça marche</a></p>
+            </div>
+           
+        
+        <div class="flex justify-between space-x-4">
+            <span onclick="closeJoinPopup()" class="bg-gray-500 cursor-pointer hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
+                Annuler
+            </span>
+            <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                Participer
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Referee Tournament Popup -->
+<div id="refereePopup" class="fixed inset-0 text-white bg-black bg-opacity-50 flex items-center justify-center animate-scaleIn hidden">
+    
+    <form action="{% url 'events:tournament' tournament.id %}" method="post" class="bg-gray-800 p-6 rounded-lg">
+        {% csrf_token %}
+        <h2 class="text-2xl font-semibold text-orange-400 mb-4">Arbitrer le tournois</h2>
+        <!-- <p class="text-white mb-4">Are you sure you want to join this tournament?</p> -->
+            <input type="hidden" name="join_type" value="referee">
+            <h2 class="text-2xl font-bold mb-4">Voulez-vous arbitrer ce tournois?</h2>
+            
+            <!-- <div class="mb-4">
+                <label for="yourCharacter" class="block mb-2">Choose your character:</label>
+                <select id="yourCharacter" name="character" class="w-full bg-gray-700 text-white p-2 rounded-lg">
+                    <option value="">Select a character</option>
+                                {% for character in characters %}
+                                {% if player.p_character == character.name %}
+                                <option selected value="{{character.name}}" data-img_link="{{character.images.0}}">{{character.name}} </option>
+                                {% else %}
+                                <option value="{{character.name}}" data-img_link="{{character.images.0}}">{{character.name}} </option>
+                                {% endif %}
+                                {% endfor %}
+                </select>
+            </div> -->
+            <!-- <div class="mb-6">
+                <p class="text-yellow-500"><i class="fas fa-exclamation-triangle mr-2"></i>Notice: Battle Points will be deducted upon joining this tournament <br><a href="#" class="text-blue-400">See how it works</a></p>
+            </div> -->
+           
+        
+        <div class="flex justify-between space-x-4">
+            <span onclick="closeRefereePopup()" class="bg-gray-500 cursor-pointer hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
+                Non
+            </span>
+            <button onclick="confirmRefereeTournament()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                Oui
+            </button>
+        </div>
+    </form>
+</div>
+
+
+{{ tournament.id|json_script:"tournament_id" }}
+{{tournament.n_participants|json_script:"tournament_participants" }}
+<script>
+        const tournament_id = JSON.parse(document.getElementById('tournament_id').textContent)
+        const tournament_participants = JSON.parse(document.getElementById('tournament_participants').textContent)
+    
+
+    //TOURNAMENT BRACKET
+        const tournamentPreview = document.getElementById('tournamentPreview');
+        const bracketContainer = document.getElementById('bracketContainer');
+
+
+
+function updateBracket() {
+    //const participants = parseInt(tournamentParticipants.value);
+    const participants = tournament_participants;
+    if (participants && participants > 1) {
+        tournamentPreview.classList.remove('hidden');
+        generateBracket(participants);
+    } else {
+        tournamentPreview.classList.add('hidden');
+    }
+}
+
+function generateBracket(participants) {
+    $.ajax({
+
+        url: `/events/tournament/battles/${tournament_id}`,
+        type: 'GET',
+        beforeSend:function(){
+            $('#preview-loader').toggleClass('hidden')
+        },
+        success:function(res){
+            const battles = res.battles
+            if(res.status == 'success'){
+                bracketContainer.innerHTML = '';
+                const rounds = Math.ceil(Math.log2(participants));
+                const bracket = document.createElement('div');
+                bracket.className = 'bracket';
+
+            for (let round = 0; round < rounds; round++) {
+                const roundDiv = document.createElement('div');
+                roundDiv.className = 'round';
+                
+                const matches = Math.pow(2, rounds - round - 1);
+                const roundBattles = battles[round]
+                console.log(roundBattles)
+
+                for (let match = 0; match < matches; match++) {
+                    const roundBattle = roundBattles[match]
+                    
+                    if(roundBattle){
+                        const matchLink = document.createElement('a')
+                    matchLink.setAttribute('href',`/battles/battle_room/${roundBattle.id}`)
+
+                    const matchDiv = document.createElement('div');
+                    matchDiv.className = 'match';
+                    //matchDiv.textContent = round === 0 ? `Match ${match + 1} Player1 vs Player2 ` : (round === rounds - 1 ? 'Final' : `Round ${round + 1}`);
+                    matchDiv.innerHTML = `<span class = 'font-bold'>${roundBattle.initiator.player}</span> <span> vs </span> <span  class = 'font-bold'>${roundBattle.opponent.player}</span>`;
+                    matchLink.appendChild(matchDiv)
+                    roundDiv.appendChild(matchLink);
+                    }else{
+                    
+
+                    const matchDiv = document.createElement('div');
+                    matchDiv.className = 'match';
+                    matchDiv.textContent = round === 0 ? `Match ${match + 1} Player1 vs Player2 ` : (round === rounds - 1 ? 'Final' : `Round ${round + 1}`);
+                    
+                    roundDiv.appendChild(matchDiv);
+                    }
+                }
+
+                bracket.appendChild(roundDiv);
+            }
+
+            bracketContainer.appendChild(bracket);
+
+            // Animate the bracket appearance
+            gsap.from('.round', {
+                x: 100,
+                opacity: 0,
+                duration: 0.5,
+                stagger: 0.1,
+                ease: 'power2.out'
+            });
+            }
+
+        },
+        complete: function(){
+            $('#preview-loader').toggleClass('hidden')
+        }
+    })
+    
+}
+
+// Update the tournament button click event
+// document.getElementById('tournamentBtn').addEventListener('click', () => {
+//     // ... (previous code) ...
+//     updateBracket(); // Call this to initialize the bracket if there's a value
+// });
+updateBracket();
+
+    function showJoinPopup() {
+        document.getElementById('joinPopup').classList.remove('hidden');
+    }
+    
+    function closeJoinPopup() {
+        document.getElementById('joinPopup').classList.add('hidden');
+    }
+    
+    function showRefereePopup() {
+        document.getElementById('refereePopup').classList.remove('hidden');
+    }
+    
+    function closeRefereePopup() {
+        document.getElementById('refereePopup').classList.add('hidden');
+    }
+
+    
+    // Event listeners
+    document.getElementById('joinTournamentBtn').addEventListener('click', showJoinPopup);
+    document.getElementById('refereeTournamentBtn').addEventListener('click', showRefereePopup);
+    
+    // Call this function when the page loads
+    document.addEventListener('DOMContentLoaded', updateTournamentInfo);
+
+
+    
+    // Sample tournament data (replace with actual data from your backend)
+    
+    </script>
+{% endblock content %}

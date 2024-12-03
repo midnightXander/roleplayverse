@@ -1,0 +1,12 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{player}}</title>
+    </head>
+    <body>
+        <a href="{%  url 'core:home' %}"><h1>Home</h1></a>
+        {% block content %}
+        {% endblock content %}
+    </body>
+</html>

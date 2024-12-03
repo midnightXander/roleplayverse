@@ -1,0 +1,17 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Manage Family</title>
+        <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    </head>
+    <body>
+        <a href="{%  url 'core:home' %}"><h1>Home</h1></a>
+        {% block content %}
+        {% endblock content %}
+
+        <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+        <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    </body>
+</html>
+

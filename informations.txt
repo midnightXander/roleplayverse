@@ -1,0 +1,34 @@
+Admin:
+	-username: xander_random
+	-pwd: random1234
+	-email: denzelwashington913@gmail.com
+
+
+Red(or orange), Black and White for the UI
+page des  tutoriel(faaire de meilleur rolleur)
+page for posts, feed, articles
+To become a certified refree, you have to complete the refree test(Quizz,and maybe others....)(to think about)
+points to win boosted when two god fathers face each other 
+
+
+
+
+implement POINTS for a month and not overall
+- monthly leaderboard of players based on wins
+- reduce progress when losing 
+
+ability to rate refreeing for a battle
+
+send a notification when there is for example a battle involving his primary character
+
+
+
+
+future features:
+-hover on a name displays some informations about th player(wins,characters..)
+-players will be able to follow a battle, he will receive notifications when new textpads are sent
+
+
+THE BADGE Model objects is added MANUALLY in the database
+
+some other actions for player page : Challenge, Invite to join Family

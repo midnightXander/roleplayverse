@@ -1,0 +1,1922 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block meta_description %}Like posts interact with other players comment to posts and see incredible battles taking place{% endblock meta_description%}
+{% block meta_keywords %}{% endblock meta_keywords%}
+
+{% block content %}
+<!--Final Home style-->
+<style>
+  
+    body {
+        background-color: #1a202c;
+        color: #e2e8f0;
+        font-family: 'Nunito';
+    }
+   
+    .post,.battle-card {
+        transition: transform 0.3s ease-in-out;
+    }
+    .post:hover,.battle-card:hover {
+        transform: translateY(-5px);
+    }
+    .like-button.liked, .comment-like-button.liked {
+        color: #ed8936;
+        animation: heartBeat;
+        animation-duration: 1.5s;
+    }
+    /* .comment, .post .content{
+        overflow: hidden;
+        word-wrap: break-word;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    } */
+    .comment-form {
+        display: none;
+    }
+    .comment-form.active {
+        display: block;
+    }
+    .sidebar {
+        height: calc(100vh - 4rem);
+        overflow-y: auto;
+    }
+    .sidebar::-webkit-scrollbar {
+        width: 6px;
+    }
+    .sidebar::-webkit-scrollbar-thumb {
+        background-color: #4a5568;
+        border-radius: 3px;
+    }
+    .sidebar-right::-webkit-scrollbar {
+        width: 6px;
+    }
+    .sidebar-right::-webkit-scrollbar-thumb {
+        background-color: #4a5568;
+        border-radius: 3px;
+    }
+    .sidebar-left::-webkit-scrollbar {
+        width: 6px;
+    }
+    .sidebar-left::-webkit-scrollbar-thumb {
+        background-color: #4a5568;
+        border-radius: 3px;
+    }
+    .post-image {
+        max-height: 300px;
+        object-fit: cover;
+    }
+    
+    @media (min-width: 768px) {
+        .fab{
+            display: none;
+        }
+
+        .sidebar-left {
+            position: fixed;
+            top: 7rem;
+            left: 1rem;
+            width: 25%;
+            max-width: 300px;
+        }
+        .sidebar-right {
+            position: fixed;
+            top: 7rem;
+            right: 1rem;
+            width: 25%;
+            max-width: 300px;
+        }
+        .main-content {
+            margin-left: calc(25% + 1rem);
+            margin-right: calc(25% + 1rem);
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .covered{
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .start-battle{
+            background-image: url("{% static 'images/start_battle/1.jpg' %}");
+        }
+        .join-family{
+            background-image: url("{% static 'images/join_family/3.jpg' %}");
+        }
+        .recent-event,.meme{
+            
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .sidebar-left {
+            position: fixed;
+            top: 4rem;
+            left: -100%;
+            width: 80%;
+            max-width: 300px;
+            z-index: 40;
+            transition: left 0.3s ease-in-out;
+        }
+        .sidebar-left.active {
+            left: 0;
+        }
+        .sidebar-right{
+            position: static;
+            width: 100%;
+            /* max-height: 300px; */
+            /* margin-bottom: 1rem; */
+            display: flex;
+            flex-direction: row;
+            overflow-x: auto;
+            
+        }
+        .sidebar-left.active {
+            left: 0;
+        }
+        .sidebar-right {
+            position: static;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        .main-content {
+            margin-left: 0;
+            margin-right: 0;
+        }
+        
+        .mobile-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+        .mobile-scroll-item {
+            flex: 0 0 auto;
+            width: 280px;
+            margin-right: 1rem;
+        }
+        .mobile-scroll-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        .mobile-scroll-container::-webkit-scrollbar-thumb {
+            background-color: #4a5568;
+            border-radius: 3px;
+        }
+        .sidebar-desktop{
+            display: none;
+        }
+    
+        .main-content {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
+    
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 30;
+        display: none;
+    }
+    
+    .overlay.active {
+        display: block;
+    }
+
+    .post-dropdown-menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background-color: #2d3748;
+      border-radius: 0.375rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+  }
+    .post-dropdown-menu.active {
+      display: block;
+  }
+  .toggle-icon{
+        transition: transform 0.3s ease-in-out;
+  }
+  .toggle-icon.open{
+    transform: rotate(180deg);
+    animation: svg-change 0.3s ease-in-out;
+  }
+
+  @keyframes svg-change {
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(180deg);
+    }
+    
+  }
+  .toggle-icon.close{
+    transform: rotate(0deg);
+    animation: svg-change-reverse 0.3s ease-in-out;
+  }
+
+  @keyframes svg-change-reverse {
+    0%{
+        transform: rotate(180deg);
+    }
+    100%{
+        transform: rotate(0deg);
+    }
+    
+  }
+
+
+    /* bg-gray-700 rgba(55,65,81,var(--tw-bg-opacity)) */
+</style>
+
+
+
+
+<!-- Overlay -->
+<div id="overlay" class="overlay">
+    
+</div>
+
+<a href="#" class="fab">
+<button class="fixed bottom-5 right-0 m-4 bg-orange-500 z-50 p-3 hover:bg-orange-600 text-white rounded-full shadow-lg">
+    <svg class="w-7 h-7 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+      </svg>
+</button>
+</a>
+
+
+<!-- Main content -->
+<div class="container relative mx-auto mt-24 px-4 flex flex-col md:flex-row">
+<!-- Left Sidebar -->
+<aside class="sidebar-left rounded-lg p-4">
+<div class="mb-4">
+    <img src="{{player.profile_picture.url}}" alt="{{player}}" class="myImg w-20 h-20 rounded-full mx-auto">
+    <h3 class="text-center font-bold mt-2">{{player}}</h3>
+    <p class="text-center text-sm">Progression: {{player.progression}}% | Rang: <b>{{player.rank}}</b></p>
+</div>
+<ul class="space-y-2">
+    <li><a href="{% url 'users:families' %}" class="flex items-center py-2 px-4 text-orange-500 hover:bg-gray-600 rounded"><i class="fas fa-users mr-2"></i>{% trans 'Familles' %} </a></li>
+    <li><a href="{% url 'battles:referees' %}" class="flex items-center py-2 px-4 hover:bg-gray-600 text-orange-500 rounded"><i class="fas fa-street-view mr-2"></i>{% trans 'Arbitres' %}</a></li>
+    <li><a href="{% url 'events:index' %}" class="flex items-center py-2 text-orange-500 px-4 hover:bg-gray-600 rounded"><i class="fas fa-calendar-alt mr-2"></i>{% trans 'Evenenements' %}</a></li>
+    <li><a href="{% url 'characters:index' %}" class="flex items-center py-2 px-4 hover:bg-gray-600 text-orange-500 rounded"><i class="fas fa-child mr-2"></i>{% trans 'Personnage' %}</a></li>
+    <li><a href="{% url 'core:rankings' %}" class="flex items-center py-2 px-4 hover:bg-gray-600 text-orange-500 rounded"><i class="fas fa-trophy mr-2"></i>{% trans 'Classements' %}</a></li>
+    <li><a href="{% url 'blog:category' 'Tutorials' %}" target="_blank" class="flex items-center py-2 px-4 hover:bg-gray-600 text-orange-500 rounded"><i class="fas fa-book mr-2"></i>{% trans 'Tutoriels' %}</a></li>
+
+    <li><a onclick="showMyToast('Coming soon')" href="#" class="flex items-center  mt-5 py-2 px-4 hover:bg-gray-600 text-yellow-300 rounded">
+        <!-- <i class="fas fa-shopping-cart mr-2"></i> -->
+        <svg class="w-8 h-8  mr-2 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 12c.263 0 .524-.06.767-.175a2 2 0 0 0 .65-.491c.186-.21.333-.46.433-.734.1-.274.15-.568.15-.864a2.4 2.4 0 0 0 .586 1.591c.375.422.884.659 1.414.659.53 0 1.04-.237 1.414-.659A2.4 2.4 0 0 0 12 9.736a2.4 2.4 0 0 0 .586 1.591c.375.422.884.659 1.414.659.53 0 1.04-.237 1.414-.659A2.4 2.4 0 0 0 16 9.736c0 .295.052.588.152.861s.248.521.434.73a2 2 0 0 0 .649.488 1.809 1.809 0 0 0 1.53 0 2.03 2.03 0 0 0 .65-.488c.185-.209.332-.457.433-.73.1-.273.152-.566.152-.861 0-.974-1.108-3.85-1.618-5.121A.983.983 0 0 0 17.466 4H6.456a.986.986 0 0 0-.93.645C5.045 5.962 4 8.905 4 9.736c.023.59.241 1.148.611 1.567.37.418.865.667 1.389.697Zm0 0c.328 0 .651-.091.94-.266A2.1 2.1 0 0 0 7.66 11h.681a2.1 2.1 0 0 0 .718.734c.29.175.613.266.942.266.328 0 .651-.091.94-.266.29-.174.537-.427.719-.734h.681a2.1 2.1 0 0 0 .719.734c.289.175.612.266.94.266.329 0 .652-.091.942-.266.29-.174.536-.427.718-.734h.681c.183.307.43.56.719.734.29.174.613.266.941.266a1.819 1.819 0 0 0 1.06-.351M6 12a1.766 1.766 0 0 1-1.163-.476M5 12v7a1 1 0 0 0 1 1h2v-5h3v5h7a1 1 0 0 0 1-1v-7m-5 3v2h2v-2h-2Z"/>
+        </svg>
+          
+        {% trans 'Store' %}
+    </a>
+</li>
+   
+</ul>
+</aside>
+
+<!-- Right Sidebar (for mobile) -->
+<aside class="md:hidden sidebar-right overflow-y-auto rounded-lg p-4 mb-4">
+    <button id="menuToggle" class="fixed z-50 border-1 border-gray-600 shadow-lg  py-1 px-2 right-10 top-20 rounded-full  text-white hover:bg-gray-400 hover:text-orange-600">
+        <!-- fa-caret-left -->
+        <i class="fas fa-angles-left text-3xl toggle-icon font-bold"></i> 
+        <!-- <svg class="w-8 h-8  toggle-icon hover:text-orange-600 font-bold dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="m15 19-7-7 7-7"/>
+        </svg> -->
+          
+    </button>
+<div class="mobile-scroll-container">
+    <a href="{% url 'battles:index' %}" class="mobile-scroll-item shine-effect bg-gray-500 rounded p-4 mb-4 covered start-battle" style="display: flex;justify-content: center; align-items: center; ">    
+        <button class="bg-gray-900 hover:bg-gray-800 text-orange-500 px-2 py-2 rounded">
+            <i class = "fas fa-fire mr-2"></i> Nouveau Combat<i class="fas fa-fire ml-2"></i></button>
+    </a> 
+    {% if player.family %}
+    {% else %}
+    <div class="mobile-scroll-item  shine-effect covered join-family rounded p-4 mb-4" style="display: flex;justify-content: center; align-items: center;">    
+        <a href="{% url 'users:families' %}">
+        <button class="font-semibold border-1 hover:text-gray-700 hover:bg-gray-900 transition duration-300 shadow-md text-white  px-2 py-2 rounded">
+            <i class="fas fa-users mr-2"></i> Rejoindre une famille
+        </button>
+        </a>
+       
+    </div> 
+    {% endif %}
+    
+    {% for event in events %}
+    <a href="{% url 'events:tournament' event.id %}" class="mobile-scroll-item bg-gray-500 flex flex-col rounded flex flex-col justify-center align-center p-4 mb-4 recent-event" style=" background-image: url('{{event.cover.url}}');">    
+        <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-sm align-self-start justify-self-start">Tournament</span>
+        <h3 class="text-orange-500 font-bold text-2xl">{{event.name}}</h3>
+        <button class="bg-gray-900  text-orange-500 px-2 py-2 rounded">
+        <i class="fas fa-shield mr-2"></i> Voir</button>
+    </a> 
+    {% endfor %}
+    
+    <span class="v-divider"></span>
+    <div class="relative mobile-scroll-item bg-gradient-to-r from-black to-gray-800 rounded p-4 mb-4">
+        <h3 class="font-bold mb-2 text-orange-500">Top Familles</h3>
+        <ul class="space-y-2">
+        {% for family in top_families %}
+        <li class="flex items-center">
+            <img src="{{family.profile_picture.url}}" alt="{{family.name}}" class="w-10 h-10 rounded-full mr-2">
+            <a href="/users/family/{{family.id}}" class="flex-grow">
+                <span class="font-bold">{{forloop.counter}}. {{family.name}}</span>
+                <p class="text-sm text-gray-300">points: {{family.points}}</p>
+            </a>
+            <!-- <button class="bg-orange-500 text-xs px-2 py-1 rounded">Challenge</button> -->
+        </li>
+        {% empty %}
+        <p class="text-center text-sm p-4">Les meilleures familles seront affichées ici</p>
+        {% endfor %}
+        </ul>
+        <a href="/users/families/rankings" class="absolute bottom-1 text-center text-blue-400 mt-5 ml-10">liste complète </a>
+
+    </div>
+    <span class="v-divider"></span>
+
+    <div class="mobile-scroll-item bg-gradient-to-r from-black to-gray-800  relative rounded p-4 mb-4">
+        <h3 class="font-bold text-orange-500 mb-2">Classement mensuel des joueurs</h3>
+        <ul class="space-y-2">
+            {% for player in top_players %}
+            <li class="flex items-center">
+                <img src="{{player.profile_picture}}" alt="{{player.user.username}}" class="w-10 h-10 rounded-full mr-2">
+                <div class="flex-grow">
+                    <span class="font-bold">{{forloop.counter}}. {{player.player.username}}</span>
+                    <p class="text-sm text-gray-300">wins: <span class="text-orange-500">{{player.wins}}</span></p>
+                </div>
+                <a href="{% url 'users:player' player.player.username %}">
+                    <button data-player_id="{{player.id}}" class="bg-orange-500 text-xs px-2 py-1 rounded">Challenge</button>
+                </a>
+                
+            </li>
+           {% empty %}
+           <p class="text-center text-sm p-4">Les meilleures joueurs du mois seront affichés i ci</p>
+            {% endfor %}
+            
+        </ul>
+        <a href="/users/players/rankings" class="absolute bottom-2 text-center text-blue-400 mt-5 ml-10">Liste complète</a>
+    </div>
+    <span class="v-divider"></span>
+    <div class="mobile-scroll-item bg-gradient-to-r from-orange-500 to-orange-800 rounded p-4 mb-4">
+        <h3 class="font-bold mb-2">Challenges recent </h3>
+        <ul class="space-y-2">
+            {% for challenge in challenges %}
+            <li class="flex justify-between items-center">
+                <span>{{challenge.sender}}</span>
+                <div>
+                    <button class="bg-green-500 text-xs px-2 py-1 rounded mr-1">Accepter</button>
+                    <button class="bg-red-500 text-xs px-2 py-1 rounded">Refuser</button>
+                
+            </li>
+            {% empty %}
+            <p class="text-center text-sm p-4">Vos challenges recent seront affichés ici</p>
+            {% endfor %}
+        </ul>
+
+        
+    </div>
+    
+</div>
+
+</aside>
+
+<!-- Main Feed -->
+<main class="w-full md:w-1/2 px-1 main-content">
+    
+<!-- Create post section -->
+<div class="bg-gray-700 rounded-lg p-4 mb-8">
+    <form id="createPostForm" class="flex flex-col">
+        <textarea id="postContent" class="bg-gray-600 text-white p-2 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-orange-500" rows="3" placeholder="Pose une question, partage un avis, ou alors post un meme..."></textarea>
+        <div id="create-post-actions" class="flex justify-between items-center">
+            <label for="imageUpload" class="cursor-pointer bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
+                <i class="fas fa-image mr-2"></i><span class="hidden">Ajouter une image</span>
+            </label>
+            <input type="file" id="imageUpload" accept="image/*" class="hidden">
+            <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition duration-300">
+                <!-- Poster -->
+                <i class="fas fa-upload mr-2"></i>Publier
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Posts feed -->
+<div id="postsFeed" class="space-y-8">
+    <!-- Posts will be dynamically added here -->
+</div>
+
+<!-- Loading indicator -->
+<div id="loadingIndicator" class="text-center mb-2 text-orange-500 py-4">
+    <i class="fas fa-spinner fa-spin"></i> Chargement des publications...
+</div>
+
+<!-- <div class="mb-4"></div>
+    <span class="opacity-0">element to create margin</span>
+</div> -->
+
+
+</main>
+
+<!-- Right Sidebar (for desktop) -->
+<aside class="hidden md:block  sidebar-right rounded-lg px-4 py-0 sidebar-desktop">
+<!-- ... (content same as mobile right sidebar) ... -->
+<div class="mb-4">
+    {% if player.family %}
+    <h3 class="font-bold mb-2 text-orange-500">Groupe de famille</h3>
+    <a href="{% url 'chats:family_chat' player.family.name %}" class="rounded p-2 hover:bg-gray-700 flex items-center">
+            <img src="{{player.family.profile_picture.url}}" alt="Family Avatar" class="w-10 h-10 rounded-full mr-2">
+            <div>
+                <h4 class="font-bold">{{player.family}}</h4>
+                <p class="text-sm text-gray-300 truncate">{{fl_message.sender}}: {{fl_message.content}}</p>
+            </div>
+    </a>
+
+    {% else %}
+    <a href="{% url 'users:families' %}">
+         <button class="text-white  border-1 border-orange-500 hover:text-gray-700 hover:bg-orange-600 transition duration-300 shadow-md   px-2 py-2 rounded"><i class="fas fa-users mr-2"></i> Rejoindre une famille</button>
+    </a>
+   
+    {% endif %}
+</div>
+
+<div class="mb-4">
+    <h3 class="font-bold mb-2 text-orange-500">Families de premier rang</h3>
+    <ul class="space-y-2">
+        {% for family in top_families %}
+        <li class="flex items-center p-2 rounded hover:bg-gray-700">
+            <img src="{{family.profile_picture.url}}" alt="{{family.name}}" class="w-10 h-10 rounded-full mr-2">
+            <a href="/users/family/{{family.id}}" class="flex-grow">
+                <span class="font-bold">{{forloop.counter}}. {{family.name}}</span>
+                <p class="text-sm text-gray-300">points: {{family.points}}</p>
+            </a>
+            <!-- <button class="bg-orange-500 text-xs px-2 py-1 rounded">Challenge</button> -->
+        </li>
+        {% empty %}
+       <p class="text-center text-sm p-4">Les meilleures Familles  seront affichés ici</p>
+        {% endfor %}
+        
+    </ul>
+    <a href="/users/families/rankings" class="text-center text-blue-400 mt-5 ml-10">liste complète</a>
+</div>
+
+
+<div class="mb-4">
+    <h3 class="font-bold mb-2 text-orange-500">Classement mensuel des joueurs</h3>
+    <ul class="space-y-2">
+        {% for player in top_players %}
+        <li class="flex items-center">
+            <img src="{{player.profile_picture}}" alt="{{player.user.username}}" class="w-10 h-10 rounded-full mr-2">
+            <div class="flex-grow">
+                <span class="font-bold">{{forloop.counter}}. {{player.player.username}}</span>
+                <p class="text-sm text-gray-300">wins: <span class="text-orange-500">{{player.wins}}</span></p>
+            </div>
+            <a href="{% url 'users:player' player.player.username %}">
+                <button data-player_id="{{player.id}}" class="bg-orange-500 text-xs px-2 py-1 rounded">Challenge</button>
+            </a>
+            
+        </li>
+       {% empty %}
+       <p class="text-center text-sm p-4">Les meilleures joueurs du mois seront affichés ici</p>
+        {% endfor %}
+        
+    </ul>
+    
+    <a href="/users/players/rankings" class="text-center text-blue-400 mt-5 ml-10">liste complète</a>
+</div>
+<div class="mb-4">
+    <h3 class="font-bold mb-2 text-orange-500">Recent Challenges</h3>
+    <ul class="space-y-2">
+        {% for challenge in challenges %}
+        <li class="flex justify-between items-center">
+            <span>{{challenge.sender}}</span>
+            <div>
+                <button class="bg-green-500 text-xs px-2 py-1 rounded mr-1">Accepter</button>
+                <button class="bg-red-500 text-xs px-2 py-1 rounded">Refuser</button>
+            
+        </li>
+        {% empty %}
+        <p class="text-center text-sm p-4">Vos challenges recent seront affichés ici</p>
+        {% endfor %}
+    </ul>
+
+    <!-- <p class="text-center text-sm p-4">Your recent challenges will be seen here</p> -->
+</div>
+<!-- <div>
+    <h3 class="font-bold mb-2">Recent Events</h3>
+    <ul class="space-y-2">
+        <li><a href="#" class="block py-1 px-2 hover:bg-gray-600 rounded">Chunin Exams</a></li>
+        <li><a href="#" class="block py-1 px-2 hover:bg-gray-600 rounded">Village Festival</a></li>
+    </ul>
+</div> -->
+</aside>
+</div>
+
+
+
+
+{{ playerName|json_script:'player' }}
+{{ player.user.username | json_script:'username' }}
+
+{% block main_active %}
+<script>
+    $(()=>{
+        console.log("home")
+        $('.bottom-nav-link').removeClass('bg-gray-700')
+        $('.bottom-nav-link')[0].classList.add('bg-gray-700')
+    })
+</script>
+{% endblock main_active  %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+<script>
+
+// ... (previous JavaScript code) ...
+
+// Menu toggle functionality
+const menuToggle = document.getElementById('menuToggle');
+const sidebarLeft = document.querySelector('.sidebar-left');
+const overlay = document.getElementById('overlay');
+
+menuToggle.addEventListener('click', () => {
+
+    // 
+    sidebarLeft.classList.add('bg-gray-900');
+    // sidebarLeft.classList.toggle('mt-24');
+    sidebarLeft.classList.toggle('active');
+    
+    // $(menuToggle).find('svg').toggleClass('open')
+    $(menuToggle).find('i').toggleClass('open')
+    //$(menuToggle).find('svg').toggleClass('close')
+
+
+});
+
+// Close profile dropdown when clicking outside
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.sidebar-left') && !e.target.closest('#menuToggle')) {
+        
+        sidebarLeft.classList.remove('active');
+        // $(menuToggle).find('svg').removeClass('open')
+        $(menuToggle).find('i').removeClass('open')
+        // $(menuToggle).find('i').removeClass('fas fa-times-circle').addClass('fas fa-chevron-circle-left')
+    }
+            // if ( e.target != sidebarLeft) {
+            //     console.log(e.target)
+            //     sidebarLeft.classList.remove('active');
+            //     //sidebarLeft.classList.add('hidden');
+            //     //sidebarLeft.style.display = 'none'
+            //     // $(".sidebar-left").hide()
+            // }
+    });
+
+
+
+overlay.addEventListener('click', () => {
+sidebarLeft.classList.remove('active');
+overlay.classList.remove('active');
+});
+
+// Close sidebar when window is resized to desktop view
+window.addEventListener('resize', () => {
+if (window.innerWidth >= 768) {
+    sidebarLeft.classList.remove('active');
+    sidebarLeft.classList.remove('bg-gray-900');
+    overlay.classList.remove('active');
+}
+});
+</script>
+
+<script>
+function closeAd(button){
+    button.closest('.ad-container').style.display = 'none';
+}
+
+      
+    $(()=>{
+
+        const currentPlayer = JSON.parse(document.getElementById('player').textContent)
+        const currentPlayerUsername = JSON.parse(document.getElementById('username').textContent)
+        const currentPlayerData = {
+            player: currentPlayer,
+            username: currentPlayerUsername,
+        }
+      // Sample posts data
+
+function togglePostDropdown(toggle){
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            console.log("Clicked")
+              
+              const dropdown = toggle.nextElementSibling;
+              dropdown.classList.toggle('active');
+          });
+}
+
+function addDropdownListeners() {
+      document.querySelectorAll('.post-dropdown-toggle').forEach(toggle => {
+        toggle.removeEventListener('click',(e)=>{
+            e.stopPropagation();
+            
+              
+              const dropdown = toggle.nextElementSibling;
+              dropdown.classList.toggle('active');
+        })  
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            
+              
+              const dropdown = toggle.nextElementSibling;
+              dropdown.classList.toggle('active');
+          });
+      });
+
+      document.addEventListener('click', () => {
+          document.querySelectorAll('.post-dropdown-menu').forEach(menu => {
+              menu.classList.remove('active');
+          });
+      });
+  }
+
+function revealComment(comment){
+    console.log(comment)
+}
+
+
+
+//function to create ad
+
+
+// Function to create a post element
+function createPostElement(post) {
+const postElement = document.createElement('div');
+postElement.className = 'post bg-gray-700 rounded-lg p-4';
+//postElement.className = 'post-gradient rounded-xl p-6 border border-gray-700 hover-scale'
+// <span class='ellipsed-text body'>${comment.body}<span>
+//     <span class = 'full-text hidden body'>${comment.body}</span>
+postElement.innerHTML = `
+    <div class="flex items-center mb-4 relative">
+        <a href = "/users/${post.author.name}">
+        <img src="${post.author.profile_picture}" alt="${post.author.name}" class="w-10 h-10 rounded-full mr-4">
+        <a>
+        <a href = "/users/${post.author.name}">
+        <h3 class="font-bold hover:text-orange-600">${post.author.player}<br><small class='font-semi-bold text-gray-400'>${post.time_posted}</small></h3>
+        </a>
+
+        <div class="absolute top-2 right-2">
+              <button onclick = 'togglePostDropdown(this)'  class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
+                  <i class="fas fa-ellipsis-v"></i>
+              </button>
+              <div class="post-dropdown-menu w-48 py-2">
+                    
+                    <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="toggleToFavorites('${post.id}')">
+                    ${post.is_favorite ? "<i class = 'fas fa-bookmark mr-2'></i>retirer des favoris":"<i class = 'far fa-bookmark mr-2'></i>ajouter aux favoris"}
+                    </div>
+                    
+                    <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="socialShare(this,'https://roleplayverse.com/posts/${post.id}')"><i class = 'fas fa-share-alt mr-2'></i>Partager</div>
+                    <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('https://roleplayverse.com/posts/${post.id}')"><i class = 'fas fa-copy mr-2'></i>copier le lien</div>
+                    ${post.author.name == currentPlayerData.username? 
+                    `
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600"><i class = 'fas fa-pencil-square-o mr-2'></i> Edit</a>
+                    <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deletePost(this,'${post.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
+                    `:`
+                  `}
+                  
+              
+                </div>
+        </div>
+    </div>
+    
+    <p class="mb-4 content body">${post.body}</p>
+    ${post.image ? `<img src="${post.image}" alt="Post image" class="myImg w-full rounded-lg mb-4 post-image">` : ''}
+    <div class="post-infos flex items-center justify-between">
+        <button class="like-button bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-full flex items-center ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
+            <i class="far fa-heart mr-2"></i>
+            <span class="like-count">${post.likes}</span>
+        </button>
+        <button class="comment-button bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-full flex items-center">
+            <i class="far fa-comment mr-2"></i>
+            <span class = 'comment-count'>${post.comments.length}</span>
+        </button>
+    </div>
+    <div class="comments border-t  border-gray-600  space-y-4 mt-4 overflow-y-auto p-1" style = 'max-height:200px'>
+        ${post.comments.map(comment =>createComment(comment)).join('')}
+    </div>
+    <form onsubmit='sendComment(this, event)' class="comment-form mt-4" data-post-id = ${post.id}>
+        <input type="text" class="bg-gray-600 text-white p-2 rounded w-full  border-0  focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Add a comment...">
+    </form>
+`;
+
+//imgModalListener()
+
+return postElement;
+}
+
+function  createBattleElement(battle){
+    const battleElement = document.createElement('div')
+    battleElement.className = 'battle-card bg-gray-700 rounded-lg p-6 flex flex-col';
+    battleElement.innerHTML = `
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-xl font-bold">${battle.status}</h3>
+                                    <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-sm">${battle.type}</span>
+                                </div>
+                                <div class="flex justify-between items-center mb-4 flex-col">
+                                    <div class="flex items-center">
+                                        <img src="${battle.initiator.profile_picture}" alt="${battle.initiator.player}" class="w-12 h-12 rounded-full mr-4">
+                                        <div>
+                                            <a href="/users/${battle.initiator.username}" class="font-bold hover:text-orange-500 ">
+                                                ${battle.initiator.player} ${battle.winner.id == battle.initiator.id ? "<span class='text-green-500'>W</span>": ''}
+                                            </a>
+                                            <p class="text-sm text-gray-400">Rank: ${battle.initiator.rank}</p>
+                                        </div>
+                                    </div>
+                                    <i class="fas fa-bolt text-yellow-500 text-2xl"></i>
+                                    <div class="flex items-center">
+                                        <div class="text-right mr-4">
+                                            <a href="/users/${battle.opponent.username}" class="font-bold hover:text-orange-500 ">
+                                                ${battle.opponent.player} ${battle.winner.id == battle.opponent.id ? "<span class='text-green-500'>W</span>": ''}
+                                            </a>
+                                            <p class="text-sm text-gray-400">Rank: ${battle.opponent.rank}</p>
+                                        </div>
+                                        <img src = "${battle.opponent.profile_picture}" alt="${battle.opponent.player}" class="w-12 h-12 rounded-full">
+                                    </div>
+                                </div>
+                                ${battle.can_refree ? `<button data-battle_id="${battle.id}" class= "proposal-btn bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
+                                    <i class="fas fa-gavel mr-2"></i>Propose as Referee
+                                </button>`:`
+                                <div class='flex justify-between items-center'> 
+                                <a class='inline-block bg-transparent text-white border-1  border-orange-500 shadow-md px-4 py-2 rounded-lg  hover:bg-gray-700 transition duration-300 mt-auto ' href="/battles/battle_room/${battle.id}">
+                                    
+                                        voir le combat
+                                    
+                                </a>
+
+                                <div><i class="fas fa-eye mr-2"></i>: <span  class='text-orange-500' >${battle.spectators}</span></div>
+                                <div>
+                                
+                                ` }
+                            `
+    // $(".battles-container").append(card)
+    return battleElement
+}
+function createMemeElement(meme){
+    const memeElement = document.createElement('div');
+memeElement.className = 'post bg-gray-700 rounded-lg p-4';
+
+memeElement.innerHTML = `
+    <h3>Meme</h3>
+    <img src="${meme}" alt="Meme image" class="myImg w-full rounded-lg mb-4 post-image">
+    
+`
+
+// <div class="meme w-full h-64 rounded-lg mb-4 post-image" style=" background-image: url(${meme});">
+// </div>
+
+    return memeElement
+}
+
+
+
+// Function to render posts
+function renderPosts() {
+
+    const postsFeed = document.getElementById('postsFeed');
+    const loader = document.getElementById('loading-overlay');
+    
+    $.ajax({
+        url:"/feed",
+        type:"GET",
+        data: {
+            
+        },
+        beforeSend: function(){
+            loader.classList.toggle('active');
+        },
+        success: function(res){
+            posts = res.data
+            
+            //add a meme
+            // const memeElement = createMemeElement('https://preview.redd.it/son-im-proud-of-you-s-v0-fjola4lkoyqd1.jpeg?width=640&crop=smart&auto=webp&s=85eeee3624f8d331e864f68337cb9e6cb1ee42b3')
+            // postsFeed.appendChild(memeElement)
+
+            const adElement = createAdElement('https://sophisticatedappearance.com/b/3KVh0.P/3VpuvzbOmpVEJBZND_0O1bNTj/Yx0/NzTtAE4oLLT-Ur2ONAjoQt1/M/DFkB')
+
+            //postsFeed.appendChild(adElement)
+            posts.forEach(post =>{
+                if(post.feed_item == "post"){
+                    const postElement = createPostElement(post);
+                    postsFeed.appendChild(postElement);
+                    //postsFeed.appendChild(adElement);
+
+                }else if(post.feed_item == 'battle'){
+                    const battleElement = createBattleElement(post)
+                    postsFeed.appendChild(battleElement)
+                    
+                }
+                
+            })
+        },
+        complete: function(){
+            //addDropdownListeners()
+            //commentListener()
+            imgModalListener()
+                document.querySelectorAll('.body').forEach((element)=>{
+                element.innerHTML = linkifyHtml(element.textContent, {
+                    target:"_blank",
+                    className: 'link'
+                })
+                
+            })
+            $('.post .ellipsed-text').on('click',(e)=>{
+                console.log("ff")
+                if(e.target.textContent.length >= 1){
+                    $(e.target).toggle
+                    $(e.target).siblings('.full-text').toggle
+                }
+            })
+
+            //ad close listener
+            // if(document.querySelector('.ad-container')){
+            //     document.querySelector('.ad-close').addEventListener('click', function() {
+            // this.closest('.ad-container').style.display = 'none';
+            // });
+            // }
+            
+            
+            loader.classList.toggle('active');
+
+            // // Animate posts appearance
+            // gsap.from('.post', {
+            //     y: 50,
+            //     opacity: 0,
+            //     duration: 0.5,
+            //     stagger: 0.2,
+            //     ease: 'power2.out'
+            // });
+            
+
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            
+            showMyToast('An error occured, please try reloading page','error')
+        }
+        
+    })
+
+
+}
+
+// Render initial posts
+renderPosts();
+
+// Infinite scrolling
+var isLoading = false;
+let page = 1;
+
+const debounce = (func, delay)=>{
+    let timeout;
+    return()=>{
+        clearTimeout(timeout);
+        timeout = setTimeout(()=> func(), delay);
+    }
+}
+
+window.addEventListener('scroll', debounce(() => {
+    
+    
+if (isLoading) return;
+// console.log("SY: ",window.scrollY)
+// console.log("WI: ",window.innerHeight)
+// console.log("BH: ",document.body.offsetHeight)
+
+if (window.scrollY + window.innerHeight >= document.body.offsetHeight - 100) {
+    document.getElementById('loadingIndicator').classList.remove('hidden');
+    
+    isLoading = true;
+    
+    //loadMorePosts();
+    $.ajax({
+        url:"/feed",
+        type:"GET",
+        data: {
+           
+        },
+        beforeSend: function(){
+            //loader.classList.toggle('active');
+            // console.log("Fetching...")
+            //isLoading = true;
+            
+            
+            
+        },
+        success: function(res){
+            // console.log("Fetched")
+            posts = res.data
+            
+            //add a meme
+            // const memeElement = createMemeElement('https://preview.redd.it/son-im-proud-of-you-s-v0-fjola4lkoyqd1.jpeg?width=640&crop=smart&auto=webp&s=85eeee3624f8d331e864f68337cb9e6cb1ee42b3')
+            // postsFeed.appendChild(memeElement)
+
+            const adElement = createAdElement('https://sophisticatedappearance.com/b/3KVh0.P/3VpuvzbOmpVEJBZND_0O1bNTj/Yx0/NzTtAE4oLLT-Ur2ONAjoQt1/M/DFkB')
+            if(posts.length>0){
+                //postsFeed.appendChild(adElement)
+            posts.forEach(post =>{
+                
+                if(post.feed_item == "post"){
+                    const postElement = createPostElement(post);
+                    postsFeed.appendChild(postElement);
+                    
+                }else if(post.feed_item == 'battle'){
+                    const battleElement = createBattleElement(post)
+                    postsFeed.appendChild(battleElement)
+                    //postsFeed.appendChild(adElement);
+                }
+                
+            })
+            }else{
+                document.getElementById('loadingIndicator').classList.add('hidden');
+            }
+            
+        },
+        complete: function(){
+            // console.log("Finished")
+            //addDropdownListeners()
+            //commentListener()
+            
+                document.querySelectorAll('.body').forEach((element)=>{
+                element.innerHTML = linkifyHtml(element.textContent, {
+                    target:"_blank",
+                    className: 'link'
+                })
+                
+            })
+            // $('.post .ellipsed-text').on('click',(e)=>{
+            //     console.log("ff")
+            //     if(e.target.textContent.length >= 1){
+            //         $(e.target).toggle
+            //         $(e.target).siblings('.full-text').toggle
+            //     }
+            // })
+
+            //ad close listener
+            // if(document.querySelector('.ad-container')){
+            //     document.querySelector('.ad-close').addEventListener('click', function() {
+            // this.closest('.ad-container').style.display = 'none';
+            // });
+            // }
+
+            isLoading = false;
+            
+
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            
+            showMyToast('An error occured, please try reloading page','error')
+        }
+        
+    })
+
+}
+},1000)
+);
+
+function loadMorePosts() {
+    isLoading = true;
+    document.getElementById('loadingIndicator').classList.remove('hidden');
+    // console.log("F called")
+$.ajax({
+        url:"/feed",
+        type:"GET",
+        data: {},
+        beforeSend: function(){
+            //loader.classList.toggle('active');
+            // console.log("Fetching...")
+            isLoading = true;
+            
+        },
+        success: function(res){
+            // console.log("Fetched")
+            posts = res.data
+            console.log(res)
+            //add a meme
+            // const memeElement = createMemeElement('https://preview.redd.it/son-im-proud-of-you-s-v0-fjola4lkoyqd1.jpeg?width=640&crop=smart&auto=webp&s=85eeee3624f8d331e864f68337cb9e6cb1ee42b3')
+            // postsFeed.appendChild(memeElement)
+
+            const adElement = createAdElement()
+
+            //postsFeed.appendChild(adElement)
+            posts.forEach(post =>{
+                console.log("Rendering...")
+                if(post.feed_item == "post"){
+                    const postElement = createPostElement(post);
+                    //postsFeed.appendChild(postElement);
+                    
+                }else if(post.feed_item == 'battle'){
+                    const battleElement = createBattleElement(post)
+                    //postsFeed.appendChild(battleElement)
+                }
+                
+            })
+        },
+        complete: function(){
+            // console.log("Finished")
+            addDropdownListeners()
+            commentListener()
+            
+                document.querySelectorAll('.body').forEach((element)=>{
+                element.innerHTML = linkifyHtml(element.textContent, {
+                    target:"_blank",
+                    className: 'link'
+                })
+                
+            })
+            $('.post .ellipsed-text').on('click',(e)=>{
+                console.log("ff")
+                if(e.target.textContent.length >= 1){
+                    $(e.target).toggle
+                    $(e.target).siblings('.full-text').toggle
+                }
+            })
+
+            //ad close listener
+            if(document.querySelector('.ad-container')){
+                document.querySelector('.ad-close').addEventListener('click', function() {
+            this.closest('.ad-container').style.display = 'none';
+            });
+            }
+
+            isLoading = false;
+            document.getElementById('loadingIndicator').classList.add('hidden');
+            page++;
+            
+
+            // Animate posts appearance
+            // gsap.from('.post', {
+            //     y: 50,
+            //     opacity: 0,
+            //     duration: 0.5,
+            //     stagger: 0.2,
+            //     ease: 'power2.out'
+            // });
+            
+
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            
+            showMyToast('An error occured, please try reloading page','error')
+        }
+        
+    })
+
+
+
+// Simulate loading more posts (replace with actual API call)
+// setTimeout(() => {
+//     // Generate new posts (replace with actual data fetching)
+//     const newPosts = [
+//         {
+//             id: posts.length + 1,
+//             author: {
+//                 name:"Shikamaru Nara",
+//                 player: "Shika",
+//                 profile_picture: "https://placekitten.com/102/102",
+
+//             },
+//             time_posted: "now",
+//             avatar: "https://placekitten.com/102/102",
+//             body: "Cloud watching is the best way to spend a lazy afternoon. What a drag...",
+//             likes: 35,
+//             comments: []
+//         },
+//         {
+//             id: posts.length + 1,
+//             author: {
+//                 name:"Hinata Hyuga",
+//                 player: "Hina",
+//                 profile_picture: "https://placekitten.com/102/102",
+
+//             },
+//             time_posted: "now",
+//             avatar: "https://placekitten.com/102/102",
+//             body: "Just completed a successful mission with my team. Feeling proud! 💜",
+//             likes: 35,
+//             comments: []
+//         },
+        
+//     ];
+
+//     posts = [...posts, ...newPosts];
+//     const postsFeed = document.getElementById('postsFeed');
+//     const adElement = createAdElement()
+//     //postsFeed.appendChild(adElement);
+//     newPosts.forEach(post => {
+//         const postElement = createPostElement(post);
+//         postsFeed.appendChild(postElement);
+//     });
+
+//     isLoading = false;
+//     document.getElementById('loadingIndicator').classList.add('hidden');
+//     page++;
+
+//     // Animate new posts
+//     gsap.from(Array.from(postsFeed.children).slice(-newPosts.length), {
+//         y: 50,
+//         opacity: 0,
+//         duration: 0.5,
+//         stagger: 0.2,
+//         ease: 'power2.out'
+//     });
+// }, 2000);
+}
+
+function addAnimation(element, animation){
+    const jqElement = $(element)
+    if(jqElement.hasClass(animation)){
+        jqElement.removeClass(animation)
+    }else{
+        jqElement.addClass(animation)
+    }
+
+}
+
+// Event delegation for like buttons
+document.getElementById('postsFeed').addEventListener('click', (e) => {
+if (e.target.closest('.like-button')) {
+
+    //$(e.target).toggleClass('animate__animated animate__heartBeat')
+    //
+    //addAnimation(e.target,'animate__animated animate__flash')
+    
+    const likeButton = e.target.closest('.like-button');
+    const postId = likeButton.dataset.postId;
+
+    $.ajax({
+        url:  `/post/react/${postId}`,
+        type:'POST',
+        beforeSend: function(){
+            
+        },
+        success: function(res){
+            
+            likeButton.querySelector('.like-count').textContent = res.likes
+            if(res.message == 'liked'){
+                if(!likeButton.classList.contains('liked')){
+                    likeButton.classList.add('liked');
+                } 
+                
+            }else if(res.message == 'unliked'){
+                likeButton.classList.remove('liked');
+            }
+        },
+        complete: function(){
+            
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            console.log('Error:', textstatus,errorThrown)
+            showMyToast('an error occured please try again', 'error')
+        }
+        
+    })
+
+    
+}else if (e.target.closest('.comment-like-button')) {
+    const likeButton = e.target.closest('.comment-like-button');
+    const postId = likeButton.dataset.commentId;
+    //$(e.target).toggleClass('animate__animated animate__heartBeat')
+    
+    $.ajax({
+        url:  `/comment/react/${postId}`,
+        type:'POST',
+        beforeSend: function(){
+            
+        },
+        success: function(res){
+            
+            likeButton.querySelector('.comment-likes-count').textContent = res.likes
+            if(res.message == 'liked'){
+                if(!likeButton.classList.contains('liked')){
+                    likeButton.classList.add('liked');
+                } 
+                
+            }else if(res.message == 'unliked'){
+                likeButton.classList.remove('liked');
+            }
+        },
+        complete: function(){
+            
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            //console.log('Error:', textstatus,errorThrown)
+            showMyToast('an error occured please try again', 'error')
+        }
+        
+    })
+
+    
+}
+});
+
+// Event delegation for comment buttons
+document.getElementById('postsFeed').addEventListener('click', (e) => {
+if (e.target.closest('.comment-button') || e.target.closest('.reply-button')) {
+    const commentForm = e.target.closest('.post').querySelector('.comment-form');
+    commentForm.classList.toggle('active');
+    if (commentForm.classList.contains('active')) {
+        commentForm.querySelector('input').focus();
+    }
+}
+});
+
+
+
+
+
+
+function commentListener(){
+    const commentForm = $('.comment-form')
+    
+    commentForm.on('submit',(e)=>{
+        e.preventDefault()
+        const postId = e.target.dataset.postId
+        const commentSection = $(e.target).siblings('.comments')
+
+        const body = $(e.target).find('input').val().trim()
+        if(body){
+        $.ajax({
+                url: `/post/comment/new/${postId}`,
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{csrf_token}}',
+                    body: body,
+                },
+                beforeSend: function(){
+                    $('#loading-overlay').toggleClass('active')
+                },
+                success: function(res){
+                    commentsCount = res.comment.comments
+                   
+                    $(e.target).find('input').val('')
+                    $(commentSection).append(createComment(res.comment))
+                    console.log(commentSection)
+
+                //Update the comments count
+                $(e.target).siblings('.post-infos').find('.comment-count').text(commentsCount)
+
+                //scroll to bottom of the comment section
+                commentSection.animate({
+                    scrollTop: commentSection[0].scrollHeight
+                },'smooth')
+
+                },
+                complete: function(){
+                    $('#loading-overlay').toggleClass('active')
+                    document.querySelectorAll('.body').forEach((element)=>{
+                    element.innerHTML = linkifyHtml(element.textContent, {
+                    target:"_blank",
+                    className: 'link'
+                    })
+                    })
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An Error occurred, please try again','error')
+                }
+            })
+
+           
+           
+        }else{
+            showMyToast('please add content', 'info')
+        }
+    })
+}
+
+// Create post form submission
+document.getElementById('createPostForm').addEventListener('submit', async (e)  => {
+e.preventDefault();
+const loader = document.getElementById('loading-overlay');
+
+const content = document.getElementById('postContent').value.trim();
+const imageInput = document.getElementById('imageUpload');
+const file = imageInput.files[0];
+
+
+
+if (content || file) {
+
+    const formData = new FormData()
+    formData.append('body',content)
+    formData.append('csrfmiddlewaretoken','{{csrf_token}}')
+
+    if (file) {
+        formData.append('image',file)
+    } 
+    $.ajax({
+        url:'/post/new',
+        type: 'POST',
+        data:formData,
+        contentType: false,
+        processData: false,
+        beforeSend: function(){
+            loader.classList.toggle('active');
+        },
+        success: function(res){
+            
+
+            
+            addNewPost(res.post)
+            showMyToast('Publié','success')
+            document.getElementById('postContent').value = '';
+            imageInput.value = '';
+            if(document.getElementById('imagePreview')){
+            document.getElementById('imagePreview').remove()
+            }
+        },
+        complete: function(){
+            loader.classList.toggle('active');
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            showMyToast('Une erreur est survenu','error')
+        }
+    })
+}else{
+    showMyToast('Ajoute du contenu a ta publication')
+}
+});
+
+function addNewPost(newPost) {
+
+const postsFeed = document.getElementById('postsFeed');
+const postElement = createPostElement(newPost);
+postsFeed.insertBefore(postElement, postsFeed.firstChild);
+addDropdownListeners()
+commentListener()    
+        
+
+
+gsap.from(postElement, {
+    y: -50,
+    opacity: 0,
+    duration: 0.5,
+    ease: 'power2.out'
+});
+}
+
+// Image upload preview
+document.getElementById('imageUpload').addEventListener('change', (e) => {
+const file = e.target.files[0];
+if (file) {
+    
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const img = document.createElement('img');
+        img.src = event.target.result;
+        img.className = 'w-full rounded-lg mb-4 post-image';
+        const previewContainer = document.createElement('div');
+        previewContainer.id = 'imagePreview';
+        previewContainer.className = 'mt-2';
+        previewContainer.appendChild(img);
+        const existingPreview = document.getElementById('imagePreview');
+        
+        if (existingPreview) {
+            existingPreview.replaceWith(previewContainer);
+        } else {
+            
+            document.getElementById('createPostForm').insertBefore(previewContainer, document.querySelector('#create-post-actions'));
+        }
+    };
+    reader.readAsDataURL(file);
+}
+});
+
+    })
+</script>
+
+
+
+
+
+
+{% endblock content %}
+
+
+
+{% block not_content %}
+
+
+
+
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="commentsModal" tabindex="-1" aria-labelledby="commentsModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <!--
+            <h3 class="modal-title fs-5" id="commentsModal">COMMENTS</h3>
+            -->
+            
+          <div class="post-body"></div>
+          </div>
+            
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          
+          
+        
+        </div>
+        <div class="modal-body">
+            <div class="loader" style="display: none;">
+                loading...
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            
+            <input type="text" id="commentInputModal">
+            <button class="send-comment"  data-ref="inModal">send</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>      
+
+<button class="toggle-btn2" onclick="toggleMenu2()">&#9776;</button>
+    <div class="container">
+        <div class="left-column fade-in" id="left-column">
+            
+            <!--
+            <i class="fa fa-user">battle requests</i>
+            -->
+        </div>
+        
+        <div class="center-column">
+            <div class="new-post">
+                <form method="post" action="{% url 'core:create_post' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="header">
+                    <input type="text" placeholder="Ask a question, share a tought, or even tell a story..." name="body">
+
+                    <label class="attach-img-btn" for="new-image"><i class="fa fa-bell"></i></label>
+                    <input type="file" name = "image" id="new-image">
+
+                    </div>
+                    
+                    
+                    <button class="btn btn-secondary post-btn" type="submit">Post</button>
+            
+                </form>
+            </div>
+            {% for post in feed  %}
+                {% if post.type == "post" %}
+                
+            <div class="post-card">
+            <div class="post-header">
+                <a href="{% url 'users:player' post.post.author.user.username %}">
+                   <img src="{{post.post.author.profile_picture.url}}" alt="Profile Picture"> 
+                </a>
+                
+                <div class="post-info">
+                    <div class="user-name"><a href="{% url 'users:player' post.post.author.user.username %}">{{post.post.author}}</a></div>
+                    <div class="post-time">{{post.time_posted}}</div>
+                </div>
+                <div class="post-options" style="position: relative;">
+                    <i class="fa fa-ellipsis-h options-toggle" data-post_id="{{post.post.id}}"></i>
+                    <div class="options" style="display: none;">
+                        <button class="btn btn-warning option-btn" data-option="favorite">ADD to FAVORITE</button>
+                        <button class="btn btn-warning option-btn" data-link="{% url 'core:post_page' post.post.id %}" data-option="copy-link">Copy link</button>
+                        <button class="btn btn-warning option-btn" data-option="share">Share</button>
+                        {% if post.post.author == player %}
+                        <a href="{% url 'core:modify_post' post.post.id %}">
+                            <button class="btn btn-warning option-btn" data-option="edit">EDIT</button>
+                        </a>
+                        <button class="btn btn-warning option-btn" data-option="delete">DELETE</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="post-text">{{post.post.body}}</div>
+                {% if post.post.image %}
+                <img src="{{post.post.image.url}}" width="100%" height="100%" alt="Post Image" class="post-image">
+                {% endif %}
+            </div>
+            <div class="post-actions">
+                <button class="like-btn" data-post_id="{{post.post.id}}" data-link="{% url 'core:react' post.post.id %}">
+                    {% if post.post.reacted %}
+                    <i id="like-icon" class="fa fa-thumbs-up"></i>
+                    {% else %}
+                    <i id="like-icon" class="fa fa-thumbs-o-up"></i>
+                    {% endif %}
+                    <span id="post-likes-{{post.post.id}}">{{post.post.likes}}</span></button>
+                
+                    <div>{{post.n_comments}} - 
+                        <button type="button" class="comment-btn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentsModal" data-link="{% url 'core:post' post.post.id %}" data-post_id="{{post.post.id}}"><i class="fa fa-comment"></i></button>
+                    </div>
+                
+            </div>
+            <div class="comment-section">
+                <input id="input-comment-{{post.post.id}}"  type="text" placeholder="Write a comment...">
+
+
+                <button class="send-comment"
+                data-ref="inHome"
+                 data-post_id="{{post.post.id}}"
+                   data-link="{% url 'core:comment' post.post.id %}">  
+                   <i class="fa fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+        {% elif post.type == "battle" %}
+        <div class="post-card">
+            {{post.battle}}
+        </div>
+        
+
+        {% endif %}
+        
+        {% endfor %}
+        </div>
+        <div class="right-column fade-in">
+            <h3>Friend Suggestions</h3>
+            <p>Friend 1</p>
+            <p>Friend 2</p>
+            <h3>Friend Requests</h3>
+            <p>Request 1</p>
+            <p>Request 2</p>
+            
+    </div>        
+
+
+
+<!--
+<div id="request-battle-details">
+
+    <img id="char-img" src="https://static.wikia.nocookie.net/naruto/images/7/7d/Naruto_Part_II.png" width="100px" height="100px">
+    <form method="post" action="{% url 'battles:request' %}">
+        {% csrf_token %}
+    <select name="character" id="character-select">
+        {% for character in characters %}
+        <option value="{{character.name}}" data-img_link="{{character.images.0}}">{{character.name}} </option>
+        {% endfor %}
+    </select>
+    <select name="type" id="type-select">
+        <option value="friendly">Friendly</option>
+        <option value="stake" disabled>Stake</option>
+        <option value="rumble" disabled>Rumble</option>
+    </select>
+    <button type="submit">request</button>
+    </form>
+    
+</div>
+-->
+
+<!--
+<h2>Your notifications</h2>
+{% for notif in player_notifs %}
+{% if notif.notif_type == 'invite' %}
+<span>new {{notif.notif_type}} to join <a href="{% url 'users:family_page' notif.family.id %}">{{notif.family.name}}</a> from
+<a href="{% url 'users:player' notif.sender.user %}">{{notif.sender}}</a></span>
+
+
+<button class="btn-post" data-type="join_family" data-url="{% url 'users:join_family' notif.family.id %}">Join</button>
+
+
+{% elif notif.notif_type == 'request' %}
+<span>new {{notif.notif_type}} to join <a href="{% url 'users:family_page' notif.family.id %}">{{notif.family.name}}</a> from
+<a href="{% url 'users:player' notif.sender.user %}">{{notif.sender}}</a></span>
+
+<button class="btn-post" data-type="accept_request" data-url="{% url 'users:accept_request' notif.sender.id %}">Accept request</button>
+
+{% endif %}
+{% empty %}
+<span>No new notif</span>
+{% endfor %}
+-->
+
+
+
+<!--
+{% if c_player.family %}
+<a href="{% url 'users:family_page' c_player.family.id %}">Manage family</a>
+{% else %}
+<a href="{% url 'users:new_family' %}">Create a family</a>
+{% endif %}
+
+
+{% if c_player.family %}
+<a href="{% url 'users:family_page' c_player.family.id %}"> You are in the {{c_player.family.name}} family</a>
+{% else %}
+family:{{player.family}}
+<p>You are in no family Make a request to join a family <a href="{% url 'users:families' %}">See families</a></p>
+{% endif %}
+
+-->
+
+
+<!--
+<ul>
+{% for player in players %}
+<li>
+    <h3><a href="{% url 'users:player' player.user %}">{{player}}</a></h3> 
+    {% if can_invite %}
+        {% if player.family != c_player.family %}
+        
+        <button class="btn-post" data-type="invite" data-url="{%  url 'users:send_invite' player.id %}">Invite to join {{c_player.family}}</button>
+        {% endif %}
+    {% endif %}    
+    
+</li>
+{% endfor %}
+</ul>
+-->
+
+{{ player.user.username | json_script:"playerName" }}
+<script>
+
+    request_btn = $(".request-btn")
+    request_btn.on("click",(e)=>{
+        
+        //document.querySelector("#request-battle-details").classList.add("animated","fadeOut")
+        $("#request-battle-details").css("display","block")
+    })
+    $("#character-select").on("change",(e)=>{
+        document.getElementById("char-img").src = e.target.selectedOptions[0].dataset.img_link
+    })
+
+
+    $(()=>{
+        function sendInvite(e,url){
+            $.ajax({
+                url: url,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+                beforeSend: function(){
+                    
+                },
+                success: function(res){
+                    console.log(res.message)
+                    if(res.message == "success"){
+                        console.log("Invite sent to ")
+                    }else{
+                        console.log("Invite not sent")
+                    }
+                },
+                complete: function(){
+                    $(e.target).text("sent")
+                    e.target.disabled = true
+                }
+            })
+
+        }
+
+        function sendRequest(url){
+            $.ajax({
+                url: url,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+                success: function(res){
+                    console.log(res.message)
+                    if(res.message == "success"){
+                        console.log("Request sent to join family")
+                    }else{
+                        console.log("request not send")
+                    }
+                }
+            })
+        }
+
+        function accept_request(url){
+            $.ajax({
+                url: url,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+                success: function(res){
+                    console.log(res.message)
+                    if(res.message == "success"){
+                        console.log("player added to family")
+                    }else{
+                        console.log("player not added")
+                    }
+                }
+            })
+        }
+
+        function join_family(url){
+            $.ajax({
+                url: url,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+                success: function(res){
+                    console.log(res.message)
+                    if(res.message == "success"){
+                        console.log("Joined family")
+                    }else{
+                        console.log("Error joining family")
+                    }
+                }
+            })
+        }
+
+        $(".btn-post").on("click",(e)=>{
+            let url = e.target.dataset.url
+            let type = e.target.dataset.type
+            console.log(url)
+            if(type == "invite"){
+                sendInvite(url) 
+                e.target.disabled = true
+            }else if (type == "request"){
+                sendRequest(url)
+                e.target.disabled = true
+            }else if(type = "accept_request"){
+                accept_request(url)
+                e.target.disabled = true
+            }else if(type = "join_family"){
+                join_family(url)
+                e.target.disabled = true
+            }else{
+                console.log("Nothing done...")
+            }
+            
+            /*
+            $.ajax({
+                url: url,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+                success: function(res){
+                    console.log(res.message)
+                    if(res.message == "success"){
+                        console.log("player added to family")
+                    }else{
+                        console.log("player not added")
+                    }
+                }
+            })*/
+                
+        })
+        
+    })
+</script>
+<script>
+     
+     const player = JSON.parse(document.getElementById('playerName').textContent)
+     var post_id;
+     $(()=>{
+        const popup = document.getElementById('comments');
+    const closeButton = document.querySelector('#close-btn');
+    $(".close-button").on('click', (e) => {
+            
+            popup.style.display = 'none';
+            $("#comments").empty()
+            });
+    
+        $(".like-btn").on("click",(e)=>{
+           
+            const post_id = String(e.target.dataset.post_id)
+            $.ajax({
+                url: e.target.dataset.link,
+                type: "POST",
+                data: { csrfmiddlewaretoken:"{{ csrf_token }}" },
+                beforeSend: function(){
+                    $(e.target).hide()
+                    //show loader
+                },
+                success: function(res){
+                    if(res.status == 'success'){
+                        let likes_span = $(`#post-likes-${post_id}`)
+                        let likes = parseInt(likes_span.text())
+                        let like_icon = $(e.target).children().eq(0)
+                        if(res.message == 'liked'){
+                            like_icon.removeClass("fa fa-thumbs-o-up")
+                            like_icon.addClass("fa fa-thumbs-up")
+
+                            likes_span.text(likes+1)
+                            
+                        }else{
+                            like_icon.removeClass("fa fa-thumbs-up")
+                            like_icon.addClass("fa fa-thumbs-o-up")
+                            likes_span.text(likes-1)
+                            
+                        }
+                        
+
+                    }
+
+                },
+                complete: function(){
+                    $(e.target).show()
+                    //remove loader
+                }
+
+            })
+        })
+        const commentSection = $("#commentsModal").find('.modal-body') //or simply $("#commentsModal .modal-body")
+        $(".comment-btn").on("click",(e)=>{
+            //popup.style.display = 'block';
+            post_id = e.target.dataset.post_id
+
+            commentSection.empty()
+            let url = e.target.dataset.link
+            $.ajax({
+                url:url,
+                type:"GET",
+                beforeSend: function(){
+                    console.log("wait..")
+                    $(".loader").show()
+                },
+                success:function(res){
+                    if(res.status == "success"){
+                        
+                        
+                        console.log(res.post)
+                        $(".post-body").empty()
+                        $(".post-body").append(`
+                        <h5>${res.post.author}</h5>
+                        <p>${res.post.body}</p>
+                        `)
+                        
+                        
+                        res.post.comments.forEach(comment => {
+                           
+                            commentSection.append(`
+                            <div class="comment">
+                                <b>${comment.author}</b>
+                                <p>${comment.body}</p>
+                            </div>    
+                            `)
+    
+                            
+                        });
+                            
+                    }
+                },
+                complete: function(){
+                    $(".loader").hide()
+                }
+            })
+        })
+
+        $(".send-comment").on("click",(e)=>{
+            console.log("clicked")
+            let newCommentUrl = `/post/comment/new/${post_id}` 
+            let ref = e.target.dataset.ref
+            
+            if(ref == "inHome"){
+                newCommentUrl = e.target.dataset.link
+                post_id = e.target.dataset.post_id
+                commentInput =  $(`#input-comment-${post_id}`)
+                
+            }else if(ref == "inModal"){
+                //newCommentUrl = `/post/comment/new/${post_id}` 
+                commentInput = $(`#commentInputModal`)
+                
+            }
+            if(commentInput.val().trim() !== "" ){
+                $.ajax({
+                url: newCommentUrl,
+                type:"POST",
+                data:{csrfmiddlewaretoken:"{{csrf_token}}",
+                "comment":commentInput.val()},
+                success: function(res){
+                    console.log(newCommentUrl)
+                    
+
+                    
+
+                    if(ref == "inModal"){
+                        commentSection.append(`
+                            <div class="comment">
+                                <b>{{player}}-${player}</b>
+                                <p>${commentInput.val()}</p>
+                            </div>    
+                            `)
+                    }else if(ref == "inHome"){
+                        $(".comment-section").append(`
+                            <div class="comment">
+                                <b>{{player}}-${player}</b>
+                                <p>${commentInput.val()}</p>
+                            </div>    
+                            `)
+                    }
+
+                    commentInput.val('')
+
+
+                }
+
+            })
+            }
+            
+        })
+        
+    })
+</script>
+{% endblock not_content %}

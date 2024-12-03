@@ -1,0 +1,74 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <h1 class="text-4xl font-bold mb-6 text-orange-500 mt-20 text-center">Persos & Jutsu Naruto</h1>
+    
+    <div class="mb-6">
+        <input id="searchCharacter" oninput="searchCharacter()" type="text" placeholder="Rechercher persos..." class="w-full p-2 rounded bg-gray-700 text-white placeholder-gray-400">
+    </div>
+    
+    <div id="characters" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for character in characters %}
+        <div class="character bg-gray-900 text-white rounded-lg shadow-lg p-4">
+            {% if character.images.1 %}
+            <img src="{{character.images.1}}" alt="{{character.name}}" class="rounded-t-lg h-40 w-full object-cover">
+            {% else %}
+            <img src="{{character.images.0}}" alt="{{character.name}}" class="rounded-t-lg h-40 w-full object-cover">
+            {% endif %}
+            
+            
+            <h2 class="text-2xl font-semibold text-orange-500 mt-2">{{character.name}}</h2>
+            <h3 class="mt-2 font-medium">Jutsu:</h3>
+            <ul class="mt-2 list-none list-inside">
+                {% for jutsu in character.jutsu %}
+                <li><i class="fas fa-fire text-orange-500 mr-2" ></i>{{jutsu}}</li>
+                <!-- <li>Shadow Clone Jutsu</li>
+                <li>Uzuki Kage Jutsu</li>
+                <li>Sage Art: Super Great S Finished</li> -->
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+<!-- <h1>Playable characters</h1>
+
+<div class="characters-container" style="display: flex; flex-wrap: wrap;">
+<div class="character">
+    {% for character in characters %}
+<h1>{{character.name}}</h1>
+<img src="{{character.images.0}}" width="200px" height="200px">
+<ul>
+    {% for jutsu in character.jutsu %}
+    <li>{{jutsu}}</li>
+    {% endfor %}
+</ul>
+</div>
+{% endfor %}
+</div> -->
+
+
+<script>
+    function searchCharacter() {
+        const searchValue = document.getElementById('searchCharacter').value.toLowerCase();
+        const characterList = document.getElementById('characters');
+        const characters = characterList.getElementsByClassName('character');
+
+        for (let i = 0; i < characters.length; i++) {
+            const characterName = characters[i].getElementsByTagName('h2')[0].innerText.toLowerCase();
+            if (characterName.includes(searchValue)) {
+                characters[i].style.display = '';
+            } else {
+                characters[i].style.display = 'none';
+            }
+        }
+    }
+</script>
+{% endblock content %}
+
+
+

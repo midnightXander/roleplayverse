@@ -1,0 +1,547 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    .chosed{
+        background-color: #fc7a0133;
+    }
+</style>
+
+<style>
+    #refereeTestPart2 {
+        overflow: hidden;
+    }
+
+    #refereeTestPart2 > div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #battleScreenshot {
+        max-height: 50vh;
+        object-fit: contain;
+    }
+
+    #verdictInput {
+        resize: vertical;
+        min-height: 100px;
+        max-height: 200px;
+    }
+</style>
+
+
+<main class="h-screen flex  items-center justify-center mt-4">
+    
+    <div id="refereeSection" class="bg-gray-700 rounded-lg p-6">
+        <h2 class="text-2xl font-bold mb-4 text-orange-400">Become a Referee</h2>
+        
+        <div class="mb-6">
+            <h3 class="text-xl font-semibold mb-2 text-orange-200">Requirements:</h3>
+            <ul class="list-disc list-inside text-gray-300">
+                <li class="flex w-full justify-between">
+                    Should be in a family
+                    {% if in_family %}
+                    <i class="fas fa-check-circle text-xl text-green-500"></i>
+                    {% else %}
+                    <i class="fas fa-times-circle text-xl text-red-500"></i>
+                    {% endif %}
+                    
+                </li>
+                <li class="flex w-full justify-between">
+                    Minimum rank: D 
+                    {% if rank_eligibility %}
+                    <i class="fas fa-check-circle text-xl text-green-500"></i>
+                    {% else %}
+                    <i class="fas fa-times-circle text-xl text-red-500"></i>
+                    {% endif %}
+                </li>
+                <li class="flex w-full justify-between">
+                    At least 3 completed battles
+                    {% if battles_eligibility %}
+                    <i class="fas fa-check-circle text-xl text-green-500"></i>
+                    {% else %}
+                    <i class="fas fa-times-circle text-xl text-red-500"></i>
+                    {% endif %}
+                </li>
+                <li class="flex w-full justify-between">
+                    Has refreed atleast 2 friendly battles
+                    {% if has_refreed %}
+                    <i class="fas fa-check-circle text-xl text-green-500"></i>
+                    {% else %}
+                    <i class="fas fa-times-circle text-xl text-red-500"></i>
+                    {% endif %}
+                </li>
+                <li class="flex w-full justify-between">
+                    Account age: 2 months or older
+                    {% if True %}
+                    <i class="fas fa-check-circle text-xl text-green-500"></i>
+                    {% else %}
+                    <i class="fas fa-times-circle text-xl text-red-500"></i>
+                    {% endif %}
+                </li>
+                
+            </ul>
+        </div>
+        
+        <div id="eligibilityStatus" class="mb-6 p-4 rounded-lg">
+            {% if eligible %}
+            <p class="text-green-400 font-semibold">Congratulations! You are eligible to take the referee test.</p>
+            {% else %}
+            <p class="text-red-400 font-semibold">You are not eligible to take the referee test yet.</p>
+                <p class="text-gray-300 mt-2">{{message}}</p>
+            {% endif %}
+        </div>
+        
+        {% if eligible %}
+        <button id="takeTestBtn" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+            Take Referee Test
+        </button>
+        {% endif %}
+
+
+        
+    </div>
+    <!--Onboarding-->
+    <div id="instructions" class="max-w-md mx-auto bg-gray-700 p-8 shadow-lg rounded-lg text-gray-300 hidden">
+        <div class="flex gap-4">
+            <i id="instructions-back" class="fas fa-arrow-left text-gray-100 text-2xl cursor-pointer"></i>
+            <h2 class="text-2xl font-bold mb-4 text-orange-400">Instructions</h2>
+        </div>
+        
+        <p>The Test is made up of 2 parts</p>
+        <p>First you answer a quiz of a series of questions on Naruto and the Rp verse</p>
+        <p>If you have atleast 80% of correct answers you go to step 2</p>
+        <p>In Step 2 you will be put in 2 situtions where you have to evaluate a battle case with some textpads</p>
+        <p>Your answer will be reviewed and if succesful, you will be accepted as a refree on the platfrom</p>
+
+        <button id="start-quiz-btn" class="bg-orange-600 hover:bg-orange-700 py-2 px-4 text-gray-100 my-4 rounded">Start the Quiz</button>
+
+    </div>
+    <div id="quizSection" class="hidden max-w-md mx-auto bg-gray-700 p-8 shadow-lg rounded-lg text-gray-300">
+        <h1 class="text-2xl font-bold mb-5 text-center text-orange-500">Refree Quiz</h1>
+        <div id="quiz-container">
+            <div class="mb-4 text-lg font-semibold">Time Left: <span id="counter" class="text-2xl font-bold text-orange-500">8</span></div>
+            <div id="question" class="mb-4 text-lg font-semibold"></div>
+            <div id="choices" class="space-y-2"></div>
+            <!-- <button id="next-btn" class="hidden mt-5 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Next</button> -->
+        </div>
+        
+        <div id="result" class="text-center mt-5 hidden"></div>
+    </div>
+
+    <div id="refereeTestPart2" class="hidden  fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50  rounded-lg p-6">
+        <div class="bg-gray-700 rounded-lg p-6 max-w-4xl w-full mx-4 flex flex-col h-screen max-h-[90vh]">
+            <h2 class="text-2xl font-bold mb-4 text-orange-500">Referee Test - Part 2</h2>
+            
+            <div class="flex-grow overflow-y-auto">
+                <div class="mb-6">
+                    <p class="text-gray-300 mb-4">Analyze the battle screenshot below and provide your verdict:</p>
+                    <img id="battleScreenshot" src="https://wallpaperaccess.com/full/477723.jpg" alt="Battle Screenshot" class="w-full max-w-2xl rounded-lg shadow-lg mb-4">
+                </div>
+                
+                <div class="mb-6">
+                    <label for="verdictInput" class="block text-indigo-200 text-lg font-semibold mb-2">Your Verdict:</label>
+                    <textarea id="verdictInput" rows="6" class=" w-full bg-gray-800 text-white rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Enter your verdict here..."></textarea>
+                </div>
+                
+                <div class="flex justify-between items-center">
+                    <button id="prevQuestionBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                        Previous Question
+                    </button>
+                    <button id="submitVerdictBtn" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                        Submit Verdict
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    
+    {{ questions|json_script:"questions" }}
+    {{ situation1|json_script:"situation1" }}
+    {{ situation2|json_script:"situation2" }}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+        $(document).ready(function() {
+    const refereeSection = document.getElementById('refereeSection');
+    const refereeTestPart2 = document.getElementById('refereeTestPart2');
+    const questions = JSON.parse(document.getElementById('questions').textContent)
+    console.log(questions)
+    
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timer;
+    
+    
+
+    function loadQuestion() {
+
+        //timer
+        if(!timer){
+        timer = setInterval(()=>{
+        count = $("#counter").text()
+        count = parseInt(count)
+        if(count>0){
+            $("#counter").text(count-1)
+        }else{
+            clearInterval(timer)
+            timer = null
+
+            // const selectedChoice = $('input[name="choice"]:checked').val();
+            const selectedChoice = $('.chosed').text().trim();
+            
+            if (!selectedChoice || selectedChoice === ""){
+                 
+            if (currentQuestionIndex < questions.length) {
+                    //clearInterval(timer)
+                    
+                    $("#counter").text(8)
+                    loadQuestion();
+            } else {
+                
+                showResult();
+                return
+                
+            }
+        };
+
+        
+        
+        const correctAnswer = questions[currentQuestionIndex].answer;
+        
+        if (selectedChoice === correctAnswer) {
+            score++;
+        }
+
+        currentQuestionIndex++
+        if (currentQuestionIndex < questions.length) {
+            $("#counter").text(8)
+            loadQuestion();
+        } else {
+            //clearInterval(timer)
+            showResult();
+            return
+        }
+
+    
+
+        // if (currentQuestionIndex < questions.length) {
+        //     loadQuestion();
+        // } else {
+        //     showResult();
+        // }
+        
+        }
+        
+    },1000) 
+        }
+         
+
+        const questionData = questions[currentQuestionIndex];
+        $('#question').text(questionData.question);
+        $('#choices').empty();
+
+        questionData.choices.forEach(choice => {
+            $('#choices').append(`
+            <div class="mb-2 choice  text-gray-200 border border-gray-100  rounded-lg p-2 cursor-pointer">
+                ${choice}</div>
+                
+            `);
+            // <div>
+            //         <input type="radio" name="choice" value="${choice}" class="mr-2">
+            //         <label>${choice}</label>
+            //     </div>
+        });
+        
+        $(".choice").on("click",(e)=>{
+        //remove the class from all other elements then add to the clicked one
+        $(".choice").removeClass("chosed")
+        $(e.target).toggleClass("chosed")
+        })
+
+    
+    }
+
+    function showResult() {
+        // $("#loading-overlay").toggleClass("active")
+        let message = "Sorry, your score is insufficient to continue to the next step, you can try again in 12days"
+        const correctPercentage = score/questions.length*100
+
+        $.ajax({
+            url: "",
+            type: "POST",
+            data: {
+                csrfmiddlewaretoken:"{{csrf_token}}",
+                "score":correctPercentage,
+                "step": 1,
+            },
+                
+            success: function(res){
+                if(res.status == "success"){
+                    console.log(res.message)
+                    $('#quiz-container').hide();
+        
+        //$('#result').text(`Your score is ${score} out of ${questions.length} ${correctPercentage}% `).removeClass('hidden');
+        $('#result').empty()
+        $('#result').append(`
+        <p class='' >
+            You had <span class='text-2xl text-orange-500'>${correctPercentage}%</span> of correct answers
+        </p> `).removeClass('hidden');
+
+        if(correctPercentage >= 80){
+            message = 'Congrats, you scored enough to continue to the next step, click on the button to continue'
+            $("#result").append(`
+            <p class="text-green-400 font-semibold">${message}</p>
+            <button id='step2-btn' class='bg-orange-600 hover:bg-orange-700 py-2 px-4 text-gray-100 my-2 rounded'>Go to Step 2</button>
+            `)
+
+            $("#step2-btn").on("click",(e)=>{
+                showRefereeTestPart2()
+            })
+
+        }else{
+            $("#result").append(`
+            <p class="text-red-400 font-semibold">${message}</p>
+            `)
+        }
+                }
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+
+        })
+
+        
+    }
+
+   
+   
+    $('#instructions-back').click(function(e) {
+        $('#instructions').addClass('hidden')
+        $('#refereeSection').removeClass('hidden')
+        
+    });
+
+
+    
+    
+    
+    function showRefereeSection() {
+        const takeTestBtn = document.getElementById('takeTestBtn');
+        refereeSection.classList.remove('hidden');
+        
+        if(takeTestBtn){
+            takeTestBtn.addEventListener('click', ()=>{
+            $('#refereeSection').addClass('hidden')
+            $('#instructions').removeClass('hidden')
+        });
+        }
+        
+    
+        //checkRefereeEligibility();
+    }
+    
+    function checkRefereeEligibility() {
+        // This would typically be fetched from your backend
+        const playerData = {
+            rank: "Jōnin",
+            completedBattles: 150,
+            winRate: 65,
+            accountAge: 5, // in months
+            hasWarnings: false
+        };
+    
+        const eligibilityStatus = document.getElementById('eligibilityStatus');
+        
+    
+        let isEligible = true;
+        let statusMessage = "";
+        
+        if (playerData.rank !== "Jōnin") {
+            isEligible = false;
+            statusMessage += "You must be a Jōnin. ";
+        }
+        if (playerData.completedBattles < 100) {
+            isEligible = false;
+            statusMessage += "You need at least 100 completed battles. ";
+        }
+        if (playerData.winRate < 60) {
+            isEligible = false;
+            statusMessage += "Your win rate must be 60% or higher. ";
+        }
+        if (playerData.accountAge < 3) {
+            isEligible = false;
+            statusMessage += "Your account must be at least 3 months old. ";
+        }
+        if (playerData.hasWarnings) {
+            isEligible = false;
+            statusMessage += "You must not have any active warnings or bans. ";
+        }
+    
+        // if (isEligible) {
+        //     eligibilityStatus.innerHTML = `
+        //         <p class="text-green-400 font-semibold">Congratulations! You are eligible to take the referee test.</p>
+        //     `;
+        //     takeTestBtn.classList.remove('hidden');
+        // } else {
+        //     eligibilityStatus.innerHTML = `
+        //         <p class="text-red-400 font-semibold">You are not eligible to take the referee test yet.</p>
+        //         <p class="text-gray-300 mt-2">${statusMessage}</p>
+        //     `;
+        //     takeTestBtn.classList.add('hidden');
+        // }
+    
+        // Add event listener to the test button
+        takeTestBtn.addEventListener('click', ()=>{
+            $('#refereeSection').addClass('hidden')
+            $('#instructions').removeClass('hidden')
+        });
+    }
+
+    //start the quizz
+    $("#start-quiz-btn").on('click',startRefereeQuiz)
+    
+    function startRefereeQuiz() {
+        // This function would initiate the referee test
+        
+        $('#instructions').addClass('hidden')
+        $("#quizSection").removeClass('hidden')
+
+        loadQuestion()
+    }
+    
+    
+    showRefereeSection()
+    
+    
+
+
+    
+    
+    //STEP 2
+    
+    let currentSituationIndex = 0;
+    const situation1 = JSON.parse(document.getElementById('situation1').textContent)
+    const situation2 = JSON.parse(document.getElementById('situation2').textContent)
+    const totalSituations = 2; // Assuming there are 5 questions in total
+    let verdicts = [];
+    
+    
+    const battleScreenshots = [
+        situation1,
+        situation2
+    ];
+    console.log(battleScreenshots)
+    
+    function showRefereeTestPart2() {
+        $("#quizSection").addClass("hidden")
+        refereeTestPart2.classList.remove('hidden');
+        // refereeSection.classList.add('hidden');
+        
+
+        loadSituation(currentSituationIndex);
+    }
+    
+    function loadSituation(index) {
+        const battleScreenshot = document.getElementById('battleScreenshot');
+        const verdictInput = document.getElementById('verdictInput');
+        const prevQuestionBtn = document.getElementById('prevQuestionBtn');
+        const submitVerdictBtn = document.getElementById('submitVerdictBtn');
+    
+        battleScreenshot.src = battleScreenshots[index];
+        verdictInput.value = ''; // Clear previous input
+    
+        prevQuestionBtn.disabled = index === 0;
+        submitVerdictBtn.textContent = index === totalSituations - 1 ? "Submit Test" : "Next Question";
+    
+        // Add animation to draw attention to the new image
+        battleScreenshot.classList.add('animate-pulse');
+        setTimeout(() => {
+            battleScreenshot.classList.remove('animate-pulse');
+        }, 1000);
+    }
+    
+    function submitVerdict() {
+        const verdict = document.getElementById('verdictInput').value.trim();
+        if (verdict === '') {
+            //replace with toast
+            alert('Please enter your verdict before proceeding.');
+            return;
+        }
+    
+        // Here you would typically send the verdict to your backend
+        console.log(`Verdict for question ${currentSituationIndex + 1}: ${verdict}`);
+        verdicts.push(verdict)
+
+        if (currentSituationIndex < totalSituations - 1) {
+
+            currentSituationIndex++;
+            loadSituation(currentSituationIndex);
+        } else {
+            // Test completed
+            //replace with toast
+            //send to backend
+            $.ajax({
+                url: '',
+                type: 'POST',
+                data: {
+                   csrfmiddlewaretoken: '{{csrf_token}}',
+                   "step": 2,
+                   "verdict1": verdicts[0],
+                   "verdict2": verdicts[1], 
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                        console.log(res.message)
+                        //replace with toast
+                        //alert('Referee test completed! Your results will be reviewed.');
+                        
+                        refereeTestPart2.classList.add('hidden');
+                        
+                        $("#quizSection").empty().removeClass("hidden")
+                        
+
+                        message = 'Test completed, now your answers will be reviewed and a feedback wil be sent to you'
+                        $("#result").empty().append(`
+                        <p class="text-green-400 font-semibold mb-3">${message}</p>
+                        <a href ='/home'>
+                        <button  class='bg-orange-600 hover:bg-orange-700 py-2 px-4 text-gray-100 my-2 rounded'>Back to home page</button>
+                        </a>
+                        `).removeClass('hidden');
+
+                    }else{
+                        console.log(res.message)
+                    }
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+            })
+            
+            
+        }
+    }
+    
+    function previousQuestion() {
+        if (currentSituationIndex > 0) {
+            currentSituationIndex--;
+            loadSituation(currentSituationIndex);
+        }
+    }
+    
+    // Event listeners
+    document.getElementById('submitVerdictBtn').addEventListener('click', submitVerdict);
+    document.getElementById('prevQuestionBtn').addEventListener('click', previousQuestion);
+
+
+});
+    </script> 
+
+</main>
+{% endblock content %}

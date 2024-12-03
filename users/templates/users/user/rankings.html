@@ -1,0 +1,115 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+
+{% block content %}
+<style>
+    .bg-orange-custom {
+        background-color: #ff6600;
+    }
+    .hover\:bg-orange-custom:hover {
+        background-color: #ff8533;
+    }
+    .text-orange-custom {
+        color: #ff6600;
+    }
+</style>
+<header class="bg-gray-800 text-orange-500 p-4 mt-20">
+    <div class="container mx-auto">
+        <h1 class="text-2xl font-bold">Classement des joueurs - RPV</h1>
+    </div>
+</header>
+<main class="flex-grow container text-white mx-auto px-4 py-8">
+    <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+        <div class="p-4 font-bold text-lg grid grid-cols-12 gap-4 items-center bg-gray-700">
+            <div class="col-span-1">Pos.</div>
+            <div class="col-span-3 sm:col-span-2">Joueur</div>
+            <div class="sm:block col-span-2">Famille</div>
+            <div class="col-span-2">Rang</div>
+            <div class=" col-span-3">Victoire</div>
+            <div class="hidden sm:block  sm:col-span-2">Prog.</div>
+        </div>
+        <div id="rankings-container">
+            <!-- Rankings will be dynamically inserted here -->
+        </div>
+    </div>
+</main>
+
+
+<script>
+   
+
+    function createPlayerRow(player, rank) {
+        const row = document.createElement('a');
+        row.className = 'p-4 grid grid-cols-12 gap-4 items-center hover:bg-gray-700 transition duration-300';
+        row.innerHTML = `
+            <div class="col-span-1 font-bold ${rank <= 3 ? 'text-orange-custom' : ''}">${rank}</div>
+            <div class="col-span-3 sm:col-span-2 flex items-center">
+                <img src="${player.profile_picture}" alt="${player.player.username}" class="w-10 h-10 rounded-full mr-2">
+                <span class="hidden sm:inline">${player.player.username.split(' ')[0]}</span>
+            </div>
+            <div class=" sm:block col-span-2">${player.family ? player.family : 'No Family'}</div>
+            <div class="col-span-2">${player.rank}</div>
+            <div class=" sm:col-span-2">
+                <span class="text-green-500">${player.wins}W</span>
+            </div>
+            <div class="hidden sm:block col-span-3 ">
+                <div class="w-full bg-gray-600 rounded-full h-2.5">
+                    <div class="bg-orange-custom h-2.5 rounded-full" style="width: ${player.progress}%"></div>
+                </div>
+                <span class="text-xs text-center align-center">${player.progress}%</span>
+            </div>
+            
+        `;
+        /*
+        <span class="text-yellow-500">${player.draws}D</span> / 
+        <span class="text-red-500">${player.losses}L</span>
+        */
+       row.setAttribute('href',`/users/${player.player.username}`)
+        return row;
+    }
+
+    function renderRankings() {
+
+        $.ajax({
+            url:'',
+            type: 'POST',
+            data: {csrfmiddlewaretoken:'{{csrf_token}}'},
+            beforeSend: function(){
+                $('#loading-overlay').toggleClass('active')
+            },
+            success: function(res){
+                
+                const container = document.getElementById('rankings-container');
+                
+                // Sort players by total matches won
+                if(res.status == 'success'){
+                    container.innerHTML = '';
+                    if(res.winners.length > 0){
+                        const winners = res.winners
+                    
+                    winners.forEach((player, index) => {
+                    container.appendChild(createPlayerRow(player, index + 1));
+                    });
+                }else{
+                    container.innerHTML = `
+                    <p class='text-center p-4'>No Battles has been terminated yet for this month</p>
+                    `
+                }
+                }
+                
+            },
+            complete: function(){
+                $('#loading-overlay').toggleClass('active')
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                showMyToast('An error occured during ranking fetching','error')
+            }
+        })
+
+        
+    }
+
+    renderRankings();
+</script>
+{% endblock content %}

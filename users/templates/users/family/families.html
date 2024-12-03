@@ -1,0 +1,252 @@
+{% extends "core/base.html" %}
+
+
+{% block content %}
+<style>
+     :root {
+            --dark-grey: #2a2a2a;
+            --light-grey: #3a3a3a;
+            --orange: #ff6600;
+            --light-orange: #ff8533;
+        }
+        .family-card {
+            
+            border: 1px solid var(--light-grey);
+            transition: all 0.3s ease;
+        }
+        .family-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn {
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        
+</style>
+
+
+<header class="bg-gray-900 text-white p-4 mt-20">
+    <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-orange-500">Familles RPV</h1>
+        <!-- {% if eligible %}
+    <a href="{% url 'users:new_family' %}"><button class="create-family-btn">Create a Family</button></a>
+    {% else %}
+    <button class="create-family-btn" disabled>Create a Family</button>
+    {% endif %} -->
+    <a href="{% url 'users:new_family' %}">
+        <button onclick="createFamily()" class="btn btn-create px-4 py-2 rounded text-white">
+            <i class="fas fa-plus mr-2"></i>Créer une famille
+        </button>
+    </a>
+    </div>
+</header>
+
+<main class="flex-grow container text-white mx-auto px-4 py-8">
+    <div id="families-container" class="grid grid-cols-1 md:grid-cols-2  gap-6">
+        
+        {% for family in families %}
+        <div class="family-card bg-gray-700 rounded-lg p-6 shadow-md relative">
+            <div class="flex items-center mb-4">
+                <img src="{{family.family.profile_picture.url}}" alt="{{family.family}}" class="w-16 h-16 rounded-full mr-4 object-cover">
+                <div>
+                    <h2 class="text-xl font-semibold">{{family.family}}</h2>
+                    <p class="text-sm text-gray-400">Rang: {{family.rank}}</p>
+                </div>
+            </div>
+            <p class="mb-2"><i class="fas fa-user-tie mr-2"></i>Parrain: {{family.family.god_father}}</p>
+            <p class="mb-4"><i class="fas fa-users mr-2"></i>Membres: {{family.n_members}}</p>
+            <p class="mb-4"><i class="fas fa-key mr-2"></i>Points: {{family.family.points}}</p>
+
+            <div class="flex space-x-2">
+                <button onclick="joinFamily('{{family.family.id}}')" class="btn btn-join bg-orange-500 hover:bg-orange-600  px-4 py-2 rounded text-white flex-grow">
+                    <i class="fas fa-sign-in-alt mr-2"></i>demande d'adhésion
+                </button>
+                <a href="{% url 'users:family_page' family.family.id %}">
+                    <button  class="border-1 border-gray-800  px-4 py-2 rounded text-white flex-grow">
+                    <i class="fas fa-eye mr-2"></i>Voir
+                </button>
+                </a>
+                
+            </div>
+
+
+         </div>
+        
+
+
+        
+        <!-- <li class="family-card">
+
+            <img src="{{family.family.profile_picture.url}}" alt="Uzumaki Clan">
+            <div class="family-card-content">
+                <h3>{{family.family}}</h3>
+                <p>God Father: {{family.family.god_father}}</p>
+                <p>Member(s): {{family.n_members}}</p>
+                <p>Points: {{family.family.points}}</p>
+            </div>
+            <div class="family-card-actions">
+                
+                {% if player.family or family.eligible_to_request  %}
+                <button class="request-btn"  disabled>Request to Join</button>
+                {% else %}
+                <button class="request-btn" data-url=" {% url 'users:send_request' family.family.id  %}">Request to Join</button>
+                {%endif%}
+                <a href="{% url 'users:family_page' family.family.id %}">
+                    <button class="view-btn">View Family</button>
+                </a>
+                
+            </div>
+        </li> -->
+        {% endfor %}
+       
+        
+    </div>
+
+</main>
+
+<script>
+    
+    function joinFamily(id) {
+        console.log(`Joining family with id ${id}`);
+        $.ajax({
+                url: `/users/send_request/${id}`,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+                beforeSend: function(){
+                    $('#loading-overlay').toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                        console.log("request sent successfully")
+                        showMyToast(res.message, 'success')
+                        // e.target.disabled = true // jquery: $(e.target).prop("disabled",true)
+                    }else{
+                        showMyToast(res.message, 'info',4000)
+                    }
+                    
+                },
+                complete: function(){
+                    $('#loading-overlay').toggleClass('active')
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured', 'error')
+                }
+            })
+    }
+    
+</script>
+
+
+{% endblock content %}
+
+
+
+{% block not_content %}
+
+  
+<div class="container-family">
+    
+    
+   
+    {% if eligible %}
+    <a href="{% url 'users:new_family' %}"><button class="create-family-btn">Create a Family</button></a>
+    {% else %}
+    <button class="create-family-btn" disabled>Create a Family</button>
+    {% endif %}
+    <div id="successAlertPlaceholder"></div>
+    <ul class="family-list" id="familyList">
+        {% for family in families %}
+        <li class="family-card">
+            <img src="{{family.family.profile_picture.url}}" alt="Uzumaki Clan">
+            <div class="family-card-content">
+                <h3>{{family.family}}</h3>
+                <p>God Father: {{family.family.god_father}}</p>
+                <p>Member(s): {{family.n_members}}</p>
+                <p>Points: {{family.family.points}}</p>
+            </div>
+            <div class="family-card-actions">
+                
+                {% if player.family or family.eligible_to_request  %}
+                <button class="request-btn"  disabled>Request to Join</button>
+                {% else %}
+                <button class="request-btn" data-url=" {% url 'users:send_request' family.family.id  %}">Request to Join</button>
+                {%endif%}
+                <a href="{% url 'users:family_page' family.family.id %}">
+                    <button class="view-btn">View Family</button>
+                </a>
+                
+            </div>
+        </li>
+        {% endfor %}
+        
+        <!-- More families can be added here -->
+    </ul>
+    
+</div>
+
+<script>
+    function searchFamily() {
+        const searchValue = document.getElementById('search').value.toLowerCase();
+        const familyList = document.getElementById('familyList');
+        const families = familyList.getElementsByTagName('li');
+
+        for (let i = 0; i < families.length; i++) {
+            const familyName = families[i].getElementsByClassName('family-card-content')[0].getElementsByTagName('h3')[0].innerText.toLowerCase();
+            if (familyName.includes(searchValue)) {
+                families[i].style.display = '';
+            } else {
+                families[i].style.display = 'none';
+            }
+        }
+    }
+</script>
+
+
+<script>
+    $(()=>{
+        $(".request-btn").on("click",(e)=>{
+            
+            let url = e.target.dataset.url
+            console.log(url)
+            
+            const alertPlaceholder = document.getElementById('successAlertPlaceholder')
+            const appendAlert = (message, type) => {
+            const wrapper = document.createElement('div')
+            wrapper.innerHTML = [
+                `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+                `   <div>${message}</div>`,
+                '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                '</div>'
+            ].join('')
+
+            alertPlaceholder.append(wrapper)
+            }//appendAlert
+
+
+            $.ajax({
+                url: url,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
+                success: function(res){
+                    if(res.message == "success"){
+                        console.log("request sent successfully")
+                        appendAlert('Request to join family sent succesfully', 'success')
+                        e.target.disabled = true // jquery: $(e.target).prop("disabled",true)
+                    }else{
+                        console.log("request not send")
+                    }
+                    
+                }
+            })
+        })
+        
+    })
+
+</script>
+
+
+{% endblock not_content %}

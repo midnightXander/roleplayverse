@@ -1,0 +1,76 @@
+{% extends "blog/base.html" %}
+
+    {% block content %}
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-300 mb-8">Latest Posts</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10">
+            <!-- Blog cards will be dynamically inserted here -->
+             {% for post in posts %}
+                <div class="blog-card bg-white S rounded-lg overflow-hidden shadow-lg">
+                    <img src="{{post.image.url}}" alt="{{post.leading}}" class="blog-image">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm font-semibold text-gray-500 dark:text-gray-400">{{post.category}}</span>
+                        <span class="text-2xl"></span>
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-900  mb-2">{{post.title}}</h2>
+                    <small class="text-sm text-gray-500">{{post.leading}}</small>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm">{{post.date_added |date:'M d, Y'}}</p>
+                </div>
+                <div class="px-6 py-4 bg-gray-100">
+                    <a href="{% url 'blog:blog_post' post.id %}" class="text-primary-color hover:underline">Read more</a>
+                </div>
+                </div>
+             {% empty %}
+                <div>No posts</div>
+             {% endfor %}
+        </div>
+    </main>
+
+    <script>
+        const blogPosts = [
+            { title: "New Jutsu System Released!", category: "Update", date: "2023-05-15", image: "https://wallpaperaccess.com/full/1805816.jpg" },
+            { title: "Top 10 Strategies for Clan Wars", category: "Tutorial", date: "2023-05-10", image: "https://wallpaperaccess.com/full/117042.jpg" },
+            { title: "Upcoming Ninja Tournament", category: "News", date: "2023-05-05", image: "https://wallpaperaccess.com/full/12886.jpg" },
+            { title: "Character Customization Guide", category: "Tutorial", date: "2023-04-30", image: "https://wallpaperaccess.com/full/1121370.jpg" },
+            { title: "Balance Changes: Ninjutsu Tweaks", category: "Update", date: "2023-04-25", image: "https://wallpaperaccess.com/full/117042.jpg" },
+            { title: "Community Spotlight: Best Artworks", category: "News", date: "2023-04-20", image: "https://wallpaperaccess.com/full/117042.jpg" }
+        ];
+
+        function createBlogCard(post) {
+            const card = document.createElement('div');
+            card.className = 'blog-card bg-white S rounded-lg overflow-hidden shadow-lg';
+            card.innerHTML = `
+                <img src="${post.image}" alt="${post.title}" class="blog-image">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm font-semibold text-gray-500 dark:text-gray-400">${post.category}</span>
+                        <span class="text-2xl"></span>
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-900  mb-2">${post.title}</h2>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm">${post.date}</p>
+                </div>
+                <div class="px-6 py-4 bg-gray-100">
+                    <a href="#" class="text-primary-color hover:underline">Read more</a>
+                </div>
+            `;
+            return card;
+        }
+
+        function populateBlogPosts() {
+            const container = document.querySelector('main > div');
+            blogPosts.forEach(post => {
+                container.appendChild(createBlogCard(post));
+            });
+        }
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+        });
+
+        //populateBlogPosts();
+    </script>
+{% endblock content %}

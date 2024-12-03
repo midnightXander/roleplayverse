@@ -1,0 +1,1009 @@
+
+{% extends "chat/chats.html" %}
+{% load static %}
+
+{% block style %}
+<style>
+    .messages-container{
+        min-height: 100%;
+    }
+    
+    @media (max-width: 768px) {
+        .chats-container{
+            display: none;
+        }
+        #backArrow{
+            display: block;
+        }
+        
+        nav{
+        display: none;
+        }
+        .message-form-container{
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            left: 0;
+        }
+        .chats-main{
+            padding:0 0;
+        } 
+       
+        
+    }
+    @media (min-width: 768px) {
+        
+        .messages-container{
+            margin: 0 1rem;
+        }
+        #chatHeader{
+         padding: 1rem;   
+        }
+       
+
+        
+        
+       
+    }
+
+
+</style>
+{% endblock style %}
+
+
+
+{% block messages %}
+
+
+        
+
+         <!--Chat header --> 
+        <div id="chatHeader" class=" p-3  flex items-center">
+            <a href="{% url 'chat:all' %}">
+                <i id="backArrow" class="fas fa-arrow-left mr-2 text-xl hidden"></i>
+            </a>
+
+            <a  href="{% url 'users:player' receiver.user.username %}">
+                <img src="{{receiver.profile_picture.url}}" alt="{{receiver}} profile picture" class="w-10 h-10 rounded-full mr-3">
+            </a>
+            
+            
+            <a  href="{% url 'users:player' receiver.user.username %}" class=" flex flex-col ">
+                <div class="text-xl font-semibold">{{receiver}}</div>
+                <div class="text-xs ellipsed">
+                    <span>last seen: {{last_seen}}</span> 
+                </div>
+                
+        </a>
+        </div>
+
+         <!-- Messages --> 
+        <div id="messagesContainer"  class="relative flex-grow px-2 py-4  overflow-y-auto bg-gradient-to-t from-black to-gray-800">
+             <!-- Messages will be added here dynamically --> 
+             <div class="flex flex-col h-full items-center justify-center">
+                <img src="{% static 'svg/empty-message.svg'  %}" alt="empty-messages" class="h-32 w-32" >
+                
+                <p>
+                    Aucun dans cette conversation
+                </p>
+                <p class="text-xs text-center" >Vos conversations sont <span class="text-orange-500">chiffrés</span>, seul vous et votre interlocuteur peuvent lire vos message</p>
+
+            </div>
+            
+        </div>
+        
+        <div class="mb-1 md:hidden">
+            <p class="opacity-0" >Margin</p>
+
+        </div>
+
+
+        
+
+
+        <!--Imag name preview-->
+
+
+        <!-- Message input --> 
+        <div class="bg-gray-900 relative message-form-container p-4">
+            <p id="image-name" class="hidden top-0 absolute">
+                <span class="text-green-500"></span>   
+                <i class="fas fa-times cursor-pointer ml-2"></i> 
+            </p>
+            <div class="message-loader top-0 absolute hidden">
+                <i class="fas fa-spinner fa-spin text-orange-500"></i>
+            </div>
+            <form id="messageForm" class="flex" enctype="multipart/form-data">
+                
+               
+                    <label for="imageUpload" class="cursor-pointer mr-2 bg-gray-600  text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
+                        <i class="fas fa-image"></i>
+                    </label>
+                    <input type="file" id="imageUpload" accept="image/*" class="hidden">
+                
+                
+                <input type="text" id="messageInput" placeholder="Type a message" class="flex-grow max-h-40 mr-2 p-2 shadow-md border-1 border-gray-800  rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-900 text-white">
+                <button type="submit" class="bg-gray-600 opacity-8 hover:bg-gray-700 text-white px-6 rounded-full  transition duration-300">
+                    <i class="fa fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+        
+
+
+
+
+<!--   JS      -->
+{{ request.user.username|json_script:"sender_name" }}
+{{ receiver.user.username|json_script:"receiver_name"}}
+{{room|json_script:"room_name"}}
+{% block main_active %}
+<script>
+    $(()=>{
+        
+        $('.bottom-nav-link').addClass('hidden')
+        
+    })
+</script>
+{% endblock main_active  %}
+
+
+<script>
+    
+
+    $(()=>{
+        //register the scrolltoplugin    
+        gsap.registerPlugin(ScrollToPlugin);
+        
+        var sender_name = JSON.parse(document.querySelector("#sender_name").textContent) 
+        //sender_name =  sender_name.replace(/^["'](.*)["']$/, '$1')//remove quotes at the start and end of text
+        var receiver_name = JSON.parse(document.querySelector("#receiver_name").textContent) 
+        //receiver_name =  receiver_name.replace(/^["'](.*)["']$/, '$1')//remove quotes
+        
+        var room = JSON.parse(document.querySelector("#room_name").textContent) 
+        //room =  room.replace(/^["'](.*)["']$/, '$1')
+        
+        const messagesContainer = $("#messagesContainer")
+        const messageForm = $('#messageForm')
+        const messageInput = $('#messageInput');
+        const fileInput = $('#imageUpload')
+
+
+        const chatSocket  = new WebSocket(
+            'ws://' + 
+            window.location.host + 
+            '/ws/chat/private/'+
+            room +  "/"
+        )
+        
+
+        function createUserMessage(message){
+        const messageElement = document.createElement('div')
+        messageElement.className = 'message flex-grow container  p-4 flex justify-end'
+        messageElement.innerHTML = `
+        <div class="rounded-lg  max-w-80 min-w-32">
+            <div class="relative group">
+                <div class="flex items-start mb-2 justify-end">
+                    <div class="flex-grow text-right">
+                        <div class="flex items-center justify-end mb-1">
+                            <span class="text-xs text-gray-400 mr-2">${message.date_sent}</span>
+                        </div>
+                        <p class="text-gray-300 body mt-1 bg-gray-900 border-1 border-gray-700  p-3 min-w-32  max-w-80 rounded-tl-xl rounded-br-xl rounded-bl-xl inline-block">${message.content}</p>
+                        
+                    </div>
+                   
+                    
+                </div>
+                <div class="message-options absolute top-0 left-0 mt-1 ml-1 opacity-100 group-hover:opacity-100">
+                    <div class="relative">
+                        <button class="optionsButton text-gray-400 bg-gray-500 round-btn hover:bg-gray-600 hover:text-white focus:outline-none" id="">
+                            <i class="fas fa-ellipsis text-xs"></i>
+                        </button>
+                        <div class="optionsMenu absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg z-10 hidden" id="">
+                            <ul class="py-1">
+                                <li>
+                                    <a href="#" onclick = 'copyLink("${message.content}")' class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
+                                        <i class="fas fa-copy mr-2"></i> Copy
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
+                                        <i class="fas fa-edit mr-2"></i> Edit
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick='deletePrivateMessage(this,"${message.id}")' class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-600 hover:text-red-300">
+                                        <i class="fas fa-trash-alt mr-2"></i> Delete
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `
+
+        return messageElement
+    } 
+    function createFriendMessage(message){
+        const messageElement = document.createElement('div')
+        messageElement.className = 'rounded-lg p-4 mb-4 max-w-2xl min-w-32'
+        messageElement.innerHTML = `
+        <div class="relative group ">
+                <div class="flex items-start mb-2">
+                    
+                    
+                   
+                    <div class="flex-grow">
+                        <p class="body  text-gray-300 mt-1 border-1 border-gray-700 w-full p-3 min-w-32 rounded-tr-xl rounded-br-xl rounded-bl-xl inline-block">${message.content}</p>
+                        
+                        <br>
+                        <span class="text-xs text-gray-400">${message.date_sent}</span>
+                        
+                    </div>
+                     
+                </div>
+                <div class="message-options absolute top-2 right-0 mt-1 mr-1 opacity-100 group-hover:opacity-100">
+                    <div class="relative">
+                        <button class="optionsButton text-gray-400 bg-gray-500 round-btn hover:bg-gray-600 hover:text-white focus:outline-none" id="">
+                            <i class="fas fa-ellipsis text-xs"></i>
+                        </button>
+                        <div class="optionsMenu absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg z-10 hidden" id="">
+                            <ul class="py-1">
+                                <li>
+                                    <a href="#" onclick="copyLink('${message.content}')" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
+                                        <i class="fas fa-copy   mr-2"></i> Copy Message
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
+                                        <i class="fas fa-reply mr-2"></i> Reply
+                                    </a>
+                                </li>
+                                
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        `
+
+        return messageElement
+    }
+    
+
+        function get_messages(){
+            
+             $.ajax({
+                url: "{% url 'chat:get_messages' receiver.id %}",
+                type: 'GET',
+                beforeSend:function(){
+                    $('#image-name i').trigger('click')
+                    $('.message-loader').toggleClass('hidden')
+                },
+                success: function(res){
+                    if(res.message === 'success'){
+                        const messages = res.messages
+                        if(messages.length > 0){
+                            messagesContainer.empty()
+                            messages.forEach(message => {
+                            if(message.image){
+                                
+                            messagesContainer.append( `
+                            <div class="relative group flex mb-4 p-4 rounded-lg ${sender_name === message.sender.username ? 'justify-end' : 'justify-start'} ">
+                            <div>
+                            <img src="${message.image}" alt="Message image" class="myImg w-60 rounded-lg">
+                            <p class="text-gray-300">${message.content? message.content : ''}</p>
+                            <p class="text-xs text-gray-400 mt-1">${message.date_sent}</p>
+                            </div>
+                        <div class="message-options  top-0 left-0 mt-1 ml-1 opacity-100 group-hover:opacity-100">
+                            <div class="relative">
+                                <button class="optionsButton bg-gray-500 round-btn hover:bg-gray-600 rounded-full text-gray-400 hover:text-white focus:outline-none" id="">
+                                    <i class="fas fa-ellipsis-v text-xs"></i>
+                                </button>
+                                <div class="optionsMenu absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg z-10 hidden" id="">
+                                    <ul class="py-1">
+                                        <li>
+                                            <a href="#" onclick = 'copyLink("${message.content}")' class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
+                                                <i class="fas fa-copy mr-2"></i> Copy
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
+                                                <i class="fas fa-edit mr-2"></i> Edit
+                                            </a>
+                                        </li>
+
+                                        ${sender_name === message.sender.username ? `
+                                        <li>
+                                            <a href="#" onclick='deletePrivateMessage(this,"${message.id}")' class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-600 hover:text-red-300">
+                                                <i class="fas fa-trash-alt mr-2"></i> Delete
+                                            </a>
+                                        </li>
+                                        `:``}
+
+                                    </ul>
+                                    </div>
+                                </div>
+                            </div> 
+                                `)
+
+                            }else{
+                            const messageElement = sender_name === message.sender.username ? createUserMessage(message):createFriendMessage(message)
+                            messagesContainer.append(messageElement)   
+                                messageDiv = `
+                             <div class="message mb-4 ${sender_name === message.sender ? 'text-right' : ''}">
+                                <div class="inline-block ${sender_name === message.sender ? 'bg-indigo-600 text-white' : 'bg-gray-700'} rounded-lg py-2 px-4 max-w-full ">
+                                    <p class='text body'>${message.content}</p>
+                                    <p class="text-xs text-gray-400 mt-1">${message.date_sent}</p>
+
+                                    <div class="message-options" style="position: relative;">
+                                    <div class="options hidden w-32 bg-gray-700 rounded-md shadow-lg absolute z-10">
+                                        <a href="#" class="block px-4 py-2 text-sm text-white hover:bg-gray-600" onclick="copyLink('${message.content}')"><i class='fas fa-copy mr-2'></i> Copy</a>
+                                        <a href="#" class="block px-4 py-2 text-sm text-white hover:bg-gray-600" onclick="#"><i class='fas fa-share mr-2'></i> Share</a>
+                                        ${sender_name === message.sender ?` <a href="#" class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-600" onclick="deleteMessage(this,${message.id})"><i class='fas fa-trash mr-2'></i>Delete</a> `: ''}
+                                        
+                                    </div>
+                                </div> 
+                                
+                            </div>
+                           
+                        </div>
+                            `
+
+                            }
+                            
+                            
+
+                            //listen to the image modal event to view images
+                            imgModalListener()
+                            
+                            
+                        });
+
+                        }
+                        
+                        
+                        
+                        //add a listener for toggling message options
+                        $(".message .text").on("taphold, mousedown",(e)=>{
+                            
+                            parent = $(e.target).parent()
+                            
+                            options = parent.find('.options')
+                            $(options).toggle()
+                        })
+                        $(".option-btn").on("click", (e)=>{
+                            option = e.target.dataset.option
+                            
+                            parent = $(e.target).parent('.options');
+                            message = $(parent).find('.text')
+                            
+                            
+            
+                        if(option == "delete"){
+                console.log("delete message")
+                /*
+                $.ajax({
+                    url:`/post/${postID}`,
+                    type: "DELETE",
+                    data: {csrfmiddlewaretoken:'{{csrf_token}}'},
+                    success: function(res){
+                        console.log(res)
+                        if(res.status == "success"){
+                            //remove post
+                        }
+                    }
+                })
+                    */
+            }else if(option == "reply"){
+                console.log($("#file-input").val())
+
+                
+                message = $($(parent).parent()).parent()
+                text = $(message.find(".text")).text()
+                //console.log($(text).text())
+                
+                $(".reply-to").empty()
+                $(".reply-to").append(`
+                <div class = 'discard'>X</div>
+                <div>${text}<div>
+                `)
+                $(".discard").on("click",(e)=>{
+                        $(".reply-to").empty()
+                })
+                    
+            }
+
+        })
+
+        //Scroll to bottom of messages 
+
+        // messagesContainer[0].scrollTo({
+        //         top: messagesContainer[0].scrollHeight,
+        //         behavior: "smooth"
+        //     })
+        messagesContainer.animate({
+            scrollTop: messagesContainer[0].scrollHeight,
+        },'smooth')
+                }else{
+                       
+                        showMyToast(res.message)
+                    }
+                },
+                complete:function(){
+                    $('.message-loader').toggleClass('hidden')
+
+                    //linkify messages
+                    document.querySelectorAll('.body').forEach((element)=>{
+                    element.innerHTML = linkifyHtml(element.textContent, {
+                    target:"_blank",
+                    className: 'link'
+                })
+            })
+                messageOptionsListener()
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                   
+                }
+            })
+        }
+        
+        
+        get_messages()
+
+       
+        
+        chatSocket.onmessage = function(e){
+            const data = JSON.parse(e.data)
+            get_messages()
+        }
+
+        chatSocket.onerror = function(e){
+            showMyToast('An error occured during sending, please try again','error')
+        }
+
+
+
+        function send_message(content){
+            
+            
+
+       
+            
+            // var formData = new FormData()
+            // console.log(fileInput[0].files[0])
+            // formData.append('file',fileInput[0].files[0])
+            // console.log(formData)
+
+            // const reader = new FileReader();
+            // reader.onload = function(event) {
+            //     console.log(event.target.result.name)
+            // };
+            // reader.readAsDataURL(fileInput[0].files[0]);
+
+            // $.ajax({
+            //     url: '',
+            //     type: 'POST',
+            //     data: formData,
+            //     processData: false,
+            //     contentType: false,
+
+            //     success: function(res){
+            //         console.log('files sent')
+            //     },
+            //     error: function(jqXHR, textstatus, errorThrown){
+            //         console.log(textstatus, errorThrown)
+            //     }
+            // })
+
+            messageInput[0].value = '';
+            showMyToast('Sent','success')
+        }
+
+        fileInput.on('change',(e)=>{
+            const file = fileInput[0].files[0]
+            let name = String(file.name)
+            if(name.length>=20){
+                name = name.slice(0,20) + '...'
+            }
+            $('#image-name').removeClass('hidden')
+            $('#image-name span').text(`image: ${name}`)
+            $('#image-name i').on('click',()=>{
+                fileInput[0].value = ''
+                $('#image-name').addClass('hidden')
+            })
+        })
+       
+        messageForm.on("submit", async (e)=>{
+            e.preventDefault()
+            
+        const content = messageInput.val().trim();
+        
+        const file = fileInput[0].files[0]
+        const reader = new FileReader()
+        var data = {
+                content: content,
+                sender: sender_name,
+                receiver: receiver_name,
+            }
+        const isImage = file && file.type.startsWith('image/')
+        
+        if(isImage){
+            //ensure reader finishes before proceeding to next code
+            await new Promise(resolve =>{
+                reader.onload = function(event){
+            const base64File = event.target.result.split(',')[1]
+            data =  {...data,file:base64File, fileName:file.name}
+            resolve()
+
+            }
+            reader.readAsDataURL(file)
+            })
+            
+        }
+        if(file && !file.type.startsWith('image/')){
+            showMyToast('Selected file is  not an image', 'error')
+            return
+        }
+        
+        if (content || isImage) {
+            //send_message(content)
+            messageInput[0].value = '';
+            
+            chatSocket.send(JSON.stringify(data))
+        }else{
+            showMyToast('Add content to your message', 'info')
+        }
+        
+        })
+        
+
+    })
+
+</script>        
+{% endblock messages %}
+
+{% block not_content %}
+<style>
+    body {
+        background-color: #f0f0f0;        
+    }
+    .container {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        height: 100vh;
+    }
+    .chat-list {
+        background-color: white;
+        border-right: 1px solid #ddd;
+        overflow-y: auto;
+        padding: 20px;
+    }
+    .chat-messages.no-scrollbar::-webkit-scrollbar {
+            display: none; /* Safari and Chrome */
+        }
+        .chat-messages.no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+    .chat-list .chat-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        cursor: pointer;
+    }
+    .chat-list .chat-item:hover {
+        background-color: #f5f5f5;
+    }
+    .chat-list .chat-item img {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    .chat-inbox {
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+        overflow-y: auto;
+    }
+    .chat-inbox.no-scrollbar::-webkit-scrollbar {
+        display: none; /* Safari and Chrome */
+        }
+    .chat-inbox.no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+    .chat-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px;
+        border-bottom: 1px solid #ddd;
+        background-color: #333;
+        color: white;
+    }
+    .chat-header img {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    .chat-messages {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+    }
+    .message {
+        margin-bottom: 20px;
+        position: relative;
+        
+        
+    }
+    .message .sender {
+        font-weight: bold;
+    }
+    .message .text {
+        background-color: #f0f0f0;
+        padding: 10px;
+        border-radius: 8px;
+        display: inline-block;
+        min-width: 50%;
+    }
+    .message-input {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-top: 1px solid #ddd;
+        background-color: #fff;
+    }
+    .message-input input[type="text"] {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-right: 10px;
+    }
+    .message-input button {
+        background-color: #333;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 8px;
+    }
+    .message-input button:hover {
+        background-color: #555;
+    }
+    .message-input input[type="file"] {
+        display: none;
+    }
+    .message-input .attach-btn {
+        background-color: #333;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 8px;
+        margin-right: 10px;
+    }
+    .message-input .attach-btn:hover {
+        background-color: #555;
+    }
+    .from-user .text{
+        background-color: #555;
+        color: white;
+    }
+    .reply-to{
+        
+        padding: 1rem;
+        background-color: #ddd;
+    }
+    @media (max-width: 767px) {
+        .container {
+            grid-template-columns: 1fr;
+        }
+        .chat-list {
+            display: none;
+        }
+        .chat-inbox {
+            grid-column: 1 / -1;
+            height: 100vh;
+        }
+        .toggle-btn {
+            display: block;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+        }
+    }
+</style>
+
+<button class="toggle-btn" onclick="toggleChatList()">&#9776;</button>
+    <div class="container">
+        <div class="chat-list no-scrollbar" id="chat-list">
+            <!-- Sample Chat Items -->
+             {% for chat in chats %}
+             {% if chat.chat.initiator == player %}
+             <a href="{%  url 'chat:private_chat' chat.chat.recipient.user.username %}">
+                <div class="chat-item">
+                
+                <img src="{{chat.chat.recipient.profile_picture.url}}" alt="User 1">
+                <div>    
+                    <div>{{chat.chat.recipient}}</div>
+                    <div>{{ chat.last_message.content }}</div>
+                </div> 
+            </div>
+             </a>
+             {%else%}
+             <a href="{%  url 'chat:private_chat' chat.chat.initiator.user.username %}">
+                <div class="chat-item">
+                
+                <img src="{{chat.chat.initiator.profile_picture.url}}" alt="User 1">
+                <div>    
+                    <div>{{chat.chat.initiator}}</div>
+                    <div>{{ chat.last_message.content }}</div>
+                </div> 
+            </div>
+             </a>
+
+            {%endif%}
+            
+            {% endfor %}
+        </div>
+        <div class="chat-inbox no-scrollbar">
+            <div class="chat-header">
+                <div class="user-info">
+                    <img src="{{receiver.profile_picture.url}}" alt="User 1">
+                    <span><a href="{% url 'users:player' receiver.user.username %}">{{receiver}}</a></span>
+                </div>
+                <i class="fa fa-ellipsis-v"></i>
+            </div>
+            <div class="chat-messages" id="inbox-messages">
+                <!-- Sample Messages -->
+                
+            </div>
+            <div class="reply-to">
+            </div>
+            <div class="message-input">
+                <label class="attach-btn" for="file-input"><i class="fa fa-paperclip"></i></label>
+                <input type="file" id="file-input">
+                <input type="text" id="input-message" placeholder="Type a message...">
+                <button id="submit">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Font Awesome CDN for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <script>
+        function toggleChatList() {
+            var chatList = document.getElementById('chat-list');
+            if (chatList.style.display === 'block') {
+                chatList.style.display = 'none';
+            } else {
+                chatList.style.display = 'block';
+            }
+        }
+    </script>
+
+
+
+
+
+
+
+
+<style>
+    .from-recipient{
+        background-color: silver;
+        border-radius: 20px;
+        padding: 0.3rem;
+    }
+    .messages-container{
+        border: 1px solid black;
+        overflow-y: scroll;
+        height: 200px;
+        width: 500px;
+        padding: 1rem;
+        
+        .message{
+        background-color: aqua;
+        }
+
+    }
+</style>
+
+
+{{ request.user.username|json_script:"sender_name" }}
+{{ receiver.user.username|json_script:"receiver_name"}}
+{{room|json_script:"room_name"}}
+
+<script>
+    $(()=>{
+        var sender_name = document.querySelector("#sender_name").textContent
+        sender_name =  sender_name.replace(/^["'](.*)["']$/, '$1')//remove quotes at the start and end of text
+        var receiver_name = document.querySelector("#receiver_name").textContent
+        receiver_name =  receiver_name.replace(/^["'](.*)["']$/, '$1')//remove quotes
+        console.log(`${sender_name}, to ,${receiver_name} `)
+        var room = document.querySelector("#room_name").textContent
+        room =  room.replace(/^["'](.*)["']$/, '$1')
+        const chatSocket  = new WebSocket(
+            'ws://' + 
+            window.location.host + 
+            '/ws/chat/private/'+
+            room +  "/"
+        )
+        console.log("connected to websocket")
+
+        
+        function get_messages(){
+            
+             $.ajax({
+                url: "{% url 'chat:get_messages' receiver.id %}",
+                type: 'GET',
+                success: function(res){
+                    if(res.message === 'success'){
+                        console.log(res.messages)
+                        messagesContainer.empty()
+                        
+                        res.messages.forEach(message => {
+                            messageDiv = `
+                             <div class="message">
+                                <div class="sender">${message.sender}</div>
+                                <div class="text"> 
+                                    ${message.content} - <small>${message.date_sent}</small>
+                                    
+                                </div>
+                            <div class="message-options" style="position: relative;">
+                                
+                                <div class="options" style="display: none;">
+                                    <button class="btn btn-warning option-btn" data-option="reply">Reply</button>
+                                    <button class="btn btn-warning option-btn" data-option="delete">Delete</button>
+                            
+                                </div>
+                            </div>
+                        </div>
+                            `
+                            messagesContainer.append(messageDiv)
+
+                            if(sender_name == message.sender){
+                               
+                                $(".message").last().addClass("from-user")
+                               
+                            }
+                            
+                        });
+
+                        //add a listener for toggling message options
+                        $(".message .text").on("click",(e)=>{
+                            parent = $(e.target).parent()
+                            options = parent.find('.options')
+                            $(options).toggle()
+                        })
+                        $(".option-btn").on("click", (e)=>{
+                            option = e.target.dataset.option
+                            
+                            parent = $(e.target).parent('.options');
+                            message = $(parent).find('.text')
+                            
+                            
+            
+                        if(option == "delete"){
+                console.log("delete message")
+                /*
+                $.ajax({
+                    url:`/post/${postID}`,
+                    type: "DELETE",
+                    data: {csrfmiddlewaretoken:'{{csrf_token}}'},
+                    success: function(res){
+                        console.log(res)
+                        if(res.status == "success"){
+                            //remove post
+                        }
+                    }
+                })
+                    */
+            }else if(option == "reply"){
+                console.log($("#file-input").val())
+
+                
+                message = $($(parent).parent()).parent()
+                text = $(message.find(".text")).text()
+                //console.log($(text).text())
+                
+                $(".reply-to").empty()
+                $(".reply-to").append(`
+                <div class = 'discard'>X</div>
+                <div>${text}<div>
+                `)
+                $(".discard").on("click",(e)=>{
+                        $(".reply-to").empty()
+                })
+                    
+            }
+
+        })
+                    }else{
+                        console.log(res.message)
+                    }
+                }
+            })
+        }
+        
+        var messagesContainer = $(".chat-messages")
+        //var messagesContainer = $(".messages-container")
+
+        var messageForm = $("#send_message")
+        
+
+        get_messages()
+
+        
+        
+
+        $("#submit").on("click",(e)=>{
+            var messageContent = document.querySelector("#input-message")
+            chatSocket.send(JSON.stringify({
+                "content": messageContent.value,
+                "sender": sender_name,
+                "receiver": receiver_name
+            })
+        )
+        messageContent.value = ''
+        })
+
+        chatSocket.onmessage = function(e){
+            console.log("data: ",e.data)
+            const data = JSON.parse(e.data)
+            console.log("A message has been sent")
+           /*messagesContainer.append(
+            `<p>${data.content} by ${data.sender_name} to ${data.receiver_name} at ${data.date_sent}</p>`
+           )*/
+          get_messages()
+        }
+
+
+
+        function send_message(){
+            $.ajax({
+                url: "{% url 'chat:send_message' receiver.id %}",
+                type: 'POST',
+                data: {'content':messageContent.value,csrfmiddlewaretoken:"{{ csrf_token }}"},
+                success: function(res){
+                    if(res.message === 'success'){
+                        console.log("New Message :"+ messageContent.value)
+                        /*messagesContainer.append(
+                            `<p>${res.content}</p>`
+                        )*/
+                       //messagesContainer.empty()
+                       get_messages()
+                    }else{
+                        console.log("No message sent")
+                    }
+                }
+            })
+        }
+        messageForm.on("submit",(e)=>{
+            e.preventDefault()
+            send_message()
+        })
+        //setInterval(get_messages,5000)
+
+    })
+
+</script>
+{% endblock not_content %}

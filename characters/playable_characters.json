@@ -1,0 +1,4467 @@
+{
+    "playable_characters": [
+        {
+            "id": 1,
+            "name": "Ten-Tails",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/e/e6/Ten-Tails_emerges.png"
+            ],
+            "jutsu": [
+                "Six Paths Senjutsu",
+                "Tailed Beast Ball",
+                "Tailed Beast Chakra Arms",
+                "Tailed Beast Shockwave",
+                "Ten-Tails Fission",
+                "Tenpenchii",
+                "Truth-Seeking Ball",
+                "Wood Release: Cutting Technique"
+            ]
+        },
+        {
+            "id": 5,
+            "name": "A (Third Raikage)",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/f/f5/Raikage3.png"
+            ],
+            "jutsu": [
+                "Black Lightning",
+                "Body Flicker Technique",
+                "Hell Stab",
+                "Lightning Release Chakra Mode",
+                "Lightning Straight"
+            ]
+        },
+        {
+            "id": 6,
+            "name": "A (Fourth Raikage)",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/4c/Fourth_Raikage_2.png",
+                "https://static.wikia.nocookie.net/naruto/images/4/4b/A_Part_III.png"
+            ],
+            "jutsu": [
+                "Body Flicker Technique",
+                "Drop Kick (Anime only)",
+                "Elbow",
+                "Guillotine Drop",
+                "Iron Claw",
+                "Liger Bomb",
+                "Lightning Oppression Horizontal",
+                "Lightning Oppression Horizontal Chop",
+                "Lightning Release Chakra Mode",
+                "Lightning Release: Double Lariat",
+                "Lightning Release: Lariat",
+                "Lightning Straight",
+                "Lightning Water Dragon Bullet"
+            ]
+        },
+        {
+            "id": 13,
+            "name": "Shino Aburame",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/9c/Shino.png",
+                "https://static.wikia.nocookie.net/naruto/images/e/e1/Shino_Aburame_P2.png"
+            ],
+            "jutsu": [
+                "Human Cocoon Technique (Anime only)",
+                "Insect Clone Technique",
+                "Insect Jamming Technique",
+                "Insect Jar Technique (Anime only)",
+                "Insect Rope Technique (Anime only)",
+                "Iron Mountain Leaning (Anime only)",
+                "Manipulated Shuriken Technique (Anime only)",
+                "Parasitic Destruction Insect Technique (Giant Insect, Kidaich\u016b, Kikaich\u016b)",
+                "Parasitic Giant Insect \u2014 Bug Bite",
+                "Secret Technique: Insect Cocoon (Anime only)",
+                "Secret Technique: Insect Gathering (Anime only)",
+                "Secret Technique: Insect Sphere",
+                "Secret Technique: Insect Tornado (Anime only)",
+                "Secret Technique: Insect Wall (Anime only)",
+                "Spindle Formation (Anime only)",
+                "Summoning Technique (Giant Insect, Kidaich\u016b, Kikaich\u016b)"
+            ]
+        },
+        {
+            "id": 15,
+            "name": "Torune Aburame",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/3/35/Torune_Anime.png"
+            ],
+            "jutsu": [
+                "Assassination Technique (Anime only)",
+                "Insect Clone Technique (Anime only)",
+                "Jar of Poison Technique (Anime only)",
+                "Parasitic Destruction Insect Technique (Kikaich\u016b, Rinkaich\u016b)",
+                "Poison Cloud Technique (Anime only)"
+            ]
+        },
+        {
+            "id": 25,
+            "name": "Akaboshi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/1/19/Akaboshi.png"
+            ],
+            "jutsu": [
+                "Barrier Shattering Technique",
+                "Chakra Transfer Technique",
+                "Combination Transformation",
+                "Hurricane Thunderclap",
+                "Impermanence of Worldly Things",
+                "Infinite Embrace",
+                "Multiple Infinite Embraces",
+                "Shadow Rope Technique",
+                "Telegram Flash"
+            ]
+        },
+        {
+            "id": 29,
+            "name": "Akamaru",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/0/09/Akamaru_p1.png",
+                "https://static.wikia.nocookie.net/naruto/images/0/06/Akamaru_part_II.png"
+            ],
+            "jutsu": [
+                "Beast Human Clone",
+                "Combination Transformation",
+                "Dynamic Marking",
+                "Fang Passing Fang",
+                "Fang Rotating Fang",
+                "Fang Wolf Fang",
+                "Human Beast Combination Transformation: Double-Headed Wolf",
+                "Human Beast Mixture Transformation \u2014 Three-Headed Wolf",
+                "Passing Fang",
+                "Super Fang Wolf Fang (Anime only)",
+                "Tail Chasing Fang Fang Rotating Fang"
+            ]
+        },
+        {
+            "id": 38,
+            "name": "Ch\u014dbee Akimichi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/6/69/Ch%C5%8Dbee_Akimichi.png"
+            ],
+            "jutsu": [
+                "Calorie Control",
+                "Multi-Size Technique",
+                "Partial Multi-Size Technique"
+            ]
+        },
+        {
+            "id": 40,
+            "name": "Ch\u014dji Akimichi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/7/7d/Ch%C5%8Dji_Akimichi.png",
+                "https://static.wikia.nocookie.net/naruto/images/e/ec/Ch%C5%8Dji_Part_II.png"
+            ],
+            "jutsu": [
+                "Ballistic Waterwheel (Anime only)",
+                "Butterfly Bullet Bombing",
+                "Butterfly Mode",
+                "Calorie Control",
+                "Double Human Bullet Tank",
+                "Earth Release: Practice Brick Technique",
+                "Formation Ino\u2013Shika\u2013Ch\u014d",
+                "Human Bullet Tank",
+                "Human Bullet Yo-Yo",
+                "Multi-Size Technique",
+                "Partial Multi-Size Technique",
+                "Spiked Human Bullet Tank",
+                "Super Multi-Size Technique",
+                "Super Open Hand Slap"
+            ]
+        },
+        {
+            "id": 42,
+            "name": "Ch\u014dza Akimichi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/a/a8/Ch%C5%8Dza_Akimichi.png"
+            ],
+            "jutsu": [
+                "Calorie Control",
+                "Double Human Bullet Tank",
+                "Formation Ino\u2013Shika\u2013Ch\u014d",
+                "Human Bullet Tank",
+                "Multi-Size Technique",
+                "Partial Multi-Size Technique",
+                "Super Multi-Size Technique"
+            ]
+        },
+        {
+            "id": 46,
+            "name": "Shit\u014d Akimichi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/0/04/Shit%C5%8D_Akimichi.png"
+            ],
+            "jutsu": [
+                "Calorie Control",
+                "Multi-Size Technique",
+                "Partial Multi-Size Technique"
+            ]
+        },
+        {
+            "id": 55,
+            "name": "Amachi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/44/Amachi.png"
+            ],
+            "jutsu": [
+                "Kaima Form",
+                "Scale Senbon",
+                "Summoning Technique (Umib\u014dzu)",
+                "Water Release: Large Projectile"
+            ]
+        },
+        {
+            "id": 57,
+            "name": "Gensui Amagiri",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/c/c1/Gensui_Amagiri.jpg"
+            ],
+            "jutsu": [
+                "Chakra Levitation Technique",
+                "Tailed Beast Replication",
+                "Telescope Technique"
+            ]
+        },
+        {
+            "id": 58,
+            "name": "Taisa Amagiri",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/d/de/Taisa_Amagiri.png"
+            ],
+            "jutsu": [
+                "Lightning Tackle",
+                "Poison Mist",
+                "Taisa's Transformation Technique"
+            ]
+        },
+        {
+            "id": 62,
+            "name": "Ameno",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/1/18/Ameno_Infobox.png"
+            ],
+            "jutsu": [
+                "Medical Water Release: Jellyfish",
+                "Medical Water Release: Water Mosquito",
+                "Medical Water Release: Water Scorpion",
+                "Mystical Palm Technique"
+            ]
+        },
+        {
+            "id": 63,
+            "name": "Ameyuki",
+            "images": [],
+            "jutsu": [
+                "Mud Release: Bottomless Mud Hole",
+                "Mud Release: Landslide",
+                "Mud Release: Mud Doll",
+                "Mud Release: Muddy Water Wall"
+            ]
+        },
+        {
+            "id": 72,
+            "name": "Boar-Masked Anbu Member",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/f/f7/Boar-Masked_Anbu_Member.png"
+            ],
+            "jutsu": [
+                "Earth Release: Dropping Lid",
+                "Earth Release: Hiding in Rock Technique (Anime only)",
+                "Earth Release: Sticky Earth Drop (Anime only)",
+                "Shadow Clone Technique (Anime only)",
+                "Temporary Paralysis Technique"
+            ]
+        },
+        {
+            "id": 73,
+            "name": "Eagle-Masked Anbu Member",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/7/7d/Eagle-Masked_Anbu.png"
+            ],
+            "jutsu": [
+                "Hiding in Surface Technique (Anime only)",
+                "Temporary Paralysis Technique",
+                "Water Clone Technique (Anime only)"
+            ]
+        },
+        {
+            "id": 77,
+            "name": "Aniki (missing-nin)",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/d/d9/Aniki_Boruto.png"
+            ],
+            "jutsu": [
+                "Fire Release: Fire Dragon Wall",
+                "Fire Release: Great Fireball Technique",
+                "Fire Release: Phoenix Sage Fire Technique"
+            ]
+        },
+        {
+            "id": 80,
+            "name": "Ao",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/7/72/Ao.png",
+                "https://static.wikia.nocookie.net/naruto/images/4/4c/Ao_Part_III.png"
+            ],
+            "jutsu": [
+                "Barrier Talisman: Armoured Eye",
+                "Sensing Technique",
+                "Sensing Water Sphere",
+                "Water Release: Water Colliding Wave"
+            ]
+        },
+        {
+            "id": 104,
+            "name": "Azure Fang",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/98/Azure_Fang.png"
+            ],
+            "jutsu": [
+                "Chakra Scalpel",
+                "Healing Resuscitation Regeneration Technique",
+                "Mystical Palm Technique",
+                "Poison Mist",
+                "Summoning Technique (Ninken, Toad)",
+                "Water Clone Technique",
+                "Water Release: Great Shark Bullet Technique",
+                "Water Release: Great Water Arm Technique",
+                "Water Release: Running Water Whip",
+                "Water Release: Water Dragon Bullet Technique",
+                "Water Release: Water Shark Bullet Technique",
+                "Water Release: Water Trumpet"
+            ]
+        },
+        {
+            "id": 119,
+            "name": "Benga",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/f/f1/Benga.png"
+            ],
+            "jutsu": [
+                "Fire Release: Flame Bullet",
+                "Fire Release: Flame Capture",
+                "Fire Release: Heavenly Prison",
+                "Summoning Technique (H\u014dzuki Castle's Ninken)"
+            ]
+        },
+        {
+            "id": 120,
+            "name": "Benten",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/95/Benten.png"
+            ],
+            "jutsu": [
+                "Barrier Shattering Technique",
+                "Chakra Transfer Technique",
+                "Combination Transformation",
+                "Hurricane Thunderclap",
+                "Impermanence of Worldly Things",
+                "Infinite Embrace",
+                "Multiple Infinite Embraces",
+                "Shadow Rope Technique",
+                "Telegram Flash"
+            ]
+        },
+        {
+            "id": 124,
+            "name": "Blue B",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/bd/Blue_B.png"
+            ],
+            "jutsu": [
+                "Continuous Tailed Beast Balls (Anime only)",
+                "Lightning Release: Lariat (Anime only)",
+                "Sensing Technique (Anime only)",
+                "Tailed Beast Ball (Anime only)",
+                "Tailed Beast Chakra Arms (Anime only)"
+            ]
+        },
+        {
+            "id": 125,
+            "name": "Boro",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/6/63/Boro.png"
+            ],
+            "jutsu": [
+                "Genjutsu Communication",
+                "Lava Release: Planet-Branding Blast",
+                "Self-Healing Technique",
+                "Water Release: Water Formation Wall"
+            ]
+        },
+        {
+            "id": 127,
+            "name": "Breeze Dancer",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/b1/Storm_Dancer.png"
+            ],
+            "jutsu": [
+                "Big Ball Rasengan",
+                "Harem Technique",
+                "Multiple Shadow Clone Technique",
+                "Rasengan",
+                "Shadow Clone Technique",
+                "Sickle Weasel Technique",
+                "Wind Release: Vacuum Serial Waves"
+            ]
+        },
+        {
+            "id": 133,
+            "name": "Burami",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/c/c8/Burami.png"
+            ],
+            "jutsu": [
+                "Odour-Concealing Bubbles",
+                "Shifting Body Technique",
+                "Smell Sphere"
+            ]
+        },
+        {
+            "id": 143,
+            "name": "Monzaemon Chikamatsu",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/a/a9/Monzaemon_Symbol.svg/revision/latest?cb=20090510230648"
+            ],
+            "jutsu": [
+                "Puppet Technique",
+                "Sealing Technique: Lion Closing Roar",
+                "Three Jewels Suction Crushing",
+                "White Secret Technique: The Chikamatsu Collection of Ten Puppets"
+            ]
+        },
+        {
+            "id": 146,
+            "name": "Chiriku",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/5/5d/Chiriku.png"
+            ],
+            "jutsu": [
+                "Destruction of Evil Seal (Anime only)",
+                "Sealed Iron Wall",
+                "Welcoming Approach: Thousand-Armed Murder (Anime only)"
+            ]
+        },
+        {
+            "id": 148,
+            "name": "Chiyo",
+            "images": [],
+            "jutsu": [
+                "Manipulating Attack Blades",
+                "Mechanical Light Shield Block",
+                "Mystical Palm Technique",
+                "One's Own Life Reincarnation",
+                "Puppet Performance: Skilful Achievement with a Human Body",
+                "Puppet Technique",
+                "Puppet: Father and Mother",
+                "Puppet: Spring Punishing Strike",
+                "Reverse White Secret Technique: The Uematsu Collection of Ten Puppets (Anime only)",
+                "Sealing Technique: Lion Closing Roar",
+                "Three Jewels Suction Crushing",
+                "White Secret Technique Secret Art: Collection of Illusions (Anime only)",
+                "White Secret Technique: The Chikamatsu Collection of Ten Puppets",
+                "White Secret Technique: The Chikamatsu Collection of Ten Puppets: Heaven Attack"
+            ]
+        },
+        {
+            "id": 152,
+            "name": "Ch\u014dj\u016br\u014d",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/d/d8/Chojuro_2.png",
+                "https://static.wikia.nocookie.net/naruto/images/2/22/Chojuro_Part_III.png"
+            ],
+            "jutsu": [
+                "Bloody Mist Sword Art: Bone Mutilation",
+                "Silent Killing",
+                "Water Release: Great Waterfall Technique (Anime only)",
+                "Water Release: Water Fang Bullet (Anime only)",
+                "Water Release: Water Formation Wall (Anime only)",
+                "Water Release: Water Spikes (Anime only)"
+            ]
+        },
+        {
+            "id": 153,
+            "name": "Ch\u014dmei",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/7/78/Chomei.png"
+            ],
+            "jutsu": [
+                "Bug Bite",
+                "Chakra Transfer Technique",
+                "Cocoon (Anime only)",
+                "Spear Attack Shining Horn",
+                "Tailed Beast Ball",
+                "Tailed Beast Full Charge",
+                "Tailed Beast Telepathy"
+            ]
+        },
+        {
+            "id": 157,
+            "name": "Ch\u016bkichi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/1/19/Ch%C5%ABkichi_mugshot.png"
+            ],
+            "jutsu": [
+                "Hiding in Frost Technique (Anime only)",
+                "Sensing Technique",
+                "Silent Killing (Anime only)"
+            ]
+        },
+        {
+            "id": 158,
+            "name": "Ch\u016bshin",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/0/09/Chushin.png"
+            ],
+            "jutsu": [
+                "Barrier Shattering Technique",
+                "Chakra Transfer Technique",
+                "Combination Transformation",
+                "Hurricane Thunderclap",
+                "Impermanence of Worldly Things",
+                "Infinite Embrace",
+                "Multiple Infinite Embraces",
+                "Shadow Rope Technique",
+                "Telegram Flash"
+            ]
+        },
+        {
+            "id": 159,
+            "name": "Code",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/3/38/Code.png"
+            ],
+            "jutsu": [
+                "Claw Grime (Manga only)",
+                "Claw Mark",
+                "Genjutsu Communication",
+                "K\u0101ma"
+            ]
+        },
+        {
+            "id": 160,
+            "name": "Conch King",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/0/0a/Conch_King.png"
+            ],
+            "jutsu": [
+                "Conch Cannon",
+                "Conch Whip",
+                "Water Release Genjutsu: Demonic Phantom Fog Prison"
+            ]
+        },
+        {
+            "id": 161,
+            "name": "Condor",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/3/3a/Condor_Infobox.png"
+            ],
+            "jutsu": [
+                "Ostrich Aerial",
+                "Ostrich Meteor Blast",
+                "Ostrich Rising Dragon Bullet",
+                "Ostrich Whirlwind Attack",
+                "Shining Ostrich Kick"
+            ]
+        },
+        {
+            "id": 162,
+            "name": "Crimson Fist",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/7/7d/Crimson_Fist.png"
+            ],
+            "jutsu": [
+                "Earth Release: Added-Weight Rock Technique",
+                "Earth Release: Earth Mausoleum Dumpling",
+                "Earth Release: Fist Rock Technique",
+                "Earth Release: Hardening Technique",
+                "Earth Release: Light-Weight Rock Technique",
+                "Earth Release: Super Fist Rock Technique",
+                "Earth Release: Ultralight-Weight Rock Technique",
+                "Front Lotus",
+                "Leaf Whirlwind",
+                "Summoning Technique (Slug)"
+            ]
+        },
+        {
+            "id": 190,
+            "name": "Darui",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/45/Darui.png",
+                "https://static.wikia.nocookie.net/naruto/images/9/9e/Darui_Part_III.png"
+            ],
+            "jutsu": [
+                "Black Lightning",
+                "Double Black Panther (Anime only)",
+                "Lightning Release: Black Panther",
+                "Lightning Release: Wave of Inspiration",
+                "Shadow Clone Technique (Anime only)",
+                "Storm Release: Laser Circus",
+                "Water Release: Water Formation Wall"
+            ]
+        },
+        {
+            "id": 192,
+            "name": "Deepa",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/6/69/Deepa.png"
+            ],
+            "jutsu": [
+                "Carbon Armour",
+                "Carbon Control",
+                "Carbon Ring",
+                "Carbon Whip",
+                "Genjutsu Communication"
+            ]
+        },
+        {
+            "id": 193,
+            "name": "Deidara",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/0/06/Deidara.png"
+            ],
+            "jutsu": [
+                "C0",
+                "C1",
+                "C2",
+                "C3",
+                "C4",
+                "Clay Clone",
+                "Earth Release: Hiding Like a Mole Technique",
+                "Explosive Clay",
+                "Explosive Clay Dolls (Anime only)",
+                "Explosive Landmines",
+                "Five-Seal Barrier Pass Technique",
+                "Iwagakure Kinjutsu",
+                "Shadow Clone Technique",
+                "Suicide Bombing Clone"
+            ]
+        },
+        {
+            "id": 199,
+            "name": "Dodai",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/92/Dodai_HDshot.png"
+            ],
+            "jutsu": [
+                "Lava Release: Rubber Ball",
+                "Lava Release: Rubber Defence",
+                "Lava Release: Rubber Rope",
+                "Lava Release: Rubber Wall"
+            ]
+        },
+        {
+            "id": 206,
+            "name": "D\u014dshin",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/d/da/Doshin.png"
+            ],
+            "jutsu": [
+                "Demonic Illusion: False Surroundings Technique",
+                "Forbidden Summoning Technique: Fire Rats Cometh",
+                "Forbidden Technique: Mud Golem"
+            ]
+        },
+        {
+            "id": 222,
+            "name": "Fud\u014d",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/45/Fud%C5%8D.png"
+            ],
+            "jutsu": [
+                "Earth Release Resurrection Technique: Corpse Soil",
+                "Earth Release: Antlion Technique",
+                "Earth Release: Bedrock Coffin",
+                "Earth Release: Bullet Rock Technique",
+                "Earth Release: Earth Flow Spears",
+                "Earth Release: Earth-Style Rampart",
+                "Earth Release: Earth-Style Wall",
+                "Earth Release: Fissure",
+                "Earth Release: Ground Bedrock",
+                "Earth Release: Hiding in Rock Technique",
+                "Earth Release: Lithic Press",
+                "Earth Release: Mutability",
+                "Earth Release: Rock Pillar Prison Technique",
+                "Earth Release: Rock Trail",
+                "Earth Release: Tearing Earth Turning Palm",
+                "Finger Carving Seal",
+                "Rock Armour",
+                "Summoning Technique"
+            ]
+        },
+        {
+            "id": 224,
+            "name": "Fuen",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/b5/Fuen.png"
+            ],
+            "jutsu": [
+                "Altering Terrain Technique",
+                "Barrier Gate Five Seals Technique: Castle Closing Eight Gates",
+                "Earth Release: Hiding in Rock Technique",
+                "Earth Release: Rock Section Cane",
+                "Poison Moth Genjutsu"
+            ]
+        },
+        {
+            "id": 230,
+            "name": "Fukasaku",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/f/fc/Fukusaku.png"
+            ],
+            "jutsu": [
+                "Demonic Illusion: Toad Confrontation Chant",
+                "Fighting Tongue Slash",
+                "Frog Kata",
+                "Reverse Summoning Technique",
+                "Sage Art: Amphibian Technique",
+                "Sage Art: Frog Call",
+                "Sage Art: Goemon",
+                "Sage Mode"
+            ]
+        },
+        {
+            "id": 240,
+            "name": "Funamushi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/7/77/Funamushi.png"
+            ],
+            "jutsu": [
+                "Summoning Technique (Leech)",
+                "Water Release: Blood Conversion Technique",
+                "Water Release: Furious Roaring Tornado",
+                "Water Release: Imminent Danger",
+                "Water Release: Jadeite",
+                "Water Release: Raging Jellyfish",
+                "Water Release: Water Formation Wall",
+                "Water Release: Water Spikes"
+            ]
+        },
+        {
+            "id": 247,
+            "name": "Tenma Funato",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/4f/Tenma.png"
+            ],
+            "jutsu": [
+                "Single Claw Bisection",
+                "Summoning: Fiddler Crab",
+                "Water Release: Water Scales"
+            ]
+        },
+        {
+            "id": 259,
+            "name": "Gaara",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/20/Gaara_in_Part_I.png",
+                "https://static.wikia.nocookie.net/naruto/images/0/0f/Gaara_Part_II.png"
+            ],
+            "jutsu": [
+                "Air Sand Protective Wall",
+                "Armour of Sand",
+                "Concealed Sand Picture Cat",
+                "Desert Layered Imperial Funeral Seal",
+                "Desert Suspension",
+                "Desert Wave",
+                "Desert: Hand",
+                "Exploding Sand Boulder",
+                "Feigning Sleep Technique",
+                "Monstrous Sand Arm",
+                "Prison Sand Burial",
+                "Quicksand Waterfall Flow",
+                "Sand Binding Coffin",
+                "Sand Binding Prison",
+                "Sand Body",
+                "Sand Bullet (Anime only)",
+                "Sand Castle Wolf Horn (Novel only)",
+                "Sand Characters",
+                "Sand Clone",
+                "Sand Drizzle",
+                "Sand Hail",
+                "Sand Lightning Needles",
+                "Sand Mesh (Anime only)",
+                "Sand Pillar",
+                "Sand Restraining Technique",
+                "Sand Shuriken",
+                "Sand Spear (Anime only)",
+                "Sand Stream",
+                "Sand Sword (Novel only)",
+                "Sand Waterfall Funeral",
+                "Sand Waterfall Imperial Funeral",
+                "Shield of Sand",
+                "Successive Shots Sand Drizzle",
+                "Third Eye",
+                "Ultimately Hard Absolute Attack: Spear of Shukaku (Anime only)",
+                "Ultimately Hard Absolute Defence: Shield of Shukaku",
+                "Wind Release: Breakthrough",
+                "Wind Release: Great Breakthrough",
+                "Wind Release: Infinite Sand Cloud \u2014 Great Breakthrough",
+                "Wind Release: Multi-Layered Gale (Novel only)",
+                "Wind Release: Sand Buckshot"
+            ]
+        },
+        {
+            "id": 261,
+            "name": "Gamabunta",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/f/f6/Gamabunta2.png"
+            ],
+            "jutsu": [
+                "Combination Transformation",
+                "Fire Release: Toad Oil Flame Bullet",
+                "Toad Oil Bullet",
+                "Toad Sword Beheading",
+                "Water Release: Gunshot"
+            ]
+        },
+        {
+            "id": 266,
+            "name": "Gamakichi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/e/e1/Gamakichi.png",
+                "https://static.wikia.nocookie.net/naruto/images/0/08/Gamakichi.png"
+            ],
+            "jutsu": [
+                "Fire Release: Flame Bullet (Anime only)",
+                "Reverse Summoning Technique",
+                "Sage Mode",
+                "Starch Syrup Gun",
+                "Toad Sword Beheading",
+                "Wind Release: Toad Oil Flame Bullet (Anime only)"
+            ]
+        },
+        {
+            "id": 267,
+            "name": "Gamamaru",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/7/76/Gamamaru_infobox.png"
+            ],
+            "jutsu": [
+                "Sage Mode (Anime only)",
+                "Telescope Technique",
+                "Water Release: Water Gun (Anime only)"
+            ]
+        },
+        {
+            "id": 269,
+            "name": "Gamariki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/c/c0/Gamariki.png"
+            ],
+            "jutsu": [
+                "Genjutsu Kiss (Anime only)",
+                "Water Release: Water Gun (Anime only)",
+                "Whip of Love (Anime only)"
+            ]
+        },
+        {
+            "id": 271,
+            "name": "Gamatatsu",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/8/81/Gamatatsu.png"
+            ],
+            "jutsu": [
+                "Toad Oil Bullet (Anime only)",
+                "Water Release: Water Gun (Anime only)",
+                "Wind Release: Toad Gun (Anime only)",
+                "Wind Release: Toad Oil Bullet (Anime only)",
+                "Wind Release: Toad Oil Flame Bullet (Anime only)"
+            ]
+        },
+        {
+            "id": 274,
+            "name": "Kiseru Gankubi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/1/1f/Kiseru_Gankubi.png"
+            ],
+            "jutsu": [
+                "Fire Release Chakra Mode",
+                "Fire Release: Deep Flame Explosion",
+                "Fire Release: Flame Attack",
+                "Fire Release: Flame Bullet",
+                "Fire Release: Flaming Hail",
+                "Fire Release: Phoenix Sage Fire Technique",
+                "Mystical Palm Technique"
+            ]
+        },
+        {
+            "id": 293,
+            "name": "Hayate Gekk\u014d",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/3/3a/Hayate_Gekk%C5%8D.png"
+            ],
+            "jutsu": [
+                "Dance of the Crescent Moon",
+                "Secret Sword: Moonlight (Anime only)",
+                "Shadow Clone Technique",
+                "Transparent Escape Technique (Anime only)"
+            ]
+        },
+        {
+            "id": 297,
+            "name": "Gengo",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/e/ef/Gengo.png"
+            ],
+            "jutsu": [
+                "Demonic Illusion: Cajolery of Glamour",
+                "Sensing Technique (Novel only)",
+                "Summoning Technique (Anime only)"
+            ]
+        },
+        {
+            "id": 302,
+            "name": "Genn\u014d",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/2c/Genn%C5%8D.png"
+            ],
+            "jutsu": [
+                "Heavenly Punishment",
+                "Rockslide Genjutsu",
+                "Summoning Technique (Giant Eagle)"
+            ]
+        },
+        {
+            "id": 327,
+            "name": "Gitai",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/e/e4/Gitai.png"
+            ],
+            "jutsu": [
+                "Earth Release: Demonic Rock Spider Armour",
+                "Earth Release: Earth Corridor",
+                "Earth Release: Stamping Rock Explosion Technique",
+                "Earth Release: Tracking Projectiles Technique",
+                "Fire Release: Running Fire"
+            ]
+        },
+        {
+            "id": 328,
+            "name": "D\u014dshu Goetsu",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/1/14/Doshu.png"
+            ],
+            "jutsu": [
+                "Chakra Transfer Technique (Anime only)",
+                "Multiple String Light Formation (Anime only)",
+                "Mystical Palm Technique (Anime only)",
+                "String Light Formation (Anime only)"
+            ]
+        },
+        {
+            "id": 339,
+            "name": "Gozu",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/c/cf/Gozu.png"
+            ],
+            "jutsu": [
+                "Body Alteration",
+                "Earth Release: Hiding Like a Mole Technique",
+                "Earth Release: Mud Body Technique",
+                "Mudshot Technique"
+            ]
+        },
+        {
+            "id": 344,
+            "name": "Might Guy",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/3/31/Might_Guy.png",
+                "https://static.wikia.nocookie.net/naruto/images/b/b3/Might_Guy_Part_III.png"
+            ],
+            "jutsu": [
+                "Daytime Tiger",
+                "Double Dynamic Entry",
+                "Dynamic Action (Anime only)",
+                "Dynamic Entry",
+                "Eight Gates",
+                "Eight Gates Released Formation",
+                "Evening Elephant",
+                "Front Lotus",
+                "Intersection Method (Anime only)",
+                "Leaf Coiling Whirlwind",
+                "Leaf Coiling Wind (Anime only)",
+                "Leaf Drop (Novel only)",
+                "Leaf Gale",
+                "Leaf Great Flash (Anime only)",
+                "Leaf Great Whirlwind (Anime only)",
+                "Leaf Gust (Anime only)",
+                "Leaf Rock-Destroying Rise",
+                "Leaf Strong Whirlwind",
+                "Leaf Whirlwind",
+                "Little Toe Attack",
+                "Morning Peacock",
+                "Night Guy",
+                "Reverse Lotus",
+                "Seasickness Fist (Novel only)",
+                "Shadow of the Dancing Leaf",
+                "Strong Fist",
+                "Summoning Technique (Tortoise)",
+                "Violent \u2014 Leaf Adamantine-Strength Whirlwind"
+            ]
+        },
+        {
+            "id": 348,
+            "name": "Kotetsu Hagane",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/8/81/Kotetsu_Hagane.png"
+            ],
+            "jutsu": [
+                "Chains: Twin Fangs Slash",
+                "Demonic Illusion: False Surroundings Technique",
+                "Twin Fangs Slash"
+            ]
+        },
+        {
+            "id": 356,
+            "name": "Haku",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/90/Haku.png"
+            ],
+            "jutsu": [
+                "Certain-Kill Ice Spears (Anime only)",
+                "Demonic Mirroring Ice Crystals",
+                "Ice Release: Ice Rock Dome of Magnificent Nothingness",
+                "Silent Killing",
+                "Thousand Flying Water Needles of Death"
+            ]
+        },
+        {
+            "id": 363,
+            "name": "Han",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/3/3c/Han.png"
+            ],
+            "jutsu": [
+                "Boil Release: Unrivalled Strength",
+                "Erupting Propulsion Fist",
+                "Erupting Strong Foot",
+                "Horn Breaking",
+                "Tailed Beast Chakra Arms"
+            ]
+        },
+        {
+            "id": 368,
+            "name": "Hanz\u014d",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/7/7a/Hanz%C5%8D.png"
+            ],
+            "jutsu": [
+                "Dance of the Sickle Blade: Falling Descent Blade",
+                "Fire Release: Exploding Flame Formation",
+                "Summoning Technique (Ibuse)",
+                "Summoning: Ibuse Poisoning"
+            ]
+        },
+        {
+            "id": 374,
+            "name": "Sakura Haruno",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/6/64/Sakura_Part_1.png",
+                "https://static.wikia.nocookie.net/naruto/images/b/ba/Sakurap2.png"
+            ],
+            "jutsu": [
+                "Area Scanning Technique (Manga only)",
+                "Chakra Enhanced Strength",
+                "Chakra Scalpel",
+                "Chakra Transfer Technique",
+                "Cherry Blossom Impact",
+                "Creation Rebirth",
+                "Delicate Illness Extraction Technique",
+                "Four-Corner Sealing Barrier (Anime only)",
+                "Healing Resuscitation Regeneration Technique (Anime only)",
+                "Healing Technique",
+                "Katsuyu: Immense Network Healing",
+                "Mystical Palm Technique",
+                "Ninja Art Creation Rebirth \u2014 Strength of a Hundred Technique",
+                "Polar Particle Unsealing Technique",
+                "Puppet: Spring Punishing Strike",
+                "Sakura Blizzard Technique",
+                "Strength of a Hundred Seal",
+                "Summoning Technique (Slug)",
+                "Yin Seal: Release"
+            ]
+        },
+        {
+            "id": 376,
+            "name": "Kakashi Hatake",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/27/Kakashi_Hatake.png",
+                "https://static.wikia.nocookie.net/naruto/images/2/25/Kakashi_Part_III.png"
+            ],
+            "jutsu": [
+                "Area Scanning Technique",
+                "Chidori",
+                "Demonic Illusion: Hell Viewing Technique",
+                "Earth Release: Double Suicide Decapitation Technique",
+                "Earth Release: Earth Wave Technique (Anime only)",
+                "Earth Release: Earth-Style Wall",
+                "Earth Release: Hiding Like a Mole Technique",
+                "Earth Release: Multiple Earth-Style Wall (Anime only)",
+                "Earth Release: Rending Drill Fang",
+                "Eight Gates",
+                "Evil Sealing Method",
+                "Eye Mind Reading (Anime only)",
+                "Fire Release: Great Fireball Technique (Anime only)",
+                "Fire Release: Water Mist (Novel only)",
+                "Flying Revolving Sword (Anime only)",
+                "Front Lotus (Anime only)",
+                "Genjutsu: Sharingan",
+                "Ground Splitting Technique",
+                "Hiding in Mist Technique (Anime only)",
+                "Ice Release: One Horned White Whale",
+                "Kamui",
+                "Kamui Lightning Cutter",
+                "Kamui Shuriken",
+                "Lightning Cutter",
+                "Lightning Release: Lightning Beast Tracking Fang",
+                "Lightning Release: Purple Electricity",
+                "Lightning Release: Shadow Clone Technique",
+                "Lightning Transmission",
+                "Multiple Shadow Clone Technique",
+                "One Thousand Years of Death",
+                "Peregrine Falcon Drop (Anime only)",
+                "Rasengan",
+                "Shadow Clone Technique",
+                "Shadow of the Dancing Leaf (Anime only)",
+                "Silent Killing",
+                "Strong Fist (Anime only)",
+                "Summoning Technique (Ninken)",
+                "Summoning: Earth Release: Tracking Fang Technique",
+                "Susanoo",
+                "Water Clone Technique",
+                "Water Release: Great Waterfall Technique",
+                "Water Release: Water Beast",
+                "Water Release: Water Bullet Technique",
+                "Water Release: Water Dragon Bullet Technique",
+                "Water Release: Water Formation Wall",
+                "Water Release: Water Shark Bullet Technique",
+                "White Light Blade"
+            ]
+        },
+        {
+            "id": 389,
+            "name": "Hidari",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/96/Hidari.png"
+            ],
+            "jutsu": [
+                "Clone Trap",
+                "Earth Release: Shadow Clone",
+                "Shadow Clone Technique"
+            ]
+        },
+        {
+            "id": 404,
+            "name": "Yomito Hirasaka",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/e/e3/Yomito_Hirasaka.png"
+            ],
+            "jutsu": [
+                "Chakra Levitation Technique",
+                "Chakra Slicers",
+                "Summoning Technique (Nuiba)",
+                "Yomito's Transformation Technique"
+            ]
+        },
+        {
+            "id": 408,
+            "name": "Hisame",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/b3/Hisame.png"
+            ],
+            "jutsu": [
+                "Water Release: Rapid Thunder Whip Technique (Novel only)",
+                "Water Release: Water Weapons (Novel only)",
+                "Water Release: Water Whip"
+            ]
+        },
+        {
+            "id": 413,
+            "name": "H\u014dichi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/c/c8/Hoichi.png"
+            ],
+            "jutsu": [
+                "Dharma Power Barrier: Auspicious Sign",
+                "Dharma Power Seal",
+                "Dharma Power Sealing Technique: Sen no Riky\u016b",
+                "Dharma Power: Silhouette"
+            ]
+        },
+        {
+            "id": 414,
+            "name": "H\u014dki (Watari)",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/40/H%C5%8Dki_newshot.png",
+                "https://static.wikia.nocookie.net/naruto/images/0/08/M%C5%8Ds%C5%8D_newshot.png"
+            ],
+            "jutsu": [
+                "Fire Release: Great Fireball Technique",
+                "Fire Release: Phoenix Sage Fire Technique",
+                "Haze Clone Technique",
+                "Shadow Clone Technique",
+                "Water Clone Technique",
+                "Water Release: Great Waterfall Technique",
+                "Water Release: Water Bullet Technique",
+                "Water Release: Water Dragon Bullet Technique"
+            ]
+        },
+        {
+            "id": 421,
+            "name": "Kisame Hoshigaki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/25/Kisame.png"
+            ],
+            "jutsu": [
+                "Earth Release: Subterranean Voyage",
+                "Silent Killing",
+                "Summoning Technique (Shark)",
+                "Water Clone Technique",
+                "Water Prison Shark Dance Technique",
+                "Water Prison Technique",
+                "Water Release: A Thousand Feeding Sharks",
+                "Water Release: Exploding Water Colliding Wave",
+                "Water Release: Five Feeding Sharks",
+                "Water Release: Four Sharks Rain (Anime only)",
+                "Water Release: Great Exploding Water Colliding Wave",
+                "Water Release: Great Shark Bullet Technique",
+                "Water Release: Water Bullet Technique",
+                "Water Release: Water Shark Bullet Technique"
+            ]
+        },
+        {
+            "id": 422,
+            "name": "Shizuma Hoshigaki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/f/f2/Shizuma.png"
+            ],
+            "jutsu": [
+                "Bloody Mist Absorption Technique",
+                "Crimson Mist Barrier Technique",
+                "Water Clone Technique (Anime only)",
+                "Water Prison Technique (Anime only)",
+                "Water Release: Water Forge Technique",
+                "Water Release: Water Formation Wall (Anime only)",
+                "Water Release: Water Spikes"
+            ]
+        },
+        {
+            "id": 429,
+            "name": "Mangetsu H\u014dzuki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/c/ce/Hozuki_Mangetsu.png"
+            ],
+            "jutsu": [
+                "Hydrification Technique",
+                "Silent Killing",
+                "Water Gun Technique"
+            ]
+        },
+        {
+            "id": 430,
+            "name": "Suigetsu H\u014dzuki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/3/3e/Suigetsu_H%C5%8Dzuki.png",
+                "https://static.wikia.nocookie.net/naruto/images/7/72/Suigetsu_part_III.png"
+            ],
+            "jutsu": [
+                "Drowning Water Blob Technique",
+                "Hydrification Technique",
+                "Silent Killing",
+                "Water Clone Technique (Anime only)",
+                "Water Gun Technique",
+                "Water Gun: Two Guns",
+                "Water Release: Great Water Arm Technique",
+                "Water Release: Tate Eboshi",
+                "Water Release: Water Hail (Anime only)"
+            ]
+        },
+        {
+            "id": 437,
+            "name": "Hinata Hy\u016bga",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/97/Hinata.png",
+                "https://static.wikia.nocookie.net/naruto/images/7/79/Hinata_Part_II.png"
+            ],
+            "jutsu": [
+                "Chakra Transfer Technique",
+                "Eight Trigrams Sixty-Four Palms",
+                "Eight Trigrams Thirty-Two Palms (Anime only)",
+                "Eight Trigrams Twin Lions Crumbling Attack",
+                "Eight Trigrams Vacuum Palm",
+                "Eight Trigrams Vacuum Wall Palm",
+                "Four-Corner Sealing Barrier (Anime only)",
+                "Gentle Fist",
+                "Gentle Step Spiralling Twin Lion Fists",
+                "Gentle Step Twin Lion Fists",
+                "Mystical Palm Technique (Anime only)",
+                "Palm Bottom",
+                "Protecting Eight Trigrams Sixty-Four Palms (Anime only)",
+                "Water Needle (Anime only)"
+            ]
+        },
+        {
+            "id": 450,
+            "name": "Ichi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/1/14/Ichi.png"
+            ],
+            "jutsu": [
+                "Chimera Technique",
+                "Snake Steel Net",
+                "Spinning Snake Thorn",
+                "Summoning: Dual-Headed Snakes"
+            ]
+        },
+        {
+            "id": 463,
+            "name": "Akita Inuzuka",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/f/fc/Akita.png"
+            ],
+            "jutsu": [
+                "Fang Passing Fang",
+                "Four Legs Technique",
+                "Passing Fang"
+            ]
+        },
+        {
+            "id": 466,
+            "name": "Kiba Inuzuka",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/0/03/Kiba.png",
+                "https://static.wikia.nocookie.net/naruto/images/c/cb/Kiba_Part_2.png"
+            ],
+            "jutsu": [
+                "Beast Human Clone",
+                "Booby Trap",
+                "Combination Transformation",
+                "Fang Passing Fang",
+                "Fang Rotating Fang",
+                "Fang Wolf Fang",
+                "Four Legs Technique",
+                "Human Beast Combination Transformation: Double-Headed Wolf",
+                "Human Beast Mixture Transformation \u2014 Three-Headed Wolf",
+                "Passing Fang",
+                "Shadow Clone Technique",
+                "Super Fang Wolf Fang (Anime only)",
+                "Tail Chasing Fang Fang Rotating Fang"
+            ]
+        },
+        {
+            "id": 468,
+            "name": "Tsume Inuzuka",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/f/f6/Tsume_Inuzuka.png"
+            ],
+            "jutsu": [
+                "Fang Passing Fang",
+                "Four Legs Technique",
+                "Passing Fang"
+            ]
+        },
+        {
+            "id": 480,
+            "name": "Isobu",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/d/df/Isobu.png"
+            ],
+            "jutsu": [
+                "Chakra Transfer Technique",
+                "Coral Palm",
+                "Illusionary Mist (Anime only)",
+                "Leaping Bullet Shell Tower",
+                "Shadow Stroke",
+                "Tailed Beast Ball",
+                "Tailed Beast Full Charge",
+                "Tailed Beast Shockwave (Anime only)",
+                "Tailed Beast Telepathy",
+                "Three-Tails Mini Clone (Anime only)",
+                "Water Release: Great Water Mass Bullet (Anime only)"
+            ]
+        },
+        {
+            "id": 483,
+            "name": "Tsuru Itoi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/c/cb/Tsuru.png"
+            ],
+            "jutsu": [
+                "Hair Binding Technique (Anime only)",
+                "Multiple String Light Formation (Anime only)",
+                "String Light Formation (Anime only)"
+            ]
+        },
+        {
+            "id": 507,
+            "name": "Jibachi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/a/a8/Jibachi_Kamizuru.png"
+            ],
+            "jutsu": [
+                "Bee Bomb Technique",
+                "Beeswax Clone",
+                "Hiding with Camouflage Technique"
+            ]
+        },
+        {
+            "id": 509,
+            "name": "Jiga",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/ba/Jiga2.png"
+            ],
+            "jutsu": [
+                "Magnet Ninja Art",
+                "Magnet Ninja Art: Electromagnetic Vision",
+                "Magnet Ninja Art: Infinite Meteors"
+            ]
+        },
+        {
+            "id": 515,
+            "name": "Jiraiya",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/21/Profile_Jiraiya.png"
+            ],
+            "jutsu": [
+                "Barrier: Canopy Method Formation",
+                "Barrier: Toad Gourd Prison",
+                "Big Ball Rasengan",
+                "Earth Release: Earth-Style Wall (Anime only)",
+                "Earth Release: Swamp of the Underworld",
+                "Finger Carving Seal",
+                "Fire Release: Big Flame Bullet",
+                "Fire Release: Dragon Fire Technique",
+                "Fire Release: Fire Dragon Flame Bullet (Anime only)",
+                "Fire Release: Flame Bullet",
+                "Fire Release: Toad Oil Flame Bullet",
+                "Fire Sealing Method",
+                "Five Elements Unseal",
+                "Frog Kata",
+                "Hair Needle Senbon",
+                "Hiding in a Toad Technique",
+                "Needle Hell (Anime only)",
+                "Needle Jiz\u014d",
+                "Rasengan",
+                "Reverse Summoning Technique (Anime only)",
+                "Sage Art: Goemon",
+                "Sage Mode",
+                "Shadow Clone Technique",
+                "Spiralling Serial Spheres",
+                "Summoning Technique (Toad)",
+                "Summoning: Crushing Toad Stomach (Anime only)",
+                "Summoning: Food Cart Destroyer Technique",
+                "Summoning: Toad Mouth Bind",
+                "Summoning: Toad Shop Technique",
+                "Toad Flatness \u2014 Shadow Manipulation Technique",
+                "Toad Oil Bullet",
+                "Transparent Escape Technique",
+                "Turning into a Frog Technique",
+                "Ultra-Big Ball Rasengan",
+                "Water Release: Water Gun (Anime only)",
+                "Wild Lion's Mane Technique"
+            ]
+        },
+        {
+            "id": 521,
+            "name": "J\u016bgo",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/42/Jugo.png",
+                "https://static.wikia.nocookie.net/naruto/images/a/af/Jugo_Part_III.png"
+            ],
+            "jutsu": [
+                "Cellular Regeneration Absorption",
+                "Cellular Regeneration Ejection",
+                "Chain",
+                "Chakra Transfer Technique",
+                "Destroying Axe Fist",
+                "Jet Booster Jump",
+                "Multiple Lotus Nonself Connected Cannons",
+                "Piston Fist",
+                "Piston Fist: Style One",
+                "Sage Mode",
+                "Sage Transformation"
+            ]
+        },
+        {
+            "id": 531,
+            "name": "Kager\u014d",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/26/Kagero.png"
+            ],
+            "jutsu": [
+                "Antlion Ninja Arts: Ephemeral",
+                "Chakra Threads",
+                "Earth Release: Antlion Technique",
+                "Earth Release: Underground Projection Fish Technique",
+                "Fire Release: Mist Blaze Dance Technique",
+                "Transformation Technique"
+            ]
+        },
+        {
+            "id": 537,
+            "name": "Kagura (game)",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/d/d4/Kagura.jpg"
+            ],
+            "jutsu": [
+                "Ravaging Chakra Knives",
+                "Soaring Strings",
+                "Soulbane"
+            ]
+        },
+        {
+            "id": 546,
+            "name": "Kajika",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/d/d1/Kajika.png"
+            ],
+            "jutsu": [
+                "Hiding with Camouflage Technique",
+                "Water Clone Technique",
+                "Water Release: Cold Sky Water Attack",
+                "Water Release: Water Bullet Technique",
+                "Water Release: Water Dragon Bullet Technique",
+                "Water Release: Water Pillar",
+                "Whirlwind of Feet"
+            ]
+        },
+        {
+            "id": 549,
+            "name": "Hana Kaka",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/98/Hana_Kaka.png"
+            ],
+            "jutsu": [
+                "Dark Flames Technique",
+                "Fire Release: Chaotic Petals",
+                "Heavenly Punishment",
+                "Shadow Clone Technique",
+                "Wind Release: Flower Storm",
+                "Wind Release: Gale Palm",
+                "Wind Release: Obscuring Paper",
+                "Wind Release: Scattering Blossoms"
+            ]
+        },
+        {
+            "id": 553,
+            "name": "Kak\u014d",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/4b/Kak%C5%8D.png"
+            ],
+            "jutsu": [
+                "Dust Release: Detachment of the Primitive World Technique",
+                "Earth Release: Earth-Style Wall",
+                "Earth Release: Opening Earth Rising Excavation",
+                "Rock Clone Technique"
+            ]
+        },
+        {
+            "id": 568,
+            "name": "Denki Kaminarimon",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/a/a3/Denki_Kaminarimon.png"
+            ],
+            "jutsu": [
+                "Lightning Release: Elekiter (Anime only)",
+                "Lightning Release: Lightning Slash (Anime only)",
+                "Lightning Release: Overdrive (Anime only)",
+                "Multiple String Light Formation (Anime only)",
+                "String Light Formation (Anime only)"
+            ]
+        },
+        {
+            "id": 571,
+            "name": "Izumo Kamizuki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/5/5d/Izumo_Kamizuki.png"
+            ],
+            "jutsu": [
+                "Chains: Twin Fangs Slash",
+                "Twin Fangs Slash",
+                "Water Release: Starch Syrup Capturing Field"
+            ]
+        },
+        {
+            "id": 574,
+            "name": "Kandachi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/1/1a/Kandachi2.png"
+            ],
+            "jutsu": [
+                "Conch Cannon",
+                "Conch Whip",
+                "Summoning Technique (Conch King)",
+                "Water Release Genjutsu: Demonic Phantom Fog Prison",
+                "Water Release: Hiding in Water Technique"
+            ]
+        },
+        {
+            "id": 577,
+            "name": "Kankur\u014d",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/7/7d/Kankur%C5%8D1.png",
+                "https://static.wikia.nocookie.net/naruto/images/4/45/Kankuro_Part_II.png"
+            ],
+            "jutsu": [
+                "Black Secret Technique Machine One Shot",
+                "Black Secret Technique Machine Two Shot",
+                "Black Secret Technique \u2014 Machine Triple Shot",
+                "Black Secret Technique: Salamander",
+                "Earth Release: Hiding Like a Mole Technique (Novel only)",
+                "Mechanical Light Shield Block",
+                "Poison Mist Hell: Hundred Continuous Firing (Anime only)",
+                "Puppet Performance: Skilful Achievement with a Human Body (Novel only)",
+                "Puppet Technique",
+                "Red Secret Technique: Machinery Triangles"
+            ]
+        },
+        {
+            "id": 591,
+            "name": "Yagura Karatachi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/e/e0/Yagura.png"
+            ],
+            "jutsu": [
+                "Coral Palm",
+                "Leaping Bullet Shell Tower",
+                "Shadow Stroke",
+                "Tailed Beast Ball (Anime only)",
+                "Water Release: Water Mirror Technique",
+                "Wind Release: Passing Typhoon (Anime only)"
+            ]
+        },
+        {
+            "id": 593,
+            "name": "Karin",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/7/72/Karin3.png",
+                "https://static.wikia.nocookie.net/naruto/images/6/6e/Karin_p3.png"
+            ],
+            "jutsu": [
+                "Adamantine Attacking Chains",
+                "Chakra Suppression Technique",
+                "Chakra Transfer Technique",
+                "Heal Bite",
+                "Mind's Eye of the Kagura",
+                "Mystical Palm Technique (Anime only)"
+            ]
+        },
+        {
+            "id": 598,
+            "name": "Kary\u016b",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/f/fe/Kary%C5%AB.png"
+            ],
+            "jutsu": [
+                "Earth Release: Earth-Style Wall",
+                "Earth Release: Multiple Earth-Style Wall",
+                "Lava Release: Rubber Ball",
+                "Lava Release: Rubber Wall"
+            ]
+        },
+        {
+            "id": 600,
+            "name": "Koji Kashin",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/f/f2/Koji.png"
+            ],
+            "jutsu": [
+                "Big Ball Rasengan",
+                "Earth Release: Swamp of the Underworld",
+                "Fire Release: Big Flame Bullet",
+                "Fire Release: Flame Attack",
+                "Fire Release: Flame Bullet",
+                "Genjutsu Communication",
+                "Needle Jiz\u014d",
+                "Rasengan",
+                "Reverse Summoning Technique",
+                "Sage Art: Five Fire Gods' Fan of Flames",
+                "Sage Mode",
+                "Sealing Technique: Frog Suppression",
+                "Shadow Clone Technique",
+                "Summoning Technique (Toad)",
+                "Summoning: Food Cart Destroyer Technique",
+                "Toad Oil Bullet",
+                "Toad Smoke Technique (Anime only)",
+                "Toad Spying Technique",
+                "True Fire of Samadhi",
+                "Ultra-Big Ball Rasengan",
+                "Wild Lion's Mane Technique"
+            ]
+        },
+        {
+            "id": 608,
+            "name": "Katsuyu",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/5/59/Katsuyu_Summoned.png"
+            ],
+            "jutsu": [
+                "Chakra Transfer Technique",
+                "Katsuyu: Immense Network Healing",
+                "Slug Great Division",
+                "Tongue Tooth Sticky Acid"
+            ]
+        },
+        {
+            "id": 609,
+            "name": "Kawaki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/e/ef/Kawaki_infobox.png"
+            ],
+            "jutsu": [
+                "Chakra Suppression Technique (Manga only)",
+                "Daikokuten (Manga only)",
+                "Disruption Cube (Manga only)",
+                "K\u0101ma",
+                "K\u0101ma Rift",
+                "Rasengan: \"Unison\"",
+                "Shadow Clone Technique",
+                "Sukunahikona (Manga only)"
+            ]
+        },
+        {
+            "id": 621,
+            "name": "Third Kazekage",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/4e/Third_Kazekage_Reincarnated.png"
+            ],
+            "jutsu": [
+                "Iron Sand Drizzle",
+                "Iron Sand Gathering Assault",
+                "Iron Sand World Method"
+            ]
+        },
+        {
+            "id": 622,
+            "name": "Kazuma",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/47/Furido.png"
+            ],
+            "jutsu": [
+                "Earth Release Resurrection Technique: Corpse Soil",
+                "Earth Release: Hiding in Rock Technique",
+                "Five Elements Unseal",
+                "Flying Swallow",
+                "Hiding with Camouflage Technique",
+                "Wind Release: Shakuj\u014d Twister"
+            ]
+        },
+        {
+            "id": 628,
+            "name": "Kigiri",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/3/3f/Kigiri.png"
+            ],
+            "jutsu": [
+                "Binding Smoke Prison",
+                "Destroying Smell Smoke Prison",
+                "Exploding Flame Shot",
+                "Multiple Smoke Clone",
+                "Smoke Clone"
+            ]
+        },
+        {
+            "id": 630,
+            "name": "Kiiro",
+            "images": [],
+            "jutsu": [
+                "Water Release: Angry Bitter Rain",
+                "Water Release: Water Bullet Technique",
+                "Water Release: Water Dragon Bullet Technique"
+            ]
+        },
+        {
+            "id": 635,
+            "name": "Kikunoj\u014d",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/1/13/Kikunoj%C5%8D.png"
+            ],
+            "jutsu": [
+                "Flower Ninja Art",
+                "Flower Ninja Art: Many Blooming Flowers",
+                "Flower Ninja Art: Many Releasing Flowers",
+                "Flower Ninja Art: Mirror Flower Water",
+                "Flower Shuriken: Falling Blossoms and Scattering Leaves"
+            ]
+        },
+        {
+            "id": 636,
+            "name": "Killer B",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/6/63/Killer_B.png",
+                "https://static.wikia.nocookie.net/naruto/images/3/30/Killer_B_Part_III.png"
+            ],
+            "jutsu": [
+                "Acrobat",
+                "Cloud-Style Deception Beheading (Anime only)",
+                "Continuous Tailed Beast Balls",
+                "Disturbance Taijutsu",
+                "Headbutt",
+                "Ink Clone Technique",
+                "Ink Creation",
+                "Lightning Release: Double Lariat",
+                "Lightning Release: Lariat",
+                "Octopus Leg Clone Technique",
+                "Reverse Mist Beheading (Anime only)",
+                "Sealing Technique: Octopus Hold",
+                "Shadow Clone Technique (Anime only)",
+                "Tailed Beast Ball",
+                "Tailed Beast Chakra Arms",
+                "Tailed Beast Eight Twists",
+                "Tailed Beast Full Charge",
+                "Tailed Beast Lariat"
+            ]
+        },
+        {
+            "id": 649,
+            "name": "Kirisame",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/1/12/Kirisame.png"
+            ],
+            "jutsu": [
+                "Water Clone Technique (Novel only)",
+                "Water Release: Rapid Thunder Whip Technique (Novel only)",
+                "Water Release: Water Weapons (Novel only)",
+                "Water Release: Water Whip"
+            ]
+        },
+        {
+            "id": 664,
+            "name": "Mukai Kohinata",
+            "images": [],
+            "jutsu": [
+                "Eight Trigrams Sixteen Palms",
+                "Gentle Fist",
+                "Shadow Clone Technique"
+            ]
+        },
+        {
+            "id": 668,
+            "name": "Renga Kokub\u014d",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/8/85/Renga_Kokub%C5%8D.png"
+            ],
+            "jutsu": [
+                "Mental Resistance Technique (Anime only)",
+                "Multiple String Light Formation (Anime only)",
+                "Quarantine Wall (Anime only)",
+                "String Light Formation (Anime only)"
+            ]
+        },
+        {
+            "id": 669,
+            "name": "Koku\u014d",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/a/a3/Kokuo.png"
+            ],
+            "jutsu": [
+                "Boil Release: Unrivalled Strength",
+                "Chakra Transfer Technique",
+                "Horn Breaking",
+                "Tailed Beast Ball",
+                "Tailed Beast Chakra Arms",
+                "Tailed Beast Full Charge",
+                "Tailed Beast Telepathy"
+            ]
+        },
+        {
+            "id": 674,
+            "name": "Komachi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/3/35/Komachi.jpg"
+            ],
+            "jutsu": [
+                "Drilling Needles",
+                "Heaven's Needle Barrage",
+                "Piercing Showers"
+            ]
+        },
+        {
+            "id": 684,
+            "name": "Konan",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/5/58/Konan_Infobox.png"
+            ],
+            "jutsu": [
+                "Dance of the Shikigami",
+                "Paper Chakram",
+                "Paper Clone",
+                "Paper Drizzle",
+                "Paper Person of God Technique",
+                "Paper Shuriken",
+                "Sensing Technique (Anime only)"
+            ]
+        },
+        {
+            "id": 701,
+            "name": "K\u016b",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/2c/K%C5%AB.png"
+            ],
+            "jutsu": [
+                "Akuta",
+                "Dust Release: Detachment of the Primitive World Technique",
+                "Earth Release Barrier: Earth Prison Dome of Magnificent Nothingness",
+                "Earth Release: Drone",
+                "Earth Release: Fist Rock Technique",
+                "Earth Release: Golem Technique",
+                "Earth Release: Light-Weight Rock Technique",
+                "Earth Release: Reverse Antlion",
+                "Earth Release: Rock Pillar Prison Technique"
+            ]
+        },
+        {
+            "id": 704,
+            "name": "Kujaku",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/5/59/Kujaku.png"
+            ],
+            "jutsu": [
+                "Ninja Tools Barrier: Reverse Fish Scales Formation",
+                "Rotating Ferocious Wind",
+                "Wind Cutter Technique",
+                "Wind Return"
+            ]
+        },
+        {
+            "id": 716,
+            "name": "Kushimaru Kuriarare",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/4b/Kushimaru_Kuriarare.png"
+            ],
+            "jutsu": [
+                "Longsword Ninja Art \u2014 Earth Spider Sewing (Anime only)",
+                "Longsword Ninja Art: Massacre Method Formation",
+                "Silent Killing"
+            ]
+        },
+        {
+            "id": 717,
+            "name": "Kurobachi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/1/1e/Kurobachi_Kamizuru.png"
+            ],
+            "jutsu": [
+                "Beeswax Clone",
+                "Hiding with Camouflage Technique",
+                "Thousand Bee Stings Technique"
+            ]
+        },
+        {
+            "id": 718,
+            "name": "Kurobane",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/90/Kurobane.png"
+            ],
+            "jutsu": [
+                "Hiding in Mist Technique",
+                "Manipulated Shuriken Technique",
+                "Ninja Art: Infinite Sea Watchtower",
+                "Secret Technique: Tree Blood Barrier",
+                "Tracking Technique"
+            ]
+        },
+        {
+            "id": 719,
+            "name": "Tsubaki Kurogane",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/bc/Tsubaki_Kurogane.png"
+            ],
+            "jutsu": [
+                "Flash",
+                "Iaid\u014d",
+                "Mifune-Style First Tachi: Blaze",
+                "Samurai Sabre Technique",
+                "Secret Sword: Snowstorm Beheading"
+            ]
+        },
+        {
+            "id": 720,
+            "name": "Hako Kuroi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/9e/Hako.png"
+            ],
+            "jutsu": [
+                "Chakra Transfer Technique (Anime only)",
+                "Mental Resistance Technique (Anime only)",
+                "Multiple String Light Formation (Anime only)",
+                "Mystical Palm Technique (Anime only)",
+                "Puppet Technique (Anime only)",
+                "String Light Formation (Anime only)"
+            ]
+        },
+        {
+            "id": 723,
+            "name": "Buntan Kurosuki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/f/f5/Buntan_kurosuki.png"
+            ],
+            "jutsu": [
+                "Lightning Ball",
+                "Lightning Burial: Banquet of Lightning",
+                "Lightning Fish",
+                "Lightning Strike Armour",
+                "Mystical Palm Technique (Anime only)",
+                "Silent Killing (Anime only)",
+                "Thunderswords Technique: Remote Control"
+            ]
+        },
+        {
+            "id": 724,
+            "name": "Raiga Kurosuki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/41/Raiga_Kurosuki.png"
+            ],
+            "jutsu": [
+                "Fangs of Lightning (Anime only)",
+                "Hiding in Mist Technique (Anime only)",
+                "Lightning Ball (Anime only)",
+                "Lightning Burial: Banquet of Lightning (Anime only)",
+                "Lightning Dragon Tornado (Anime only)",
+                "Lightning Strike Armour (Anime only)",
+                "Rock Avalanche (Anime only)"
+            ]
+        },
+        {
+            "id": 725,
+            "name": "Kurotsuchi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/29/Kurotsuchi_Part_II.png",
+                "https://static.wikia.nocookie.net/naruto/images/e/e5/Kurotsuchi_New_Era.png"
+            ],
+            "jutsu": [
+                "Earth Release: Earth Flow Spears (Anime only)",
+                "Earth Release: Fist Rock Technique (Anime only)",
+                "Earth Release: Hiding Like a Mole Technique",
+                "Earth Release: Opening Earth Rising Excavation",
+                "Earth Release: Rock Shelter",
+                "Lava Release: Ash Stone Seal Technique",
+                "Lava Release: Quicklime Congealing Technique",
+                "Water Release: Water Trumpet"
+            ]
+        },
+        {
+            "id": 739,
+            "name": "Rock Lee",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/97/Rock_Lee_Part_I.png",
+                "https://static.wikia.nocookie.net/naruto/images/7/7d/Lee_timeskip.png"
+            ],
+            "jutsu": [
+                "Crane Wing Formation",
+                "Double Dynamic Entry",
+                "Drunken Fist",
+                "Dynamic Entry (Anime only)",
+                "Eight Gates",
+                "Front Lotus",
+                "Front Lotus: Eight Trigrams Palms Revolving Heaven",
+                "Leaf Coiling Whirlwind",
+                "Leaf Drop",
+                "Leaf Flash Kick",
+                "Leaf Gale",
+                "Leaf Great Whirlwind",
+                "Leaf Rising Wind",
+                "Leaf Whirlwind",
+                "Ninja Art: Bare-Handed Blade Block (Anime only)",
+                "One-Man Front Lotus (Anime only)",
+                "Reverse Lotus",
+                "Seasickness Fist (Anime only)",
+                "Shadow of the Dancing Leaf",
+                "Strong Fist",
+                "Youth Full Power (Anime only)"
+            ]
+        },
+        {
+            "id": 754,
+            "name": "Maki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/21/Maki.png"
+            ],
+            "jutsu": [
+                "Cloth Binding Technique",
+                "Hiding in Cloth Technique (Anime only)",
+                "Protective Cloth Dome (Anime only)"
+            ]
+        },
+        {
+            "id": 757,
+            "name": "Malice",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/a/aa/Malice.jpg"
+            ],
+            "jutsu": [
+                "Crystal Barrier Technique",
+                "Puppet Technique",
+                "Self-Seal Technique",
+                "Spirit Reflection Technique"
+            ]
+        },
+        {
+            "id": 765,
+            "name": "Kosuke Maruboshi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/2c/Ninja_Kosuke.png"
+            ],
+            "jutsu": [
+                "Earth Release: Hiding Like a Mole Technique",
+                "Iron Pan Furious Attack",
+                "Leaf-Style Willow",
+                "Shuriken Shadow Clone Technique",
+                "Water Release: Water Bullet Technique",
+                "Water Release: Water Dragon Bullet Technique",
+                "Water Release: Water Formation Wall"
+            ]
+        },
+        {
+            "id": 780,
+            "name": "Menma (anime)",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/a/af/Menma.png"
+            ],
+            "jutsu": [
+                "Chakra Enhancing Music",
+                "Memory Blocking Technique",
+                "Offsetting Sound"
+            ]
+        },
+        {
+            "id": 791,
+            "name": "Midnight Blade",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/bf/Midnight_Blade.png"
+            ],
+            "jutsu": [
+                "Chidori Sharp Spear",
+                "Dancing Blade Risk",
+                "Flash",
+                "Iaid\u014d",
+                "Lightning Release Chakra Mode",
+                "Lightning Release: Shadow Clone Technique",
+                "Shadow Clone Technique",
+                "Summoning Technique (Giant Rhino, Giant Snake-Tailed Chameleon, Hawk, Ninken, Slug)",
+                "Sword of Kusanagi: Chidori Katana"
+            ]
+        },
+        {
+            "id": 794,
+            "name": "Mifune",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/e/ee/Mifune.png"
+            ],
+            "jutsu": [
+                "Chakra Shockwave Slash (Anime only)",
+                "Dancing Blade Risk",
+                "Flash",
+                "Iai Beheading",
+                "Iaid\u014d",
+                "Samurai Sabre Technique"
+            ]
+        },
+        {
+            "id": 809,
+            "name": "Anko Mitarashi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/bd/Anko_Part_I.png",
+                "https://static.wikia.nocookie.net/naruto/images/5/5e/Anko_part_III.png"
+            ],
+            "jutsu": [
+                "Cursed Seal of Heaven",
+                "Fire Release: Dragon Fire Technique (Anime only)",
+                "Hidden Shadow Snake Hands",
+                "Many Hidden Shadow Snake Hands",
+                "Sly Mind Affect Technique (Anime only)",
+                "Snake Clone Technique (Anime only)",
+                "Summoning Technique (Snake)",
+                "Twin Snakes Mutual Death Technique"
+            ]
+        },
+        {
+            "id": 813,
+            "name": "Mitsuki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/5/5c/Mitsuki.png"
+            ],
+            "jutsu": [
+                "Binding Snake Glare Spell",
+                "Boruto Stream",
+                "Chakra Transfer Technique (Anime only)",
+                "Claw Creation Technique (Anime only)",
+                "Hidden Shadow Snake Burial (Anime only)",
+                "Hidden Shadow Snake Hands",
+                "Hidden Shadow Wild Snake Hands",
+                "Lightning Release: Purple Electricity (Manga only)",
+                "Lightning Release: Snake Lightning",
+                "Lightning Strike (Anime only)",
+                "Lorentz Gun (Novel only)",
+                "Many Hidden Shadow Snake Hands (Anime only)",
+                "Multiple String Light Formation (Anime only)",
+                "Sage Art: Great Snake Lightning (Anime only)",
+                "Sage Mode",
+                "Sage Transformation",
+                "Sensing Technique (Anime only)",
+                "Shadow Clone Technique (Anime only)",
+                "Sickle Weasel Technique (Anime only)",
+                "Snake Clone Technique",
+                "Snake Spying Technique (Anime only)",
+                "Soft Physique Modification",
+                "String Light Formation (Anime only)",
+                "Summoning Technique (Snake)",
+                "Super Compression Rasengan (Anime only)",
+                "Wind Release: Breakthrough",
+                "Wind Release: Gale Palm (Anime only)"
+            ]
+        },
+        {
+            "id": 818,
+            "name": "Mizuki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/9c/Mizuki.png"
+            ],
+            "jutsu": [
+                "Animal Cursed Seal (Anime only)",
+                "Earth Release: Underground Projection Fish Technique (Anime only)",
+                "Hazy Genjutsu (Anime only)",
+                "Puppet Technique (Anime only)",
+                "Silent Killing (Anime only)",
+                "Soft Physique Modification (Anime only)"
+            ]
+        },
+        {
+            "id": 831,
+            "name": "Zabuza Momochi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/3/37/Zabuza_Momochi.png"
+            ],
+            "jutsu": [
+                "Flying Revolving Sword",
+                "Hiding in Mist Technique",
+                "Silent Killing",
+                "Water Clone Technique",
+                "Water Prison Technique",
+                "Water Release: Great Waterfall Technique",
+                "Water Release: Water Bullet Technique",
+                "Water Release: Water Dragon Bullet Technique"
+            ]
+        },
+        {
+            "id": 834,
+            "name": "Monju",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/e/e1/Monju.png"
+            ],
+            "jutsu": [
+                "Murderous Grasp",
+                "Wire Bind",
+                "Wire Cage"
+            ]
+        },
+        {
+            "id": 835,
+            "name": "Ibiki Morino",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/4b/Ibiki_Part_I.png",
+                "https://static.wikia.nocookie.net/naruto/images/9/96/Ibiki_New_Era.png"
+            ],
+            "jutsu": [
+                "Summoning Technique",
+                "Summoning: Iron Maiden (Anime only)",
+                "Summoning: Torture Chamber (Anime only)"
+            ]
+        },
+        {
+            "id": 844,
+            "name": "M\u016b",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/d/d5/M%C5%AB.png"
+            ],
+            "jutsu": [
+                "Dust Release: Detachment of the Primitive World Technique",
+                "Dustless Bewildering Cover",
+                "Earth Release: Light-Weight Rock Technique",
+                "Fission Technique",
+                "Sensing Technique"
+            ]
+        },
+        {
+            "id": 845,
+            "name": "Mubi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/43/Mubi2.png"
+            ],
+            "jutsu": [
+                "Earth Release: Underground Projection Fish Technique",
+                "Haze Clone Technique",
+                "Mist Servant Technique",
+                "Sly Mind Affect Technique",
+                "Water Clone Technique (Anime only)"
+            ]
+        },
+        {
+            "id": 846,
+            "name": "Mugino",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/1/19/Mugino.png"
+            ],
+            "jutsu": [
+                "Barrier Releasing Technique (Anime only)",
+                "Earth Release: Rock Gun Technique (Anime only)",
+                "Earth Release: Rock Lodging Destruction"
+            ]
+        },
+        {
+            "id": 847,
+            "name": "Mui",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/4b/Mui_Blood_Prison.png"
+            ],
+            "jutsu": [
+                "Fire Release: Great Fire Heavenly Prison",
+                "Fire Release: Heavenly Prison",
+                "Grass Shadow-Style Emit Destroy Palm",
+                "Heavenly Prison Fire Sword",
+                "Summoning Technique (H\u014dzuki Castle's Ninken)"
+            ]
+        },
+        {
+            "id": 851,
+            "name": "Mukade (movie)",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/ba/Anrokuzan.png"
+            ],
+            "jutsu": [
+                "Peacock Wisdom Queen",
+                "Puppet: Rotation Attack",
+                "Ry\u016bmyaku Chakra Control",
+                "Ry\u016bmyaku: Great Dragon Fire",
+                "Ry\u016bmyaku: Super Great Dragon Fire Technique",
+                "Ultra-Fast Regeneration Technique"
+            ]
+        },
+        {
+            "id": 852,
+            "name": "Muku",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/8/89/Muku.png"
+            ],
+            "jutsu": [
+                "Feather Launching",
+                "Fire Release: Demon Lantern",
+                "Giant Sphere"
+            ]
+        },
+        {
+            "id": 854,
+            "name": "Murasame",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/23/Murasame.png"
+            ],
+            "jutsu": [
+                "Heart Acceleration Technique (Novel only)",
+                "Mist Servant Technique (Novel only)",
+                "Water Release: Hail Barrage (Novel only)",
+                "Water Release: Water Weapons (Novel only)",
+                "Water Release: Water Whip"
+            ]
+        },
+        {
+            "id": 857,
+            "name": "Muyami",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/6/66/Muyami_Infobox.png"
+            ],
+            "jutsu": [
+                "Earth Release: Hiding Like a Mole Technique",
+                "Earth Release: Underground Projection Fish Technique",
+                "Summoning Technique (Moguranmaru)"
+            ]
+        },
+        {
+            "id": 860,
+            "name": "Nagare",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/be/Nagare.png"
+            ],
+            "jutsu": [
+                "Assimilate All Creation Technique",
+                "Assimilation: Rock Blizzard",
+                "Assimilation: Rock Tank",
+                "Assimilation: Sand Binding Coffin",
+                "Assimilation: Sand Waterfall Funeral",
+                "Hiding with Camouflage Technique"
+            ]
+        },
+        {
+            "id": 865,
+            "name": "Minato Namikaze",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/7/71/Minato_Namikaze.png"
+            ],
+            "jutsu": [
+                "Area Scanning Technique",
+                "Chakra Transfer Technique",
+                "Contract Seal",
+                "Dead Demon Consuming Seal",
+                "Eight Trigrams Sealing Style",
+                "Flying Thunder Formation Technique",
+                "Flying Thunder God Mutually Instantaneous Revolving Technique",
+                "Flying Thunder God Slash",
+                "Flying Thunder God Technique",
+                "Flying Thunder God \u2014 Second Step",
+                "Flying Thunder God: Guiding Thunder",
+                "Four Red Yang Formation",
+                "Four Symbols Seal",
+                "Memory Erasing Seal",
+                "Nine-Tails Chakra Mode",
+                "Parent and Child Rasengan",
+                "Rasengan",
+                "Sage Mode",
+                "Sensing Technique",
+                "Shadow Clone Technique",
+                "Spiralling Flash Super Round Dance Howl Style Three",
+                "Summoning Technique (Shinigami, Toad)",
+                "Summoning: Food Cart Destroyer Technique",
+                "Supreme Ultimate Rasengan",
+                "Tailed Beast Ball",
+                "Tailed Beast Chakra Arms",
+                "Tailed Beast Transfer Technique"
+            ]
+        },
+        {
+            "id": 870,
+            "name": "Nang\u014d",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/c/cf/Nango.png"
+            ],
+            "jutsu": [
+                "Barrier Shattering Technique",
+                "Chakra Transfer Technique",
+                "Combination Transformation",
+                "Earth Release: Mud Body Technique",
+                "Hurricane Thunderclap",
+                "Impermanence of Worldly Things",
+                "Infinite Embrace",
+                "Multiple Infinite Embraces",
+                "Shadow Rope Technique",
+                "Telegram Flash"
+            ]
+        },
+        {
+            "id": 873,
+            "name": "Ensui Nara",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/d/da/Ensui_Nara_Anime.png"
+            ],
+            "jutsu": [
+                "Shadow Imitation Shadow Bind Technique",
+                "Shadow Imitation Technique",
+                "Shadow Sewing Technique"
+            ]
+        },
+        {
+            "id": 876,
+            "name": "Shikadai Nara",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/3/3d/Shikadai_Nara.png"
+            ],
+            "jutsu": [
+                "Formation Ino\u2013Shika\u2013Ch\u014d",
+                "Multiple String Light Formation (Anime only)",
+                "Shadow Gathering Technique (Anime only)",
+                "Shadow Imitation Field Technique",
+                "Shadow Imitation Technique",
+                "Shadow\u2013Neck Binding Technique (Anime only)",
+                "Sickle Weasel Technique",
+                "String Light Formation (Anime only)",
+                "Wind Release: Air Current Wild Dance (Anime only)",
+                "Wind Release: Great Task of the Dragon (Anime only)"
+            ]
+        },
+        {
+            "id": 878,
+            "name": "Shikamaru Nara",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/44/Shikamaru_Part_I.png",
+                "https://static.wikia.nocookie.net/naruto/images/9/9a/Shikamaru_Nara.png"
+            ],
+            "jutsu": [
+                "Earth Release: Practice Brick Technique",
+                "Flying Swallow (Anime only)",
+                "Formation Ino\u2013Shika\u2013Ch\u014d",
+                "Human Bullet Yo-Yo",
+                "Ninja Art: Bare-Handed Blade Block",
+                "Shadow Clone Technique (Novel only)",
+                "Shadow Clutch Technique",
+                "Shadow Gathering Technique",
+                "Shadow Imitation Shuriken Technique",
+                "Shadow Imitation Technique",
+                "Shadow Sewing Technique",
+                "Shadow\u2013Neck Binding Technique"
+            ]
+        },
+        {
+            "id": 909,
+            "name": "Nurari",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/c/c5/Nurari.png"
+            ],
+            "jutsu": [
+                "Casualty Puppet",
+                "Hiding with Camouflage Technique",
+                "Soft Physique Modification",
+                "Viscous Water Mass"
+            ]
+        },
+        {
+            "id": 912,
+            "name": "\u014cga",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/0/04/%C5%8Cga.png"
+            ],
+            "jutsu": [
+                "Genjutsu Communication",
+                "Lightning Release: Lightning Eel",
+                "Lightning Release: Thunder Wedge",
+                "Puppet Technique"
+            ]
+        },
+        {
+            "id": 920,
+            "name": "Omoi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/9f/Omoi_Part_II.png",
+                "https://static.wikia.nocookie.net/naruto/images/9/97/Omoi.png"
+            ],
+            "jutsu": [
+                "Cloud-Style Crescent Moon Beheading",
+                "Cloud-Style Deception Beheading (Anime only)",
+                "Cloud-Style Reverse Beheading",
+                "Lightning Release Co-Operation: Thunder Bomb (Anime only)",
+                "Lightning Release: Shadow Clone Technique (Anime only)",
+                "Lightning Release: Thunderbolt (Anime only)",
+                "Reverse Mist Beheading (Anime only)",
+                "Shadow Clone Technique (Anime only)"
+            ]
+        },
+        {
+            "id": 923,
+            "name": "Enko Onikuma",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/27/Enko_Onikuma.png"
+            ],
+            "jutsu": [
+                "Multiple String Light Formation (Anime only)",
+                "Onikuma Clan's Hijutsu (Anime only)",
+                "String Light Formation (Anime only)"
+            ]
+        },
+        {
+            "id": 928,
+            "name": "Orochimaru",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/1/14/Orochimaru_Infobox.png",
+                "https://static.wikia.nocookie.net/naruto/images/b/be/Orochimaru_Part_III.png"
+            ],
+            "jutsu": [
+                "Binding Snake Glare Spell",
+                "Casualty Puppet (Anime only)",
+                "Chakra Scalpel (Anime only)",
+                "Earth Release: Hiding Like a Mole Technique",
+                "Earth Release: Shadow Clone (Anime only)",
+                "Eight Branches Technique",
+                "Eight Trigrams Sealing Style (Anime only)",
+                "Five Elements Seal",
+                "Five Elements Unseal (Anime only)",
+                "Formation of Ten Thousand Snakes",
+                "Four Black Snakes Formation (Anime only)",
+                "Four Symbols Seal (Anime only)",
+                "F\u016binjutsu Trap (Anime only)",
+                "Gathering of the Snakes",
+                "Genjutsu Binding (Anime only)",
+                "Hidden Doorway Technique (Anime only)",
+                "Hidden Shadow Snake Hands",
+                "Hideout Destruction Trap (Anime only)",
+                "Hiding in Surface Technique",
+                "Living Corpse Reincarnation",
+                "Many Hidden Shadow Snake Hands",
+                "Orochimaru's Juinjutsu",
+                "Orochimaru-Style Body Replacement Technique",
+                "Regeneration Ability",
+                "Reversible Technique (Anime only)",
+                "Self-Healing Technique (Anime only)",
+                "Shadow Clone Technique",
+                "Shuriken Shadow Clone Technique (Anime only)",
+                "Slithering Snake Mode",
+                "Snake Clone Technique (Anime only)",
+                "Snake Mouth Bind (Anime only)",
+                "Soft Physique Modification",
+                "Sound Wave Technique (Anime only)",
+                "Space\u2013Time Technique Formula: Underworld Turnover (Anime only)",
+                "Substitute Technique",
+                "Summoning Technique (Shinigami, Snake)",
+                "Summoning: Impure World Reincarnation",
+                "Summoning: Rash\u014dmon",
+                "Summoning: Triple Rash\u014dmon",
+                "Sword of Kusanagi: Longsword of the Sky",
+                "Temporary Paralysis Technique",
+                "Twin Snakes Mutual Death Technique",
+                "Vanishing Facial Copy Technique",
+                "White Snake Possession (Anime only)",
+                "Wind Release: Breakthrough",
+                "Wind Release: Gale Palm (Anime only)",
+                "Wind Release: Great Breakthrough"
+            ]
+        },
+        {
+            "id": 934,
+            "name": "Asura \u014ctsutsuki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/5/56/Asura_%C5%8Ctsutsuki.png"
+            ],
+            "jutsu": [
+                "Amenomihashira (Anime only)",
+                "Chakra Transfer Technique (Anime only)",
+                "Hands of Bonds (Anime only)",
+                "Mystical Palm Technique (Anime only)",
+                "Sage Art Wood Release: True Several Thousand Hands (Anime only)",
+                "Sensing Technique (Anime only)",
+                "Six Paths Senjutsu",
+                "Six Paths: Kunitsukami",
+                "Swift Wind Wall (Anime only)",
+                "Top Transformed Buddha (Anime only)",
+                "Truth-Seeking Ball"
+            ]
+        },
+        {
+            "id": 935,
+            "name": "Hagoromo \u014ctsutsuki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/6/62/Hagoromo.png"
+            ],
+            "jutsu": [
+                "Animal Path",
+                "Asura Path",
+                "Chakra Transfer Technique",
+                "Chibaku Tensei",
+                "Creation of All Things Technique",
+                "Deva Path",
+                "Drilling Hand of Sage Lightning (Anime only)",
+                "Human Path",
+                "Mystical Palm Technique (Anime only)",
+                "Naraka Path",
+                "Outer Path",
+                "Preta Path",
+                "Sensing Technique",
+                "Six Paths Senjutsu",
+                "Six Paths Technique",
+                "Six Paths Yang Power",
+                "Six Paths Yin Power",
+                "Six Paths \u2014 Chibaku Tensei",
+                "Summoning Technique",
+                "Susanoo (Anime only)",
+                "Truth-Seeking Ball"
+            ]
+        },
+        {
+            "id": 936,
+            "name": "Hamura \u014ctsutsuki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/e/e8/Hamura.png"
+            ],
+            "jutsu": [
+                "Chakra Transfer Technique",
+                "Six Paths Senjutsu",
+                "Six Paths Yin Power",
+                "Six Paths \u2014 Chibaku Tensei",
+                "Summoning Technique (Anime only)",
+                "Teleportation Seal (Anime only)",
+                "Truth-Seeking Ball"
+            ]
+        },
+        {
+            "id": 938,
+            "name": "Indra \u014ctsutsuki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/bd/Indra_%C5%8Ctsutsuki.png"
+            ],
+            "jutsu": [
+                "Genjutsu: Sharingan (Anime only)",
+                "Hinokagutsuchi (Anime only)",
+                "Sensing Technique (Anime only)",
+                "Susanoo"
+            ]
+        },
+        {
+            "id": 939,
+            "name": "Isshiki \u014ctsutsuki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/21/Isshiki.png"
+            ],
+            "jutsu": [
+                "Daikokuten",
+                "Disruption Cube",
+                "Genjutsu Communication",
+                "K\u0101ma Rift",
+                "Sukunahikona"
+            ]
+        },
+        {
+            "id": 940,
+            "name": "Kaguya \u014ctsutsuki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/6/6c/Kaguya_%C5%8Ctsutsuki.png"
+            ],
+            "jutsu": [
+                "All-Killing Ash Bones",
+                "Amenominaka",
+                "Eighty Gods Vacuum Attack",
+                "Expansive Truth-Seeking Ball",
+                "God: Nativity of a World of Trees",
+                "Hair Binding Technique",
+                "Infinite Tsukuyomi",
+                "Rabbit Hair Needle",
+                "Sensing Technique",
+                "Summoning Technique",
+                "Temporary Paralysis Technique",
+                "Will Materialisation",
+                "Yomotsu Hirasaka"
+            ]
+        },
+        {
+            "id": 944,
+            "name": "Toneri \u014ctsutsuki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/3/3c/Toneri.png"
+            ],
+            "jutsu": [
+                "Golden Wheel Reincarnation Explosion (Movie only)",
+                "Localised Reincarnation Explosion",
+                "Projection Technique",
+                "Puppet Reincarnation",
+                "Puppet Technique",
+                "Puppet-Cursing Sphere",
+                "Sensing Technique",
+                "Silver Wheel Reincarnation Explosion (Movie only)",
+                "Six Paths Senjutsu",
+                "Tenseigan Chakra Mode (Movie only)",
+                "Truth-Seeking Ball"
+            ]
+        },
+        {
+            "id": 945,
+            "name": "Urashiki \u014ctsutsuki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/f/f6/Urashiki.png"
+            ],
+            "jutsu": [
+                "Amenosubaruboshinomikoto",
+                "Amenosubaruboshinomikoto: Gyokk\u014d",
+                "Amenosubaruboshinomikoto: Ry\u016bg\u016b",
+                "Black Receiver",
+                "Chakra Edible Creation",
+                "Chakra Transfer Technique",
+                "Desert: Hand",
+                "Earth Release: Earth Corridor",
+                "Origami Replacement Technique",
+                "Puppet Technique",
+                "Sensing Technique",
+                "Shadow Imitation Technique",
+                "Temporal Rewind",
+                "Tool Creation Technique",
+                "Wind Release: Great Task of the Dragon",
+                "Yomotsu Hirasaka"
+            ]
+        },
+        {
+            "id": 965,
+            "name": "Ranke",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/c/c5/Ranke_Profile.png"
+            ],
+            "jutsu": [
+                "Plasma Ball",
+                "Thunder Sabre",
+                "Tornado Lightning"
+            ]
+        },
+        {
+            "id": 967,
+            "name": "Rasa",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/24/Yondaime_Kazekage.png"
+            ],
+            "jutsu": [
+                "Air Gold Dust Protective Wall",
+                "Magnet Release: Gold Dust Imperial Funeral",
+                "Third Eye",
+                "Water Release: Water Blade Technique (Novel only)"
+            ]
+        },
+        {
+            "id": 975,
+            "name": "Ameyuri Ringo",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/0/0e/Ameyuri.png"
+            ],
+            "jutsu": [
+                "Lightning Release: Depth Charge (Anime only)",
+                "Lightning Release: Lightning Fang (Anime only)",
+                "Lightning Release: Thunder Gate (Anime only)",
+                "Silent Killing",
+                "Thunderswords Technique: Thunderbolt (Anime only)"
+            ]
+        },
+        {
+            "id": 979,
+            "name": "Nadare R\u014dga",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/1/19/Nadare_R%C5%8Dga.png"
+            ],
+            "jutsu": [
+                "Ice Release: One Horned White Whale",
+                "Ice Release: Tearing Dragon Fierce Tiger",
+                "Ice Release: Wolf Fang Avalanche Technique"
+            ]
+        },
+        {
+            "id": 984,
+            "name": "Ruiga",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/8/83/Ruiga.png"
+            ],
+            "jutsu": [
+                "Summoning Technique (Piranha, Shark)",
+                "Water Prison Technique",
+                "Water Release: Water\u2013Heavens Convergence"
+            ]
+        },
+        {
+            "id": 986,
+            "name": "Ry\u014dgi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/b9/Ryougi.png"
+            ],
+            "jutsu": [
+                "Ice Release: Crystal Wall",
+                "Ice Release: Frozen Capturing Field",
+                "Ice Release: Ten Thousand Ice Petals",
+                "Ice Release: Whirlwind"
+            ]
+        },
+        {
+            "id": 989,
+            "name": "Gensh\u014d Ry\u016bd\u014din",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/5/51/Gensho_Ryudoin.png"
+            ],
+            "jutsu": [
+                "Intersection Method",
+                "Wooden Men Possession Turnover Manipulation Technique",
+                "Wooden Puppet Manipulation Technique"
+            ]
+        },
+        {
+            "id": 1003,
+            "name": "Sadai",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/c/c0/Assailant.png"
+            ],
+            "jutsu": [
+                "Earth Release: Earth-Style Wall",
+                "Earth Release: Hardening Technique",
+                "Earth Release: Hiding in Rock Technique",
+                "Earth Release: Mudslide"
+            ]
+        },
+        {
+            "id": 1008,
+            "name": "Sai",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/0/07/Sai_Infobox.png",
+                "https://static.wikia.nocookie.net/naruto/images/6/6c/Sai_Part_III.png"
+            ],
+            "jutsu": [
+                "Assassination Technique",
+                "Earth Release: Hiding Like a Mole Technique",
+                "Ink Clone Technique",
+                "Ink Flush (Anime only)",
+                "Ink Mist Technique",
+                "Mental Resistance Technique (Anime only)",
+                "Sealing Technique: Tiger Vision Staring Bullet",
+                "Shadow Clone Technique (Anime only)",
+                "Super Beast Imitating Drawing",
+                "Super God Imitating Drawing"
+            ]
+        },
+        {
+            "id": 1009,
+            "name": "Saiken",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/5/58/Saiken.png"
+            ],
+            "jutsu": [
+                "Chakra Transfer Technique",
+                "Leech Gap",
+                "Soap Bubble Ninjutsu (Anime only)",
+                "Tailed Beast Ball",
+                "Tailed Beast Full Charge",
+                "Tailed Beast Telepathy",
+                "Water Release: Starch Syrup Capturing Field",
+                "Wisdom Wolf Decay"
+            ]
+        },
+        {
+            "id": 1022,
+            "name": "Sana",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/1/11/Sana.png"
+            ],
+            "jutsu": [
+                "Sand Cloak Technique",
+                "Sandstorm Technique",
+                "Sensing Technique"
+            ]
+        },
+        {
+            "id": 1034,
+            "name": "Asuma Sarutobi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/7/7c/Asuma.png"
+            ],
+            "jutsu": [
+                "Chakra Blade: Straight Line",
+                "Fire Release: Ash Pile Burning",
+                "Fire Release: Flint Yagura Technique (Anime only)",
+                "Flying Swallow",
+                "Welcoming Approach: Thousand-Armed Murder (Anime only)",
+                "Wind Release: Dust Cloud Technique",
+                "Wind Release: Verdant Mountain Gale (Anime only)"
+            ]
+        },
+        {
+            "id": 1036,
+            "name": "Hiruzen Sarutobi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/e/e4/Hiruzen_Sarutobi.png"
+            ],
+            "jutsu": [
+                "Dead Demon Consuming Seal",
+                "Earth Release: Double Suicide Decapitation Technique (Anime only)",
+                "Earth Release: Earth Dragon Bullet (Anime only)",
+                "Earth Release: Earth Flow River (Anime only)",
+                "Earth Release: Earth-Style Wall",
+                "Earth Release: Shadow Clone (Anime only)",
+                "Fire Release: Fire Dragon Bullet (Anime only)",
+                "Fire Release: Fire Dragon Flame Bullet",
+                "Fire Release: Phoenix Sage Fire Technique (Anime only)",
+                "Five Elements Unseal (Anime only)",
+                "Five Release Great Combo Technique",
+                "Four Red Yang Formation",
+                "Roof Tile Shuriken (Anime only)",
+                "Sealing Technique: Three Directions Seal (Anime only)",
+                "Sensing Technique",
+                "Shadow Clone Technique",
+                "Shuriken Shadow Clone Technique",
+                "Summoning Technique (Monkey King: Enma, Shinigami)",
+                "Telescope Technique"
+            ]
+        },
+        {
+            "id": 1037,
+            "name": "Konohamaru Sarutobi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/8/89/Konohamaru_p1.png",
+                "https://static.wikia.nocookie.net/naruto/images/3/37/Konohamaru_Sarutobi.png"
+            ],
+            "jutsu": [
+                "Adamantine Seal: Monkey Yang Suppression (Anime only)",
+                "Barrier Releasing Technique (Anime only)",
+                "Big Ball Rasengan (Anime only)",
+                "Booby Trap (Anime only)",
+                "Bouncy Bouncy Technique (Anime only)",
+                "Fire Release: Ash Pile Burning (Anime only)",
+                "Fire Release: Blazing Meteors",
+                "Fire Release: Fire Dragon Bullet (Anime only)",
+                "Fire Release: Fire Dragon Flame Bullet",
+                "Fire Release: Great Flame Technique",
+                "Flying Swallow (Anime only)",
+                "Harem Technique (Anime only)",
+                "Multiple Shadow Clone Technique (Anime only)",
+                "Multiple String Light Formation (Anime only)",
+                "Rasengan",
+                "Sealing Technique: Release",
+                "Sealing Technique: Three Directions Seal (Anime only)",
+                "Sexy Technique",
+                "Sexy Technique: Pole Dance and Nice Body (Anime only)",
+                "Sexy: Boy on Boy Technique (Manga only)",
+                "Sexy: Girl on Girl Technique",
+                "Shadow Clone Technique",
+                "Shuriken Shadow Clone Technique (Anime only)",
+                "String Light Formation (Anime only)",
+                "Student and Teacher: Rasengan",
+                "Summoning Technique (Monkey, Toad) (Anime only)",
+                "Wind Release: Rasengan"
+            ]
+        },
+        {
+            "id": 1038,
+            "name": "Mirai Sarutobi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/7/7a/Mirai_Sarutobi.png"
+            ],
+            "jutsu": [
+                "Demonic Illusion: Tree Binding Death",
+                "Fire Release: Flint Yagura Technique",
+                "Flying Swallow (Anime only)",
+                "Genjutsu: Ghost Fire",
+                "Shadow Shuriken Technique",
+                "Wind Release: Whirlwind Fist (Anime only)"
+            ]
+        },
+        {
+            "id": 1042,
+            "name": "Sasori",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/f/f7/Sasori.png"
+            ],
+            "jutsu": [
+                "Iron Sand Drizzle",
+                "Iron Sand Gathering Assault",
+                "Iron Sand World Method",
+                "Iron Sand: Black Iron Wings",
+                "Memory-Concealing Manipulative Sand Technique",
+                "Prepared Puppet: Eight Waves of Needles",
+                "Puppet Performance: Skilful Achievement with a Human Body",
+                "Puppet Technique",
+                "Puppet Technique: Prosthetic Arm Senbon",
+                "Red Secret Technique: Performance of a Hundred Puppets",
+                "Sand Clone (Anime only)",
+                "Thousand Hands Manipulation Force"
+            ]
+        },
+        {
+            "id": 1048,
+            "name": "Saya",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/c/ce/Saya.png"
+            ],
+            "jutsu": [
+                "Cursed Sand Puppet Technique",
+                "Hiding in Surface Technique",
+                "Puppet Imitation Technique",
+                "Puppet Technique"
+            ]
+        },
+        {
+            "id": 1051,
+            "name": "Scarlet Blaze",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/e/eb/Scarlet_Blaze.png"
+            ],
+            "jutsu": [
+                "Demonic Illusion: Hell Viewing Technique",
+                "Fire Release: Ash Pile Burning",
+                "Fire Release: Blast Wave Wild Dance",
+                "Fire Release: Dragon Fire Technique",
+                "Fire Release: Great Dragon Fire Technique",
+                "Fire Release: Great Fireball Technique",
+                "Fire Release: Heavenly Prison",
+                "Fire Release: Phoenix Sage Fire Technique",
+                "Haze Clone Technique",
+                "Sealing Technique: Crimson Seal",
+                "Temple of Nirvana Technique"
+            ]
+        },
+        {
+            "id": 1052,
+            "name": "Seimei",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/c/c8/Seimei2.png"
+            ],
+            "jutsu": [
+                "Great Vacuum Cannon",
+                "Peacock Whirlwind Formation",
+                "Rotating Ferocious Wind"
+            ]
+        },
+        {
+            "id": 1054,
+            "name": "Sekiei",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/0/05/Sekiei.png"
+            ],
+            "jutsu": [
+                "C1",
+                "Explosive Clay",
+                "Iwagakure Kinjutsu"
+            ]
+        },
+        {
+            "id": 1055,
+            "name": "Sekiei (spectator)",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/a/a7/Sekiei_%28spectator%29.png"
+            ],
+            "jutsu": [
+                "Earth Release: Earth Flow Wave",
+                "Earth Release: Mud Wolves",
+                "Earth Release: Shadow Clone",
+                "Shadow Clone Technique",
+                "Violent Heavenly Earth Needle"
+            ]
+        },
+        {
+            "id": 1063,
+            "name": "Hashirama Senju",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/7/7e/Hashirama_Senju.png"
+            ],
+            "jutsu": [
+                "Bringer-of-Darkness Technique (Manga only)",
+                "Chakra Transfer Technique",
+                "Contract Seal (Anime only)",
+                "Four Red Yang Formation",
+                "Hokage-Style Sixty-Year-Old Technique \u2014 Kakuan Entering Society with Bliss-Bringing Hands",
+                "Regeneration Ability",
+                "Sage Art Wood Release: True Several Thousand Hands",
+                "Sage Art: Gate of the Great God",
+                "Sage Mode",
+                "Summoning Technique",
+                "Summoning: Quintuple Rash\u014dmon",
+                "Summoning: Rash\u014dmon",
+                "Top Transformed Buddha",
+                "Wood Clone Technique",
+                "Wood Release Secret Technique: Nativity of a World of Trees",
+                "Wood Release: Advent of a World of Flowering Trees",
+                "Wood Release: Great Forest Technique",
+                "Wood Release: H\u014dbi Technique",
+                "Wood Release: Hotei Technique",
+                "Wood Release: Wood Dragon Technique",
+                "Wood Release: Wood Human Technique",
+                "Wood Release: Wood Locking Wall (Anime only)"
+            ]
+        },
+        {
+            "id": 1066,
+            "name": "Tobirama Senju",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/be/Tobirama_Senju.png"
+            ],
+            "jutsu": [
+                "Area Scanning Technique",
+                "Bringer-of-Darkness Technique (Anime only)",
+                "Flying Thunder God Mutually Instantaneous Revolving Technique",
+                "Flying Thunder God Slash",
+                "Flying Thunder God Technique",
+                "Four Red Yang Formation",
+                "Heavenly Weeping",
+                "Mutually Multiplying Explosive Tags",
+                "Sensing Technique",
+                "Shadow Clone Technique",
+                "Summoning Technique",
+                "Summoning: Impure World Reincarnation",
+                "Water Release: Water Bullet Technique",
+                "Water Release: Water Colliding Wave (Anime only)",
+                "Water Release: Water Dragon Bullet Technique",
+                "Water Release: Water Fang Bullet (Anime only)",
+                "Water Release: Water Formation Wall",
+                "Water Release: Water Severing Wave"
+            ]
+        },
+        {
+            "id": 1074,
+            "name": "Setsuna",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/3/3c/Setsuna.png"
+            ],
+            "jutsu": [
+                "Mysterious Storm Technique",
+                "Wind Release: Divine Mountain Wind",
+                "Wind Release: Divine Wind",
+                "Wind Release: Rotating Shuriken"
+            ]
+        },
+        {
+            "id": 1076,
+            "name": "Shamo",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/1/18/Shamo_Infobox.png"
+            ],
+            "jutsu": [
+                "Earth Release: Earth Flow Wave",
+                "Earth Release: Earth and Stone Bamboo Shoot",
+                "Earth Release: Earth-Style Wall"
+            ]
+        },
+        {
+            "id": 1082,
+            "name": "Shibuki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/c/ce/Shibuki.png"
+            ],
+            "jutsu": [
+                "Summoning Technique (Novel only)",
+                "Takigakure Style: Watercutting Sword",
+                "Tornado of Water (Anime only)",
+                "Water Release: Water Bullet Technique (Anime only)",
+                "Water Release: Water Dragon Bullet Technique (Anime only)"
+            ]
+        },
+        {
+            "id": 1091,
+            "name": "Shima",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/6/69/Shima.png"
+            ],
+            "jutsu": [
+                "Demonic Illusion: Toad Confrontation Chant",
+                "Fighting Tongue Bind",
+                "Frog Kata",
+                "Reverse Summoning Technique",
+                "Sage Art: Amphibian Technique",
+                "Sage Art: Frog Call",
+                "Sage Art: Goemon",
+                "Sage Art: Wind Release Dust Cloud",
+                "Sage Mode",
+                "Summoning Technique (Toad)"
+            ]
+        },
+        {
+            "id": 1093,
+            "name": "Danz\u014d Shimura",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/1/17/Danz%C5%8D.png"
+            ],
+            "jutsu": [
+                "Cursed Tongue Eradication Seal",
+                "Genjutsu: Sharingan (Anime only)",
+                "Hiding in Surface Technique (Anime only)",
+                "Izanagi",
+                "Kotoamatsukami",
+                "Regeneration Ability",
+                "Reverse Four Symbols Sealing",
+                "Self-Cursing Seal",
+                "Spontaneous Tree Summoning",
+                "Summoning Technique (Baku)",
+                "Wind Release: Vacuum Blade",
+                "Wind Release: Vacuum Great Sphere",
+                "Wind Release: Vacuum Serial Waves",
+                "Wind Release: Vacuum Sphere",
+                "Wind Release: Vacuum Wave",
+                "Wind Waves"
+            ]
+        },
+        {
+            "id": 1100,
+            "name": "Shinki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/7/78/Shinki.png"
+            ],
+            "jutsu": [
+                "Black Iron Fist (Anime only)",
+                "Black Secret Technique: Black Iron (Anime only)",
+                "Desert Suspension",
+                "Desert Wave (Anime only)",
+                "Desert: Hand (Anime only)",
+                "Iron Sand Clone (Anime only)",
+                "Iron Sand Drizzle (Anime only)",
+                "Iron Sand Marking (Anime only)",
+                "Iron Sand Wall",
+                "Iron Sand Wave (Anime only)",
+                "Iron Sand Weaponry (Anime only)",
+                "Iron Sand: Black Iron Wings (Anime only)",
+                "Puppet Technique",
+                "Sand Binding Coffin (Anime only)",
+                "Sand Restraining Technique (Anime only)",
+                "Sand Waterfall Funeral (Anime only)",
+                "Successive Shots Iron Sand Drizzle (Anime only)",
+                "Third Eye (Anime only)"
+            ]
+        },
+        {
+            "id": 1104,
+            "name": "Shion",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/e/e1/Shion.png"
+            ],
+            "jutsu": [
+                "Bell Barrier Technique",
+                "Flashing Bell Beams",
+                "Future Telling",
+                "Mystic Safety Bell Seal: Release",
+                "Naruto and Shion's Super Chakra Rasengan",
+                "Protective Sphere of Light",
+                "Shrine Seal"
+            ]
+        },
+        {
+            "id": 1109,
+            "name": "Shiranami",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/0/05/Shiranami.png"
+            ],
+            "jutsu": [
+                "Character Bind Technique",
+                "Dragon Spying Technique",
+                "Fury",
+                "Hiding with Camouflage Technique",
+                "Infinite Embrace",
+                "Tsuchigumo Style: Forbidden Life Technique Release: Creation of Heaven and Earth"
+            ]
+        },
+        {
+            "id": 1115,
+            "name": "Shishio",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/e/e6/Shishio.png"
+            ],
+            "jutsu": [
+                "Blinding Wide Sand Formation: Noise",
+                "Polarised Sand Formation: Hot Sand Camouflage",
+                "Sand Formation: Shisa",
+                "Sensing Hexagram Seal"
+            ]
+        },
+        {
+            "id": 1120,
+            "name": "Shizuku",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/a/ac/Shizuku.png"
+            ],
+            "jutsu": [
+                "Fire Release: Running Fire",
+                "Mysterious Storm Technique",
+                "Water Attacking Gorgon",
+                "Water Release: Rising Water Slicer",
+                "Water Release: Water Dragon Whip",
+                "Water Replacement"
+            ]
+        },
+        {
+            "id": 1122,
+            "name": "Shizune",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/0/0a/Shizune_Infobox.png",
+                "https://static.wikia.nocookie.net/naruto/images/f/f3/Shizune_Part_III.png"
+            ],
+            "jutsu": [
+                "Four-Corner Sealing Barrier (Anime only)",
+                "Healing Resuscitation Regeneration Technique",
+                "Multiple Shadow Clone Technique (Anime only)",
+                "Mystical Palm Technique",
+                "Poison Mist",
+                "Prepared Needle Shot",
+                "Shadow Clone Technique (Anime only)"
+            ]
+        },
+        {
+            "id": 1123,
+            "name": "Shojoji",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/d/d7/Shojoji.png"
+            ],
+            "jutsu": [
+                "Corpse Clone Technique",
+                "Moon Shadow Technique (Anime only)",
+                "Pink Lightning (Anime only)",
+                "Shadow Sword (Anime only)",
+                "Wind Release: Shield of the Wind Count",
+                "Wind Release: Sword of the Wind Count"
+            ]
+        },
+        {
+            "id": 1127,
+            "name": "Shukaku",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/99/Shukaku.png"
+            ],
+            "jutsu": [
+                "Chakra Transfer Technique",
+                "Desert Layered Imperial Funeral Seal",
+                "Tailed Beast Ball",
+                "Tailed Beast Full Charge",
+                "Tailed Beast Shockwave (Anime only)",
+                "Tailed Beast Telepathy",
+                "Wind Release: Drilling Air Bullet",
+                "Wind Release: Sand Buckshot"
+            ]
+        },
+        {
+            "id": 1134,
+            "name": "Son Gok\u016b",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/5/5e/Son_Goku.png"
+            ],
+            "jutsu": [
+                "Chakra Transfer Technique",
+                "Flower\u2013Fruit Mountain",
+                "Monkey Flame Arson",
+                "Tailed Beast Ball",
+                "Tailed Beast Full Charge",
+                "Tailed Beast Telepathy"
+            ]
+        },
+        {
+            "id": 1135,
+            "name": "Sora",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/2d/Sora_full.png"
+            ],
+            "jutsu": [
+                "Beast Tearing Gale Palm",
+                "Beast Tearing Palm",
+                "Flying Swallow",
+                "Tailed Beast Chakra Arms",
+                "Tailed Beast Shockwave"
+            ]
+        },
+        {
+            "id": 1143,
+            "name": "Suien",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/6/65/Suien.png"
+            ],
+            "jutsu": [
+                "Echo Technique (Novel only)",
+                "Labyrinth Barrier (Novel only)",
+                "Summoning Technique (Konenmaru, Rainenmaru) (Novel only)",
+                "Takigakure Style: Watercutting Sword",
+                "Water Clone Technique (Novel only)",
+                "Water Release: Transform-at-Will (Novel only)",
+                "Water Release: Water Armour (Novel only)",
+                "Water Release: Water Formation Wall (Anime only)"
+            ]
+        },
+        {
+            "id": 1144,
+            "name": "Suika",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/a/a3/Suika_infobox.png"
+            ],
+            "jutsu": [
+                "Fire Release: Crimson Earth Spider",
+                "Fire Release: Flame Whirlwind",
+                "Fire Release: Great Fireball Technique",
+                "Net-Shaped Prison",
+                "Summoning Technique (Spider)"
+            ]
+        },
+        {
+            "id": 1145,
+            "name": "Fuguki Suikazan",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/a/a7/Fuguki.png"
+            ],
+            "jutsu": [
+                "Hair Needle Senbon",
+                "Sharp Hair Spear: Might (Anime only)",
+                "Silent Killing"
+            ]
+        },
+        {
+            "id": 1147,
+            "name": "Suiren",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/5/5b/Suiren_Genin.png"
+            ],
+            "jutsu": [
+                "Senbon Shower",
+                "Sensing Technique",
+                "Water Release: Hiding in Drizzle Technique"
+            ]
+        },
+        {
+            "id": 1165,
+            "name": "Suzumebachi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/3/3d/Suzumebachi_Kamizuru.png"
+            ],
+            "jutsu": [
+                "Bee Bomb Technique",
+                "Bee Honey Technique",
+                "Beeswax Clone",
+                "Hiding with Camouflage Technique",
+                "Rock Hive",
+                "Summoning Technique (Bee)",
+                "Thousand Bee Stings Technique"
+            ]
+        },
+        {
+            "id": 1166,
+            "name": "Namida Suzumeno",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/1/1d/Namida.png"
+            ],
+            "jutsu": [
+                "Calling on Tears Technique (Anime only)",
+                "Multiple String Light Formation (Anime only)",
+                "String Light Formation (Anime only)",
+                "Water Release: Wild Water Wave (Anime only)"
+            ]
+        },
+        {
+            "id": 1179,
+            "name": "H\u014dki Taketori",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/bf/Houki_Taketori.png"
+            ],
+            "jutsu": [
+                "Earth Release: Fighting Blade Rod (Anime only)",
+                "Mental Resistance Technique (Anime only)",
+                "Multiple String Light Formation (Anime only)",
+                "String Light Formation (Anime only)"
+            ]
+        },
+        {
+            "id": 1197,
+            "name": "Tatewaki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/f/fe/Tatewaki_newshot.png"
+            ],
+            "jutsu": [
+                "Chakra Shockwave Slash",
+                "Iaid\u014d",
+                "Rupture",
+                "Samurai Sabre Technique"
+            ]
+        },
+        {
+            "id": 1203,
+            "name": "Tayuya",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/7/78/Tayuya_Shot.png"
+            ],
+            "jutsu": [
+                "Barrier Method Formation",
+                "Combination Transformation",
+                "Demonic Flute: Illusionary Warriors Manipulating Melody",
+                "Demonic Flute: Phantom Sound Chains",
+                "Four Black Fogs Formation",
+                "Four Violet Flames Formation",
+                "Revolt of the Demon World",
+                "Sound Four's Cursed Seals",
+                "Sound Four: Summoning: Four Beasts Encirclement Formation (Anime only)",
+                "Space\u2013Time Technique Formula: Underworld Turnover (Anime only)",
+                "Summoning Technique (Doki)"
+            ]
+        },
+        {
+            "id": 1208,
+            "name": "Temari",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/bb/Temari_newshot.png",
+                "https://static.wikia.nocookie.net/naruto/images/b/b2/Temari_Part_II.png"
+            ],
+            "jutsu": [
+                "Dust Wind Technique (Anime only)",
+                "Great Sickle Weasel Technique",
+                "Sickle Weasel Technique",
+                "Summoning Technique (Kamatari)",
+                "Summoning: Quick Beheading Dance",
+                "Wind Release: Air Current Wild Dance (Anime only)",
+                "Wind Release: Cast Net",
+                "Wind Release: Flashing Fireworks (Novel only)",
+                "Wind Release: Great Cast Net",
+                "Wind Release: Great Sickle Weasel Technique",
+                "Wind Release: Great Task of the Dragon (Anime only)",
+                "Wind Release: Great Wind Protective Wall (Anime only)",
+                "Wind Release: Wind Cutter Technique"
+            ]
+        },
+        {
+            "id": 1214,
+            "name": "Enzo Tenr\u014d",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/7/7a/Enzo_Tenro.jpg"
+            ],
+            "jutsu": [
+                "Beast-Human Fury Kicks",
+                "Beast-Human Needle Senbon",
+                "Tenr\u014d-Style Ninjutsu: Beast-Human Transformation Technique"
+            ]
+        },
+        {
+            "id": 1215,
+            "name": "Ryuka Tenr\u014d",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/4c/Ryuka_Tenro.jpg"
+            ],
+            "jutsu": [
+                "Beast-Human Fury Kicks",
+                "Beast-Human Needle Senbon",
+                "Tenr\u014d-Style Ninjutsu: Beast-Human Transformation Technique"
+            ]
+        },
+        {
+            "id": 1216,
+            "name": "Tenten",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/d/da/Tenten_Part_1.png",
+                "https://static.wikia.nocookie.net/naruto/images/0/02/Tenten_Part_II.png"
+            ],
+            "jutsu": [
+                "Bash\u014dsen: Coil of Fire (Anime only)",
+                "Bash\u014dsen: Coil of Wind",
+                "Dynamic Entry (Anime only)",
+                "Enclosing Technique",
+                "Exploding Dragon Strike (Anime only)",
+                "Manipulated Shuriken Technique (Anime only)",
+                "Manipulated Tools: Binding Meteor (Anime only)",
+                "Manipulated Tools: Heavenly Chain Disaster (Anime only)",
+                "Manipulating Attack Blades (Anime only)",
+                "Puppet Technique (Anime only)",
+                "Reverse Summoning Technique (Anime only)",
+                "Summoning Technique (Anime only)",
+                "Twin Rising Dragons",
+                "Unsealing Technique",
+                "Unsealing Technique: Segmented Iron Dome (Anime only)",
+                "Unsealing Technique: Shuriken (Anime only)"
+            ]
+        },
+        {
+            "id": 1260,
+            "name": "Towa",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/a/ae/Towa.jpg"
+            ],
+            "jutsu": [
+                "Drilling Crimson Blade",
+                "Drilling Needles",
+                "Slicing Crimson Wave"
+            ]
+        },
+        {
+            "id": 1274,
+            "name": "Tsukino",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/b4/Tsukino2.jpg"
+            ],
+            "jutsu": [
+                "Sealing Technique: Vitality Seal Formation",
+                "Sealing Trap Explosion",
+                "Secret Technique: Sealing Release",
+                "Temple of Nirvana Technique"
+            ]
+        },
+        {
+            "id": 1276,
+            "name": "Tsukiyo",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/6/62/Tsukiyo.png"
+            ],
+            "jutsu": [
+                "Moon Shadow Technique",
+                "Pink Lightning",
+                "Shadow Sword"
+            ]
+        },
+        {
+            "id": 1279,
+            "name": "Kido Tsumiki",
+            "images": [],
+            "jutsu": [
+                "Kido's Juinjutsu",
+                "Lightning Release: Shadow Clone Technique",
+                "Lightning Release: Thunder",
+                "Lightning Release: Tiger Scissors",
+                "Shadow Clone Technique",
+                "Tailed Beast Ball"
+            ]
+        },
+        {
+            "id": 1280,
+            "name": "Tsunade",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/b3/Tsunade_infobox2.png"
+            ],
+            "jutsu": [
+                "Body Pathway Derangement",
+                "Cell Activation Technique (Anime only)",
+                "Chakra Enhanced Strength",
+                "Chakra Scalpel",
+                "Chakra Transfer Technique",
+                "Creation Rebirth",
+                "Five Elements Unseal (Anime only)",
+                "Four-Corner Sealing Barrier (Anime only)",
+                "Genjutsu Binding (Anime only)",
+                "Heavenly Foot of Pain",
+                "Heavenly Spear Foot",
+                "Katsuyu: Immense Network Healing",
+                "Mechanical Eight Trigrams Formation (Anime only)",
+                "Mystical Palm Technique",
+                "Ninja Art Creation Rebirth \u2014 Strength of a Hundred Technique",
+                "Reverse Summoning Technique (Anime only)",
+                "Shadow Clone Technique (Anime only)",
+                "Strength of a Hundred Seal",
+                "Summoning Technique (Slug)",
+                "Time-Release Technique",
+                "Transformation Technique",
+                "Yin Seal: Release"
+            ]
+        },
+        {
+            "id": 1293,
+            "name": "Itachi Uchiha",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/bb/Itachi.png"
+            ],
+            "jutsu": [
+                "Amaterasu",
+                "Chakra Suppression Technique (Novel only)",
+                "Clone Great Explosion",
+                "Crow Clone Technique",
+                "Demonic Illusion: Mirage Crow",
+                "Demonic Illusion: Mirror Heaven and Earth Change",
+                "Demonic Illusion: Shackling Stakes Technique",
+                "Early Sacrifice",
+                "Ephemeral",
+                "Fire Release: Great Fireball Technique",
+                "Fire Release: Phoenix Sage Fire Technique",
+                "Fire Release: Phoenix Sage Flower Nail Crimson",
+                "Genjutsu: Sharingan",
+                "Izanami",
+                "Sensing Barrier Pass Technique",
+                "Shadow Clone Technique",
+                "Summoning Technique (Crow)",
+                "Susanoo",
+                "Susanoo: Fist",
+                "Transcription Seal: Amaterasu",
+                "Tsukuyomi",
+                "Water Release: Starch Syrup Capturing Field (Novel only)",
+                "Water Release: Water Bullet Technique",
+                "Water Release: Water Dragon Bullet Technique",
+                "Water Release: Water Fang Bullet",
+                "Yasaka Magatama"
+            ]
+        },
+        {
+            "id": 1299,
+            "name": "Madara Uchiha",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/f/fd/Madara.png"
+            ],
+            "jutsu": [
+                "Animal Path",
+                "Asura Path",
+                "Black Receiver",
+                "Blocking Technique Absorption Seal",
+                "Chibaku Tensei",
+                "Demonic Statue Chains",
+                "Deva Path",
+                "Evil Disturbance Waltz",
+                "Fire Release: Dragon Flame Release Song Technique",
+                "Fire Release: Great Fire Annihilation",
+                "Fire Release: Great Fire Destruction",
+                "Fire Release: Great Fireball Technique",
+                "Fire Release: Great Flame Flower (Anime only)",
+                "Fire Release: Hiding in Ash and Dust Technique",
+                "Forbidden Individual Curse Tag",
+                "Genjutsu: Sharingan",
+                "God: Nativity of a World of Trees",
+                "Gunbai Fanned Wind (Anime only)",
+                "Hiding in Surface Technique",
+                "Human Path",
+                "Infinite Tsukuyomi",
+                "Izanagi",
+                "Kamui",
+                "Limbo: Border Jail",
+                "Majestic Attire: Susanoo",
+                "Multiple Wood Release Clone Technique",
+                "Naraka Path",
+                "Outer Path",
+                "Preta Path",
+                "Regeneration Ability",
+                "Sage Art: Storm Release Light Fang",
+                "Sage Art: Yin Release Lightning Dispatch",
+                "Sensing Technique",
+                "Shadow Clone Technique",
+                "Six Paths Senjutsu",
+                "Six Paths Technique",
+                "Six Paths Ten-Tails Coffin Seal",
+                "Summoning Technique (Demonic Statue of the Outer Path, Kurama)",
+                "Summoning: Demonic Statue of the Outer Path",
+                "Susanoo",
+                "Susanoo: Fist",
+                "Tengai Shinsei",
+                "Transcription Seal: Izanagi",
+                "Truth-Seeking Ball",
+                "Uchiha Return",
+                "Will Materialisation",
+                "Wood Clone Technique",
+                "Wood Release Secret Technique: Nativity of a World of Trees",
+                "Wood Release: Advent of a World of Flowering Trees",
+                "Wood Release: Wood Dragon Technique",
+                "Yasaka Magatama"
+            ]
+        },
+        {
+            "id": 1303,
+            "name": "Obito Uchiha",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/4a/Obito_Uchiha.png",
+                "https://static.wikia.nocookie.net/naruto/images/3/3c/Obito.png"
+            ],
+            "jutsu": [
+                "Animal Path",
+                "Asura Path",
+                "Black Receiver",
+                "Chakra Transfer Technique",
+                "Demonic Statue Chains",
+                "Deva Path",
+                "Earth Release: Hiding Like a Mole Technique",
+                "Explosive Landmines",
+                "Fire Release: Blast Wave Wild Dance",
+                "Fire Release: Great Fireball Technique",
+                "Fire Release: Phoenix Sage Fire Technique (Anime only)",
+                "Genjutsu: Sharingan",
+                "Hands of Flame",
+                "Human Path",
+                "Infinite Tsukuyomi",
+                "Izanagi",
+                "Kamui",
+                "Naraka Path",
+                "Outer Path",
+                "Outer Path \u2014 Samsara of Heavenly Life Technique",
+                "Preta Path",
+                "Regeneration Ability",
+                "Sealing Technique: Phantom Dragons Nine Consuming Seals",
+                "Sensing Technique",
+                "Six Paths Senjutsu",
+                "Six Paths Technique",
+                "Six Paths Ten-Tails Coffin Seal",
+                "Six Paths of Pain",
+                "Six Red Yang Formation",
+                "Summoning Rinnegan",
+                "Summoning Technique (Demonic Statue of the Outer Path, Kurama)",
+                "Summoning: Demonic Statue of the Outer Path",
+                "Tail Releasing Method",
+                "Tailed Beast Ball",
+                "Tailed Beast Chakra Arms",
+                "Tailed Beast Transfer Technique",
+                "Telescope Technique",
+                "Truth-Seeking Ball",
+                "Uchiha Flame Formation",
+                "Uchiha Return",
+                "Whac-A-Mole Technique (Anime only)",
+                "Wood Release: Cutting Technique",
+                "Wood Release: Great Spear Tree",
+                "Wood Release: Underground Roots Technique",
+                "Wood Release: Wood Dragon Technique"
+            ]
+        },
+        {
+            "id": 1306,
+            "name": "Sarada Uchiha",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/9a/Sarada_Infobox.png"
+            ],
+            "jutsu": [
+                "Boruto Stream",
+                "Chakra Enhanced Strength",
+                "Chakra Transfer Technique (Anime only)",
+                "Cherry Blossom Impact",
+                "Chidori",
+                "Fire Release: Great Fireball Technique",
+                "Fire Release: Phoenix Sage Fire Technique",
+                "Genjutsu: Sharingan",
+                "Improvised Secret Technique: Lightning Ball Shuriken Technique (Anime only)",
+                "Lightning Ball",
+                "Lightning Burial: Banquet of Lightning (Anime only)",
+                "Lightning Flash",
+                "Lightning Strike Armour (Anime only)",
+                "Lorentz Gun (Novel only)",
+                "Multiple String Light Formation (Anime only)",
+                "Mystical Palm Technique (Anime only)",
+                "Shadow Clone Technique (Anime only)",
+                "String Light Formation (Anime only)",
+                "Super Compression Rasengan (Anime only)",
+                "Wind Release: Gale Palm (Anime only)"
+            ]
+        },
+        {
+            "id": 1307,
+            "name": "Sasuke Uchiha",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/21/Sasuke_Part_1.png",
+                "https://static.wikia.nocookie.net/naruto/images/1/13/Sasuke_Part_2.png"
+            ],
+            "jutsu": [
+                "Afterglow",
+                "Amaterasu",
+                "Amaterasu: Flame Wrapping Fire",
+                "Amenotejikara",
+                "Animal Path",
+                "Area Scanning Technique",
+                "Asura Path",
+                "Bansh\u014d Ten'in (Anime only)",
+                "Binding Snake Glare Spell",
+                "Blaze Release: Honoikazuchi (Anime only)",
+                "Blaze Release: Kagutsuchi",
+                "Blaze Release: Susanoo Kagutsuchi",
+                "Blaze Release: Yasaka Magatama",
+                "Chibaku Tensei",
+                "Chidori",
+                "Chidori Current",
+                "Chidori Light Sword",
+                "Chidori Senbon",
+                "Chidori Sharp Spear",
+                "Coercion Sharingan",
+                "Combination Transformation (Anime only)",
+                "Cursed Seal of Heaven",
+                "Demonic Illusion: Mirage Crow",
+                "Demonic Illusion: Shackling Stakes Technique",
+                "Deva Path",
+                "Earth Release: Stone Luster",
+                "Evil Releasing Method",
+                "Fire Release: Dragon Fire Technique",
+                "Fire Release: Great Dragon Fire Technique",
+                "Fire Release: Great Fireball Technique",
+                "Fire Release: Phoenix Sage Fire Technique",
+                "Genjutsu: Sharingan",
+                "Hidden Shadow Snake Hands",
+                "Human Path",
+                "Hurricane Thunderclap \u2014 Majestic Attire Sword Stroke",
+                "Indra's Arrow",
+                "Kirin",
+                "Lightning Flash",
+                "Lion Combo",
+                "Lorentz Gun (Novel only)",
+                "Majestic Attire: Susanoo",
+                "Manipulated Shuriken Technique",
+                "Manipulating Windmill Triple Blades",
+                "Moonlight",
+                "Naka Shrine Pass Technique",
+                "Naraka Path",
+                "Orochimaru-Style Body Replacement Technique",
+                "Outer Path",
+                "Pachinko Technique (Anime only)",
+                "Peregrine Falcon Drop",
+                "Preta Path",
+                "Reverse Summoning Technique",
+                "Sasuke Uchiha's Space\u2013Time D\u014djutsu",
+                "Scorch Release: Halo Hurricane Jet Black Arrow Style Zero",
+                "Shadow Clone Technique",
+                "Shadow Shuriken Technique",
+                "Shadow of the Dancing Leaf",
+                "Six Paths Technique",
+                "Six Paths Yin Power",
+                "Six Paths \u2014 Chibaku Tensei",
+                "Strong Fist",
+                "Summoning Technique (Hawk, Snake)",
+                "Summoning: Lightning Flash Blade Creation",
+                "Supercooled Water Technique",
+                "Surging Fire Wild Dance",
+                "Susanoo",
+                "Susanoo: Captive Slash",
+                "Susanoo: Chidori",
+                "Susanoo: Crush",
+                "Susanoo: Fist",
+                "Susanoo: Great Fireball Technique (Anime only)",
+                "Sword of Kagutsuchi",
+                "Sword of Kusanagi: Chidori Katana",
+                "Uchiha Style Shurikenjutsu: \"Lightning\": Triple",
+                "Water Release: Water Formation Wall (Novel only)"
+            ]
+        },
+        {
+            "id": 1310,
+            "name": "Shisui Uchiha",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/4/4c/Shisui_Uchiha.png"
+            ],
+            "jutsu": [
+                "Afterimage Clone (Anime only)",
+                "Body Flicker Technique",
+                "Fire Release: Great Fireball Technique (Anime only)",
+                "Genjutsu: Sharingan (Anime only)",
+                "Kotoamatsukami",
+                "Summoning Technique (Crow)"
+            ]
+        },
+        {
+            "id": 1325,
+            "name": "Iruka Umino",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/b/bc/Iruka.png",
+                "https://static.wikia.nocookie.net/naruto/images/4/4a/Iruka_umino.png"
+            ],
+            "jutsu": [
+                "Demonic Illusion: Hell Viewing Technique (Anime only)",
+                "Sealed Binding Formation (Anime only)",
+                "String Light Formation"
+            ]
+        },
+        {
+            "id": 1335,
+            "name": "Utakata",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/27/Utakata.png"
+            ],
+            "jutsu": [
+                "Acid Permeation (Anime only)",
+                "Blinding Bubbles Technique (Anime only)",
+                "Bubble Clone Technique (Anime only)",
+                "Bubble Dome (Anime only)",
+                "Drowning Bubble Technique (Anime only)",
+                "Explosive Bubble (Anime only)",
+                "Ink Bubble Explosion (Anime only)",
+                "Leech Gap",
+                "Sensing Technique (Anime only)",
+                "Soap Bubble Ninjutsu",
+                "Soap Bubble Slime (Anime only)",
+                "Water Release: Bubbles Technique",
+                "Water Release: Bubbles Technique \u2014 Drift (Anime only)",
+                "Water Release: Wild Water Wave (Anime only)",
+                "Wisdom Wolf Decay"
+            ]
+        },
+        {
+            "id": 1337,
+            "name": "Y\u016bgao Uzuki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/f/f3/Y%C5%ABgao_Uzuki.png"
+            ],
+            "jutsu": [
+                "Dance of the Crescent Moon (Anime only)",
+                "Enclosing Technique (Anime only)",
+                "Hazy Moon Night (Anime only)",
+                "Sensing Technique (Anime only)",
+                "Shadow Clone Technique (Anime only)"
+            ]
+        },
+        {
+            "id": 1339,
+            "name": "Boruto Uzumaki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/d/de/Boruto_Infobox.png"
+            ],
+            "jutsu": [
+                "Boruto Stream",
+                "Compression Rasengan (Anime only)",
+                "Gentle Fist",
+                "Harem Technique",
+                "Improvised Secret Technique: Lightning Ball Shuriken Technique (Anime only)",
+                "K\u0101ma",
+                "K\u0101ma Rift",
+                "Lightning Release Bullet: Powerful Breath (Anime only)",
+                "Lightning Release: Purple Electricity (Manga only)",
+                "Lightning Release: Thunderclap Arrow",
+                "Multiple String Light Formation (Anime only)",
+                "Parent and Child Rasengan",
+                "Rasengan",
+                "Rasengan: \"Unison\"",
+                "Sexy Technique",
+                "Shadow Clone Technique",
+                "String Light Formation (Anime only)",
+                "Student and Teacher: Rasengan",
+                "Summoning Technique (Snake) (Anime only)",
+                "Super Compression Rasengan (Anime only)",
+                "Surging Fire Wild Dance (Anime only)",
+                "Uchiha Style Shurikenjutsu: \"Lightning\": Triple",
+                "Vanishing Rasengan",
+                "Water Release: Surging Sea",
+                "Water Release: Water Formation Wall (Novel only)",
+                "Wind Release: Gale Palm",
+                "Wind Release: Rasengan (Anime only)"
+            ]
+        },
+        {
+            "id": 1342,
+            "name": "Menma Uzumaki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/8/85/Menma_Uzumaki.png"
+            ],
+            "jutsu": [
+                "Great Spiralling Ring",
+                "Nine Masked Beasts",
+                "Repulsion Technique",
+                "Spiralling Ring"
+            ]
+        },
+        {
+            "id": 1344,
+            "name": "Naruto Uzumaki",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/d/d6/Naruto_Part_I.png",
+                "https://static.wikia.nocookie.net/naruto/images/7/7d/Naruto_Part_II.png"
+            ],
+            "jutsu": [
+                "All Directions Shuriken",
+                "Baryon Mode",
+                "Big Ball Rasengan",
+                "Big Ball Rasenshuriken",
+                "Big Ball Spiralling Serial Zone Spheres",
+                "Boil Release: Unrivalled Strength",
+                "Chakra Transfer Technique",
+                "Clone Body Blow",
+                "Clone Flying Arrow",
+                "Clone Spinning Heel Drop (Anime only)",
+                "Combination Transformation",
+                "Continuous Tailed Beast Balls",
+                "Crescent Moon Rasengan",
+                "Earth Release: Earth-Style Wall",
+                "Erupting Propulsion Fist",
+                "Fire Release: Toad Oil Flame Bullet (Anime only)",
+                "Frog Kata",
+                "Frog Strike",
+                "Gelel Rasengan",
+                "Gentle Step Spiralling Twin Lion Fists",
+                "Guts Rasengan",
+                "Harem Technique",
+                "Hurricane Thunderclap \u2014 Majestic Attire Sword Stroke",
+                "Ink Creation",
+                "Kurama Arm Attack",
+                "Mini-Rasenshuriken",
+                "Multiple Shadow Clone Technique",
+                "Naruto Region Combo",
+                "Naruto Uzumaki Combo",
+                "Naruto Uzumaki Two Thousand Combo",
+                "Naruto and Shion's Super Chakra Rasengan",
+                "Negative Emotions Sensing",
+                "New Sexy Technique",
+                "Nine-Tails Chakra Mode",
+                "Ninja Art: Bare-Handed Blade Block",
+                "One Thousand Years of Death",
+                "Pachinko Technique (Anime only)",
+                "Parachute",
+                "Parent and Child Rasengan",
+                "Planetary Rasengan",
+                "Rasengan",
+                "Rasengan: Flash",
+                "Regeneration Ability",
+                "Runt Ball Rasengan (Anime only)",
+                "Sage Art: Lava Release Rasenshuriken",
+                "Sage Art: Magnet Release Rasengan",
+                "Sage Art: Many Ultra-Big Ball Spiralling Serial Spheres",
+                "Sage Art: Super Tailed Beast Rasenshuriken",
+                "Sage Mode",
+                "Scorch Release: Halo Hurricane Jet Black Arrow Style Zero",
+                "Seven-Coloured Rasengan",
+                "Sexy Reverse Harem Technique",
+                "Sexy Technique",
+                "Sexy Technique: Pole Dance and Nice Body (Anime only)",
+                "Shadow Clone Technique",
+                "Shadow Shuriken Technique",
+                "Shuriken Shadow Clone Technique (Anime only)",
+                "Six Paths Sage Mode",
+                "Six Paths Senjutsu",
+                "Six Paths Yang Power",
+                "Six Paths \u2014 Chibaku Tensei",
+                "Six Paths: Ultra-Big Ball Rasenshuriken",
+                "Soap Bubble Ninjutsu (Anime only)",
+                "Spiralling Absorption Sphere",
+                "Spiralling Serial Spheres",
+                "Spiralling Strife Spheres",
+                "Strong Fist (Anime only)",
+                "Summoning Technique (Toad)",
+                "Summoning: Food Cart Destroyer Technique",
+                "Super Mini-Tailed Beast Ball",
+                "Super-Ultra-Big Ball Rasengan",
+                "Supreme Ultimate Rasengan",
+                "Tailed Beast Ball",
+                "Tailed Beast Ball Rasenshuriken",
+                "Tailed Beast Chakra Arms",
+                "Tailed Beast Full Charge",
+                "Tailed Beast Rasengan",
+                "Tailed Beast Shockwave",
+                "Torii Seal",
+                "Tornado Rasengan",
+                "Truth-Seeking Ball",
+                "Turning into a Frog Technique (Anime only)",
+                "Typhoon Water Vortex Technique",
+                "Ultra-Big Ball Rasengan",
+                "Ultra-Many Spiralling Serial Spheres",
+                "Uzumaki Formation (Anime only)",
+                "Wind Release: Rasengan",
+                "Wind Release: Rasenshuriken",
+                "Wind Release: Repeated Rasenshuriken",
+                "Wind Release: Toad Gun (Anime only)",
+                "Wind Release: Toad Oil Bullet (Anime only)",
+                "Wind Release: Toad Oil Flame Bullet (Anime only)",
+                "Wind Release: Ultra-Big Ball Rasenshuriken",
+                "Wisdom Wolf Decay"
+            ]
+        },
+        {
+            "id": 1345,
+            "name": "Nine-Tailed Naruto Clone",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/5/51/Kyuubi_Naruto_Clone.png"
+            ],
+            "jutsu": [
+                "Spear of Heaven Nine-Tails Beam",
+                "Tailed Beast Ball",
+                "Tailed Beast Chakra Arms",
+                "Tailed Beast Shockwave"
+            ]
+        },
+        {
+            "id": 1346,
+            "name": "Victor",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/90/Victor.png"
+            ],
+            "jutsu": [
+                "Arm Growth Technique (Anime only)",
+                "Earth Release: Dust Storm (Anime only)",
+                "Earth Release: Tearing Earth Turning Palm (Anime only)",
+                "Fire Release: Great Fireball Technique (Anime only)",
+                "Fire Release: Great Flame Flower (Anime only)",
+                "Genjutsu Communication",
+                "Lightning Release: Heavenly Formation Lightning (Anime only)",
+                "Self-Healing Technique",
+                "Water Release: Water Formation Wall (Anime only)",
+                "Wind Release: Great Balloon (Anime only)"
+            ]
+        },
+        {
+            "id": 1359,
+            "name": "Kabuto Yakushi",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/c/c9/Kabuto_Part_1.png",
+                "https://static.wikia.nocookie.net/naruto/images/0/0b/Kabuto_Part_II.png"
+            ],
+            "jutsu": [
+                "Attack of the Twin Demons",
+                "Body Fluid Shedding Technique",
+                "Body Recreation Technique (Anime only)",
+                "Chakra Absorbing Snakes (Anime only)",
+                "Chakra Draining Seal",
+                "Chakra Scalpel",
+                "Clone Snakes (Anime only)",
+                "Clone Snakes: Serpent Technique (Anime only)",
+                "Dance of the Seedling Fern",
+                "Dead Soul Technique",
+                "Demonic Flute: Phantom Sound Chains",
+                "Earth Release: Earth Shore Return",
+                "Earth Release: Hiding Like a Mole Technique",
+                "Hidden Shadow Snake Hands",
+                "Hiding with Camouflage Technique (Anime only)",
+                "Many Hidden Shadow Snake Hands",
+                "Mystical Palm Technique",
+                "Orochimaru-Style Body Replacement Technique",
+                "Reverse Summoning Technique",
+                "Sage Art: Inorganic Reincarnation",
+                "Sage Art: White Rage Technique",
+                "Sage Mode",
+                "Sage Transformation",
+                "Scroll Communication Technique (Anime only)",
+                "Slithering Snake Mode",
+                "Snake Clone Technique (Anime only)",
+                "Soft Physique Modification",
+                "Spider Web Unrolling",
+                "Strange Transmission Distant Shadow",
+                "Summoning Technique (Snake)",
+                "Summoning: Impure World Reincarnation",
+                "Temple of Nirvana Technique",
+                "Vanishing Facial Copy Technique (Anime only)",
+                "Water Release: Great Waterfall Technique",
+                "Water Release: Water Bullet Technique",
+                "Water Release: Water Dragon Bullet Technique",
+                "Yin Healing Wound Destruction"
+            ]
+        },
+        {
+            "id": 1364,
+            "name": "F\u016b Yamanaka",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/95/Fu_1.png"
+            ],
+            "jutsu": [
+                "Assassination Technique",
+                "Mind Body Switch Technique",
+                "Mind Puppet Switch Cursed Seal Technique",
+                "Sensing Technique"
+            ]
+        },
+        {
+            "id": 1365,
+            "name": "Ino Yamanaka",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/d/dd/Ino.png",
+                "https://static.wikia.nocookie.net/naruto/images/8/89/Ino2.png"
+            ],
+            "jutsu": [
+                "Chakra Hair Trap Technique",
+                "Chakra Transfer Technique (Anime only)",
+                "Earth Release: Practice Brick Technique",
+                "Formation Ino\u2013Shika\u2013Ch\u014d",
+                "Four-Corner Sealing Barrier (Anime only)",
+                "Human Bullet Yo-Yo",
+                "Mind Body Disturbance Technique (Anime only)",
+                "Mind Body Switch Technique",
+                "Mind Body Transmission Technique",
+                "Mind Clone Switch Technique",
+                "Mystical Palm Technique",
+                "Psycho Mind Transmission (Anime only)",
+                "Sensing Technique",
+                "Sensing Transmission"
+            ]
+        },
+        {
+            "id": 1367,
+            "name": "Inoichi Yamanaka",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/d/d2/Inoichi_Yamanaka.png"
+            ],
+            "jutsu": [
+                "Formation Ino\u2013Shika\u2013Ch\u014d",
+                "Mind Body Disturbance Technique",
+                "Mind Body Switch Technique",
+                "Mind Body Transmission Technique",
+                "Mind Disturbance Dance Performance Technique (Anime only)",
+                "Psycho Mind Transmission",
+                "Sensing Technique",
+                "Sensing Water Sphere"
+            ]
+        },
+        {
+            "id": 1368,
+            "name": "Inojin Yamanaka",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/e/e6/Inojin_movie.png"
+            ],
+            "jutsu": [
+                "Chakra Lock-On (Anime only)",
+                "Chakra Transfer Technique (Anime only)",
+                "Formation Ino\u2013Shika\u2013Ch\u014d",
+                "Mind Body Switch Technique",
+                "Mind Body Transmission Technique",
+                "Multiple String Light Formation (Anime only)",
+                "Mystical Palm Technique (Anime only)",
+                "Sealing Technique: Tiger Vision Staring Bullet (Anime only)",
+                "Sensing Technique (Anime only)",
+                "String Light Formation (Anime only)",
+                "Super Beast Imitating Drawing"
+            ]
+        },
+        {
+            "id": 1369,
+            "name": "Kohan Yamanaka",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/0/01/Kohan_Yamanaka.png"
+            ],
+            "jutsu": [
+                "Chakra Lock-On",
+                "Mind Body Switch Technique",
+                "Sensing Technique"
+            ]
+        },
+        {
+            "id": 1373,
+            "name": "Yamato",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/f/f7/Yamato_newshot.png",
+                "https://static.wikia.nocookie.net/naruto/images/4/48/Yamato_Part_III.png"
+            ],
+            "jutsu": [
+                "Area Scanning Technique",
+                "Ball of Light Technique (Anime only)",
+                "Earth Release: Earth Flow Divide",
+                "Earth Release: Earth Flow Spears (Anime only)",
+                "Earth Release: Earth-Style Rampart",
+                "Earth Release: Earth-Style Wall",
+                "Earth Release: Hiding in Rock Technique (Anime only)",
+                "Earth Release: Tunnelling Technique",
+                "Hiding in Surface Technique",
+                "Hokage-Style Sixty-Year-Old Technique \u2014 Kakuan Entering Society with Bliss-Bringing Hands",
+                "Regeneration Ability",
+                "Tailed Beast Sealing",
+                "Transmission Wood",
+                "Typhoon Water Vortex Technique",
+                "Water Release: Tearing Torrent",
+                "Water Release: Water Bowl (Anime only)",
+                "Water Release: Water Formation Wall (Anime only)",
+                "Water Release: Waterfall Basin Technique",
+                "Wood Clone Technique",
+                "Wood Release: Foo Dog Heads",
+                "Wood Release: Four-Pillar House Technique",
+                "Wood Release: Four-Pillar Prison Technique",
+                "Wood Release: Great Forest Technique",
+                "Wood Release: Hand Tool Manipulation",
+                "Wood Release: Nativity of a Sea of Trees",
+                "Wood Release: Serial Pillar Houses Technique",
+                "Wood Release: Smothering Binding Technique",
+                "Wood Release: Stocks",
+                "Wood Release: Transformation",
+                "Wood Release: Tree Bind Flourishing Burial (Anime only)",
+                "Wood Release: Wood Locking Wall",
+                "Wood Release: Wood Spikes Ring",
+                "Wood Release: World of Trees Wall (Anime only)"
+            ]
+        },
+        {
+            "id": 1382,
+            "name": "Yome",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/2a/Yome.png"
+            ],
+            "jutsu": [
+                "Evasion Technique",
+                "Mystical Palm Technique",
+                "Water Droplet Reflection Sight"
+            ]
+        },
+        {
+            "id": 1400,
+            "name": "Iwabee Yuino",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/0/0b/Iwabee_Yuino.png"
+            ],
+            "jutsu": [
+                "Chakra Transfer Technique (Anime only)",
+                "Earth Release: Earth Flow Spears (Anime only)",
+                "Earth Release: Earth Flow Wave (Anime only)",
+                "Earth Release: Earth-Style Wall (Anime only)",
+                "Earth Release: Gravel (Anime only)",
+                "Earth Release: Reverse Antlion (Anime only)",
+                "Earth Release: Rock Brick Cane",
+                "Earth Release: Rock Trail",
+                "Earth Release: Sandwich Technique (Anime only)",
+                "Earth Release: Tunnelling Technique (Anime only)",
+                "Multiple String Light Formation (Anime only)",
+                "Mystical Palm Technique (Anime only)",
+                "String Light Formation (Anime only)"
+            ]
+        },
+        {
+            "id": 1411,
+            "name": "Yurinoj\u014d",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/9/95/Yurinoj%C5%8D.png"
+            ],
+            "jutsu": [
+                "Flower Ninja Art",
+                "Flower Ninja Art: Many Blooming Flowers",
+                "Flower Shuriken: Falling Blossoms and Scattering Leaves"
+            ]
+        },
+        {
+            "id": 1426,
+            "name": "White Zetsu",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/5/5f/White_Zetsu.png"
+            ],
+            "jutsu": [
+                "Chakra Transfer Technique",
+                "Mayfly",
+                "Parasite Clone",
+                "Regeneration Ability",
+                "Spore Technique",
+                "Substitute Technique"
+            ]
+        },
+        {
+            "id": 1427,
+            "name": "Z\u014d",
+            "images": [
+                "https://static.wikia.nocookie.net/naruto/images/2/22/Z%C5%8D.png"
+            ],
+            "jutsu": [
+                "Fire Release: Fired Pottery Technique (Anime only)",
+                "Lightning Release: Four Pillar Bind",
+                "Lightning Release: Sixteen Pillar Bind (Anime only)",
+                "Time Reversal Technique (Anime only)"
+            ]
+        }
+    ]
+}

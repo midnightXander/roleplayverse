@@ -1,0 +1,720 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #1a202c;
+        color: #e2e8f0;
+    }
+    .battle-card {
+        transition: transform 0.3s ease-in-out;
+    }
+    .battle-card:hover {
+        transform: translateY(-5px);
+    }
+    .filter-button.active {
+        background-color: #f37309;
+        color: #1a202c;
+    }
+    .filter-container::-webkit-scrollbar {
+            height: 6px;
+        }
+    .filter-container::-webkit-scrollbar-thumb {
+            background-color: #4a5568;
+            border-radius: 3px;
+        }
+    @media (max-width: 640px) {
+        .filter-container {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+        .filter-button {
+            flex: 0 0 auto;
+        }
+    }
+    @media (min-width: 640px){
+        .filter-container {
+        justify-content: center;
+        }
+    }
+</style>
+
+
+    
+<main class="container mx-auto mt-28 pb-10 px-4">
+    
+        
+    <div class="bg-gray-700 rounded-lg p-6 mb-8">
+        <h2 class="text-2xl font-bold text-orange-500 mb-4">Créer une réquete de combat</h2>
+        <form id="battleRequestForm" class="space-y-4" method="post" action="{% url 'battles:request' %}">
+            {% csrf_token %}
+            <div>
+                
+                <img id="char-img" class="myImg mx-auto w-1/2 h-50 rounded-lg" src="{{characters.0.images.0}}">
+                
+                
+                <div class="my-3">
+                        <label for="character-select" class="block mb-2">Perso:</label>
+                        
+                        <select  id="character-select" name="character" class="w-full bg-gray-600 text-white p-2 rounded-lg">
+                            <option value="">Choisir le personnage</option>
+                            {% for character in characters %}
+                            {% if player.p_character == character.name %}
+                            <option selected value="{{character.name}}" data-img_link="{{character.images.0}}">{{character.name}} </option>
+                            {% else %}
+                            <option value="{{character.name}}" data-img_link="{{character.images.0}}">{{character.name}} </option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                        <p class="mt-2 text-sm text-gray-400">consulter le <a class="text-orange-500 hover:text-orange-600" href="/characters" >catalogue des personnages</a> pour connaitre tous les jutsu de vos personnages préferés</p>
+
+                </div>
+                <div class="my-3">
+                    <label for="battleType-select" class="block mb-2">Type de combat:</label>
+                
+                <select  id="battleType-select" name="type" class="w-full bg-gray-600 text-white p-2 rounded-lg">
+                    <option value = "">choisir le type de combat</option>
+                    <option value = "friendly">Amicale</option>
+                    <option value = "stake">Stake</option>
+                    <option value = "rumble" disabled>Rumble</option>
+                </select>
+                </div>
+                <div class="mb-6">
+                    <p class="mt-2 text-gray-400 text-sm"><i class="fas fa-exclamation-triangle text-xl text-yellow-500 mr-2"></i>  des jetons de combat(JC) seront deduit en créant des RDC de type <span class="font-bold text-yellow-500 text-xl">stake</span>.<br><a href="#" class="text-blue-400">comment ça marçhe</a></p>
+                </div>
+
+                {% for message in messages %}
+                <div class="mb-6">
+                    {% if message.tags == 'error' %}
+                    <p class="text-red-500 mb-2">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        {{message}} </p>
+                        <a class="text-yellow-500 border-1 border-yellow-500 p-2 rounded" href="{% url 'core:battle_points' %}">Get Battle points</a>
+                        {% else %}
+                        <p class="text-green-500">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                        {{message}}</p>
+                        {% endif %}
+                        
+                </div>
+                {% endfor %}
+                
+                
+            </div>
+            <button  class="request-button bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition duration-300">
+                <i class="fas fa-fist-raised mr-2"></i>Créer la réquete 
+            </button>
+        </form>
+    </div>
+
+    <div class="filter-container w-full mx-auto flex space-x-2 mb-6 overflow-x-auto pb-2">
+        <button data-url="/battles/requests" data-=""   class="filter-button border-1 border-gray-600 shadow-md px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
+            <i class="fas fa-envelope mr-2"></i>RDC
+        </button>
+        <button  data-url="{% url 'battles:filter' 0 %}" data-filter = '0' class="filter-button border-1 border-gray-600 shadow-md px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
+            <i class="fas fa-hourglass-start mr-2"></i>En attente D'arbitrage
+        </button>
+        <button  data-url="/battles/filter/1" data-filter = '1'  class="filter-button border-1 border-gray-600 shadow-md px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
+            
+            <i class="fas fa-user-shield mr-2"></i>Pas commencé
+        </button>
+        <button  data-url="/battles/filter/2" data-filter = '2' class="filter-button border-1 border-gray-600 shadow-md px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
+            <i class="fas fa-fire mr-2"></i>En cours
+        </button>
+        <button  data-url="/battles/filter/3" data-filter = '3' class="filter-button border-1 border-gray-600 shadow-md px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
+            <i class="fas fa-flag-checkered mr-2"></i>Terminé
+        </button>
+    </div>
+
+    <div class="battles-container grid mb-20 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {%  for request in requests %} 
+            <div class="battle-card border-1 border-gray-600 shadow-md rounded-lg p-6 flex flex-col">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold">RDC</h3>
+                    <span class="bg-yellow-500 text-gray-800 px-2 py-1 rounded-full text-sm">{{request.type}}</span>
+                </div>
+                <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center">
+                        <a href="{% url 'users:player' request.sender.user.username %}">
+                            <img src="{{request.sender.profile_picture.url}}" alt="Challenger" class="w-12 h-12 rounded-full mr-4">
+                        </a>
+                        <div>
+                            
+                            <a href="{% url 'users:player' request.sender.user.username %}" class="font-bold hover:text-orange-600">{{request.sender}}</a>
+                            <p class="font-bold ">avec <span class="text-yellow-500">{{request.character}}</span></p>
+                            <p class="text-sm text-gray-400">Rang: {{request.sender.rank}}</p>
+                        </div>
+                    </div>
+                    <i class="fas fa-bolt text-yellow-500 text-2xl"></i>
+                   
+                </div>
+                <button data-url="{% url 'battles:accept' request.id %}" data-requesttype="{{request.type}}" data-character="{{request.character}}" data-requestsender="{{request.sender}}"  class="accept-button bg-green-500 text-white px-4 py-2 cursor-pointer rounded-lg hover:bg-green-600 transition duration-300">
+                    <i class="fas fa-check mr-2"></i>Accepter
+                </button>
+                
+            </div>
+            {% endfor %}
+            <div class="ad-container game animate-fadeIn">
+                <span class="ad-label">Ad</span>
+                <button onclick = 'closeAd(this)' class="ad-close">&times;</button>
+                <a href='https://sophisticatedappearance.com/bP3nVZ0/P.3-pJvwbhmgV_JiZpDu0/1mNqjCYP0tNmTbAZ4LLpTiU/2UNvjiQD1lMHDMkq' target='_blank' class="ad-content">
+                    <p class="text-center">
+                        <!-- Your ad content here (300x90) -->
+                    </p>
+                </a>
+            </div>
+        {% for battle in battles %}
+        <div class="battle-card bg-gray-700 rounded-lg p-6 flex flex-col">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">{{battle.status}}</h3>
+                <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-sm">{{battle.type}}</span>
+            </div>
+            <div class="flex justify-between items-center mb-4 flex-col">
+                <div class="flex items-center">
+                    <img src="{{battle.initiator.profile_picture}}" alt="Player 1" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <a href="{% url 'users:player' battle.initiator.username %}" class="font-bold hover:text-orange-600 ">{{battle.initiator.player}}</a>
+                        <p class="text-sm text-gray-400">Rang: {{battle.initiator.rank}}</p>
+                    </div>
+                </div>
+                <i class="fas fa-bolt text-yellow-500 text-2xl"></i>
+                <div class="flex items-center">
+                    <div class="text-right mr-4">
+                        <a href="{% url 'users:player' battle.opponent.username %}" class="font-bold hover:text-orange-600 ">{{battle.opponent.player}}</a>
+                        <p class="text-sm text-gray-400">Rang: {{battle.opponent.rank}}</p>
+                    </div>
+                    <img src="{{battle.opponent.profile_picture}}" alt="Player 2" class="w-12 h-12 rounded-full">
+                </div>
+            </div>
+            {% if battle.can_refree %}
+            <button data-battle_id="{{battle.id}}" class="proposal-btn bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
+                <i class="fas fa-gavel mr-2"></i>proposer d'arbitrer
+            </button>
+            {% else %}
+            {% if battle.status != 'waiting_refree' %}
+            
+            <div class='flex justify-between items-center'>
+
+            <a href="/battles/battle_room/{{battle.id}}" class="inline-block shadow-md bg-transparent border-1 border-orange-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
+                voir le combat 
+            </a>
+
+            <div><i class="fas fa-eye mr-2"></i>: <span  class='text-orange-500' >{{battle.spectators}}</span></div>
+            </div>
+            <!-- <div class='flex justify-between items-center' > 
+                <a href="{% url 'battles:battle_room' battle.id %}">
+                    <button class="bg-transparent text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
+                        <i class="fas fa-eye mr-2"></i>Watch Battle
+                    </button>
+                </a>
+
+                <div>Specators: <span  class='text-orange-500' >{{battle.spectators.all}}</span></div>
+             </div>    -->
+            {% endif %}
+            {% endif %}
+        </div>
+        {% empty %}
+        {% endfor %}
+        <!-- Add more battle cards for other statuses -->
+
+    </div>
+    {% if requests|length == 0 and battles|length == 0 %}
+        <div class = 'flex flex-col mb-4 justify-center  items-center'>
+            <img src="{% static 'svg/sword-spin.svg'  %}" alt="sword-spin" class="h-64 w-64" >
+            
+            <p class = 'text-center'>Aucun combat actuellement</p>
+        </div>
+    {% endif %}
+
+    <div class = 'filter-empty mb-4  hidden flex flex-col justify-center items-center'>
+        <img src="{% static 'svg/sword-spin.svg'  %}" alt="sword-spin" class="h-64 w-64" >
+        
+        <p class = 'text-center'>Aucun combat dans cet état actuellement</p>
+    </div>
+</main>
+
+<!-- Popup for accepting battle -->
+<div id="confirmRequestPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 animate-scaleIn">
+    <div class="bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4">
+        <h2 class="text-2xl font-bold mb-4">Confirmer RDC</h2>
+        
+        
+        <div class="mb-6">
+            <p class="text-yellow-500"><i class="fas fa-exclamation-triangle mr-2"></i>Notice: 250 Battle Points will be deducted upon creating this request.</p>
+        </div>
+        <div class="flex justify-between">
+            <button id="confirmRequest" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
+                <i class="fas fa-check mr-2"></i>Confirmer
+            </button>
+            <button id="cancelRequest" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
+                <i class="fas fa-times mr-2"></i>Annuler
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Popup for accepting battle -->
+<div id="acceptBattlePopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 animate-scaleIn">
+    <div class="bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4">
+        <h2 class="text-2xl font-bold mb-4">Accepter RDC</h2>
+        <div class="mb-4">
+            <h3 class="font-bold">Adversaire:</h3>
+            <p id="opponentName" class="mb-1"></p>
+            <p id="opponentCharacter" class="mb-1"></p>
+            <p  class=" mb-1">Type: <span id="requestType" class="text-2xl font-bold"></span></p>
+        </div>
+        <div class="mb-4">
+            <label for="yourCharacter" class="block mb-2">Choisir le perso:</label>
+            <select id="yourCharacter" name="yourCharacter" class="w-full bg-gray-700 text-white p-2 rounded-lg">
+                <option value="">Perso</option>
+                            {% for character in characters %}
+                            {% if player.p_character == character.name %}
+                            <option selected value="{{character.name}}" data-img_link="{{character.images.0}}">{{character.name}} </option>
+                            {% else %}
+                            <option value="{{character.name}}" data-img_link="{{character.images.0}}">{{character.name}} </option>
+                            {% endif %}
+                            {% endfor %}
+            </select>
+        </div>
+        <div class="mb-6">
+            <p class="text-yellow-500"><i class="fas fa-exclamation-triangle mr-2"></i>Notice: Battle Points will be deducted upon accepting this request. <br><a href="#" class="text-blue-400">See how it works</a></p>
+        </div>
+        <div class="flex justify-between">
+            <button id="confirmAccept" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
+                <i class="fas fa-check mr-2"></i>Confirmer
+            </button>
+            <button id="cancelAccept" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
+                <i class="fas fa-times mr-2"></i>Annuler
+            </button>
+        </div>
+    </div>
+</div>
+
+{% block main_active %}
+<script>
+    $(()=>{
+        console.log("home")
+        $('.bottom-nav-link').removeClass('bg-gray-700')
+        $('.bottom-nav-link')[2].classList.add('bg-gray-700')
+    })
+</script>
+{% endblock main_active  %}
+
+
+
+<script>
+    function  createBattleElement(battle){
+    const battleElement = document.createElement('div')
+    battleElement.className = 'battle-card  bg-gray-700 rounded-lg p-6 flex flex-col';
+    battleElement.innerHTML = `
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-xl font-bold">${battle.status}</h3>
+                                    <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-sm">${battle.type}</span>
+                                </div>
+                                <div class="flex justify-between items-center mb-4 flex-col">
+                                    <div class="flex items-center">
+                                        <img src="${battle.initiator.profile_picture}" alt="${battle.initiator.player}" class="w-12 h-12 rounded-full mr-4">
+                                        <div>
+                                            <a href="/users/${battle.initiator.username}" class="font-bold hover:text-orange-500 ">
+                                                ${battle.initiator.player} ${ battle.winner ? (battle.winner.id == battle.initiator.id ? "<span class='text-green-500'>W</span>": ''):''}
+                                            </a>
+                                            <p class="text-sm text-gray-400">Rank: ${battle.initiator.rank}</p>
+                                        </div>
+                                    </div>
+                                    <i class="fas fa-bolt text-yellow-500 text-2xl"></i>
+                                    <div class="flex items-center">
+                                        <div class="text-right mr-4">
+                                            <a href="/users/${battle.opponent.username}" class="font-bold hover:text-orange-500 ">
+                                                ${battle.opponent.player} ${ battle.winner ? (battle.winner.id == battle.opponent.id ? "<span class='text-green-500'>W</span>": ''):''}
+                                            </a>
+                                            <p class="text-sm text-gray-400">Rank: ${battle.opponent.rank}</p>
+                                        </div>
+                                        <img src="${battle.opponent.profile_picture}" alt="${battle.opponent.player}" class="w-12 h-12 rounded-full">
+                                    </div>
+                                </div>
+                                ${battle.can_refree ? `<button data-battle_id="${battle.id}" class= "proposal-btn bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
+                                    <i class="fas fa-gavel mr-2"></i>Propose as Referee
+                                </button>`:`
+                                <div class='flex justify-between items-center' > 
+                                <a href="/battles/battle_room/${battle.id}" class="inline-block bg-transparent border-1 border-orange-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
+                                        voir le combat 
+                                </a>
+
+                                <div><i class="fas fa-eye mr-2"></i>: <span  class='text-orange-500' >${battle.spectators}</span></div>
+                                <div>
+                                
+                                ` }
+                            `
+    
+    return battleElement
+}
+    
+function createRequest(request){
+
+    return `
+     <div class="battle-card border-1 border-gray-600 shadow-md rounded-lg p-6 flex flex-col">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold">RDC</h3>
+                            <span class="bg-yellow-500 text-gray-800 px-2 py-1 rounded-full text-sm">${request.type}</span>
+                        </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="flex items-center">
+                                <a href="/users/${request.sender.username}">
+                                    <img src="${request.sender.profile_picture}" alt="Challenger" class="w-12 h-12 rounded-full mr-4">
+                                </a>
+                                <div>
+                                    
+                                    <a href="/users/${request.sender.username}" class="font-bold">${request.sender.player}</a>
+                                    <p class="font-bold ">avec <span class="text-yellow-500">${request.character}</span></p>
+                                    <p class="text-sm text-gray-400">Rang: ${request.sender.rank}</p>
+
+                                    <small class=" font-bold text-sm text-gray-400">${request.date_sent}</small>
+                                </div>
+                            </div>
+                            <i class="fas fa-bolt text-yellow-500 text-2xl"></i>
+                            
+                        </div>
+                        <button class="accept-button bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300" data-url="/battles/accept/${request.id}" data-requesttype="${request.type}" data-character="${request.character}" data-requestsender="${request.sender.player}">
+                            <i class="fas fa-check mr-2"></i>Accepter
+                        </button>
+
+                </div>
+                          
+    
+    `
+
+}
+
+    const battleRequestForm = document.getElementById('battleRequestForm');
+    const requestButton = $('.battleRequestForm .request-button');
+    const requestBattlePopup = $('#confirmRequestPopup');
+    const confirmRequestBtn = $('#confirmRequest');
+    const cancelRequestBtn = $('#cancelRequest');
+
+    //for confirm request creation(might be implemented later)
+    requestButton.on('click',(e)=>{
+        requestBattlePopup.removeClass('hidden')
+    })
+    confirmRequestBtn.on('click', (e) => {  
+    });
+    cancelRequestBtn.on('click', () => {
+        requestBattlePopup.addClass('hidden');
+    });
+
+
+    function popupListener(){
+        // Popup functionality
+     const acceptButtons = document.querySelectorAll('.battle-card .accept-button');
+    const acceptBattlePopup = document.getElementById('acceptBattlePopup');
+    const confirmAcceptBtn = document.getElementById('confirmAccept');
+    const cancelAcceptBtn = document.getElementById('cancelAccept');
+    let accept_battle_url;
+
+    acceptButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            let type = e.target.dataset.requesttype 
+            let sender = e.target.dataset.requestsender
+            let character = e.target.dataset.character
+            accept_battle_url = e.target.dataset.url
+            console.log(accept_battle_url)
+            e.preventDefault();
+            const battleCard = button.closest('.battle-card');
+            const opponentName = sender;
+            // const opponentRank = battleCard.querySelector('.text-sm.text-gray-400').textContent;
+            const requestType = type;
+            const opponentCharacter = character; // Assuming the character name is the same as the player name for this example
+            
+            document.getElementById('opponentName').textContent = `Name: ${opponentName}`;
+            document.getElementById('requestType').textContent = requestType;
+            document.getElementById('opponentCharacter').textContent = `Character: ${opponentCharacter}`;
+
+            acceptBattlePopup.classList.remove('hidden');
+        });
+    });
+
+    confirmAcceptBtn.addEventListener('click', () => {
+        const selectedCharacter = document.getElementById('yourCharacter').value;
+        if (selectedCharacter) {
+            // Add logic to handle battle acceptance
+            $.ajax({
+                url: accept_battle_url,
+                type: "POST",
+                data: {
+                    "character":selectedCharacter,
+                    csrfmiddlewaretoken:"{{ csrf_token }}",
+                },
+                beforeSend: function(){
+                    $('#loading-overlay').addClass('active')
+                },
+                success: function(res){
+                        if(res.status == "success"){
+                            
+                            showMyToast("Request accepted waiting for refree...", 'success')
+                            
+                        }else{
+                            showMyToast(res.message,'info',5500)
+                        }
+                },
+                complete: function(){
+                    $('#loading-overlay').removeClass('active')
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured!', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+
+            })
+
+            
+            acceptBattlePopup.classList.add('hidden');
+        } else {
+            
+            showMyToast('Please select your character before confirming.')
+            
+        }
+    });
+
+    cancelAcceptBtn.addEventListener('click', () => {
+        acceptBattlePopup.classList.add('hidden');
+    });
+    }
+
+    popupListener();
+     
+</script>
+
+<script>
+    $(()=>{
+        
+        function makeProposal(battleId){
+
+            $.ajax({
+                url : `/battles/refree/send_proposal/${battleId}`,
+                type: "POST",
+                data: { csrfmiddlewaretoken:"{{csrf_token}}" },
+                beforeSend: function(){
+                    $('#loading-overlay').toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                       showMyToast(res.message, 'success')
+                    }else{
+                        showMyToast(res.message, 'info', 5000);
+                    }
+                    
+                },
+                complete: function(){
+                    $('#loading-overlay').toggleClass('active')
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+            })
+        
+        }
+
+        const acceptBtn = $(".accept-battle-btn")
+        $(".filter-button").on("click",(e)=>{
+            let url = e.target.dataset.url
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {
+                    
+                },
+                beforeSend: function(){
+                    $('#loading-overlay').toggleClass('active')
+                },
+                success: function(res){
+                        if(res.status == "success"){
+                            console.log(res)
+                            $(".battles-container").empty()
+                            $(".filter-empty").addClass('hidden')
+                            const battles = res.battles ? res.battles : []
+                            const requests = res.requests ? res.requests : []
+
+                            if(battles.length > 0){
+                                res.battles.forEach(battle => {
+                            $(".battles-container").append(createBattleElement(battle))
+                            });
+                            }else if(requests.length > 0){
+                                //display requests
+                                requests.forEach(request =>{
+                                    $(".battles-container").append(createRequest(request))
+                                })
+                                
+                                
+                            }
+                            else{
+                                $(".filter-empty").removeClass('hidden')
+                            }
+                            
+                            
+                            
+                        }else{
+                            
+                            showMyToast('un problème est survenue veuiller réessayer','info',2000)
+                        }
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    
+                },
+                complete: function(){
+                    $('#loading-overlay').toggleClass('active')
+                    
+                    //add listeners
+                    popupListener()
+                    $('.proposal-btn').on('click', (e)=> makeProposal(e.target.dataset.battle_id))
+                },
+
+            })
+        })
+        
+        //console.log(document.querySelector("#character-select").selectedOptions[0].value)
+        acceptBtn.on("click",(e)=>{
+            const character = document.querySelector("#character-select-accept").selectedOptions[0].value
+            console.log(character)
+            
+            $.ajax({
+                url: e.target.dataset.link,
+                type: "POST",
+                data: {
+                    "character":character,
+                    csrfmiddlewaretoken:"{{ csrf_token }}",
+                },
+                success: function(res){
+                        if(res.status == "success"){
+                            e.target.disabled = true
+                            console.log("Request accepted waiting for refree...")
+                        }else{
+                            console.log(res.message)
+                        }
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+
+            })
+                
+        })
+
+
+        //listener for refree proposal
+        $('.proposal-btn').on('click', (e)=> makeProposal(e.target.dataset.battle_id))
+
+    })
+
+
+
+
+</script>
+{% endblock content %}
+
+
+
+
+
+{% block not_content %}
+<script>
+    $(()=>{
+        
+        function makeRequest(url){
+            $.ajax({
+                url : url,
+                type: "POST",
+                data: { csrfmiddlewaretoken:"{{csrf_token}}" },
+                success: function(res){
+                    if(res.status == "success"){
+                        console.log(res.message)
+                    }else{
+                        console.log(res.message)
+                    }
+                    
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+            })
+        
+        }
+
+        const acceptBtn = $(".accept-battle-btn")
+        $(".filter-battle-link").on("click",(e)=>{
+            let url = e.target.dataset.link
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {
+                    csrfmiddlewaretoken:"{{ csrf_token }}",
+                },
+                success: function(res){
+                        if(res.status == "success"){
+                            console.log(res)
+                            $(".bottom-section").empty()
+                            res.battles.forEach(battle => {
+                               let card =  `
+                            <div class="battle-card">
+                            <h5>${battle.initiator}(<b>${battle.i_character}</b>) vs ${battle.opponent}(<b>${battle.o_character}</b>)</h5>
+                            <span class="badge">${battle.type}</span>
+                            <a href="/battles/battle_room/${battle.id}">See battle</a>
+                            ` 
+                            if(battle.can_refree){
+                                card += `<button class='btn btn-success' onclick = makeRequest("/battles/refree/send_proposal/${battle.id}") >Send Refree proposal</button>`
+                            }
+                            card+="</div>"
+                            $(".bottom-section").append(card)
+                            
+                        });
+                            
+                        }else{
+                            console.log(res.message)
+                        }
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+
+            })
+        })
+        console.log(document.querySelector("#character-select").selectedOptions[0].value)
+        acceptBtn.on("click",(e)=>{
+            const character = document.querySelector("#character-select-accept").selectedOptions[0].value
+            console.log(character)
+            
+            $.ajax({
+                url: e.target.dataset.link,
+                type: "POST",
+                data: {
+                    "character":character,
+                    csrfmiddlewaretoken:"{{ csrf_token }}",
+                },
+                success: function(res){
+                        if(res.status == "success"){
+                            e.target.disabled = true
+                            console.log("Request accepted waiting for refree...")
+                        }else{
+                            console.log(res.message)
+                        }
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast('An error occured! try reloading page', 'error')
+                    console.log(textstatus, errorThrown)
+                }
+
+            })
+                
+        })
+
+    })
+
+</script>
+{% endblock not_content %}
+

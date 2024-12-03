@@ -1,0 +1,243 @@
+{% extends "core/base.html" %}
+
+
+{% block content %}
+<style>
+    body{
+        color: white;
+        
+    }
+</style>
+
+<header class="pt-20 pb-10 px-4 bg-gray-800">
+    <div class="max-w-7xl mx-auto text-center">
+        <h1 class="text-4xl font-bold mb-4">Verse Events</h1>
+        <p class="text-xl mb-8">Rejoins des tournois excitants, quizzes, et combats de RolePlay de l'univers Naruto!</p>
+        
+        <!-- <a href="{% url 'events:create' %}">
+        <button id="createEventBtn" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-full text-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+            <i class="fas fa-plus mr-2"></i> Create Event
+        </button>
+        </a> -->
+    </div>
+</header>
+
+<!-- Event Filters -->
+<section class="py-8 bg-gray-800">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex flex-wrap justify-center gap-4">
+            <button class="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out">
+                <i class="fas fa-trophy mr-2"></i> Tournois
+            </button>
+            <button onclick="showMyToast('Bientot...')" class="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out">
+                <i class="fas fa-question-circle mr-2"></i> Quizzes
+            </button>
+            <button onclick="showMyToast('Bientot...')" class="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out">
+                <i class="fas fa-fist-raised mr-2"></i> Royal Rumble
+            </button>
+            <button onclick="showMyToast('Bientot...')" class="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-full transition duration-300 ease-in-out">
+                <i class="fas fa-book-open mr-2"></i> Stories
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Events Grid -->
+<section class="py-12 bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for event in events %}
+            {% if event.type == 'tournament' %}
+            <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+                <div class="relative">
+                    <!-- 5486894 -->
+                    <img src="{{event.tournament.cover.url}}" alt="{{event.tournament.name}}" class="w-full h-48 object-cover">
+                    <div class="absolute top-0 right-0 bg-orange-500 text-white px-3 py-1 rounded-bl-lg">
+                        <i class="fas fa-trophy mr-1"></i> Tournois
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold mb-2">{{event.tournament.name}}</h3>
+                    <p class="text-gray-400 mb-2"><i class="fas fa-caret-right mr-2"></i>Status: <span class="text-orange-500">{{event.tournament.status}}</span></p>
+
+                    <p class="text-gray-400 mb-2"><i class="fas fa-award mr-2"></i>Prix: <span class="text-orange-500">{{event.tournament.reward}} JC</span></p>
+                    <p class="text-gray-400 mb-2"><i class="fas fa-ticket-simple mr-2"></i>Entrée: <span class="text-orange-500">{{event.tournament.participation_cost}} JC</span></p>
+                    <p class="text-gray-400 mb-2"><i class="fas fa-user-ninja mr-2"></i>Nombre de participants: <span class="text-orange-500">{{event.tournament.n_participants}}</span></p>
+                    <p class="text-gray-400 mb-2">{{event.tournament.rules}}</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm"><i class="far fa-calendar-alt mr-2"></i>{{event.tournament.date_created}}</span>
+                        <a href="/events/tournaments/{{event.tournament.id}}">
+                        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out">
+                            Details <i class="ml-2 fas fa-chevron-right" ></i>
+                        </button>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+            {% else %}
+
+            {% endif %}
+            
+            {% endfor %}
+
+            <!-- Tournament Event Card -->
+            <!-- <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+                <div class="relative">
+                     5486894 
+                    <img src="https://wallpaperaccess.com/full/477723.jpg" alt="Chunin Exams" class="w-full h-48 object-cover">
+                    <div class="absolute top-0 right-0 bg-orange-500 text-white px-3 py-1 rounded-bl-lg">
+                        <i class="fas fa-trophy mr-1"></i> Tournament
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold mb-2">Chunin Exams: Forest of Death</h3>
+                    <p class="text-gray-400 mb-4">Survive the Forest of Death and prove your worth as a shinobi!</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm"><i class="far fa-calendar-alt mr-2"></i>May 15, 2023</span>
+                        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out">
+                            Join Now
+                        </button>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- Quiz Event Card -->
+            <!-- <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+                <div class="relative">
+                    <img src="https://wallpaperaccess.com/full/1801715.jpg" alt="Ninja Trivia" class="w-full h-48 object-cover">
+                    <div class="absolute top-0 right-0 bg-blue-500 text-white px-3 py-1 rounded-bl-lg">
+                        <i class="fas fa-question-circle mr-1"></i> Quiz
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold mb-2">Ultimate Ninja Trivia Night</h3>
+                    <p class="text-gray-400 mb-4">Test your knowledge of the Naruto universe and win prizes!</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm"><i class="far fa-calendar-alt mr-2"></i>May 20, 2023</span>
+                        <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out">
+                            Register
+                        </button>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- Royal Rumble Event Card -->
+            <!-- <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+                <div class="relative">
+                    <img src="https://wallpaperaccess.com/full/201660.jpg" alt="Shinobi Showdown" class="w-full h-48 object-cover">
+                    <div class="absolute top-0 right-0 bg-red-500 text-white px-3 py-1 rounded-bl-lg">
+                        <i class="fas fa-fist-raised mr-1"></i> Royal Rumble
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold mb-2">Shinobi Showdown: Last Ninja Standing</h3>
+                    <p class="text-gray-400 mb-4">Battle against 99 other ninjas in this epic free-for-all!</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm"><i class="far fa-calendar-alt mr-2"></i>June 1, 2023</span>
+                        <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out">
+                            Enlist
+                        </button>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- Story Event Card -->
+            <!-- <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+                <div class="relative">
+                    <img src="https://wallpaperaccess.com/full/1355645.jpg" alt="Tale of the Legendary Sannin" class="w-full h-48 object-cover">
+                    <div class="absolute top-0 right-0 bg-purple-500 text-white px-3 py-1 rounded-bl-lg">
+                        <i class="fas fa-book-open mr-1"></i> Story
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold mb-2">Tale of the Legendary Sannin</h3>
+                    <p class="text-gray-400 mb-4">Experience the epic story of Jiraiya, Tsunade, and Orochimaru!</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm"><i class="far fa-calendar-alt mr-2"></i>Ongoing</span>
+                        <button class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out">
+                            Start Reading
+                        </button>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- Add more event cards here -->
+
+        </div>
+    </div>
+</section>
+
+<!-- Footer (same as before) -->
+<footer class="bg-gray-900 text-white py-8">
+    <!-- ... (footer content) ... -->
+</footer>
+
+<script>
+    // Scroll Progress Indicator
+    // window.addEventListener('scroll', () => {
+    //     const scrollIndicator = document.querySelector('.scroll-indicator');
+    //     const windowScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    //     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    //     const scrolled = (windowScroll / height) * 100;
+    //     scrollIndicator.style.width = scrolled + '%';
+    // });
+
+    // GSAP Animations
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Animate event cards
+    gsap.utils.toArray('.bg-gray-800').forEach((card, index) => {
+        gsap.from(card, {
+            y: 50,
+            opacity: 0,
+            duration: 0.6,
+            delay: index * 0.1,
+            scrollTrigger: {
+                trigger: card,
+                start: 'top bottom-=100',
+                toggleActions: 'play none none reverse'
+            }
+        });
+    });
+
+    // Animate filter buttons
+    gsap.from('.bg-gray-700', {
+        scale: 0.8,
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.1,
+        ease: 'back.out(1.7)',
+        scrollTrigger: {
+            trigger: '.bg-gray-700',
+            start: 'top bottom-=50',
+            toggleActions: 'play none none reverse'
+        }
+    });
+
+    // Create Event button hover effect
+    const createEventBtn = document.getElementById('createEventBtn');
+    createEventBtn.addEventListener('mouseenter', () => {
+        gsap.to(createEventBtn, {scale: 1.1, duration: 0.3});
+    });
+    createEventBtn.addEventListener('mouseleave', () => {
+        gsap.to(createEventBtn, {scale: 1, duration: 0.3});
+    });
+
+    // Add a floating kunai cursor effect
+    const kunai = document.createElement('div');
+    kunai.innerHTML = '<i class="fas fa-khanda text-orange-500 text-2xl"></i>';
+    kunai.style.position = 'fixed';
+    kunai.style.pointerEvents = 'none';
+    kunai.style.zIndex = '9999';
+    document.body.appendChild(kunai);
+
+    document.addEventListener('mousemove', (e) => {
+        gsap.to(kunai, {
+            x: e.clientX + 10,
+            y: e.clientY + 10,
+            duration: 0.1
+        });
+    });
+</script>
+{% endblock content %}

@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chat</title>
+        <style>
+            ul{
+                list-style: none;
+
+            }
+            a{
+                text-decoration: none;
+            }
+        </style>
+
+        <link rel="stylesheet" href="{% static 'css/chats.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/private_chat.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/group_chat.css' %}" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+    <body>
+        <a href="{% url 'users:logout' %}">Logout</a>
+        <a href="{% url 'core:home' %}">Home</a>
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">Message</div>
+        {% block content %}
+        {% endblock content %}
+
+        <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+        <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>

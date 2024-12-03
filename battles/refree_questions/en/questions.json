@@ -1,0 +1,30 @@
+{
+    "questions":[
+        {
+            "question": "What is the meaning of Akatsuki?",
+            "choices":["Sun","Mod","Moon","Twilight"],
+            "answer":"Moon"
+        },
+        {
+            "question": "Who is the best friend of Naruto?",
+            "choices":["Shikamaru","Bee","Shisui","Sasuke"],
+            "answer":"Sasuke"
+        },
+        {
+            "question": "What's the name given to the sword of Killer Bee",
+            "choices":["Samehada","Ponzi","Pinacle","Pirene"],
+            "answer":"Samehada"
+        },
+        {
+            "question": "Who is the first Hokage?",
+            "choices":["Tsuande","Jiraya","Tobirama","Hashirama"],
+            "answer":"Hashirama"
+        },
+        {
+            "question": "What is the meaning of MC in Role playing?",
+            "choices":["Madagascar", "Main Character","Mauvais Contre","Mad Chaos"],
+            "answer":"Mauvais Contre"
+        }
+
+    ]
+}

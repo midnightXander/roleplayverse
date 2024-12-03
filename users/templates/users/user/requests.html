@@ -1,0 +1,250 @@
+{% extends "users/user/user_page.html"%}
+{% block filterContent %}
+<!-- Content area for filtered results -->
+<div id="filteredContent" class="bg-gray-700 rounded-lg p-6">
+    <div id="battlesList" class="hidden">
+        <!-- ... (keep existing battles content) ... -->
+    </div>
+    <div id="requestsList" class="">
+        <h2 class="text-2xl font-bold mb-4">
+            {% if req_player == player %}
+            Your Battle Requests
+            {% else %}
+            Battle Requests by {{req_player}}
+            {% endif %}
+        </h2>
+        <div class="space-y-6">
+            <p class="text-sm text-yellow-500 mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>Les Requetes de combat(RDC) seront supprimées après 3 combats initités depuis la requète <br><a class="text-blue-500 hover:text-blue-600" href="#">comment ça marche</a></p>
+            <!-- Battle request cards will be dynamically inserted here -->
+             {% for request in requests %}
+
+             <div class="battle-request-card relative bg-gray-800 rounded-lg p-4 shadow-lg">
+                <h3 class="text-xl font-bold mb-2">{{request.character}}</h3>
+                <p class="text-sm mb-2">{{request.date_sent}}</p>
+                <!-- <p class="text-sm mb-2">Expires: {{request.expiry_date.date}}</p> -->
+                
+                <p class="text-sm font-semibold mb-4">Type: <span class="text-blue-400">{{request.type}}</span></p>
+                
+                <button class="bg-red-600 absolute top-2 right-2 hover:bg-red-500 text-white px-3 py-1 rounded text-sm transition duration-300">
+                    <svg class="w-7 h-7 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                      </svg>
+                </button>
+
+                <div class="mb-4">
+                    <h4 class="text-lg font-semibold mb-2">Acceptances:</h4>
+                    
+                        <ul class="space-y-2">
+                                {% for acceptor in request.acceptors %}
+                                <li class="flex justify-between items-center border-1 border-gray-600 shadow-md rounded p-2">
+                                    <a href="{% url 'users:player' acceptor.player.user.username %}">
+                                      <span>{{acceptor.player}} ({{acceptor.player.rank}})</span>  
+                                    </a>
+                                    <button class="start-fight-btn bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded text-sm transition duration-300"
+                                            data-request-id="{{request.id}}" data-acceptance-id="{{acceptor.id}}">
+                                        Start Fight
+                                    </button>
+                                </li>
+                                {% empty %}
+                                <p class="text-gray-400">No acceptances yet.</p>
+                                {% endfor %}
+                        </ul>
+                    
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-2">Propositions d'arbitrages:</h4>
+                    
+                        <ul class="space-y-2">
+                            {% for proposal in request.refree_proposals %}
+                            <p class="text-sm font-semibold mb-2">Toi vs {{proposal.battle.opponent}} <i class="fas fa-khanda text-orange-500 ml-2" ></i> </p>
+                                <li class="flex justify-between items-center border-1 border-gray-600 shadow-md rounded p-2">
+                                    <a href="{% url 'users:player' proposal.player.user.username %}">
+                                        <span>{{proposal.player}} ({{proposal.player.rank}})</span>
+                                    </a>
+                                    
+                                    <div class = "flex justify-between space-x-2 ">
+                                        <button class="answer-referee-btn bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded text-sm transition duration-300"
+                                                data-request_id="{{request.id}}" data-proposal_id="{{proposal.id}}" data-response="accepted" >
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        <button class="answer-referee-btn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition duration-300"
+                                                data-request_id="{{request.id}}" data-proposal_id="{{proposal.id}}" data-response="declined" >
+                                                <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </li>
+
+                                {% empty %}
+                                <p class="text-gray-400">No referee proposals yet.</p>
+
+                                {% endfor %}
+                            
+                        </ul>
+                    
+                </div>
+            </div>
+            {% empty %}
+            <div class="flex flex-col text-gray-300 justify-center items-center">
+                <svg class="w-32 h-32  dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8m18 0-8.029-4.46a2 2 0 0 0-1.942 0L3 8m18 0-9 6.5L3 8"/>
+                  </svg>
+                  
+                <div>
+                    Aucune Demande de Combat actuellement <br> <a href="/battles" class="text-blue-500" >Faire une requète de combat</a>
+                </div>   
+             </div>
+             {% endfor %}
+
+        </div>
+    </div>
+    
+</div>
+
+
+
+
+
+{% block active %}
+<script>
+    $(()=>{
+        $('.filter-button').removeClass('active')
+        $('.filter-button')[3].classList.add('active')
+    })
+</script>
+{% endblock active %}
+
+
+{% block fetchContent %}
+<script>
+    $(()=>{
+
+
+    //Start a battle
+    $(".start-fight-btn").on("click",(e) => startFight(e.target.dataset.requestId, e.target.dataset.acceptanceId)    
+)
+//accept a refree
+$(".answer-referee-btn").on("click",(e)=> answerReferee(e.target,e.target.dataset.request_id, e.target.dataset.proposal_id, e.target.dataset.response))
+
+
+function startFight(requestId, acceptanceId) {
+        console.log(`Starting fight for request ${requestId} with acceptance ${acceptanceId}`);
+        $.ajax({
+            url: `/battles/new/${acceptanceId}`,
+            type:"POST",
+            data:{csrfmiddlewaretoken:"{{csrf_token}}"},
+            beforeSend: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+            success: function(res){
+                if(res.status == "success"){
+                    showMyToast(res.message, 'success')
+                    
+                }else{
+                    showMyToast(res.message)
+                    
+                }
+            },
+            complete: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                  showMyToast("An error occured", 'error')
+                }
+        })
+    }
+
+   
+
+    function createRequestCard(request) {
+        return `
+            <div class="battle-request-card bg-gray-800 rounded-lg p-4 shadow-lg">
+                <h3 class="text-xl font-bold mb-2">${request.title}</h3>
+                <p class="text-sm mb-2">${request.description}</p>
+                <p class="text-sm font-semibold mb-4">Status: <span class="text-blue-400">${request.status}</span></p>
+                
+                <div class="mb-4">
+                    <h4 class="text-lg font-semibold mb-2">Acceptances:</h4>
+                    ${request.acceptances.length > 0 ? `
+                        <ul class="space-y-2">
+                            ${request.acceptances.map(acceptance => `
+                                <li class="flex justify-between items-center bg-gray-700 rounded p-2">
+                                    <span>${acceptance.player} (${acceptance.rank})</span>
+                                    <button class="start-fight-btn bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded text-sm transition duration-300"
+                                            data-request-id="${request.id}" data-acceptance-id="${acceptance.id}">
+                                        Start Fight
+                                    </button>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    ` : '<p class="text-gray-400">No acceptances yet.</p>'}
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-2">Referee Proposals:</h4>
+                    ${request.refereeProposals.length > 0 ? `
+                        <ul class="space-y-2">
+                            ${request.refereeProposals.map(proposal => `
+                                <li class="flex justify-between items-center bg-gray-700 rounded p-2">
+                                    <span>${proposal.referee} (${proposal.rank})</span>
+                                    <div class = "flex justify-between">
+                                    <button class="answer-referee-btn bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-sm transition duration-300"
+                                            data-requestId="${request.id}" data-proposalId="${proposal.id}" data-response="accepted" >
+                                        Accept Referee
+                                    </button>
+                                    <button class="answer-referee-btn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition duration-300"
+                                            data-requestId="${request.id}" data-proposalId="${proposal.id}" data-response="declined" >
+                                        Refuse Referee
+                                    </button>
+                                    </div>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    ` : '<p class="text-gray-400">No referee proposals yet.</p>'}
+                </div>
+            </div>
+        `;
+    }
+
+    
+
+    function answerReferee(btn,requestId, proposalId,response) {
+        
+        // Add logic to accept the referee
+    
+        $.ajax({
+            url: `/battles/refree/validate/${proposalId}`,
+            type:"POST",
+            data:{csrfmiddlewaretoken:"{{csrf_token}}", response:response},
+            beforeSend: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+            success: function(res){
+                if(res.status == "success"){
+                    showMyToast(res.message, 'success')
+                    // if(response != 'accepted'){
+                    //     $(btn).parent('li').remove()
+                    // }
+                }else{
+                    showMyToast(res.message)
+                    
+                }
+            },
+            complete: function(){
+                  $('#loading-overlay').toggleClass('active')
+                  
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                  showMyToast("An error occured", 'error')
+                }
+        })
+    
+    }
+
+    // Initialize with battles shown
+    //showRequests();
+})
+</script>
+{% endblock fetchContent %}
+
+{% endblock filterContent %}

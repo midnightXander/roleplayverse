@@ -1,0 +1,243 @@
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <style>
+            .toast {
+                max-width: 350px;
+                padding: 12px 16px;
+                border-radius: 4px;
+                margin-bottom: 10px;
+                margin: auto;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                animation: fadeInDown 0.5s forwards;
+                /* animation-duration: 0.5s;
+                animation-fill-mode: forwards;  */
+            }
+        
+            .toast-success {
+                background-color: #10B981;
+                color: #ffffff;
+            }
+        
+            .toast-error {
+                background-color: #EF4444;
+                color: #ffffff;
+            }
+        
+            .toast-warning {
+                background-color: #F59E0B;
+                color: #ffffff;
+            }
+        
+            .toast-info {
+                background-color: #3B82F6;
+                color: #ffffff;
+            }
+        
+            .toast-close {
+                background: none;
+                border: none;
+                color: #ffffff;
+                cursor: pointer;
+                font-size: 16px;
+                margin-left: 10px;
+            }
+        
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+        
+            @keyframes fadeOut {
+                from {
+                    opacity: 1;
+                }
+                to {
+                    opacity: 0;
+                }
+            }
+        </style>
+        
+</head>
+
+<body>
+    <div id="top-toastContainer" class="fixed top-4 right-4 z-50"></div>
+    
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="col-3">
+                <form>
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1" class="h4 pt-5">Chatbox</label>
+                        <textarea class="form-control" id="chat-text" readonly rows="10"></textarea><br>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" placeholder="Enter text here" id="input" type="text"></br>
+                    </div>
+                    <input class="btn btn-primary btn-lg btn-block" id="submit" type="button" value="Send">
+                </form>
+            </div>
+        </div>
+    </div>
+    {% comment %} Get data for username and chatbox name{% endcomment %}
+    {{ request.user.username|json_script:"user_username" }}
+    {{ chat_box_name|json_script:"room-name" }}
+
+
+
+    <!-- toast management -->
+<script>
+    
+        const toastContainer = document.getElementById('top-toastContainer');
+    
+    function showToast(message, type = 'info', duration = 3000) {
+        
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        
+        const messageSpan = document.createElement('span');
+        messageSpan.textContent = message;
+        
+        const closeButton = document.createElement('button');
+        closeButton.className = 'toast-close';
+        closeButton.innerHTML = '&times;';
+        closeButton.onclick = () => removeToast(toast);
+        // toast.classList.add('animate__animated')
+        // toast.classList.add('animate__fadeInDown')
+        toast.appendChild(messageSpan);
+        toast.appendChild(closeButton);
+        
+        toastContainer.appendChild(toast);
+        console.log(messageSpan)
+        console.log(toastContainer)
+        // toast.style.animation = 'fadeOut 0.3s ease-out forwards';
+        setTimeout(() => {
+            toast.style.animation = 'fadeOutUp 0.3s ease-out forwards';
+            setTimeout(() => removeToast(toast), 300);
+        }, 3000);
+    }
+    
+    function removeToast(toast) {
+        toastContainer.removeChild(toast);
+    }
+    
+    // Example usage:
+    showToast('Battle started!', 'success');
+    //showToast('Error loading battle data', 'error');
+     //showToast('Your turn in 30 seconds', 'warning');
+    // showToast('New message received', 'info');
+    
+    
+    </script>
+
+
+
+
+    <script>
+
+//example socket 2
+/*
+        const chatSocket = new WebSocket(
+            'ws://'+ window.location.host + '/ws/chat/'
+        );
+
+        chatSocket.onmessage = function(e){
+            const data = JSON.parse(e.data)
+            const message = data['message'];
+            //Handle incoming msgs
+        }
+
+        chatSocket.onclose = function(e){
+            console.error("this Chat socket closed unexpectedly");
+        }
+
+        function sendMessage(message){
+            chatSocket.send(JSON.stringify({
+                'message':message
+            }))
+        }
+
+*/
+
+
+
+  
+  //example socket 1
+  /*  const chatSocket = new WebSocket(
+            'ws://' + 
+            window.location.host + 
+            '/ws/chat/'
+        );
+*/
+       console.log(` window: ${window.location.host} \n `)
+       const boxName = JSON.parse(document.getElementById('room-name').textContent)
+       console.log(` box-name: ${document.getElementById('room-name').textContent} \n `)
+       
+       
+       const chatSocket = new WebSocket(
+            'ws://' + 
+            window.location.host + 
+            '/ws/chat/' + 
+            boxName + 
+            '/'
+        );
+        
+
+        const user_username = JSON.parse(document.getElementById('user_username').textContent)
+        document.querySelector("#submit").onclick = function (e){
+            const messageInputDom = document.querySelector("#input");
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': user_username,
+            }));
+            console.log("sent")
+            messageInputDom.value = '';
+
+        };
+        //const boxName = JSON.parse(document.getElementById('room-name').textContent)
+        
+        
+
+        chatSocket.onmessage = function(e){
+            const data = JSON.parse(e.data);
+            document.querySelector('#chat-text').value += (data.message + ' sent by ' + data.username + '\n')  //adding message to text box
+        }
+
+
+
+    </script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+    </script>
+</body>
+
+</html>

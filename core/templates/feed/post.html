@@ -1,0 +1,386 @@
+{% extends "core/base.html" %}
+
+
+{% block content  %}
+<style>
+    .post-dropdown-menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background-color: #2d3748;
+      border-radius: 0.375rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+  }
+    .post-dropdown-menu.active {
+      display: block;
+  }
+  .post,.battle-card {
+        transition: transform 0.3s ease-in-out;
+    }
+    .post:hover,.battle-card:hover {
+        transform: translateY(-5px);
+    }
+    .like-button.liked, .comment-like-button.liked {
+        color: #ed8936;
+        animation: heartBeat;
+        animation-duration: 1s;
+    }
+    .comment-form {
+        display: none;
+    }
+    .comment-form.active {
+        display: block;
+    }
+    .post-image {
+        max-height: 300px;
+        object-fit: cover;
+    }
+    .post-dropdown-menu.active {
+      display: block;
+  }
+</style>
+
+
+<div id="postContainer" class="text-white  flex flex-col  items-center justify-center" style="margin:100px 0;" >
+</div>
+<!-- <div class="mb-4">
+    <span class="opacity-0">element to create margin</span>
+</div> -->
+
+
+{{ playerName|json_script:'player' }}
+{{ player.user.username | json_script:'username' }}
+<script>
+           
+    // Get the modal
+
+</script>
+
+<!-- toast management -->
+
+<script>
+
+    const currentPlayerData = {
+            player: '{{player}}',
+            username: '{{player.user.username}}',
+        }
+          
+        $(()=>{
+    
+            const currentPlayer = JSON.parse(document.getElementById('player').textContent)
+            const currentPlayerUsername = JSON.parse(document.getElementById('username').textContent)
+          
+    function addDropdownListeners() {
+          document.querySelectorAll('.post-dropdown-toggle').forEach(toggle => {
+              toggle.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                  const dropdown = toggle.nextElementSibling;
+                  dropdown.classList.toggle('active');
+              });
+          });
+    
+          document.addEventListener('click', () => {
+              document.querySelectorAll('.post-dropdown-menu').forEach(menu => {
+                  menu.classList.remove('active');
+              });
+          });
+      }
+    
+    
+//       function createComment(comment){
+//     return `
+//      <div  class="flex flex-col comment bg-gray-600 rounded p-2 " data-toggle="tooltip" data-placement='top' title = '${comment.body}' >
+//                 <a class = "font-semibold flex items-center hover:text-orange-500" href='/users/${comment.author.username}'>
+//                     <img src="${comment.author.profile_picture}" alt="${comment.author.username}" class="w-5 h-5 rounded-full mr-1"> <span>${comment.author.player}</span> 
+//                 </a>
+//                 <span class='body pl-6'>${comment.body}<span>
+//             </div>
+//             <div>
+//                 <span class='font-semi-bold text-xs text-gray-400'>${comment.timestamp}</span> 
+//                 <button data-comment-id="${comment.id}" class='comment-like-button  ${comment.liked ? 'liked' : ''}'><i class="far fa-heart text-xs ml-2 mr-1"></i><span class='comment-likes-count'>${comment.likes}</span></button>
+//             </div>
+//             <br>
+//     `
+// }
+
+
+    // Function to create a post element
+    function createPostElement(post) {
+    const postElement = document.createElement('div');
+    postElement.className = 'post max-w-5xl w-11/12 mx-auto mb-5 bg-gray-700 rounded-lg p-4';
+    
+    postElement.innerHTML = `
+        <div class="flex items-center mb-4 relative">
+            <a href = "/users/${post.author.name}">
+            <img src="${post.author.profile_picture}" alt="${post.author.name}" class="w-10 h-10 rounded-full mr-4">
+            <a>
+            <a href = "/users/${post.author.name}">
+            <h3 class="font-bold hover:text-orange-600">${post.author.player}<br><small class='font-semi-bold text-gray-400'>${post.time_posted}</small></h3>
+            </a>
+    
+            <div class="absolute top-2 right-2">
+                  <button class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
+                      <i class="fas fa-ellipsis-v"></i>
+                  </button>
+                  <div class="post-dropdown-menu w-48 py-2">
+                      <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="toggleToFavorites('${post.id}')"><i class = 'fas fa-bookmark mr-2'></i>Save</div>
+                      <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="socialShare(this,'https://roleplayverse.com/posts/${post.id}')"><i class = 'fas fa-share mr-2'></i>Share</div>
+                      <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('https://roleplayverse.com/posts/${post.id}')"><i class = 'fas fa-copy mr-2'></i>copy link</div>
+                      ${post.author.name == currentPlayerData.username? `
+                      <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600"><i class = 'fas fa-pencil-square-o mr-2'></i> Edit</a>
+                       <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deletePost(this,'${post.id}')"><i class = 'fas fa-trash  mr-2'></i> Delete</div>
+                      `:`
+                      `}
+                      
+                  
+                    </div>
+            </div>
+        </div>
+        
+        <p class="mb-4 body">${post.body}</p>
+        ${post.image ? `<img src="${post.image}" alt="Post image" class="myImg w-full rounded-lg mb-4 post-image">` : ''}
+        <div class="post-infos flex items-center justify-between">
+            <button class="like-button flex items-center ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
+                <i class="far fa-heart text-xl mr-2"></i>
+                <span class="like-count">${post.likes}</span>
+            </button>
+            <button class="comment-button flex items-center">
+                <i class="far fa-comment text-xl mr-2"></i>
+                <span class = 'comment-count'>${post.comments.length}</span>
+            </button>
+        </div>
+         <div class="comments mt-4 overflow-y-auto px-1" style = 'max-height:200px'>
+        ${post.comments.map(comment =>createComment(comment)).join('')}
+    </div>
+        <form class="comment-form mt-4" data-post-id = ${post.id}>
+            <input type="text" class="bg-gray-600 text-white p-2 rounded w-full" placeholder="Add a comment...">
+        </form>
+    `;
+    
+    imgModalListener()
+    
+    return postElement;
+    }
+    
+  
+    
+    
+    // Function to render posts
+    function renderPost() {
+    
+        const postContainer = document.getElementById('postContainer');
+        const loader = document.getElementById('loading-overlay');
+        
+        $.ajax({
+            url:"",
+            type:"POST",
+            data: {
+                csrfmiddlewaretoken: '{{csrf_token}}'
+            },
+            beforeSend: function(){
+                loader.classList.toggle('active');
+            },
+            success: function(res){
+                if(res.status == 'success'){
+                    post = res.post
+                    const adElement = createAdElement('https://sophisticatedappearance.com/b/3KVh0.P/3VpuvzbOmpVEJBZND_0O1bNTj/Yx0/NzTtAE4oLLT-Ur2ONAjoQt1/M/DFkB')
+                    const postElement = createPostElement(post);
+                    postContainer.appendChild(adElement);
+                    postContainer.appendChild(postElement);
+                    
+
+                }
+            },
+            complete: function(){
+                addDropdownListeners()
+                commentListener()
+                
+                    document.querySelectorAll('.body').forEach((element)=>{
+                    element.innerHTML = linkifyHtml(element.textContent, {
+                        target:"_blank",
+                        className: 'link'
+                    })
+                    
+                })
+    
+                //ad close listener
+            //     if(document.querySelector('.ad-container')){
+            //         document.querySelector('.ad-close').addEventListener('click', function() {
+            //     this.closest('.ad-container').style.display = 'none';
+            //     });
+            // }
+                loader.classList.toggle('active');
+                
+    
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                
+                showMyToast('An error occured, please try reloading page','error')
+            }
+            
+        })
+    
+    // Animate posts appearance
+    gsap.from('.post', {
+        y: 50,
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.2,
+        ease: 'power2.out'
+    });
+    }
+    
+    // Render initial posts
+    renderPost();
+    
+    // Infinite scrolling
+   
+   
+    
+  
+    // Event delegation for like buttons
+    document.getElementById('postContainer').addEventListener('click', (e) => {
+    if (e.target.closest('.like-button')) {
+        const likeButton = e.target.closest('.like-button');
+        const postId = likeButton.dataset.postId;
+        $(e.target).toggleClass('animate__animated animate__heartBeat')
+        $.ajax({
+            url:  `/post/react/${postId}`,
+            type:'POST',
+            beforeSend: function(){
+                
+            },
+            success: function(res){
+                
+                likeButton.querySelector('.like-count').textContent = res.likes
+                if(res.message == 'liked'){
+                    if(!likeButton.classList.contains('liked')){
+                        likeButton.classList.add('liked');
+                    } 
+                    
+                }else if(res.message == 'unliked'){
+                    likeButton.classList.remove('liked');
+                }
+            },
+            complete: function(){
+                
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                
+                showMyToast('an error occured please try again', 'error')
+            }
+            
+        })
+    
+        
+    }else if (e.target.closest('.comment-like-button')) {
+    const likeButton = e.target.closest('.comment-like-button');
+    const postId = likeButton.dataset.commentId;
+    $(e.target).toggleClass('animate__animated animate__heartBeat')
+    $.ajax({
+        url:  `/comment/react/${postId}`,
+        type:'POST',
+        beforeSend: function(){
+            
+        },
+        success: function(res){
+            console.log(res)
+            likeButton.querySelector('.comment-likes-count').textContent = res.likes
+            if(res.message == 'liked'){
+                if(!likeButton.classList.contains('liked')){
+                    likeButton.classList.add('liked');
+                } 
+                
+            }else if(res.message == 'unliked'){
+                likeButton.classList.remove('liked');
+            }
+        },
+        complete: function(){
+            
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            console.log('Error:', textstatus,errorThrown)
+            showMyToast('an error occured please try again', 'error')
+        }
+        
+    })
+
+    
+}
+    });
+    
+    // Event delegation for comment buttons
+    document.getElementById('postContainer').addEventListener('click', (e) => {
+    if (e.target.closest('.comment-button')) {
+        const commentForm = e.target.closest('.post').querySelector('.comment-form');
+        commentForm.classList.toggle('active');
+        if (commentForm.classList.contains('active')) {
+            commentForm.querySelector('input').focus();
+        }
+    }
+    });
+    
+    function commentListener(){
+        const commentForm = $('.comment-form')
+        
+        commentForm.on('submit',(e)=>{
+            e.preventDefault()
+            const postId = e.target.dataset.postId
+            const commentSection = $(e.target).siblings('.comments')
+            
+        
+            
+            const body = $(e.target).find('input').val().trim()
+            if(body){
+    
+                
+                $.ajax({
+                    url: `/post/comment/new/${postId}`,
+                    type: 'POST',
+                    data: {
+                        csrfmiddlewaretoken: '{{csrf_token}}',
+                        body: body,
+                    },
+                    beforeSend: function(){
+                        $('#loading-overlay').toggleClass('active')
+                    },
+                    success: function(res){
+                        commentsCount = res.comment.comments
+                       
+                        $(e.target).find('input').val('')
+
+                        $(commentSection).prepend(createComment(res.comment))
+    
+                    //Update the comments count
+                    $(e.target).siblings('.post-infos').find('.comment-count').text(commentsCount)
+    
+                    //scroll to bottom of the comment section
+                    commentSection.animate({
+                        // scrollTop: commentSection[0].scrollHeight
+                        scrollTop: 0
+                    },'smooth')
+    
+                    },
+                    complete: function(){
+                        $('#loading-overlay').toggleClass('active')
+                        document.querySelectorAll('.body').forEach((element)=>{
+                        element.innerHTML = linkifyHtml(element.textContent, {
+                        target:"_blank",
+                        className: 'link'
+                        })
+                        })
+                    },
+                    error: function(jqXHR, textstatus, errorThrown){
+                        showMyToast('An Error occurred, please try again','error')
+                    }
+                })
+            }else{
+                showMyToast('please add content to comment', 'info')
+            }
+        })
+    }
+        })
+</script>
+{% endblock content %}

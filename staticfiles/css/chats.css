@@ -1,0 +1,16 @@
+.chats-container{
+    .chat-list{
+        .sender{
+            background-color: cadetblue;
+            color: aliceblue;
+            padding: 1rem;
+            margin: 10px 0;
+            position: relative;
+            b{
+                position: absolute;
+                right: 30%;
+            }
+
+        }
+    }
+}

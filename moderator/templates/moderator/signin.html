@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPV Moderator signin</title>
+    <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+ 
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="{% static 'css/output.css' %}" >
+<script src="https://cdn.tiny.cloud/1/j4yc51tqbhmqbmoqot1d4l8uircpwyr932mazjpidtzv6yt7/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Nunito','inter','Roboto Mono','Gill Sans';
+            
+            
+        }
+        *{
+            font-family: 'Nunito','inter','Roboto Mono','Gill Sans';
+        }
+    </style>
+       <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+    </style>
+    <body class="bg-gray-100 min-h-screen flex flex-col">
+        <div class="flex-grow flex items-center justify-center px-4">
+            <div class="bg-white rounded-lg shadow-xl p-8 max-w-md w-full fade-in">
+                <div class="text-center mb-8">
+                    <i class="fas fa-user-shield text-5xl text-blue-500 mb-4"></i>
+                    <h1 class="text-3xl font-bold text-gray-800">Moderator Sign In</h1>
+                </div>
+                
+                {% for message in messages %}
+                <div>{{message}}</div>
+                {% endfor %}
+                
+                <form id="signInForm" method="post" action="{% url 'moderator:signin' %}" class="space-y-6">
+                    {% csrf_token %}
+                    <div>
+                        <label for="signinCode" class="block text-sm font-medium text-gray-700">Sign-in Code</label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-fingerprint text-gray-400"></i>
+                            </div>
+                            <input type="text" id="signinCode" name="signinCode" required class="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md" placeholder="Enter your sign-in code">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Moderator Email</label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-envelope text-gray-400"></i>
+                            </div>
+                            <input type="email" id="email" name="email" required class="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md" placeholder="Enter your sign-in code">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-lock text-gray-400"></i>
+                            </div>
+                            <input type="password" id="password" name="password" required class="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md" placeholder="Enter your password">
+                        </div>
+                    </div>
+                    <div>
+                        <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                            Sign In
+                        </button>
+                    </div>
+                </form>
+               
+            </div>
+        </div>
+        <footer class="bg-white py-4 text-center text-gray-500">
+            <p>&copy; 2023 Your RPG Platform. All rights reserved.</p>
+        </footer>
+    
+        
+    </body>
+    
+</head>

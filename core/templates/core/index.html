@@ -1,0 +1,681 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+    {% load pwa %}
+    {% progressive_web_app_meta %}
+    <link rel="manifest" href="manifest.json">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Join the ultimate Naruto text-based roleplaying community">
+    <meta name="description" content="Incarnate a character and design battles with your creativity">
+    <meta name="description" content="Build or join families and win trophies">
+    <meta name="description" content="Earn money by winning fights">
+
+    <meta name="keywords" content="Role-play communauté roleplay reddit roleplay forum roleplay naruto anime Naruto shippuden messagerie combats simulation">
+    <meta property = "og:image" content = "{% static 'images/logo/logo_1.png' %}" >
+    <meta property = "og:url" content = "https://roleplayverse.com">
+    <link rel="icon" type="image/x-icon" href="{% static 'images/logo/logo_1.png' %}">
+    <title>RolePlay Verse</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+        <link rel="stylesheet" href="{% static 'css/output.css' %}" >
+        <link rel="stylesheet" href="{% static 'css/index.css' %}" >
+        <link rel="stylesheet" href="{% static 'css/effects.css' %}" >
+        <link rel="stylesheet" href="{% static 'css/utility.css' %}" >
+        
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+        .scroll-indicator {
+            height: 3px;
+            background: #ff4500;
+            width: 0%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 50;
+            transition: width 0.3s ease;
+        }
+        .transition-smooth {
+            transition: all 0.3s ease-in-out;
+        }
+        a,a:hover{
+            color: inherit;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="scroll-indicator"></div>
+    <div id="mobileMenu" class="fixed inset-0 bg-gray-800 px-4  z-50   transform translate-x-full transition-transform duration-300 ease-in-out">
+        <header class="flex border-b border-gray-700 mb-4 justify-between">
+            <div>
+                <img class="h-20 w-auto" src="{% static 'images/logo/logo_1.png' %}" alt="Logo">
+            </div>
+            <button id="closeMenu" class="top-4 right-4 text-white text-3xl">&times;</button>
+            
+        </header>
+        
+        <nav class="flex flex-col w-full h-96 justify-between">
+            <ul class="space-y-6">
+                <li><a href="/" class="text-white hover:text-gray-300 transition duration-300">Acceuil</a></li>
+                <li><a href="/characters" class="text-white  hover:text-gray-600 transition duration-300">Personnages</a></li>
+                <li><a href="/blog/tutorials/posts" class="text-white  hover:text-gray-600 transition duration-300">Guide</a></li>
+                <li><a href="/blog" class="text-white  hover:text-gray-600 transition duration-300">Blog</a></li>
+                <li><a href="/services" class="text-white  hover:text-gray-600 transition duration-300">Store</a></li>
+                <li><a href="" class="text-white  hover:text-gray-300 transition duration-300">Contact</a></li>
+            </ul>  
+            
+            <a href="{% url 'users:login' %}">
+                <button class="bg-orange-500  mx-auto w-full hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+                   Se Connecter
+                </button>
+            </a>
+
+        </nav>
+    </div>
+    <!-- Navigation -->
+    <nav class="bg-gray-800 fixed w-full z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between ">
+                <div class="flex items-center">
+                    <a href="#" class="flex-shrink-0">
+                        <img class="h-20 w-auto" src="{% static 'images/logo/logo_1.png' %}" alt="Logo">
+                    </a>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a href="#home" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-gray-700">Acceuil</a>
+                            <a href="#features" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">personnages</a>
+                            <a href="#characters" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">blog</a>
+                            <a href="#join" class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">store</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <a href="{% url 'users:login' %}">
+                        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+                           Se Connecter
+                        </button>
+                    </a>
+                    
+                </div>
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" id="menuToggle" class="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="w-8 h-8 block tcolor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M5 7h14M5 12h14M5 17h10"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center bg-cover bg-center shine-effect" style="background-image: url('https://wallpaperaccess.com/full/2932932.jpg');">
+        <div class="bg-black bg-opacity-50 p-12 rounded-lg text-center">
+            <h1 class="text-5xl font-bold mb-4 animate-pulse">RolePlay Verse</h1>
+            <p class="text-xl mb-8">L'experience ultime du RP Naruto.</p>
+            <a href="/users/signup" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-full text-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+                Commencer a RP
+            </a>
+        </div>
+    </section>
+    
+    <section id="features" class="hero-pattern min-h-screen relative overflow-hidden">
+        
+        <!-- Families feature -->
+        <div class="">
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 mb-8 ">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <!-- Left Content -->
+                    <div class="space-y-8">
+                        <div class="space-y-4">
+                            <h1 class="text-4xl md:text-5xl font-bold leading-tight">
+                                <span class="text-orange-500">Unissez vous</span> et 
+                                <span class="text-orange-500">Grandissez</span> Ensemble
+                            </h1>
+                            <p class="text-xl text-gray-300">
+                                Crée ou rejoins une famille, forge des alliances, et domine le monde Rp  avec tes companions.
+                            </p>
+                        </div>
+
+                        <!-- Feature Cards -->
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="family-card feature feature-gradient p-6 rounded-xl border-2 border-gray-600 transform transition duration-500 hover:scale-105 ">
+                                <div class="text-orange-500 text-3xl mb-4">
+                                    <svg class="w-12 h-12 floating " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                      </svg>
+                                      
+                                </div>
+                                <h3 class="text-xl font-semibold mb-2">Crée une famille</h3>
+                                <p class="text-gray-400">Construit ta légende en tant que parrain d'une famille</p>
+                            </div>
+
+                            <div class="family-card  feature feature-gradient p-6 rounded-xl border-2 border-gray-600 transform transition duration-500 hover:scale-105 ">
+                                <div class="text-orange-500 text-3xl mb-4">
+                                    <!-- <i class="fas fa-users floating"></i> -->
+                                    <svg class="w-12 h-12 floating" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/>
+                                      </svg>
+                                      
+                                </div>
+                                <h3 class="text-xl font-semibold mb-2">Rejoins une famille</h3>
+                                <p class="text-gray-400">Trouve la famille qui te correspond et prends part a une aventure incroyable</p>
+                            </div>
+                        </div>
+
+                        <!-- CTA Buttons -->
+                        <div class="flex flex-wrap gap-4">
+                            <a href="/users/signup" class="px-8 py-3 bg-orange-500 hover:bg-orange-600 rounded-lg font-semibold transition flex items-center">
+                                <i class="fas fa-plus-circle mr-2"></i>
+                                Créer une famille
+                            </a>
+                            <a href="/users/signup" class="px-8 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg font-semibold transition flex items-center">
+                                <i class="fas fa-search mr-2"></i>
+                                Catalogue des Families
+                            </a>
+                        </div>
+
+                        <!-- Quick Stats -->
+                        <div class="flex flex-wrap gap-8 pt-4">
+                            <div>
+                                <div class="text-2xl font-bold text-orange-500">250+</div>
+                                <div class="text-gray-400">Familles actives</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-orange-500">5000+</div>
+                                <div class="text-gray-400">Membres de familles</div>
+                            </div>
+                            <div>
+                                <div class="text-2xl font-bold text-orange-500">100+</div>
+                                <div class="text-gray-400">Bonus familiaux</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Content - Interactive Preview -->
+                    <div class="relative">
+                        <div class="feature bg-gray-800 rounded-xl p-6 border-2 border-gray-600 transform transition duration-500 hover:scale-105 ">
+                            <!-- Family Preview -->
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center">
+                                            <i class="fas fa-dragon text-2xl"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-xl font-bold">Hell's</h3>
+                                            <p class="text-gray-400">Famille de niveau 20</p>
+                                        </div>
+                                    </div>
+                                    <div class="bg-orange-500 px-3 py-1 rounded-full text-sm">
+                                        Top 10
+                                    </div>
+                                </div>
+
+                                <!-- Family Members Preview -->
+                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                    <div class="bg-gray-700 p-3 rounded-lg text-center">
+                                        <!-- <img src="https://placehold.co/40x40" alt="Member" class="w-10 h-10 rounded-full mx-auto mb-2"> -->
+                                        <svg class="w-10 h-10 mx-auto mb-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                          </svg>
+                                          
+                                        <div class="text-sm font-semibold">Hradolf(Hell's)</div>
+                                        <div class="text-xs text-gray-400">Parrain</div>
+                                    </div>
+                                    <div class="bg-gray-700 p-3 rounded-lg text-center">
+                                        <svg class="w-10 h-10 mx-auto mb-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                          </svg>
+                                        <div class="text-sm font-semibold">Sen(Hell's)</div>
+                                        <div class="text-xs text-gray-400">recruteur</div>
+                                    </div>
+                                    <div class="bg-gray-700 p-3 rounded-lg text-center">
+                                        <svg class="w-10 h-10 mx-auto mb-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                                          </svg>
+                                        <div class="text-sm font-semibold">StormSeven(Hell's)</div>
+                                        <div class="text-xs text-gray-400">Membre</div>
+                                    </div>
+                                </div>
+
+                                <!-- Family Perks Preview -->
+                                <div class="space-y-2">
+                                    <div class="text-sm font-semibold text-gray-300">Bonus familiaux</div>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-3 py-1 bg-gray-700 rounded-full text-xs">+10% progression/victoire</span>
+                                        <span class="px-3 py-1 bg-gray-700 rounded-full text-xs">Combat Stake</span>
+                                        <span class="px-3 py-1 bg-gray-700 rounded-full text-xs">Tournois</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Floating Decorative Elements -->
+                        <div class="absolute -top-4 -right-4 w-20 h-20 bg-orange-500 opacity-10 rounded-full blur-xl"></div>
+                        <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-orange-500 opacity-10 rounded-full blur-xl"></div>
+                    </div>
+                </div>
+                
+                
+        <!-- Posts feature -->
+        <div class="feature mt-40 flex flex-col lg:flex-row items-center justify-between gap-12">
+            <!-- Text Content -->
+            <div class="lg:w-1/2">
+                <h2 class="text-4xl font-bold mb-6 bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text">
+                    Partage tes aventures
+                </h2>
+                <p class="text-xl text-gray-400 mb-8">
+                    Fais des posts captivants sur tes experiences en roleplay, partage des memes, et interagie avec d'autres joueurs partout dans le monde, ton histoire merite d'etre raconté! 
+                </p>
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Editeur pour t'aider a creer du superbe contenu RP
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Image, Liens, Vidéo
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Elements de publication interactif
+                    </li>
+                </ul>
+                <a href="/users/signup" class="inline-block bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg transition duration-300">
+                    Commencer a publier
+                </a>
+            </div>
+            
+            <!-- Image Stack -->
+            <div class="lg:w-1/2 relative">
+                <div class="image-stack">
+                    <div class="image-stack__item--bottom">
+                        <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg shadow-lg transform rotate-6"></div>
+                    </div>
+                    <div class="image-stack__item--top floating">
+                        <img src="{% static 'images/screenshots/015643.png' %}" alt="RPG Post Screenshot" class="w-full h-auto rounded-lg shadow-2xl border-4 border-gray-800">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- battles feature -->
+        <div class="mb-16 mt-40 feature">
+            <h2 class="text-4xl font-bold text-center mb-6 bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text">
+                Des Combats Epic t'attendent
+            </h2>
+            <p class="text-xl text-gray-400 text-center max-w-3xl mx-auto">
+                
+                Participez à des combats passionnants au tour par tour, montrez vos prouesses tactiques et gravissez les échelons pour devenir un Rolleur légendaire !
+            </p>
+        </div>
+
+        <div class="feature flex flex-col lg:flex-row items-center justify-between gap-12 mb-16">
+            <!-- Text Content -->
+            <div class="lg:w-1/2">
+                <h3 class="text-2xl font-bold mb-4">Maitrise l'art du RP</h3>
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        des combats strategiques en tour par tour en utilisant les jutsus du personnage choisi
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Combats suivi par arbitrage pour validé les pavé et designer un vainqueur
+                    </li>
+                    <li class="flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Des tournois et battle royale avec des récompenses unique
+                        
+                    </li>
+                </ul>
+                <a href="/users/signup" class="inline-block bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg transition duration-300">
+                    Entrer dans l'arène
+                </a>
+            </div>
+            
+            <!-- Illustration Elements -->
+            <div class="lg:w-1/2 space-y-8">
+                <!-- Leaderboard Illustration -->
+                <div class="feature-gradient p-6 rounded-xl border-2 border-gray-600 transform transition duration-500 hover:scale-105 p-6  shadow-lg">
+                    <h4 class="text-xl font-bold mb-4">Classement du mois</h4>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span>1. DragonSlayer92</span>
+                            <span class="text-orange-500">2500 pts</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>2. ShadowNinja</span>
+                            <span class="text-orange-500">2350 pts</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>3. MysticMage</span>
+                            <span class="text-orange-500">2200 pts</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats Illustration -->
+                <div class="feature-gradient p-6 rounded-xl border-2 border-gray-600 transform transition duration-500 hover:scale-105 p-6 shadow-lg">
+                    <h4 class="text-xl font-bold mb-4">Suis tes stats</h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-green-400">Victoires</p>
+                            <p class="text-2xl font-bold text-orange-500">47</p>
+                        </div>
+                        <div>
+                            <p class="text-red-400">Defaites</p>
+                            <p class="text-2xl font-bold">23</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-400">Ratio de victoires</p>
+                            <p class="text-2xl font-bold text-orange-500">67%</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-400">Rang</p>
+                            <button class="text-3xl text-orange-500 rounded-full border-1 border-gray-400 font-bold">B</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screenshots -->
+        <div class="mb-16">
+            <h3 class="text-3xl md:text-4xl font-bold mb-6 text-center bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text ">Contre qui sera to prochain combat ?</h3>
+            <div class="screenshot-grid">
+                <img src="{% static 'images/screenshots/021459.png' %}" alt="Battle Screenshot 1" class="w-full floating h-auto rounded-lg shadow-lg">
+                <img src="{% static 'images/screenshots/021759.png' %}" alt="Battle Screenshot 2" class="w-full h-auto rounded-lg shadow-lg">
+                <img src="{% static 'images/screenshots/022129.png' %}" alt="Battle Screenshot 3" class="w-full floating h-auto rounded-lg shadow-lg">
+            </div>
+        </div>
+
+
+
+
+        <!-- Ninja Fight Illustration -->
+        <!-- <div class="flex justify-center items-center space-x-12">
+            <svg class="w-32 h-32 text-orange-500 ninja-fight" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor" d="M50 10 L90 90 L10 90 Z" />
+                <circle cx="50" cy="35" r="10" fill="white" />
+                <rect x="45" y="50" width="10" height="30" fill="white" />
+                <line x1="30" y1="60" x2="70" y2="60" stroke="white" stroke-width="2" />
+            </svg>
+            <div class="text-4xl font-bold">VS</div>
+            <svg class="w-32 h-32 text-yellow-500 ninja-fight" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor" d="M50 10 L90 90 L10 90 Z" />
+                <circle cx="50" cy="35" r="10" fill="white" />
+                <rect x="45" y="50" width="10" height="30" fill="white" />
+                <line x1="30" y1="60" x2="70" y2="60" stroke="white" stroke-width="2" />
+            </svg>
+        </div> -->
+        
+        <!-- Characters -->
+        <div class="feature max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-2">Explore le catalogue de <span class="text-orange-500">Personnages</span> et leurs <span class="text-orange-500">jutsus</span></h2>
+            <p class="text-xl text-gray-400 text-center max-w-3xl mx-auto mb-12">
+                Affine ton utilisation de tes personnages préférées en sachant quels jutsus ils utlisent et comment les utilisé 
+            </p>
+            <div class="flex flex-wrap justify-center gap-8">
+                <div class="character-card w-64 bg-gray-800 rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+                    <img src="https://i.pinimg.com/originals/e9/f6/c8/e9f6c8d798b94a30a6093a73d7769b6a.jpg" alt="Naruto" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl text-orange-500 font-semibold mb-2">Naruto Uzumaki</h3>
+                        <p class="text-gray-400">The main protagonist and future Hokage.</p>
+                    </div>
+                </div>
+                <div class="character-card w-64 bg-gray-800 rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+                    <img src="https://i.pinimg.com/originals/d4/55/b5/d455b5c9f06ec8c0d5abec8f6a80d9b1.jpg" alt="Sasuke" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl text-orange-500 font-semibold mb-2">Sasuke Uchiha</h3>
+                        <p class="text-gray-400">Naruto's rival and last surviving Uchiha.</p>
+                    </div>
+                </div>
+                <div class="character-card w-64 bg-gray-800 rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+                    <img src="https://i.pinimg.com/originals/81/9e/84/819e841f210a2ba0aca4d5f3f07a3d89.jpg" alt="Sakura" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl text-orange-500 font-semibold mb-2">Sakura Haruno</h3>
+                        <p class="text-gray-400">Skilled medical-nin and powerful kunoichi.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="mt-40 max-w-7xl flex flex-col justify-center items-center mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-4">et bien plus encore a découvrir, Commence l'aventure pour explorer le reste !</h2>
+            <!-- <p class="text-xl text-gray-400 text-center max-w-3xl mx-auto mb-12">
+                Affine ton utilisation de tes personnages préférées en sachant quels jutsus ils utlisent et comment les utilisé 
+            </p> -->
+            <a href="users/signup" class="bg-orange-500 mx-auto w-1/2 text-center  hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110" >
+            
+                   S'inscrire
+                
+            </a>
+
+            <div class="flex flex-wrap items-center justify-center gap-8">
+                <!-- <div class="character-card w-64 bg-gray-800 rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+                    <img src="https://i.pinimg.com/originals/e9/f6/c8/e9f6c8d798b94a30a6093a73d7769b6a.jpg" alt="Naruto" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-xl text-orange-500 font-semibold mb-2">Naruto Uzumaki</h3>
+                        <p class="text-gray-400">The main protagonist and future Hokage.</p>
+                    </div>
+                </div> -->
+               
+                
+                
+            </div>
+        </div>
+
+
+
+        </div>
+    </div>
+
+
+        
+
+
+    </section>
+
+    
+
+
+    <!-- <section  class="py-20 bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-12">Sur RPV</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-700 p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
+                    <i class="fas fa-users text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-xl text-orange-500 font-semibold mb-2">des parties de roleplay naruto engageant</h3>
+                    <p>
+                        Bat toi contre les autres joueurs en leurs lancant un defi ou en faisant une requete de combat(RDC)
+                    </p>
+                    <p></p>
+                </div>
+                <div class="bg-gray-700 p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
+                    <i class="fas fa-users text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-xl text-orange-500 font-semibold mb-2">Distingue toi avec ton rang</h3>
+                    <p>
+                        Chaque combat te permet de monter en rang et d'atteindre le top du classement des joueurs de RPV et  la <span class="text-orange-500">monetization...</span> oui la monetization. 
+                    </p>
+                    <p></p>
+                </div>
+                <div class="bg-gray-700 p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
+                    <i class="fas fa-users text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-xl text-orange-500 font-semibold mb-2">Bat toi au nom de ta famille</h3>
+                    <p>
+                        Rejoins ou crée une famille et bat toi en son nom pour la hissé au top
+                    </p>
+                    <p>Tu gagnes plus de points et de notoriété en étant dans une famille</p>
+                </div>
+                <div class="bg-gray-700 p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
+                    <i class="fas fa-fist-raised text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-xl text-orange-500 font-semibold mb-2"> Participe a des Evenements exclusifs </h3>
+                    <p>Participe a des tournois,des quizz ou lis des stories captivant</p>
+                    <p>Graçe aux tournois, monte rapidement au classement et fait toi un nom</p>
+                </div>
+                <div class="bg-gray-700 p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
+                    <i class="fas fa-globe text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-xl text-orange-500 font-semibold mb-2">Communique par message</h3>
+                    <p>Communique avec les membres de ta famille par message de groupe ou échange avec les autres joueurs par messagerie privé</p>
+                </div>
+                <div class="bg-gray-700 p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
+                    <i class="fas fa-globe text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-xl text-orange-500 font-semibold mb-2">Reste connecté a tout les joueurs</h3>
+                    <p>Pose des questions, partage des memes, demande des avis ou encore raconte tes aventures dans le RolePlay </p>
+                </div>
+                <div class="bg-gray-700 p-6 rounded-lg shadow-lg transform transition duration-500 hover:scale-105">
+                    <i class="fas fa-globe text-4xl text-orange-500 mb-4"></i>
+                    <h3 class="text-xl text-orange-500 font-semibold mb-2">Gagne de l'argent en tant que joueur</h3>
+                    <p>Graçe a la monetization RPV, remplie les conditions necessaire et commence a gagner de l'argent grace au RP Naruto</p>
+                    <a href="#" class="text-blue-500">en savoir plus</a>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+ 
+    
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-700 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap justify-between">
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-2">RolePlay Verse</h3>
+                    <p class="text-gray-400">L'experience ultime du RP Naruto.</p>
+                </div>
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-2">Liens Utils</h3>
+                    <ul>
+                        <li><a href="/home" class="text-gray-400 hover:text-white">Acceuil</a></li>
+                        <li><a href="/blog" class="text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="/characters" class="text-gray-400 hover:text-white">Personnages</a></li>
+                        <li><a href="/" class="text-gray-400 hover:text-white">Store</a></li>
+                        <br>
+                        <li><a href="/legal/terms#privacy" class="text-gray-400 hover:text-white">Politique de confidentialité</a></li>
+                        <li><a href="/legal/terms#terms" class="text-gray-400 hover:text-white">Termes d'utilisations</a></li>
+                    </ul>
+                </div>
+                <div class="w-full md:w-1/3">
+                    <h3 class="text-xl font-bold mb-2">Rejoins nous sur les réseaux-sociaux</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-700 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2024 RolePlay Verse. Tous droits reservé.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+         document.addEventListener('DOMContentLoaded', function() {
+                const menuToggle = document.getElementById('menuToggle');
+                const mobileMenu = document.getElementById('mobileMenu');
+                const closeMenu = document.getElementById('closeMenu');
+        
+                if(menuToggle){
+                    menuToggle.addEventListener('click', function() {
+                    mobileMenu.classList.remove('translate-x-full');
+                });
+        
+                closeMenu.addEventListener('click', function() {
+                    mobileMenu.classList.add('translate-x-full');
+                });
+                }
+                
+            });
+      
+    </script>
+
+    <script>
+        // Scroll Progress Indicator
+        window.addEventListener('scroll', () => {
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            const windowScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (windowScroll / height) * 100;
+            scrollIndicator.style.width = scrolled + '%';
+        });
+
+        // GSAP Animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Animate character cards
+        gsap.utils.toArray('.character-card').forEach(card => {
+            gsap.from(card, {
+                y: 100,
+                opacity: 0,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top bottom-=100',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // Animate features
+        // gsap.utils.toArray('#features .bg-gray-700')
+        gsap.utils.toArray('.feature').forEach((feature, index) => {
+            gsap.from(feature, {
+                x: index % 2 === 0 ? -100 : 100,
+                opacity: 0,
+                duration: 1,
+                scrollTrigger: {
+                    trigger: feature,
+                    start: 'top bottom-=100',
+                    toggleActions: 'play none none reverse'
+                }
+            });
+        });
+
+        // Parallax effect on hero section
+        gsap.to('#home', {
+            backgroundPosition: '50% 100%',
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '#home',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: true
+            }
+        });
+    </script>
+</body>
+</html>

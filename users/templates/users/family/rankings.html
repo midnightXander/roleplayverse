@@ -1,0 +1,119 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+
+{% block content %}
+<style>
+    :root {
+        --dark-grey: rgb(31 41 55);
+        --light-grey: rgb(67, 83, 105);
+        --orange: #ff6600;
+        --light-orange: #ff8533;
+    }
+    body {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+        font-family: 'Arial', sans-serif;
+    }
+    .ranking-table {
+        background-color: var(--dark-grey);
+        border: 1px solid var(--light-grey);
+    }
+    .ranking-header {
+        background-color: var(--light-grey);
+    }
+    .ranking-row:nth-child(even) {
+        background-color: rgb(67, 83, 105,0.5);;
+    }
+    .ranking-row:hover {
+        background-color: var(--light-grey);
+    }
+    .btn {
+        transition: all 0.3s ease;
+        background-color: var(--orange);
+    }
+    .btn:hover {
+        background-color: var(--light-orange);
+        transform: translateY(-2px);
+    }
+    .rank-1 {
+        color: gold;
+    }
+    .rank-2 {
+        color: silver;
+    }
+    .rank-3 {
+        color: #cd7f32;
+    }
+</style>
+
+<header class="bg-gray-900 text-orange-500 p-4 mt-20">
+    <div class="container mx-auto">
+        <h1 class="text-2xl font-bold">Classement de Familles - RPV</h1>
+    </div>
+</header>
+
+<main class="flex-grow container mx-auto px-4 py-8">
+    <div class="ranking-table rounded-lg overflow-hidden shadow-lg">
+        <div class="ranking-header text-orange-500 p-4 font-bold text-lg grid grid-cols-5 gap-4">
+            <div >Rang</div>
+            <div class="col-span-2">Famille</div>
+            <div>Membres</div>
+            <div>Points</div>
+        </div>
+        <div id="rankings-container">
+            <!-- Rankings will be dynamically inserted here -->
+        </div>
+    </div>
+</main>
+
+
+<script>
+       
+
+    function createRankingRow(family, rank) {
+        const row = document.createElement('a');
+        row.className = 'ranking-row p-4 grid grid-cols-5 gap-4 items-center';
+        row.innerHTML = `
+            <div class="font-bold ${rank <= 3 ? 'rank-' + rank : ''}">${rank}</div>
+            <div class="col-span-2">${family.name}</div>
+            <div>${family.members}</div>
+            <div>${family.points.toLocaleString()}</div>
+        `;
+        row.setAttribute('href',`/users/family/${family.id}`)
+        return row;
+    }
+
+    
+
+    //renderRankings();
+    $.ajax({
+        url: '/users/families/rankings/data',
+        type: 'GET',
+        data: {csrfmiddlewaretoken:'{{csrf_token}}'},
+        beforeSend: function(){
+            
+        },
+        success: function(res){
+            const families = res.families
+            const container = document.getElementById('rankings-container');
+            container.innerHTML = '';
+        
+        // Sort families by points in descending order
+        // const sortedFamilies = families.sort((a, b) => b.points - a.points);
+        
+        families.forEach((family, index) => {
+            container.appendChild(createRankingRow(family, index+1));
+        });
+        },
+        complete: function(){
+            
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            showMyToast('An errror occured','error')
+        }
+    })
+
+</script>
+
+{% endblock content %}

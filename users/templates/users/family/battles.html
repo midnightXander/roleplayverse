@@ -1,0 +1,126 @@
+{% extends "users/family/family_page.html" %}
+
+
+
+
+{% block container %}
+<div id="battlesList" class="hidden text-white">
+    <h2 class="text-2xl font-bold mb-4 text-orange-500">{{family}} Battles</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Battle cards will be dynamically inserted here -->
+        <p id="defaultMessage" class="text-center text-gray-400">The members has no fought battles yet.</p>
+    </div>
+</div>
+
+<script>
+    $(()=>{
+        // Filter functionality
+    // const filterButtons = document.querySelectorAll('.bg-gray-600');
+    // const filteredContent = document.getElementById('filteredContent');
+    const battlesList = document.getElementById('battlesList');
+    const defaultMessage = document.getElementById('defaultMessage');
+
+    // filterButtons.forEach(button => {
+    //     button.addEventListener('click', () => {
+    //         const filter = button.textContent.trim();
+    //         if (filter === 'Battles') {
+    //             showBattles();
+    //         } else {
+    //             // Handle other filters
+    //             battlesList.classList.add('hidden');
+    //             defaultMessage.classList.remove('hidden');
+    //             defaultMessage.textContent = `${filter} content coming soon...`;
+    //         }
+    //     });
+    // });
+
+    function showBattles() {
+        const loader = document.getElementById('loading-overlay');
+        battlesList.classList.remove('hidden');
+        defaultMessage.classList.add('hidden');
+        $.ajax({
+        url: "",
+        type: "POST",
+        data:{ csrfmiddlewaretoken: "{{csrf_token}}"},
+        beforeSend:()=>{
+            $('#loading-overlay').toggleClass('active')
+            //loader.classList.add('active')
+        },
+        success: function(res){
+            const battles = res.battles
+            // $(".battles-container").append(card)
+        
+        const battleCards = battles.map(battle => createBattleCard(battle)).join('');
+        battlesList.querySelector('.grid').innerHTML = battleCards;
+        },
+        complete: ()=>{
+            $('#loading-overlay').toggleClass('active')
+        },
+        error: function(jqXHR,  textstatus, errorThrown){
+            console.log(errorThrown)
+            showMyToast('An Error occcured','error')
+        }
+    })
+       
+
+        
+    }
+
+    function createBattleCard(battle) {
+                    return `
+                                <div class="battle-card bg-gray-700 rounded-lg p-6 flex flex-col">
+                                    <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-xl font-bold">${battle.status}</h3>
+                                    <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-sm">${battle.type}</span>
+                                    </div>
+                                <div class="flex justify-between items-center mb-4 flex-col">
+                                    <div class="flex items-center">
+                                        <img src="${battle.initiator.profile_picture}" alt="Player 1" class="w-12 h-12 rounded-full mr-4">
+                                        <div>
+                                            <a href="/users/${battle.initiator.username}" class="font-bold">${battle.initiator.player}</a>
+                                            <p class="text-sm text-gray-400">Rank: ${battle.initiator.rank}</p>
+                                        </div>
+                                    </div>
+                                    <i class="fas fa-bolt text-yellow-500 text-2xl"></i>
+                                    <div class="flex items-center">
+                                        <div class="text-right mr-4">
+                                            <a href="/users/${battle.opponent.username}" class="font-bold">${battle.opponent.player}</a>
+                                            <p class="text-sm text-gray-400">Rank: ${battle.opponent.rank}</p>
+                                        </div>
+                                        <img src="${battle.opponent.profile_picture}" alt="Player 2" class="w-12 h-12 rounded-full">
+                                    </div>
+                                </div>
+                                ${battle.can_refree ? `<button data-battle_id="${battle.id}" class= "proposal-btn bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
+                                    <i class="fas fa-gavel mr-2"></i>Propose as Referee
+                                </button>`:`
+                                 <a href="/battles/battle_room/${battle.id}">
+                                    <button class="bg-transparent text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
+                                        <i class="fas fa-eye mr-2"></i>Watch Battle
+                                    </button>
+                                </a>
+                                ` }
+                                
+                                
+                            </div>`
+                           
+    }
+    
+    // Initialize with battles shown
+    showBattles();
+
+
+    })
+
+    
+</script>
+
+{% endblock container %}
+
+{% block active %}
+<script>
+    $(()=>{
+        $('.filter-button').removeClass('active')
+        $('.filter-button')[1].classList.add('active')
+    })
+</script>
+{% endblock active %}

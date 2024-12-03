@@ -1,0 +1,271 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    .sdk {
+        display: block;
+        position: absolute;
+        background-position: center;
+        text-align: center;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+</style>
+
+
+<div class="container mt-20 mx-auto px-4 py-8">
+    <h2 class="text-3xl font-bold text-orange-500 mb-6">Acheter des Jétons de combat</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Tier 1 -->
+        <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+            <h3 class="text-xl font-semibold text-orange-400 mb-4">: 350 JC</h3>
+            <p class="text-gray-300 mb-4">Prix: 100F ($0,16)</p>
+            <button onclick="mobileCheckout(100, 350)" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded w-full mb-2">
+                Achat par mobile money
+            </button>
+            <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full" onclick="showPaymentModal('Tier 1', 350, 0.16, true)">
+                Achat par carte
+            </button>
+        </div>
+        <!-- Tier 2 -->
+        <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+            <h3 class="text-xl font-semibold text-orange-400 mb-4">: 850 JC</h3>
+            <p class="text-gray-300 mb-4">Prix: 200F ($0,32)</p>
+            <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded w-full mb-2" onclick="mobileCheckout(200, 850)">
+                Achat par mobile money
+            </button>
+            <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full" onclick="showPaymentModal('Tier 2', 200, 0.32, true)">
+                Achat par carte
+            </button>
+        </div>
+        <!-- Tier 3 -->
+        <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+            <h3 class="text-xl font-semibold text-orange-400 mb-4">: 2000 JC</h3>
+            <p class="text-gray-300 mb-4">Prix: 500F ($0,8)</p>
+            <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded w-full mb-2" onclick="mobileCheckout(500, 2000)">
+                Achat par mobile money
+            </button>
+            <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full" onclick="showPaymentModal('Tier 3', 2000, 0.8, true)">
+                Achat par carte
+            </button>
+        </div>
+
+        <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+            <h3 class="text-xl font-semibold text-orange-400 mb-4">: 3500 JC</h3>
+            <p class="text-gray-300 mb-4">Prix: 700F ($1,13)</p>
+            <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded w-full mb-2" onclick="mobileCheckout(700, 3500)">
+                Achat par mobile money
+            </button>
+            <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full" onclick="showPaymentModal('Tier 4', 3500, 1.13, true)">
+                Achat par carte
+            </button>
+        </div>
+
+        <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+            <h3 class="text-xl font-semibold text-orange-400 mb-4">: 5000 JC</h3>
+            <p class="text-gray-300 mb-4">Prix: 1000F ($1,61)</p>
+            <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded w-full mb-2" onclick="mobileCheckout(1000, 5000)">
+                Achat par mobile money
+            </button>
+            <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full" onclick="showPaymentModal('Tier 5', 5000, 1.61, true)">
+                Achat par carte
+            </button>
+        </div>
+        <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+            <h3 class="text-xl font-semibold text-orange-400 mb-4">: 12000 JC</h3>
+            <p class="text-gray-300 mb-4">Prix: 2100F ($3,38)</p>
+            <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded w-full mb-2" onclick="mobileCheckout(2100, 12000)">
+                Achat par mobile money
+            </button>
+            <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full" onclick="showPaymentModal('Tier 6', 12000, 3.38, true)">
+                Achat par carte
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Modal -->
+<div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+    <div class="bg-gray-900 p-8 rounded-lg max-w-md w-full">
+        <h3 id="modalTitle" class="text-2xl font-bold text-orange-500 mb-4"></h3>
+        <p id="modalDetails" class="text-gray-300 mb-4"></p>
+        <form id="paymentForm">
+            <div id="mobileMoneyFields" class="mb-4 hidden">
+                <input type="tel" id="phoneNumber" placeholder="Phone Number" class="w-full bg-gray-800 text-white rounded p-2 mb-2" required>
+            </div>
+            <div id="cardFields" class="mb-4 hidden">
+                <input type="text" id="cardNumber" placeholder="Card Number" class="w-full bg-gray-800 text-white rounded p-2 mb-2" required>
+                <div class="flex space-x-2">
+                    <input type="text" id="expiryDate" placeholder="MM/YY" class="w-1/2 bg-gray-800 text-white rounded p-2" required>
+                    <input type="text" id="cvv" placeholder="CVV" class="w-1/2 bg-gray-800 text-white rounded p-2" required>
+                </div>
+            </div>
+            <button type="submit"  class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded w-full">
+                Confirm Payment
+            </button>
+        </form>
+        <button onclick="closePaymentModal()" class="mt-4 text-gray-400 hover:text-white">Cancel</button>
+    </div>
+</div>
+
+
+<script>
+
+    function redirectCheckout(){
+        data = JSON.stringify({
+        "apikey": "702892022671e702732f873.87026675",
+      "site_id": "5882134",
+      "transaction_id":  Math.floor(Math.random() * 100000000).toString(), //
+      "amount": 100,
+      "currency": "XAF",
+      "alternative_currency": "",
+      "description": " TEST INTEGRATION ",
+      "customer_id": "172",
+      "customer_name": "KOUADIO",
+      "customer_surname": "Francisse",
+      "customer_email": "harrissylver@gmail.com",
+      "customer_phone_number": "+237677266693",
+      "customer_address": "Antananarivo",
+      "customer_city": "Antananarivo",
+      "customer_country": "CM",
+      "customer_state": "CM",
+      "customer_zip_code": "065100",
+      "notify_url": "https://webhook.site/d1dbbb89-52c7-49af-a689-b3c412df820d",
+      "return_url": "https://webhook.site/d1dbbb89-52c7-49af-a689-b3c412df820d",
+      "channels": "ALL",
+      "metadata": "user1",
+      "lang": "FR",
+      "invoice_data": {
+        "Donnee1": "",
+        "Donnee2": "",
+        "Donnee3": ""
+        },
+            })
+        $.ajax({
+            url: 'https://api-checkout.cinetpay.com/v2/payment',
+            type:'POST',
+            data: {csrfmiddlewaretoken : '{{csrf_token}}', ...data},
+            // headers: {
+            //     'Content-Type': 'application/json'
+            // },
+            success: function(res){
+                console.log(res)
+            },
+            error: function(jqXHR , textstatus, errorThrown){
+                console.log(textstatus,errorThrown,jqXHR)
+            }
+        })
+    }
+
+
+    function mobileCheckout(amount, BT) {
+        CinetPay.setConfig({
+            apikey: '702892022671e702732f873.87026675',//   YOUR APIKEY
+            site_id: '5882134',//YOUR_SITE_ID
+            notify_url: 'http://mondomaine.com/notify/',
+            mode: 'PRODUCTION'
+        });
+        CinetPay.getCheckout({
+            transaction_id: Math.floor(Math.random() * 100000000).toString(), // YOUR TRANSACTION ID
+            amount: amount,
+            currency: 'XAF',
+            channels: 'ALL',
+            description: 'Test de paiement',   
+             //Fournir ces variables pour le paiements par carte bancaire
+            customer_id: "172",
+            customer_name:"Joe",//Le nom du client
+            customer_surname:"Down",//Le prenom du client
+            customer_email: "down@test.com",//l'email du client
+            customer_phone_number: "088767611",//l'email du client
+            customer_address : "BP 0024",//addresse du client
+            customer_city: "Antananarivo",// La ville du client
+            customer_country : "CM",// le code ISO du pays
+            customer_state : "CM",// le code ISO l'état
+            customer_zip_code : "06510", // code postal
+
+        });
+        CinetPay.waitResponse(function(data) {
+            if (data.status == "REFUSED") {
+                if (alert("Votre paiement a échoué")) {
+                    window.location.reload();
+                }
+            } else if (data.status == "ACCEPTED") {
+                if (alert("Votre paiement a été effectué avec succès")) {
+                    window.location.reload();
+                }
+            }
+        });
+        CinetPay.onError(function(data) {
+            console.log(data);
+        });
+    }
+</script>
+<script>
+    let currentTier, currentPoints, currentPrice, isCardPayment;
+    
+    function showPaymentModal(tier, points, price, card = false) {
+        currentTier = tier;
+        currentPoints = points;
+        currentPrice = price;
+        isCardPayment = card;
+    
+        const modal = document.getElementById('paymentModal');
+        const title = document.getElementById('modalTitle');
+        const details = document.getElementById('modalDetails');
+        const mobileMoneyFields = document.getElementById('mobileMoneyFields');
+        const cardFields = document.getElementById('cardFields');
+    
+        title.textContent = `Purchase ${tier}`;
+        details.textContent = `You are about to buy ${points} Battle Points for $${price}`;
+    
+        if (card) {
+            mobileMoneyFields.classList.add('hidden');
+            cardFields.classList.remove('hidden');
+        } else {
+            mobileMoneyFields.classList.remove('hidden');
+            cardFields.classList.add('hidden');
+        }
+    
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+    
+    function closePaymentModal() {
+        const modal = document.getElementById('paymentModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+    
+    document.getElementById('paymentForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        // Here you would typically send the payment information to your backend
+        // For this example, we'll just show a success message
+        showToast(`Successfully purchased ${currentPoints} Battle Points!`, 'success');
+        closePaymentModal();
+    });
+    
+    // Assuming you have the showToast function from the previous conversation
+    function showToast(message, type = 'info', duration = 3000) {
+        // ... (previous showToast implementation)
+    }
+    </script>
+{% endblock content %}
+
+
+{% block not_content %}
+<div>
+    <h1>GET Battle points</h1>
+    <form method="post" action="{% url 'core:battle_points' %}">
+        {% csrf_token %}
+        <select name="points">
+            <option value="">How many battle points?</option>
+            <option value="1000">1000BP</option>
+            <option value="3000">3500BP</option>
+            <option value="5000">7000BP</option>
+        </select>
+        <button type="submit">Buy</button>
+    </form>
+</div>
+{% endblock not_content %}

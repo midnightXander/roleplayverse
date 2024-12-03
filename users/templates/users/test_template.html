@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shinobi Chronicles - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #1a202c;
+            color: #e2e8f0;
+            font-family: 'Nunito';
+        }
+        .post {
+            transition: transform 0.3s ease-in-out;
+        }
+        .post:hover {
+            transform: translateY(-5px);
+        }
+        .like-button.liked {
+            color: #ed8936;
+        }
+        .comment-form {
+            display: none;
+        }
+        .comment-form.active {
+            display: block;
+        }
+        .sidebar {
+            height: calc(100vh - 4rem);
+            overflow-y: auto;
+        }
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #4a5568;
+            border-radius: 3px;
+        }
+        .sidebar-right::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar-right::-webkit-scrollbar-thumb {
+            background-color: #4a5568;
+            border-radius: 3px;
+        }
+        .sidebar-left::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar-left::-webkit-scrollbar-thumb {
+            background-color: #4a5568;
+            border-radius: 3px;
+        }
+        .post-image {
+            max-height: 300px;
+            object-fit: cover;
+        }
+        
+        @media (min-width: 768px) {
+            .sidebar-left {
+                position: fixed;
+                top: 7rem;
+                left: 1rem;
+                width: 25%;
+                max-width: 300px;
+            }
+            .sidebar-right {
+                position: fixed;
+                top: 7rem;
+                right: 1rem;
+                width: 25%;
+                max-width: 300px;
+            }
+            .main-content {
+                margin-left: calc(25% + 1rem);
+                margin-right: calc(25% + 1rem);
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .sidebar-left {
+                position: fixed;
+                top: 4rem;
+                left: -100%;
+                width: 80%;
+                max-width: 300px;
+                z-index: 40;
+                transition: left 0.3s ease-in-out;
+            }
+            .sidebar-left.active {
+                left: 0;
+            }
+            .sidebar-right{
+                position: static;
+                width: 100%;
+                /* max-height: 300px; */
+                /* margin-bottom: 1rem; */
+                display: flex;
+                flex-direction: row;
+                overflow-x: auto;
+                
+            }
+            .sidebar-left.active {
+                left: 0;
+            }
+            .sidebar-right {
+                position: static;
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+            .main-content {
+                margin-left: 0;
+                margin-right: 0;
+            }
+            
+            .mobile-scroll-container {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 1rem;
+            }
+            .mobile-scroll-item {
+                flex: 0 0 auto;
+                width: 280px;
+                margin-right: 1rem;
+            }
+            .mobile-scroll-container::-webkit-scrollbar {
+                height: 6px;
+            }
+            .mobile-scroll-container::-webkit-scrollbar-thumb {
+                background-color: #4a5568;
+                border-radius: 3px;
+            }
+            .sidebar-desktop{
+                display: none;
+            }
+        
+            .main-content {
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 30;
+            display: none;
+        }
+        
+        .overlay.active {
+            display: block;
+        }
+
+
+        /* bg-gray-700 rgba(55,65,81,var(--tw-bg-opacity)) */
+    </style>
+</head>
+<body>
+    <!-- Profile Picture Upload Modal -->
+<div id="uploadModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
+        <h2 class="text-2xl font-bold mb-4">Upload Profile Picture</h2>
+        <form id="uploadForm" class="space-y-4">
+            <div class="flex items-center justify-center w-full">
+                <label for="pictureUpload" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-600 border-dashed rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-600 transition duration-300">
+                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <i class="fas fa-cloud-upload-alt text-4xl mb-3"></i>
+                        <p class="mb-2 text-sm"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                        <p class="text-xs text-gray-400">PNG, JPG or GIF (MAX. 800x800px)</p>
+                    </div>
+                    <input id="pictureUpload" type="file" class="hidden" accept="image/*" />
+                </label>
+            </div>
+            <div id="imagePreview" class="hidden">
+                <img id="previewImage" src="" alt="Preview" class="max-w-full h-auto rounded-lg">
+            </div>
+            <div class="flex justify-between">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
+                    <i class="fas fa-upload mr-2"></i>Upload
+                </button>
+                <button id="cancelUpload" type="button" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
+                    <i class="fas fa-times mr-2"></i>Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+    <button id="menuToggle" class="md:hidden text-white">
+                <i class="fas fa-bars"></i>
+    </button>
+    
+
+    <!-- Overlay -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Main content -->
+    <div class="container mx-auto mt-24 px-4 flex flex-col md:flex-row">
+        <!-- Left Sidebar -->
+        <aside class="sidebar-left rounded-lg p-4">
+            <div class="mb-4">
+                <img src="https://placekitten.com/100/100" alt="Current Player" class="w-20 h-20 rounded-full mx-auto">
+                <h3 class="text-center font-bold mt-2">Naruto Uzumaki</h3>
+                <p class="text-center text-sm">Level: 30 | Rank: Jounin</p>
+            </div>
+            <ul class="space-y-2">
+                <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-600 rounded"><i class="fas fa-users mr-2"></i>Families</a></li>
+                <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-600 rounded"><i class="fas fa-star mr-2"></i>Favorites</a></li>
+                <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-600 rounded"><i class="fas fa-calendar-alt mr-2"></i>Events</a></li>
+                <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-600 rounded"><i class="fas fa-fist-raised mr-2"></i>Battle Points</a></li>
+                <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-600 rounded"><i class="fas fa-trophy mr-2"></i>Rankings</a></li>
+                <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-600 rounded"><i class="fas fa-book mr-2"></i>Tutorials</a></li>
+            </ul>
+        </aside>
+
+        <!-- Right Sidebar (for mobile) -->
+        <aside class="md:hidden sidebar-right  rounded-lg p-4 mb-4">
+            <div class="mobile-scroll-container">
+                <!-- <div class="mobile-scroll-item bg-gray-600 rounded p-4 mb-4">
+                    <h3 class="font-bold mb-2">Family Group Chat</h3>
+                    <div class="bg-gray-500 rounded p-2 flex items-center">
+                        <img src="https://placekitten.com/50/50" alt="Family Avatar" class="w-10 h-10 rounded-full mr-2">
+                        <div>
+                            <h4 class="font-bold">Uzumaki Clan</h4>
+                            <p class="text-sm text-gray-300 truncate">Kushina: Don't forget the clan meeting tonight!</p>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="mobile-scroll-item bg-gray-600 rounded p-4 mb-4">
+                    <h3 class="font-bold mb-2">Top Ranked Players</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <img src="https://placekitten.com/40/40" alt="Sasuke" class="w-10 h-10 rounded-full mr-2">
+                            <div class="flex-grow">
+                                <span class="font-bold">1. Sasuke Uchiha</span>
+                                <p class="text-sm text-gray-300">Rank: S</p>
+                            </div>
+                            <button class="bg-orange-500 text-xs px-2 py-1 rounded">Challenge</button>
+                        </li>
+                        <li class="flex items-center">
+                            <img src="https://placekitten.com/41/41" alt="Sakura" class="w-10 h-10 rounded-full mr-2">
+                            <div class="flex-grow">
+                                <span class="font-bold">2. Sakura Haruno</span>
+                                <p class="text-sm text-gray-300">Rank: A</p>
+                            </div>
+                            <button class="bg-orange-500 text-xs px-2 py-1 rounded">Challenge</button>
+                        </li>
+                    </ul>
+                </div>
+                <div class="mobile-scroll-item bg-gray-600 rounded p-4 mb-4">
+                    <h3 class="font-bold mb-2">Recent Challenges</h3>
+                    <ul class="space-y-2">
+                        <li class="flex justify-between items-center">
+                            <span>Rock Lee</span>
+                            <div>
+                                <button class="bg-green-500 text-xs px-2 py-1 rounded mr-1">Accept</button>
+                                <button class="bg-red-500 text-xs px-2 py-1 rounded">Refuse</button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="mobile-scroll-item bg-gray-600 rounded p-4">
+                    <h3 class="font-bold mb-2">Recent Events</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="block py-1 px-2 hover:bg-gray-500 rounded">Chunin Exams</a></li>
+                        <li><a href="#" class="block py-1 px-2 hover:bg-gray-500 rounded">Village Festival</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- Main Feed -->
+        <main class="w-full md:w-1/2 px-4 main-content">
+            <!-- <div id="refereeTestPart2" class=" bg-gray-700 rounded-lg p-6">
+                <h2 class="text-2xl font-bold mb-4 text-indigo-300">Referee Test - Part 2</h2>
+                
+                <div class="mb-6">
+                    <p class="text-gray-300 mb-4">Analyze the battle screenshot below and provide your verdict:</p>
+                    <img id="battleScreenshot" src="https://wallpaperaccess.com/full/477723.jpg" alt="Battle Screenshot" class="w-full max-w-2xl mx-auto rounded-lg shadow-lg mb-4">
+                </div>
+                
+                <div class="mb-6">
+                    <label for="verdictInput" class="block text-indigo-200 text-lg font-semibold mb-2">Your Verdict:</label>
+                    <textarea id="verdictInput" rows="6" class="w-full bg-gray-800 text-white rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Enter your verdict here..."></textarea>
+                </div>
+                
+                <div class="flex justify-between items-center">
+                    <button id="prevQuestionBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                        Previous Question
+                    </button>
+                    <button id="submitVerdictBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                        Submit Verdict
+                    </button>
+                </div>
+            </div> -->
+
+            <!-- Create post section -->
+            <div class="bg-gray-700 rounded-lg p-4 mb-8">
+                <form id="createPostForm" class="flex flex-col">
+                    <textarea id="postContent" class="bg-gray-600 text-white p-2 rounded-lg mb-2" rows="3" placeholder="Share your ninja way..."></textarea>
+                    <div class="flex justify-between items-center">
+                        <label for="imageUpload" class="cursor-pointer bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
+                            <i class="fas fa-image mr-2"></i>Add Image
+                        </label>
+                        <input type="file" id="imageUpload" accept="image/*" class="hidden">
+                        <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition duration-300">Post</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Posts feed -->
+            <div id="postsFeed" class="space-y-8">
+                <!-- Posts will be dynamically added here -->
+            </div>
+
+            <!-- Loading indicator -->
+            <div id="loadingIndicator" class="text-center py-4 hidden">
+                <i class="fas fa-spinner fa-spin"></i> Loading more posts...
+            </div>
+        </main>
+
+        <!-- Right Sidebar (for desktop) -->
+        <aside class="hidden md:block  sidebar-right rounded-lg p-4 sidebar-desktop">
+            <!-- ... (content same as mobile right sidebar) ... -->
+            <div class="mb-4">
+                <h3 class="font-bold mb-2">Family Group Chat</h3>
+                <div class=" rounded p-2 flex items-center">
+                    <img src="https://placekitten.com/50/50" alt="Family Avatar" class="w-10 h-10 rounded-full mr-2">
+                    <div>
+                        <h4 class="font-bold">Uzumaki Clan</h4>
+                        <p class="text-sm text-gray-300 truncate">Kushina: Don't forget the clan meeting tonight!</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <h3 class="font-bold mb-2">Top Ranked Players</h3>
+                <ul class="space-y-2">
+                    <li class="flex justify-between items-center">
+                        <span>1. Sasuke Uchiha</span>
+                        <button class="bg-orange-500 text-xs px-2 py-1 rounded">Challenge</button>
+                    </li>
+                    <li class="flex justify-between items-center">
+                        <span>2. Sakura Haruno</span>
+                        <button class="bg-orange-500 text-xs px-2 py-1 rounded">Challenge</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="mb-4">
+                <h3 class="font-bold mb-2">Recent Challenges</h3>
+                <ul class="space-y-2">
+                    <li class="flex justify-between items-center">
+                        <span>Rock Lee</span>
+                        <div>
+                            <button class="bg-green-500 text-xs px-2 py-1 rounded mr-1">Accept</button>
+                            <button class="bg-red-500 text-xs px-2 py-1 rounded">Refuse</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold mb-2">Recent Events</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="block py-1 px-2 hover:bg-gray-600 rounded">Chunin Exams</a></li>
+                    <li><a href="#" class="block py-1 px-2 hover:bg-gray-600 rounded">Village Festival</a></li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script>
+        // ... (previous JavaScript code) ...
+
+        // Menu toggle functionality
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebarLeft = document.querySelector('.sidebar-left');
+        const overlay = document.getElementById('overlay');
+
+        menuToggle.addEventListener('click', () => {
+            sidebarLeft.classList.add('bg-gray-600');
+            sidebarLeft.classList.toggle('active');
+            
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebarLeft.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        // Close sidebar when window is resized to desktop view
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) {
+                sidebarLeft.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+        });
+    </script>
+    <script>
+        // Sample posts data
+        let posts = [
+            {
+                id: 1,
+                author: "Naruto Uzumaki",
+                avatar: "https://placekitten.com/100/100",
+                content: "Just mastered a new jutsu! Can't wait to show it off in the next battle. Believe it! 🍥🍜",
+                image: "https://wallpaperaccess.com/full/477723.jpg",
+                likes: 42,
+                comments: [
+                    { author: "Sasuke Uchiha", content: "Hn. Don't get too confident, loser." },
+                    { author: "Sakura Haruno", content: "That's amazing, Naruto! 🌸" }
+                ]
+            },
+            {
+                id: 2,
+                author: "Kakashi Hatake",
+                avatar: "https://placekitten.com/101/101",
+                content: "Remember, teamwork is essential for any successful mission. Also, has anyone seen my latest Icha Icha book? 📚🥷",
+                likes: 78,
+                comments: [
+                    { author: "Might Guy", content: "Ah, my eternal rival! Always with your nose in those books!" },
+                    { author: "Iruka Umino", content: "Kakashi-sensei, please set a better example for the students... 😓" }
+                ]
+            },
+            {
+                id: 2,
+                author: "Kakashi Hatake",
+                avatar: "https://placekitten.com/101/101",
+                content: "Remember, teamwork is essential for any successful mission. Also, has anyone seen my latest Icha Icha book? 📚🥷",
+                likes: 78,
+                comments: [
+                    { author: "Might Guy", content: "Ah, my eternal rival! Always with your nose in those books!" },
+                    { author: "Iruka Umino", content: "Kakashi-sensei, please set a better example for the students... 😓" }
+                ]
+            },
+            {
+                id: 2,
+                author: "Kakashi Hatake",
+                avatar: "https://placekitten.com/101/101",
+                content: "Remember, teamwork is essential for any successful mission. Also, has anyone seen my latest Icha Icha book? 📚🥷",
+                likes: 78,
+                comments: [
+                    { author: "Might Guy", content: "Ah, my eternal rival! Always with your nose in those books!" },
+                    { author: "Iruka Umino", content: "Kakashi-sensei, please set a better example for the students... 😓" }
+                ]
+            },
+            {
+                id: 2,
+                author: "Kakashi Hatake",
+                avatar: "https://placekitten.com/101/101",
+                content: "Remember, teamwork is essential for any successful mission. Also, has anyone seen my latest Icha Icha book? 📚🥷",
+                likes: 78,
+                comments: [
+                    { author: "Might Guy", content: "Ah, my eternal rival! Always with your nose in those books!" },
+                    { author: "Iruka Umino", content: "Kakashi-sensei, please set a better example for the students... 😓" }
+                ]
+            },
+            {
+                id: 2,
+                author: "Kakashi Hatake",
+                avatar: "https://placekitten.com/101/101",
+                content: "Remember, teamwork is essential for any successful mission. Also, has anyone seen my latest Icha Icha book? 📚🥷",
+                likes: 78,
+                comments: [
+                    { author: "Might Guy", content: "Ah, my eternal rival! Always with your nose in those books!" },
+                    { author: "Iruka Umino", content: "Kakashi-sensei, please set a better example for the students... 😓" }
+                ]
+            },
+            {
+                id: 2,
+                author: "Kakashi Hatake",
+                avatar: "https://placekitten.com/101/101",
+                content: "Remember, teamwork is essential for any successful mission. Also, has anyone seen my latest Icha Icha book? 📚🥷",
+                likes: 78,
+                comments: [
+                    { author: "Might Guy", content: "Ah, my eternal rival! Always with your nose in those books!" },
+                    { author: "Iruka Umino", content: "Kakashi-sensei, please set a better example for the students... 😓" }
+                ]
+            },
+            {
+                id: 2,
+                author: "Kakashi Hatake",
+                avatar: "https://placekitten.com/101/101",
+                content: "Remember, teamwork is essential for any successful mission. Also, has anyone seen my latest Icha Icha book? 📚🥷",
+                likes: 78,
+                comments: [
+                    { author: "Might Guy", content: "Ah, my eternal rival! Always with your nose in those books!" },
+                    { author: "Iruka Umino", content: "Kakashi-sensei, please set a better example for the students... 😓" }
+                ]
+            },
+            {
+                id: 2,
+                author: "Kakashi Hatake",
+                avatar: "https://placekitten.com/101/101",
+                content: "Remember, teamwork is essential for any successful mission. Also, has anyone seen my latest Icha Icha book? 📚🥷",
+                likes: 78,
+                comments: [
+                    { author: "Might Guy", content: "Ah, my eternal rival! Always with your nose in those books!" },
+                    { author: "Iruka Umino", content: "Kakashi-sensei, please set a better example for the students... 😓" }
+                ]
+            },
+        ];
+
+        // Function to create a post element
+        function createPostElement(post) {
+            const postElement = document.createElement('div');
+            postElement.className = 'post bg-gray-700 rounded-lg p-4';
+            postElement.innerHTML = `
+                <div class="flex items-center mb-4">
+                    <img src="${post.avatar}" alt="${post.author}" class="w-10 h-10 rounded-full mr-4">
+                    <h3 class="font-bold">${post.author}</h3>
+                </div>
+                <p class="mb-4">${post.content}</p>
+                ${post.image ? `<img src="${post.image}" alt="Post image" class="w-full rounded-lg mb-4 post-image">` : ''}
+                <div class="flex items-center justify-between">
+                    <button class="like-button flex items-center" data-post-id="${post.id}">
+                        <i class="far fa-heart mr-2"></i>
+                        <span class="like-count">${post.likes}</span>
+                    </button>
+                    <button class="comment-button flex items-center">
+                        <i class="far fa-comment mr-2"></i>
+                        <span>${post.comments.length}</span>
+                    </button>
+                </div>
+                <div class="comments mt-4">
+                    ${post.comments.map(comment => `
+                        <div class="comment bg-gray-600 rounded p-2 mb-2">
+                            <strong>${comment.author}:</strong> ${comment.content}
+                        </div>
+                    `).join('')}
+                </div>
+                <form class="comment-form mt-4">
+                    <input type="text" class="bg-gray-600 text-white p-2 rounded w-full" placeholder="Add a comment...">
+                </form>
+            `;
+            return postElement;
+        }
+
+        // Function to render posts
+        function renderPosts() {
+            const postsFeed = document.getElementById('postsFeed');
+            posts.forEach(post => {
+                const postElement = createPostElement(post);
+                postsFeed.appendChild(postElement);
+            });
+
+            // Animate posts appearance
+            gsap.from('.post', {
+                y: 50,
+                opacity: 0,
+                duration: 0.5,
+                stagger: 0.2,
+                ease: 'power2.out'
+            });
+        }
+
+        // Render initial posts
+        renderPosts();
+
+        // Infinite scrolling
+        let isLoading = false;
+        let page = 1;
+
+        window.addEventListener('scroll', () => {
+            if (isLoading) return;
+
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+                loadMorePosts();
+            }
+        });
+
+        function loadMorePosts() {
+            isLoading = true;
+            document.getElementById('loadingIndicator').classList.remove('hidden');
+
+            // Simulate loading more posts (replace with actual API call)
+            setTimeout(() => {
+                // Generate new posts (replace with actual data fetching)
+                const newPosts = [
+                    {
+                        id: posts.length + 1,
+                        author: "Shikamaru Nara",
+                        avatar: "https://placekitten.com/102/102",
+                        content: "Cloud watching is the best way to spend a lazy afternoon. What a drag...",
+                        likes: 35,
+                        comments: []
+                    },
+                    {
+                        id: posts.length + 2,
+                        author: "Hinata Hyuga",
+                        avatar: "https://placekitten.com/103/103",
+                        content: "Just completed a successful mission with my team. Feeling proud! 💜",
+                        image: "https://placekitten.com/500/301",
+                        likes: 56,
+                        comments: []
+                    }
+                ];
+
+                posts = [...posts, ...newPosts];
+                const postsFeed = document.getElementById('postsFeed');
+                newPosts.forEach(post => {
+                    const postElement = createPostElement(post);
+                    postsFeed.appendChild(postElement);
+                });
+
+                isLoading = false;
+                document.getElementById('loadingIndicator').classList.add('hidden');
+                page++;
+
+                // Animate new posts
+                gsap.from(postsFeed.children.slice(-newPosts.length), {
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.5,
+                    stagger: 0.2,
+                    ease: 'power2.out'
+                });
+            }, 1000);
+        }
+
+        // Event delegation for like buttons
+        document.getElementById('postsFeed').addEventListener('click', (e) => {
+            if (e.target.closest('.like-button')) {
+                const likeButton = e.target.closest('.like-button');
+                const postId = parseInt(likeButton.dataset.postId);
+                const post = posts.find(p => p.id === postId);
+                if (post) {
+                    post.likes += likeButton.classList.contains('liked') ? -1 : 1;
+                    likeButton.classList.toggle('liked');
+                    likeButton.querySelector('.like-count').textContent = post.likes;
+                }
+            }
+        });
+
+        // Event delegation for comment buttons
+        document.getElementById('postsFeed').addEventListener('click', (e) => {
+            if (e.target.closest('.comment-button')) {
+                const commentForm = e.target.closest('.post').querySelector('.comment-form');
+                commentForm.classList.toggle('active');
+                if (commentForm.classList.contains('active')) {
+                    commentForm.querySelector('input').focus();
+                }
+            }
+        });
+
+        // Create post form submission
+        document.getElementById('createPostForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const content = document.getElementById('postContent').value.trim();
+            const imageInput = document.getElementById('imageUpload');
+            const file = imageInput.files[0];
+
+            if (content || file) {
+                const newPost = {
+                    id: posts.length + 1,
+                    author: "Current User",
+                    avatar: "https://placekitten.com/104/104",
+                    content: content,
+                    likes: 0,
+                    comments: []
+                };
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        newPost.image = event.target.result;
+                        addNewPost(newPost);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    addNewPost(newPost);
+                }
+
+                document.getElementById('postContent').value = '';
+                imageInput.value = '';
+            }
+        });
+
+        function addNewPost(newPost) {
+            posts.unshift(newPost);
+            const postsFeed = document.getElementById('postsFeed');
+            const postElement = createPostElement(newPost);
+            postsFeed.insertBefore(postElement, postsFeed.firstChild);
+
+            gsap.from(postElement, {
+                y: -50,
+                opacity: 0,
+                duration: 0.5,
+                ease: 'power2.out'
+            });
+        }
+
+        // Image upload preview
+        document.getElementById('imageUpload').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = document.createElement('img');
+                    img.src = event.target.result;
+                    img.className = 'w-full rounded-lg mb-4 post-image';
+                    const previewContainer = document.createElement('div');
+                    previewContainer.id = 'imagePreview';
+                    previewContainer.className = 'mt-2';
+                    previewContainer.appendChild(img);
+                    const existingPreview = document.getElementById('imagePreview');
+                    if (existingPreview) {
+                        existingPreview.replaceWith(previewContainer);
+                    } else {
+                        document.getElementById('createPostForm').insertBefore(previewContainer, document.querySelector('button[type="submit"]'));
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>

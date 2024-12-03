@@ -1,0 +1,465 @@
+{% extends "legal/base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- Main Container -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header Section -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl flex items-center justify-center font-bold text-orange-500 mb-4">
+                <svg class="w-16 h-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20a16.405 16.405 0 0 1-5.092-5.804A16.694 16.694 0 0 1 5 6.666L12 4l7 2.667a16.695 16.695 0 0 1-1.908 7.529A16.406 16.406 0 0 1 12 20Z"/>
+                    
+                </svg>
+                Terms & Privacy Policies
+                
+            </h1>
+            <p class="text-gray-400 max-w-2xl mx-auto">
+                Last updated: November 14 , 2024
+            </p>
+        </header>
+
+        <!-- Quick Navigation -->
+        <div class="rounded-lg p-6 mb-8 shadow-lg">
+            <h2 class="text-2xl font-bold text-orange-400 mb-4">Quick Navigation</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <a href="#terms" class="bg-gray-700 hover:bg-gray-600 rounded-lg p-4 text-center transition duration-300">
+                    <svg class="w-8 h-8 mx-auto text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 3v4a1 1 0 0 1-1 1H5m4 8h6m-6-4h6m4-8v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z"/>
+                      </svg>
+                      
+                      
+                    <div>Terms of Service</div>
+                </a>
+                <a href="#privacy" class="bg-gray-700 hover:bg-gray-600 rounded-lg p-4 text-center transition duration-300">
+                    <i class="fas fa-user-shield text-orange-500 text-2xl mb-2"></i>
+                    <div>Privacy Policy</div>
+                </a>
+                <a href="#cookies" class="bg-gray-700 hover:bg-gray-600 rounded-lg p-4 text-center transition duration-300">
+                    <i class="fas fa-cookie-bite text-orange-500 text-2xl mb-2"></i>
+                    <div>Cookie Policy</div>
+                </a>
+                <a href="#contact" class="bg-gray-700 hover:bg-gray-600 rounded-lg p-4 text-center transition duration-300">
+                    <svg class="w-8 h-8 mx-auto text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"/>
+                      </svg>
+                      
+                    <div>Contact Us</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <!-- Left Sidebar - Table of Contents -->
+            <div class="lg:col-span-1">
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg sticky top-4">
+                    <h3 class="text-xl font-bold text-orange-400 mb-4">Contents</h3>
+                    <nav class="space-y-2">
+                        <a href="#terms" class="block text-gray-300 hover:text-orange-500 transition duration-300">
+                            1. Terms of Service
+                        </a>
+                        <a href="#privacy" class="block text-gray-300 hover:text-orange-500 transition duration-300">
+                            2. Privacy Policy
+                        </a>
+                        <a href="#cookies" class="block text-gray-300 hover:text-orange-500 transition duration-300">
+                            3. Cookie Policy
+                        </a>
+                        <a href="#contact" class="block text-gray-300 hover:text-orange-500 transition duration-300">
+                            4. Contact Information
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="lg:col-span-3 space-y-8">
+                <!-- Terms of Service Section -->
+                <section id="terms" class="section-card bg-gray-800 rounded-lg p-6 shadow-lg">
+                    <h2 class="text-2xl flex items-center font-bold text-orange-500 mb-4">
+                        <svg class="w-8 h-8 mr-2 text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 3v4a1 1 0 0 1-1 1H5m4 8h6m-6-4h6m4-8v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7.914a1 1 0 0 1 .293-.707l3.914-3.914A1 1 0 0 1 9.914 3H18a1 1 0 0 1 1 1Z"/>
+                        </svg>
+                        Terms of Service
+                    </h2>
+                    <strong>Effective Date: 14/11/24</strong>
+
+                       <p>Welcome to RolePlay Verse. These Terms and Conditions (“Terms”) govern your use of our website, <a href="https://roleplayverse.com" class="text-orange-500">https://roleplayverse.com/</a> (the “Website”), and our mobile application, <a href="https://roleplayverse.com" class="text-orange-500">RolePlayVerse Ap</a>p (collectively, the “Services”). Please read these Terms carefully before using our Services. Before using our platform, please read the KultureApp Terms & Conditions carefully to understand how we manage user data, transactions, and your rights.</p>
+                    <div class="space-y-4 text-gray-300">
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">1. General Information</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p><span class="text-orange-500 font-semi-bold">Business name</span>: IT Verse inc.</p>
+                                <p><span class="text-orange-500 font-semi-bold">Business Address</span>: Centre, Cameroun.</p>
+                                <p><span class="text-orange-500 font-semi-bold">Contact Email</span>: <a href="#" class="font-semi-bold">contact@roleplayverse.com</a></p>
+                                <p><span class="text-orange-500 font-semi-bold">Location</span>: Centre, Cameroun</p>
+                            </div>
+                        </div>
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">2. Acceptance of Terms</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>By accessing and using this gaming platform, you accept and agree to be bound by the terms and provision of this agreement.</p>
+                            </div>
+                        </div>
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">3. User Accounts</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>You may create an account to access certain features of the Services. You agree to provide accurate, current, and complete information during the registration process and to update this information when necessary.</p>
+                                <p>You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.</p>
+                            </div>
+                        </div>
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">4. User Content</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>You may upload, create, or share content, such as text, images, or other materials, through the Services. By doing so, you grant IT Verse inc. a non-exclusive, royalty-free, worldwide, perpetual license to use, display, modify, and distribute your content in connection with operating and providing the Services.</p>
+                                <p>You agree not to post any content that is illegal, harmful, defamatory, or violates the rights of others. We reserve the right to remove any content at our discretion.</p>
+                            </div>
+                        </div>
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">5. Purchases</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>Users may buy goods or services through our Services using a one-time payment system. We use third-party payment processors like Stripe, PayPal, and CinetPay. By making a purchase, you agree to the terms and conditions of the respective payment processor. For more information, please refer to their privacy policies:</p>
+                                <ul>
+                                    <li>Stripe: <a href="#" class="text-blue-500 hover:text-blue-600">Privacy policy</a></li>
+                                    <li>CinetPay: <a href="#" class="text-blue-500 hover:text-blue-600">Privacy policy</a></li>
+                                    <li>PayPal: <a href="#" class="text-blue-500 hover:text-blue-600">Privacy policy</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">6. Intellectual Property</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>All content, logos, designs, and trademarks related to Kulture are the exclusive property of <span class="text-orange-500 font-semi-bold">IT Verse inc.</span> Unauthorized use of our intellectual property is prohibited without prior written consent.</p>
+                                
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">7. Feedback</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>Any feedback, suggestions, or ideas you provide to us may be used to improve our Services without any obligation to compensate or credit you for your contributions.</p>
+                                
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">8. Contests and Promotions</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>From time to time, we may offer contests, promotions, or sweepstakes. These activities will be governed by additional terms and conditions, which will be provided at the time of participation.</p>
+                                
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">9. Termination</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>We may suspend or terminate your access to the Services at any time, for any reason, including a violation of these Terms.</p>
+                                
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">10. Disclaimer</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>Our Services are provided “as is” without any warranties, expressed or implied. We do not guarantee the accuracy, reliability, or availability of the Services.</p>
+                                
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">11. Limitation of Liability</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>IT Verse inc. will not be liable for any direct, indirect, incidental, or consequential damages arising from your use of the Services.</p>
+                                
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">12. Changes to These Terms</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>We may update these Terms at any time. The updated version will be posted on our Website with the “Effective Date.” Your continued use of the Services after any such changes constitutes acceptance of the new Terms.</p>
+                                
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">13. Contact Us</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>By agreeing to the roleplayverse Terms & Conditions, you ensure a smooth and secure experience while using our platform. If you have any questions, concerns, or feedback regarding this Disclaimer, our Terms and Conditions, Privacy Policy, or any other aspect of our Services, please don’t hesitate to reach out to us. We value your input and are committed to providing clear and transparent communication. You can contact us at privacy@roleplayverse.com with any inquiries you may have.</p>
+                                <p>Our team will do our best to address any concerns you bring to our attention in a timely, thorough, and transparent manner. We take your privacy and user experience seriously and will work diligently to provide any necessary clarifications or resolutions related to our Services. Whether it’s about how we manage your data, how we use cookies, or any other matter involving your interaction with <span class="text-orange-500">IT Verse inc</span>., we’re here to help.</p>
+                                <p>Thank you for being a valued user of RolePlay Verse, and we look forward to assisting you!</p>
+                                <p>
+                                    © 2024 Kultureapp LLC. All rights reserved. Kultureapp™, the Kultureapp logo, and other trademarks, service marks, and logos displayed on this website are the exclusive property of Kultureapp LLC. Unauthorized use, reproduction, or distribution of any content, images, text, or other materials on this website is strictly prohibited. All content provided is protected by copyright law and may not be reproduced or transmitted in any form without express written permission from Kultureapp LLC. For inquiries regarding permission to use any of our materials or content, please contact us at <span class="text-orange-500" >copyright@roleplayverse.com</span> 
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Add more accordion sections as needed -->
+                    </div>
+                </section>
+
+                <!-- Privacy Policy Section -->
+                <section id="privacy" class="section-card bg-gray-800 rounded-lg p-6 shadow-lg">
+                    <h2 class="text-2xl font-bold text-orange-500 mb-4">
+                        <i class="fas fa-user-shield mr-2"></i>
+                        Privacy Policy
+                    </h2>
+                    <strong>Effective Date: 14/11/24</strong>
+
+                       <p>IT Verse (“we,” “us,” or “our”) is committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, <a href="" class="text-orange-500" >https://roleplayverse.com/</a>(the “Website”), or use our mobile application, RolePlay Verse(collectively, the “Services”). Please read this policy carefully.</p>
+                    <div class="space-y-4 text-gray-300">
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">1. Information We Collect</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>We collect the following personal information directly from you:</p>
+                                <ul class="list-disc" >
+                                    <li>Userame(your player username)</li>
+                                    <li>Email Adsress</li>
+                                    <li>passwords</li>
+                                    <li>Debit/credit card numbers</li>
+                                    <li>Phone Number</li>
+                                </ul>
+                                <p>We also collect log and usage data, device data, and location data when you use our Services.</p>
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">2. How We Use Your Information</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>We use your personal information for the following purposes:</p>
+                                <ul class="list-disc" >
+                                    <li>To deliver and facilitate the delivery of services to you.</li>
+                                    <li>To enable user-to-user communications.</li>
+                                    <li>To fulfill and manage your orders.</li>
+                                    <li>To send you administrative information.</li>
+                                    <li>To deliver targeted advertising and personalized content.</li>
+                                    <li>To improve and maintain our Services.</li>
+                                    <li>To send marketing and promotional communications (you can unsubscribe via email).</li>
+                                </ul>
+                                
+                            </div>
+                        </div>
+
+
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">3. Legal Bases for Processing (GDPR Compliance)</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>Under the EU and UK GDPR, we rely on the following lawful bases for processing your personal information:</p>
+                                <ol class="" >
+                                    <li><span class="text-orange-500 font-semibold">Consent</span> – You have given clear consent for us to process your personal information.</li>
+                                    <li><span class="text-orange-500 font-semibold">Performance of a Contract</span> – Processing is necessary for the performance of a contract to which you are a party.</li>
+                                    <li><span class="text-orange-500 font-semibold">Legitimate Interests</span> – Processing is necessary for our legitimate interests, such as improving our Services.</li>
+                                    <li><span class="text-orange-500 font-semibold">Legal Obligation</span> – Processing is necessary for us to comply with legal obligations.</li>
+                                    <li><span class="text-orange-500 font-semibold">Vital Interests</span> – Processing is necessary to protect your vital interests.</li>
+                                    
+                                </ol>
+                                
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">4. Data Retention</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>We will retain your personal information for at least three months after your account is terminated. After that, we will securely delete your data, unless required by law to retain it for a longer period.</p>
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">5. Sharing Your Information</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>We may share your information with third-party service providers, including:</p>
+                                <ul class="list-disc" >
+                                    <li>Ad Networks</li>
+                                    <li>Data Analytics Services</li>
+                                    <li>Payment Processors (e.g., Stripe, PayPal, CinetPay)</li>
+                                    <li>Social Networks</li>
+                                    <li>Website Hosting Service Providers</li>
+                                    
+                                </ul>
+                                <p>We do not sell your personal information.</p>
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">6. Cookies and Google Services</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>We use cookies, web beacons, and Google Maps APIs to enhance your experience. Please refer to our Cookie Policy for more information: <a href="#cookies" class="text-orange-500">here</a>.</p>
+                               
+                                
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">7. Security of Your Information</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>We implement appropriate technical and organizational measures to protect your personal information. However, no method of transmission over the internet is 100% secure.</p>
+                                <p>Your messages are encrypted, only you can read the content of messages sent to you or by you</p>
+                                
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">8. Your Privacy Rights</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>Depending on your location, you may have the following rights:</p>
+                                <ul class="list-disc" >
+                                    <li>The right to access, update, or delete your personal information.</li>
+                                    <li>The right to restrict or object to the processing of your personal information.</li>
+                                    <li>The right to data portability.</li>
+                                    
+                                    <p>To exercise these rights, contact us at <a href="#" class="text-orange-500" >privacy@roleplayverse.com.</a></p>
+                                    
+                                </ul>
+                                
+                            </div>
+                        </div>
+
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">9. Changes to This Privacy Policy</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>We may update this Privacy Policy from time to time. The updated version will be posted on our Website with the “Effective Date.” Your continued use of the Services after any such changes constitutes acceptance of the new Privacy Policy.</p>
+                                
+                                
+                            </div>
+                        </div>
+
+                        
+
+                        <div class="accordion">
+                            <div class="accordion-header cursor-pointer flex justify-between items-center p-4  rounded-lg">
+                                <h3 class="text-lg font-semibold">10. Contact Us</h3>
+                                <i class="fas fa-chevron-down text-orange-500"></i>
+                            </div>
+                            <div class="accordion-content p-4">
+                                <p>If you have any questions regarding this Privacy Policy or wish to exercise your privacy rights, please contact us at:</p>
+                                
+                                <p> Email: <a href="#" class="text-orange-500">privacy@roleplayerse.com</a> </p>
+                            </div>
+                        </div>
+                        <!-- Add more accordion sections as needed -->
+                    </div>
+                </section>
+
+                <!-- Cookie Policy Section -->
+                <section id="cookies" class="section-card bg-gray-800 rounded-lg p-6 shadow-lg">
+                    <h2 class="text-2xl font-bold text-orange-500 mb-4">
+                        <i class="fas fa-cookie-bite mr-2"></i>
+                        Cookie Policy
+                    </h2>
+                    <div class="space-y-4 text-gray-300">
+                        <p>Our website uses cookies to enhance your browsing experience.</p>
+                    </div>
+                </section>
+
+                <!-- Contact Section -->
+                <section id="contact" class="section-card bg-gray-800 rounded-lg p-6 shadow-lg">
+                    <h2 class="text-2xl flex  font-bold text-orange-500 mb-4">
+                        <svg class="w-8 h-8 mr-2 text-orange-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m3.5 5.5 7.893 6.036a1 1 0 0 0 1.214 0L20.5 5.5M4 19h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"/>
+                          </svg>
+                        Contact Us
+                    </h2>
+                    <div class="space-y-4">
+                        <p class="text-gray-300">If you have any questions about these policies, please contact us:</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-700 rounded-lg p-4">
+                                <i class="fas fa-envelope text-orange-500 mr-2"></i>
+                                <span class="text-gray-300">support@rpggame.com</span>
+                            </div>
+                            <div class="bg-gray-700 rounded-lg p-4">
+                                <i class="fas fa-phone text-orange-500 mr-2"></i>
+                                <span class="text-gray-300">+1 (555) 123-4567</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Scroll Progress Indicator
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("scrollIndicator").style.transform = `scaleX(${scrolled}%)`;
+        };
+
+        // Accordion functionality
+        document.querySelectorAll('.accordion-header').forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                content.classList.toggle('active');
+                const icon = button.querySelector('i');
+                icon.classList.toggle('fa-chevron-up');
+                icon.classList.toggle('fa-chevron-down');
+            });
+        });
+    </script>
+{% endblock content %}
