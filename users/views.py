@@ -302,17 +302,20 @@ def register(request):
                 return HttpResponseRedirect(reverse("users:register"))
             else:        
                 new_user = User.objects.create_user(username=username,email=email,password=password1)
-                new_player = Player.objects.create(
-                    user = new_user,
-                    language = request.LANGUAGE_CODE,
-                    country = get_country(request)
-                    )
+                # new_player = Player.objects.create(
+                #     user = new_user,
+                #     language = request.LANGUAGE_CODE,
+                #     country = get_country(request)
+                #     )
                 # new_stats = PlayerStat.objects.create(player = new_player)
                 user_auth = auth.authenticate(username = username,password=password1)
                 auth.login(request,user_auth)
                 
                 #Award entry battle points
                 core_views.add_points(new_player, ENTRY_POINTS)
+                new_player = Player.objects.get(user = new_user)
+                new_player.language = request.LANGUAGE_CODE
+                new_player.country = get_country(request)
                 
                 new_user.save()
                 new_player.save()
@@ -323,12 +326,12 @@ def register(request):
                 except Exception as e:
                     print(f"could not send email: {e}")    
 
-                new_notif = core_views.Notification.objects.create(
-                    target = new_player,
-                    url = '#',
-                    content = f'Bienvenue sur RolePlay Verse {new_player} pourquoi pas commencé un combat amicale pour voir comment ça se passe ici?'
-                )
-                new_notif.save()
+                # new_notif = core_views.Notification.objects.create(
+                #     target = new_player,
+                #     url = '#',
+                #     content = f'Bienvenue sur RolePlay Verse {new_player} pourquoi pas commencé un combat amicale pour voir comment ça se passe ici?'
+                # )
+                # new_notif.save()
 
                 #Reward the referer if there is one
                 referall_code = request.GET.get('rc', None)
