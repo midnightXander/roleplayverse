@@ -20,7 +20,7 @@ def create_player(sender, instance, created, **kwargs):
         new_player.save()
         new_notif = Notification.objects.create(
                     target = new_player,
-                    url = '#',
-                    content = f'Welcome to Roleplay verse {new_player} Why not start a friendly battle to see how it works?'
+                    url = '/battles',
+                    content = f'Bienvenue sur RolePlay Verse {new_player} pourquoi pas commencé un combat amicale pour voir comment ça se passe ici?'
                 )
         new_notif.save()
