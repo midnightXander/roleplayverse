@@ -327,3 +327,5 @@ for it in [10,56,447,89]:
         biggest = it
 
 print(biggest)
+count = [1 for x in [1,2,3]]
+print(sum(count))

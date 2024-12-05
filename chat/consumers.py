@@ -248,6 +248,9 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
             family = family,
             content = encrypt_message(message)
         )
+        #add the message sender to the list of readers
+        new_msg.readers.add(player_sender)
+
         if image_data and image_name:
             print("setting image")
             new_msg.image.save(image_name, ContentFile(image_data))

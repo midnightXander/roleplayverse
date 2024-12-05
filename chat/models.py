@@ -13,6 +13,10 @@ class Chat(models.Model):
 
     date_created = models.DateTimeField(auto_now_add=True)
 
+    def unreads(self, player:Player):
+        unread_messages = self.message_set.filter(read=False, receiver = player)
+        return len(unread_messages)
+
     def __str__(self):
         return self.initiator.user.username + " and " +  self.recipient.user.username
 
@@ -32,6 +36,10 @@ class Message(models.Model):
     read = models.BooleanField(default=False)
     image = models.ImageField(blank=True,null=True,upload_to = upload_private_message_to)
     
+    def mark_as_read(self):
+        self.read = True
+        self.save()
+
     def __str__(self):
         return self.sender.user.username + " to " + self.receiver.user.username
     
@@ -42,7 +50,15 @@ class FamilyMessage(models.Model):
     content = models.TextField(null=True, blank=True)
     image = models.ImageField(blank=True,null=True, upload_to = upload_family_message_to)
     date_sent = models.DateTimeField(auto_now_add = True)
+    readers = models.ManyToManyField(Player, through=('FamilyMessageReader'), related_name = 'readers')
     
-
     def __str__(self):
         return self.sender.user.username + " in " + self.family.name
+    
+class FamilyMessageReader(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    message = models.ForeignKey(FamilyMessage, on_delete=models.CASCADE)
+    date_read = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('player', 'message')

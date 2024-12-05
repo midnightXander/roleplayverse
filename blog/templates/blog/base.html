@@ -59,7 +59,7 @@
         }
         .blog-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            /* box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); */
         }
         .icon-spin {
             animation: spin 1s linear infinite;
@@ -80,8 +80,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
-                    <a href="#" class="flex-shrink-0">
-                        <img class="h-8 w-8" src="https://via.placeholder.com/32" alt="Logo">
+                    <a href="/home" class="flex-shrink-0">
+                        <img class="h-16 w-16" src="{% static 'images/logo_1_nobg.png' %}" alt="Logo">
                     </a>
                     <div class="ml-10 flex items-baseline space-x-3">
                         <a href="{% url 'blog:index' %}" class="text-gray-400  hover:text-gray-900  px-2 py-2 rounded-md text-sm font-medium">All</a>
@@ -115,8 +115,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-                <h3 class="text-lg font-semibold text-orange-500 mb-4">Shinobi Chronicles</h3>
-                <img src="{% static 'images/logo.png' %}" alt="Shinobi Chronicles Logo" class="mb-4">
+                <h3 class="text-lg font-semibold text-orange-500 mb-4">Role Play Verse</h3>
+                <img src="{% static 'images/logo_1_nobg.png' %}" alt="Role Play Verse Logo" class="w-24 mb-4">
                 <p class="text-sm text-gray-400">Immerse yourself in the world of ninjas and become a legend in your own right.</p>
             </div>
             <div>
@@ -150,7 +150,7 @@
             </div>
         </div>
         <div class="mt-8 pt-8 border-t border-gray-700 flex flex-col md:flex-row justify-between items-center">
-            <p class="text-sm text-gray-400">&copy; 2023 Shinobi Chronicles. All rights reserved.</p>
+            <p class="text-sm text-gray-400">&copy; 2024 Role Play Verse. All rights reserved.</p>
             <div class="flex space-x-4 mt-4 md:mt-0">
                 <a href="#" class="text-gray-400 hover:text-orange-500 transition">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">

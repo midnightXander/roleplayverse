@@ -15,7 +15,7 @@ import uuid
 from datetime import datetime
 import json
 from django.views.decorators.csrf import csrf_exempt
-from utility import decrypt_message,_date_time,_time_since
+from utility import decrypt_message,_date_time,_time_since,_parse_number
 from cryptography.fernet import Fernet
 
 
@@ -45,6 +45,18 @@ def get_player_last_seen(player:Player):
     last_seen = player.last_seen
     return _time_since(last_seen)
 
+
+def _get_family_unreads(player:Player):
+    family = player.family
+    if family:
+        family_messages = FamilyMessage.objects.filter(family = family)
+        count = [1 for msg in family_messages if player not in msg.readers.all()]
+        return sum(count)
+    
+    else:
+        return 0    
+
+
 @login_required
 def chats(request):
     current_player = get_player(request.user)
@@ -67,7 +79,8 @@ def chats(request):
     chats_data = [
         {
             "chat": chat,
-            "last_message": get_last_message(chat,"private")
+            "last_message": get_last_message(chat,"private"),
+            'unreads': _parse_number(chat.unreads(current_player)),
 
         }
         for chat in chats
@@ -83,7 +96,9 @@ def chats(request):
             "sender":family_last_message.sender.user.username,
             'content': content,
             'image': family_last_message.image.url if family_last_message.image else None, 
-            'date_sent': _date_time(family_last_message.date_sent)
+            'date_sent': _date_time(family_last_message.date_sent),
+            'unreads': _parse_number(_get_family_unreads(current_player))
+            
         }
     else:
         fl_message_data = ''    
@@ -102,6 +117,10 @@ def getchats(player):
 
     return chats
 
+def mark_as_read(message:Message):
+    message.read = True
+    message.save()
+
 def get_messages(request,receiver_id):    
     #receiver_user = User.objects.get(username = receiver_name)
     receiver = Player.objects.get(id=receiver_id)
@@ -111,7 +130,12 @@ def get_messages(request,receiver_id):
     messages = Message.objects.filter(
         Q(sender = sender) |  Q(sender=receiver), 
         Q(receiver = receiver) | Q(receiver = sender)).order_by("date_sent")
-     
+    
+    for msg in messages:
+        if msg.receiver == Player.objects.get(user = request.user):
+            msg.mark_as_read()
+            #mark_as_read(msg)
+
     messages_data = [{
         "id":message.id,
         "sender":{
@@ -124,11 +148,16 @@ def get_messages(request,receiver_id):
             },
         "content":decrypt_message(message.content),
         'image': message.image.url if message.image else None, 
-        'date_sent': _date_time(message.date_sent)
+        'date_sent': _date_time(message.date_sent),
+        'read': message.read,
         
         }
         for message in messages]
     return JsonResponse({"message":"success","messages":messages_data})
+
+def mark_as_reader_family(player,family):
+    messages = FamilyMessage.objects.filter(family = family)
+
 
 def get_family_messages(request, family_name):
     family = Family.objects.get(name = family_name)
@@ -137,6 +166,10 @@ def get_family_messages(request, family_name):
     messages = FamilyMessage.objects.filter(
         family = family
     ).order_by('date_sent')
+    #Mark All family messages as read
+    for msg in FamilyMessage.objects.filter(family = family):
+        if sender not in msg.readers.all():
+            msg.readers.add(sender)
 
     messages_data = [
         {   "id":message.id,          
@@ -147,8 +180,9 @@ def get_family_messages(request, family_name):
                       "family":message.family.name,
                       "content":decrypt_message(message.content),
                       'image': message.image.url if message.image else None, 
-                        'date_sent': _date_time(message.date_sent)
-                      #"date_sent":str(message.date_sent.date().day)+"/"+str(message.date_sent.date().strftime("%B")) + " "+str(message.date_sent.time().strftime("%H:%M")) 
+                        'date_sent': _date_time(message.date_sent),
+                        
+                      
                        }for message in messages
     ]
     return JsonResponse({"message":"success","messages":messages_data})
@@ -313,6 +347,9 @@ def chat_box(request, chat_box_name):
     ctx = {"chat_box_name":chat_box_name}
     return render(request,"chat/chatbox.html",ctx)
 
+def _mark_family_message_as_read(message: FamilyMessage, player:Player):
+    message.readers.add(player)
+
 @login_required
 def family_chat(request,family_name):
     player = get_player(request.user)
@@ -323,7 +360,9 @@ def family_chat(request,family_name):
     chats = Chat.objects.filter(
         Q(initiator = player) | Q(recipient = player)
     ).order_by("-last_message_time_sent")
-    
+
+
+
     chats_data = [
         {
             "chat": chat,
@@ -332,6 +371,9 @@ def family_chat(request,family_name):
         }
         for chat in chats
     ]
+
+    
+
     family_last_message = FamilyMessage.objects.filter(family = player.family).order_by('-date_sent').first()
     if family_last_message:
         content =  decrypt_message(family_last_message.content)[:7]+'...'

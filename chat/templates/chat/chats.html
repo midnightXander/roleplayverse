@@ -46,7 +46,7 @@
                     <div class="flex items-center">
                         <img src="{{player.family.profile_picture.url}}" alt="{{player.family}} profile picture" class="w-12 h-12 rounded-full mr-4">
                         <div class="flex-grow">
-                            <h3 class="font-semibold"> {{player.family}}</h3>
+                            <h3 class="font-semibold"> {{player.family}} <span class="text-red-500 ml-2 ">{{family_last_message.unreads}}</span> </h3>
                             <p class="text-gray-500 text-sm ellipsed max-w-64 truncate">
                                 {{family_last_message.sender}}: {{family_last_message.content}}
                             </p>
@@ -67,13 +67,14 @@
                 <div class="flex items-center ">
                 <img src="{{chat.chat.initiator.profile_picture.url}}" alt="{{chat.chat.initiator}} profile picture" class="w-12 h-12 rounded-full mr-4">
                 <div class="flex-grow">
-                    <h3 class="font-semibold">{{chat.chat.initiator}}</h3>
+                    <h3 class="font-semibold">{{chat.chat.initiator}} <span class="text-red-500 ml-2 ">{{chat.unreads}}</span></h3>
+                    
                     <p class="text-gray-500 text-sm ellipsed max-w-64 truncate">
                         
                         {% if chat.last_message.image %}
                         <i class="fas fa-camera mr-2"></i> sent an image
                         {% else %}
-                        {{ chat.last_message.content }}
+                        {{ chat.last_message.content}}
                         {% endif %}
                         
                     </p>
@@ -89,7 +90,8 @@
                 <div class="flex items-center">
                     <img src="{{chat.chat.recipient.profile_picture.url}}" alt="{{chat.chat.recipient}} profile picture" class="w-12 h-12 rounded-full mr-4">
                     <div class="flex-grow">
-                        <h3 class="font-semibold">{{chat.chat.recipient}}</h3>
+                        <h3 class="font-semibold">{{chat.chat.recipient}} <span class="text-red-500 ml-2 ">{{chat.unreads}}</span></h3>
+                        <!-- inline-flex text-sm justify-center items-center w-5 h-5 bg-red-500 rounded-full -->
                         <p class="text-gray-500 ellipsed max-w-64 text-sm truncate">
                             {% if chat.last_message.image %}
                             <i class="fas fa-camera mr-2"></i> sent an image

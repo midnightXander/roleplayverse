@@ -299,10 +299,10 @@ if 'DATABASE_URL' in os.environ:
         conn_health_checks=True
     )
 
-#reduce size of static files when served
-STORAGES = {
-    # ...
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}    
+# #reduce size of static files when served
+# STORAGES = {
+#     # ...
+#     "staticfiles": {
+#         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+#     },
+# }    

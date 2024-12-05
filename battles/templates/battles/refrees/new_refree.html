@@ -34,13 +34,13 @@
 <main class="h-screen flex  items-center justify-center mt-4">
     
     <div id="refereeSection" class="bg-gray-700 rounded-lg p-6">
-        <h2 class="text-2xl font-bold mb-4 text-orange-400">Become a Referee</h2>
+        <h2 class="text-2xl font-bold mb-4 text-orange-400">Devienir Arbitre Rpv</h2>
         
         <div class="mb-6">
-            <h3 class="text-xl font-semibold mb-2 text-orange-200">Requirements:</h3>
+            <h3 class="text-xl font-semibold mb-2 text-orange-200">Besoins:</h3>
             <ul class="list-disc list-inside text-gray-300">
                 <li class="flex w-full justify-between">
-                    Should be in a family
+                    Faire partie d'une famille
                     {% if in_family %}
                     <i class="fas fa-check-circle text-xl text-green-500"></i>
                     {% else %}
@@ -49,7 +49,7 @@
                     
                 </li>
                 <li class="flex w-full justify-between">
-                    Minimum rank: D 
+                    Rang minimum: E 
                     {% if rank_eligibility %}
                     <i class="fas fa-check-circle text-xl text-green-500"></i>
                     {% else %}
@@ -57,7 +57,7 @@
                     {% endif %}
                 </li>
                 <li class="flex w-full justify-between">
-                    At least 3 completed battles
+                    Au moins 1 combat terminé
                     {% if battles_eligibility %}
                     <i class="fas fa-check-circle text-xl text-green-500"></i>
                     {% else %}
@@ -65,37 +65,37 @@
                     {% endif %}
                 </li>
                 <li class="flex w-full justify-between">
-                    Has refreed atleast 2 friendly battles
+                    A arbitrer au moins 2 combats amicaux
                     {% if has_refreed %}
                     <i class="fas fa-check-circle text-xl text-green-500"></i>
                     {% else %}
                     <i class="fas fa-times-circle text-xl text-red-500"></i>
                     {% endif %}
                 </li>
-                <li class="flex w-full justify-between">
+                <!-- <li class="flex w-full justify-between">
                     Account age: 2 months or older
                     {% if True %}
                     <i class="fas fa-check-circle text-xl text-green-500"></i>
                     {% else %}
                     <i class="fas fa-times-circle text-xl text-red-500"></i>
                     {% endif %}
-                </li>
+                </li> -->
                 
             </ul>
         </div>
         
         <div id="eligibilityStatus" class="mb-6 p-4 rounded-lg">
             {% if eligible %}
-            <p class="text-green-400 font-semibold">Congratulations! You are eligible to take the referee test.</p>
+            <p class="text-green-400 font-semibold">Felicitation! tu es eligible au test d'arbitrage.</p>
             {% else %}
-            <p class="text-red-400 font-semibold">You are not eligible to take the referee test yet.</p>
+            <p class="text-red-400 font-semibold">Tu n'es pas eligible au test d'arbitrage.</p>
                 <p class="text-gray-300 mt-2">{{message}}</p>
             {% endif %}
         </div>
         
         {% if eligible %}
         <button id="takeTestBtn" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition duration-300">
-            Take Referee Test
+            Faire le test 
         </button>
         {% endif %}
 
@@ -109,19 +109,21 @@
             <h2 class="text-2xl font-bold mb-4 text-orange-400">Instructions</h2>
         </div>
         
-        <p>The Test is made up of 2 parts</p>
-        <p>First you answer a quiz of a series of questions on Naruto and the Rp verse</p>
-        <p>If you have atleast 80% of correct answers you go to step 2</p>
-        <p>In Step 2 you will be put in 2 situtions where you have to evaluate a battle case with some textpads</p>
-        <p>Your answer will be reviewed and if succesful, you will be accepted as a refree on the platfrom</p>
+        <p>Le test est en 2 parties</p>
+        <p>La première partie est un quizz avec des questions sur l'univers Naruto et le monde du RP</p>
+        <p>Si tu obtiens 80% de bonnes tu vas a la prochaine étape</p>
+        <p>Dans la deuxieme partie est la <span class="text-orange-500">mise en situation arbitrale(MSA),</span> tu seras presenter deux situations ou tu devras proposer un verdict</p>
+        <p>
+            Tes verdictes seront checké et si accepté, tu deviendras arbitre officiel sur la plateform
+        </p>
 
-        <button id="start-quiz-btn" class="bg-orange-600 hover:bg-orange-700 py-2 px-4 text-gray-100 my-4 rounded">Start the Quiz</button>
+        <button id="start-quiz-btn" class="bg-orange-600 hover:bg-orange-700 py-2 px-4 text-gray-100 my-4 rounded">commencer le quizz</button>
 
     </div>
     <div id="quizSection" class="hidden max-w-md mx-auto bg-gray-700 p-8 shadow-lg rounded-lg text-gray-300">
-        <h1 class="text-2xl font-bold mb-5 text-center text-orange-500">Refree Quiz</h1>
+        <h1 class="text-2xl font-bold mb-5 text-center text-orange-500">Quiz d'arbitre</h1>
         <div id="quiz-container">
-            <div class="mb-4 text-lg font-semibold">Time Left: <span id="counter" class="text-2xl font-bold text-orange-500">8</span></div>
+            <div class="mb-4 text-lg font-semibold">Temps restants: <span id="counter" class="text-2xl font-bold text-orange-500">8</span></div>
             <div id="question" class="mb-4 text-lg font-semibold"></div>
             <div id="choices" class="space-y-2"></div>
             <!-- <button id="next-btn" class="hidden mt-5 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Next</button> -->
@@ -132,25 +134,25 @@
 
     <div id="refereeTestPart2" class="hidden  fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50  rounded-lg p-6">
         <div class="bg-gray-700 rounded-lg p-6 max-w-4xl w-full mx-4 flex flex-col h-screen max-h-[90vh]">
-            <h2 class="text-2xl font-bold mb-4 text-orange-500">Referee Test - Part 2</h2>
+            <h2 class="text-2xl font-bold mb-4 text-orange-500">Test d'Arbitre - Partie 2</h2>
             
             <div class="flex-grow overflow-y-auto">
                 <div class="mb-6">
-                    <p class="text-gray-300 mb-4">Analyze the battle screenshot below and provide your verdict:</p>
+                    <p class="text-gray-300 mb-4">Analyse les screenshot ci-dessous et donne un verdict:</p>
                     <img id="battleScreenshot" src="https://wallpaperaccess.com/full/477723.jpg" alt="Battle Screenshot" class="w-full max-w-2xl rounded-lg shadow-lg mb-4">
                 </div>
                 
                 <div class="mb-6">
-                    <label for="verdictInput" class="block text-indigo-200 text-lg font-semibold mb-2">Your Verdict:</label>
+                    <label for="verdictInput" class="block text-indigo-200 text-lg font-semibold mb-2">Ton Verdict:</label>
                     <textarea id="verdictInput" rows="6" class=" w-full bg-gray-800 text-white rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Enter your verdict here..."></textarea>
                 </div>
                 
                 <div class="flex justify-between items-center">
                     <button id="prevQuestionBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition duration-300">
-                        Previous Question
+                        Question précédente
                     </button>
                     <button id="submitVerdictBtn" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition duration-300">
-                        Submit Verdict
+                        Soumettre le verdict
                     </button>
                 </div>
             </div>
