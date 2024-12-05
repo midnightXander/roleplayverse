@@ -312,11 +312,13 @@ def register(request):
                 auth.login(request,user_auth)
                 
                 #Award entry battle points
-                core_views.add_points(new_player, ENTRY_POINTS)
+                
                 new_player = Player.objects.get(user = new_user)
                 new_player.language = request.LANGUAGE_CODE
                 new_player.country = get_country(request)
-                
+
+                core_views.add_points(new_player, ENTRY_POINTS)
+
                 new_user.save()
                 new_player.save()
                 # new_stats.save()
