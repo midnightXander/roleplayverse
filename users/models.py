@@ -29,9 +29,10 @@ class Family(models.Model):
         MinValueValidator(1)
     ])
     
-    id = models.UUIDField(primary_key=True,default=uuid.uuid4())
+    # id = models.UUIDField(primary_key=True,default=uuid.uuid4())
+    id = models.BigAutoField(primary_key=True)
     date_created = models.DateField(auto_now_add=True)
-
+    
     class Meta():
         verbose_name_plural = 'Families'
 

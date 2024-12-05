@@ -135,7 +135,8 @@ def get_notifs(player):
         
 @login_required
 def home(request):
-    
+
+
     posts = Post.objects.all()
     battles = Battle.objects.filter(status = "finished")
 
