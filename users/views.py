@@ -295,10 +295,10 @@ def register(request):
 
         if(password1 == password2):
             if User.objects.filter(email=email).exists():
-                messages.info(request,"Email taken already")
+                messages.info(request,"l'email est deja utilisé")
                 return HttpResponseRedirect(reverse("users:register"))
             elif User.objects.filter(username=username).exists():
-                messages.error(request,"username already taken")
+                messages.error(request,"le nom d'utilisateur est deja utilisé")
                 return HttpResponseRedirect(reverse("users:register"))
             else:        
                 new_user = User.objects.create_user(username=username,email=email,password=password1)
@@ -323,11 +323,12 @@ def register(request):
                 except Exception as e:
                     print(f"could not send email: {e}")    
 
-                core_views.Notification.objects.create(
+                new_notif = core_views.Notification.objects.create(
                     target = new_player,
                     url = '#',
                     content = f'Bienvenue sur RolePlay Verse {new_player} pourquoi pas commencé un combat amicale pour voir comment ça se passe ici?'
                 )
+                new_notif.save()
 
                 #Reward the referer if there is one
                 referall_code = request.GET.get('rc', None)
@@ -337,7 +338,7 @@ def register(request):
                 return HttpResponseRedirect(reverse("users:player",args=[new_user.username]))   
 
         else:
-            messages.error(request,"Passwords don't match")    
+            messages.error(request,"Les mots de passes ne correspondent pas")    
             return HttpResponseRedirect(reverse("users:register")) 
 
     return render(request,"users/register.html",{
