@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-bur-rles0=f72k8&1ky@%
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-# CSRF_TRUSTED_ORIGINS = ['']
+CSRF_TRUSTED_ORIGINS = ['https://roleplayverse-production.up.railway.app']
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'para.settings')
 
 # Application definition
