@@ -7,7 +7,7 @@ from django.utils import timezone
 
 rankings = ['E','D','C','B','B+','A','A+','S','SS','SSS']
 
-referall_points = 150
+referall_points = 450
 MONTHLY_POINTS = 1000
 ENTRY_POINTS =  10300
 characters_list = get_characters()
@@ -30,7 +30,7 @@ class Family(models.Model):
     ])
     
     # id = models.UUIDField(primary_key=True,default=uuid.uuid4())
-    id = models.BigAutoField(primary_key=True)
+    #id = models.BigAutoField(primary_key=True)
     date_created = models.DateField(auto_now_add=True)
     
     class Meta():

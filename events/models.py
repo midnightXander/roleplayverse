@@ -34,7 +34,7 @@ def tournament_upload_to(self, filename):
     return f'{self.name}/{filename}'
 
 class Tournament(models.Model):
-    id = models.UUIDField(primary_key=True,default=uuid.uuid4)
+    # id = models.UUIDField(primary_key=True,default=uuid.uuid4)
     name = models.CharField(max_length=30, unique=True)
     
     n_participants = models.IntegerField(

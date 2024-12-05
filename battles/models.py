@@ -51,7 +51,7 @@ class BattleRequest(models.Model):
 
 
 class Battle(models.Model):
-    id = models.UUIDField(primary_key=True,default=uuid.uuid4)
+    # id = models.UUIDField(primary_key=True,default=uuid.uuid4)
     type = models.CharField(max_length=30,choices=[
         (i,i) for i in battle_types
     ])

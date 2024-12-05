@@ -36,7 +36,7 @@ urlpatterns = [
     path('statistics/<str:name>', views.stats, name = 'player_stats'),
     path('challenges/<str:name>', views.challenges, name = 'player_challenges'),
 
-    path('send_request/Uv59f2JdwPpZS3ey<int:family_id>',views.send_request,name='send_request'),
+    path('send_request/<int:family_id>',views.send_request,name='send_request'),
     path('refuse_request/<int:notif_id>',views.refuse_request, name='refuse_request'),
     path('send_invite/<int:target_id>',views.send_invite,name="send_invite"),
     path('join_family/<int:notif_id>',views.join_family,name="join_family"),

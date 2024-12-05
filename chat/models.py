@@ -5,7 +5,7 @@ import datetime
 
 
 class Chat(models.Model):
-    id = models.UUIDField(primary_key=True,default=uuid.uuid4)
+    # id = models.UUIDField(primary_key=True,default=uuid.uuid4)
     initiator = models.ForeignKey(Player,on_delete=models.CASCADE,null=True,default=None)
     recipient = models.ForeignKey(Player,on_delete=models.CASCADE,null=True,default=None,related_name="chat_recipient")
     last_message_abbr = models.TextField()
@@ -44,7 +44,7 @@ class Message(models.Model):
         return self.sender.user.username + " to " + self.receiver.user.username
     
 class FamilyMessage(models.Model):
-    id = models.UUIDField(primary_key=True,default=uuid.uuid4)
+    # id = models.UUIDField(primary_key=True,default=uuid.uuid4)
     sender = models.ForeignKey(Player,on_delete=models.SET_NULL,null=True)
     family = models.ForeignKey(Family,on_delete=models.CASCADE,null=True, related_name="family")
     content = models.TextField(null=True, blank=True)
