@@ -411,14 +411,14 @@ def new_family(request):
         profile_pic = request.POST.get("profile_picture")
         #all_families = list(Family.objects.all())
         if player.family:
-            messages.error(request,"You are already in a family, quit your current family to create a family")
+            messages.error(request,"Tu es deja dans une famille, quitte ta famille actuel pour en créer une")
             return HttpResponseRedirect(reverse("users:new_family"))
 
         elif Family.objects.filter(name=name).exists():
-            messages.error(request,"A family with that name already exists")
+            messages.error(request,"Une famille avec ce nom existe deja")
             return HttpResponseRedirect(reverse("users:new_family"))
         elif not profile_pic:
-            messages.error(request,"You should add a profile picture")
+            messages.error(request,"Tu dois ajouter une photo de profile")
             return HttpResponseRedirect(reverse("users:new_family"))
         else:
             new_position = len(Family.objects.all()) + 1
@@ -449,7 +449,8 @@ def new_family(request):
             )
 
             new_notif.save()
-            return HttpResponseRedirect(reverse("users:family"))
+            return redirect(f'/users/family/Uv59f2JdwPpZS3ey/{new_family.id}')
+            # return HttpResponseRedirect(reverse("users:family"))
 
     player_notifs = PlayerNotification.objects.filter(target= player, read = False)
     n_notifs = len(player_notifs)
