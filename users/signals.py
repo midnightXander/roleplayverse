@@ -19,9 +19,8 @@ def create_player(sender, instance, created, **kwargs):
             gender = 'male',
             referall_code = generate_referall_code(instance.username),
         ) 
-        profile_pics = PlayerDefaultImage.objects.all()
-        new_player.profile_picture = profile_pics[random.randint(0,len(profile_pics)-1)].image
-        new_player.save()
+        
+        
         new_notif = Notification.objects.create(
                     target = new_player,
                     url = '/battles',

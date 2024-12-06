@@ -83,9 +83,7 @@ class Player(models.Model):
         (i,i) for i in ['male','female']
     ])
     bio = models.CharField(max_length=60 ,blank=True)
-    country = models.CharField(max_length=80,choices=[
-        (i,i) for i in ["Cameroon","Congo"]
-    ])
+    country = models.CharField(max_length=80)
     p_character = models.CharField(default= ch_names[0],max_length=30,choices=[
         (i,i) for i in ch_names
     ])
@@ -94,7 +92,7 @@ class Player(models.Model):
 
     achievements = models.ManyToManyField(Achievement, through=('PlayerAchievement'))
 
-    language = models.CharField(default = 'en', max_length=20)
+    language = models.CharField(default = 'fr', max_length=20)
     battle_points = models.IntegerField(default=1000)
     badges = models.ManyToManyField(Badge, through='PlayerBadge')
     progression = models.IntegerField(default=0, validators=[
