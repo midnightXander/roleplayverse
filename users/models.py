@@ -4,6 +4,7 @@ from django.core.validators import MinValueValidator,MaxValueValidator
 import uuid
 from utility import get_characters
 from django.utils import timezone
+import random
 
 rankings = ['E','D','C','B','B+','A','A+','S','SS','SSS']
 
@@ -16,12 +17,23 @@ ch_names = []
 for ch in characters_list:
     ch_names.append(ch['name'])
 
+
+PLAYER_PROFILE_PICTURES = ['1.jpg','2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.png', '7.jpg', '8.jpg','9.png']
+
+
+class PlayerDefaultImage(models.Model):
+    image = models.ImageField(upload_to="players/profile_pics/")
+
+    def __str__(self):
+        return f"{self.image.name}"
+
 class Family(models.Model):
     name = models.CharField(max_length=25)
     position = models.IntegerField(validators=[
         MinValueValidator(1)
     ])
-    profile_picture = models.ImageField(upload_to="families/profile_pics/",default="default_picture_f.png")
+    profile_picture = models.ImageField(upload_to="families/profile_pics/",
+                                        default="default_picture_f.png")
     god_father = models.OneToOneField(User, on_delete=models.CASCADE)
     description = models.CharField(max_length=100,blank=True)
     challenge_head = models.ForeignKey(User, null=True,blank=True, on_delete=models.SET_NULL,related_name='challenge_heads')
@@ -62,7 +74,9 @@ class Player(models.Model):
     rank = models.CharField(default='E',max_length=3,choices=[
         (i,i) for i in rankings
     ])
-    profile_picture = models.ImageField(upload_to="players/profile_pics/",  default="blank-profile-picture.png")
+    profile_picture = models.ImageField(upload_to="players/profile_pics/",  
+                                        default = "blank-profile-picture.png"
+                                        )
     family = models.ForeignKey(Family,on_delete=models.SET_NULL,null=True,blank=True,default=None)
     nickname = models.CharField(max_length=30,blank=True,null=True)
     gender = models.CharField(default='male', max_length=10, choices=[

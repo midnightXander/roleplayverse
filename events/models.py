@@ -53,7 +53,8 @@ class Tournament(models.Model):
 
     rules = models.TextField(default='rules')
     date_created = models.DateField(auto_now_add = True )
-    cover = models.ImageField(default = f'tournaments/covers/{tournament_covers[randint(0, len(tournament_covers)-1)]}',upload_to=tournament_upload_to)
+    #cover = models.ImageField(default = f'tournaments/covers/{tournament_covers[randint(0, len(tournament_covers)-1)]}',upload_to=tournament_upload_to)
+    cover = models.ImageField(default = f'tournaments/covers/1.png',upload_to=tournament_upload_to)
     winner = models.ForeignKey(Player, on_delete=models.SET_NULL, null=True, blank=True, related_name='winner')
     
     #restrictrions: select from a list of restrictions like 'only players from a particular country can 

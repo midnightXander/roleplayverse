@@ -10,4 +10,5 @@ admin.site.register(Badge)
 admin.site.register(PlayerBadge)
 admin.site.register(Achievement)
 admin.site.register(PasswordRecoveryCode)
+admin.site.register(PlayerDefaultImage)
 
