@@ -138,7 +138,7 @@
 
     const wsprotocol = window.location.protocol === 'https' ? 'wss://' : 'ws://' 
     const groupChatSocket = new WebSocket(
-            wsprotocol + 
+            'wss://' + 
             window.location.host + 
             '/ws/chat/group/'+
             family_name +  "/"

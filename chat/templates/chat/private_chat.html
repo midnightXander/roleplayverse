@@ -170,7 +170,7 @@
 
         const wsprotocol = window.location.protocol === 'https' ? 'wss://' : 'ws://' 
         const chatSocket  = new WebSocket(
-            wsprotocol + 
+            'wss://' + 
             window.location.host + 
             '/ws/chat/private/'+
             room +  "/"
