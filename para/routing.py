@@ -1,5 +1,6 @@
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.security.websocket import AllowedHostsOriginValidator, OriginValidator
 from django.urls import re_path,path
 from chat import consumers
 from battles import consumers as battle_consumers
@@ -25,11 +26,14 @@ websocket_urlpatterns = [
 application = ProtocolTypeRouter(
     {
         'http': get_asgi_application(),
-        "websocket": AuthMiddlewareStack(
+        "websocket": AllowedHostsOriginValidator(
+            AuthMiddlewareStack(
             URLRouter(
                 websocket_urlpatterns
             )
         ),
+        )
+          
     }
 )
 
