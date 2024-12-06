@@ -252,8 +252,8 @@ LOGIN_URL = '/users/signin'
 
 from celery.schedules import crontab
 
-CELERY_BROKER_URL = os.environ.get('CELERY_BROKEN_URL','redis://127.0.0.1:6379/0')
-CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://127.0.0.1:6379/0')
+CELERY_BROKER_URL = os.environ.get('REDIS_URL','redis://127.0.0.1:6379/0')
+CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379/0')
 
 #optional, for task results
 CELERY_ACCEPT_CONTENT = ['application/json']
