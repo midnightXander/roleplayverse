@@ -4,6 +4,8 @@ from django.urls import re_path,path
 from chat import consumers
 from battles import consumers as battle_consumers
 from core.consumers import NotificationConsumer
+from django.core.asgi import get_asgi_application
+
 #URLS that handle WebSocket connection are placed here.
 
 websocket_urlpatterns = [
@@ -22,6 +24,7 @@ websocket_urlpatterns = [
 
 application = ProtocolTypeRouter(
     {
+        'http': get_asgi_application(),
         "websocket": AuthMiddlewareStack(
             URLRouter(
                 websocket_urlpatterns

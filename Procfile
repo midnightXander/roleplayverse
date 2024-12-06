@@ -1,1 +1,1 @@
-web: python manage.py migrate && python manage.py collectstatic --no-input && gunicorn para.wsgi
+web: python manage.py migrate && python manage.py collectstatic --no-input && python -m gunicorn para.asgi:application -k uvicorn.workers.UvicornWorker

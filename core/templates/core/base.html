@@ -1190,7 +1190,7 @@ function deleteComment(element, id){
                 const wsprotocol = window.location.protocol === 'https' ? 'wss://' : 'ws://'
                 console.log(wsprotocol) 
                 const notificationSocket = new WebSocket(
-                'ws://' + window.location.host + '/ws/notifications/'
+                'wss://' + window.location.host + '/ws/notifications/'
             )
             console.log("connected to receive notifications")
             notificationSocket.onmessage = function(event){

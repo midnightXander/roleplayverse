@@ -172,8 +172,7 @@ def home(request):
     if not player:
         return redirect('/users/signin')
     
-    player.profile_picture = f"/static/images/profile_pictures/1.jpg"
-    player.save()
+    
 
     feed,created = Feed.objects.get_or_create(player = player)
     
