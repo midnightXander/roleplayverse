@@ -60,12 +60,6 @@ def index(request):
     if player:
         return redirect('/home')
     else:
-        new_admin = User.objects.create_superuser(
-        username='xander_random',
-        email='denzelwashington913@gmail.com',
-        password='qAwe&@rTr90Io$.?>pol#'
-        )
-        new_admin.save()
         return render(request,"core/index.html")
 
 def get_comments(post):

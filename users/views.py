@@ -353,6 +353,10 @@ def register(request):
 
 
 def login(request):
+    player = get_player(request.user)
+    if player:
+        return redirect('/home')
+    
     if request.method == "POST":
         email = request.POST["email"]
         password = request.POST["password"]
