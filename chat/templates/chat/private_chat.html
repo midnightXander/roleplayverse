@@ -168,9 +168,9 @@
         const messageInput = $('#messageInput');
         const fileInput = $('#imageUpload')
 
-
+        const wsprotocol = window.location.protocol === 'https' ? 'wss://' : 'ws://' 
         const chatSocket  = new WebSocket(
-            'ws://' + 
+            wsprotocol + 
             window.location.host + 
             '/ws/chat/private/'+
             room +  "/"

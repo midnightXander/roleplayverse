@@ -56,7 +56,7 @@ def manage_battles_latency():
             alert_notif = Notification.objects.create(
                     target = loser,
                     url = f'/battles/battle_room/{battle.id}',
-                    content = f"You are about to lose the battle against {winner} by latency, send your textpad now!!"
+                    content = f"Tu es sur le point de perdre le combat contre {winner} par latence, fais ton pavé maintenant!!"
                 )
             alert_notif.save() 
             
@@ -87,21 +87,21 @@ def manage_battles_latency():
             win_notif = Notification.objects.create(
                         target = winner,
                         url = f'/battles/battle_room/{battle.id}',
-                        content = f"You have been declared winner of your battle against {loser} by latency"
+                        content = f"Tu as été declaré  vainqueur de ton combat contre {loser} par latence"
                         ) 
             win_notif.save()
 
             lose_notif = Notification.objects.create(
                         target = loser,
                         url = f'/battles/battle_room/{battle.id}',
-                        content = f"You lost the battle against {winner} by latency"
+                        content = f"Tu as perdu ton combat contre {winner} par latence"
                     )
             lose_notif.save()  
             
             referee_notif = Notification.objects.create(
                         target = battle.refree,
                         url = f'/battles/battle_room/{battle.id}',
-                        content = f"The battle {winner} vs {loser} you were refereeing ended by latency"
+                        content = f"Le combat {winner} vs {loser} que tu arbitrais a été terminé par latence"
                     )
             referee_notif.save()  
             

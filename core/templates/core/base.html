@@ -1187,8 +1187,9 @@ function deleteComment(element, id){
         
         <script>
             $(()=>{
-                 notificationSocket = new WebSocket(
-                'ws://' + window.location.host + '/ws/notifications/'
+                const wsprotocol = window.location.protocol === 'https' ? 'wss://' : 'ws://' 
+                const notificationSocket = new WebSocket(
+                wsprotocol + window.location.host + '/ws/notifications/'
             )
             console.log("connected to receive notifications")
             notificationSocket.onmessage = function(event){
