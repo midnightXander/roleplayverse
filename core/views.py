@@ -272,10 +272,10 @@ def _posts_data(player:Player,posts):
                         },
             'body':post.body,
             'liked': _liked_post(player, post),
-            'likes':_parse_number(post.likes),
+            'likes':_parse_number(post.likes, True),
             'image':post.image.url if post.image else None,
             "comments": get_comments_dict(player,post),
-            "n_comments": _parse_number(len(get_comments(post))),
+            "n_comments": _parse_number(len(get_comments(post)), True),
             "time_posted": _time_since(post.date_added),
             'is_favorite': SavedPost.objects.filter(player = player, post = post).exists(),
         } for post in posts
@@ -293,11 +293,11 @@ def _post_data(player:Player, post:Post):
                         },
             'body':post.body,
             'liked': _liked_post(player, post),
-            'likes':_parse_number(post.likes),
+            'likes':_parse_number(post.likes,True),
             'is_favorite': SavedPost.objects.filter(player = player, post = post).exists(),
             'image':post.image.url if post.image else None,
             "comments": get_comments_dict(player,post),
-            "n_comments": _parse_number(len(get_comments(post))),
+            "n_comments": _parse_number(len(get_comments(post)),True),
             "time_posted": _time_since(post.date_added),
         }
 

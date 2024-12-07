@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     #thirdParties
     
     'channels',
+    'channels_redis',
     'celery',
     'django_celery_beat',
     'django_celery_results',
@@ -111,24 +112,24 @@ ASGI_APPLICATION = 'para.routing.application'
 
 
 REDIS_URL = os.environ.get('REDIS_URL')
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels_redis.core.RedisChannelLayer' if REDIS_URL else 'channels.layers.InMemoryChannelLayer',
-#         'CONFIG': {
-#             "hosts": [
-#                 (REDIS_URL),
-#                 #("127.0.0.1", 6379)
-#                 ],  # Update with your Redis host and port
-#         } if REDIS_URL else {},
-
-#     }
-# }
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-        
+        'BACKEND': 'channels_redis.core.RedisChannelLayer' if REDIS_URL else 'channels.layers.InMemoryChannelLayer',
+        'CONFIG': {
+            "hosts": [
+                (REDIS_URL),
+                #("127.0.0.1", 6379)
+                ],  # Update with your Redis host and port
+        } if REDIS_URL else {},
+
     }
 }
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        
+#     }
+# }
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
