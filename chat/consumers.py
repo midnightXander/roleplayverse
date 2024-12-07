@@ -139,7 +139,7 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
                 "sender_name": sender_name,
                 "receiver_name": receiver_name,
                 "content": message,
-                "date_sent":messageObj.date_sent,
+                "date_sent":_time_since(messageObj.date_sent),
                 "profile_picture_url":  messageObj.sender.profile_picture.url,
 
             },
