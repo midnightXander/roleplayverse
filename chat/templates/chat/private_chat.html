@@ -84,9 +84,9 @@
                 <img src="{% static 'svg/empty-message.svg'  %}" alt="empty-messages" class="h-32 w-32" >
                 
                 <p>
-                    Aucun dans cette conversation
+                    Aucun message dans cette conversation
                 </p>
-                <p class="text-xs text-center" >Vos conversations sont <span class="text-orange-500">chiffrés</span>, seul vous et votre interlocuteur peuvent lire vos message</p>
+                <p class="text-xs text-center" >Vos conversations sont <span class="text-orange-500">chiffrés</span>, seul vous et votre interlocuteur peuvent lire vos messages</p>
 
             </div>
             
@@ -446,7 +446,7 @@
                 messageOptionsListener()
                 },
                 error: function(jqXHR, textstatus, errorThrown){
-                    showMyToast('An error occured! try reloading page', 'error')
+                    showMyToast('Une erreur est survenu, recharge la page', 'error')
                    
                 }
             })

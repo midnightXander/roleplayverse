@@ -412,8 +412,8 @@ def new_family(request):
     own_family = Family.objects.filter(god_father = player.user).exists()
     if request.method == "POST":
         name = request.POST["familyName"]
-        description = request.POST.get("description")
-        profile_pic = request.POST.get("profile_picture")
+        description = request.POST.get("family-bio")
+        profile_pic = request.FILES.get("family-picture")
         #all_families = list(Family.objects.all())
         if player.family:
             messages.error(request,"Tu es deja dans une famille, quitte ta famille actuel pour en créer une")
@@ -454,8 +454,8 @@ def new_family(request):
             )
 
             new_notif.save()
-            return redirect(f'/users/family/Uv59f2JdwPpZS3ey/{new_family.id}')
-            # return HttpResponseRedirect(reverse("users:family"))
+            #return redirect(f'/users/family/65744{new_family.id}')
+            return HttpResponseRedirect(reverse("users:family_page", args=[new_family.id]))
 
     player_notifs = PlayerNotification.objects.filter(target= player, read = False)
     n_notifs = len(player_notifs)

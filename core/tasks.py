@@ -30,6 +30,12 @@ def delete_referee_tests():
         if now.day - test.date_started.day >= 5:
             
             test.delete()
+            new_notif = Notification.objects.create(
+                target = test.player,
+                url = '/battles/refrees/new_refree',
+                content = "Tu peux a nouveau faire le test d'arbitrage, applique toi cette fois!"
+            )
+            new_notif.save()
             #SEND EMAIL/NOTIFICATION TO PLAYER TELLING HE CAN TAKE A NEW TEST
 
 @shared_task
@@ -109,11 +115,12 @@ def manage_battles_latency():
 
 @shared_task
 def delete_expired_notifications():
-    pass
+    print("delete notif")
 
 @shared_task
 def add_monthly_points():
     for player in Player.objects.all():
+        #REVIEW THIS, SHOULD BE WITH DAYS
         joined_day = player.date_joined.day
         current_day = timezone.now().day
 

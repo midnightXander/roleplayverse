@@ -67,11 +67,11 @@
 
 <main class="flex-grow container  mx-auto px-4 py-8 text-white">
     <div class="form-container bg-gray-700 max-w-2xl mx-auto rounded-lg p-8 shadow-md">
-        <form action="{% url 'users:new_family' %}" method="post" id="create-family-form">
+        <form action="{% url 'users:new_family' %}" method="post" id="create-family-form" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="mb-6">
                 <label for="family-name" class="block mb-2">Nom de la famille</label>
-                <input type="text"  id="family-name" name="family-name" required
+                <input type="text"  id="family-name" name="familyName" required
                        class="w-full bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500">
                        <div id="family-name-error"></div>
                     </div>
