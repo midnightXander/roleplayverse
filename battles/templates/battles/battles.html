@@ -90,20 +90,23 @@
                     {% if message.tags == 'error' %}
                     <p class="text-red-500 mb-2">
                         <i class="fas fa-exclamation-triangle mr-2"></i>
-                        {{message}} </p>
-                        <a class="text-yellow-500 border-1 border-yellow-500 p-2 rounded" href="{% url 'core:battle_points' %}">Get Battle points</a>
+                        {{message}}
+                    </p>
+                    <a class="text-yellow-500 border-1 border-yellow-500 p-2 rounded" href="{% url 'core:battle_points' %}">Get Battle points</a>
                         {% else %}
-                        <p class="text-green-500">
-                            <i class="fas fa-exclamation-triangle mr-2"></i>
-                        {{message}}</p>
-                        {% endif %}
-                        
+                    <p class="text-green-500">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                        {{message}}
+                    </p>
+
+                    <p class="text-gray-400">
+                    Tu peux consulter et voir l'état de tes requètes(RDC) sur ton profile, tes RDC et combats ne sont pas affichés ici
+                    </p>
+                    {% endif %}            
                 </div>
                 {% endfor %}
-                
-                
             </div>
-            <button  class="request-button bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition duration-300">
+            <button  class="request-button form-submit-btn bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition duration-300">
                 <i class="fas fa-fist-raised mr-2"></i>Créer la réquete 
             </button>
         </form>
@@ -225,6 +228,7 @@
             <img src="{% static 'svg/sword-spin.svg'  %}" alt="sword-spin" class="h-64 w-64" >
             
             <p class = 'text-center'>Aucun combat actuellement</p>
+            <p class = 'text-center' >tes RDC et combats ne sont pas affichés ici, pour les voir va sur ton profile</p>
         </div>
     {% endif %}
 
@@ -232,13 +236,14 @@
         <img src="{% static 'svg/sword-spin.svg'  %}" alt="sword-spin" class="h-64 w-64" >
         
         <p class = 'text-center'>Aucun combat dans cet état actuellement</p>
+        <p>Pour voir l'état de tes combat vas sur ton profile</p>
     </div>
 </main>
 
 <!-- Popup for accepting battle -->
 <div id="confirmRequestPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 animate-scaleIn">
     <div class="bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4">
-        <h2 class="text-2xl font-bold mb-4">Confirmer RDC</h2>
+        <h2 class="text-2xl font-bold mb-4">Confirmer la RDC</h2>
         
         
         <div class="mb-6">
@@ -259,7 +264,7 @@
 <!-- Popup for accepting battle -->
 <div id="acceptBattlePopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 animate-scaleIn">
     <div class="bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4">
-        <h2 class="text-2xl font-bold mb-4">Accepter RDC</h2>
+        <h2 class="text-2xl font-bold mb-4">Accepter la RDC</h2>
         <div class="mb-4">
             <h3 class="font-bold">Adversaire:</h3>
             <p id="opponentName" class="mb-1"></p>
@@ -296,7 +301,7 @@
 {% block main_active %}
 <script>
     $(()=>{
-        console.log("home")
+        
         $('.bottom-nav-link').removeClass('bg-gray-700')
         $('.bottom-nav-link')[2].classList.add('bg-gray-700')
     })

@@ -295,11 +295,11 @@
                 <div class="bg-gray-700 rounded-lg p-6 mb-4">
                     <p class="text-center text-gray-400">
                         {% if can_edit %}
-                        Your referall link: 
+                       Ton lien d'affiliation: 
                         <span class="text-orange-500">https://roleplayverse.com/users/signup?rc={{player.referall_code}}</span>
                         
                         <i onclick="copyLink('https:\/\/roleplayverse.com/users/signup/{{player.referall_code}}')" class="fas fa-clone text-xl cursor-pointer ml-2"></i><br>
-                        <span class="text-xs ">Invite des gens a rejoindre la plate-forme par ce lien et obtiens des Points de combats et plein d'autres lots</span>
+                        <span class="text-xs ">Invite des gens a rejoindre la plate-forme par ce lien et obtiens des Jétons de combats et plein d'autres lots</span>
                         {% else %}
                         {% endif %}
                     </p>
@@ -329,16 +329,16 @@
 <!-- Profile Picture Upload Modal -->
 <div id="uploadModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
     <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
-        <h2 class="text-2xl font-bold mb-4">Upload Profile Picture</h2>
+        <h2 class="text-2xl font-bold mb-4">Mettre a jour la photo de profile</h2>
         <form id="uploadForm" class="space-y-4" enctype="multipart/form-data" action="{% url 'users:edit_info' %}" method="post">
             {% csrf_token %}
             <div class="flex items-center justify-center w-full">
                 <label for="pictureUpload" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-600 border-dashed rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-600 transition duration-300">
                     <div class="flex flex-col items-center justify-center pt-5 pb-6">
                         <i class="fas fa-cloud-upload-alt text-4xl mb-3"></i>
-                        <p class="mb-2 text-sm"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                        <p class="text-xs text-gray-400">PNG, JPG or GIF (MAX. 800x800px)</p>
-                        <p class="text-xs text-yellow-400">Keep blank to remove profile picture</p>
+                        <p class="mb-2 text-sm"><span class="font-semibold">Appuie pour ajouter</span> ou drag and drop</p>
+                        <p class="text-xs text-gray-400">PNG, JPG(MAX. 800x800px)</p>
+                        <p class="text-xs text-yellow-400">laisse vide pour retirer la photo de profile</p>
                     </div>
                     <input id="pictureUpload" type="file" name="profile-picture" class="hidden" accept="image/*" />
                     <input type="hidden" name="info" value="profile-picture">
@@ -356,10 +356,10 @@
             </div> -->
             <div class="flex justify-between">
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
-                    <i class="fas fa-upload mr-2"></i>Upload
+                    <i class="fas fa-upload mr-2"></i>Mettre a jour
                 </button>
                 <button id="cancelUpload" type="button" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
-                    <i class="fas fa-times mr-2"></i>Cancel
+                    <i class="fas fa-times mr-2"></i>Annuler
                 </button>
             </div>
         </form>
@@ -374,7 +374,7 @@
 <!-- Popup for Challenging player -->
 <div id="challengePopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 animate-scaleIn">
     <div class="bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4">
-        <h2 class="text-2xl font-bold mb-4">lance un challenge a {{req_player}} </h2>
+        <h2 class="text-2xl font-bold mb-4">lancer un challenge a {{req_player}} </h2>
         
         <div class="mb-4">
             <label for="character" class="block mb-2">Perso:</label>
@@ -407,14 +407,14 @@
 <!-- Popup for inviting player -->
 <div id="invitePopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 animate-scaleIn">
     <div class="bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4">
-        <h2 class="text-2xl font-bold mb-4">Invite {{req_player}} to join {{player.family}}</h2>
+        <h2 class="text-2xl font-bold mb-4">Inviter {{req_player}} a  rejoindre {{player.family}}</h2>
         
         <div class="flex justify-between">
             <button id="confirmInvite" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
-                <i class="fas fa-check mr-2"></i>Confirm
+                <i class="fas fa-check mr-2"></i>Confirmer
             </button>
             <button id="cancelInvite" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
-                <i class="fas fa-times mr-2"></i>Cancel
+                <i class="fas fa-times mr-2"></i>Annuler
             </button>
         </div>
     </div>
@@ -424,7 +424,7 @@
 {% block main_active %}
 <script>
     $(()=>{
-        console.log("home")
+        
         $('.bottom-nav-link').removeClass('bg-gray-700')
         $('.bottom-nav-link')[3].classList.add('bg-gray-700')
     })

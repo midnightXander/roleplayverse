@@ -267,7 +267,7 @@ def request_battle(request):
                 new_request.save()
                 #deduct the battle points needed to start a battle
                 core_views.remove_points(sender, request_cost)
-                messages.success(request,"Requète crée")
+                messages.success(request,"Requète crée, ")
 
                 
                 #send a notif to the head of the family informing a member made a stake battle request
@@ -282,7 +282,7 @@ def request_battle(request):
             #SET THE EXPIRY DATE
             new_request.save()
 
-            messages.success(request,"Requète cré")
+            messages.success(request,"Requète crée")
         elif type == "":
             messages.error(request,"Choisi le type de  combat")  
         sender.save()    
