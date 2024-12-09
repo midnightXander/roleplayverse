@@ -42,7 +42,7 @@ def signin(request):
             return HttpResponseRedirect(reverse("moderator:signin")) 
 
 
-        user_auth = auth.authenticate(username = user.username, password = password)
+        user_auth = auth.authenticate(username = user.username, password = user.password)
         if user_auth is not None:
             auth.login(request,user_auth)
             return HttpResponseRedirect(reverse("moderator:index"))
