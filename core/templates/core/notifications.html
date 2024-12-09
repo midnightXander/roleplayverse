@@ -160,18 +160,18 @@
             
               <div>
                   <a href="{% url 'users:family_page' notif.family.id %}" class="font-semibold text-xl text-lg">{{notif.family}}</a>
-                  <p class="text-gray-400">GodFather: <a href="{% url 'users:player' notif.family.god_father.username %}" class="font-semibold" >{{notif.family.god_father}}</a></p>
+                  <p class="text-gray-400">Parrain: <a href="{% url 'users:player' notif.family.god_father.username %}" class="font-semibold" >{{notif.family.god_father}}</a></p>
               </div>
           </div>
-          <p class="text-gray-300">You've been invited to join the {{notif.family}} family. Will you accept their invitation?</p>
+          <p class="text-gray-300">Tu as été invité a rejoindre la famille {{notif.family}} . Vas tu accepter leurs invitations?</p>
       </div>
       
       <div class="flex flex-col space-y-3">
         <button onclick="handleInvite(this,'{{notif.id}}', 'accept')" class="bg-green-600 mb-2 hover:bg-green-700 text-white py-3 px-4 rounded-full transition duration-300 pulse-animation">
-            <i class="fas fa-check mr-2"></i>Accept Invitation
+            <i class="fas fa-check mr-2"></i>Accepter
         </button>
         <button onclick="handleInvite(this,'{{notif.id}}', 'decline')" class="bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-full transition duration-300">
-            <i class="fas fa-times mr-2"></i>Decline Invitation
+            <i class="fas fa-times mr-2"></i>Decliner
         </button>
     </div>
   </div>
@@ -189,17 +189,17 @@
 <!-- Popup for accepting battle -->
 <div id="ChallengePopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 animate-scaleIn">
   <div class="bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4">
-      <h2 class="text-2xl font-bold mb-4">Accept Battle Request</h2>
+      <h2 class="text-2xl font-bold mb-4">Accepter la Requète</h2>
       <div class="mb-4">
-          <h3 class="font-bold">Opponent:</h3>
+          <h3 class="font-bold">Adversaire:</h3>
           <p id="opponentName" class="mb-1"></p>
           <p id="opponentCharacter" class="mb-1"></p>
           <p  class=" mb-1">Type: <span id="requestType" class="text-2xl font-bold"></span></p>
       </div>
       <div class="mb-4">
-          <label for="character" class="block mb-2">Choose your character:</label>
+          <label for="character" class="block mb-2">Choisi ton perso:</label>
           <select id="character" name="character" class="w-full bg-gray-700 text-white p-2 rounded-lg">
-              <option value="">Select a character</option>
+              <option value="">Choisi un perso pour le combat</option>
                           {% for character in characters %}
                           {% if player.p_character == character.name %}
                           <option selected value="{{character.name}}" data-img_link="{{character.images.0}}">{{character.name}} </option>
@@ -214,10 +214,10 @@
       </div>
       <div class="flex justify-between">
           <button id="confirmChallenge" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
-              <i class="fas fa-check mr-2"></i>Confirm
+              <i class="fas fa-check mr-2"></i>Confirmer
           </button>
           <button id="cancelChallenge" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
-              <i class="fas fa-times mr-2"></i>Cancel
+              <i class="fas fa-times mr-2"></i>Annuler
           </button>
       </div>
   </div>

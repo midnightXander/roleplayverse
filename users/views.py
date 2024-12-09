@@ -363,13 +363,15 @@ def login(request):
         return redirect('/home')
     
     if request.method == "POST":
-        email = request.POST["email"]
+        user_data = request.POST["email"]
         password = request.POST["password"]
+        user = User.objects.filter(Q(username = user_data) | Q(email = user_data))
 
-        try:
-            user = User.objects.get(email=email)
+        try:    
+            # user = User.objects.get(email=user_data)
+            user = user[0]
         except:
-            messages.error(request,"User does not exist")
+            messages.error(request,"Aucun n'utilisateur avec cet email ou nom d'utilisateur")
             return HttpResponseRedirect(reverse("users:login")) 
         
         user_auth = auth.authenticate(username=user.username,password=password)
@@ -377,7 +379,7 @@ def login(request):
             auth.login(request,user_auth)
             return HttpResponseRedirect(reverse("core:home"))
         else:
-            messages.error(request,"Incorrect Password")
+            messages.error(request,"Mot de passe incorrect")
             return HttpResponseRedirect(reverse("users:login"))
 
 

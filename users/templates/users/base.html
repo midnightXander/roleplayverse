@@ -3,11 +3,15 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>authenticate</title>
+        <title>{% block title %} Créer un compte {% endblock title %}</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-compatible" content="IE=edge">
         <meta name="viewport"  content="width=device-width, initial-scale=1">
-        <link rel="icon" type="image/x-icon" href="{% static 'images/logo/logo.png' %}">
+        <meta name="description" content="{% block meta_description %} page de création de compte    {% endblock meta_description %}">
+        
+        <meta name="keywords" content="{% block meta_keywords %} Création de comptes réseaux sociaux jeu en ligne RP Jeu de Role Naruto authentification {% endblock meta_keywords %}">
+        <meta property = "og:url" content = "https://roleplayverse.com">
+        <link rel="icon" type="image/x-icon" href="{% static 'images/logo/logo_1.png' %}">
         
         <link rel="stylesheet" href="{% static 'css/output.css' %}"/>
         

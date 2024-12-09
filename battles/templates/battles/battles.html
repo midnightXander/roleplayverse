@@ -1,6 +1,7 @@
 {% extends "core/base.html" %}
 {% load static %}
-
+{% block title %}Combats{% endblock title %}
+{% block meta_description%}Page des combats, Requetes de combat {% endblock meta_description%}
 {% block content %}
 <style>
     body {
@@ -68,7 +69,7 @@
                             {% endif %}
                             {% endfor %}
                         </select>
-                        <p class="mt-2 text-sm text-gray-400">consulter le <a class="text-orange-500 hover:text-orange-600" href="/characters" >catalogue des personnages</a> pour connaitre tous les jutsu de vos personnages préferés</p>
+                        <p class="mt-2 text-sm text-gray-400">consulte le <a class="text-orange-500 hover:text-orange-600" href="/characters" >catalogue des personnages</a> pour connaitre tous les jutsu de vos personnages préferés</p>
 
                 </div>
                 <div class="my-3">
@@ -92,7 +93,7 @@
                         <i class="fas fa-exclamation-triangle mr-2"></i>
                         {{message}}
                     </p>
-                    <a class="text-yellow-500 border-1 border-yellow-500 p-2 rounded" href="{% url 'core:battle_points' %}">Get Battle points</a>
+                    <a class="text-yellow-500 border-1 border-yellow-500 p-2 rounded" href="{% url 'core:battle_points' %}">Obtenir des jetons de combat</a>
                         {% else %}
                     <p class="text-green-500">
                     <i class="fas fa-exclamation-triangle mr-2"></i>

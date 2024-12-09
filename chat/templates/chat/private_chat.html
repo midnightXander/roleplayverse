@@ -1,6 +1,7 @@
 
 {% extends "chat/chats.html" %}
 {% load static %}
+{% block title %}{{receiver}}{% endblock title %}
 
 {% block style %}
 <style>
@@ -116,7 +117,7 @@
             <form id="messageForm" class="flex" enctype="multipart/form-data">
                 
                
-                    <label for="imageUpload" class="cursor-pointer mr-2 bg-gray-600  text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
+                    <label for="imageUpload" class="cursor-pointer mr-2   text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
                         <i class="fas fa-image"></i>
                     </label>
                     <input type="file" id="imageUpload" accept="image/*" class="hidden">

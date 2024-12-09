@@ -6,6 +6,7 @@ from django.contrib.auth.models import User,auth
 from django.contrib.auth import logout,login,authenticate
 from django.urls import reverse
 from .moderator_utility import get_moderator
+from .models import *
 import os
 from dotenv import load_dotenv
 
@@ -19,27 +20,36 @@ def signin(request):
         password = request.POST.get('password')
 
         if not email or not l_code or not password:
-            messages.error(request,"Enter all fields")
+            messages.error(request,"Entrez tout les champs")
             return HttpResponseRedirect(reverse("moderator:signin"))
-
-        if l_code != os.environ.get('M_LOGIN_CODE'):
-            raise Http404
-        elif password != os.environ.get('M_PASSWORD'):
-            raise Http404
-
+        
         try:
             user = User.objects.get(email=email)
+            moderator = Moderator.objects.get(user = user )
         except:
-            messages.error(request,"Wrong credentials")
+            messages.error(request,"L'utisateur n'est pas moderateur")
             return HttpResponseRedirect(reverse("moderator:signin")) 
         
-        user_auth = auth.authenticate(username = user.username,password = password)
+
+        
+
+        if l_code != moderator.login_code:
+            messages.error(request,"Le code de  connexion est incorrect")
+            return HttpResponseRedirect(reverse("moderator:signin")) 
+        
+        elif password != os.environ.get('M_PASSWORD'):
+            messages.error(request,"Le mot de passe de  moderateur est incorrect")
+            return HttpResponseRedirect(reverse("moderator:signin")) 
+
+
+        user_auth = auth.authenticate(username = user.username, password = password)
         if user_auth is not None:
             auth.login(request,user_auth)
             return HttpResponseRedirect(reverse("moderator:index"))
         else:
-            messages.error(request,"Incorrect credentials")
+            messages.error(request,"Informations incorrect")
             return HttpResponseRedirect(reverse("moderator:signin"))
+        
     return render(request, "moderator/signin.html")    
 
 def index(request):
@@ -94,7 +104,7 @@ def edit_blog_post(request,post_id):
         post.text = content
         post.image = image
         post.leading = leading
-        category = category
+        post.category = category
         
         post.save()
         return HttpResponseRedirect(reverse('moderator:index'))

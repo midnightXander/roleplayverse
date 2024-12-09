@@ -78,10 +78,10 @@
             </a> 
         </div> -->
         <p class="mt-4 text-center text-gray-400">
-            Vous avez déja un compte? <a href="{% url 'users:login' %}" class="text-orange-custom hover:underline">Log in</a>
+            Tu as déja un compte? <a href="{% url 'users:login' %}" class="text-orange-custom hover:underline">Log in</a>
         </p>
         <p class="mt-4 text-center text-gray-400">
-            en continuant, vous accepter nos <a href="/legal/terms" class="text-orange-custom hover:underline">termes</a>  et  <a href="#" class="text-orange-custom hover:underline">politiques de confidentielités </a>
+            en continuant, tu acceptes nos <a href="/legal/terms" class="text-orange-custom hover:underline">termes</a>  et  <a href="#" class="text-orange-custom hover:underline">politiques de confidentielités </a>
         </p>
     </div>
     
@@ -125,7 +125,7 @@
         
 
     usernameInput.on("input",(e)=>{
-        console.log(usernameInput.val())
+        
         $.ajax({
             url: "/users/verify_username",
             type: "POST",
@@ -133,7 +133,7 @@
                 "username":usernameInput.val(), csrfmiddlewaretoken: "{{csrf_token}}"
             },
             success: function(res){
-                console.log(res.status, res.message)
+                
                 if(res.status == "valid"){
                     $("#username-error").removeClass("invalid")
                      $("#username-error").addClass("valid")
@@ -168,7 +168,7 @@
                 "email":emailInput.val(), csrfmiddlewaretoken: "{{csrf_token}}"
             },
             success: function(res){
-                console.log(res.status, res.message)
+                
                 if(res.status == "valid"){
                     $("#email-error").removeClass("invalid")
                      $("#email-error").addClass("valid")
@@ -202,7 +202,7 @@
                 csrfmiddlewaretoken: "{{csrf_token}}",
             },
             success: function(res){
-                console.log(res.status, res.message)
+                
                 if(res.status == "valid"){
                     $("#password1-error").removeClass("invalid")
                      $("#password1-error").addClass("valid")
@@ -229,7 +229,7 @@
 
     password2Input.on("input",(e)=>{
         password1 = password1Input.val()
-        console.log(password2Input.val())
+        
         $.ajax({
             url: "/users/verify_passwords",
             type: "POST",
@@ -239,7 +239,7 @@
                 csrfmiddlewaretoken: "{{csrf_token}}",
             },
             success: function(res){
-                console.log(res.status, res.message)
+                
                 if(res.status == "valid"){
                     $("#password2-error").removeClass("invalid")
                      $("#password2-error").addClass("valid")

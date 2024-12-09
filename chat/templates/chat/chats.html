@@ -1,4 +1,9 @@
 {% extends "core/base.html" %}
+
+{% block title %}Conversations{% endblock title %}
+{% block meta_description %} page des conversations entre joueurs   {% endblock meta_description %}
+{% block meta_keywords %} Messagerie conversations privée message de groupe {% endblock meta_keywords %}
+
 {% block content %}
 {% load static %}
 
@@ -109,7 +114,7 @@
         {% empty %}
         <div  class="p-4 flex flex-col justify-center items-center">
             <img src="{% static 'svg/no-chats.svg'  %}" alt="no-chats" class="h-24 w-24" >
-            Aucune conversation privée pour le moment 
+            Aucune conversation pour le moment 
         </div>
         {% endfor %}
 
