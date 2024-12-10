@@ -743,13 +743,10 @@
             }
 
             }    
-            function disableSubmitButtons(){
-                buttons = $('.form-submit-btn')
-                buttons.on('click', (e)=>{
-                    e.target.disabled = true
-                })
+            function disableSubmitButton(button){
+                button.disabled = true
             }
-            disableSubmitButtons()
+            
             imgModalListener()
             </script>
 

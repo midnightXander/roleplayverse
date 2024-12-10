@@ -56,7 +56,7 @@
                 <input type="checkbox" id="newsletter" name="newsletter" class="mr-2">
                 <label for="newsletter" class="text-xs" >Recevoir des mise à jour,info et story dans ton email</label>
             </div>
-            <button type="submit"  class="submit-btn w-full bg-orange-custom text-white py-2 rounded hover:bg-orange-custom transition-all duration-300 hover:scale-105" disabled>
+            <button onsubmit="disableSubmitButton(this)" type="submit"  class="submit-btn w-full bg-orange-custom text-white py-2 rounded hover:bg-orange-custom transition-all duration-300 hover:scale-105" disabled>
                 Créer le compte
             </button>
         </form>

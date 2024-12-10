@@ -38,7 +38,7 @@
                 </div> -->
                 <a href="{% url 'users:password_recover' %}" class="text-orange-custom hover:underline">Mot de passe oublié?</a>
             </div>
-            <button type="submit" class="w-full bg-orange-custom text-white py-2 rounded hover:bg-orange-custom transition-all duration-300 hover:scale-105">
+            <button onsubmit="this.disabled=true;" type="submit" class="w-full bg-orange-custom text-white py-2 rounded hover:bg-orange-custom transition-all duration-300 hover:scale-105">
                 Se connecter
             </button>
         </form>

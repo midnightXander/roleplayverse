@@ -85,7 +85,7 @@ $(()=>{
         const cardColor = isParticipant ? 'bg-gray-800' : 'bg-teal-800';
         var resultColor = 'text-yellow-400';
         var winner = false;
-        const opponent = battle.initiator.id == player_id ? { "player":battle.opponent.player,"username":battle.opponent.username }: {"player":battle.initiator.player, "username":battle.initiator.username}
+        const opponent = battle.initiator.id == player_id ? { "player":battle.opponent.player,"username":battle.opponent.username,'profile_picture': battle.opponent.profile_picture }: {"player":battle.initiator.player, "username":battle.initiator.username,'profile_picture': battle.initiator.profile_picture}
         //const resultColor =  battle.winner.id === parseInt('{{req_player.id}}') ? 'text-green-400' : battle.result === 'Defeat' ? 'text-red-400' : 'text-yellow-400';
        
         if(isParticipant){
@@ -106,8 +106,10 @@ $(()=>{
                     <span class="text-sm">${battle.date}</span>
                 </div>
                 ${isParticipant ? `
-                    <a href='/users/${opponent.username}'>
-                    <p class="text-lg font-bold mb-1">vs. ${opponent.player}</p>
+                    <a class='flex hover:text-orange-500 ' href='/users/${opponent.username}'>
+                    <span>vs.</span>
+                    <img class='h-6 w-6 rounded-full mx-2' src = '${opponent.profile_picture}' >
+                    <p class="text-lg font-bold mb-1"> ${opponent.player}</p>
                     </a>
                     ${battle.winner ? `
                     <p class="text-lg ${resultColor} font-semibold">${winner ? 'Victoire': 'Defaite'}</p>

@@ -20,7 +20,7 @@
 
              <div class="battle-request-card relative bg-gray-800 rounded-lg p-4 shadow-lg">
                 <h3 class="text-xl font-bold mb-2">{{request.character}}</h3>
-                <p class="text-sm mb-2">{{request.date_sent}}</p>
+                <p class="text-sm mb-2">il y'a {{request.date_sent}}</p>
                 <!-- <p class="text-sm mb-2">Expires: {{request.expiry_date.date}}</p> -->
                 
                 <p class="text-sm font-semibold mb-4">Type: <span class="text-blue-400">{{request.type}}</span></p>
@@ -32,17 +32,21 @@
                 </button>
 
                 <div class="mb-4">
-                    <h4 class="text-lg font-semibold mb-2">Acceptances:</h4>
+                    <h4 class="text-lg font-semibold mb-2">Acceptations:</h4>
                     
                         <ul class="space-y-2">
                                 {% for acceptor in request.acceptors %}
                                 <li class="flex justify-between items-center border-1 border-gray-600 shadow-md rounded p-2">
-                                    <a href="{% url 'users:player' acceptor.player.user.username %}">
+                                    <div class="flex" >
+                                    <img class="h-6 w-6 rounded-full mr-2" src="{{acceptor.player.profile_picture.url}}"  >
+                                    <a class="inline-block hover:text-orange-500 " href="{% url 'users:player' acceptor.player.user.username %}">
                                       <span>{{acceptor.player}} ({{acceptor.player.rank}})</span>  
                                     </a>
-                                    <button class="start-fight-btn bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded text-sm transition duration-300"
+                                    </div>
+                                    
+                                    <button onclick="startFight('{{request.id}}','{{acceptor.id}}')" class="start-fight-btn border-1 border-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded text-sm transition duration-300"
                                             data-request-id="{{request.id}}" data-acceptance-id="{{acceptor.id}}">
-                                        Start Fight
+                                        Commencer le combat
                                     </button>
                                 </li>
                                 {% empty %}
@@ -64,11 +68,11 @@
                                     </a>
                                     
                                     <div class = "flex justify-between space-x-2 ">
-                                        <button class="answer-referee-btn bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded text-sm transition duration-300"
+                                        <button onclick="answerReferee(this, '{{request.id}}','{{proposal.id}}', 'accepted')" class="answer-referee-btn bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded text-sm transition duration-300"
                                                 data-request_id="{{request.id}}" data-proposal_id="{{proposal.id}}" data-response="accepted" >
                                             <i class="fas fa-check"></i>
                                         </button>
-                                        <button class="answer-referee-btn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition duration-300"
+                                        <button onclick="answerReferee(this, '{{request.id}}','{{proposal.id}}', 'declined')" class="answer-referee-btn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition duration-300"
                                                 data-request_id="{{request.id}}" data-proposal_id="{{proposal.id}}" data-response="declined" >
                                                 <i class="fas fa-times"></i>
                                         </button>
@@ -114,20 +118,8 @@
 </script>
 {% endblock active %}
 
-
-{% block fetchContent %}
 <script>
-    $(()=>{
-
-
-    //Start a battle
-    $(".start-fight-btn").on("click",(e) => startFight(e.target.dataset.requestId, e.target.dataset.acceptanceId)    
-)
-//accept a refree
-$(".answer-referee-btn").on("click",(e)=> answerReferee(e.target,e.target.dataset.request_id, e.target.dataset.proposal_id, e.target.dataset.response))
-
-
-function startFight(requestId, acceptanceId) {
+    function startFight(requestId, acceptanceId) {
         console.log(`Starting fight for request ${requestId} with acceptance ${acceptanceId}`);
         $.ajax({
             url: `/battles/new/${acceptanceId}`,
@@ -154,6 +146,55 @@ function startFight(requestId, acceptanceId) {
         })
     }
 
+    function answerReferee(btn,requestId, proposalId,response) {
+        
+        // Add logic to accept the referee
+    
+        $.ajax({
+            url: `/battles/refree/validate/${proposalId}`,
+            type:"POST",
+            data:{csrfmiddlewaretoken:"{{csrf_token}}", response:response},
+            beforeSend: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+            success: function(res){
+                if(res.status == "success"){
+                    showMyToast(res.message, 'success')
+                    // if(response != 'accepted'){
+                    //     $(btn).parent('li').remove()
+                    // }
+                }else{
+                    showMyToast(res.message)
+                    
+                }
+            },
+            complete: function(){
+                  $('#loading-overlay').toggleClass('active')
+                  
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                  showMyToast("An error occured", 'error')
+                }
+        })
+    
+    }
+</script>
+
+{% block fetchContent %}
+<script>
+    $(()=>{
+
+
+    //Start a battle
+//     $(".start-fight-btn").on("click",(e) => startFight(e.target.dataset.requestId, e.target.dataset.acceptanceId)    
+// )
+
+//accept a refree
+//$(".answer-referee-btn").on("click",(e)=> answerReferee(e.target,e.target.dataset.request_id, e.target.dataset.proposal_id, e.target.dataset.response))
+
+
+
+
    
 
     function createRequestCard(request) {
@@ -170,7 +211,7 @@ function startFight(requestId, acceptanceId) {
                             ${request.acceptances.map(acceptance => `
                                 <li class="flex justify-between items-center bg-gray-700 rounded p-2">
                                     <span>${acceptance.player} (${acceptance.rank})</span>
-                                    <button class="start-fight-btn bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded text-sm transition duration-300"
+                                    <button onclick='startFight(${request.id},${acceptance.id})' class="start-fight-btn bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded text-sm transition duration-300"
                                             data-request-id="${request.id}" data-acceptance-id="${acceptance.id}">
                                         Start Fight
                                     </button>
@@ -208,38 +249,7 @@ function startFight(requestId, acceptanceId) {
 
     
 
-    function answerReferee(btn,requestId, proposalId,response) {
-        
-        // Add logic to accept the referee
     
-        $.ajax({
-            url: `/battles/refree/validate/${proposalId}`,
-            type:"POST",
-            data:{csrfmiddlewaretoken:"{{csrf_token}}", response:response},
-            beforeSend: function(){
-                  $('#loading-overlay').toggleClass('active')
-                },
-            success: function(res){
-                if(res.status == "success"){
-                    showMyToast(res.message, 'success')
-                    // if(response != 'accepted'){
-                    //     $(btn).parent('li').remove()
-                    // }
-                }else{
-                    showMyToast(res.message)
-                    
-                }
-            },
-            complete: function(){
-                  $('#loading-overlay').toggleClass('active')
-                  
-                },
-                error: function(jqXHR, textstatus, errorThrown){
-                  showMyToast("An error occured", 'error')
-                }
-        })
-    
-    }
 
     // Initialize with battles shown
     //showRequests();

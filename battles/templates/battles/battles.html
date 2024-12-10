@@ -107,7 +107,7 @@
                 </div>
                 {% endfor %}
             </div>
-            <button  class="request-button form-submit-btn bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition duration-300">
+            <button onsubmit="disableSubmitButton(this)"  class="request-button form-submit-btn bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition duration-300">
                 <i class="fas fa-fist-raised mr-2"></i>Créer la réquete 
             </button>
         </form>
@@ -147,14 +147,14 @@
                         <div>
                             
                             <a href="{% url 'users:player' request.sender.user.username %}" class="font-bold hover:text-orange-600">{{request.sender}}</a>
-                            <p class="font-bold ">avec <span class="text-yellow-500">{{request.character}}</span></p>
+                            <p class="">avec <span class="text-yellow-500">{{request.character}}</span></p>
                             <p class="text-sm text-gray-400">Rang: {{request.sender.rank}}</p>
                         </div>
                     </div>
                     <i class="fas fa-bolt text-yellow-500 text-2xl"></i>
                    
                 </div>
-                <button data-url="{% url 'battles:accept' request.id %}" data-requesttype="{{request.type}}" data-character="{{request.character}}" data-requestsender="{{request.sender}}"  class="accept-button bg-green-500 text-white px-4 py-2 cursor-pointer rounded-lg hover:bg-green-600 transition duration-300">
+                <button data-url="{% url 'battles:accept' request.id %}" data-requesttype="{{request.type}}" data-character="{{request.character}}" data-requestsender="{{request.sender}}"  class="accept-button border-1 border-green-500 text-green-500 px-4 py-2 cursor-pointer rounded-lg hover:bg-green-600 transition duration-300">
                     <i class="fas fa-check mr-2"></i>Accepter
                 </button>
                 
@@ -193,7 +193,7 @@
                 </div>
             </div>
             {% if battle.can_refree %}
-            <button data-battle_id="{{battle.id}}" class="proposal-btn bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
+            <button data-battle_id="{{battle.id}}" class="proposal-btn border-1 border-purple-500 text-purple-500 px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
                 <i class="fas fa-gavel mr-2"></i>proposer d'arbitrer
             </button>
             {% else %}
@@ -341,7 +341,7 @@
                                         <img src="${battle.opponent.profile_picture}" alt="${battle.opponent.player}" class="w-12 h-12 rounded-full">
                                     </div>
                                 </div>
-                                ${battle.can_refree ? `<button data-battle_id="${battle.id}" class= "proposal-btn bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
+                                ${battle.can_refree ? `<button data-battle_id="${battle.id}" class= "proposal-btn border-1 border-purple-500 text-purple-500 px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
                                     <i class="fas fa-gavel mr-2"></i>Propose as Referee
                                 </button>`:`
                                 <div class='flex justify-between items-center' > 
@@ -383,7 +383,7 @@ function createRequest(request){
                             <i class="fas fa-bolt text-yellow-500 text-2xl"></i>
                             
                         </div>
-                        <button class="accept-button bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300" data-url="/battles/accept/${request.id}" data-requesttype="${request.type}" data-character="${request.character}" data-requestsender="${request.sender.player}">
+                        <button class="accept-button border-1 border-green-500 text-green-500 px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300" data-url="/battles/accept/${request.id}" data-requesttype="${request.type}" data-character="${request.character}" data-requestsender="${request.sender.player}">
                             <i class="fas fa-check mr-2"></i>Accepter
                         </button>
 
@@ -458,7 +458,7 @@ function createRequest(request){
                 success: function(res){
                         if(res.status == "success"){
                             
-                            showMyToast("Request accepted waiting for refree...", 'success')
+                            showMyToast("Requète accepté, en attente de validation...", 'success')
                             
                         }else{
                             showMyToast(res.message,'info',5500)
@@ -478,7 +478,7 @@ function createRequest(request){
             acceptBattlePopup.classList.add('hidden');
         } else {
             
-            showMyToast('Please select your character before confirming.')
+            showMyToast('Choisi un personnage avant de continuer.')
             
         }
     });
@@ -537,7 +537,7 @@ function createRequest(request){
                 },
                 success: function(res){
                         if(res.status == "success"){
-                            console.log(res)
+                            
                             $(".battles-container").empty()
                             $(".filter-empty").addClass('hidden')
                             const battles = res.battles ? res.battles : []
@@ -563,7 +563,7 @@ function createRequest(request){
                             
                         }else{
                             
-                            showMyToast('un problème est survenue veuiller réessayer','info',2000)
+                            showMyToast(res.message,'info',2000)
                         }
                 },
                 error: function(jqXHR, textstatus, errorThrown){
@@ -584,7 +584,7 @@ function createRequest(request){
         //console.log(document.querySelector("#character-select").selectedOptions[0].value)
         acceptBtn.on("click",(e)=>{
             const character = document.querySelector("#character-select-accept").selectedOptions[0].value
-            console.log(character)
+            
             
             $.ajax({
                 url: e.target.dataset.link,
@@ -596,9 +596,9 @@ function createRequest(request){
                 success: function(res){
                         if(res.status == "success"){
                             e.target.disabled = true
-                            console.log("Request accepted waiting for refree...")
+                            //console.log("Request accepted waiting for refree...")
                         }else{
-                            console.log(res.message)
+                            //console.log(res.message)
                         }
                 },
                 error: function(jqXHR, textstatus, errorThrown){

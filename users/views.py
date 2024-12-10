@@ -675,6 +675,7 @@ def family_battles(request,family_id):
     })
 
 def get_acceptors(req: BattleRequest):
+        accepted_requests_list = []
         accepted_requests = BattleAcceptor.objects.filter(request = req)
         # for a_request in BattleAcceptor.objects.all(): 
         #     if a_request.request.sender == req.sender:     

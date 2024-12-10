@@ -214,9 +214,19 @@ def battles(request):
     sorted_characters = sorted(characters["playable_characters"], key = lambda item: item["name"])
     battles = Battle.objects.all().order_by('-date_started')
     requests = BattleRequest.objects.exclude(sender = player).order_by('-date_sent')
+    requests_list = []
+
+    #Show Number of battles initiated for each request  
+
+    #remove requests where 3 battles had already being inititated from 
+    for b_request in requests:
+        r_battles = Battle.objects.filter(request = b_request)
+        if len(r_battles)<=3:
+            requests_list.append(b_request)
+
     battles_data = _battles_data(player, battles)
 
-    context = {"requests":requests,
+    context = {"requests":requests_list,
                "characters":sorted_characters,
                "player":player,
                "n_notifs":core_views.get_notifs(player),
@@ -305,7 +315,7 @@ def accept_battle(request,request_id):
         if  b_request.type == battle_types[1] and player.family == b_request.sender.family:
             message = 'Vous ne pouvez pas faire des combats stake contre des membres de votre famille'
         elif not player.family and b_request.type == battle_types[1]:
-            message = 'Vous devez dans une famille pour faire des combats stake'
+            message = 'Vous devez étre dans une famille pour faire des combats stake'
         #check if there are more than 3 acceptors for the request already    
         elif len(acceptors)>=3:
             
@@ -339,7 +349,7 @@ def accept_battle(request,request_id):
 
             new_notif = core_models.Notification.objects.create(
                 target = b_request.sender,
-                content = f"{b_request.sender} a accepté votre requète de combat",
+                content = f"{b_request.sender} a accepté ta requète de combat, clique pour aller commencer le combat",
                 url = f'/users/requests/{b_request.sender.user.username}',
             )
 
@@ -368,6 +378,7 @@ def init_battle(request,acceptor_id):
 
         #check if there is already a battle from that request between the two players
         if player == battle_request.sender:
+            
             if Battle.objects.filter(
                 initiator = initiator,
                 opponent = battle_acceptor.player,
@@ -376,7 +387,10 @@ def init_battle(request,acceptor_id):
                 
                 message = 'Ce combat a deja été initié'
             else:
+                
+                #all_battles = Battle.objects.all()
                 new_battle = Battle.objects.create(
+                    #id = len(all_battles)+1,
                     initiator = initiator,
                     i_character = battle_request.character,
                     opponent = battle_acceptor.player,
@@ -392,12 +406,14 @@ def init_battle(request,acceptor_id):
                     
                 
                 #Notify the acceptor
-                new_notif = PlayerNotification.objects.create(
-                    sender = initiator,
-                    notif_type = "battle_accepted",
+                new_notif = core_models.Notification.objects.create(
+                    content = f"Ton combat contre {player} a été initié, un arbitre doit maintenant etre designé",
                     target = battle_acceptor.player,
+                    url = f'/users/battles/{battle_acceptor.player.user.username}'
 
                 )
+                new_notif.save()
+
                 new_battle.save()
                 message = "combat initiée, maintenant en attente d'un arbitre"
                 return JsonResponse({"status":"success","message": message})
