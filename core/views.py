@@ -409,7 +409,7 @@ def search_all(request, scope = 'global'):
         searched_players = []
         #if not searched_users:
         for user in searched_users:
-            if user.username != "xander_random":
+            if user.username != "xander_randomo":
                 player = Player.objects.get(user=user)
                 searched_players.append({"id":player.id,
                                          "etype":"player",

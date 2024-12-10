@@ -49,6 +49,8 @@
 
 
 </style>
+
+
 {% endblock style %}
 
 
@@ -102,11 +104,40 @@
         
 
 
-        <!--Imag name preview-->
+        
+        
+        <div class="bg-gray-900 relative  message-form-container px-2 py-4 ">
+            <p id="image-name" class="hidden top-0 absolute">
+                <span class="text-green-500"></span>   
+                <i class="fas fa-times cursor-pointer ml-2"></i> 
+            </p>
+            <div class="message-loader top-0 absolute hidden">
+                <i class="fas fa-spinner fa-spin text-orange-500"></i>
+            </div>
+            <form id="messageForm" class="flex shadow-md border-1 border-gray-800  rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-900" enctype="multipart/form-data">
+                    <label for="imageUpload" class="cursor-pointer  text-white px-4 py-2 rounded-lg  transition duration-300">
+                        <i class="fas fa-image"></i>
+                    </label>
+                    <input type="file" id="imageUpload" accept="image/*" class="hidden">
+                
+                
+                <input type="text" id="messageInput" placeholder="Type a message" class="flex-grow max-h-40 bg-transparent text-white focus:outline-none">
+                <button type="button" id="emojiButton" class="text-gray-400 hover:text-white  focus:outline-none">
+                    <i class="far fa-smile"></i>
+                </button>
+                <button type="submit" class=" opacity-8  text-white px-6 rounded-full  transition duration-300">
+                    <i class="fa fa-paper-plane"></i>
+                </button>
+            </form>
+            <div id="emojiPicker" class="emoji-picker">
+                
+            </div>
+        </div>
+
 
 
         <!-- Message input --> 
-        <div class="bg-gray-900 relative message-form-container p-4">
+        <!-- <div class="bg-gray-900 relative hidden message-form-container p-4">
             <p id="image-name" class="hidden top-0 absolute">
                 <span class="text-green-500"></span>   
                 <i class="fas fa-times cursor-pointer ml-2"></i> 
@@ -117,7 +148,7 @@
             <form id="messageForm" class="flex" enctype="multipart/form-data">
                 
                
-                    <label for="imageUpload" class="cursor-pointer mr-2   text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
+                    <label for="imageUpload" class="cursor-pointer  text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
                         <i class="fas fa-image"></i>
                     </label>
                     <input type="file" id="imageUpload" accept="image/*" class="hidden">
@@ -128,7 +159,7 @@
                     <i class="fa fa-paper-plane"></i>
                 </button>
             </form>
-        </div>
+        </div> -->
         
 
 

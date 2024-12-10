@@ -31,7 +31,41 @@
     }
     
 </style>
+
+
 {% endblock style %}
+<style>
+    .emoji-picker {
+        display: none;
+        position: absolute;
+        bottom: 100%;
+        right: 0;
+        width: 200px;
+        height: 150px;
+        background-color: #1F2937;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 8px;
+        overflow-y: auto;
+    }
+    
+    .emoji-picker.active {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+    }
+    
+    .emoji-picker span {
+        cursor: pointer;
+        font-size: 1.2rem;
+        text-align: center;
+    }
+    
+    .emoji-picker span:hover {
+        background-color: #374151;
+        border-radius: 4px;
+    }
+</style>
 
 <main class="chats-main  bg-gray-700 rounded-lg p-6 md:mt-16 text-gray-300 flex-grow flex flex-col md:flex-row overflow-hidden" >
     <!-- Sidebar -->
@@ -173,7 +207,52 @@
     }
 
 </script>
+<script>
+    const addImageButton = document.getElementById('addImage');
+    const messageInput = document.getElementById('messageInput');
+    const emojiButton = document.getElementById('emojiButton');
+    const sendMessageButton = document.getElementById('sendMessage');
+    const emojiPicker = document.getElementById('emojiPicker');
 
+    // Simulated image upload
+    
+
+    // Toggle emoji picker
+    emojiButton.addEventListener('click', () => {
+        emojiPicker.classList.toggle('active');
+    });
+
+    // Send message
+    
+    // messageInput.addEventListener('keypress', (e) => {
+    //     if (e.key === 'Enter') {
+    //         sendMessage();
+    //     }
+    // });
+
+   
+
+    // Populate emoji picker
+    const emojis = ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '😋', '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓', '😎', '🤩'];
+    
+    emojis.forEach(emoji => {
+        const span = document.createElement('span');
+        span.textContent = emoji;
+        span.addEventListener('click', () => {
+            messageInput.value += emoji;
+            emojiPicker.classList.remove('active');
+            messageInput.focus();
+        });
+        emojiPicker.appendChild(span);
+    });
+
+    // Close emoji picker when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!emojiButton.contains(e.target) && !emojiPicker.contains(e.target)) {
+            emojiPicker.classList.remove('active');
+        }
+    });
+</script>
 
 <script>
 
