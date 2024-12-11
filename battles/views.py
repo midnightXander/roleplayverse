@@ -503,10 +503,10 @@ def refree_proposal(request, battle_id):
                 else:
                     message = "Tu dois étre un arbitre officiel pour arbitrer un combat STAKE , Fais le teste d'arbitrage pour devenir arbitre officiel"
             else:
-                new_notif = PlayerNotification.objects.create(
-                sender = player,
+                new_notif = core_models.Notification.objects.create(
                 target = battle.initiator,
-                notif_type = "refree_proposal",
+                content = f"{player} veut arbitrer un de tes combats, clique pour répondre",
+                url = f'/users/requests/{battle.initiator.user.username}',
                 )    
                 new_proposal = RefreeingProposal.objects.create(player=player, battle=battle)
                 new_proposal.save()
@@ -627,6 +627,8 @@ def battle_room(request,battle_id):
     #get the last player to send a  textpad
     def can_rate(battle:Battle):
         if player == battle.refree:
+            return False
+        elif battle.type == 'friendly':
             return False
         elif RefereeRating.objects.filter(battle = battle, player = player).exists():
             return False
@@ -754,6 +756,7 @@ def get_textpads(request, battle_id):
 
     textpads_data = [
         {
+            'id' : textpad.id,
             "owner": textpad.owner.user.username,
             "text": textpad.text,
             "valid": textpad.valid,

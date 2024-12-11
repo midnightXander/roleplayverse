@@ -7,6 +7,8 @@
 <style>
     .messages-container{
         min-height: 100%;
+        /* background: rgba(29, 31, 32, 0.904)
+    radial-gradient(rgba(255, 255, 255, 0.712) 10%, transparent 1%); */
     }
     
     @media (max-width: 768px) {
@@ -61,7 +63,7 @@
         
 
          <!--Chat header --> 
-        <div id="chatHeader" class=" p-3  flex items-center">
+        <div id="chatHeader" class=" p-3 bg-gray-900 flex items-center">
             <a href="{% url 'chat:all' %}">
                 <i id="backArrow" class="fas fa-arrow-left mr-2 text-xl hidden"></i>
             </a>
@@ -115,17 +117,18 @@
                 <i class="fas fa-spinner fa-spin text-orange-500"></i>
             </div>
             <form id="messageForm" class="flex shadow-md border-1 border-gray-800  rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-900" enctype="multipart/form-data">
-                    <label for="imageUpload" class="cursor-pointer  text-white px-4 py-2 rounded-lg  transition duration-300">
-                        <i class="fas fa-image"></i>
-                    </label>
-                    <input type="file" id="imageUpload" accept="image/*" class="hidden">
+                    
                 
-                
-                <input type="text" id="messageInput" placeholder="Type a message" class="flex-grow max-h-40 bg-transparent text-white focus:outline-none">
-                <button type="button" id="emojiButton" class="text-gray-400 hover:text-white  focus:outline-none">
+                <button type="button" id="emojiButton" class="px-4 py-2 text-gray-400 hover:text-white  focus:outline-none">
                     <i class="far fa-smile"></i>
                 </button>
-                <button type="submit" class=" opacity-8  text-white px-6 rounded-full  transition duration-300">
+                <input type="text" id="messageInput" placeholder="Type a message" class="flex-grow max-h-40 bg-transparent text-white focus:outline-none">
+                <label for="imageUpload" class="cursor-pointer   text-white py-2 px-4 rounded-full  transition duration-300">
+                    <i class="fas fa-image"></i>
+                </label>
+                <input type="file" id="imageUpload" accept="image/*" class="hidden">
+                
+                <button type="submit" class=" opacity-8   text-white px-4 rounded-full  transition duration-300">
                     <i class="fa fa-paper-plane"></i>
                 </button>
             </form>

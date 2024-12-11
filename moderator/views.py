@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect,Http404
 from django.contrib import messages
 from django.contrib.auth.models import User,auth
 from django.contrib.auth import logout,login,authenticate
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .moderator_utility import get_moderator
 from .models import *
@@ -42,16 +43,19 @@ def signin(request):
             return HttpResponseRedirect(reverse("moderator:signin")) 
 
 
-        user_auth = auth.authenticate(username = user.username, password = user.password)
-        if user_auth is not None:
-            auth.login(request,user_auth)
-            return HttpResponseRedirect(reverse("moderator:index"))
-        else:
-            messages.error(request,"Informations incorrect")
-            return HttpResponseRedirect(reverse("moderator:signin"))
+        #user_auth = auth.authenticate(username = user.username, password = user.password)
+        #auth.login(request,user)
+        return HttpResponseRedirect(reverse("moderator:index"))
+        # if user_auth is not None:
+        #     auth.login(request,user_auth)
+        #     return HttpResponseRedirect(reverse("moderator:index"))
+        # else:
+        #     messages.error(request,"Informations incorrect")
+        #     return HttpResponseRedirect(reverse("moderator:signin"))
         
     return render(request, "moderator/signin.html")    
 
+# @login_required('/moderator/signinxyz')
 def index(request):
     moderator = get_moderator(request.user)
     if not moderator:
@@ -62,7 +66,7 @@ def index(request):
     })
     
         
-
+# @login_required('/moderator/signinxyz')
 def create_post(request):
     moderator = get_moderator(request.user)
     if not moderator:
@@ -86,7 +90,7 @@ def create_post(request):
     
     return render(request, "moderator/blog/create_post.html")
 
-
+# @login_required('/moderator/signinxyz')
 def edit_blog_post(request,post_id):
     moderator = get_moderator(request.user)
     if not moderator:

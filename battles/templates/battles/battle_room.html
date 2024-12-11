@@ -61,7 +61,7 @@
     
     <div class="max-w-5xl mx-auto">
         <div class="flex justify-between items-center mb-1">
-            <h1 class="text-3xl font-bold text-orange-500 mb-6">Battle Room</h1>
+            <h1 class="text-3xl font-bold text-orange-500 mb-6">Salle de combat</h1>
             <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-sm">{{battle.status}}</span>
         </div>
         
@@ -72,13 +72,13 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                 <div>
                     <!-- {{battle.i_character}} vs {{battle.o_character}} -->
-                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Fighters:</span> <a href="{% url 'users:player' battle.initiator.user.username %}" class=""><span class="font-bold hover:text-orange-600" id="fighter1">{{battle.initiator}}</span></a> vs <a href="{% url 'users:player' battle.opponent.user.username %}"><span class="font-bold hover:text-orange-600" id="fighter2">{{battle.opponent}}</span></a></p>
-                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Characters:</span> <a href="#" class=""><span class="" >{{battle.i_character}}</span></a> vs <a href="#">{{battle.o_character}}</span></a></p>
-                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Referee:</span> <a href="/users/{{battle.refree.user.username}}"><span class="font-bold hover:text-orange-600" id="referee">{{battle.refree}}</span></a></p>
+                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Combattants:</span> <a href="{% url 'users:player' battle.initiator.user.username %}" class=""><span class="font-bold hover:text-orange-600" id="fighter1">{{battle.initiator}}</span></a> vs <a href="{% url 'users:player' battle.opponent.user.username %}"><span class="font-bold hover:text-orange-600" id="fighter2">{{battle.opponent}}</span></a></p>
+                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Persos:</span> <a href="#" class=""><span class="" >{{battle.i_character}}</span></a> vs <a href="#">{{battle.o_character}}</span></a></p>
+                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Arbitre:</span> <a href="/users/{{battle.refree.user.username}}"><span class="font-bold hover:text-orange-600" id="referee">{{battle.refree}}</span></a></p>
                 </div>
                 <div>
                     <!-- <p class="text-gray-300"><span class="font-semibold text-orange-200">Status:</span> <span id="battleStatus">{{battle.status}}</span></p> -->
-                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Winner:</span> 
+                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Vaniqueur:</span> 
                         <span class="font-bold" id="winner">
                         {% if battle.winner %}
                         <a class="hover:text-orange-600" href="{% url 'users:player' battle.winner.user.username %}">
@@ -95,15 +95,15 @@
                 </div>
                 <div>
                     
-                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Date started:</span> <span class="font-bold" id="fighter1">{{battle.date_started | date:'d M Y'}}</span> </p>
-                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Date ended:</span> <span class="font-bold" id="referee">{{battle.date_ended | date:'d M Y' }}</span></p>
+                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Date de début:</span> <span class="font-bold" id="fighter1">{{battle.date_started | date:'d M Y'}}</span> </p>
+                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Date de fin:</span> <span class="font-bold" id="referee">{{battle.date_ended | date:'d M Y' }}</span></p>
                 </div>
             </div>
         </div>
         
         <!-- Battle Rules -->
         <div class="bg-gray-700 rounded-lg p-4 mb-6">
-            <h2 class="text-3xl font-bold text-orange-500 mb-6">Battle Rules</h2>
+            <h2 class="text-3xl font-bold text-orange-500 mb-6">Règles du combat</h2>
             <ul id="battleRules" class="list-disc list-inside text-gray-300">
                 <!-- <li>No god-modding or auto-hitting</li>
                 <li>Respect the character's known abilities</li>
@@ -116,19 +116,19 @@
 
                 {% empty %}
                 {% if player != battle.refree %}
-                <div>The  Rules for the battle has not yet being set!</div>
-                <div>Message the refree <a class="font-bold text-xl hover:text-orange-600" href="/chats/dm/{{battle.refree.user.username}}">{{battle.refree}}</a> to set the rules now</div>
+                <div>Les règles du combat n'ont pas encore été etablies!</div>
+                <div>Envoie un message a l'arbitre <a class="font-bold hover:text-orange-600" href="/chats/dm/{{battle.refree.user.username}}">{{battle.refree}}</a> pour établir les règles</div>
             
                 <button class="mt-4" onclick="copyLink('https:\/\/roleplayverse.com/battles/battle_room/{{battle.id}}')">
-                    <i class="fas fa-copy mr-2"></i>Copy link to battle</button>
+                    <i class="fas fa-copy mr-2"></i>Copier le lien du combat</button>
                 {% else %}
                
                 <div class="container px-4 py-8">
                     
-                    <h2 class="text-xl font-semibold text-white mb-4">Set the rules of the battle</h2>
+                    <h2 class="text-xl font-semibold text-white mb-4">Fixer les règles du combat</h2>
                     <!-- Standard Rules -->
                     <div class="mb-8">
-                        <h3 class="text-xl font-semibold text-orange-400 mb-4">Standard Rules</h3>
+                        <h3 class="text-xl font-semibold text-orange-400 mb-4">Règles Standard</h3>
                         <div class="flex space-x-4">
                             <input type="text" id="standardRuleInput" placeholder="Enter standard rule" class="flex-grow bg-gray-800 text-white rounded p-2">
                             <button onclick="addRule('standard')" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
@@ -140,7 +140,7 @@
                 
                     <!-- Specific Rules 1 -->
                     <div class="mb-8">
-                        <h3 class="text-xl font-semibold text-orange-400 mb-4">Specific Rules {{battle.i_character}}</h3>
+                        <h3 class="text-xl font-semibold text-orange-400 mb-4">Règles Spécifiques {{battle.i_character}}</h3>
                         <div class="flex space-x-4">
                             <input type="text" id="specific1RuleInput" placeholder="Enter specific rule for {{battle.i_character}}" class="flex-grow bg-gray-800 text-white rounded p-2">
                             <button onclick="addRule('specific1')" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
@@ -152,7 +152,7 @@
                 
                     <!-- Specific Rules 2 -->
                     <div class="mb-8">
-                        <h3 class="text-xl font-semibold text-orange-400 mb-4">Specific Rules {{battle.o_character}}</h3>
+                        <h3 class="text-xl font-semibold text-orange-400 mb-4">Règles Specifiques {{battle.o_character}}</h3>
                         <div class="flex space-x-4">
                             <input type="text" id="specific2RuleInput" placeholder="Enter specific rule for {{battle.o_character}}" class="flex-grow bg-gray-800 text-white rounded p-2">
                             <button onclick="addRule('specific2')" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded">
@@ -164,7 +164,7 @@
                 
                     <!-- Save Rules Button -->
                     <button onclick="saveRules()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-8">
-                        Save All Rules
+                        Sauvegarder les règles
                     </button>
                 </div>
                 {% endif %}
@@ -183,13 +183,13 @@
 
         <!-- Submit Textpad -->
         <div class="my-6 bg-gray-700 rounded-lg p-4">
-            <h3 class="text-xl font-semibold text-orange-300 mb-2">Submit Your Move</h3>
+            <h3 class="text-xl font-semibold text-orange-300 mb-2">Faire le pavé</h3>
             <form id="submitTextpadForm">
-                <textarea id="newTextpad" rows="6" class="w-full bg-gray-800 text-white rounded-lg p-3 mb-3 focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Enter your move here..."></textarea>
-                <div class="flex justify-between items-center">
-                    <span id="wordCount" class="text-gray-400">Words: 0</span>
+                <textarea id="newTextpad" rows="6" class="w-full bg-gray-800 text-white rounded-lg p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Entre ton text ici..."></textarea>
+                <div class="mt-2 flex justify-between items-center">
+                    <span id="wordCount" class="text-gray-400">Mots: 0</span>
                     <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition duration-300">
-                        Submit Move
+                        Terminé
                     </button>
                 </div>
             </form>
@@ -202,13 +202,13 @@
 
         <!-- Referee Actions -->
         <div class="referee-actions my-6 bg-gray-700 rounded-lg p-4">
-            <h3 class="text-xl font-semibold text-orange-300 mb-2">Referee Actions</h3>
+            <h3 class="text-xl font-semibold text-orange-300 mb-2">Actions arbitrales</h3>
             <div class="flex flex-wrap gap-2">
                 <button id="validateBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300">
-                    Validate Post
+                    Validé le pavé
                 </button>
                 <button id="invalidateBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300">
-                    Invalidate Post
+                    Refusé le pavé
                 </button>
                 <!-- <button id="endBattleBtn" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition duration-300">
                     End Battle
@@ -223,10 +223,10 @@
 {% if can_rate %}
         <!-- Referee Rating Section -->
 <div id="refereeRatingSection" class="mt-8 bg-gray-800 rounded-lg p-6 hidden">
-    <h2 class="text-2xl font-semibold text-orange-400 mb-4">Rate the Referee</h2>
-    <p class="text-white mb-4">Please rate your experience with the referee for this battle:</p>
+    <h2 class="text-2xl font-semibold text-orange-400 mb-4">Noter l'arbitre</h2>
+    <p class="text-white mb-4">Note ton experience avec larbitre de ce combat</p>
     <div class="flex items-center mb-4">
-        <span class="text-white mr-2">Fairness:</span>
+        <span class="text-white mr-2">Impartialité:</span>
         <div class="star-rating" data-category="fairness">
             <span class="star" data-value="1">★</span>
             <span class="star" data-value="2">★</span>
@@ -246,7 +246,7 @@
         </div>
     </div>
     <div class="flex items-center mb-4">
-        <span class="text-white mr-2">Timeliness:</span>
+        <span class="text-white mr-2">Temps de réponse:</span>
         <div class="star-rating" data-category="timeliness">
             <span class="star" data-value="1">★</span>
             <span class="star" data-value="2">★</span>
@@ -257,7 +257,7 @@
     </div>
     <textarea id="refereeComment" class="w-full bg-gray-700 text-white rounded p-2 mb-4" rows="3" placeholder="Additional comments (optional)"></textarea>
     <button id="submitRefereeRating" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-        Submit Rating
+        Soumettre la note
     </button>
 </div>
 
@@ -266,13 +266,13 @@
 <!-- <h1 class="text-2xl font-bold mb-6 text-orange-500">Referee Ratings</h1> -->
         
         <div id="referee-ratings" class="bg-gray-800 text-white rounded-lg p-4 shadow-md animate-fadeIn">
-            <h2 class="text-lg text-orange-500 font-semibold mb-4">Ratings for Referee:<span class="text-white"> {{battle.refree}}</span>  </h2>
+            <h2 class="text-lg text-orange-500 font-semibold mb-4">Note de l'arbitre:<span class="text-white"> {{battle.refree}}</span>  </h2>
             
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
                         <tr class="bg-gray-700">
-                            <th class="p-2 text-left">Category</th>
+                            <th class="p-2 text-left">Categorie</th>
                             <th class="p-2 text-center">{{battle.initiator}}</th>
                             <th class="p-2 text-center">{{battle.opponent}}</th>
                         </tr>
@@ -291,23 +291,23 @@
 <!-- Popup for accepting battle -->
 <div id="endBattlePopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 animate-scaleIn">
     <div class="bg-gray-800 text-white rounded-lg p-8 max-w-md w-full mx-4">
-        <h2 class="text-2xl font-bold mb-4">End battle</h2>
+        <h2 class="text-2xl font-bold mb-4">Arreter le combat</h2>
         <div class="mb-2">
-            <h3 class="font-bold">Comment on this textpad:</h3>
+            <h3 class="font-bold">Commenter sur le pavé:</h3>
             <textarea  id="invalidTextpadComment" rows="4" class="w-full bg-gray-600 mt-2 text-white rounded-lg p-3 mb-3 focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Say why this textpad is not valid"></textarea>
         </div>
         
         <div class="mb-6">
             <p class="text-yellow-500"><i class="fas fa-exclamation-triangle mr-2"></i>Notice: <span id="winner-notice" class="text-blue-400"></span> <br>
-                <a href="#" class="text-blue-400">Learn more</a>
+                <a href="#" class="text-blue-400">Plus d'infos</a>
             </p>
         </div>
         <div class="flex justify-between">
             <button id="confirmEndbattle" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
-                <i class="fas fa-check mr-2"></i>Confirm
+                <i class="fas fa-check mr-2"></i>Confirmer
             </button>
             <button id="cancelEndBattle" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
-                <i class="fas fa-times mr-2"></i>Cancel
+                <i class="fas fa-times mr-2"></i>Annuler
             </button>
         </div>
     </div>
@@ -530,7 +530,7 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
                     $("#loading-overlay").toggleClass('active')
                 },
                 success:function(res){
-                    showMyToast('The battle has been ended')
+                    showMyToast('Le combat est terminé')
                     $(".validate-textpad").empty()
                 },
                 complete: function(){
@@ -564,6 +564,27 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
     
     $(()=>{
 
+        tinymce.init({
+    selector: '#newTextpad-test', //remove test for actual textpad
+    plugins: [
+      // Core editing features
+      'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
+      // Your account includes a free trial of TinyMCE premium features
+      // Try the most popular premium features until Oct 14, 2024:
+      //'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate',  'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
+    ],
+    skin: 'oxide-dark',
+    content_css: 'dark',
+    toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+    tinycomments_mode: 'embedded',
+    tinycomments_author: 'Author name',
+    mergetags_list: [
+      { value: 'First.Name', title: 'First Name' },
+      { value: 'Email', title: 'Email' },
+    ],
+    
+  });
+
        
 
         const initiator = JSON.parse(document.querySelector("#initiator").textContent)
@@ -572,12 +593,12 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
         const battleId = JSON.parse(document.querySelector("#battle_id").textContent)
         const username = JSON.parse(document.querySelector("#username").textContent)
        // const playerName = JSON.parse(document.querySelector("#player_name").textContent)
-        const battleSocket = new WebSocket(
-            'ws://' + 
-            window.location.host + 
-            '/ws/battle/one_v_one/'+
-            battleId +  "/"
-        )
+        // const battleSocket = new WebSocket(
+        //     'ws://' + 
+        //     window.location.host + 
+        //     '/ws/battle/one_v_one/'+
+        //     battleId +  "/"
+        // )
         // battleSocket.onmessage = function(e){
         //     const data = JSON.parse(e.data)
         //     getTextpads()
@@ -602,7 +623,7 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
                 e.preventDefault();
                 const textpadContent = newTextpad.value.trim();
                 if (textpadContent.length === 0) {
-                    showMyToast('Please enter your move before submitting.', 'info')
+                    showMyToast('Ajoute ton text pour terminer.', 'info')
                     return;
                 }
         
@@ -613,6 +634,9 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
                 //     "sender": username,
                 // })    
                 // )
+
+                
+
                 $.ajax({
                     url: '/battles/textpads/send/{{battle.id}}',
                     type: "POST",
@@ -622,16 +646,17 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
                     success: function(res){
                         if(res.status == 'success'){
                             getTextpads()
-                            showMyToast('Move submitted successfully!', 'success')
+                            showMyToast('Pavé envoyé!', 'success')
                             // Clear the input after submission
                             newTextpad.value = '';
+                            textpadContent = ''
                         }else{
                             showMyToast(res.message,'info',5000)
                         }
                         
                     },
                     error: function(jqXHR, textstatus, errorThrown){
-                    showMyToast('An error occured! try reloading page', 'error')
+                    showMyToast("Une erreur s'est produite, recharge la page ", 'error')
                     
                 }
                 })
@@ -649,11 +674,11 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
             var text = document.querySelector("#text-pad")
             newText = $('#new-text').val();
             if (newText.trim() !== "") {
-            battleSocket.send(JSON.stringify({
-                "text": newText,
-                "sender": username,
-            })    
-            )
+            // battleSocket.send(JSON.stringify({
+            //     "text": newText,
+            //     "sender": username,
+            // })    
+            // )
             }else{
                 console.log("textpad can't be empty")
             }
@@ -704,7 +729,14 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
         })
 
 
+        function createTextpad(textpad){
+            const padContainer = document.createElement('div')
+            padContainer.className = 'p-4 rounded-lg'
+            const header = document.createElement('h3').className = ''
+            const textContainer = document.createElement('div')
+            textContainer.className = 'body bg-gray-800 text-gray-300 p-3 rounded-lg max-h-64 overflow-y-auto'
 
+        }
 
         function getTextpads(){
             $.ajax({
@@ -718,7 +750,7 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
                         $("#text-pads").empty()
 
                         $('#textPads').empty()
-                        console.log(res.textpads)
+                        
 
                         
                         if(res.textpads.length>0){
@@ -739,8 +771,8 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
                                 `
                                 <div class=" rounded-lg p-4">
                                     <h3 class="text-xl font-semibold text-orange-300 mb-2">${textpad.owner}: <span id="">${textpad.character}</span></h3>
-                                    <div id="fighterTextpad" class="body bg-gray-800 text-gray-300 p-3 rounded-lg max-h-64 overflow-y-auto">
-                                        ${textpad.text}
+                                    <div id="fighterTextpad-${textpad.id}" class="body bg-gray-800 text-gray-300 p-3 rounded-lg max-h-64 overflow-y-auto">
+                                        
                                     </div>
                                     <div class="text-gray-300 text-sm p-3 flex justify-between">
                                         <span>${textpad.time_since}</span>
@@ -750,6 +782,7 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
                                 </div>
                                 `
                              )
+                             $(`#fighterTextpad-${textpad.id}`).append(textpad.text)
                              
                              $("#battle-room").prepend(`
                                 <div class="${fighterClass} fighter-text">
@@ -797,11 +830,11 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
         }
         getTextpads()
 
-        battleSocket.onmessage = function(e){
-            const data = JSON.parse(e.data)
-            getTextpads()
+        // battleSocket.onmessage = function(e){
+        //     const data = JSON.parse(e.data)
+        //     getTextpads()
           
-        }
+        // }
 
         //add an input button for the rules
         $(".add-rule-btn").on("click",(e)=>{
@@ -986,7 +1019,7 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
     }
     
     function saveRules() {
-        console.log('Saving rules:', rules);
+       console.log('{{battle.id}}')
         if(rules.standard.length>0 && rules.specific1.length>0 && rules.specific2.length>0 ){
             $.ajax({
                 type: "POST",
@@ -1002,7 +1035,7 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
                 },
                 success: function(res){
                     if(res.status == "success"){
-                        showMyToast('Rules set successfully!, now players can send their textpads', 'success', 5000);
+                        showMyToast('Règles établies!, les joueurs peuvent maintenant faire leurs pavé', 'success', 5000);
             
                         container = $("#battleRules")
                         $(container).empty()
@@ -1039,11 +1072,11 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
                     $('#loading-overlay').toggleClass('active')
                 },
                 error: function(jqXHR, textstatus, errorThrown){
-                    showMyToast('An error occured! try reloading page', 'error')
+                    showMyToast("Une erreur s'est produite", 'error')
                 }
             })
         }else{
-            showMyToast('Please set all rules');
+            showMyToast('Fixe toutes les règles');
         }
         
         

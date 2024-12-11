@@ -39,7 +39,7 @@
         display: none;
         position: absolute;
         bottom: 100%;
-        right: 0;
+        left: 0;
         width: 200px;
         height: 150px;
         background-color: #1F2937;
@@ -233,14 +233,14 @@
    
 
     // Populate emoji picker
-    const emojis = ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '😋', '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓', '😎', '🤩'];
+    const emojis = ['😀', '😃', '😄', '😁', '😆', '💀','😅', '😂', '🤣', '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😙', '😚', '😋', '😛', '😝', '😜', '🤪', '🤨', '🧐', '🤓', '😎', '🤩',];
     
     emojis.forEach(emoji => {
         const span = document.createElement('span');
         span.textContent = emoji;
         span.addEventListener('click', () => {
             messageInput.value += emoji;
-            emojiPicker.classList.remove('active');
+            //emojiPicker.classList.remove('active');
             messageInput.focus();
         });
         emojiPicker.appendChild(span);

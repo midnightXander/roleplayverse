@@ -11,7 +11,7 @@ urlpatterns = [
 
     path("filter/<int:filter_num>",views.filter_battle, name='filter'),
 
-    path('rules/int:battle_id>', views.rules,name= 'rules'),
+    path('rules/<int:battle_id>', views.rules,name= 'rules'),
     path('battle_room/<int:battle_id>',views.battle_room, name="battle_room"),
     path('textpads/get/<int:battle_id>',views.get_textpads, name="get_textpads"),
     path('textpads/send/<int:battle_id>',views.send_textpad, name="send_textpad"),
