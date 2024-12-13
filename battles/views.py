@@ -647,7 +647,7 @@ def battle_room(request,battle_id):
                "rules":rules, 
                "rules_set": len(rules) >= 3,
                "textpads":textpads_data,
-               'spectators':  _parse_number(len(battle.spectators.all())),
+               'spectators':  _parse_number(len(battle.spectators.all()),True),
                  "last_sender":l_sender,
                  "role":role,
                  "can_rate": can_rate(battle),
