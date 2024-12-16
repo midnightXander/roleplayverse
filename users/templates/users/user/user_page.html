@@ -122,7 +122,7 @@
                 <li><a href="{% url 'users:favorites' %}" class="block py-2 px-4 text-orange-500 hover:bg-gray-700 rounded"><i class="fas fa-bookmark-o mr-2"></i>Favoris</a></li>
                 <!-- <li><a onclick="showDownloadPopup()" href="#" class="block py-2 px-4 text-orange-500 hover:bg-gray-700 rounded"><i class="fas fa-download mr-2"></i>Télécharger</a></li>   -->
                 <li><a href="{% url 'battles:new_refree' %}" class="block py-2 px-4 text-indigo-500 hover:bg-gray-700 mt-4 rounded"><i class="fas fa-gavel mr-2"></i>Devenir Arbitre</a></li>
-                <li><a href="#" onclick="showMyToast('You are not yet eligible for monetization')" class="block py-2 px-4 text-yellow-500 hover:bg-gray-700 rounded"><i class="fas fa-money mr-2"></i>Monetization</a></li>
+                <li><a href="#" onclick="showMyToast(`Tu n'es pas encore eligible a la Monetization`)" class="block py-2 px-4 text-yellow-500 hover:bg-gray-700 rounded"><i class="fas fa-money mr-2"></i>Monetization</a></li>
             </ul>
         </nav>
     </aside>
@@ -152,7 +152,7 @@
                     <button data-info="name" class = "edit-info-btn mb-2  text-white px-4 py-2 rounded  transition duration-300">
                         <i class="fas fa-edit mr-2"></i>Changer nom d'utlisateur
                     </button>
-                    <form style="display: none;" method="post" action="{% url 'users:edit_info' %}">
+                    <form onsubmit="showOverlay()" style="display: none;" method="post" action="{% url 'users:edit_info' %}">
                         {% csrf_token %}
                         <input type="text" name="username" style="border: 1px solid white;"  class="bg-gray-700 text-white px-2 py-1 my-2 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-orange-500" value="{{req_player.user.username}}">
                         
@@ -172,7 +172,7 @@
                     {% if not can_edit %}
                     <div class="bg-gray-800 mt-2 text-sm rounded-lg p-4 shadow-md animate-scaleIn">
                         <div class="flex flex-wrap items-center ">
-                            <a href="{% url 'chats:private_chat' req_player.user.username %}">
+                            <a onclick="showOverlay()" href="{% url 'chats:private_chat' req_player.user.username %}">
                             <button class="action-btn flex items-center justify-center
                                 text-white font-bold  
                                 rounded-full transition duration-300 ease-in-out">
@@ -255,28 +255,28 @@
         </div>
         <div class="filter-container  w-full mx-auto flex space-x-2 mb-6 overflow-x-auto pb-2">
             
-            <a href="{% url 'users:player' req_player.user.username %}" class="">
+            <a onclick="showOverlay()" href="{% url 'users:player' req_player.user.username %}" class="">
                 <button  class="flex items-center filter-button bg-gray-600 px-4 py-2 rounded-full hover:bg-gray-500 transition duration-300">
                 <i class="fas fa-newspaper mr-2"></i>Publications
                 </button>
             </a>
-            <a href="{% url 'users:player_battles' req_player.user.username  %}" class="" >
+            <a onclick="showOverlay()" href="{% url 'users:player_battles' req_player.user.username  %}" class="" >
             <button   class="flex items-center filter-button bg-gray-600 px-4 py-2 rounded-full hover:bg-gray-500 transition duration-300">
                 <i class="fas fa-khanda mr-2"></i>Combats
             </button>
             </a>
-            <a href="{% url 'users:player_stats' req_player.user.username %}" class="" >
+            <a onclick="showOverlay()" href="{% url 'users:player_stats' req_player.user.username %}" class="" >
                 <button   class="flex items-center filter-button bg-gray-600 px-4 py-2 rounded-full hover:bg-gray-500 transition duration-300">
                 <i class="fas fa-chart-bar mr-2"></i>Stats
             </button>
             </a>
                 {% if req_player == player %}
-            <a href="{% url 'users:player_battle_requests' req_player.user.username %}" class="" >
+            <a onclick="showOverlay()" href="{% url 'users:player_battle_requests' req_player.user.username %}" class="" >
                 <button  class="flex items-center filter-button bg-gray-600 px-4 py-2 rounded-full hover:bg-gray-500 transition duration-300">
                 <i class="fas fa-envelope mr-2"></i>RDC
             </button>
             </a>
-            <a href="{% url 'users:player_challenges' req_player.user.username %}" class="" >
+            <a onclick="showOverlay()" href="{% url 'users:player_challenges' req_player.user.username %}" class="" >
                 <button  class="flex items-center filter-button bg-gray-600 px-4 py-2 rounded-full hover:bg-gray-500 transition duration-300">
                 <i class="fas fa-fire mr-2"></i>Challenges
             </button>
@@ -294,20 +294,30 @@
            
             <div class="bg-gray-800 md:w-1/2 w-full flex flex-col ">  
                 <div class="bg-gray-700 rounded-lg p-6 mb-4">
+                    {% if can_edit %}
+                    <p class="text-center text-gray-400">
+                        
+                        <i class="fa-regular fa-circle-question text-white mr-2 "></i>
+                          Nouveau dans le monde du RP Naruto?  
+                        <a href="#" class="text-orange-500" >Lire Le turoriel</a>
+                    </p>
+
+                    {% else %}
+                    {% endif %}
+                </div>
+                <div class="bg-gray-700 rounded-lg p-6 mb-4">
                     <p class="text-center text-gray-400">
                         {% if can_edit %}
-                       Ton lien d'affiliation: 
+                       Ton lien d'affiliation: <br>
                         <span class="text-orange-500">https://roleplayverse.com/users/signup?rc={{player.referall_code}}</span>
                         
                         <i onclick="copyLink('https:\/\/roleplayverse.com/users/signup/{{player.referall_code}}')" class="fas fa-clone text-xl cursor-pointer ml-2"></i><br>
-                        <span class="text-xs ">Invite des gens a rejoindre la plate-forme par ce lien et obtiens des Jétons de combats et plein d'autres lots</span>
+                        <span class="text-xs ">Invite des gens a rejoindre la plate-forme par ce lien et obtiens des Jétons de combats et plein d'autres récompense</span>
                         {% else %}
                         {% endif %}
                     </p>
                 </div>
-                <div class="bg-gray-700 rounded-lg p-6 mb-4">
-                    <p class="text-center text-gray-400">Something here</p>
-                </div>
+                
             </div>
 
             <div id="postsFeed" class="space-y-8">
@@ -767,7 +777,7 @@ function renderPosts() {
         },
         beforeSend: function(){
            
-            loader.classList.toggle('active');
+            //loader.classList.toggle('active');
         },
         success: function(res){
             console.log(res)
@@ -796,7 +806,7 @@ function renderPosts() {
                 })
                 
             })
-            loader.classList.toggle('active');
+            //loader.classList.toggle('active');
             
 
         },

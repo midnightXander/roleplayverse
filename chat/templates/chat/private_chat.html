@@ -64,16 +64,16 @@
 
          <!--Chat header --> 
         <div id="chatHeader" class=" p-3 bg-gray-800 flex items-center">
-            <a href="{% url 'chat:all' %}">
-                <i id="backArrow" class="fas fa-arrow-left mr-2 text-xl hidden"></i>
+            <a onclick="showOverlay()" href="{% url 'chat:all' %}">
+                <i id="backArrow" class="fas fa-arrow-left mr-2 text-xl hover:text-orange-500 hidden"></i>
             </a>
 
-            <a  href="{% url 'users:player' receiver.user.username %}">
+            <a onclick="showOverlay()" href="{% url 'users:player' receiver.user.username %}">
                 <img src="{{receiver.profile_picture.url}}" alt="{{receiver}} profile picture" class="w-10 h-10 rounded-full mr-3">
             </a>
             
             
-            <a  href="{% url 'users:player' receiver.user.username %}" class=" flex flex-col ">
+            <a onclick="showOverlay()" href="{% url 'users:player' receiver.user.username %}" class=" flex flex-col ">
                 <div class="text-xl font-semibold">{{receiver}}</div>
                 <div class="text-xs ellipsed">
                     <span>vu: {{last_seen}}</span> 
@@ -231,7 +231,7 @@
                 </div>
                 <div class="message-options absolute top-0 left-0 mt-1 ml-1 opacity-100 group-hover:opacity-100">
                     <div class="relative">
-                        <button class="optionsButton text-gray-400 bg-gray-500 round-btn hover:bg-gray-600 hover:text-white focus:outline-none" id="">
+                        <button class="optionsButton text-gray-400  round-btn hover:bg-gray-600 hover:text-white focus:outline-none" id="">
                             <i class="fas fa-ellipsis text-xs"></i>
                         </button>
                         <div class="optionsMenu absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg z-10 hidden" id="">
@@ -241,11 +241,13 @@
                                         <i class="fas fa-copy mr-2"></i> Copy
                                     </a>
                                 </li>
+                                <!--
                                 <li>
                                     <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
                                         <i class="fas fa-edit mr-2"></i> Edit
                                     </a>
                                 </li>
+                                -->
                                 <li>
                                     <a href="#" onclick='deletePrivateMessage(this,"${message.id}")' class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-600 hover:text-red-300">
                                         <i class="fas fa-trash-alt mr-2"></i> Delete
@@ -280,21 +282,23 @@
                 </div>
                 <div class="message-options absolute top-2 right-0 mt-1 mr-1 opacity-100 group-hover:opacity-100">
                     <div class="relative">
-                        <button class="optionsButton text-gray-400 bg-gray-500 round-btn hover:bg-gray-600 hover:text-white focus:outline-none" id="">
+                        <button class="optionsButton text-gray-400  round-btn hover:bg-gray-600 hover:text-white focus:outline-none" id="">
                             <i class="fas fa-ellipsis text-xs"></i>
                         </button>
                         <div class="optionsMenu absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg z-10 hidden" id="">
                             <ul class="py-1">
                                 <li>
                                     <a href="#" onclick="copyLink('${message.content}')" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
-                                        <i class="fas fa-copy   mr-2"></i> Copy Message
+                                        <i class="fas fa-copy   mr-2"></i> Copier
                                     </a>
                                 </li>
+                                <!--
                                 <li>
                                     <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
-                                        <i class="fas fa-reply mr-2"></i> Reply
+                                        <i class="fas fa-reply mr-2"></i> Répondre
                                     </a>
                                 </li>
+                                -->
                                 
                                 
                             </ul>

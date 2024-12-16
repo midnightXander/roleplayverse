@@ -102,7 +102,7 @@
             
             
             {% if chat.chat.recipient == player %}
-            <a href="{%  url 'chat:private_chat' chat.chat.initiator.user.username %}">
+            <a onclick="showOverlay()" href="{%  url 'chat:private_chat' chat.chat.initiator.user.username %}">
                 <div class="flex items-center ">
                 <img src="{{chat.chat.initiator.profile_picture.url}}" alt="{{chat.chat.initiator}} profile picture" class="w-12 h-12 rounded-full mr-4">
                 <div class="flex-grow">
@@ -125,7 +125,7 @@
             </a>
 
             {% else %}
-            <a href="{%  url 'chat:private_chat' chat.chat.recipient.user.username %}">
+            <a onclick="showOverlay()" href="{%  url 'chat:private_chat' chat.chat.recipient.user.username %}">
                 <div class="flex items-center">
                     <img src="{{chat.chat.recipient.profile_picture.url}}" alt="{{chat.chat.recipient}} profile picture" class="w-12 h-12 rounded-full mr-4">
                     <div class="flex-grow">

@@ -59,7 +59,7 @@ $(()=>{
         type: "POST",
         data:{ csrfmiddlewaretoken: "{{csrf_token}}"},
         beforeSend:()=>{
-            $('#loading-overlay').toggleClass('active')
+            //$('#loading-overlay').toggleClass('active')
             //loader.classList.add('active')
         },
         success: function(res){
@@ -71,7 +71,7 @@ $(()=>{
         
         },
         complete: ()=>{
-            $('#loading-overlay').toggleClass('active')
+            //$('#loading-overlay').toggleClass('active')
         }
     })
        

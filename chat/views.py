@@ -15,7 +15,7 @@ import uuid
 from datetime import datetime
 import json
 from django.views.decorators.csrf import csrf_exempt
-from utility import decrypt_message,_date_time,_time_since,_parse_number
+from utility import decrypt_message,_date_time,_time_since,_parse_number,_time_since_last_seen
 from cryptography.fernet import Fernet
 
 
@@ -43,7 +43,7 @@ def get_last_message(chat,chat_type='private'):
 
 def get_player_last_seen(player:Player):
     last_seen = player.last_seen
-    return _time_since(last_seen)
+    return _time_since_last_seen(last_seen)
 
 
 def _get_family_unreads(player:Player):

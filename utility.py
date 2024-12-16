@@ -88,6 +88,42 @@ def get_refree_questions(language='en'):
     else:
         return []    
 
+def _time_since_last_seen(time):
+    now = timezone.now()
+    difference = now - time
+
+    days = difference.days
+
+    years = days // 365
+
+    months = days // 30
+    
+    seconds = difference.seconds
+    
+    hours = seconds // 3600
+    
+    minutes = (seconds % 3600) // 60
+
+    if years > 0 :
+        return f"{years} yrs ago"
+    
+    # elif months > 0 :
+    #     return f"{months} months ago"
+    
+    elif days > 0 and days < 7:
+        return f"{days}d"
+    elif days > 7 and years <= 0:
+        return time.strftime('%d-%m')
+    elif days > 7 and years>0:
+        return time.strftime('%d-%m-%y')
+    elif hours > 0:
+        return f"{hours}h"
+    elif minutes > 10:
+        return f"{minutes}m"
+    else:
+        return "en ligne"
+
+
 def _time_since(time):
     #now = datetime.datetime.now()
     now = timezone.now()
@@ -122,7 +158,7 @@ def _time_since(time):
     elif minutes > 0:
         return f"{minutes}m"
     else:
-        return "Just now"
+        return "il ya 1s"
 
 def _date_time(time):
     #formatted_datetime = datetime_value.strftime('%Y-%m-%d %H:%M:%S')

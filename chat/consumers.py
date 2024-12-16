@@ -54,7 +54,9 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
                 new_msg.chat = chat
                 chat.save()
             else:
+
                 new_chat = Chat.objects.create(
+                #id = len(Chat.objects.all())+1,
                 initiator = sender,
                 recipient = receiver,
                 last_message_abbr = content[:20],
@@ -120,7 +122,7 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
         file_data = None
         available_file_name = None
         print("message receiver: ",receiver_name)
-        print("file data:",base64_file, fileName)
+        # print("file data:",base64_file, fileName)
 
         #Handle Image Upload
         if base64_file and fileName:

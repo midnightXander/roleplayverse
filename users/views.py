@@ -758,9 +758,10 @@ def get_players(request):
             family = Family.objects.get(id = family_id)
             #family = current_player.family
             players = Player.objects.exclude(family = family).order_by('-progression')
-            
+            #Exclude players having a stake battle going on
             
             players_data = [ _player_data(player)  for player in players if not _sent_invite(current_player,player)]
+
 
             return JsonResponse({'players': players_data, 'status':'success'})
 
