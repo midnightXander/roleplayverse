@@ -80,7 +80,10 @@ def chats(request):
         {
             "chat": chat,
             "last_message": get_last_message(chat,"private"),
-            'unreads': _parse_number(chat.unreads(current_player)),
+            'unreads': {
+                'number':_parse_number(chat.unreads(current_player)),
+                'label':'unread' if _parse_number(chat.unreads(current_player)) != '' else ''
+            }
 
         }
         for chat in chats
@@ -97,7 +100,10 @@ def chats(request):
             'content': content,
             'image': family_last_message.image.url if family_last_message.image else None, 
             'date_sent': _date_time(family_last_message.date_sent),
-            'unreads': _parse_number(_get_family_unreads(current_player))
+            'unreads': {
+               'number': _parse_number(_get_family_unreads(current_player)),
+               'label': 'unread' if _parse_number(_get_family_unreads(current_player)) != '' else ''
+            }
             
         }
     else:

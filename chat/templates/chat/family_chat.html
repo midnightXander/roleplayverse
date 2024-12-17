@@ -178,26 +178,30 @@
                 </div>
                 <div class="message-options absolute top-0 left-0 mt-1  opacity-100 group-hover:opacity-100">
                     <div class="relative">
-                        <button class="optionsButton bg-gray-500 round-btn hover:bg-gray-600 text-gray-400 hover:text-white focus:outline-none" id="">
+                        <button class="optionsButton round-btn hover:bg-gray-600 text-gray-400 hover:text-white focus:outline-none" id="">
                             <i class="fas fa-ellipsis text-xs"></i>
                         </button>
                         <div class="optionsMenu absolute left-0 mt-2 mr-2 w-48 bg-gray-700 rounded-md shadow-lg z-10 hidden" id="">
                             <ul class="py-1">
                                 <li>
                                     <a href="#" onclick = 'copyLink("${message.content}")' class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
-                                        <i class="fas fa-copy mr-2"></i> Copy Message
+                                        <i class="fas fa-copy mr-2"></i> Copier
                                     </a>
                                 </li>
+                                <!--
                                 <li>
                                     <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
                                         <i class="fas fa-edit mr-2"></i> Edit
                                     </a>
                                 </li>
+                                -->
+                                
                                 <li>
                                     <a href="#" onclick='deleteFamilyMessage(this,"${message.id}")' class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-600 hover:text-red-300">
                                         <i class="fas fa-trash-alt mr-2"></i> Delete
                                     </a>
                                 </li>
+                                
                             </ul>
                         </div>
                     </div>
@@ -235,19 +239,19 @@
                 </div>
                 <div class="message-options absolute top-0 right-0 mt-1 mr-1 opacity-100 group-hover:opacity-100">
                     <div class="relative">
-                        <button class="optionsButton  bg-gray-500 round-btn hover:bg-gray-600 text-gray-400 hover:text-white focus:outline-none" id="">
+                        <button class="optionsButton round-btn hover:bg-gray-600 text-gray-400 hover:text-white focus:outline-none" id="">
                             <i class="fas fa-ellipsis text-xs"></i>
                         </button>
                         <div class="optionsMenu absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg z-10 hidden" id="">
                             <ul class="py-1">
                                 <li>
                                     <a href="#" onclick="copyLink('${message.content}')" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
-                                        <i class="fas fa-copy mr-2"></i> Copy Message
+                                        <i class="fas fa-copy mr-2"></i> Copier
                                     </a>
                                 </li>
                                 <li>
                                     <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
-                                        <i class="fas fa-reply mr-2"></i> Reply
+                                        <i class="fas fa-reply mr-2"></i> Répondre
                                     </a>
                                 </li>
                                 

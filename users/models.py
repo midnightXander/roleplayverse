@@ -102,8 +102,17 @@ class Player(models.Model):
     referall_code = models.CharField(max_length=80)
     # recover_code = models.CharField(max_length=50)
 
-    date_joined = models.DateField(auto_now_add=True)
+    date_points_added = models.DateField(auto_now_add=True)
     last_seen = models.DateTimeField(auto_now=True)
+
+    def add_points(self, points:int, monthly_points:bool = False):
+        """Adds points(Battle tokens) to the player"""
+
+        self.battle_points += points
+        if monthly_points: self.date_points_added = timezone.now()
+
+        self.save()
+
 
     def __str__(self):
         if self.family:

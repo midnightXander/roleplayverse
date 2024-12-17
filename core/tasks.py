@@ -121,11 +121,16 @@ def delete_expired_notifications():
 def add_monthly_points():
     for player in Player.objects.all():
         #REVIEW THIS, SHOULD BE WITH DAYS
-        joined_day = player.date_joined.day
+
+        last_day_added = player.date_points_added.day
         current_day = timezone.now().day
 
-        if joined_day == current_day:
-            add_points(player, MONTHLY_POINTS)
+        days_difference = timezone.now() - player.date_points_added
+
+        if days_difference.days == 31:
+            #add_points(player, MONTHLY_POINTS)
+            #player.date_points_added = timezone.now()
+            player.add_points(MONTHLY_POINTS, True)
             
             #send email to notify player got monthly points  / or notify normally?      
 

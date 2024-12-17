@@ -105,21 +105,21 @@ def _time_since_last_seen(time):
     minutes = (seconds % 3600) // 60
 
     if years > 0 :
-        return f"{years} yrs ago"
+        return f"il y'a {years}"
     
     # elif months > 0 :
     #     return f"{months} months ago"
     
     elif days > 0 and days < 7:
-        return f"{days}d"
+        return f"il y'a {days} jours"
     elif days > 7 and years <= 0:
         return time.strftime('%d-%m')
     elif days > 7 and years>0:
         return time.strftime('%d-%m-%y')
     elif hours > 0:
-        return f"{hours}h"
+        return f"il y'a {hours}h"
     elif minutes > 10:
-        return f"{minutes}m"
+        return f"il y'a {minutes}m"
     else:
         return "en ligne"
 
@@ -142,13 +142,13 @@ def _time_since(time):
     minutes = (seconds % 3600) // 60
 
     if years > 0 :
-        return f"{years} yrs ago"
+        return f"il y'a {years} an"
     
     # elif months > 0 :
     #     return f"{months} months ago"
     
     elif days > 0 and days < 7:
-        return f"{days}d"
+        return f"il y'a {days} jours"
     elif days > 7 and years <= 0:
         return time.strftime('%d-%m')
     elif days > 7 and years>0:
