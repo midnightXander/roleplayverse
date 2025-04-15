@@ -88,7 +88,7 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
         new_notif = Notification.objects.create(
                 target = receiver,
                 url = f'/chats/dm/{sender_name}',
-                content = f'{sender} sent you a message',
+                content = f"{sender} t'a envoyé un message",
         )      
 
         new_msg.save()
@@ -264,7 +264,7 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
             new_notif = Notification.objects.create(
                     target = member,
                     url = f'/chats/group/{family}',
-                    content = f'{sender} sent a message in {family}',
+                    content = f'{sender} a envoyé un message dans {family}',
             )  
             new_notif.save()
 

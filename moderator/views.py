@@ -78,12 +78,14 @@ def create_post(request):
         image = request.FILES['cover']
         leading = request.POST['leading']
         category = request.POST['category']
+        
         new_post = BlogPost.objects.create(
             category = category,
             title = title,
             text = content,
             image = image,
             leading = leading,
+            owner = moderator.user
         )
         new_post.save()
         return HttpResponseRedirect(reverse('moderator:index'))

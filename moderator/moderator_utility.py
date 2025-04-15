@@ -9,4 +9,5 @@ def get_moderator(user:User):
         moderator = Moderator.objects.get(user = user)
         return moderator
     except:
+        print("Not a moderator")
         return None

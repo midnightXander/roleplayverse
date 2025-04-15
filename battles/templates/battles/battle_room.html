@@ -52,7 +52,74 @@
         color: #fbbf24;
     }
 </style>
+<style>
+    .profile-container {
+        position: relative;
+        width: 150px;
+        height: 200px;
+    }
 
+    .profile-image {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        position: absolute;
+        transition: all 0.3s ease;
+        
+    }
+
+    .profile-image-top {
+        top: 0;
+        left: 15px;
+        z-index: 2;
+    }
+
+    .profile-image-bottom {
+        bottom: 0;
+        right: 15px;
+        z-index: 1;
+    }
+
+    .profile-container:hover .profile-image-top {
+        transform: translateY(-10px);
+    }
+
+    .profile-container:hover .profile-image-bottom {
+        transform: translateY(10px);
+    }
+
+    .profile-border {
+        position: absolute;
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        border: 3px solid;
+        transition: all 0.3s ease;
+    }
+
+    .border-top {
+        top: -5px;
+        left: 10px;
+        border-color: #F97316;
+        z-index: 3;
+    }
+
+    .border-bottom {
+        bottom: -5px;
+        right: 10px;
+        border-color: #3B82F6;
+        z-index: 0;
+    }
+
+    .profile-container:hover .border-top {
+        transform: scale(1.1) translateY(-10px);
+    }
+
+    .profile-container:hover .border-bottom {
+        transform: scale(1.1) translateY(10px);
+    }
+</style>
 
 
 
@@ -76,20 +143,60 @@
             
         </div>
         
+        <div class="text-white flex items-center justify-center mb-4" >
+            <div class="text-center">
+                <div class="mb-8">
+                    <p class="text-xl font-semibold text-orange-500"><a href="{% url 'users:player' battle.initiator.user.username %}" class=""><span class="font-bold hover:text-orange-600" id="fighter1">{{battle.initiator}}</span></a></p>
+                </div>
+                <div class="profile-container mx-auto">
+                    <div class="profile-border border-top"></div>
+                    <img src="{{battle.initiator.profile_picture.url}}" alt="Hero" class="profile-image profile-image-top shadow-lg">
+                    <img src="{{i_character.images.0}}" alt="{{i_character}}" class="profile-image profile-image-bottom shadow-lg">
+                    <div class="profile-border border-bottom"></div>
+                </div>
+                <div class="mt-8">
+                    <p class="text-xl font-semibold text-blue-500 mt-2">{{battle.i_character}}</p>
+                </div>
+            </div>
+            <div class="flex flex-col items-center justify-center">
+                <span class="text-2xl text-center "> VS </span>
+                <span>{{battle.type}}</span>
+            </div>
+            
+
+            <div class="text-center">
+                <div class="mb-8">
+                    <p class="text-xl font-semibold text-orange-500">
+                        <a href="{% url 'users:player' battle.opponent.user.username %}"><span class="font-bold hover:text-orange-600" id="fighter2">{{battle.opponent}}</span></a></p>
+
+                </div>
+                <div class="profile-container mx-auto">
+                    <div class="profile-border border-top"></div>
+                    <img src="{{battle.opponent.profile_picture.url}}" alt="Hero" class="profile-image profile-image-top shadow-lg">
+                    <img src="{{o_character.images.0}}" alt="{{o_character}}" class="profile-image profile-image-bottom shadow-lg">
+                    <div class="profile-border border-bottom"></div>
+                </div>
+                <div class="mt-8">
+                    <p class="text-xl font-semibold text-blue-500 mt-2">{{battle.o_character}}</p>
+                </div>
+            </div>
+
+        </div>
+
+
+        
         
         <!-- Battle Information -->
-        <div class="bg-gray-700 rounded-lg p-4 mb-6">
+        <div class="border-1 border-gray-700 rounded-lg p-4 mb-6">
             <!-- <h2 class="text-2xl font-semibold text-orange-300 mb-2">Battle Information</h2> -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                 <div>
-                    <!-- {{battle.i_character}} vs {{battle.o_character}} -->
-                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Combattants:</span> <a href="{% url 'users:player' battle.initiator.user.username %}" class=""><span class="font-bold hover:text-orange-600" id="fighter1">{{battle.initiator}}</span></a> vs <a href="{% url 'users:player' battle.opponent.user.username %}"><span class="font-bold hover:text-orange-600" id="fighter2">{{battle.opponent}}</span></a></p>
-                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Persos:</span> <a href="#" class=""><span class="" >{{battle.i_character}}</span></a> vs <a href="#">{{battle.o_character}}</span></a></p>
-                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Arbitre:</span> <a href="/users/{{battle.refree.user.username}}"><span class="font-bold hover:text-orange-600" id="referee">{{battle.refree}}</span></a></p>
+                  
+                    <p class="text-gray-300"><span class="font-semibold text-orange-500">Arbitre<i class="fa-solid fa-gavel ml-2" ></i> :</span> <a href="/users/{{battle.refree.user.username}}"> <img class="h-6 w-6 inline-block rounded-full" src="{{battle.refree.profile_picture.url}}" alt="{{battle.refree.user.username}} profile picture"> <span class="font-bold hover:text-orange-600" id="referee">{{battle.refree}}</span></a></p>
                 </div>
                 <div>
-                    <!-- <p class="text-gray-300"><span class="font-semibold text-orange-200">Status:</span> <span id="battleStatus">{{battle.status}}</span></p> -->
-                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Vaniqueur:</span> 
+                    <!-- <p class="text-gray-300"><span class="font-semibold text-orange-500">Status:</span> <span id="battleStatus">{{battle.status}}</span></p> -->
+                    <p class="text-gray-300"><span class="font-semibold text-orange-500"><i class="fa-solid fa-trophy" ></i> : </span> 
                         <span class="font-bold" id="winner">
                         {% if battle.winner %}
                         <a class="hover:text-orange-600" href="{% url 'users:player' battle.winner.user.username %}">
@@ -101,13 +208,13 @@
                         {% endif %}
                     </span>
                     </p>
-                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Type: </span>{{battle.type}}</p>
-                    <p class="text-gray-300"><span class="font-semibold text-orange-200"><i class="fas fa-eye mr-2"></i>: </span>{{spectators}}</p>
+                   
+                    <p class="text-gray-300"><span class="font-semibold text-orange-500"><i class="fa-regular fa-eye mr-2"></i>: </span>{{spectators}}</p>
                 </div>
                 <div>
                     
-                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Date de début:</span> <span class="font-bold" id="fighter1">{{battle.date_started | date:'d M Y'}}</span> </p>
-                    <p class="text-gray-300"><span class="font-semibold text-orange-200">Date de fin:</span> <span class="font-bold" id="referee">{{battle.date_ended | date:'d M Y' }}</span></p>
+                    <p class="text-gray-300"><span class="font-semibold text-orange-500"><i class="fa-regular fa-calendar-days" ></i> : </span> <span class="font-bold" id="fighter1">{{battle.date_started | date:'d M Y'}}</span> </p>
+                    <p class="text-gray-300"><span class="font-semibold text-orange-500"><i class="fa-regular fa-calendar" ></i> : </span> <span class="font-bold" id="referee">{{battle.date_ended | date:'d M Y' }}</span></p>
                 </div>
             </div>
         </div>
@@ -193,9 +300,43 @@
         
 
         <!-- Submit Textpad -->
-        <div class="my-6 bg-gray-700 rounded-lg p-4">
-            <h3 class="text-xl font-semibold text-orange-300 mb-2">Faire le pavé</h3>
+        <div class="my-6 border-1 border-gray-700 rounded-lg py-4 px-3 ">
+            <h3 class="text-xl font-semibold text-orange-300 mb-2">Fait ton pavé</h3>
+            <div class=" text-white mb-4">
+                <h4 class="text-xl font-semibold text-orange-300 mb-2">Jutsu de ton personnage</h4>
+                <ul class="mt-2 max-h-32 overflow-y-auto list-none list-inside">
+                    {% for jutsu in jutsus %}
+                    <li>
+                        <button>
+                            <i class="fas fa-caret-right text-orange-500 mr-2" ></i>{{jutsu}}</li>
+                        </button>
+                    {% endfor %}
+                </ul>
+                  
+            </div>
             <form id="submitTextpadForm">
+                <h4 class="text-xl font-semibold text-orange-300 mb-2">Approche</h4>
+                <div class="flex py-2 mb-2 space-x-2 overflow-x-auto w-full">
+                    <button type="button" class="hover:bg-orange-700 border text-white font-bold py-1 px-4 rounded-full transition duration-300">
+                        Strategique
+                    </button>
+
+                    <button type="button" class="hover:bg-orange-700 border text-white font-bold py-2 px-4 rounded-full transition duration-300">
+                        Strategique
+                    </button>
+
+                    <button type="button" class="hover:bg-orange-700 border text-white font-bold py-2 px-4 rounded-full transition duration-300">
+                        Strategique
+                    </button>
+
+                    <button type="button" class="hover:bg-orange-700 border text-white font-bold py-2 px-4 rounded-full transition duration-300">
+                        Strategique
+                    </button>
+
+                    
+
+                </div>
+
                 <textarea id="newTextpad" rows="6" class="w-full bg-gray-800 text-white rounded-lg p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Entre ton text ici..."></textarea>
                 <div class="mt-2 flex justify-between items-center">
                     <span id="wordCount" class="text-gray-400">Mots: 0</span>
@@ -781,13 +922,14 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
                              $('#textPads').append(
                                 `
                                 <div class=" rounded-lg p-4">
-                                    <h3 class="text-xl font-semibold text-orange-300 mb-2"><i class='fas fa-user-ninja mr-2' ></i><a class='underline' onclick="showOverlay()" href='/users/${textpad.owner}' >${textpad.owner}</a>: <span class='text-orange-500' id=""> ${textpad.character}</span></h3>
+                                    <h3 class="text-xl font-semibold text-orange-500 mb-2"><i class='fas fa-user-ninja mr-2' ></i><a class='underline' onclick="showOverlay()" href='/users/${textpad.owner}' >${textpad.owner}</a>: <span class='text-blue-500' id=""> ${textpad.character}</span></h3>
                                     <div id="fighterTextpad-${textpad.id}" class="body bg-gray-800 text-gray-300 p-3 rounded-lg max-h-64 overflow-y-auto">
                                         
                                     </div>
                                     <div class="text-gray-300 text-sm p-3 flex justify-between">
                                         <span>${textpad.time_since}</span>
-                                        <span class = '${textpad.valid? 'text-green-500':'text-red-500'} '>${validText}</span>
+                                        ${textpad.valid ? '<i class="text-green-500 fa-regular fa-circle-check"></i>' : '<i class="text-red-500 fa-regular fa-circle-xmark"></i>'}
+                                        <!--<span class = '${textpad.valid? 'text-green-500':'text-red-500'} '>${validText}</span>-->
                                     </div>
                                     
                                 </div>

@@ -1,5 +1,16 @@
 {% extends "core/base.html" %}
 
+{% block meta_keywords  %}
+{% for character in characters %}
+technique de {{character.name}}
+{% endfor %}
+{% endblock meta_keywords %}
+
+{% block meta_description  %}
+Decouvrez les techniques de tout les personnages de l'univers Naruto
+{% endblock meta_description %}
+
+
 {% block content %}
 <div class="container mx-auto p-6">
     <h1 class="text-4xl font-bold mb-6 text-orange-500 mt-20 text-center">Persos & Jutsu Naruto</h1>

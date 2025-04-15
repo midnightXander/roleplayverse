@@ -332,3 +332,15 @@ print(sum(count))
 
 print(uuid.uuid1())
 
+import core.views as coreViews
+
+characters = coreViews.get_characters()
+character = 'Sasuke uchiwa'
+
+print(characters[0])
+
+# for ch in characters:
+#     print(ch)
+#     # if character.lower() == ch['']:
+
+

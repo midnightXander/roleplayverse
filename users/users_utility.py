@@ -1,4 +1,4 @@
-from .models import Player,referall_points
+from .models import Player,referall_points,Family
 from core.models import models
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.gis.geoip2 import GeoIP2
+
 
 def get_player(user:User):
     try:
@@ -35,3 +36,23 @@ def refer_player(referall_code):
 
     except:
         return    
+
+def add_player_to_family(family:Family, player:Player): 
+    """Adds a player to a family"""
+    if player.family != None:
+        return False
+    else:
+        family.members.add(player)
+        player.family = family
+        player.save()
+        return True 
+
+def remove_player_from_family(family:Family, player:Player): 
+    """Removes a player from a family"""
+    if player.family == None:
+        return False
+    else:
+        family.members.remove(player)
+        player.family = None
+        player.save()
+        return True      

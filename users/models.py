@@ -7,7 +7,7 @@ from django.utils import timezone
 import random
 
 rankings = ['E','D','C','B','B+','A','A+','S','SS','SSS']
-
+FAMILYROLES = ['challenge_head','recruiter', 'casual','fighter']
 referall_points = 450
 MONTHLY_POINTS = 1000
 ENTRY_POINTS =  10300
@@ -40,7 +40,7 @@ class Family(models.Model):
     points = models.IntegerField(default=0,validators=[
         MinValueValidator(1)
     ])
-    
+    members = models.ManyToManyField('Player', through=('FamilyMember'), related_name = 'members')
     # id = models.UUIDField(primary_key=True,default=uuid.uuid4())
     #id = models.BigAutoField(primary_key=True)
     date_created = models.DateField(auto_now_add=True)
@@ -68,6 +68,12 @@ class Achievement(models.Model):
     title = models.CharField(max_length=50)    
     def __str__(self):
         return f'{self.title}'
+    
+class Event(models.Model):
+    title = models.CharField(max_length=100)    
+    description = models.TextField(blank = True)
+    def __str__(self):
+        return f'{self.title}'
 
 class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -78,6 +84,7 @@ class Player(models.Model):
                                         default = "blank-profile-picture.png"
                                         )
     family = models.ForeignKey(Family,on_delete=models.SET_NULL,null=True,blank=True,default=None)
+    #family_pk = models.IntegerField(null=True, blank = True, default = None) #To reference the family 
     nickname = models.CharField(max_length=30,blank=True,null=True)
     gender = models.CharField(default='male', max_length=10, choices=[
         (i,i) for i in ['male','female']
@@ -91,6 +98,7 @@ class Player(models.Model):
     can_create_family = models.BooleanField(default=False,blank=True)
 
     achievements = models.ManyToManyField(Achievement, through=('PlayerAchievement'))
+    events = models.ManyToManyField('Event', through='PlayerEvent')
 
     language = models.CharField(default = 'fr', max_length=20)
     battle_points = models.IntegerField(default=1000)
@@ -201,3 +209,22 @@ class PlayerAchievement(models.Model):
     class Meta:
         unique_together = ('player','achievement')
 
+class PlayerEvent(models.Model):
+    player  = models.ForeignKey(Player, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.SET_NULL, null = True)
+    date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('player','event')
+
+
+class FamilyMember(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    family = models.ForeignKey(Family, on_delete=models.SET_NULL, null = True)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    role = models.CharField(max_length=50, choices = [
+        (i,i) for i in FAMILYROLES
+    ], default = 'casual')
+
+    class Meta:
+        unique_together = ('player', 'family')

@@ -11,6 +11,7 @@ def index(request):
 
 def blog_post(request,post_id):
     post = get_object_or_404(BlogPost, id = post_id)
+    
     if request.method == 'POST':
         pass
     return render(request, "blog/post.html",{

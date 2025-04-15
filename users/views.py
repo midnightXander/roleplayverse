@@ -528,13 +528,15 @@ def join_family(request,notif_id):
         if player.family:
             message = 'tu es deja dans une famille'
         else:
-            player.family = family
-            #new_name = player.user.username + " " + family.name
-            family.save()
-            player.save()
+            # player.family = family
+            # family.members.add(player)
+            # #new_name = player.user.username + " " + family.name
+            # family.save()
+            # player.save()
+            add_player_to_family(family, player)
             notif.delete()
             
-            return JsonResponse({'status' : 'success', "message" : f"successfully joined {family}"})
+            return JsonResponse({'status' : 'success', "message" : f"tu es maintenant membre de  {family}"})
     
     return JsonResponse({"status" : "failed", 'message' : message})    
 
@@ -583,9 +585,10 @@ def refuse_request(request,notif_id):
 
 def _can_add_members(player:Player,family:Family):
     family = family
+    family_member = FamilyMember.objects.get(player = player)
     if not family:
         return False
-    elif family.god_father == player.user:
+    elif family.god_father == player.user or family_member.role == 'recruiter':
         #Make it based on role
         return True
     else:
@@ -622,7 +625,7 @@ def family_page(request,family_id):
         "player":player,
         "battles": family_battles,
         "recent_battles": family_battles[:3],
-        "roles":roles,
+        "roles":FAMILYROLES,
         'can_add': _can_add_members(player,family),
         "n_notifs":core_views.get_notifs(player),
 

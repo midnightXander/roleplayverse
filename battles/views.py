@@ -24,6 +24,20 @@ import random
 #manage BP for starting a battle
 #refree quizz
 
+def _character_jutsus(name:str):
+    characters = get_characters() 
+    for character in characters['playable_characters']:
+        if str(character['name']).lower() == name.lower():
+            jutsus = character.get('jutsu','No Jutsu')
+            return jutsus  
+
+def _character(name:str):
+    characters = get_characters() 
+    for character in characters['playable_characters']:
+        if str(character['name']).lower() == name.lower():
+            
+            return character          
+
 def update_battle_spectators(player:Player, battle:Battle):
     spectators = battle.spectators.all()
     
@@ -602,11 +616,26 @@ def battle_room(request,battle_id):
     
     rules = Rule.objects.filter(battle = battle)
     
+
     role = "Spectateur"
+    
     if player == battle.refree:
         role = "Arbitre"
+        
     elif player == battle.initiator or player == battle.opponent:
         role = "Combattant"    
+
+    ch_jutsus = ''
+    character = ''
+    i_character =  _character(battle.i_character)
+    o_character = _character(battle.o_character)
+    if player == battle.initiator:
+        ch_jutsus = _character_jutsus(battle.i_character)
+        character = _character(battle.i_character)
+    if player == battle.opponent:
+        ch_jutsus = _character_jutsus(battle.o_character)    
+        character = _character(battle.o_character)
+
 
     textpads = TextPad.objects.filter(battle = battle)
 
@@ -644,15 +673,20 @@ def battle_room(request,battle_id):
     
     context = {"player":player,
                "battle":battle,
+               
                "rules":rules, 
                "rules_set": len(rules) >= 3,
                "textpads":textpads_data,
+               'jutsus': ch_jutsus,
+               'i_character': i_character,
+               'o_character': o_character,
                'spectators':  _parse_number(len(battle.spectators.all()),True),
                  "last_sender":l_sender,
                  "role":role,
                  "can_rate": can_rate(battle),
                  'referee_rated': referee_rated(battle),
                  "n_notifs":core_views.get_notifs(player=player),
+                 
 
                  }
     

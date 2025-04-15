@@ -141,7 +141,9 @@ def home(request):
     battles = Battle.objects.filter(status = "finished")
     
 
-    characters = get_characters()    
+    characters = get_characters()  
+    
+    
 
     posts = list(posts)
     battles = list(battles)
