@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import *
 from django.db.models import Q
-from users.models import Player,Family
+from users.models import Player,Family,FamilyMember
 from users.users_utility import get_player
 import core.views as core_views
 import uuid
@@ -356,13 +356,26 @@ def chat_box(request, chat_box_name):
 def _mark_family_message_as_read(message: FamilyMessage, player:Player):
     message.readers.add(player)
 
+
+
 @login_required
 def family_chat(request,family_name):
+
     player = get_player(request.user)
     if not player:
         return redirect('/users/signin')
-    
+  
     family = Family.objects.get(name = family_name)
+    if player.family != family:
+        redirect('/home')
+
+    #Add players found in the family to family members
+    members = family.members.all()
+    
+    if player.family == family and not player in members:
+        family.members.add(player)
+
+
     chats = Chat.objects.filter(
         Q(initiator = player) | Q(recipient = player)
     ).order_by("-last_message_time_sent")
