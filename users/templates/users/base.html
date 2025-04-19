@@ -92,21 +92,50 @@
     }
     
         </style>
+
+        <style>
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 10, 10, 0.5);
+            z-index: 30;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+    
+    .loading-overlay.active {
+        display: flex;
+    }
+        </style>
     
     </head>
     <body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
     
         {% block content %}
         {% endblock content %}
-    
+        
+
+        <div id="loading-overlay" class="loading-overlay">
+            <div class="text-center py-4">
+                <i style="font-size: 30pt;" class="fas fa-spinner fa-spin text-orange-500"></i> 
+                <!-- <span>Loading text...</span> -->
+            </div>
+        </div>
     
         <footer class="bg-gray-800 text-white p-4 text-center">
-            <p>&copy; 2024 RolePlay Verse. Tous droits reservés.</p>
+            <p>&copy; 2025 RolePlay Verse. Tous droits reservés.</p>
         </footer>
 
         <script>
             function disableSubmitButton(button){
                 button.disabled = true
+            }
+            function showOverlay(){
+                $('#loading-overlay').addClass('active')
             }
         </script>
     </body>
