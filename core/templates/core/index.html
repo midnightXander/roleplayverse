@@ -61,6 +61,7 @@
     <title>RolePlay Verse</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -97,6 +98,10 @@
             color: inherit;
             text-decoration: none;
         }
+        .font-quicksand{
+            font-family: 'Quicksand';
+            font-weight:900;
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white">
@@ -110,7 +115,7 @@
             
         </header>
         
-        <nav class="flex flex-col w-full h-96 justify-between">
+        <nav class="flex flex-col w-full h-96 justify-between ">
             <ul class="space-y-6">
                 <li><a href="/" class="text-white hover:text-gray-300 transition duration-300">Acceuil</a></li>
                 <li><a href="/characters" class="text-white  hover:text-gray-600 transition duration-300">Personnages</a></li>
@@ -129,12 +134,12 @@
         </nav>
     </div>
     <!-- Navigation -->
-    <nav class="bg-gray-800 fixed w-full z-10">
+    <nav class="bg-gray-800 fixed w-full z-10 bg-opacity-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between ">
                 <div class="flex items-center">
                     <a href="#" class="flex-shrink-0">
-                        <img class="h-20 w-auto" src="{% static 'images/logo/logo_1.png' %}" alt="Logo">
+                        <img class="h-20 w-auto" src="{% static 'images/logo/logo_1_nobg.png' %}" alt="Logo">
                     </a>
                     <div class="hidden md:block">
                         <div class="ml-10 flex items-baseline space-x-4">
@@ -168,8 +173,8 @@
     <!-- Hero Section -->
     <section id="home" class="min-h-screen flex items-center justify-center bg-cover bg-center shine-effect" style="background-image: url('https://wallpaperaccess.com/full/2932932.jpg');">
         <div class="bg-black bg-opacity-50 p-12 rounded-lg text-center">
-            <h1 class="text-5xl font-bold mb-4 animate-pulse">RolePlay Verse</h1>
-            <p class="text-xl mb-8">L'experience ultime du RP Naruto.</p>
+            <h1 class="text-5xl font-quicksand  font-bold mb-4 animate-pulse">RolePlay Verse</h1>
+            <p class="text-xl  mb-8">L'experience ultime du RP Naruto.</p>
             <a href="/users/signup" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-full text-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
                 Commencer a RP
             </a>

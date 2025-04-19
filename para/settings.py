@@ -199,7 +199,7 @@ PWA_APP_DISPLAY = 'standalone'
 PWA_APP_SCOPE = '/'
 PWA_APP_ORIENTATION = 'any'
 PWA_APP_START_URL = '/'
-PWA_APP_STATUS_BAR_COLOR = 'default'
+PWA_APP_STATUS_BAR_COLOR = 'transparent'
 PWA_APP_ICONS = [
 	{
 		'src': 'static/images/logo/logo_1_nobg.png',
