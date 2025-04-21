@@ -589,7 +589,7 @@ def _can_add_members(player:Player,family:Family):
     members = family.members.all()
     
     if player not in members and player.family == family:
-        members.add(player)
+        family.members.add(player)
 
     try:
         family_member = FamilyMember.objects.get(player = player)
