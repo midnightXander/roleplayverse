@@ -5,16 +5,7 @@
     {% progressive_web_app_meta %}
     <link rel="manifest" href="manifest.json">
 
-<!-- PushAlert -->
-<script type="text/javascript">
-    (function(d, t) {
-            var g = d.createElement(t),
-            s = d.getElementsByTagName(t)[0];
-            g.src = "https://cdn.pushalert.co/integrate_a54f156228901c510dc9e45a45d3acbf.js";
-            s.parentNode.insertBefore(g, s);
-    }(document, "script"));
-</script>
-<!-- End PushAlert -->
+
 
     <head>
 
@@ -115,6 +106,17 @@
             font-weight:900;
         }
     </style>
+
+    <!-- PushAlert -->
+<script type="text/javascript">
+    (function(d, t) {
+            var g = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+            g.src = "https://cdn.pushalert.co/integrate_a54f156228901c510dc9e45a45d3acbf.js";
+            s.parentNode.insertBefore(g, s);
+    }(document, "script"));
+</script>
+<!-- End PushAlert -->
 </head>
 <body class="bg-gray-900 text-white">
     <div class="scroll-indicator"></div>
