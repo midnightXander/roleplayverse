@@ -585,7 +585,17 @@ def refuse_request(request,notif_id):
 
 def _can_add_members(player:Player,family:Family):
     family = family
-    family_member = FamilyMember.objects.get(player = player)
+    #Add a familyMember check and addition here
+    members = family.members.all()
+    
+    if player not in members and player.family == family:
+        members.add(player)
+
+    try:
+        family_member = FamilyMember.objects.get(player = player)
+    except FamilyMember.DoesNotExist:
+        return False     
+
     if not family:
         return False
     elif family.god_father == player.user or family_member.role == 'recruiter':
