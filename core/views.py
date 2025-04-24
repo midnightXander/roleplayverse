@@ -494,7 +494,7 @@ def create_post(request):
         if body or image:
             postid = len(Post.objects.all()) + 1
             new_post = Post.objects.create(
-                id = postid,
+                #id = postid,
                 author=player,body=body,image = image)
             
             new_post_data = _post_data(player,new_post)

@@ -142,13 +142,13 @@ def _time_since(time):
     minutes = (seconds % 3600) // 60
 
     if years > 0 :
-        return f"il y'a {years} an"
+        return f"{years} an"
     
     # elif months > 0 :
     #     return f"{months} months ago"
     
     elif days > 0 and days < 7:
-        return f"il y'a {days} jours"
+        return f"{days} jours"
     elif days > 7 and years <= 0:
         return time.strftime('%d-%m')
     elif days > 7 and years>0:
@@ -158,7 +158,7 @@ def _time_since(time):
     elif minutes > 0:
         return f"{minutes}m"
     else:
-        return "il ya 1s"
+        return "1s"
 
 def _date_time(time):
     #formatted_datetime = datetime_value.strftime('%Y-%m-%d %H:%M:%S')
