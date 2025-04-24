@@ -57,7 +57,7 @@ def sendResetPasswordLink(recipient_email:str,language:str='en'):
     <p>From Role Play Universe</p>
     <em>Here is your reset password link, click to reset your password</em>
     
-    <a href ='https://roleplayverse.com/users/signup/'>This Link</a>                
+    <a href ='https://roleplayverse.live/users/signup/'>This Link</a>                
     </html>
     
     """,subtype="html")

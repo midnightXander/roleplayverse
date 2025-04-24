@@ -213,7 +213,7 @@ def password_recover(request):
             try:
                 player = Player.objects.get(user = user)
                 code = PasswordRecoveryCode.objects.create(key = generate_reset_key(), player = player)
-                link = f"https://roleplayverse.com/users/password/reset?k={code.key}"
+                link = f"https://roleplayverse.live/users/password/reset?k={code.key}"
                 print(f"sent {link} to {user_email}")
                 
                 code.save()

@@ -34,9 +34,7 @@
         .infos{
             width: 300px;
         }
-        /* .sidebar{   
-            margin-top: 5rem;
-        } */
+       
     
     }
 
@@ -107,76 +105,38 @@
     }
 </style>
 
+<div class="max-w-xl mx-auto px-4 py-32 space-y-6">
+    <!-- Player Info Section -->
+    <div class="bg-gray-900 rounded-2xl shadow-md p-5 space-y-4">
+      <div class="flex items-center space-x-4 ">
+        <div class="relative">
+            <img src="{{req_player.profile_picture.url}}" class="w-16 h-16 myImg rounded-full border-2 border-orange-500" />
+        {% if  can_edit %}
+            <button type="button" id="changePictureBtn" class="absolute bottom-0 right-0 bg-orange-500 text-white px-2 py-1 rounded-full hover:bg-orange-600 transition duration-300">
+                <i class="text-sm fas fa-camera text-center"></i>
+            </button>
+        {% endif %}
+        </div>
+        
+        <div>
+          <h2 class="text-xl font-bold">{{req_player}}</h2>
+          <div class="flex justify-between space-x-2 mt-1">
+            <p class="text-sm text-gray-400">@{{req_player.nickname}}</p>
+          </div>
+          
+          
+          <p class="text-sm mt-1">Class: <span class="font-medium text-orange-600">{{req_player.rank}}</span></p>
+        </div>
+      </div>
 
-
-<div class="flex flex-col md:flex-row " style="margin-top: 60px; margin-bottom: 100px;">
-    {% if can_edit %}
-    <button class="showSidebar hover:text-gray-300  mt-4 px-4 hidden">
-            <i class="fas fa-sort-desc"></i>   
-    </button>
-    
-    <!-- Sidebar -->
-    <aside class="sidebar bg-gray-800 w-full md:w-64 md:min-h-screen p-4">
-        <nav>
-            <ul class="space-y-2">
-                <li><a href="{% url 'users:favorites' %}" class="block py-2 px-4 text-orange-500 hover:bg-gray-700 rounded"><i class="fas fa-bookmark-o mr-2"></i>Favoris</a></li>
-                <!-- <li><a onclick="showDownloadPopup()" href="#" class="block py-2 px-4 text-orange-500 hover:bg-gray-700 rounded"><i class="fas fa-download mr-2"></i>Télécharger</a></li>   -->
-                <li><a href="{% url 'battles:new_refree' %}" class="block py-2 px-4 text-indigo-500 hover:bg-gray-700 mt-4 rounded"><i class="fas fa-gavel mr-2"></i>Devenir Arbitre</a></li>
-                <li><a href="#" onclick="showMyToast(`Tu n'es pas encore eligible a la Monetization`)" class="block py-2 px-4 text-yellow-500 hover:bg-gray-700 rounded"><i class="fas fa-money mr-2"></i>Monetization</a></li>
-            </ul>
-        </nav>
-    </aside>
-
-    {% endif %}
-
-    <!-- Main Content -->
-    <main class="flex-1 p-4">
-        <div class="bg-gray-700 rounded-lg p-6 mb-6">
-            <div class="flex flex-col md:flex-row items-center justify-between">
-                <div class="flex flex-col items-center md:items-start mb-4 md:mb-0">
-                    
-                    <div style="position: relative;">
-                        <img src="{{req_player.profile_picture.url}}" alt="Profile Picture" class="myImg w-32 h-32 rounded-full mb-2">
-                        {% if  can_edit %}
-                        <button style="position: absolute; bottom: 0; right: 0;" type="button" id="changePictureBtn" class="bg-orange-500 text-white px-3 py-2.5 rounded-full hover:bg-orange-600 transition duration-300">
-                            <i class="fas fa-camera text-center"></i>
-                        </button>
-                        {% endif %}
-                    </div>
-
-                    
-                    
-                    <h1 class="text-2xl font-bold mb-2">{{req_player}}</h1>
-                    
-                    {% if can_edit %}
-                    <button data-info="name" class = "edit-info-btn mb-2  text-white px-4 py-2 rounded  transition duration-300">
-                        <i class="fas fa-edit mr-2"></i>Changer nom d'utlisateur
-                    </button>
-                    <form onsubmit="showOverlay()" style="display: none;" method="post" action="{% url 'users:edit_info' %}">
-                        {% csrf_token %}
-                        <input type="text" name="username" style="border: 1px solid white;"  class="bg-gray-700 text-white px-2 py-1 my-2 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-orange-500" value="{{req_player.user.username}}">
-                        
-                        <input  type="hidden" name="info" value="username">
-                        <button class="" type="submit">Save</button>
-                    </form>
-                    {% endif %}
-
-
-                    <div class="badges flex p-1 ">
-                        {% for badge in badges %}
-                        <span class="bg-blue-500 font-bold text-white px-2 py-1 rounded-full text-sm">{{badge}}</span>
-                        {% endfor %}
-                    </div>
-                    
-
-                    {% if not can_edit %}
+      {% if  not can_edit %}
                     <div class="bg-gray-800 mt-2 text-sm rounded-lg p-4 shadow-md animate-scaleIn">
-                        <div class="flex flex-wrap items-center ">
+                        <div class="flex flex-wrap justify-between items-center ">
                             <a onclick="showOverlay()" href="{% url 'chats:private_chat' req_player.user.username %}">
                             <button class="action-btn flex items-center justify-center
                                 text-white font-bold  
                                 rounded-full transition duration-300 ease-in-out">
-                                <i class="fas fa-comment text-2xl mr-2"></i>
+                                <i class="fas fa-comment text-2xl mr-2"></i> Message
                                 <!-- <span>Message</span> -->
                             </button>
                             </a>
@@ -185,19 +145,11 @@
                             
                             <button id="challenge-btn" class="action-btn flex items-center justify-center  text-orange-500 font-bold 
                             rounded-full transition duration-300 ease-in-out" data-action="challenge">
-                                <i class="fas fa-fire text-2xl mr-2"></i>
-                                <!-- <span>Challenge</span> -->
+                                <i class="fas fa-fire text-2xl mr-2"></i> Lancer un defi
+                                
                             </button>
 
-                            <!-- {% if req_player.family != player.family %}
-                            <span class="v-divider"></span>
-                            
-                            <button id="invite-btn" class="action-btn flex items-center justify-center hover:text-orange-500 text-white font-bold 
-                            rounded-full transition duration-300 ease-in-out" data-action="invite">
-                                <i class="fas fa-user-plus text-2xl mr-2"></i>
-                                 <span>Invite to Family</span> 
-                            </button>
-                            {% endif %} -->
+                           
                             {% if can_invite %}
                             <span class="v-divider"></span>
                             
@@ -210,133 +162,123 @@
                         </div>
                     </div>
                     
-                    {% endif %}
-                </div>
-                <div class="text-center md:text-left mb-4 md:mb-0">
-                    
-                    
-                        {% if req_player.nickname %}
-                        <h4 class="nickname text-xl text-gray-300 mb-2">{{req_player.nickname}}</h4>
-                        {% else %}
-                        <div class="nickname text-xl text-gray-300 mb-2">@No nickname</div>
-                        {%endif%}
-
-                    {% if can_edit %}
-                        
-                        
-                    <button data-info="nickname" class=" edit-info-btn  text-white px-4 py-2 rounded  transition duration-300">
-                        <i class="fas fa-edit mr-2"></i>Changer de surnom
-                    </button>
-                    <form style="display: none;" method="post" action="{% url 'users:edit_info' %}">
-                        {% csrf_token %}
-                        <input type="text" name="nickname" style="border: 1px solid white;"  class="bg-gray-700 text-white px-2 py-1 my-2 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-orange-500" value="{{req_player.nickname}}">
-                        
-                        <input  type="hidden" name="info" value="nickname">
-                        <button class="" type="submit">Save</button>
-                    </form>
-                    
-                    
-                    {% endif %}
-                </div>
-                <div class="flex flex-col items-center">
-                    <svg class="progress-ring">
-                        <circle r="52" cx="60" cy="60" fill="transparent" stroke="#e0e0e0" stroke-width="8"></circle>
-                        <circle class="progress-ring__circle" stroke="#f97516" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
-                        <text x="30%" y="280px" fill="#f97516" font-size="1.5rem" font-weight="bold" style="transform:rotate(0deg) translate(0px, -210px)">{{req_player.progression}}%</text>
-                    </svg>
-                    <p class="mt-2 font-bold">Progression</p>
-                </div>
-            </div>
-            <div class="mt-6 text-center md:text-left">
-                <p class="text-xl font-bold">Rang: <span class="text-orange-500 text-3xl">{{req_player.rank}}</span></p>
-                
-                <p><span class="text-green-500">Victoires</span>: {{stats.wins}} | <span class="text-red-500">Defaites</span>: {{stats.losses }}</p>
-            </div>
-        </div>
-        <div class="filter-container  w-full mx-auto flex space-x-2 mb-6 overflow-x-auto pb-2">
-            
-            <a onclick="showOverlay()" href="{% url 'users:player' req_player.user.username %}" class="">
-                <button  class="flex items-center filter-button bg-gray-600 px-4 py-2 rounded-full hover:bg-gray-500 transition duration-300">
-                <i class="fas fa-newspaper mr-2"></i>Publications
-                </button>
-            </a>
-            <a onclick="showOverlay()" href="{% url 'users:player_battles' req_player.user.username  %}" class="" >
-            <button   class="flex items-center filter-button bg-gray-600 px-4 py-2 rounded-full hover:bg-gray-500 transition duration-300">
-                <i class="fas fa-khanda mr-2"></i>Combats
-            </button>
-            </a>
-            <a onclick="showOverlay()" href="{% url 'users:player_stats' req_player.user.username %}" class="" >
-                <button   class="flex items-center filter-button bg-gray-600 px-4 py-2 rounded-full hover:bg-gray-500 transition duration-300">
-                <i class="fas fa-chart-bar mr-2"></i>Stats
-            </button>
-            </a>
-                {% if req_player == player %}
-            <a onclick="showOverlay()" href="{% url 'users:player_battle_requests' req_player.user.username %}" class="" >
-                <button  class="flex items-center filter-button bg-gray-600 px-4 py-2 rounded-full hover:bg-gray-500 transition duration-300">
-                <i class="fas fa-envelope mr-2"></i>RDC
-            </button>
-            </a>
-            <a onclick="showOverlay()" href="{% url 'users:player_challenges' req_player.user.username %}" class="" >
-                <button  class="flex items-center filter-button bg-gray-600 px-4 py-2 rounded-full hover:bg-gray-500 transition duration-300">
-                <i class="fas fa-fire mr-2"></i>Challenges
-            </button>
-            </a>
             {% endif %}
-            
-            
-            
-           
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Progression</label>
+        <div class="w-full bg-gray-200 rounded-full h-3 bg-gray-700">
+          <div id="progression_bar" class="bg-orange-500 h-3 rounded-full"></div>
         </div>
+        <p id="progression_bar_text" class="text-sm mt-1">{{req_player.progression}}%</p>
+      </div>
+      
+      
+      <div class="flex justify-between text-sm">
+        <p>🏆 Victoires: <strong>{{stats.wins}}</strong></p>
+        <p>💀 Defaites: <strong>{{stats.losses}}</strong></p>
+      </div>
+    </div>
+
+    <!-- Referral and Tutorial -->
+    <div class="bg-gray-900 rounded-2xl shadow-md p-5 space-y-3">
+        <div>
+          <p class="text-sm font-semibold">Ton lien d'affiliation:</p>
+          <div class="flex flex-wrap">
+            <input onfocus="copyLink('https:\/\/roleplayverse.live/users/signup?rc={{player.referall_code}}')" type="text" readonly value="https://roleplayverse.live/users/signup?rc={{player.referall_code}}'" class="w-full mt-1 px-3 py-2 rounded-lg border border-gray-700 bg-gray-800 text-sm" />
+            <!-- <button onclick="copyLink('https:\/\/roleplayverse.live/users/signup?rc={{player.referall_code}}')" class="text-sm px-4 py-1.5 rounded-full">
+                <i class="fas fa-clone mr-2"></i>
+            </button> -->
+          </div>
+          
+          <p class="text-xs text-gray-300 mt-2">Invite des gens a rejoindre la plate-forme par ce lien et obtiens des Jétons de combats et plein d'autres récompense</p>
+        </div>
+        <a href="/blog/tutorials/posts" target="_blank" class="inline-block w-full text-center bg-[#d45822] text-white py-2 rounded-xl font-semibold hover:bg-orange-600 transition">📘Tutoriel RP Naruto</a>
+      </div>
+
+    <!-- Quick Access Links -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <a href="#" onclick="showMyToast(`Tu n'es pas encore eligible a la Monetization`)" class="bg-gray-900 text-center p-4 rounded-xl shadow hover:bg-gray-800 transition">
+        💰<p class="mt-2 text-sm font-medium">Monetization</p>
+      </a>
+      <a onclick="showOverlay()" href="{% url 'battles:new_refree' %}" class="bg-gray-900 text-center p-4 rounded-xl shadow hover:bg-gray-800 transition">
+        🎯<p class="mt-2 text-sm font-medium">Devenir Arbitre</p>
+      </a>
+      <a onclick="showOverlay()" href="{% url 'users:favorites' %}" class="bg-gray-900 text-center p-4 rounded-xl shadow hover:bg-gray-800 transition">
+        ⭐<p class="mt-2 text-sm font-medium">Favoris</p>
+      </a>
+    </div>
+
+    <!-- Post Filters -->
+    <div class="flex flex-wrap gap-2 justify-between">
+        
+      <a onclick="showOverlay()" href="{% url 'users:player' req_player.user.username %}" class = "filter-button bg-gray-700 text-sm px-4 py-1.5 rounded-full hover:bg-gray-300 hover:bg-gray-600">Publications</a>
+      <a onclick="showOverlay()" href="{% url 'users:player_battles' req_player.user.username  %}" class = "filter-button bg-gray-700 text-sm px-4 py-1.5 rounded-full hover:bg-gray-300 hover:bg-gray-600">Combats</a>
+      <a onclick="showOverlay()" href="{% url 'users:player_stats' req_player.user.username %}" class = "filter-button bg-gray-700 text-sm px-4 py-1.5 rounded-full hover:bg-gray-300 hover:bg-gray-600">Stats</a>
+      {% if req_player == player %}
+      <a onclick="showOverlay()" href="{% url 'users:player_battle_requests' req_player.user.username %}" class = "filter-button bg-gray-700 text-sm px-4 py-1.5 rounded-full hover:bg-gray-300 hover:bg-gray-600">Requetes de Combats</a>
+      <a href="{% url 'users:player_challenges' req_player.user.username %}" onclick="showOverlay()" class = "filter-button bg-gray-700 text-sm px-4 py-1.5 rounded-full hover:bg-gray-300 hover:bg-gray-600">Challenges</a>
+      {% endif %}
+      
+     
+      
+    </div>
+
+
+    <!-- Player Posts (example) -->
+   
+
+<!-- {% if can_edit %}
+<button data-info="name" class = "edit-info-btn mb-2  text-white px-4 py-2 rounded  transition duration-300">
+    <i class="fas fa-edit mr-2"></i>Changer nom d'utlisateur
+</button>
+<form onsubmit="showOverlay()" style="display: none;" method="post" action="{% url 'users:edit_info' %}">
+    {% csrf_token %}
+    <input type="text" name="username" style="border: 1px solid white;"  class="bg-gray-700 text-white px-2 py-1 my-2 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-orange-500" value="{{req_player.user.username}}">
+    
+    <input  type="hidden" name="info" value="username">
+    <button class="" type="submit">Save</button>
+</form>
+{% endif %} -->
+
+
+                    
+<!-- {% if can_edit %}
+    
+    
+<button data-info="nickname" class=" edit-info-btn  text-white px-4 py-2 rounded  transition duration-300">
+    <i class="fas fa-edit mr-2"></i>Changer de surnom
+</button>
+<form style="display: none;" method="post" action="{% url 'users:edit_info' %}">
+    {% csrf_token %}
+    <input type="text" name="nickname" style="border: 1px solid white;"  class="bg-gray-700 text-white px-2 py-1 my-2 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-orange-500" value="{{req_player.nickname}}">
+    
+    <input  type="hidden" name="info" value="nickname">
+    <button class="" type="submit">Save</button>
+</form>
+
+
+{% endif %} -->
+
+<!-- <div class="flex flex-col items-center">
+<svg class="progress-ring">
+    <circle r="52" cx="60" cy="60" fill="transparent" stroke="#e0e0e0" stroke-width="8"></circle>
+    <circle class="progress-ring__circle" stroke="#f97516" stroke-width="8" fill="transparent" r="52" cx="60" cy="60"/>
+    <text x="30%" y="280px" fill="#f97516" font-size="1.5rem" font-weight="bold" style="transform:rotate(0deg) translate(0px, -210px)">{{req_player.progression}}%</text>
+</svg>
+<p class="mt-2 font-bold">Progression</p>
+</div> -->
+
+            
+      
+
         
         {% block filterContent %}
-        <!-- Content area for filtered results -->
-        <div class=" rounded-lg py-6 flex flex-col md:flex-row  justify-between w-full space-x-5">
-           
-            <div class="bg-gray-800 md:w-1/2 w-full flex flex-col ">  
-                <div class="bg-gray-700 rounded-lg p-6 mb-4">
-                    {% if can_edit %}
-                    <p class="text-center text-gray-400">
-                        
-                        <i class="fa-regular fa-circle-question text-white mr-2 "></i>
-                          Nouveau dans le monde du RP Naruto?  
-                        <a href="#" class="text-orange-500" >Lire Le turoriel</a>
-                    </p>
-
-                    {% else %}
-                    {% endif %}
-                </div>
-                <div class="bg-gray-700 rounded-lg p-6 mb-4">
-                    <p class="text-center text-gray-400">
-                        {% if can_edit %}
-                       Ton lien d'affiliation: <br>
-                        <span class="text-orange-500">https://roleplayverse.com/users/signup?rc={{player.referall_code}}</span>
-                        
-                        <i onclick="copyLink('https:\/\/roleplayverse.com/users/signup/{{player.referall_code}}')" class="fas fa-clone text-xl cursor-pointer ml-2"></i><br>
-                        <span class="text-xs ">Invite des gens a rejoindre la plate-forme par ce lien et obtiens des Jétons de combats et plein d'autres récompense</span>
-                        {% else %}
-                        {% endif %}
-                    </p>
-                </div>
-                
-            </div>
-
-            <div id="postsFeed" class="space-y-8">
-                <!-- Posts will be dynamically added here -->
-                <div class="flex flex-col justify-center  items-center">
-                    <svg class="w-32 h-32 text-gray-300 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linejoin="round" stroke-width="1.7" d="M10 12v1h4v-1m4 7H6a1 1 0 0 1-1-1V9h14v9a1 1 0 0 1-1 1ZM4 5h16a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
-                    </svg>
-                    <div>
-                        Aucune publications
-                    </div>   
-                 </div>
-            </div>
+        <div id="postsFeed" class="space-y-8">
+            <p class="text-center text-blue-400">Aucune publications pour l'instant</p>
         </div>
         {% endblock filterContent %}
-        <!-- <div class="mb-4"></div>
-            <span class="opacity-0">element to create margin</span>
-        </div> -->
-
+     
+</div>
 <!-- Profile Picture Upload Modal -->
 <div id="uploadModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
     <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
@@ -379,7 +321,7 @@
 
 
 
-</main>
+
 </div>
 
 <!-- Popup for Challenging player -->
@@ -448,6 +390,8 @@
         $('.filter-button').removeClass('active')
         $('.filter-button')[0].classList.add('active')
     })
+
+    
 </script>
 {% endblock active %}
 
@@ -456,20 +400,34 @@
     // Set progress ring
     const playerProgress = JSON.parse(document.getElementById("player_progression").textContent)
     
-    const circle = document.querySelector('.progress-ring__circle');
-    const radius = circle.r.baseVal.value;
-    const circumference = radius * 2 * Math.PI;
+    // const circle = document.querySelector('.progress-ring__circle');
+    // const radius = circle.r.baseVal.value;
+    // const circumference = radius * 2 * Math.PI;
 
-    circle.style.strokeDasharray = `${circumference} ${circumference}`;
-    circle.style.strokeDashoffset = circumference;
+    // circle.style.strokeDasharray = `${circumference} ${circumference}`;
+    // circle.style.strokeDashoffset = circumference;
 
-    function setProgress(percent) {
-        const offset = circumference - percent / 100 * circumference;
-        circle.style.strokeDashoffset = offset;
+    // function setProgress(percent) {
+    //     const offset = circumference - percent / 100 * circumference;
+    //     circle.style.strokeDashoffset = offset;
+    // }
+
+    // // Set to 75% as an example
+    // setProgress(playerProgress);
+
+    
+    playerProgressBar = document.getElementById('progression_bar')
+    if(parseInt(playerProgress) == 0){
+        playerProgressBar.style.width = `1%`
+    }else{
+        playerProgressBar.style.width = `${playerProgress}%`
     }
+    
+    //document.getElementById('progression_bar_text').innerText = `${100 - playerProgress}% avant la prochaine classe`
 
-    // Set to 75% as an example
-    setProgress(playerProgress);
+
+
+
 </script>
 
 
@@ -704,64 +662,7 @@ cancelChallengeBtn.on('click',()=>{
 
 
   
-// Function to create a post element
-function createPostElement(post) {
-   
-const postElement = document.createElement('div');
-postElement.className = 'post bg-gray-700 rounded-lg p-4';
 
-postElement.innerHTML = `
-    <div class="flex items-center mb-4 relative">
-        <a href = "/users/${post.author.name}">
-        <img src="${post.author.profile_picture}" alt="${post.author.name}" class="w-10 h-10 rounded-full mr-4">
-        <a>
-        <a href = "/users/${post.author.name}">
-        <h3 class="font-bold ">${post.author.player}<br><small>${post.time_posted}</small></h3>
-        </a>
-
-        <div class="absolute top-2 right-2">
-              <button class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
-                  <i class="fas fa-ellipsis-v"></i>
-              </button>
-              <div class="post-dropdown-menu w-48 py-2">
-                   <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="toggleToFavorites('${post.id}')"><i class = 'fas fa-bookmark mr-2'></i>Save</div>
-                  <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="socialShare(this,'https://roleplayverse.com/posts/${post.id}')"><i class = 'fas fa-share mr-2'></i>Share</div>
-                  <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('https://roleplayeverse.com/posts/${post.id}')"><i class = 'fas fa-copy mr-2'></i>copy link</div>
-                  ${post.author.name == currentPlayerData.username? `
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600"><i class = 'fas fa-pencil-square-o mr-2'></i> Edit</a>
-                   <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deletePost(this,'${post.id}')"><i class = 'fas fa-trash  mr-2'></i> Delete</div>
-                  `:`
-                  `}
-                  
-              
-                </div>
-        </div>
-    </div>
-    
-    <p class="mb-4 body">${post.body}</p>
-    ${post.image ? `<img src="${post.image}" alt="Post image" class="myImg w-full rounded-lg mb-4 post-image">` : ''}
-    <div class="post-infos flex items-center justify-between">
-        <button class="like-button flex items-center ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
-            <i class="far fa-heart mr-2"></i>
-            <span class="like-count">${post.likes}</span>
-        </button>
-        <button class="comment-button flex items-center">
-            <i class="far fa-comment mr-2"></i>
-            <span class = 'comment-count'>${post.comments.length}</span>
-        </button>
-    </div>
-    <div class="comments mt-4 overflow-y-auto px-1" style = 'max-height:200px'>
-        ${post.comments.map(comment => createComment(comment)).join('')}
-    </div>
-    <form class="comment-form mt-4" data-post-id = ${post.id}>
-        <input type="text" class="bg-gray-600 text-white p-2 rounded w-full" placeholder="Add a comment...">
-    </form>
-`;
-
-
-
-return postElement;
-}
 
 // Function to render posts
 function renderPosts() {

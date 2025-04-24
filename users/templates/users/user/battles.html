@@ -2,20 +2,19 @@
 {% load static %}
 {% block filterContent %}
 <!-- Content area for filtered results -->
-<div id="filteredContent" class="bg-gray-700 rounded-lg p-6">
+ <div id="filteredContent" class="rounded-lg p-6">
     <div id="battlesList" class="hidden">
-        <h2 class="text-2xl font-bold mb-4">{{req_player}} Battles</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Battle cards will be dynamically inserted here -->
-            <div class="flex text-gray-300 flex-col justify-center items-center">
-                <img src="{% static 'svg/khanda.svg'  %}" alt="khanda" class="h-64 w-64" >
-                <p>Aucun combat pour l'instant</p>
-                <a class="text-blue-500 hover:text-blue-600" href="#">comment faire un combat</a>
+        <!-- <h2 class="text-2xl font-bold mb-4">{{req_player}} C</h2>  -->
+        <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> -->
+            
+            <div class="flex flex-col justify-center items-center">
+                <p class="text-center text-gray-400">Aucun combat pour l'instant</p>
+            <a class="text-center text-orange-500 hover:text-orange-600 text-sm" href="/battles">comment faire un combat</a>
             </div>
-        </div>
+        <!-- </div> -->
     </div>
     <p id="defaultMessage" class="text-center text-gray-400">Select a filter to view content</p>
-</div>
+</div> 
 
 
 {% block active %}
@@ -25,6 +24,7 @@ $(()=>{
     $('.filter-button')[1].classList.add('active')
 })
 </script>
+
 {% endblock active %}
 
 {% block fetchContent %}
@@ -66,7 +66,8 @@ $(()=>{
         const battles = res.battles
         if(res.battles.length > 0){
             const battleCards = battles.map(battle => createBattleCard(battle)).join('');
-            battlesList.querySelector('.grid').innerHTML = battleCards;
+            // battlesList.querySelector('.grid').innerHTML = battleCards;
+            battlesList.innerHTML = battleCards;
         }
         
         },

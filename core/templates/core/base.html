@@ -33,7 +33,7 @@
         <meta name="keywords" content="{% block meta_keywords %} 
         Naruto Text Pave Anime Manga RPG jeux en ligne communauté messagerie privée jeu de role naruto shippuden réseau social RPG Anime role-playing rolleur community {% endblock meta_keywords %}">
         <meta property = "og:image" content = "{% static 'images/logo/logo_1.png' %}" >
-        <meta property = "og:url" content = "https://roleplayverse.com">
+        <meta property = "og:url" content = "https://roleplayverse.live">
         <link rel="icon" type="image/x-icon" href="{% static 'images/logo/logo_1.png' %}">
         
         <!-- <link rel="stylesheet" href="{% static 'css/home.css' %}" /> -->
@@ -42,20 +42,31 @@
         <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/linkifyjs/dist/linkify.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/linkify-html/dist/linkify-html.min.js' %}"></script>
+        <script src="{% static 'js/components.js' %}" ></script>
+        <script src="{% static 'js/utility.js' %}"  ></script> 
+        <script src="{% static 'js/core.js' %}"></script> 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         
         
         
        
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Arrows:wght@400..700&family=Gluten:wght@100..900&family=Quicksand:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
+
+
+
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/output.css' %}" >
         <link rel="stylesheet" href="{% static 'css/effects.css' %}" >
         <link rel="stylesheet" href="{% static 'css/ads.css' %}" >
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}" >
     
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.0/gsap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
@@ -66,401 +77,15 @@
         <script src="https://cdn.tiny.cloud/1/j4yc51tqbhmqbmoqot1d4l8uircpwyr932mazjpidtzv6yt7/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
         <script src="https://cdn.cinetpay.com/seamless/main.js"></script>
 
-        <!-- <style>
-            body {
-                font-family: 'Nunito', sans-serif;
-            }
-            .scroll-indicator {
-                height: 3px;
-                background: #ff4500;
-                width: 0%;
-                position: fixed;
-                top: 0;
-                left: 0;
-                z-index: 50;
-                transition: width 0.3s ease;
-            }
-    
-            
-        </style> -->
 
-        <!--Navbar-->
+
 <style>
-    
-
-    /* Navbar styles */
-    .nav-icon {
-        font-size: 1.25rem;
-    }
-    
-    /* Profile dropdown animation */
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    #profileMenu {
-        animation: fadeIn 0.2s ease-out;
+    .post{
+        border: 1px solid #ccc;
     }
 </style>
 
 
-    <style>
-
-            body {
-                margin: 0;
-                font-family: 'Nunito','inter','Roboto Mono','Gill Sans';
-                
-                
-            }
-            *{
-                font-family: 'Nunito','inter','Roboto Mono','Gill Sans';
-            }
-            .link{
-                color: #1a7feb;
-                font-weight: bold;
-                text-decoration: underline;
-            }
-            .link:hover{
-                color: #207cdd;
-            }
-            .round-btn{
-                border-radius: 50%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding: 5px;
-                width: 20px;
-                height: 20px;
-            }
-            .ellipsed{
-                overflow: hidden;
-                word-wrap: break-word;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-            
-        .search-area{
-            border-radius: 5px;
-            width: 100%;
-            background-color: #f0f0f0;
-            input{
-                outline: none;
-                background-color: #f0f0f0;
-                border:0; 
-                width: 85%;
-            }
-            i:hover{
-                cursor: pointer;
-
-            }
-        }
-        .toggle-btn {
-            display: none;
-            color: white;
-            background-color: #333;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-        }
-            @media (max-width: 768px) {
-                .navbar-center {
-                    display: none;
-                }
-                .toggle-btn {
-                display: block;
-            }
-            
-            }
-            /* @media (min-width: 768px){
-                #mobile-search{
-                display: block;
-            }
-            } */
-
-        </style>
-
-
-<!--battles style-->
-<style>
-/*---notif---*/
-.notifier{
-    font-size: small;
-    /* padding: 4px; */
-}
-</style>
-
-<style>
-    .search-result{
-        padding: 1rem;
-        min-height: 100vh;
-        background-color: #ddd;
-        position: absolute;
-
-    }
-</style>
-<style>
-    .options{
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        position: absolute;
-        z-index: 99;
-    }
-    /* i{
-        font-size: larger;
-    } */
-</style>
-<style>
-    .loading-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(10, 10, 10, 0.5);
-        z-index: 30;
-        display: none;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    .loading-overlay.active {
-        display: flex;
-    }
-
-</style>
-
-
-<style>
-    .filter-button.active {
-        background-color: #e67010;
-        /* color: #1a202c; */
-    }
-    .filter-container::-webkit-scrollbar {
-            height: 6px;
-        }
-    .filter-container::-webkit-scrollbar-thumb {
-            background-color: #4a5568;
-            border-radius: 3px;
-        }
-    *::-webkit-scrollbar {
-            height: 6px;
-            width: 6px;
-        }
-    *::-webkit-scrollbar-thumb {
-            background-color: #4a5568;
-            border-radius: 3px;
-        }
-        
-    @media (max-width: 640px) {
-        .fab{
-            display: block;
-        }
-
-        .filter-container {
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            padding-bottom: 1rem;
-        }
-        .filter-button {
-            flex: 0 0 auto;
-        }
-        
-    }
-    @media (min-width: 640px){
-        .filter-container {
-        justify-content: center;
-        }
-        /* .bottom-nav{
-            display: none;
-        } */
-    }
-</style>
-
-<style>
-    .my-toast {
-               max-width: 350px;
-               min-width: 150px;
-               padding: 12px 16px;
-               border-radius: 4px;
-               margin-bottom: 10px;
-               margin: auto;
-               box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-               display: flex;
-               align-items: center;
-               justify-content: space-between;
-               animation: fadeInDown 0.5s forwards;
-               /* animation-duration: 0.5s;
-               animation-fill-mode: forwards;  */
-           }
-
-   .my-toast-success {
-       background-color: #10B981;
-       color: #ffffff;
-   }
-
-   .my-toast-error {
-       background-color: #EF4444;
-       color: #ffffff;
-   }
-
-   .my-toast-warning {
-       background-color: #F59E0B;
-       color: #ffffff;
-   }
-
-   .my-toast-info {
-       background-color: #3B82F6;
-       color: #ffffff;
-   }
-
-   .my-toast-close {
-       background: none;
-       border: none;
-       color: #ffffff;
-       cursor: pointer;
-       font-size: 16px;
-       margin-left: 10px;
-   }
-
-   @keyframes slideIn {
-       from {
-           transform: translateX(100%);
-           opacity: 0;
-       }
-       to {
-           transform: translateX(0);
-           opacity: 1;
-       }
-   }
-
-   @keyframes fadeOut {
-       from {
-           opacity: 1;
-       }
-       to {
-           opacity: 0;
-       }
-   }
-   @keyframes scaleIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        .animate-scaleIn {
-            animation: scaleIn 0.3s ease-out;
-        }
-</style>
-
-
-<!--Modal for images-->
-<style>
-   .myImg{
-    cursor: pointer;
-   }
-    
-    /* The Modal (background) */
-    .img-modal {
-      display: none; /* Hidden by default */
-      position: fixed; /* Stay in place */
-      z-index: 1000; /* Sit on top */
-      padding-top: 100px; /* Location of the box */
-      left: 0;
-      top: 0;
-      width: 100%; /* Full width */
-      height: 100%; /* Full height */
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgb(0,0,0); /* Fallback color */
-      background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
-
-        /* Modal Content (image) */
-    .modal-content {
-      margin: auto;
-      display: block;
-      width: 80%;
-      max-width: 700px;
-    }
-       
-    
-    /* Add Animation */
-    .modal-content, #caption {  
-      /* min-height: 300px; */
-        animation-name: zoom 2s;
-      animation-duration: 0.6s;
-    }
-    
-    
-    /* The Close Button */
-    .close {
-      position: absolute;
-      top: 135px;
-      right: 35px;
-      color: #f1f1f1;
-      font-size: 40px;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-    
-    .close:hover,
-    .close:focus {
-      color: #bbb;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    
-    /* 100% Image Width on Smaller Screens */
-    @media only screen and (max-width: 700px){
-      .modal-content {
-        width: 70%; 
-      }
-
-      #mobile-search{
-                display: block;
-            }
-    }
-    @keyframes zoom {
-      from {transform: scale(0.1)} 
-      to {transform: scale(1)}
-    }
-    
-    }
-</style>
-
-<style>
-    .v-divider{
-        height: 100%;
-        width: 2px;
-        background-color: #ccc;
-        color: white;
-        margin: 0 10px;
-        
-    }
-    /* .reply-box {
-            border-left: 2px solid #4B5563;
-            margin-left: 2rem;
-        } */
-</style>
-<!-- <style>
-    .bottom-nav {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: rgba(31, 41, 55, 0.95);
-        backdrop-filter: blur(10px);
-        z-index: 1000;
-    }
-    .nav-item {
-        transition: all 0.3s ease;
-    }
-    .nav-item:hover, .nav-item.active {
-        color: #F97316;
-        transform: translateY(-5px);
-    }
-    .content-area {
-        padding-bottom: 80px;
-    }
-</style> -->
 
 
     <!-- PushAlert -NGA 
@@ -487,7 +112,7 @@
 
 
     </head>
-    <body class="bg-gray-800 h-screen flex flex-col">
+    <body class="bg-gray-950 h-screen flex flex-col">
         
         <div id="top-toastContainer" class="flex justify-center w-full fixed top-4 right-4 z-50"></div>
 
@@ -501,17 +126,17 @@
         
 
     <!-- Navigation style ='background: transparent;'  -->
-    <nav class="bg-gray-800 fixed w-full z-10 py-2" style="margin-bottom: 1rem;">
+    <nav class="bg-gray-950 fixed w-full z-10 py-2" style="margin-bottom: 1rem;">
         <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Left side: Logo and Search -->
                 <div class="flex items-center">
                     <a href="/home" class="logo-container flex-shrink-0">    
-                    <img class="h-20 w-auto" src="{% static 'images/logo/logo_1.png' %}" alt="Roleplay Verse Logo">
+                    <img class="h-20 w-auto" src="{% static 'images/logo/logo_1_nobg.png' %}" alt="Roleplay Verse Logo">
                     </a>
                     <div id="mobile-search" class="hidden md:block ml-4 ">
                         <div class="relative">
-                            <input type="text" id="searchInput" style="width:100%;" class="bg-gray-700  w-64 text-white px-4 py-2 rounded-full  focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="recherche...">
+                            <input type="text" id="searchInput" style="width:100%;" class="bg-gray-900 border-1 border-gray-700 w-64 text-white px-4 py-2 rounded-full  focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="recherche...">
                             <button  class="absolute right-3 top-2 text-gray-400 hover:text-white">
                                 <!-- <i class="fas fa-search"></i> -->
                                 <svg class="h-6 w-6 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -566,7 +191,7 @@
                                 <!-- <span id="notifier" class="position-absolute top-0 start-100 translate-middle px-1 rounded-pill  bg-danger notifier">    
                                     {{n_notifs}}
                                 </span> -->
-                                <div id="notifier" class="notifier absolute top-0 start-100 translate-middle bg-red-500 text-gray-200  rounded-full w-6 h-6 flex items-center justify-center"> {{n_notifs}}</div>
+                                <div id="notifier" class="notifier absolute top-3 start-100 translate-middle bg-red-500 text-gray-200  rounded-full w-6 h-6 flex items-center justify-center"> {{n_notifs}}</div>
                                 {% endif %}
                             </i>
                             
@@ -585,7 +210,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="ml-4 flex items-center bg-gray-700 rounded-full px-3 py-1">
+                    <div class="ml-4 flex items-center bg-gray-900 border-1 border-gray-700 rounded-full px-3 py-1">
                         <span class="text-orange-500 font-bold mr-2">{{player.battle_points}} JC</span>
                         <a href="{% url 'core:battle_points' %}">
                             <button class="bg-orange-500 text-white rounded-full px-2 py-1 text-xs hover:bg-orange-600 transition duration-300">
@@ -620,26 +245,26 @@
             
             <div id="loading-indicator" class="loader-circle" style="display: none;" class="spinner-border" role="status">
                 <span class="visually-hidden">Loading...</span>
-        </div>
+            </div>
         </div>
               
-              <div class="toast-container position-fixed bottom-0 end-0 p-3">
+              <div class="toast-container position-fixed hidden bottom-0 end-0 p-3">
                 <div id="liveNotificationToast" class="toast text-white bg-gray-800" role="alert" aria-live="assertive" aria-atomic="true">
                   <div class="toast-header text-white bg-gray-800">
-                    <img id="notif-sender-img" src="{{player.profile_picture.url}}" style="width: 40px;height: 40px;border-radius: 50%;margin-right: 1rem;" alt="notification sender profile pic">
-                    <strong id="notif-sender" class="me-auto">sender</strong>
-                    <small id="notif-time">11 mins ago</small>
+                    <img id="notif-sender-img" src="" style="width: 40px;height: 40px;border-radius: 50%;margin-right: 1rem;" alt="notification sender image">
+                    <strong id="notif-sender" class="me-auto"></strong>
+                    <small id="notif-time"></small>
                     <button type="button" class="btn-close text-2xl text-orange-500" data-bs-dismiss="toast" aria-label="Close"></button>
                   </div>
                   <a id="notif-link" href="#">
                   <div  class="toast-body">
-                    content
+                    
                   </div>
                 </a>
                 </div>
             </div>
         
-        </div>
+        
 
         <!-- loading Overlay  -->
 <div id="loading-overlay" class="loading-overlay">
@@ -701,9 +326,161 @@
     
 </div>
 
-        
+{{ playerName|json_script:'player' }}
+{{ player.user.username | json_script:'username' }}
+<script>
+    const currentPlayer = JSON.parse(document.getElementById('player').textContent)
+        const currentPlayerUsername = JSON.parse(document.getElementById('username').textContent)
+        const currentPlayerData = {
+            player: currentPlayer,
+            username: currentPlayerUsername,
+    }
 
-        {% block content %}
+    function createPostElement(post) {
+    const postElement = document.createElement('div');
+    postElement.className = 'post bg-gray-700 rounded-lg p-4';
+    const postElement2 = document.createElement('div');
+    postElement2.className = 'post bg-gray-900 rounded-2xl shadow-sm p-4 border-1 border-gray-700';
+    //postElement.className = 'post-gradient rounded-xl p-6 border border-gray-700 hover-scale'
+    // <span class='ellipsed-text body'>${comment.body}<span>
+    //     <span class = 'full-text hidden body'>${comment.body}</span>
+    postElement.innerHTML = `
+        <div class="flex items-center mb-4 relative">
+            <a href = "/users/${post.author.name}">
+            <img src="${post.author.profile_picture}" alt="${post.author.name}" class="w-10 h-10 rounded-full mr-4">
+            <a>
+            <a href = "/users/${post.author.name}">
+            <h3 class="font-bold hover:text-orange-600">${post.author.player}<br><small class='font-semi-bold text-gray-400'>${post.time_posted}</small></h3>
+            </a>
+    
+            <div class="absolute top-2 right-2">
+                  <button onclick = 'togglePostDropdown(this)'  class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
+                      <i class="fas fa-ellipsis-v"></i>
+                  </button>
+                  <div class="post-dropdown-menu w-48 py-2">
+                        
+                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="toggleToFavorites('${post.id}')">
+                        ${post.is_favorite ? "<i class = 'fas fa-bookmark mr-2'></i>retirer des favoris":"<i class = 'far fa-bookmark mr-2'></i>ajouter aux favoris"}
+                        </div>
+                        
+                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="socialShare(this,'https://roleplayverse.llive/posts/${post.id}')"><i class = 'fas fa-share-alt mr-2'></i>Partager</div>
+                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('https://roleplayverse.live/posts/${post.id}')"><i class = 'fas fa-copy mr-2'></i>copier le lien</div>
+                        ${post.author.name == currentPlayerData.username? 
+                        `
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600"><i class = 'fas fa-pencil-square-o mr-2'></i> Edit</a>
+                        <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deletePost(this,'${post.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
+                        `:`
+                      `}
+                      
+                  
+                    </div>
+            </div>
+        </div>
+        
+        <p class="mb-4 content body">${post.body}</p>
+        ${post.image ? `<img src="${post.image}" alt="Post image" class="myImg w-full rounded-lg mb-4 post-image">` : ''}
+        <div class="post-infos flex items-center justify-between">
+            <button class="like-button bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-full flex items-center ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
+                <i class="far fa-heart mr-2"></i>
+                <span class="like-count">${post.likes}</span>
+            </button>
+            <button class="comment-button bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-full flex items-center">
+                <i class="far fa-comment mr-2"></i>
+                <span class = 'comment-count'>${post.n_comments}</span>
+            </button>
+        </div>
+        <div class="comments border-t  border-gray-600  space-y-4 mt-4 overflow-y-auto p-1" style = 'max-height:200px'>
+            ${post.comments.map(comment =>createComment(comment)).join('')}
+        </div>
+        <form onsubmit='sendComment(this, event)' class="comment-form mt-4" data-post-id = ${post.id}>
+            <input type="text" class="bg-gray-600 text-white p-2 rounded w-full  border-0  focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Add a comment...">
+        </form>
+    `;
+    
+    //imgModalListener()
+    
+    //return postElement;
+    
+    postElement2.innerHTML = `
+    <div class="flex items-start gap-4">
+            <img src="${post.author.profile_picture}" alt="${post.author.player}" class="myImg w-10 h-10 rounded-full" />
+            <div class="flex-1">
+              <div class="flex justify-between text-sm text-gray-400">
+                <div>
+                  <a href = "/users/${post.author.name}" class="inline-block font-semibold hover:text-orange-600 text-white">${post.author.player}</a> @${post.author.player}
+                </div>
+                
+    
+                 <div class="relative flex space-x-2">
+                  <span>${post.time_posted}</span>
+                  <button onclick = 'togglePostDropdown(this)'  class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
+                      <i class="fas fa-ellipsis-v"></i>
+                  </button>
+                  <div class="post-dropdown-menu bg-gray-800 w-48 py-2">
+                        
+                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="toggleToFavorites('${post.id}')">
+                        ${post.is_favorite ? "<i class = 'fas fa-bookmark mr-2'></i>retirer des favoris":"<i class = 'far fa-bookmark mr-2'></i>ajouter aux favoris"}
+                        </div>
+                        
+                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="socialShare(this,'https://roleplayverse.live/posts/${post.id}')"><i class = 'fas fa-share-alt mr-2'></i>Partager</div>
+                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('https://roleplayverse.live/posts/${post.id}')"><i class = 'fas fa-copy mr-2'></i>copier le lien</div>
+                        ${post.author.name == currentPlayerData.username? 
+                        `
+                        <!--
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600"><i class = 'fas fa-pencil-square-o mr-2'></i> Edit</a>
+                        -->
+                        <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deletePost(this,'${post.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
+                        `:`
+                      `}
+                      
+                  
+                    </div>
+                </div>
+              </div>
+              <p class="text-base text-gray-800 dark:text-gray-100 mt-1 data-expandable">
+                ${post.body}
+              </p>
+                ${post.image ? `
+                <div class="mt-3">
+                <img  src="${post.image}" alt="${post.author.player} image de publication" class="w-full myImg rounded-xl border-1 border-gray-700 object-cover max-h-64" />
+              </div>
+                ` : ''}
+              
+              <div class="flex justify-between mt-4 text-gray-500 dark:text-gray-400 text-sm">
+                <button class="like-button flex items-center space-x-1 hover:text-orange-500 ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
+                <i class="far fa-heart"></i>
+                <span class="like-count">${post.likes}</span>
+                </button>
+                <button class="comment-button flex items-center space-x-1 hover:text-blue-500">            
+                <i class="far fa-comment"></i>
+                <span class = 'comment-count'>${post.n_comments}</span>
+                </button>
+                
+                <button class="flex items-center space-x-1 hover:text-green-500" onclick="socialShare(this,'https://roleplayverse.live/posts/${post.id}')">
+                  <i class = 'fas fa-share-alt'></i><span>partager</span>
+                </button>
+              </div>
+    
+               
+    
+              <div class="mt-4 space-y-3 comments max-h-64 overflow-y-auto" style='max-height:300px'>
+                 ${post.comments.map(comment =>createComment(comment)).join('')}
+              </div>
+    
+               <form onsubmit='sendComment(this, event)' class="comment-form mt-4" data-post-id = ${post.id}>
+                    <input type="text" class="bg-gray-800 text-white p-2 rounded w-full  border-0  focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="ajoute un commentaire...">
+                </form>
+    
+              
+        
+            </div>
+          </div>
+    `
+    return postElement2
+    }
+</script>
+
+     {% block content %}
         {% endblock content %}
         
         <!-- <nav class="bottom-nav">
@@ -753,12 +530,17 @@
             </a>
     
         </div>     
+
         {% block main_active %}
         {% endblock main_active  %}
         <!--Linkify js-->
+ 
         
+       
 <!--Image Modal script-->
         <script>
+            
+    //document.addEventListener('DOMContentLoaded', );
         //    const currentPlayerData = {
         //     player: '{{player}}',
         //     username: '{{player.user.username}}',
@@ -825,170 +607,7 @@
           });      
       
               }
-    function createComment(comment){
-        var c_player = {
-            'username': '{{player.user.username}}',
-            'player':'{{player}}',
-        }
-        // <button data-comment-id="${comment.id}" class='text-xs'><i class="fas fa-mail-reply text-xs ml-2 mr-1"></i><span class=''>2 replies</span></button>
-   /*
-        return `
-            <div  class="flex flex-col comment bg-gray-600 rounded p-2 " data-toggle="tooltip" data-placement='top' title = '${comment.body}' >
-                <a class = "font-semibold flex items-center hover:text-orange-500" href='/users/${comment.author.username}'>
-                    <img src="${comment.author.profile_picture}" alt="${comment.author.username}" class="w-5 h-5 rounded-full mr-1"> <span>${comment.author.player}</span> 
-                </a>
-                <span class='body text-gray-300 pl-6'>${comment.body}<span>
-            </div>
-            <div>
-                <span class='font-semi-bold text-xs text-gray-400'>${comment.timestamp}</span> 
-                <button data-comment-id="${comment.id}" class='text-xs comment-like-button  rounded-full ${comment.liked ? 'liked' : ''}'><i class="far fa-heart  ml-2 mr-1"></i><span class='comment-likes-count'>${comment.likes}</span></button>                
-            </div>
-           
-            <br>
-    `
-    */
-    
-    // return `
-    //     <div class="max-w-2xl  space-y-4">
-    //     <!-- Original Comment -->
-    //     <div class="rounded-lg p-2">
-    //         <div class="flex items-start space-x-4">
-    //             <a class = "font-semibold inline-block flex items-center hover:text-orange-500" href='/users/${comment.author.username}'>
-    //                 <img src="${comment.author.profile_picture}" alt="${comment.author.username}" class="w-10 h-10 rounded-full"> 
-    //             </a>
-    //             <div class="flex-1">
-    //                 <div class="flex items-center space-x-2">
-    //                     <a href='/users/${comment.author.username}' class="text-orange-500 font-semibold inline-block hover:text-orange-500 ">${comment.author.player}</a>
-    //                     <span class="text-gray-400 text-sm">${comment.timestamp}</span>
-    //                 </div>
-    //                 <p class="body text-white mt-1">${comment.body}</p>
-                    
-    //                 <!-- Comment Actions -->
-    //                 <div class="flex items-center space-x-4 mt-2">
-    //                     <button class="text-gray-400 hover:text-orange-500 text-sm flex items-center space-x-1">
-    //                         <i class="fas fa-reply"></i>
-    //                         <span>Reply</span>
-    //                     </button>
-    //                     <button data-comment-id="${comment.id}" class='text-xs comment-like-button hover:text-orange-500  rounded-full ${comment.liked ? 'liked' : ''}'>
-    //                         <i class="far fa-heart "></i>
-    //                         <span class='comment-likes-count'>${comment.likes}</span>
-    //                     </button>                
-    //                 </div>
-    //             </div>
-    //         </div>
-
-    //         <!-- Replies Container -->
-    //         <div class="reply-box hidden border-l border-gray-900 pl-4  mt-4 space-y-4">
-    //             <!-- Reply 1 -->
-    //             <div class="reply-enter bg-gray-700 rounded-lg p-2">
-    //                 <div class="flex items-start space-x-3">
-    //                     <a class = "font-semibold inline-block flex items-center hover:text-orange-500" href='/users/${comment.author.username}'>
-    //                   <img src="${comment.author.profile_picture}" alt="${comment.author.username}" class="w-5 h-5 rounded-full mr-1"> <span>${comment.author.player}</span> 
-    //                   </a>
-    //                     <div class="flex-1">
-    //                         <div class="flex items-center space-x-2">
-    //                             <span class="text-orange-500 font-semibold">ShadowMage</span>
-    //                             <span class="text-gray-400 text-xs">1 hour ago</span>
-    //                         </div>
-    //                         <p class="text-white text-sm mt-1">Totally agree! The graphics are incredible.</p>
-                            
-    //                         <!-- Reply Actions -->
-    //                         <div class="flex items-center space-x-4 mt-2">
-    //                             <button class="text-gray-400 hover:text-orange-500 text-xs flex items-center space-x-1">
-    //                                 <i class="fas fa-reply"></i>
-    //                                 <span>Reply</span>
-    //                             </button>
-    //                             <button class="like-button text-gray-400 hover:text-orange-500 text-xs flex items-center space-x-1">
-    //                                 <i class="fas fa-heart"></i>
-    //                                 <span>5</span>
-    //                             </button>
-    //                         </div>
-    //                     </div>
-    //                 </div>
-    //             </div>
-
-    //             <!-- Reply 2 -->
-    //             <div class="reply-enter bg-gray-700 rounded-lg p-3">
-    //                 <div class="flex items-start space-x-3">
-    //                     <img src="https://placehold.co/32x32" alt="Reply User Avatar" class="w-8 h-8 rounded-full">
-    //                     <div class="flex-1">
-    //                         <div class="flex items-center space-x-2">
-    //                             <span class="text-orange-500 font-semibold">StormBringer</span>
-    //                             <span class="text-gray-400 text-xs">30 mins ago</span>
-    //                         </div>
-    //                         <p class="text-white text-sm mt-1">Have you tried the new update? It's even better now!</p>
-                            
-    //                         <!-- Reply Actions -->
-    //                         <div class="flex items-center space-x-4 mt-2">
-    //                             <button class="text-gray-400 hover:text-orange-500 text-xs flex items-center space-x-1">
-    //                                 <i class="fas fa-reply"></i>
-    //                                 <span>Reply</span>
-    //                             </button>
-    //                             <button class="like-button text-gray-400 hover:text-orange-500 text-xs flex items-center space-x-1">
-    //                                 <i class="fas fa-heart"></i>
-    //                                 <span>3</span>
-    //                             </button>
-    //                         </div>
-    //                     </div>
-    //                 </div>
-    //             </div>
-
-                
-                
-    //         </div>
-    //     </div>
-    // </div>
-
-    // `
-   
-    return `
-    
-                        <div class="flex comment items-start space-x-3" data-toggle="tooltip" data-placement='top' title = '${comment.body}'>
-                            <a class = "font-semibold inline-block  hover:text-orange-500" href='/users/${comment.author.username}'>
-                                     <img src="${comment.author.profile_picture}" alt="${comment.author.username}" class="w-8 h-8 rounded-full"> 
-                            </a>
-                            <div class="flex-1  rounded-lg p-1">
-                                <div class="flex items-center justify-between mb-1 relative">
-                                    <div class="flex items-center space-x-2">
-                                        <a href='/users/${comment.author.username}' class="text-orange-500 text-sm font-semibold inline-block hover:text-orange-600 ">${comment.author.player}</a>
-                                        <!--
-                                        <span class="text-xs text-gray-400">${comment.timestamp}</span>
-                                        -->
-                                    </div>
-                                    <div class="absolute top-0 right-2">
-                                        <button onclick = 'toggleDropdown(this)' class="text-gray-400 hover:text-white post-dropdown-toggle">
-                                            <i class="fas fa-ellipsis-h"></i>
-                                        </button>
-
-                                        <div class="post-dropdown-menu w-48 py-2">
-                                            <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('${comment.body}')"><i class = 'fas fa-copy mr-2'></i>copier</div>
-                                            <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick=""><i class = 'fas fa-flag mr-2'></i> signaler</div>
-                                            
-                                            ${comment.author.username == c_player.username ?  `
-                                            
-                                            <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deleteComment(this,'${comment.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
-                                            `:``}
-                                        </div>
-                                    </div>    
-                            </div>
-                            <p class="body text-sm text-gray-300">${comment.body}</p>
-                            <div class="flex items-center space-x-4 mt-2 text-sm">
-                                    
-                                    <span class="text-xs text-gray-400">${comment.timestamp}</span>
-                                    <button data-comment-id="${comment.id}" class='text-xs comment-like-button  rounded-full ${comment.liked ? 'liked' : ''}'>
-                                        <i class="far fa-heart  mr-1"></i>
-                                        <span class='comment-likes-count'>${comment.likes}</span>
-                                    </button>
-                                    <button data-comment-id="${comment.id}" class="reply-button text-gray-400 text-xs hover:text-orange-500">Reply</button>
-                                    <!--
-                                    <span class="text-gray-400">5 likes</span>
-                                    -->
-                                </div>
-                            </div>
-                        </div>
-    `
-    
-}
+  
     function sendComment(element, e){
     e.preventDefault()
     //const commentForm = $('.comment-form')
@@ -1268,6 +887,7 @@ function deleteComment(element, id){
                 }else if(message_type == 'family'){
                     link = `/chats/group/${sender}`
                 }
+                // $('.toast-container').removeClass('hidden')
                 const toastLiveExample = document.getElementById('liveNotificationToast')
                 $("#notif-link").attr("href", link)
                 $(".toast-header #notif-sender").text(sender)

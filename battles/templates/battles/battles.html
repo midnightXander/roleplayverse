@@ -42,12 +42,100 @@
     }
 </style>
 
+<div class="mt-10" >-</div>
+<div class="max-w-xl mt-5 mx-auto px-4 py-6 space-y-6">
+    <!-- Player Info Section -->
+    <!-- Existing content remains unchanged -->
 
+    <!-- Battle Request Creation -->
     
-<main class="container mx-auto mt-28 pb-10 px-4">
-    
+    <form id="battleRequestForm" class="bg-gray-900 rounded-2xl shadow-md p-5 space-y-4" method="post" action="{% url 'battles:request' %}">
+            {% csrf_token %} 
+      <h2 class="text-xl font-semibold">Créer une Réquete de Combat</h2>
+
+      <!-- Character Selection -->
+      <div class="space-y-2">
+        <label class="inline-block text-sm font-medium">Choisie ton personnage</label>
+
+        <!-- Search Input -->
+        <input id="character-search" type="text" placeholder="rechercher personnage..."
+          class="w-full px-4 py-2 rounded-lg border border border-gray-700 bg-gray-800 mb-3">
+
+        <!-- Character Scrollable Selection -->
+        <div id="character-list" class="flex relative w-96 h-32 overflow-x-auto gap-4 pb-2">
+            <label class="relative group cursor-pointer shrink-0">
+                <input type="radio" name="character" value="{{characters.0.name}}" class="hidden peer" checked>
+                
+                <img src="{{characters.0.images.1}}" data-name="{{characters.0.name}}" class="rounded-xl border-2 border-transparent peer-checked:border-orange-500 transition w-28 h-28 object-cover" />
+                <div class="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">{{characters.0.name}}</div>
+            </label>
+          {% for character in characters|slice:"2:"  %}
+            <label class="relative group cursor-pointer shrink-0">
+            <input type="radio" name="character" value="{{character.name}}" class="hidden peer">
+            {% if character.images.1 %}
+            <img src="{{character.images.1}}" data-name="{{character.name}}" class="rounded-xl border-2 border-transparent peer-checked:border-orange-500 transition w-28 h-28 object-cover" />
+            {% else %}
+            <img src="{{character.images.0}}" data-name="{{character.name}}" class="rounded-xl border-2 border-transparent peer-checked:border-orange-500 transition w-28 h-28 object-cover" />
+            {% endif %}
+            
+            <div class="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">{{character.name}}</div>
+          </label>
+          {% endfor %}
+
+          <div id="character-loading-indicator" class="hidden absolute w-full bg-black h-full bg-opacity-50  text-center">
+            <!-- <i  class="fas fa-spinner "></i> -->
+            <i class="fa-solid fa-circle-notch rotate w-16 h-16 text-orange-500"></i>
+            <p class="text-xs">chargement des persos...</p>
+        </div>
+          
+          <!-- Add more characters as needed -->
+        </div>
+      </div>
+
+
+        <p class="text-sm text-gray-400">Consulte le <a href="/characters" class="text-orange-500 hover:text-orange-600">catalogue de personnages</a> pour connaître tous les jutsu de tes personnages préférés.</p>
+
+      <!-- Battle Type Selection -->
+      <div class="space-y-2">
+        <label class="block text-sm font-medium">Type de Combat</label>
+        <select id="battleType-select" name="type" class="w-full px-4 py-2 rounded-lg border border-gray-700 bg-gray-800">
+            <option value = "friendly">Amicale</option>
+            <option value = "stake">Stake</option>
+            <option value = "rumble" disabled>Rumble</option>
+        </select>
+        <p class="mt-2 text-gray-400 text-sm"><i class="fas fa-exclamation-triangle text-xl text-yellow-500 mr-2"></i>  des jetons de combat(JC) seront deduit en créant des RDC de type <span class="font-bold text-orange-500">stake</span>.<br><a href="#" class="text-orange-500">comment ça marçhe</a></p>
+      </div>
+      {% for message in messages %}
+                <div class="text-sm mb-4">
+                    {% if message.tags == 'error' %}
+                    <p class="text-red-500 mb-2">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        {{message}}
+                    </p>
+                    <a class="text-orange-500 border border-yellow-500 p-2 rounded" href="{% url 'core:battle_points' %}">Obtenir des jetons de combat</a>
+                        {% else %}
+                    <p class="text-green-500">
+                    <i class="fas fa-check-circle mr-2"></i>
+                        {{message}}
+                    </p>
+
+                    <p class="text-gray-400">
+                    Tu peux consulter et voir l'état de tes requètes(RDC) sur ton profile, tes RDC et combats ne sont pas affichés ici
+                    </p>
+                    {% endif %}            
+                </div>
+                {% endfor %}
+
+      <!-- Submit Button -->
+      <button onsubmit="disableSubmitButton(this); showOverlay(); "  class="request-button w-full bg-[#d45822] hover:bg-orange-600 text-white py-2 rounded-xl font-semibold transition">🚀 Envoyer la Requete</button>
+    </form>
+
+    <!-- Existing sections remain unchanged -->
+  </div>
+<main class="container mx-auto pb-10 px-4">
+   
         
-    <div class="bg-gray-700 rounded-lg p-6 mb-8">
+    <!-- <div class="bg-gray-800 rounded-lg p-6 mb-8">
         <h2 class="text-2xl font-bold text-orange-500 mb-4">Créer une réquete de combat</h2>
         <form id="battleRequestForm" class="space-y-4" method="post" action="{% url 'battles:request' %}">
             {% csrf_token %}
@@ -93,7 +181,7 @@
                         <i class="fas fa-exclamation-triangle mr-2"></i>
                         {{message}}
                     </p>
-                    <a class="text-yellow-500 border-1 border-yellow-500 p-2 rounded" href="{% url 'core:battle_points' %}">Obtenir des jetons de combat</a>
+                    <a class="text-yellow-500 border border-yellow-500 p-2 rounded" href="{% url 'core:battle_points' %}">Obtenir des jetons de combat</a>
                         {% else %}
                     <p class="text-green-500">
                     <i class="fas fa-exclamation-triangle mr-2"></i>
@@ -111,30 +199,30 @@
                 <i class="fas fa-fist-raised mr-2"></i>Créer la réquete 
             </button>
         </form>
-    </div>
+    </div> -->
 
     <div class="filter-container w-full mx-auto flex space-x-2 mb-6 overflow-x-auto pb-2">
-        <button data-url="/battles/requests" data-=""   class="filter-button border-1 border-gray-600 shadow-md px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
+        <button data-url="/battles/requests" data-=""   class="filter-button border border-gray-700 shadow-md px-4 py-2 rounded-xl hover:bg-gray-500 transition duration-300">
             <i class="fas fa-envelope mr-2"></i>RDC
         </button>
-        <button  data-url="{% url 'battles:filter' 0 %}" data-filter = '0' class="filter-button border-1 border-gray-600 shadow-md px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
+        <button  data-url="{% url 'battles:filter' 0 %}" data-filter = '0' class="filter-button border border-gray-700 shadow-md px-4 py-2 rounded-xl hover:bg-gray-500 transition duration-300">
             <i class="fas fa-hourglass-start mr-2"></i>En attente D'arbitrage
         </button>
-        <button  data-url="/battles/filter/1" data-filter = '1'  class="filter-button border-1 border-gray-600 shadow-md px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
+        <button  data-url="/battles/filter/1" data-filter = '1'  class="filter-button border border-gray-700 shadow-md px-4 py-2 rounded-xl hover:bg-gray-500 transition duration-300">
             
             <i class="fas fa-user-shield mr-2"></i>Pas commencé
         </button>
-        <button  data-url="/battles/filter/2" data-filter = '2' class="filter-button border-1 border-gray-600 shadow-md px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
+        <button  data-url="/battles/filter/2" data-filter = '2' class="filter-button border border-gray-700 shadow-md px-4 py-2 rounded-xl hover:bg-gray-500 transition duration-300">
             <i class="fas fa-fire mr-2"></i>En cours
         </button>
-        <button  data-url="/battles/filter/3" data-filter = '3' class="filter-button border-1 border-gray-600 shadow-md px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
+        <button  data-url="/battles/filter/3" data-filter = '3' class="filter-button border border-gray-700 shadow-md px-4 py-2 rounded-xl hover:bg-gray-500 transition duration-300">
             <i class="fas fa-flag-checkered mr-2"></i>Terminé
         </button>
     </div>
 
     <div class="battles-container grid mb-20 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {%  for request in requests %} 
-            <div class="battle-card border-1 border-gray-600 shadow-md rounded-lg p-6 flex flex-col">
+            <div class="battle-card border border-gray-600 shadow-md rounded-lg p-6 flex flex-col">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-xl font-bold">RDC</h3>
                     <span class="bg-yellow-500 text-gray-800 px-2 py-1 rounded-full text-sm">{{request.type}}</span>
@@ -154,7 +242,7 @@
                     <i class="fas fa-bolt text-yellow-500 text-2xl"></i>
                    
                 </div>
-                <button data-url="{% url 'battles:accept' request.id %}" data-requesttype="{{request.type}}" data-character="{{request.character}}" data-requestsender="{{request.sender}}"  class="accept-button border-1 border-green-500 text-green-500 px-4 py-2 cursor-pointer rounded-lg hover:bg-green-600 transition duration-300">
+                <button data-url="{% url 'battles:accept' request.id %}" data-requesttype="{{request.type}}" data-character="{{request.character}}" data-requestsender="{{request.sender}}"  class="accept-button border border-green-500 text-green-500 px-4 py-2 cursor-pointer rounded-lg hover:bg-green-600 transition duration-300">
                     <i class="fas fa-check mr-2"></i>Accepter
                 </button>
                 
@@ -170,7 +258,7 @@
                 </a>
             </div>
         {% for battle in battles %}
-        <div class="battle-card bg-gray-700 rounded-lg p-6 flex flex-col">
+        <div class="battle-card bg-gray-900 border border-gray-700 rounded-lg p-6 flex flex-col">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-xl font-bold">{{battle.status}}</h3>
                 <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-sm">{{battle.type}}</span>
@@ -193,7 +281,7 @@
                 </div>
             </div>
             {% if battle.can_refree %}
-            <button data-battle_id="{{battle.id}}" class="proposal-btn border-1 border-purple-500 text-purple-500 px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
+            <button data-battle_id="{{battle.id}}" class="proposal-btn border border-purple-500 text-purple-500 px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
                 <i class="fas fa-gavel mr-2"></i>proposer d'arbitrer
             </button>
             {% else %}
@@ -201,7 +289,7 @@
             
             <div class='flex justify-between items-center'>
 
-            <a href="/battles/battle_room/{{battle.id}}" class="inline-block shadow-md bg-transparent border-1 border-orange-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
+            <a href="/battles/battle_room/{{battle.id}}" class="inline-block shadow-md bg-transparent border border-orange-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
                 voir le combat 
             </a>
 
@@ -309,92 +397,68 @@
 </script>
 {% endblock main_active  %}
 
+<script>
+    function setupCharacterSearch() {
+      const input = document.getElementById('character-search');
+      const characters = document.querySelectorAll('#character-list label');
+      
+      input.addEventListener('input', () => {
+        const search = input.value.toLowerCase().trim(); // Normalize input by converting to lowercase and trimming whitespace
+        
+        characters.forEach(label => {
+          let name = label.querySelector('img').getAttribute('data-name');
+          name = name.toLowerCase().trim()
+          if (name.includes(search)) {
+            label.classList.remove('hidden');
+            
+          } else {
+            label.classList.add('hidden');
+          }
+        });
+      });
+    }
 
+
+    function loadCharacters(){
+        // $.ajax({
+        //     url: '',
+        //         type: "GET",
+        //         data: {
+        //             csrfmiddlewaretoken:"{{ csrf_token }}",
+        //         },
+        //         beforeSend: function(){
+        //             $('#character-loading-indicator').removeClass('hidden')
+        //         },
+        //         success: function(res){
+        //                 if(res.status == "success"){
+                            
+        //                    //populate characters
+                            
+        //                 }else{
+        //                     showMyToast(res.message,'info',5500)
+        //                 }
+        //         },
+        //         complete: function(){
+        //             $('#loading-overlay').addClass('hidden')
+        //         },
+        //         error: function(jqXHR, textstatus, errorThrown){
+        //             showMyToast("Une erreur s'est produite, veillez recharger la page ", 'error')
+
+        //         }
+
+
+        // })
+    }
+
+    setupCharacterSearch();
+    document.addEventListener('DOMContentLoaded', () => {
+    //   setupExpandableText();
+      setupCharacterSearch();
+    });
+</script>
 
 <script>
-    function  createBattleElement(battle){
-    const battleElement = document.createElement('div')
-    battleElement.className = 'battle-card  bg-gray-700 rounded-lg p-6 flex flex-col';
-    battleElement.innerHTML = `
-                                <div class="flex justify-between items-center mb-4">
-                                    <h3 class="text-xl font-bold">${battle.status}</h3>
-                                    <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-sm">${battle.type}</span>
-                                </div>
-                                <div class="flex justify-between items-center mb-4 flex-col">
-                                    <div class="flex items-center">
-                                        <img src="${battle.initiator.profile_picture}" alt="${battle.initiator.player}" class="w-12 h-12 rounded-full mr-4">
-                                        <div>
-                                            <a href="/users/${battle.initiator.username}" class="font-bold hover:text-orange-500 ">
-                                                ${battle.initiator.player} ${ battle.winner ? (battle.winner.id == battle.initiator.id ? "<span class='text-green-500'>W</span>": ''):''}
-                                            </a>
-                                            <p class="text-sm text-gray-400">Rank: ${battle.initiator.rank}</p>
-                                        </div>
-                                    </div>
-                                    <i class="fas fa-bolt text-yellow-500 text-2xl"></i>
-                                    <div class="flex items-center">
-                                        <div class="text-right mr-4">
-                                            <a href="/users/${battle.opponent.username}" class="font-bold hover:text-orange-500 ">
-                                                ${battle.opponent.player} ${ battle.winner ? (battle.winner.id == battle.opponent.id ? "<span class='text-green-500'>W</span>": ''):''}
-                                            </a>
-                                            <p class="text-sm text-gray-400">Rank: ${battle.opponent.rank}</p>
-                                        </div>
-                                        <img src="${battle.opponent.profile_picture}" alt="${battle.opponent.player}" class="w-12 h-12 rounded-full">
-                                    </div>
-                                </div>
-                                ${battle.can_refree ? `<button data-battle_id="${battle.id}" class= "proposal-btn border-1 border-purple-500 text-purple-500 px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
-                                    <i class="fas fa-gavel mr-2"></i>Propose as Referee
-                                </button>`:`
-                                <div class='flex justify-between items-center' > 
-                                <a href="/battles/battle_room/${battle.id}" class="inline-block bg-transparent border-1 border-orange-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
-                                        voir le combat 
-                                </a>
-
-                                <div><i class="fas fa-eye mr-2"></i>: <span  class='text-orange-500' >${battle.spectators}</span></div>
-                                <div>
-                                
-                                ` }
-                            `
     
-    return battleElement
-}
-
-    
-function createRequest(request){
-
-    return `
-     <div class="battle-card border-1 border-gray-600 shadow-md rounded-lg p-6 flex flex-col">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-xl font-bold">RDC</h3>
-                            <span class="bg-yellow-500 text-gray-800 px-2 py-1 rounded-full text-sm">${request.type}</span>
-                        </div>
-                        <div class="flex justify-between items-center mb-4">
-                            <div class="flex items-center">
-                                <a href="/users/${request.sender.username}">
-                                    <img src="${request.sender.profile_picture}" alt="Challenger" class="w-12 h-12 rounded-full mr-4">
-                                </a>
-                                <div>
-                                    
-                                    <a href="/users/${request.sender.username}" class="font-bold">${request.sender.player}</a>
-                                    <p class="font-bold ">avec <span class="text-yellow-500">${request.character}</span></p>
-                                    <p class="text-sm text-gray-400">Rang: ${request.sender.rank}</p>
-
-                                    <small class=" font-bold text-sm text-gray-400">${request.date_sent}</small>
-                                </div>
-                            </div>
-                            <i class="fas fa-bolt text-yellow-500 text-2xl"></i>
-                            
-                        </div>
-                        <button class="accept-button border-1 border-green-500 text-green-500 px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300" data-url="/battles/accept/${request.id}" data-requesttype="${request.type}" data-character="${request.character}" data-requestsender="${request.sender.player}">
-                            <i class="fas fa-check mr-2"></i>Accepter
-                        </button>
-
-                </div>
-                          
-    
-    `
-
-}
-
     const battleRequestForm = document.getElementById('battleRequestForm');
     const requestButton = $('.battleRequestForm .request-button');
     const requestBattlePopup = $('#confirmRequestPopup');

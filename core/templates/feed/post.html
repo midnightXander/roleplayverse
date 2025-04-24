@@ -106,66 +106,7 @@
 // }
 
 
-    // Function to create a post element
-    function createPostElement(post) {
-    const postElement = document.createElement('div');
-    postElement.className = 'post max-w-5xl w-11/12 mx-auto mb-5 bg-gray-700 rounded-lg p-4';
-    
-    postElement.innerHTML = `
-        <div class="flex items-center mb-4 relative">
-            <a href = "/users/${post.author.name}">
-            <img src="${post.author.profile_picture}" alt="${post.author.name}" class="w-10 h-10 rounded-full mr-4">
-            <a>
-            <a href = "/users/${post.author.name}">
-            <h3 class="font-bold hover:text-orange-600">${post.author.player}<br><small class='font-semi-bold text-gray-400'>${post.time_posted}</small></h3>
-            </a>
-    
-            <div class="absolute top-2 right-2">
-                  <button class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
-                      <i class="fas fa-ellipsis-v"></i>
-                  </button>
-                  <div class="post-dropdown-menu w-48 py-2">
-                      <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="toggleToFavorites('${post.id}')"><i class = 'fas fa-bookmark mr-2'></i>Save</div>
-                      <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="socialShare(this,'https://roleplayverse.com/posts/${post.id}')"><i class = 'fas fa-share mr-2'></i>Share</div>
-                      <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('https://roleplayverse.com/posts/${post.id}')"><i class = 'fas fa-copy mr-2'></i>copy link</div>
-                      ${post.author.name == currentPlayerData.username? `
-                      <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600"><i class = 'fas fa-pencil-square-o mr-2'></i> Edit</a>
-                       <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deletePost(this,'${post.id}')"><i class = 'fas fa-trash  mr-2'></i> Delete</div>
-                      `:`
-                      `}
-                      
-                  
-                    </div>
-            </div>
-        </div>
-        
-        <p class="mb-4 body">${post.body}</p>
-        ${post.image ? `<img src="${post.image}" alt="Post image" class="myImg w-full rounded-lg mb-4 post-image">` : ''}
-        <div class="post-infos flex items-center justify-between">
-            <button class="like-button flex items-center ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
-                <i class="far fa-heart text-xl mr-2"></i>
-                <span class="like-count">${post.likes}</span>
-            </button>
-            <button class="comment-button flex items-center">
-                <i class="far fa-comment text-xl mr-2"></i>
-                <span class = 'comment-count'>${post.comments.length}</span>
-            </button>
-        </div>
-         <div class="comments mt-4 overflow-y-auto px-1" style = 'max-height:200px'>
-        ${post.comments.map(comment =>createComment(comment)).join('')}
-    </div>
-        <form class="comment-form mt-4" data-post-id = ${post.id}>
-            <input type="text" class="bg-gray-600 text-white p-2 rounded w-full" placeholder="Add a comment...">
-        </form>
-    `;
-    
-    imgModalListener()
-    
-    return postElement;
-    }
-    
-  
-    
+   
     
     // Function to render posts
     function renderPost() {

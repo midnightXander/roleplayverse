@@ -71,11 +71,11 @@
     }
 </style>
 
-<main class="chats-main  bg-gray-700 rounded-lg p-6 md:mt-16 text-gray-300 flex-grow flex flex-col md:flex-row overflow-hidden" >
+<main class="chats-main  bg-gray-950 rounded-lg p-6 md:mt-16 text-gray-300 flex-grow flex flex-col md:flex-row overflow-hidden" >
     <!-- Sidebar -->
-    <aside class="chats-container  w-full md:w-1/4 bg-gray-800 rounded-lg  border-gray-200 overflow-y-auto">
-        <div class="p-4">
-            <input id="searchChats" type="text" placeholder="Rechercher une conversation..." oninput="searchChats()" class="w-full p-2  rounded-full bg-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500">
+    <aside class="chats-container w-full md:w-1/4 bg-gray-950 md:bg-gray-900 rounded-lg  border-gray-200 overflow-y-auto">
+        <div class="p-4 mt-4">
+            <input id="searchChats" type="text" placeholder="Rechercher une conversation..." oninput="searchChats()" class="w-full p-2  rounded-full bg-gray-900 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500">
         </div>
 
         <ul id="chatList" class="">
@@ -83,8 +83,8 @@
             
             {% if player.family %}
             <!-- border-b border-gray-700 -->
-            <li class='chat  p-2  hover:bg-gray-700 cursor-pointer transition duration-300'>
-                <a href="{% url 'chat:family_chat' player.family %}">
+            <li  class='chat  p-2  hover:bg-gray-800 cursor-pointer transition duration-300'>
+                <a onclick="showOverlay()" href="{% url 'chat:family_chat' player.family %}">
                     
                     <div class="flex items-center">
                         <img src="{{player.family.profile_picture.url}}" alt="{{player.family}} profile picture" class="w-12 h-12 rounded-full mr-4">
@@ -102,7 +102,7 @@
 
             {% for chat in chats %}
             <!-- border-b border-gray-700 -->
-        <li class='chat  p-2  hover:bg-gray-700 cursor-pointer transition duration-300'>
+        <li class='chat  p-2  hover:bg-gray-900 cursor-pointer transition duration-300'>
             
             
             {% if chat.chat.recipient == player %}
@@ -193,8 +193,8 @@
 <script>
     $(()=>{
         
-        $('.bottom-nav-link').removeClass('bg-gray-700')
-        $('.bottom-nav-link')[1].classList.add('bg-gray-700')
+        $('.bottom-nav-link').removeClass('bg-gray-800')
+        $('.bottom-nav-link')[1].classList.add('bg-gray-800')
     })
 </script>
 {% endblock main_active  %}

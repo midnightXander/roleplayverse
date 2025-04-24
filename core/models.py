@@ -10,7 +10,7 @@ reaction_list = ["like","love","laugh","disapprove"]
 
 
 class Post(models.Model):
-    # id = models.UUIDField(primary_key=True,default=uuid.uuid4)
+    # id = models.BigAutoField(primary_key=True)
     author = models.ForeignKey(Player, on_delete=models.CASCADE)
     body = models.TextField(blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
@@ -31,7 +31,7 @@ class SavedPost(models.Model):
 
 
 class Comment(models.Model):
-    # id = models.UUIDField(primary_key=True,default=uuid.uuid4)
+    # id = models.BigAutoField(primary_key=True)
     author = models.ForeignKey(Player, on_delete=models.CASCADE)
     body = models.TextField()
     post = models.ForeignKey(Post,on_delete=models.CASCADE)

@@ -234,7 +234,7 @@ def home(request):
         "n_notifs":get_notifs(player),
         'fl_message':fl_message_data,
         'top_families': top_families,
-        'top_players': users_views._monthly_players_ranking()[:3],
+        'top_players': users_views._monthly_players_ranking()[:2],
         'battle_cover': random.randint(1,1),
         'events': events,
         "to_translate": to_translate,
@@ -492,27 +492,11 @@ def create_post(request):
         image = request.FILES.get('image')
         
         if body or image:
+            postid = len(Post.objects.all()) + 1
+            new_post = Post.objects.create(
+                id = postid,
+                author=player,body=body,image = image)
             
-            new_post = Post.objects.create(author=player,body=body,image = image)
-            
-
-        #     new_post_data = {
-        #     "feed_item": "post",
-        #     "id": new_post.id,
-        #     "author":{  
-        #                 'id':new_post.author.id,
-        #                 "name":new_post.author.user.username,
-        #                 'player': str(new_post.author),
-        #                 'profile_picture':new_post.author.profile_picture.url
-        #                 },
-        #     'body':new_post.body,
-        #     'liked': _liked_post(player, new_post),
-        #     'likes':_parse_number(new_post.likes),
-        #     'image':new_post.image.url if new_post.image else None,
-        #     "comments": get_comments_dict(player,new_post),
-        #     "n_comments": len(get_comments(new_post)),
-        #     "time_posted": _time_since(new_post.date_added),
-        # }
             new_post_data = _post_data(player,new_post)
             new_post.save()
             return JsonResponse({'status':'success', 'post':new_post_data})
@@ -709,7 +693,10 @@ def create_comment(request,post_id):
         if body != "":
             post  = get_object_or_404(Post, id = post_id)
             player = Player.objects.get(user = request.user)
+
+            commentid = len(Comment.objects.all()) + 1
             new_comment = Comment.objects.create(
+                
                 author = player,
                 post = post,
                 body = body,

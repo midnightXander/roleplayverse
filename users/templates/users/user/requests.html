@@ -1,27 +1,131 @@
 {% extends "users/user/user_page.html"%}
 {% block filterContent %}
+
 <!-- Content area for filtered results -->
-<div id="filteredContent" class="bg-gray-700 rounded-lg p-6">
+<div class="bg-gray-900 rounded-2xl shadow-md p-5 space-y-4">
+    <h2 class="text-xl font-semibold">🗡️ Tes Requètes de combat</h2>
+    <p class="text-sm text-gray-400"><i class="text-yellow-500 fas fa-exclamation-triangle mr-2"></i>Les Requetes de combat(RDC) seront supprimées après 3 combats initités depuis la requète <br><a target="_blank" class="text-orange-500 hover:text-orange-600" href="/blog/News/posts">comment ça marche</a></p>
+    <!-- Example Request -->
+    <div class="border border-gray-700 rounded-xl p-4 space-y-2">
+        {% for request in requests %}
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-sm text-gray-500">1v1 {{request.type}} - Persos: <span class="font-medium text-orange-500">{{request.character}}</span></p>
+          <p class="text-xs text-gray-400">Envoyé il ya {{request.date_sent}}</p>
+        </div>
+        <!-- <span class="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full font-semibold">Pending Match</span> -->
+         
+      </div>
+
+      <!-- Accepted Players -->
+      <div>
+        <h4 class="text-sm font-semibold mb-1">Joueurs ayant accepte:</h4>
+        <div class="space-y-2">
+            {% for acceptor in request.acceptors %}
+            <div class="flex items-center justify-between px-3 py-2 bg-gray-800 rounded-xl text-xs">
+                <a onclick="showOverlay()" class="inline-block hover:text-orange-500 " href="{% url 'users:player' acceptor.player.user.username %}">
+                    {{acceptor.player}} ({{acceptor.player.rank}})
+                </a>
+                <div class="flex gap-2">
+                  <button onclick="startFight('{{request.id}}','{{acceptor.id}}')" class="start-fight-btn bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded">confirmer le combat</button>
+                  <!-- <button class="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded">Decliner</button> -->
+                </div>
+              </div>
+                <!-- <li class="flex justify-between items-center border-1 border-gray-600 shadow-md rounded p-2">
+                    <div class="flex" >
+                    <img class="h-6 w-6 rounded-full mr-2" src="{{acceptor.player.profile_picture.url}}"  >
+                    <a class="inline-block hover:text-orange-500 " href="{% url 'users:player' acceptor.player.user.username %}">
+                        <span>{{acceptor.player}} ({{acceptor.player.rank}})</span>  
+                    </a>
+                    </div>
+                    
+                    <button onclick="startFight('{{request.id}}','{{acceptor.id}}')" class="start-fight-btn border-1 border-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded text-sm transition duration-300"
+                            data-request-id="{{request.id}}" data-acceptance-id="{{acceptor.id}}">
+                        Commencer le combat
+                    </button>
+                </li> -->
+                {% empty %}
+                <p class=" text-sm text-gray-400">No acceptances yet.</p>
+            {% endfor %}
+          
+          
+        </div>
+      </div>
+
+      <!-- Referees Interested -->
+      <div>
+        <h4 class="text-sm font-semibold mb-1">Propositions d'arbitrage</h4>
+        <div class="space-y-2">
+          
+          {% for proposal in request.refree_proposals %}
+          <p class="text-sm font-semibold mb-2">✅ VS {{proposal.battle.opponent}} <i class="fas fa-khanda text-orange-500 ml-2" ></i></p>
+          <div class="flex items-center justify-between px-3 py-2 bg-green-900 rounded-xl text-xs text-green-300">
+            <a href="{% url 'users:player' proposal.player.user.username %}">
+                {{proposal.player}} ({{proposal.player.rank}})
+            </a>
+            <div class="flex gap-2">
+              <button onclick="answerReferee(this, '{{request.id}}','{{proposal.id}}', 'accepted')" data-request_id="{{request.id}}" data-proposal_id="{{proposal.id}}" data-response="accepted" class="answer-referee-btn bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded">Accept</button>
+              <button onclick="answerReferee(this, '{{request.id}}','{{proposal.id}}', 'declined')" data-request_id="{{request.id}}" data-proposal_id="{{proposal.id}}" data-response="declined" class="answer-referee-btn bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded">Decline</button>
+            </div>
+          </div>
+          <!-- <li class="flex justify-between items-center border-1 border-gray-600 shadow-md rounded p-2">
+                  <a href="{% url 'users:player' proposal.player.user.username %}">
+                      <span>{{proposal.player}} ({{proposal.player.rank}})</span>
+                  </a>
+                  
+                  <div class = "flex justify-between space-x-2 ">
+                      <button onclick="answerReferee(this, '{{request.id}}','{{proposal.id}}', 'accepted')" class="answer-referee-btn bg-green-600 hover:bg-green-500 text-white px-3 py-1 rounded text-sm transition duration-300"
+                              data-request_id="{{request.id}}" data-proposal_id="{{proposal.id}}" data-response="accepted" >
+                          <i class="fas fa-check"></i>
+                      </button>
+                      <button onclick="answerReferee(this, '{{request.id}}','{{proposal.id}}', 'declined')" class="answer-referee-btn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition duration-300"
+                              data-request_id="{{request.id}}" data-proposal_id="{{proposal.id}}" data-response="declined" >
+                              <i class="fas fa-times"></i>
+                      </button>
+                  </div>
+              </li> -->
+
+              {% empty %}
+              <p class="text-sm text-gray-400">Aucune proposition d'arbitrage pour l'instant. trouve des arbitres dispo <a onclick="showOverlay()" href="battles/referees" class="text-orange-500" >ici</a></p>
+
+              {% endfor %}
+          
+        </div>
+      </div>
+
+      <!-- Confirmed Battle Partner -->
+      <!-- <div>
+        <p class="text-sm mt-2">✅ Pour le combat contre: <span class="font-semibold">LeafBlaze42</span></p>
+      </div> -->
+      {% endfor%}
+    </div>
+    <!-- Repeat .request-card for other requests -->
+  </div>
+
+
+
+
+<!-- <div id="filteredContent" class="bg-gray-800 rounded-lg p-6">
     <div id="battlesList" class="hidden">
-        <!-- ... (keep existing battles content) ... -->
+        <!-- ... (keep existing battles content) ... 
     </div>
     <div id="requestsList" class="">
-        <h2 class="text-2xl font-bold mb-4">
+        <h2 class="text-xl font-bold mb-4">
             {% if req_player == player %}
-            Your Battle Requests
+            Tes Requètes de combat
             {% else %}
-            Battle Requests by {{req_player}}
+            Requètes de combat de {{req_player}}
             {% endif %}
         </h2>
         <div class="space-y-6">
-            <p class="text-sm text-yellow-500 mb-2"><i class="fas fa-exclamation-triangle mr-2"></i>Les Requetes de combat(RDC) seront supprimées après 3 combats initités depuis la requète <br><a class="text-blue-500 hover:text-blue-600" href="#">comment ça marche</a></p>
-            <!-- Battle request cards will be dynamically inserted here -->
+            <p class="text-sm text-gray-400 mb-2"><i class="text-yellow-500 fas fa-exclamation-triangle mr-2"></i>Les Requetes de combat(RDC) seront supprimées après 3 combats initités depuis la requète <br><a class="text-orange-500 hover:text-orange-600" href="#">comment ça marche</a></p>
+            <!-- Battle request cards will be dynamically inserted here 
              {% for request in requests %}
 
-             <div class="battle-request-card relative bg-gray-800 rounded-lg p-4 shadow-lg">
+             <div class="battle-request-card relative bg-gray-900 rounded-lg p-4 shadow-lg">
                 <h3 class="text-xl font-bold mb-2">{{request.character}}</h3>
                 <p class="text-sm mb-2">il y'a {{request.date_sent}}</p>
-                <!-- <p class="text-sm mb-2">Expires: {{request.expiry_date.date}}</p> -->
+                <!-- <p class="text-sm mb-2">Expires: {{request.expiry_date.date}}</p> 
                 
                 <p class="text-sm font-semibold mb-4">Type: <span class="text-blue-400">{{request.type}}</span></p>
                 
@@ -90,12 +194,12 @@
             </div>
             {% empty %}
             <div class="flex flex-col text-gray-300 justify-center items-center">
-                <svg class="w-32 h-32  dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <svg class="w-16 h-16" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8m18 0-8.029-4.46a2 2 0 0 0-1.942 0L3 8m18 0-9 6.5L3 8"/>
                   </svg>
                   
-                <div>
-                    Aucune Demande de Combat actuellement <br> <a href="/battles" class="text-blue-500" >Faire une requète de combat</a>
+                <div class="text-center text-sm text-gray-400">
+                    Aucune Demande de Combat actuellement <br> <a href="/battles" class="text-orange-500" >Faire une requète de combat</a>
                 </div>   
              </div>
              {% endfor %}
@@ -103,7 +207,7 @@
         </div>
     </div>
     
-</div>
+</div> -->
 
 
 

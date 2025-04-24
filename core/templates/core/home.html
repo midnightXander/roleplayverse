@@ -193,7 +193,7 @@
       position: absolute;
       right: 0;
       top: 100%;
-      background-color: #2d3748;
+      /* background-color: #2d3748; */
       border-radius: 0.375rem;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       z-index: 10;
@@ -285,8 +285,8 @@
 </aside>
 
 <!-- Right Sidebar (for mobile) -->
-<aside class="md:hidden sidebar-right overflow-y-auto rounded-lg p-4 mb-4">
-    <button id="menuToggle" class="fixed z-50 border-1 border-gray-600 shadow-lg  py-1 px-2 right-10 top-20 rounded-full  text-white hover:bg-gray-400 hover:text-orange-600">
+<aside class="md:hidden sidebar-right overflow-y-auto rounded-xl mb-4">
+    <button id="menuToggle" class="fixed z-50 border-1 border-gray-600 shadow-lg  py-1 px-2 right-10 top-20 rounded-xl  text-white hover:bg-gray-400 hover:text-orange-600">
         <!-- fa-caret-left -->
         <i class="fas fa-angles-left text-3xl toggle-icon font-bold"></i> 
         <!-- <svg class="w-8 h-8  toggle-icon hover:text-orange-600 font-bold dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -295,15 +295,15 @@
           
     </button>
 <div class="mobile-scroll-container">
-    <a href="{% url 'battles:index' %}" class="mobile-scroll-item shine-effect bg-gray-500 rounded p-4 mb-4 covered start-battle" style="display: flex;justify-content: center; align-items: center; ">    
-        <button class="bg-gray-900 hover:bg-gray-800 text-orange-500 px-2 py-2 rounded">
+    <a href="{% url 'battles:index' %}" class="mobile-scroll-item shine-effect bg-gray-500 rounded-xl mb-4 covered start-battle" style="display: flex;justify-content: center; align-items: center; ">    
+        <button class="bg-gray-900 hover:bg-gray-800 text-orange-500 px-2 py-2 rounded-xl">
             <i class = "fas fa-fire mr-2"></i> Nouveau Combat<i class="fas fa-fire ml-2"></i></button>
     </a> 
     {% if player.family %}
     {% else %}
-    <div class="mobile-scroll-item  shine-effect covered join-family rounded p-4 mb-4" style="display: flex;justify-content: center; align-items: center;">    
+    <div class="mobile-scroll-item  shine-effect covered join-family rounded-xl p-4 mb-4" style="display: flex;justify-content: center; align-items: center;">    
         <a href="{% url 'users:families' %}">
-        <button class="font-semibold border-1 hover:text-gray-700 hover:bg-gray-900 transition duration-300 shadow-md text-white  px-2 py-2 rounded">
+        <button class="font-semibold border-1 hover:text-gray-700 hover:bg-gray-900 transition duration-300 shadow-md text-white  px-2 py-2 rounded-xl">
             <i class="fas fa-users mr-2"></i> Rejoindre une famille
         </button>
         </a>
@@ -312,72 +312,75 @@
     {% endif %}
     
     {% for event in events %}
-    <a href="{% url 'events:tournament' event.id %}" class="mobile-scroll-item bg-gray-500 flex flex-col rounded flex flex-col justify-center align-center p-4 mb-4 recent-event" style=" background-image: url('{{event.cover.url}}');">    
-        <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-sm align-self-start justify-self-start">Tournament</span>
+    <a href="{% url 'events:tournament' event.id %}" class="mobile-scroll-item bg-gray-500 flex flex-col rounded-xl flex flex-col justify-center align-center p-4 mb-4 recent-event" style=" background-image: url('{{event.cover.url}}');">    
+        <span class="bg-blue-500 text-white px-2 py-1 rounded-xl text-sm align-self-start justify-self-start">Tournament</span>
         <h3 class="text-orange-500 font-bold text-2xl">{{event.name}}</h3>
-        <button class="bg-gray-900  text-orange-500 px-2 py-2 rounded">
+        <button class="bg-gray-900  text-orange-500 px-2 py-2 rounded-xl">
         <i class="fas fa-shield mr-2"></i> Voir</button>
     </a> 
     {% endfor %}
     
     <span class="v-divider"></span>
-    <div class="relative mobile-scroll-item bg-gradient-to-r from-black to-gray-800 rounded p-4 mb-4">
-        <h3 class="font-bold mb-2 text-orange-500">Top Familles</h3>
-        <ul class="space-y-2">
-        {% for family in top_families %}
-        <li class="flex items-center">
-            <img src="{{family.profile_picture.url}}" alt="{{family.name}}" class="w-10 h-10 rounded-full mr-2">
-            <a href="/users/family/{{family.id}}" class="flex-grow">
-                <span class="font-bold">{{forloop.counter}}. {{family.name}}</span>
-                <p class="text-sm text-gray-300">points: {{family.points}}</p>
-            </a>
-            <!-- <button class="bg-orange-500 text-xs px-2 py-1 rounded">Challenge</button> -->
-        </li>
-        {% empty %}
-        <p class="text-center text-sm p-4">Les meilleures familles seront affichées ici</p>
+    
+    <div class="mobile-scroll-item bg-gray-900 rounded-2xl shadow-md p-5 space-y-4">
+        <h2 class="text-xl font-semibold">🏆 Top Familles</h2>
+        <div class="space-y-3">
+          <!-- Family Card -->
+          {% for family in top_families %}
+          <div class="flex items-center justify-between bg-gray-800 rounded-xl p-3">
+            <div class="flex items-center gap-3">
+              <img  src="{{family.profile_picture.url}}" alt="{{family.name}}" class="w-10 h-10 rounded-full" />
+              <div>
+                <a onclick="showOverlay()" href="/users/family/{{family.id}}" class="font-semibold">{{forloop.counter}}. {{family.name}}</a>
+                <p class="text-xs text-gray-500">{{family.points}} pts</p>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+            <p class="text-center text-gray-400 text-sm p-4">Les meilleures familles seront affichées ici</p>
         {% endfor %}
-        </ul>
-        <a href="/users/families/rankings" class="absolute bottom-1 text-center text-blue-400 mt-5 ml-10">liste complète </a>
-
-    </div>
+        <a href="/users/families/rankings" class="text-center text-orange-500">voir plus</a>
+          
+          
+        </div>
+      </div>
     <span class="v-divider"></span>
-
-    <div class="mobile-scroll-item bg-gradient-to-r from-black to-gray-800  relative rounded p-4 mb-4">
-        <h3 class="font-bold text-orange-500 mb-2">Classement mensuel des joueurs</h3>
-        <ul class="space-y-2">
-            {% for player in top_players %}
-            <li class="flex items-center">
-                <img src="{{player.profile_picture}}" alt="{{player.user.username}}" class="w-10 h-10 rounded-full mr-2">
-                <div class="flex-grow">
-                    <span class="font-bold">{{forloop.counter}}. {{player.player.username}}</span>
-                    <p class="text-sm text-gray-300">wins: <span class="text-orange-500">{{player.wins}}</span></p>
-                </div>
-                <a href="{% url 'users:player' player.player.username %}">
-                    <button data-player_id="{{player.id}}" class="bg-orange-500 text-xs px-2 py-1 rounded">Challenge</button>
-                </a>
-                
-            </li>
-           {% empty %}
-           <p class="text-center text-sm p-4">Les meilleures joueurs du mois seront affichés i ci</p>
-            {% endfor %}
-            
-        </ul>
-        <a href="/users/players/rankings" class="absolute bottom-2 text-center text-blue-400 mt-5 ml-10">Liste complète</a>
-    </div>
+    <div class="mobile-scroll-item bg-gray-900 rounded-2xl shadow-md p-5 space-y-4">
+        <h2 class="text-xl font-semibold">🏆 Top joueurs</h2>
+        <div class="space-y-3">
+          <!-- Player Card -->
+          {% for player in top_players %}
+          <div class="flex items-center justify-between bg-gray-800 rounded-xl p-3">
+            <div class="flex items-center gap-3">
+              <img  src="{{player.profile_picture}}" alt="{{player.user.username}}" class="w-10 h-10 rounded-full" />
+              <div>
+                <a onclick="showOverlay()" href="/users/family/{{family.id}}" class="font-semibold">{{forloop.counter}}. {{player.player.username}}</a>
+                <p class="text-xs text-gray-500">{{player.wins}} victoires</p>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+            <p class="text-center text-gray-400 text-sm p-4">Les meilleures joueurs du mois seront affichées ici</p>
+        {% endfor %}
+        <a href="/users/players/rankings" class="text-center text-orange-500">voir plus</a>
+          
+          
+        </div>
+      </div>
+  
     <span class="v-divider"></span>
-    <div class="mobile-scroll-item bg-gradient-to-r from-orange-500 to-orange-800 rounded p-4 mb-4">
-        <h3 class="font-bold mb-2">Challenges recent </h3>
+    <div class="mobile-scroll-item bg-gray-900 rounded-2xl shadow-md p-5 space-y-4">
+        <h3 class="text-xl font-semibold">Defis recent </h3>
         <ul class="space-y-2">
             {% for challenge in challenges %}
             <li class="flex justify-between items-center">
                 <span>{{challenge.sender}}</span>
                 <div>
-                    <button class="bg-green-500 text-xs px-2 py-1 rounded mr-1">Accepter</button>
-                    <button class="bg-red-500 text-xs px-2 py-1 rounded">Refuser</button>
-                
+                    <button class="bg-green-500 text-xs px-2 py-1 rounded-xl mr-1">Accepter</button>
+                    <button class="bg-red-500 text-xs px-2 py-1 rounded-xl">Refuser</button>
             </li>
             {% empty %}
-            <p class="text-center text-sm p-4">Vos challenges recent seront affichés ici</p>
+            <p class="text-center text-gray-400 text-sm p-4">Tes challenges recent seront affichés ici</p>
             {% endfor %}
         </ul>
 
@@ -392,26 +395,55 @@
 <main class="w-full md:w-1/2 px-1 main-content">
     
 <!-- Create post section -->
-<div class="bg-gray-700 rounded-lg p-4 mb-8">
+<!-- <div class="bg-gray-900 rounded-xl p-4 mb-8">
     <form id="createPostForm" class="flex flex-col">
-        <textarea id="postContent" class="bg-gray-600 text-white p-2 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-orange-500" rows="3" placeholder="Pose une question, partage un avis, ou alors post un meme..."></textarea>
+        <textarea id="postContent" class="bg-gray-700 text-white p-2 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-orange-500" rows="3" placeholder="Pose une question, partage un avis, ou alors post un meme..."></textarea>
         <div id="create-post-actions" class="flex justify-between items-center">
-            <label for="imageUpload" class="cursor-pointer bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
+            <label for="imageUpload" class="cursor-pointer bg-gray-700 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
                 <i class="fas fa-image mr-2"></i><span class="hidden">Ajouter une image</span>
             </label>
             <input type="file" id="imageUpload" accept="image/*" class="hidden">
             <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition duration-300">
-                <!-- Poster -->
+                <!-- Poster 
                 <i class="fas fa-upload mr-2"></i>Publier
             </button>
         </div>
     </form>
-</div>
+</div> -->
+
+<div class="bg-gray-900 rounded-2xl p-4 border border-gray-800 shadow-sm mb-8">
+    <div class="flex items-start gap-4">
+      <img src="{{player.profile_picture.url}}" alt="{{player}}" class="w-10 h-10 rounded-full" />
+      <form id="createPostForm" class="flex-1">
+        <textarea
+          id="postContent"
+          class="w-full bg-transparent text-white placeholder-gray-400 border-b border-gray-700 focus:outline-none resize-none"
+          placeholder="Libère tes pensées"
+          rows="2"
+        ></textarea>
+        <div class="flex justify-between items-center mt-3">
+          <label class="cursor-pointer inline-flex items-center space-x-2 text-sm text-gray-400 hover:text-orange-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V8.414a2 2 0 00-.586-1.414l-3.414-3.414A2 2 0 0012.586 3H4zm0 2h8v3a1 1 0 001 1h3v6H4V5z" />
+            </svg>
+            <span>Ajouter image</span>
+            <input type="file" id="imageUpload" accept="image/*" class="hidden">
+          </label>
+          <button type="submit" class="bg-[#d45822] text-white text-sm px-4 py-1.5 rounded-xl hover:bg-orange-600 transition">
+            Poster
+          </button>
+        </div>
+    </form>
+    </div>
+  </div>
 
 <!-- Posts feed -->
 <div id="postsFeed" class="space-y-8">
     <!-- Posts will be dynamically added here -->
+
 </div>
+
+
 
 <!-- Loading indicator -->
 <div id="loadingIndicator" class="text-center mb-2 text-orange-500 py-4">
@@ -453,7 +485,8 @@
         {% for family in top_families %}
         <li class="flex items-center p-2 rounded hover:bg-gray-700">
             <img src="{{family.profile_picture.url}}" alt="{{family.name}}" class="w-10 h-10 rounded-full mr-2">
-            <a href="/users/family/{{family.id}}" class="flex-grow">
+            <!-- path('family/65744<int:family_id>',views.family_page,name='family_page'), -->
+            <a href="/users/family/65744{{family.id}}" class="flex-grow">
                 <span class="font-bold">{{forloop.counter}}. {{family.name}}</span>
                 <p class="text-sm text-gray-300">points: {{family.points}}</p>
             </a>
@@ -522,8 +555,7 @@
 
 
 
-{{ playerName|json_script:'player' }}
-{{ player.user.username | json_script:'username' }}
+
 
 {% block main_active %}
 <script>
@@ -602,18 +634,13 @@ function closeAd(button){
       
     $(()=>{
 
-        const currentPlayer = JSON.parse(document.getElementById('player').textContent)
-        const currentPlayerUsername = JSON.parse(document.getElementById('username').textContent)
-        const currentPlayerData = {
-            player: currentPlayer,
-            username: currentPlayerUsername,
-        }
+        
       // Sample posts data
 
 function togglePostDropdown(toggle){
         toggle.addEventListener('click', (e) => {
             e.stopPropagation();
-            console.log("Clicked")
+            
               
               const dropdown = toggle.nextElementSibling;
               dropdown.classList.toggle('active');
@@ -654,74 +681,153 @@ function revealComment(comment){
 //function to create ad
 
 
-// Function to create a post element
-function createPostElement(post) {
-const postElement = document.createElement('div');
-postElement.className = 'post bg-gray-700 rounded-lg p-4';
-//postElement.className = 'post-gradient rounded-xl p-6 border border-gray-700 hover-scale'
-// <span class='ellipsed-text body'>${comment.body}<span>
-//     <span class = 'full-text hidden body'>${comment.body}</span>
-postElement.innerHTML = `
-    <div class="flex items-center mb-4 relative">
-        <a href = "/users/${post.author.name}">
-        <img src="${post.author.profile_picture}" alt="${post.author.name}" class="w-10 h-10 rounded-full mr-4">
-        <a>
-        <a href = "/users/${post.author.name}">
-        <h3 class="font-bold hover:text-orange-600">${post.author.player}<br><small class='font-semi-bold text-gray-400'>${post.time_posted}</small></h3>
-        </a>
+// // Function to create a post element
+// function createPostElement(post) {
+// const postElement = document.createElement('div');
+// postElement.className = 'post bg-gray-700 rounded-lg p-4';
+// const postElement2 = document.createElement('div');
+// postElement2.className = 'post bg-gray-900 rounded-2xl shadow-sm p-4 border-1 border-gray-700';
+// //postElement.className = 'post-gradient rounded-xl p-6 border border-gray-700 hover-scale'
+// // <span class='ellipsed-text body'>${comment.body}<span>
+// //     <span class = 'full-text hidden body'>${comment.body}</span>
+// postElement.innerHTML = `
+//     <div class="flex items-center mb-4 relative">
+//         <a href = "/users/${post.author.name}">
+//         <img src="${post.author.profile_picture}" alt="${post.author.name}" class="w-10 h-10 rounded-full mr-4">
+//         <a>
+//         <a href = "/users/${post.author.name}">
+//         <h3 class="font-bold hover:text-orange-600">${post.author.player}<br><small class='font-semi-bold text-gray-400'>${post.time_posted}</small></h3>
+//         </a>
 
-        <div class="absolute top-2 right-2">
-              <button onclick = 'togglePostDropdown(this)'  class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
-                  <i class="fas fa-ellipsis-v"></i>
-              </button>
-              <div class="post-dropdown-menu w-48 py-2">
+//         <div class="absolute top-2 right-2">
+//               <button onclick = 'togglePostDropdown(this)'  class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
+//                   <i class="fas fa-ellipsis-v"></i>
+//               </button>
+//               <div class="post-dropdown-menu w-48 py-2">
                     
-                    <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="toggleToFavorites('${post.id}')">
-                    ${post.is_favorite ? "<i class = 'fas fa-bookmark mr-2'></i>retirer des favoris":"<i class = 'far fa-bookmark mr-2'></i>ajouter aux favoris"}
-                    </div>
+//                     <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="toggleToFavorites('${post.id}')">
+//                     ${post.is_favorite ? "<i class = 'fas fa-bookmark mr-2'></i>retirer des favoris":"<i class = 'far fa-bookmark mr-2'></i>ajouter aux favoris"}
+//                     </div>
                     
-                    <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="socialShare(this,'https://roleplayverse.com/posts/${post.id}')"><i class = 'fas fa-share-alt mr-2'></i>Partager</div>
-                    <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('https://roleplayverse.com/posts/${post.id}')"><i class = 'fas fa-copy mr-2'></i>copier le lien</div>
-                    ${post.author.name == currentPlayerData.username? 
-                    `
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600"><i class = 'fas fa-pencil-square-o mr-2'></i> Edit</a>
-                    <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deletePost(this,'${post.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
-                    `:`
-                  `}
+//                     <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="socialShare(this,'https://roleplayverse.live/posts/${post.id}')"><i class = 'fas fa-share-alt mr-2'></i>Partager</div>
+//                     <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('https://roleplayverse.live/posts/${post.id}')"><i class = 'fas fa-copy mr-2'></i>copier le lien</div>
+//                     ${post.author.name == currentPlayerData.username? 
+//                     `
+//                     <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600"><i class = 'fas fa-pencil-square-o mr-2'></i> Edit</a>
+//                     <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deletePost(this,'${post.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
+//                     `:`
+//                   `}
                   
               
-                </div>
-        </div>
-    </div>
+//                 </div>
+//         </div>
+//     </div>
     
-    <p class="mb-4 content body">${post.body}</p>
-    ${post.image ? `<img src="${post.image}" alt="Post image" class="myImg w-full rounded-lg mb-4 post-image">` : ''}
-    <div class="post-infos flex items-center justify-between">
-        <button class="like-button bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-full flex items-center ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
-            <i class="far fa-heart mr-2"></i>
-            <span class="like-count">${post.likes}</span>
-        </button>
-        <button class="comment-button bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-full flex items-center">
-            <i class="far fa-comment mr-2"></i>
-            <span class = 'comment-count'>${post.n_comments}</span>
-        </button>
-    </div>
-    <div class="comments border-t  border-gray-600  space-y-4 mt-4 overflow-y-auto p-1" style = 'max-height:200px'>
-        ${post.comments.map(comment =>createComment(comment)).join('')}
-    </div>
-    <form onsubmit='sendComment(this, event)' class="comment-form mt-4" data-post-id = ${post.id}>
-        <input type="text" class="bg-gray-600 text-white p-2 rounded w-full  border-0  focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Add a comment...">
-    </form>
-`;
+//     <p class="mb-4 content body">${post.body}</p>
+//     ${post.image ? `<img src="${post.image}" alt="Post image" class="myImg w-full rounded-lg mb-4 post-image">` : ''}
+//     <div class="post-infos flex items-center justify-between">
+//         <button class="like-button bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-full flex items-center ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
+//             <i class="far fa-heart mr-2"></i>
+//             <span class="like-count">${post.likes}</span>
+//         </button>
+//         <button class="comment-button bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-full flex items-center">
+//             <i class="far fa-comment mr-2"></i>
+//             <span class = 'comment-count'>${post.n_comments}</span>
+//         </button>
+//     </div>
+//     <div class="comments border-t  border-gray-600  space-y-4 mt-4 overflow-y-auto p-1" style = 'max-height:200px'>
+//         ${post.comments.map(comment =>createComment(comment)).join('')}
+//     </div>
+//     <form onsubmit='sendComment(this, event)' class="comment-form mt-4" data-post-id = ${post.id}>
+//         <input type="text" class="bg-gray-600 text-white p-2 rounded w-full  border-0  focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Add a comment...">
+//     </form>
+// `;
 
-//imgModalListener()
+// //imgModalListener()
 
-return postElement;
-}
+// //return postElement;
+
+// postElement2.innerHTML = `
+// <div class="flex items-start gap-4">
+//         <img src="${post.author.profile_picture}" alt="${post.author.player}" class="myImg w-10 h-10 rounded-full" />
+//         <div class="flex-1">
+//           <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400">
+//             <div>
+//               <a href = "/users/${post.author.name}" class="inline-block font-semibold hover:text-orange-600 text-gray-900 dark:text-white">${post.author.player}</a> @${post.author.player}
+//             </div>
+            
+
+//              <div class="relative flex space-x-2">
+//               <span>${post.time_posted}</span>
+//               <button onclick = 'togglePostDropdown(this)'  class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
+//                   <i class="fas fa-ellipsis-v"></i>
+//               </button>
+//               <div class="post-dropdown-menu bg-gray-800 w-48 py-2">
+                    
+//                     <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="toggleToFavorites('${post.id}')">
+//                     ${post.is_favorite ? "<i class = 'fas fa-bookmark mr-2'></i>retirer des favoris":"<i class = 'far fa-bookmark mr-2'></i>ajouter aux favoris"}
+//                     </div>
+                    
+//                     <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="socialShare(this,'https://roleplayverse.live/posts/${post.id}')"><i class = 'fas fa-share-alt mr-2'></i>Partager</div>
+//                     <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('https://roleplayverse.live/posts/${post.id}')"><i class = 'fas fa-copy mr-2'></i>copier le lien</div>
+//                     ${post.author.name == currentPlayerData.username? 
+//                     `
+//                     <!--
+//                     <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600"><i class = 'fas fa-pencil-square-o mr-2'></i> Edit</a>
+//                     -->
+//                     <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deletePost(this,'${post.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
+//                     `:`
+//                   `}
+                  
+              
+//                 </div>
+//             </div>
+//           </div>
+//           <p class="text-base text-gray-800 dark:text-gray-100 mt-1 data-expandable">
+//             ${post.body}
+//           </p>
+//             ${post.image ? `
+//             <div class="mt-3">
+//             <img  src="${post.image}" alt="${post.author.player} image de publication" class="w-full myImg rounded-xl border-1 border-gray-700 object-cover max-h-64" />
+//           </div>
+//             ` : ''}
+          
+//           <div class="flex justify-between mt-4 text-gray-500 dark:text-gray-400 text-sm">
+//             <button class="like-button flex items-center space-x-1 hover:text-orange-500 ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
+//             <i class="far fa-heart"></i>
+//             <span class="like-count">${post.likes}</span>
+//             </button>
+//             <button class="comment-button flex items-center space-x-1 hover:text-blue-500">            
+//             <i class="far fa-comment"></i>
+//             <span class = 'comment-count'>${post.n_comments}</span>
+//             </button>
+            
+//             <button class="flex items-center space-x-1 hover:text-green-500" onclick="socialShare(this,'https://roleplayverse.live/posts/${post.id}')">
+//               <i class = 'fas fa-share-alt'></i><span>partager</span>
+//             </button>
+//           </div>
+
+           
+
+//           <div class="mt-4 space-y-3 comments max-h-64 overflow-y-auto" style='max-height:300px'>
+//              ${post.comments.map(comment =>createComment(comment)).join('')}
+//           </div>
+
+//            <form onsubmit='sendComment(this, event)' class="comment-form mt-4" data-post-id = ${post.id}>
+//                 <input type="text" class="bg-gray-800 text-white p-2 rounded w-full  border-0  focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="ajoute un commentaire...">
+//             </form>
+
+          
+    
+//         </div>
+//       </div>
+// `
+// return postElement2
+// }
 
 function  createBattleElement(battle){
     const battleElement = document.createElement('div')
-    battleElement.className = 'battle-card bg-gray-700 rounded-lg p-6 flex flex-col';
+    battleElement.className = 'battle-card bg-gray-900 border-1 border-gray-700 rounded-lg p-6 flex flex-col';
     battleElement.innerHTML = `
                                 <div class="flex justify-between items-center mb-4">
                                     <h3 class="text-xl font-bold">${battle.status}</h3>
