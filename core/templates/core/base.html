@@ -44,7 +44,8 @@
         <script type="text/javascript" src="{% static 'js/linkify-html/dist/linkify-html.min.js' %}"></script>
         <script src="{% static 'js/components.js' %}" ></script>
         <script src="{% static 'js/utility.js' %}"  ></script> 
-        <script src="{% static 'js/core.js' %}"></script> 
+        <script src="{% static 'js/core.js' %}"></script>
+        <!-- <script src="{% static 'js/notifications.js' %}"></script>  -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         
         
@@ -328,6 +329,60 @@
 
 {{ playerName|json_script:'player' }}
 {{ player.user.username | json_script:'username' }}
+
+<script>
+    
+const VAPID_PUBLIC_KEY = "BGCLJh08s1sUp-PyGLvD1KwqmIK9WSnwbzJscdiOef-o7usOuFaSefB-Fn-XEWD0oJVH8opYXoz6mJ_ejIQpE50";
+
+// Register service worker
+async function subscribeUser() {
+  const registration = await navigator.serviceWorker.register("{% static 'sw.js' %}");
+
+  const subscription = await registration.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+  });
+
+
+  // Send subscription to backend
+  $.ajax({
+    url: '/api/save-subscription/',
+    data: JSON.stringify(subscription),
+    type: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    }, 
+    success: function(res){
+        //console.log('Subscription sent to server:', res);
+        
+    }
+  })
+  
+//   await fetch('/api/save-subscription/', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+    
+//     body: JSON.stringify(subscription)
+//   });
+}
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding)
+    .replace(/\-/g, '+')
+    .replace(/_/g, '/');
+
+  const rawData = atob(base64);
+  return Uint8Array.from([...rawData].map(char => char.charCodeAt(0)));
+}
+
+if ('serviceWorker' in navigator && 'PushManager' in window) {
+  subscribeUser();
+}
+
+</script>
 <script>
     const currentPlayer = JSON.parse(document.getElementById('player').textContent)
         const currentPlayerUsername = JSON.parse(document.getElementById('username').textContent)
@@ -336,148 +391,148 @@
             username: currentPlayerUsername,
     }
 
-    function createPostElement(post) {
-    const postElement = document.createElement('div');
-    postElement.className = 'post bg-gray-700 rounded-lg p-4';
-    const postElement2 = document.createElement('div');
-    postElement2.className = 'post bg-gray-900 rounded-2xl shadow-sm p-4 border-1 border-gray-700';
-    //postElement.className = 'post-gradient rounded-xl p-6 border border-gray-700 hover-scale'
-    // <span class='ellipsed-text body'>${comment.body}<span>
-    //     <span class = 'full-text hidden body'>${comment.body}</span>
-    postElement.innerHTML = `
-        <div class="flex items-center mb-4 relative">
-            <a href = "/users/${post.author.name}">
-            <img src="${post.author.profile_picture}" alt="${post.author.name}" class="w-10 h-10 rounded-full mr-4">
-            <a>
-            <a href = "/users/${post.author.name}">
-            <h3 class="font-bold hover:text-orange-600">${post.author.player}<br><small class='font-semi-bold text-gray-400'>${post.time_posted}</small></h3>
-            </a>
+    // function createPostElement(post) {
+    // const postElement = document.createElement('div');
+    // postElement.className = 'post bg-gray-700 rounded-lg p-4';
+    // const postElement2 = document.createElement('div');
+    // postElement2.className = 'post bg-gray-900 rounded-2xl shadow-sm p-4 border-1 border-gray-700';
+    // //postElement.className = 'post-gradient rounded-xl p-6 border border-gray-700 hover-scale'
+    // // <span class='ellipsed-text body'>${comment.body}<span>
+    // //     <span class = 'full-text hidden body'>${comment.body}</span>
+    // postElement.innerHTML = `
+    //     <div class="flex items-center mb-4 relative">
+    //         <a href = "/users/${post.author.name}">
+    //         <img src="${post.author.profile_picture}" alt="${post.author.name}" class="w-10 h-10 rounded-full mr-4">
+    //         <a>
+    //         <a href = "/users/${post.author.name}">
+    //         <h3 class="font-bold hover:text-orange-600">${post.author.player}<br><small class='font-semi-bold text-gray-400'>${post.time_posted}</small></h3>
+    //         </a>
     
-            <div class="absolute top-2 right-2">
-                  <button onclick = 'togglePostDropdown(this)'  class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
-                      <i class="fas fa-ellipsis-v"></i>
-                  </button>
-                  <div class="post-dropdown-menu w-48 py-2">
+    //         <div class="absolute top-2 right-2">
+    //               <button onclick = 'togglePostDropdown(this)'  class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
+    //                   <i class="fas fa-ellipsis-v"></i>
+    //               </button>
+    //               <div class="post-dropdown-menu w-48 py-2">
                         
-                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="toggleToFavorites('${post.id}')">
-                        ${post.is_favorite ? "<i class = 'fas fa-bookmark mr-2'></i>retirer des favoris":"<i class = 'far fa-bookmark mr-2'></i>ajouter aux favoris"}
-                        </div>
+    //                     <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="toggleToFavorites('${post.id}')">
+    //                     ${post.is_favorite ? "<i class = 'fas fa-bookmark mr-2'></i>retirer des favoris":"<i class = 'far fa-bookmark mr-2'></i>ajouter aux favoris"}
+    //                     </div>
                         
-                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="socialShare(this,'https://roleplayverse.llive/posts/${post.id}')"><i class = 'fas fa-share-alt mr-2'></i>Partager</div>
-                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('https://roleplayverse.live/posts/${post.id}')"><i class = 'fas fa-copy mr-2'></i>copier le lien</div>
-                        ${post.author.name == currentPlayerData.username? 
-                        `
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600"><i class = 'fas fa-pencil-square-o mr-2'></i> Edit</a>
-                        <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deletePost(this,'${post.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
-                        `:`
-                      `}
+    //                     <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="socialShare(this,'https://roleplayverse.llive/posts/${post.id}')"><i class = 'fas fa-share-alt mr-2'></i>Partager</div>
+    //                     <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('https://roleplayverse.live/posts/${post.id}')"><i class = 'fas fa-copy mr-2'></i>copier le lien</div>
+    //                     ${post.author.name == currentPlayerData.username? 
+    //                     `
+    //                     <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600"><i class = 'fas fa-pencil-square-o mr-2'></i> Edit</a>
+    //                     <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deletePost(this,'${post.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
+    //                     `:`
+    //                   `}
                       
                   
-                    </div>
-            </div>
-        </div>
+    //                 </div>
+    //         </div>
+    //     </div>
         
-        <p class="mb-4 content body">${post.body}</p>
-        ${post.image ? `<img src="${post.image}" alt="Post image" class="myImg w-full rounded-lg mb-4 post-image">` : ''}
-        <div class="post-infos flex items-center justify-between">
-            <button class="like-button bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-full flex items-center ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
-                <i class="far fa-heart mr-2"></i>
-                <span class="like-count">${post.likes}</span>
-            </button>
-            <button class="comment-button bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-full flex items-center">
-                <i class="far fa-comment mr-2"></i>
-                <span class = 'comment-count'>${post.n_comments}</span>
-            </button>
-        </div>
-        <div class="comments border-t  border-gray-600  space-y-4 mt-4 overflow-y-auto p-1" style = 'max-height:200px'>
-            ${post.comments.map(comment =>createComment(comment)).join('')}
-        </div>
-        <form onsubmit='sendComment(this, event)' class="comment-form mt-4" data-post-id = ${post.id}>
-            <input type="text" class="bg-gray-600 text-white p-2 rounded w-full  border-0  focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Add a comment...">
-        </form>
-    `;
+    //     <p class="mb-4 content body">${post.body}</p>
+    //     ${post.image ? `<img src="${post.image}" alt="Post image" class="myImg w-full rounded-lg mb-4 post-image">` : ''}
+    //     <div class="post-infos flex items-center justify-between">
+    //         <button class="like-button bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-full flex items-center ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
+    //             <i class="far fa-heart mr-2"></i>
+    //             <span class="like-count">${post.likes}</span>
+    //         </button>
+    //         <button class="comment-button bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-full flex items-center">
+    //             <i class="far fa-comment mr-2"></i>
+    //             <span class = 'comment-count'>${post.n_comments}</span>
+    //         </button>
+    //     </div>
+    //     <div class="comments border-t  border-gray-600  space-y-4 mt-4 overflow-y-auto p-1" style = 'max-height:200px'>
+    //         ${post.comments.map(comment =>createComment(comment)).join('')}
+    //     </div>
+    //     <form onsubmit='sendComment(this, event)' class="comment-form mt-4" data-post-id = ${post.id}>
+    //         <input type="text" class="bg-gray-600 text-white p-2 rounded w-full  border-0  focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Add a comment...">
+    //     </form>
+    // `;
     
-    //imgModalListener()
+    // //imgModalListener()
     
-    //return postElement;
+    // //return postElement;
     
-    postElement2.innerHTML = `
-    <div class="flex items-start gap-4">
-            <img src="${post.author.profile_picture}" alt="${post.author.player}" class="myImg w-10 h-10 rounded-full" />
-            <div class="flex-1">
-              <div class="flex justify-between text-sm text-gray-400">
-                <div>
-                  <a href = "/users/${post.author.name}" class="inline-block font-semibold hover:text-orange-600 text-white">${post.author.player}</a> @${post.author.player}
-                </div>
+    // postElement2.innerHTML = `
+    // <div class="flex items-start gap-4">
+    //         <img src="${post.author.profile_picture}" alt="${post.author.player}" class="myImg w-10 h-10 rounded-full" />
+    //         <div class="flex-1">
+    //           <div class="flex justify-between text-sm text-gray-400">
+    //             <div>
+    //               <a href = "/users/${post.author.name}" class="inline-block font-semibold hover:text-orange-600 text-white">${post.author.player}</a> @${post.author.player}
+    //             </div>
                 
     
-                 <div class="relative flex space-x-2">
-                  <span>${post.time_posted}</span>
-                  <button onclick = 'togglePostDropdown(this)'  class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
-                      <i class="fas fa-ellipsis-v"></i>
-                  </button>
-                  <div class="post-dropdown-menu bg-gray-800 w-48 py-2">
+    //              <div class="relative flex space-x-2">
+    //               <span>${post.time_posted}</span>
+    //               <button onclick = 'togglePostDropdown(this)'  class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
+    //                   <i class="fas fa-ellipsis-v"></i>
+    //               </button>
+    //               <div class="post-dropdown-menu bg-gray-800 w-48 py-2">
                         
-                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="toggleToFavorites('${post.id}')">
-                        ${post.is_favorite ? "<i class = 'fas fa-bookmark mr-2'></i>retirer des favoris":"<i class = 'far fa-bookmark mr-2'></i>ajouter aux favoris"}
-                        </div>
+    //                     <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="toggleToFavorites('${post.id}')">
+    //                     ${post.is_favorite ? "<i class = 'fas fa-bookmark mr-2'></i>retirer des favoris":"<i class = 'far fa-bookmark mr-2'></i>ajouter aux favoris"}
+    //                     </div>
                         
-                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="socialShare(this,'https://roleplayverse.live/posts/${post.id}')"><i class = 'fas fa-share-alt mr-2'></i>Partager</div>
-                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('https://roleplayverse.live/posts/${post.id}')"><i class = 'fas fa-copy mr-2'></i>copier le lien</div>
-                        ${post.author.name == currentPlayerData.username? 
-                        `
-                        <!--
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600"><i class = 'fas fa-pencil-square-o mr-2'></i> Edit</a>
-                        -->
-                        <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deletePost(this,'${post.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
-                        `:`
-                      `}
+    //                     <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="socialShare(this,'https://roleplayverse.live/posts/${post.id}')"><i class = 'fas fa-share-alt mr-2'></i>Partager</div>
+    //                     <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('https://roleplayverse.live/posts/${post.id}')"><i class = 'fas fa-copy mr-2'></i>copier le lien</div>
+    //                     ${post.author.name == currentPlayerData.username? 
+    //                     `
+    //                     <!--
+    //                     <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600"><i class = 'fas fa-pencil-square-o mr-2'></i> Edit</a>
+    //                     -->
+    //                     <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deletePost(this,'${post.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
+    //                     `:`
+    //                   `}
                       
                   
-                    </div>
-                </div>
-              </div>
-              <p class="text-base text-gray-800 dark:text-gray-100 mt-1 data-expandable">
-                ${post.body}
-              </p>
-                ${post.image ? `
-                <div class="mt-3">
-                <img  src="${post.image}" alt="${post.author.player} image de publication" class="w-full myImg rounded-xl border-1 border-gray-700 object-cover max-h-64" />
-              </div>
-                ` : ''}
+    //                 </div>
+    //             </div>
+    //           </div>
+    //           <p class="text-base text-gray-800 dark:text-gray-100 mt-1 data-expandable">
+    //             ${post.body}
+    //           </p>
+    //             ${post.image ? `
+    //             <div class="mt-3">
+    //             <img  src="${post.image}" alt="${post.author.player} image de publication" class="w-full myImg rounded-xl border-1 border-gray-700 object-cover max-h-64" />
+    //           </div>
+    //             ` : ''}
               
-              <div class="flex justify-between mt-4 text-gray-500 dark:text-gray-400 text-sm">
-                <button class="like-button flex items-center space-x-1 hover:text-orange-500 ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
-                <i class="far fa-heart"></i>
-                <span class="like-count">${post.likes}</span>
-                </button>
-                <button class="comment-button flex items-center space-x-1 hover:text-blue-500">            
-                <i class="far fa-comment"></i>
-                <span class = 'comment-count'>${post.n_comments}</span>
-                </button>
+    //           <div class="flex justify-between mt-4 text-gray-500 dark:text-gray-400 text-sm">
+    //             <button class="like-button flex items-center space-x-1 hover:text-orange-500 ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
+    //             <i class="far fa-heart"></i>
+    //             <span class="like-count">${post.likes}</span>
+    //             </button>
+    //             <button class="comment-button flex items-center space-x-1 hover:text-blue-500">            
+    //             <i class="far fa-comment"></i>
+    //             <span class = 'comment-count'>${post.n_comments}</span>
+    //             </button>
                 
-                <button class="flex items-center space-x-1 hover:text-green-500" onclick="socialShare(this,'https://roleplayverse.live/posts/${post.id}')">
-                  <i class = 'fas fa-share-alt'></i><span>partager</span>
-                </button>
-              </div>
+    //             <button class="flex items-center space-x-1 hover:text-green-500" onclick="socialShare(this,'https://roleplayverse.live/posts/${post.id}')">
+    //               <i class = 'fas fa-share-alt'></i><span>partager</span>
+    //             </button>
+    //           </div>
     
                
     
-              <div class="mt-4 space-y-3 comments max-h-64 overflow-y-auto" style='max-height:300px'>
-                 ${post.comments.map(comment =>createComment(comment)).join('')}
-              </div>
+    //           <div class="mt-4 space-y-3 comments max-h-64 overflow-y-auto" style='max-height:300px'>
+    //              ${post.comments.map(comment =>createComment(comment)).join('')}
+    //           </div>
     
-               <form onsubmit='sendComment(this, event)' class="comment-form mt-4" data-post-id = ${post.id}>
-                    <input type="text" class="bg-gray-800 text-white p-2 rounded w-full  border-0  focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="ajoute un commentaire...">
-                </form>
+    //            <form onsubmit='sendComment(this, event)' class="comment-form mt-4" data-post-id = ${post.id}>
+    //                 <input type="text" class="bg-gray-800 text-white p-2 rounded w-full  border-0  focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="ajoute un commentaire...">
+    //             </form>
     
               
         
-            </div>
-          </div>
-    `
-    return postElement2
-    }
+    //         </div>
+    //       </div>
+    // `
+    // return postElement2
+    // }
 </script>
 
      {% block content %}

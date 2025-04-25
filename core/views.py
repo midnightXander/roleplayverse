@@ -24,6 +24,8 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from users.users_utility import get_player
 from utility import _time_since,_parse_number,decrypt_message,sendWelcomeEmail,generate_referall_code
+from api.models import PushSubscription
+from api.utility import send_push_notification
 import random
 from django.contrib.gis.geoip2 import GeoIP2
 import re
@@ -136,6 +138,12 @@ def get_notifs(player):
 @login_required
 def home(request):
 
+    # neon = User.objects.get(username = 'Neon365')
+    # send_push_notification(PushSubscription.objects.get(user = neon), {
+    #     'title': 'Welcome from Roleplay Verse',
+    #     'body': 'Your journey begins here',
+    #     'icon': '/static/images/logo/logo_1.png'
+    # })
 
     posts = Post.objects.all()
     battles = Battle.objects.filter(status = "finished")
@@ -244,6 +252,7 @@ def home(request):
     
     
     return render(request,"core/home.html",context)
+
 
 def _liked_comment(player:Player, comment:Comment):
     liked = False
@@ -623,6 +632,14 @@ def react_post(request,post_id):
         post.likes = post.likes + 1
         reaction.save()
         post.save()
+
+        #Send Push Notification if likes exceeds 10
+        if post.likes == 5:
+            send_push_notification(post.author.user, {
+                'title': 'Votre publication a été aimé par 5 personnes',
+                'body': f'Votre publication a été aimé par 5 personnes',
+                'icon': '/static/images/logo/logo_1.png'
+            })
         
         
         return JsonResponse({"status":'success',"message":"liked",'likes':post.likes})
@@ -682,6 +699,13 @@ def react_comment(request, comment_id):
         comment.save()
         
         likes = len(CommentReaction.objects.filter(comment = comment))
+        #Send Push Notification if likes exceeds 10
+        if likes == 10:
+            send_push_notification(comment.author.user, {
+                'title': 'Votre commentaire a été aimé par 10 personnes',
+                'body': f'Votre commentaire sur la publication de {comment.post.author} a été aimé par 10 personnes',
+                'icon': '/static/images/logo/logo_1.png'
+            })
         return JsonResponse({"status":'success',"message":"liked",'likes':_parse_number(likes)})
     
     return JsonResponse({"status":"error"}) 
@@ -711,6 +735,13 @@ def create_comment(request,post_id):
                     url = f'/posts/{post.id}',
                 )
                 new_notif.save()
+                #send a push notification to the post author
+                send_push_notification(post.author.user, {
+                    'title': '{player} a commenté votre publication',
+                    'body': f'{new_comment.body[:10]}...',
+                    'icon': '/static/images/logo/logo_1.png'
+                })
+
             new_comment.save()
             comment = _get_comment(player, new_comment)
             return JsonResponse({"status":"success","comment":comment

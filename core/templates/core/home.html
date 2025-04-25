@@ -280,6 +280,10 @@
         {% trans 'Store' %}
     </a>
 </li>
+<li><a onclick="askNotificationFromBtn()" id="enable-notification-btn"  class="flex items-center cursor-pointer py-2 px-4 text-gray-400 rounded">
+    <i class="fas fa-ring-bell mr-2"></i> Activer les notifications  
+    </a>
+</li>
    
 </ul>
 </aside>
@@ -339,7 +343,8 @@
           {% empty %}
             <p class="text-center text-gray-400 text-sm p-4">Les meilleures familles seront affichées ici</p>
         {% endfor %}
-        <a href="/users/families/rankings" class="text-center text-orange-500">voir plus</a>
+        <p class="text-center text-orange-500"><a href="/users/families/rankings" >voir plus</a></p>
+        
           
           
         </div>
@@ -362,7 +367,8 @@
           {% empty %}
             <p class="text-center text-gray-400 text-sm p-4">Les meilleures joueurs du mois seront affichées ici</p>
         {% endfor %}
-        <a href="/users/players/rankings" class="text-center text-orange-500">voir plus</a>
+        <p class="text-center text-orange-500" ><a href="/users/players/rankings" >voir plus</a></p>
+        
           
           
         </div>
@@ -570,7 +576,53 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
 <script>
 
-// ... (previous JavaScript code) ...
+
+function askNotificationFromBtn(){
+
+// Check if the browser supports notifications
+if(!("Notification" in window)){
+    console.log("Browser doesn't support notifications")
+    return
+}
+if(Notification?.permission !== 'granted'){
+    Notification.requestPermission((permission)=>{
+        const notificationBtn = document.getElementById("enable-notification-btn")
+        // set the button to shown or hidden, depending on what the user answers
+        Notification.requestPermission((permission)=>{
+        notificationBtn.style.display = permission === "granted" ? "none" : "block";
+        })
+    })
+}
+
+// if(Notification?.permission === 'granted'){
+//     const notification = new Notification("Roleplayverse", {
+//         body: "Tu as un nouveau message",
+//         icon: "https://roleplayverse.live/static/images/logo.png"
+//     })
+//     notification.onclick = function(event) {
+//         event.preventDefault(); // Prevent the browser from focusing the Notification's tab
+//         window.open('https://roleplayverse.live/chats', '_blank'); // Open the chat page in a new tab
+//     }
+}
+
+function createNotification(title, body, img, tag = null){
+    if(Notification?.permission == "granted"){
+        const notification = new Notification(title,{ body: body, icon:img, tag: tag})
+
+    document.addEventListener('visibilitychange', ()=>{
+    if(document.visibilityState == 'visible'){
+        notification.close()
+    }
+})
+    }
+    
+}
+
+//createNotification('Hello', 'Join the adventure', "{% static 'images/logo/logo_1.png' %}")
+
+
+
+
 
 // Menu toggle functionality
 const menuToggle = document.getElementById('menuToggle');

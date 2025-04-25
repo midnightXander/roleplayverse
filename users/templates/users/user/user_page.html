@@ -397,7 +397,33 @@
 </script>
 {% endblock active %}
 
+<script>
+function askNotification(){
 
+// Check if the browser supports notifications
+if(!("Notification" in window)){
+    console.log("Browser doesn't support notifications")
+    return
+}
+if(Notification?.permission !== 'granted'){
+    Notification.requestPermission((permission)=>{
+    })
+}
+
+// if(Notification?.permission === 'granted'){
+//     const notification = new Notification("Roleplayverse", {
+//         body: "Tu as un nouveau message",
+//         icon: "https://roleplayverse.live/static/images/logo.png"
+//     })
+//     notification.onclick = function(event) {
+//         event.preventDefault(); // Prevent the browser from focusing the Notification's tab
+//         window.open('https://roleplayverse.live/chats', '_blank'); // Open the chat page in a new tab
+//     }
+}
+askNotification()
+
+
+</script>
 <script>
     // Set progress ring
     const playerProgress = JSON.parse(document.getElementById("player_progression").textContent)

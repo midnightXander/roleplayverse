@@ -201,7 +201,7 @@ function createPostElement(post) {
 
 function  createBattleElement(battle){
   const battleElement = document.createElement('div')
-  battleElement.className = 'battle-card  bg-gray-800 border border-gray-200 rounded-lg p-6 flex flex-col';
+  battleElement.className = 'battle-card  bg-gray-900 border border-gray-700 rounded-lg p-6 flex flex-col';
   battleElement.innerHTML = `
                               <div class="flex justify-between items-center mb-4">
                                   <h3 class="text-xl font-bold">${battle.status}</h3>

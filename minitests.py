@@ -332,15 +332,22 @@ print(sum(count))
 
 print(uuid.uuid1())
 
-import core.views as coreViews
+# import core.views as coreViews
 
-characters = coreViews.get_characters()
-character = 'Sasuke uchiwa'
+# characters = coreViews.get_characters()
+# character = 'Sasuke uchiwa'
 
-print(characters[0])
+# print(characters[0])
 
 # for ch in characters:
 #     print(ch)
 #     # if character.lower() == ch['']:
 
 
+from py_vapid import Vapid
+
+print('keys:')
+vapid = Vapid.generate_keys()
+print(vapid)
+# print("public key: ", vapid['publicKey'])
+# print("private key: ", vapid['privateKey'])

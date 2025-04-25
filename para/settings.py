@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #Myapps
+    'api',
     'core',
     'users',
     'chat',
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     'blog',
     'moderator',
     'legal',
+    
 
     #thirdParties
     
@@ -62,6 +64,7 @@ INSTALLED_APPS = [
     'celery',
     'django_celery_beat',
     'django_celery_results',
+    
 
     #Allauth
     'allauth',

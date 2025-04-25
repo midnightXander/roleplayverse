@@ -228,3 +228,5 @@ class FamilyMember(models.Model):
 
     class Meta:
         unique_together = ('player', 'family')
+
+
