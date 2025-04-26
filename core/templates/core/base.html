@@ -43,7 +43,7 @@
         <script type="text/javascript" src="{% static 'js/linkifyjs/dist/linkify.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/linkify-html/dist/linkify-html.min.js' %}"></script>
         <script src="{% static 'js/components.js' %}" ></script>
-        <script src="{% static 'js/utility.js' %}"  ></script> 
+        <!-- <script src="{% static 'js/utility.js' %}"  ></script>  -->
         <script src="{% static 'js/core.js' %}"></script>
         <!-- <script src="{% static 'js/notifications.js' %}"></script>  -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -84,6 +84,9 @@
     .post{
         border: 1px solid #ccc;
     }
+    [data-expandable] {
+        cursor: pointer;
+    }   
 </style>
 
 
@@ -110,7 +113,41 @@
     }(document, "script"));
 </script> -->
 <!-- End PushAlert -->
+    <script>
+        function toggleExpand(el) {
+    // Check if the element has the 'data-expandable' attribute  
+    const text = el.textContent.trim();
+    const fullText = el.getAttribute('data-full');
+    const isExpanded = el.getAttribute('data-expanded') === "true";
+    
+    if (isExpanded && fullText.length > 200) {
+        el.textContent = fullText.slice(0, 200) + '...';
+        el.setAttribute('data-expanded', "false");
+    } else{
+    el.textContent = fullText;
+    el.setAttribute('data-expanded', "true");
+    }
+}
 
+function setupExpandableText() {
+    document.querySelectorAll('[data-expandable]').forEach(el => {
+    const text = el.textContent.trim();
+    console.log(text)
+    if (el.getAttribute('data-full').length > 200) {
+        //el.setAttribute('data-full', text);
+        el.setAttribute('data-expanded', "false");
+        el.classList.add('cursor-pointer');
+        //el.textContent = text.slice(0, 200) + '...';
+        // el.removeEventListener('click', () => toggleExpand(el));
+        // el.addEventListener('click', () => toggleExpand(el));
+    }
+    });
+    console.log("Expandable text set up for elements:", document.querySelectorAll('[data-expandable]'));
+}
+
+//document.addEventListener('DOMContentLoaded', () =>{ console.log("expandable set up"); setupExpandableText() });
+
+    </script>
 
     </head>
     <body class="bg-gray-950 h-screen flex flex-col">

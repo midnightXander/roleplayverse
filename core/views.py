@@ -79,7 +79,9 @@ def _get_comment(player:Player,comment:Comment):
             'comments': len(Comment.objects.filter(post = comment.post)),
             'liked': _liked_comment(player, comment),
             'likes': _parse_number(len(CommentReaction.objects.filter(comment = comment))),
-            'body': comment.body,
+            
+            'body_full': comment.body,
+            'body': comment.body[:197]+'...' if len(comment.body) > 200 else comment.body,
             'timestamp': _time_since(comment.date_added)  
 
         } 
@@ -99,7 +101,8 @@ def get_comments_dict(player:Player,post:Post):
             },
             'liked': _liked_comment(player, comment),
             'likes': _parse_number(len(CommentReaction.objects.filter(comment = comment))),
-            'body': comment.body,
+            'body_full': comment.body,
+            'body': comment.body[:197]+'...' if len(comment.body) > 200 else comment.body,
             'timestamp': _time_since(comment.date_added)  
 
         } for comment in comments
@@ -302,7 +305,9 @@ def _post_data(player:Player, post:Post):
                         'player': str(post.author),
                         'profile_picture':post.author.profile_picture.url
                         },
-            'body':post.body,
+            
+            'body_full': post.body,
+            'body': post.body[:200]+'...' if len(post.body) > 200 else post.body,
             'liked': _liked_post(player, post),
             'likes':_parse_number(post.likes,True),
             'is_favorite': SavedPost.objects.filter(player = player, post = post).exists(),
@@ -503,7 +508,7 @@ def create_post(request):
         if body or image:
             postid = len(Post.objects.all()) + 1
             new_post = Post.objects.create(
-                #id = postid,
+                id = postid,
                 author=player,body=body,image = image)
             
             new_post_data = _post_data(player,new_post)
@@ -737,8 +742,8 @@ def create_comment(request,post_id):
                 new_notif.save()
                 #send a push notification to the post author
                 send_push_notification(post.author.user, {
-                    'title': '{player} a commenté votre publication',
-                    'body': f'{new_comment.body[:10]}...',
+                    'title': f'{player} a commenté votre publication',
+                    'body': f'{new_comment.body[:20]}...',
                     'icon': '/static/images/logo/logo_1.png'
                 })
 

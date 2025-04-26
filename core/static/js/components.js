@@ -1,5 +1,6 @@
 
 // Function to create a post element
+// // Function to create a post element
 function createPostElement(post) {
     const postElement = document.createElement('div');
     postElement.className = 'post bg-gray-700 rounded-lg p-4';
@@ -101,9 +102,11 @@ function createPostElement(post) {
                     </div>
                 </div>
               </div>
-              <p class="text-base text-gray-800 dark:text-gray-100 mt-1 data-expandable">
+              
+              <p onclick = 'toggleExpand(this)' class="text-base text-gray-800 dark:text-gray-100 mt-1" data-expandable data-full='${post.body_full}'>
                 ${post.body}
               </p>
+             
                 ${post.image ? `
                 <div class="mt-3">
                 <img  src="${post.image}" alt="${post.author.player} image de publication" class="w-full myImg rounded-xl border-1 border-gray-700 object-cover max-h-64" />
@@ -179,7 +182,10 @@ function createPostElement(post) {
                                       </div>
                                   </div>    
                           </div>
-                          <p class="body text-sm text-gray-300 data-expandable">${comment.body}</p>
+                          
+                          <p onclick = 'toggleExpand(this)' class="body text-sm text-gray-300" data-expandable data-full='${comment.body_full}'>${comment.body}</p>
+                          
+                          
                           <div class="flex items-center space-x-4 mt-2 text-sm">
                                   
                                   <span class="text-xs text-gray-400">${comment.timestamp}</span>

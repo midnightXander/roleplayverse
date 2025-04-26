@@ -22,6 +22,7 @@ function setupExpandableText() {
         el.addEventListener('click', () => toggleExpand(el));
     }
     });
+    console.log("Expandable text set up for elements:", document.querySelectorAll('[data-expandable]'));
 }
 
-document.addEventListener('DOMContentLoaded', () =>{ console.log("expandable set up"); setupExpandableText() });
+//document.addEventListener('DOMContentLoaded', () =>{ console.log("expandable set up"); setupExpandableText() });

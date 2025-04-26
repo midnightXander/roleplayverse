@@ -38,7 +38,7 @@ class Family(models.Model):
     description = models.CharField(max_length=100,blank=True)
     challenge_head = models.ForeignKey(User, null=True,blank=True, on_delete=models.SET_NULL,related_name='challenge_heads')
     points = models.IntegerField(default=0,validators=[
-        MinValueValidator(1)
+        MinValueValidator(0)
     ])
     members = models.ManyToManyField('Player', through=('FamilyMember'), related_name = 'members')
     # id = models.UUIDField(primary_key=True,default=uuid.uuid4())
