@@ -70,13 +70,13 @@ function createPostElement(post) {
     <div class="flex items-start gap-4">
             <img src="${post.author.profile_picture}" alt="${post.author.player}" class="myImg w-10 h-10 rounded-full" />
             <div class="flex-1">
-              <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400">
+              <div class="flex justify-between text-sm text-gray-400">
                 <div>
-                  <a href = "/users/${post.author.name}" class="inline-block font-semibold hover:text-orange-600 text-gray-900 dark:text-white">${post.author.player}</a> @${post.author.player}
+                  <a href = "/users/${post.author.name}" class="inline-block font-semibold hover:text-orange-600 text-white">${post.author.player}</a> @${post.author.player}
                 </div>
                 
     
-                 <div class="relative flex space-x-2">
+                 <div class="relative flex space-x-2 ">
                   <span>${post.time_posted}</span>
                   <button onclick = 'togglePostDropdown(this)'  class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
                       <i class="fas fa-ellipsis-v"></i>
@@ -97,13 +97,12 @@ function createPostElement(post) {
                         <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deletePost(this,'${post.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
                         `:`
                       `}
-                      
-                  
+                       
                     </div>
                 </div>
               </div>
               
-              <p onclick = 'toggleExpand(this)' class="text-base text-gray-800 dark:text-gray-100 mt-1" data-expandable data-full='${post.body_full}'>
+              <p onclick = 'toggleExpand(this)' class="text-base text-gray-100 mt-1" data-expandable data-full='${post.body_full}'>
                 ${post.body}
               </p>
              
@@ -113,7 +112,7 @@ function createPostElement(post) {
               </div>
                 ` : ''}
               
-              <div class="flex justify-between mt-4 text-gray-500 dark:text-gray-400 text-sm">
+              <div class="flex justify-between mt-4 text-gray-400 text-sm">
                 <button class="like-button flex items-center space-x-1 hover:text-orange-500 ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
                 <i class="far fa-heart"></i>
                 <span class="like-count">${post.likes}</span>

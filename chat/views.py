@@ -17,7 +17,8 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from utility import decrypt_message,_date_time,_time_since,_parse_number,_time_since_last_seen
 from cryptography.fernet import Fernet
-
+from api.models import PushSubscription
+from api.utility import send_push_notification
 
 
 
@@ -306,7 +307,7 @@ def send_message(request,receiver_id):
             #)
             chat.last_message_abbr = content[:20]
             chat.last_message_time_sent= new_msg.date_sent
-            print("Existing chat between these two...")
+            #print("Existing chat between these two...")
             new_msg.chat = chat
             chat.save()
         except:
@@ -317,7 +318,7 @@ def send_message(request,receiver_id):
                 last_message_time_sent= new_msg.date_sent,
             )
             new_msg.chat = new_chat
-            print("New chat between these two")
+            #print("New chat between these two")
             new_chat.save()
         new_msg.save()
 

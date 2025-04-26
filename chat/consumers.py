@@ -12,6 +12,8 @@ from core.views import _time_since
 from core.models import Notification
 
 from utility import encrypt_message
+from api.models import PushSubscription
+from api.utility import send_push_notification
 
 class PrivateChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
@@ -89,7 +91,18 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
                 target = receiver,
                 url = f'/chats/dm/{sender_name}',
                 content = f"{sender} t'a envoyé un message",
-        )      
+        )
+        #create a notification for the sender
+        send_push_notification(
+            PushSubscription.objects.filter(user = receiver_user).first(),
+            {
+            'title' : f"Message de {sender_name}",
+            'body' : f"{sender_name} t'a envoyé un message",
+            'url' : f'/chats/dm/{sender_name}',
+            'icon': '/static/images/logo/logo_1.png'
+            },
+            
+        )
 
         new_msg.save()
         new_notif.save()
@@ -267,6 +280,17 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
                     content = f'{sender} a envoyé un message dans {family}',
             )  
             new_notif.save()
+            #send push notification to the family members
+            send_push_notification(
+                PushSubscription.objects.filter(user = member.user).first(),
+                {
+                'title' : f"Message de {sender}",
+                'body' : f"{sender} a envoyé un message dans {family}",
+                'url' : f'/chats/group/{family}',
+                'icon': '/static/images/logo/logo_1.png'
+                },
+                
+            )
 
         new_msg.save()
         return new_msg
