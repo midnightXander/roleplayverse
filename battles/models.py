@@ -5,7 +5,7 @@ import uuid
 from utility import get_characters
 from django.utils import timezone
 
-BATTLE_LATENCY = 5
+BATTLE_LATENCY = 12
 f_request_cost = 250
 s_request_cost = 350
 request_cost = 350

@@ -10,7 +10,7 @@ def send_push_notification(user :User, message):
     # logic to send a push notification using the subscription data
     try:
         subscription = PushSubscription.objects.get(user=user)
-    except PushSubscription.DoesNotExist:
+    except:
         print("Subscription does not exist for this user.")
         return    
 

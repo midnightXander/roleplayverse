@@ -348,9 +348,9 @@ def accept_battle(request,request_id):
         elif not player.family and b_request.type == battle_types[1]:
             message = 'Vous devez étre dans une famille pour faire des combats stake'
         #check if there are more than 3 acceptors for the request already    
-        elif len(acceptors)>=3:
+        elif len(acceptors)>=2:
             
-            message = "3 combats ont deja été initié de cette RDC"
+            message = "2 combats ont deja été initié de cette RDC"
         
         #check if the player has already accepted this request
         elif BattleAcceptor.objects.filter(player = player, request = b_request).exists():
@@ -387,7 +387,7 @@ def accept_battle(request,request_id):
                 PushSubscription.objects.filter(user = b_request.sender.user).first(),
                 {
                 'title' : f"Ton combat peut Commencer",
-                'body' : f"{b_request.senderv} a accepté ta requète de combat, clique pour commencer le combat",
+                'body' : f"{b_request.sender} a accepté ta requète de combat, clique pour commencer le combat",
                 'url' : f'/users/requests/{b_request.sender.user.username}',
                 'icon' : '/static/images/logo/logo_1.png',
                 },
@@ -442,8 +442,11 @@ def init_battle(request,acceptor_id):
                 )
 
                 #delete request if there are more than 3 persons that have accepted
-                if len(BattleAcceptor.objects.filter(request = battle_request))>=3:
-                    battle_request.delete()
+                # if len(BattleAcceptor.objects.filter(request = battle_request))>=2:
+                #     battle_request.delete()
+
+                if len(Battle.objects.filter(request = battle_request))>=2:
+                    battle_request.delete()    
                     
                 
                 #Notify the acceptor
