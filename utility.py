@@ -148,7 +148,7 @@ def _time_since(time):
     #     return f"{months} months ago"
     
     elif days > 0 and days < 7:
-        return f"{days} jours"
+        return f"{days} j"
     elif days > 7 and years <= 0:
         return time.strftime('%d-%m')
     elif days > 7 and years>0:

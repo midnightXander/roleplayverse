@@ -123,7 +123,7 @@
 
 
 
-<div id="battleRoom" class="bg-gray-800 p-4 mb-8 mt-20">
+<div id="battleRoom" class="bg-gray-950 p-4 mb-8 mt-20">
     
     
     <div class="max-w-5xl mx-auto">
@@ -151,7 +151,7 @@
                 <div class="profile-container mx-auto">
                     <div class="profile-border border-top"></div>
                     <img src="{{battle.initiator.profile_picture.url}}" alt="Hero" class="profile-image profile-image-top shadow-lg">
-                    <img src="{{i_character.images.0}}" alt="{{i_character}}" class="profile-image profile-image-bottom shadow-lg">
+                    <img src="{{i_character.images.0}}" alt="image de {{i_character.name}}" class="profile-image profile-image-bottom shadow-lg">
                     <div class="profile-border border-bottom"></div>
                 </div>
                 <div class="mt-8">
@@ -173,7 +173,7 @@
                 <div class="profile-container mx-auto">
                     <div class="profile-border border-top"></div>
                     <img src="{{battle.opponent.profile_picture.url}}" alt="Hero" class="profile-image profile-image-top shadow-lg">
-                    <img src="{{o_character.images.0}}" alt="{{o_character}}" class="profile-image profile-image-bottom shadow-lg">
+                    <img src="{{o_character.images.0}}" alt="image de {{o_character.name}}" class="profile-image profile-image-bottom shadow-lg">
                     <div class="profile-border border-bottom"></div>
                 </div>
                 <div class="mt-8">
@@ -220,9 +220,16 @@
         </div>
         
         <!-- Battle Rules -->
-        <div class="bg-gray-700 rounded-lg p-4 mb-6">
+        <div class="bg-gray-900 rounded-2xl p-4 mb-6">
             <h2 class="text-3xl font-bold text-orange-500 mb-6">Règles du combat</h2>
-            <ul id="battleRules" class="list-disc list-inside text-gray-300">
+            <div class="flex flex-col space-y-2 mb-4">
+                <p class="text-gray-400 text-xs" ><i class="fas fa-exclamation-triangle text-yellow-500 mr-2"></i>La latence est automatiquement fixé a <span>12 heures</span> pour tout les combats
+                </p>
+                <!-- <p>Ce qui veut dire que chaque joueurs dispose de 12h max pour envoyer son pavé auquel cas son adversaire est declaré vainqueur automatiquement</p> -->
+                <a target="_blank"  href="/blog/News/posts" class="text-xs text-orange-500" >En apprendre plus</a>
+            </div>
+            
+            <ul id="battleRules" class="list-none list-inside text-gray-300 max-h-64 overflow-y-auto">
                 <!-- <li>No god-modding or auto-hitting</li>
                 <li>Respect the character's known abilities</li>
                 <li>Minimum of 300 words per post</li>
@@ -230,14 +237,14 @@
                 <li>72-hour time limit for responses</li> -->
             {% for rule in rules %}
                 
-                <li>{{rule}}</li>
+                <li> <i class="fas fa-caret-right text-orange-500 mr-2"></i> {{rule}}</li>
 
                 {% empty %}
                 {% if player != battle.refree %}
                 <div>Les règles du combat n'ont pas encore été etablies!</div>
                 <div>Envoie un message a l'arbitre <a class="font-bold hover:text-orange-600" href="/chats/dm/{{battle.refree.user.username}}">{{battle.refree}}</a> pour établir les règles</div>
             
-                <button class="mt-4" onclick="copyLink('https:\/\/roleplayverse.com/battles/battle_room/{{battle.id}}')">
+                <button class="mt-4" onclick="copyLink('https:\/\/roleplayverse.live/battles/battle_room/{{battle.id}}')">
                     <i class="fas fa-copy mr-2"></i>Copier le lien du combat</button>
                 {% else %}
                

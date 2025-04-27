@@ -273,7 +273,7 @@
 
     <li><a onclick="showMyToast('Coming soon')" href="#" class="flex items-center  mt-5 py-2 px-4 hover:bg-gray-600 text-yellow-300 rounded">
         <!-- <i class="fas fa-shopping-cart mr-2"></i> -->
-        <svg class="w-8 h-8  mr-2 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+        <svg class="w-8 h-8  mr-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 12c.263 0 .524-.06.767-.175a2 2 0 0 0 .65-.491c.186-.21.333-.46.433-.734.1-.274.15-.568.15-.864a2.4 2.4 0 0 0 .586 1.591c.375.422.884.659 1.414.659.53 0 1.04-.237 1.414-.659A2.4 2.4 0 0 0 12 9.736a2.4 2.4 0 0 0 .586 1.591c.375.422.884.659 1.414.659.53 0 1.04-.237 1.414-.659A2.4 2.4 0 0 0 16 9.736c0 .295.052.588.152.861s.248.521.434.73a2 2 0 0 0 .649.488 1.809 1.809 0 0 0 1.53 0 2.03 2.03 0 0 0 .65-.488c.185-.209.332-.457.433-.73.1-.273.152-.566.152-.861 0-.974-1.108-3.85-1.618-5.121A.983.983 0 0 0 17.466 4H6.456a.986.986 0 0 0-.93.645C5.045 5.962 4 8.905 4 9.736c.023.59.241 1.148.611 1.567.37.418.865.667 1.389.697Zm0 0c.328 0 .651-.091.94-.266A2.1 2.1 0 0 0 7.66 11h.681a2.1 2.1 0 0 0 .718.734c.29.175.613.266.942.266.328 0 .651-.091.94-.266.29-.174.537-.427.719-.734h.681a2.1 2.1 0 0 0 .719.734c.289.175.612.266.94.266.329 0 .652-.091.942-.266.29-.174.536-.427.718-.734h.681c.183.307.43.56.719.734.29.174.613.266.941.266a1.819 1.819 0 0 0 1.06-.351M6 12a1.766 1.766 0 0 1-1.163-.476M5 12v7a1 1 0 0 0 1 1h2v-5h3v5h7a1 1 0 0 0 1-1v-7m-5 3v2h2v-2h-2Z"/>
         </svg>
           
@@ -331,7 +331,7 @@
         <div class="space-y-3">
           <!-- Family Card -->
           {% for family in top_families %}
-          <div class="flex items-center justify-between bg-gray-800 rounded-xl p-3">
+          <div class="flex items-center justify-between bg-gray-900 rounded-xl p-3">
             <div class="flex items-center gap-3">
               <img  src="{{family.profile_picture.url}}" alt="{{family.name}}" class="w-10 h-10 rounded-full" />
               <div>
@@ -355,7 +355,7 @@
         <div class="space-y-3">
           <!-- Player Card -->
           {% for player in top_players %}
-          <div class="flex items-center justify-between bg-gray-800 rounded-xl p-3">
+          <div class="flex items-center justify-between bg-gray-900 rounded-xl p-3">
             <div class="flex items-center gap-3">
               <img  src="{{player.profile_picture}}" alt="{{player.user.username}}" class="w-10 h-10 rounded-full" />
               <div>
@@ -484,30 +484,56 @@
    
     {% endif %}
 </div>
+<div class="rounded-2xl shadow-md p-5 mb-4">
+    <h2 class="text-xl font-semibold">🏆 Top Familles</h2>
+    <div class="space-y-3">
+      <!-- Family Card -->
+      {% for family in top_families %}
+      <div class="flex items-center justify-between bg-gray-900 rounded-xl p-3">
+        <div class="flex items-center gap-3">
+          <img  src="{{family.profile_picture.url}}" alt="{{family.name}}" class="w-10 h-10 rounded-full" />
+          <div>
+            <a onclick="showOverlay()" href="/users/family/{{family.id}}" class="font-semibold">{{forloop.counter}}. {{family.name}}</a>
+            <p class="text-xs text-gray-500">{{family.points}} pts</p>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+        <p class="text-center text-gray-400 text-sm p-4">Les meilleures familles seront affichées ici</p>
+    {% endfor %}
+    <p class="text-center text-orange-500"><a href="/users/families/rankings" >voir plus</a></p>
+    
+      
+      
+    </div>
+  </div>
 
-<div class="mb-4">
-    <h3 class="font-bold mb-2 text-orange-500">Families de premier rang</h3>
-    <ul class="space-y-2">
-        {% for family in top_families %}
-        <li class="flex items-center p-2 rounded hover:bg-gray-700">
-            <img src="{{family.profile_picture.url}}" alt="{{family.name}}" class="w-10 h-10 rounded-full mr-2">
-            <!-- path('family/65744<int:family_id>',views.family_page,name='family_page'), -->
-            <a href="/users/family/65744{{family.id}}" class="flex-grow">
-                <span class="font-bold">{{forloop.counter}}. {{family.name}}</span>
-                <p class="text-sm text-gray-300">points: {{family.points}}</p>
-            </a>
-            <!-- <button class="bg-orange-500 text-xs px-2 py-1 rounded">Challenge</button> -->
-        </li>
-        {% empty %}
-       <p class="text-center text-sm p-4">Les meilleures Familles  seront affichés ici</p>
-        {% endfor %}
-        
-    </ul>
-    <a href="/users/families/rankings" class="text-center text-blue-400 mt-5 ml-10">liste complète</a>
-</div>
 
+  <div class="p-5 mb-4">
+    <h2 class="text-xl font-semibold">🏆 Joueurs du mois</h2>
+    <div class="space-y-3">
+      <!-- Player Card -->
+      {% for player in top_players %}
+      <div class="flex items-center justify-between bg-gray-900 rounded-xl p-3">
+        <div class="flex items-center gap-3">
+          <img  src="{{player.profile_picture}}" alt="{{player.user.username}}" class="w-10 h-10 rounded-full" />
+          <div>
+            <a onclick="showOverlay()" href="/users/family/{{family.id}}" class="font-semibold">{{forloop.counter}}. {{player.player.username}}</a>
+            <p class="text-xs text-gray-500">{{player.wins}} victoires</p>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+        <p class="text-center text-gray-400 text-sm p-4">Les meilleures joueurs du mois seront affichées ici</p>
+    {% endfor %}
+    <p class="text-center text-orange-500" ><a href="/users/players/rankings" >voir plus</a></p>
+    
+      
+      
+    </div>
+  </div>
 
-<div class="mb-4">
+<!-- <div class="mb-4">
     <h3 class="font-bold mb-2 text-orange-500">Classement mensuel des joueurs</h3>
     <ul class="space-y-2">
         {% for player in top_players %}
@@ -529,7 +555,7 @@
     </ul>
     
     <a href="/users/players/rankings" class="text-center text-blue-400 mt-5 ml-10">liste complète</a>
-</div>
+</div> -->
 <div class="mb-4">
     <h3 class="font-bold mb-2 text-orange-500">Recent Challenges</h3>
     <ul class="space-y-2">

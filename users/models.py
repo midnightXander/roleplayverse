@@ -20,6 +20,18 @@ for ch in characters_list:
 
 PLAYER_PROFILE_PICTURES = ['1.jpg','2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.png', '7.jpg', '8.jpg','9.png']
 
+ML_STATUS = {
+    "waiting referee": {
+        'fr':"en attente d'arbitrage",
+        'en': 'waiting referee',
+    },
+    'ongoing': {
+        'fr':'en cours',
+        'en': 'ongoing',
+    }
+}
+
+# ML_STATUS.get('waiting referee').get('fr')
 
 class PlayerDefaultImage(models.Model):
     image = models.ImageField(upload_to="players/profile_pics/")

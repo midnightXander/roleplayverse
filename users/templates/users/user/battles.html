@@ -3,13 +3,13 @@
 {% block filterContent %}
 <!-- Content area for filtered results -->
  <div id="filteredContent" class="rounded-lg p-6">
-    <div id="battlesList" class="hidden">
+    <div id="battlesList" class="hidden flex flex-col space-y-4 ">
         <!-- <h2 class="text-2xl font-bold mb-4">{{req_player}} C</h2>  -->
         <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> -->
             
             <div class="flex flex-col justify-center items-center">
                 <p class="text-center text-gray-400">Aucun combat pour l'instant</p>
-            <a class="text-center text-orange-500 hover:text-orange-600 text-sm" href="/battles">comment faire un combat</a>
+            <a onclick="showOverlay()" class="text-center text-orange-500 hover:text-orange-600 text-sm" href="/battles">comment faire un combat</a>
             </div>
         <!-- </div> -->
     </div>

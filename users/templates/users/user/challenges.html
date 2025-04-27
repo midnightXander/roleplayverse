@@ -12,7 +12,7 @@
     }
 </style>
 {% for battle in battles %}
-<div class="bg-gray-800 rounded-lg shadow-md p-6 mb-8">
+<div class="bg-gray-900 rounded-lg shadow-md p-6 mb-8">
     <div class="py-2">vs <a href="/users/{{battle.opponent.username}}" class="text-2xl font-semibold text-orange-500 mb-4">{{battle.opponent.player}}</a></div>
     <p class="text-gray-200 mb-2 ">Persos : {{battle.i_character}}(Toi) vs {{battle.o_character}}({{battle.opponent.username}})</p>
     <!-- <p class="text-gray-200 mb-2">Participants : Toi vs <a href="/users/{{battle.opponent.username}}" class="font-semibold hover:text-orange-500 " >{{battle.opponent.player}}</a></p> -->
@@ -66,7 +66,7 @@
 
 <div class="flex text-gray-300 text-sm flex-col justify-center items-center">
     <img src="{% static 'svg/sword-spin.svg'  %}" alt="sword-spin" class="h-16 w-16" >
-    <p>Aucune defi lancé pour l'instant</p>
+    <p>Aucun défi lancé pour l'instant</p>
 </div>
 
 

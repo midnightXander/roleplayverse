@@ -237,7 +237,7 @@ function  createBattleElement(battle){
                                   <i class="fas fa-gavel mr-2"></i>Propose as Referee
                               </button>`:`
                               <div class='flex justify-between items-center' > 
-                              <a href="/battles/battle_room/${battle.id}" class="inline-block bg-transparent border border-orange-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
+                              <a onclick = 'showOverlay()' href="/battles/battle_room/${battle.id}" class="inline-block bg-transparent border border-orange-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
                                       voir le combat 
                               </a>
 
