@@ -6,13 +6,13 @@ from dotenv import load_dotenv
 import os,json
 
 
-def send_push_notification(user :User, message):
+def send_push_notification(subscription :PushSubscription, message):
     # logic to send a push notification using the subscription data
-    try:
-        subscription = PushSubscription.objects.get(user=user)
-    except:
-        print("Subscription does not exist for this user.")
-        return    
+    # try:
+    #     subscription = PushSubscription.objects.get(user=user)
+    # except:
+    #     print(f"Subscription does not exist for user {user}.")
+    #     return    
 
     try: 
         webpush(
