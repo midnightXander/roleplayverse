@@ -29,5 +29,6 @@ def send_push_notification(subscription :PushSubscription, message):
                 'sub': 'mailto:alexngaikama913@gmail.com' 
                 }
         )
+        print(f"Notif sent to {subscription.user}.")
     except WebPushException as ex:
         print(f"Failed to send notification: {ex}")
