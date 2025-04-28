@@ -16,7 +16,7 @@ def send_push_notification(subscription :PushSubscription, message):
 
 
     if subscription == None:
-        print(f"Subscription does not exist for user {subscription.user}.")
+        print(f"Subscription does not exist for user.")
         return
     try: 
         webpush(
