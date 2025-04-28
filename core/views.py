@@ -307,7 +307,7 @@ def _post_data(player:Player, post:Post):
                         },
             
             'body_full': post.body,
-            'body': post.body[:200]+'...' if len(post.body) > 200 else post.body,
+            'body': post.body[:200]+'...' if post.body and len(post.body) > 200 else (post.body if post.body else '' ),
             'liked': _liked_post(player, post),
             'likes':_parse_number(post.likes,True),
             'is_favorite': SavedPost.objects.filter(player = player, post = post).exists(),
@@ -328,7 +328,7 @@ def get_posts(request):
     #sort both posts and battles
     feed_items = (Post.objects.values('custom_id','date_added')
                   .annotate(date=F('date_added'))
-                  .union(Battle.objects.filter(Q(status = 'finished') |  Q(status = 'ongoing') |  Q(status = 'waiting_refree') |  Q(status = 'not_started'))
+                  .union(Battle.objects.filter(Q(status = 'finished') |  Q(status = 'ongoing'))
                     .values('custom_id','date_ended')
                     .annotate(date = F('date_ended')), all=True)
                     .order_by('-date'))
