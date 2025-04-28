@@ -121,6 +121,11 @@ function createPostElement(post) {
                 <i class="far fa-comment"></i>
                 <span class = 'comment-count'>${post.n_comments}</span>
                 </button>
+
+                
+                <button class="flex items-center space-x-1 hover:text-orange-500" onclick="toggleToFavorites('${post.id}')">
+                  <i class = 'far fa-bookmark'></i>
+                </button>
                 
                 <button class="flex items-center space-x-1 hover:text-green-500" onclick="socialShare(this,'https://roleplayverse.live/posts/${post.id}')">
                   <i class = 'fas fa-share-alt'></i><span>partager</span>

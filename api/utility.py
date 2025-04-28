@@ -14,6 +14,10 @@ def send_push_notification(subscription :PushSubscription, message):
     #     print(f"Subscription does not exist for user {user}.")
     #     return    
 
+
+    if subscription == None:
+        print(f"Subscription does not exist for user {subscription.user}.")
+        return
     try: 
         webpush(
             subscription_info= {
@@ -30,5 +34,7 @@ def send_push_notification(subscription :PushSubscription, message):
                 }
         )
         print(f"Notif sent to {subscription.user}.")
+    # except WebPushException as ex:
+    #     print(f"Failed to send notification: {ex}")
     except WebPushException as ex:
         print(f"Failed to send notification: {ex}")
