@@ -18,7 +18,7 @@ class Post(models.Model):
     likes = models.IntegerField(default=0)
     image = models.ImageField(upload_to='posts/',blank=True,null=True)
     #video = models.FileField(upload_to='posts/videos/',blank=True,null=True)    
-    custom_id = models.CharField(max_length=8, default=generate_custom_id)
+    custom_id = models.CharField(max_length=20, default=generate_custom_id)
 
     def __str__(self):
         return f"{self.author}: {self.body[:20]}..."

@@ -5,6 +5,7 @@ import uuid
 from utility import get_characters
 from django.utils import timezone
 import random
+
 def generate_custom_id():
     return str(random.randint(10000000, 99999999))
 
@@ -55,7 +56,7 @@ class BattleRequest(models.Model):
 
 class Battle(models.Model):
     #id = models.BigAutoField(primary_key=True)
-    custom_id = models.CharField(max_length=8, default=generate_custom_id)
+    custom_id = models.CharField(max_length=20, default=generate_custom_id)
     type = models.CharField(max_length=30,choices=[
         (i,i) for i in battle_types
     ])
