@@ -326,16 +326,24 @@ def get_posts(request):
     feed_data = []
 
     #sort both posts and battles
-    feed_items = (Post.objects.values('id','date_added').annotate(date=F('date_added')).union(Battle.objects.filter(Q(status = 'finished') |  Q(status = 'ongoing')).values('id','date_ended').annotate(date = F('date_ended')), all=True).order_by('-date'))
+    feed_items = (Post.objects.values('custom_id','date_added')
+                  .annotate(date=F('date_added'))
+                  .union(Battle.objects.filter(Q(status = 'finished') |  Q(status = 'ongoing') |  Q(status = 'waiting_refree') |  Q(status = 'not_started'))
+                    .values('custom_id','date_ended')
+                    .annotate(date = F('date_ended')), all=True)
+                    .order_by('-date'))
+    
     for feed_item in feed_items:
         try:
-            post = Post.objects.get(id = feed_item['id'])
+            post = Post.objects.get(custom_id = feed_item['custom_id'])
+            
             if (post not in feed.posts.all()) and len(feed_data) <=2:
                 post_data = _post_data(player,post)
                 feed_data.append(post_data)
                 feed.posts.add(post)
         except Post.DoesNotExist:
-            battle = Battle.objects.get(id = feed_item['id'])    
+            
+            battle = Battle.objects.get(custom_id = feed_item['custom_id'])    
             if battle not in feed.battles.all() and len(feed_data) <= 2:
                 battle_data = battle_views._battle_data(player, battle)
                 feed_data.append(battle_data)

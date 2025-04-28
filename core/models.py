@@ -1,12 +1,13 @@
 from django.db import models
 from users.models import Player
 from battles.models import Battle
-import uuid
+import uuid, random
 from django.utils import timezone
 
 reaction_list = ["like","love","laugh","disapprove"]
 
-
+def generate_custom_id():
+    return str(random.randint(10000000, 99999999))
 
 
 class Post(models.Model):
@@ -16,7 +17,8 @@ class Post(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     likes = models.IntegerField(default=0)
     image = models.ImageField(upload_to='posts/',blank=True,null=True)
-    
+    #video = models.FileField(upload_to='posts/videos/',blank=True,null=True)    
+    custom_id = models.CharField(max_length=8, default=generate_custom_id)
 
     def __str__(self):
         return f"{self.author}: {self.body[:20]}..."

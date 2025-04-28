@@ -4,6 +4,9 @@ from users.models import Player,Family
 import uuid
 from utility import get_characters
 from django.utils import timezone
+import random
+def generate_custom_id():
+    return str(random.randint(10000000, 99999999))
 
 BATTLE_LATENCY = 12
 f_request_cost = 250
@@ -51,7 +54,8 @@ class BattleRequest(models.Model):
 
 
 class Battle(models.Model):
-    id = models.BigAutoField(primary_key=True)
+    #id = models.BigAutoField(primary_key=True)
+    custom_id = models.CharField(max_length=8, default=generate_custom_id)
     type = models.CharField(max_length=30,choices=[
         (i,i) for i in battle_types
     ])
@@ -80,6 +84,8 @@ class Battle(models.Model):
 
     def __str__(self):
         return f'{self.type} {self.initiator} vs {self.opponent} '
+
+
 
 class BattleSpectator(models.Model):
     player = models.ForeignKey(Player, on_delete=models.SET_NULL, null=True)

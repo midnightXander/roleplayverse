@@ -5,7 +5,7 @@ function createPostElement(post) {
     const postElement = document.createElement('div');
     postElement.className = 'post bg-gray-700 rounded-lg p-4';
     const postElement2 = document.createElement('div');
-    postElement2.className = 'post bg-gray-900 rounded-2xl shadow-sm p-4 border-1 border-gray-700';
+    postElement2.className = 'post bg-gray-900 rounded-2xl shadow-sm p-4 border border-gray-800';
     //postElement.className = 'post-gradient rounded-xl p-6 border border-gray-700 hover-scale'
     // <span class='ellipsed-text body'>${comment.body}<span>
     //     <span class = 'full-text hidden body'>${comment.body}</span>
@@ -67,7 +67,7 @@ function createPostElement(post) {
     //return postElement;
     
     postElement2.innerHTML = `
-    <div class="flex items-start gap-4">
+    <div class="flex items-start  gap-4">
             <img src="${post.author.profile_picture}" alt="${post.author.player}" class="myImg w-10 h-10 rounded-full" />
             <div class="flex-1">
               <div class="flex justify-between text-sm text-gray-400">
@@ -237,7 +237,7 @@ function  createBattleElement(battle){
                                   <i class="fas fa-gavel mr-2"></i>Propose as Referee
                               </button>`:`
                               <div class='flex justify-between items-center' > 
-                              <a href="/battles/battle_room/${battle.id}" class="inline-block bg-transparent border border-orange-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
+                              <a onclick = 'showOverlay()' href="/battles/battle_room/${battle.id}" class="inline-block bg-transparent border border-orange-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
                                       voir le combat 
                               </a>
 
