@@ -648,7 +648,7 @@ def react_post(request,post_id):
 
         #Send Push Notification if likes exceeds 10
         if post.likes == 5:
-            send_push_notification(post.author.user, {
+            send_push_notification(PushSubscription.objects.filter(user = post.author.user).first(), {
                 'title': 'Votre publication a été aimé par 5 personnes',
                 'body': f'Votre publication a été aimé par 5 personnes',
                 'icon': '/static/images/logo/logo_1.png'
@@ -714,7 +714,7 @@ def react_comment(request, comment_id):
         likes = len(CommentReaction.objects.filter(comment = comment))
         #Send Push Notification if likes exceeds 10
         if likes == 10:
-            send_push_notification(comment.author.user, {
+            send_push_notification(PushSubscription.objects.filter(user = comment.author.user).first(), {
                 'title': 'Votre commentaire a été aimé par 10 personnes',
                 'body': f'Votre commentaire sur la publication de {comment.post.author} a été aimé par 10 personnes',
                 'icon': '/static/images/logo/logo_1.png'
@@ -749,7 +749,7 @@ def create_comment(request,post_id):
                 )
                 new_notif.save()
                 #send a push notification to the post author
-                send_push_notification(post.author.user, {
+                send_push_notification(PushSubscription.objects.filter(user = post.author.user).first(), {
                     'title': f'{player} a commenté votre publication',
                     'body': f'{new_comment.body[:20]}...',
                     'icon': '/static/images/logo/logo_1.png'
