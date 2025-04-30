@@ -179,9 +179,11 @@ def _date_time(time):
     if years>0:
         return time.strftime('%d-%m-%y, %H:%M')
     elif days>1 and years <= 0:
-        return time.strftime('%H:%M, %d-%m')
+        # return time.strftime('%H:%M, %d-%m')
+        return time.strftime('%H:%M')
     else:
-        return time.strftime('%H:%M, %a')
+        # return time.strftime('%H:%M, %a')
+        return time.strftime('%H:%M')
     
 
 

@@ -59,22 +59,19 @@
 
 {% block messages %}
 
-
-        
-
          <!--Chat header --> 
-        <div id="chatHeader" class=" p-3 bg-gray-800 flex items-center">
+        <div id="chatHeader" class=" p-3 bg-transperent border-b border-gray-700 flex items-center">
             <a onclick="showOverlay()" href="{% url 'chat:all' %}">
                 <i id="backArrow" class="fas fa-arrow-left mr-2 text-xl hover:text-orange-500 hidden"></i>
             </a>
 
             <a onclick="showOverlay()" href="{% url 'users:player' receiver.user.username %}">
-                <img src="{{receiver.profile_picture.url}}" alt="{{receiver}} profile picture" class="w-10 h-10 rounded-full mr-3">
+                <img src="{{receiver.profile_picture.url}}" alt="{{receiver}} profile picture" class="w-8 h-8 rounded-full mr-3">
             </a>
             
             
             <a onclick="showOverlay()" href="{% url 'users:player' receiver.user.username %}" class=" flex flex-col ">
-                <div class="text-xl font-semibold">{{receiver}}</div>
+                <div class="text-sm font-semibold">{{receiver}}</div>
                 <div class="text-xs ellipsed">
                     <span>vu: {{last_seen}}</span> 
                 </div>
@@ -116,7 +113,7 @@
             <div class="message-loader top-0 absolute hidden">
                 <i class="fas fa-spinner fa-spin text-orange-500"></i>
             </div>
-            <form id="messageForm" class="flex shadow-md border-1 border-gray-800  rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-900" enctype="multipart/form-data">
+            <form id="messageForm" class="flex shadow-md border border-gray-700  rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-900" enctype="multipart/form-data">
                     
                 
                 <button type="button" id="emojiButton" class="px-4 py-2 text-gray-400 hover:text-white  focus:outline-none">
@@ -177,7 +174,7 @@
 <script>
     $(()=>{
         
-        $('.bottom-nav-link').addClass('hidden')
+        $('.bottom-nav').addClass('hidden')
         
     })
 </script>
@@ -215,22 +212,23 @@
 
         function createUserMessage(message){
         const messageElement = document.createElement('div')
-        messageElement.className = 'message flex-grow container  p-4 flex justify-end'
+        messageElement.className = 'message p-4 max-w-2xl min-w-32'
         messageElement.innerHTML = `
-        <div class="rounded-lg  max-w-80 min-w-32">
+        <div class="rounded-lg  max-w-2xl">
             <div class="relative group">
                 <div class="flex items-start mb-2 justify-end">
-                    <div class="flex-grow text-right">
+                    <div class="flex-grow ">
                         <div class="flex items-center justify-end mb-1">
-                            <span class="text-xs text-gray-400 mr-2">${message.date_sent}</span>
+                            
                         </div>
-                        <p class="text-gray-300 body mt-1 bg-gray-900 border-1 border-gray-700  p-3 min-w-32  max-w-80 rounded-tl-xl rounded-br-xl rounded-bl-xl inline-block">${message.content}</p>
-                        
+                        <p class="text-gray-300 body mt-1 rounded-tl-xl rounded-br-xl rounded-bl-xl">${message.content}</p>
+                        <span class="text-xs text-gray-400 mr-2">${message.date_sent}</span>
                     </div>
                    
                     
                 </div>
-                <div class="message-options absolute top-0 left-0 mt-1 ml-1 opacity-100 group-hover:opacity-100">
+                
+                <div class="message-options absolute top-0 right-0 mt-1 ml-1 opacity-100 group-hover:opacity-100">
                     <div class="relative">
                         <button class="optionsButton text-gray-400  round-btn hover:bg-gray-600 hover:text-white focus:outline-none" id="">
                             <i class="fas fa-ellipsis text-xs"></i>
@@ -242,13 +240,8 @@
                                         <i class="fas fa-copy mr-2"></i> Copy
                                     </a>
                                 </li>
-                                <!--
-                                <li>
-                                    <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
-                                        <i class="fas fa-edit mr-2"></i> Edit
-                                    </a>
-                                </li>
-                                -->
+                                
+                                
                                 <li>
                                     <a href="#" onclick='deletePrivateMessage(this,"${message.id}")' class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-600 hover:text-red-300">
                                         <i class="fas fa-trash-alt mr-2"></i> Delete
@@ -258,6 +251,7 @@
                         </div>
                     </div>
                 </div>
+                
             </div>
         `
 
@@ -265,17 +259,17 @@
     } 
     function createFriendMessage(message){
         const messageElement = document.createElement('div')
-        messageElement.className = 'rounded-lg p-4 mb-4 max-w-2xl min-w-32'
+        messageElement.className = 'rounded-lg max-w-2xl min-w-32'
         messageElement.innerHTML = `
         <div class="relative group ">
                 <div class="flex items-start mb-2">
                     <div class="flex-grow">
-                        <p class="body  text-gray-300 mt-1 border-1 border-gray-700 w-full p-3 min-w-32 rounded-tr-xl rounded-br-xl rounded-bl-xl inline-block">${message.content}</p>
+                        <p class="body  text-gray-300 mt-1 border border-gray-700 w-full p-3 min-w-32 rounded-tr-xl rounded-br-xl rounded-bl-xl inline-block">${message.content}</p>
                         <br>
-                        <span class="text-xs text-gray-400">${message.date_sent}</span>    
+                        <span class="text-xs text-gray-400 pl-3">${message.date_sent}</span>    
                     </div>   
                 </div>
-                <div class="message-options absolute top-2 right-0 mt-1 mr-1 opacity-100 group-hover:opacity-100">
+                <div class="message-options absolute top-2 right-2 mt-1 mr-1 opacity-100 group-hover:opacity-100">
                     <div class="relative">
                         <button class="optionsButton text-gray-400  round-btn hover:bg-gray-600 hover:text-white focus:outline-none" id="">
                             <i class="fas fa-ellipsis text-xs"></i>
@@ -322,11 +316,28 @@
                         const messages = res.messages
                         if(messages.length > 0){
                             messagesContainer.empty()
-                            messages.forEach(message => {
+
+                            
+
+                            messages.forEach((message, i) => {
+                            console.log(message)
+                            if( messages[i-1] && messages[i-1].day !== message.day){
+                                messagesContainer.append(`
+                                <div class="date-divider my-4 text-center text-gray-500 text-sm">
+                                    <span class="bg-gray-800 px-4 py-1 rounded-full">
+                                        ${message.date}
+                                    </span>
+                                </div>
+                                `)   
+                            }
+
                             if(message.image){
-                                
+                             
                             messagesContainer.append( `
+                            <!--
                             <div class="relative group flex mb-4 p-4 rounded-lg ${sender_name === message.sender.username ? 'justify-end' : 'justify-start'} ">
+                            -->
+                            <div class="relative group flex mb-4 p-4 rounded-lg ${sender_name === message.sender.username ? '' : ''} ">
                             <div>
                             <img src="${message.image}" alt="Message image" class="myImg w-60 rounded-lg">
                             <p class="text-gray-300">${message.content? message.content : ''}</p>

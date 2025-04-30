@@ -157,6 +157,8 @@ def get_messages(request,receiver_id):
         'image': message.image.url if message.image else None, 
         'date_sent': _date_time(message.date_sent),
         'read': message.read,
+        'day': message.date_sent.strftime("%A"),
+        'date': message.date_sent.strftime("%d %b %Y"),
         
         }
         for message in messages]
@@ -232,7 +234,12 @@ def private_chat(request,receiver_name):
             "sender":family_last_message.sender.user.username,
             'content': content,
             'image': family_last_message.image.url if family_last_message.image else None, 
-            'date_sent': _date_time(family_last_message.date_sent)
+            'date_sent': _date_time(family_last_message.date_sent),
+             
+            # 'unreads': {
+            #    'number': _parse_number(_get_family_unreads(player)),
+            #    'label': 'unread' if _parse_number(_get_family_unreads(player)) != '' else ''
+            # }
         }
     else:
         fl_message_data = ''    
