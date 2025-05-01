@@ -318,6 +318,10 @@ mimetypes.add_type("text/javascript",".js",True)
 LOGIN_URL = "/users/signin"
 
 
+#HTTPS settings
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+
 import dj_database_url
 
 if 'DATABASE_URL' in os.environ:
