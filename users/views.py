@@ -280,7 +280,7 @@ def password_reset(request):
         raise Http404
 
 def _name_suggestion():
-    return 'WerenLyrics'
+    return 'KraKen_30'
 
 def register(request):
     
