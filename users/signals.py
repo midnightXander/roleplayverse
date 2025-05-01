@@ -6,8 +6,9 @@ from core.models import Notification
 from utility import generate_referall_code
 from django.contrib.gis.geoip2 import GeoIP2
 import random
+import core.views as core_views
 
-
+from .models import ENTRY_POINTS
 @receiver(post_save, sender = User)
 def create_player(sender, instance, created, **kwargs):
     if created:
@@ -15,11 +16,21 @@ def create_player(sender, instance, created, **kwargs):
         #Think of the Possible name conflicts
         new_player = Player.objects.create(
             user = instance,
-            country = 'Cameroon',
+            country = 'unknown',
             gender = 'male',
             referall_code = generate_referall_code(instance.username),
         ) 
+
+        #Get the country of the user using the ip address
+        g = GeoIP2()
+        try:
+            ip = instance.last_login_ip
+            country = g.country(ip)['country_name']
+            new_player.country = country
+        except:
+            pass
         
+        core_views.add_points(new_player, ENTRY_POINTS)
         
         new_notif = Notification.objects.create(
                     target = new_player,
