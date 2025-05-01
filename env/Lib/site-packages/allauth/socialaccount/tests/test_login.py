@@ -36,7 +36,7 @@ def test_email_authentication(
     settings.ACCOUNT_EMAIL_REQUIRED = True
     settings.ACCOUNT_UNIQUE_EMAIL = True
     settings.ACCOUNT_USERNAME_REQUIRED = False
-    settings.ACCOUNT_AUTHENTICATION_METHOD = "email"
+    settings.ACCOUNT_LOGIN_METHODS = {"email"}
     settings.ACCOUNT_EMAIL_VERIFICATION = "mandatory"
     settings.SOCIALACCOUNT_AUTO_SIGNUP = True
     settings.SOCIALACCOUNT_STORE_TOKENS = True
@@ -125,7 +125,7 @@ def test_record_authentication(
     sociallogin = sociallogin_factory(provider="unittest-server", uid="123")
     sociallogin.state["process"] = process
     sociallogin.token = SocialToken(
-        app=sociallogin.account.get_provider().app, token="123", token_secret="456"
+        app=sociallogin.provider.app, token="123", token_secret="456"
     )
     SocialAccount.objects.create(user=user, uid="123", provider="unittest-server")
     request = request_factory.get("/")

@@ -42,16 +42,16 @@
                 Se connecter
             </button>
         </form>
-        <!-- <div class="mt-4 text-center">
+        <div class="mt-4 text-center">
             <p class="text-gray-400">Ou se connecter avec Google</p>
             
-            <a href="#" id="google-signin" class="mt-2 bg-white text-gray-800 py-2 px-4 rounded flex items-center justify-center w-full hover:bg-gray-100 transition-all duration-300 hover:scale-105">
+            <a href="{% provider_login_url 'google' %}" id="google-signin" class="mt-2 bg-white text-gray-800 py-2 px-4 rounded flex items-center justify-center w-full hover:bg-gray-100 transition-all duration-300 hover:scale-105">
                 <img src="https://www.google.com/favicon.ico" alt="Google" class="w-5 h-5 mr-2">
                 Se connecter avec Google
             </a>
             
             
-        </div> -->
+        </div>
         <p class="mt-4 text-center text-gray-400">
             Tu n'as pas de compte? <a href="{%  url 'users:register'%}" class="text-orange-custom hover:underline">Créer un compte</a>
         </p>

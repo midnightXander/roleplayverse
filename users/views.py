@@ -318,7 +318,7 @@ def register(request):
                 new_player.country = get_country(request)
                 print(get_country(request))
                 profile_pics = PlayerDefaultImage.objects.all()
-                new_player.profile_picture = profile_pics[random.randint(0,len(profile_pics)-1)].image
+                #new_player.profile_picture = profile_pics[random.randint(0,len(profile_pics)-1)].image
                 
                 new_player.save()
 

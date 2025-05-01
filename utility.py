@@ -234,7 +234,7 @@ def generate_referall_code(username:str):
     num5 = random.randint(9,20)
     #str1 = random.ra
     num5 = (num1+num2+num3+num4) % num5
-    code = f'{username[:3].upper()}{num1}{num2}{num5}'
+    code = f'{username[:3].upper()}{num1}{num5}'
     
     
     return code

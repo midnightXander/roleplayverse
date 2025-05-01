@@ -1,3 +1,5 @@
+import pytest
+
 from allauth.account.models import (
     EmailAddress,
     EmailConfirmationHMAC,
@@ -23,10 +25,20 @@ def test_verify_email_other_user(auth_client, user, user_factory, headless_rever
     assert data["data"]["user"]["id"] == user.pk
 
 
+@pytest.mark.parametrize(
+    "login_on_email_verification,status_code", [(False, 401), (True, 200)]
+)
 def test_auth_unverified_email(
-    client, user_factory, password_factory, settings, headless_reverse
+    client,
+    user_factory,
+    password_factory,
+    settings,
+    headless_reverse,
+    login_on_email_verification,
+    status_code,
 ):
-    settings.ACCOUNT_AUTHENTICATION_METHOD = "email"
+    settings.ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = login_on_email_verification
+    settings.ACCOUNT_LOGIN_METHODS = {"email"}
     settings.ACCOUNT_EMAIL_VERIFICATION = "mandatory"
     password = password_factory()
     user = user_factory(email_verified=False, password=password)
@@ -49,13 +61,13 @@ def test_auth_unverified_email(
         data={"key": key},
         content_type="application/json",
     )
-    assert resp.status_code == 200
+    assert resp.status_code == status_code
 
 
 def test_verify_email_bad_key(
     client, settings, password_factory, user_factory, headless_reverse
 ):
-    settings.ACCOUNT_AUTHENTICATION_METHOD = "email"
+    settings.ACCOUNT_LOGIN_METHODS = {"email"}
     settings.ACCOUNT_EMAIL_VERIFICATION = "mandatory"
     password = password_factory()
     user = user_factory(email_verified=False, password=password)
