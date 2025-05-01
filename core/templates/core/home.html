@@ -416,6 +416,22 @@
         </div>
     </form>
 </div> -->
+<script>
+     const spawnEnemy = () => {
+        const enemyZone = document.getElementById('enemy-zone');
+        enemyZone.innerHTML = '';
+        const enemy = document.createElement('div');
+        enemy.className = 'absolute bottom-8 right-12 bg-red-600 text-white text-xs px-3 py-1 rounded-full animate-bounce shadow-lg';
+        enemy.textContent = '⚔️ Enemy Appeared!';
+        enemyZone.appendChild(enemy);
+        setTimeout(() => enemy.remove(), 5000);
+      };
+      document.getElementById('explore-btn').addEventListener('click', spawnEnemy);
+</script>
+
+
+  
+
 
 <div class="bg-gray-900 rounded-2xl p-4 border border-gray-800 shadow-sm mb-8">
     <div class="flex items-start gap-4">
