@@ -3,10 +3,11 @@ from email.message import EmailMessage
 import ssl
 from dotenv import load_dotenv
 import os
+
 load_dotenv()
 
 
-rpv_email = os.getenv("GMAIL_ADRESS")
+rpv_email = os.environ.get("GMAIL_ADRESS")
 rpv_email_pwd = os.environ.get("GMAIL_PASSWORD")
 
 
@@ -207,11 +208,11 @@ def send_email(recipient_email:str,title:str, subject:str,body:str,language:str=
     
 """
     email.add_alternative(html_content,subtype="html")
-    
+    print(rpv_email, rpv_email_pwd, recipient_email)
     with smtplib.SMTP_SSL("smtp.gmail.com",465,context=ssl.create_default_context()) as smtp_server:
         smtp_server.login(rpv_email,rpv_email_pwd)
         email["To"] = recipient_email
-
+        
         smtp_server.send_message(email)
         del email["To"]
         del email["From"]

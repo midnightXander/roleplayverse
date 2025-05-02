@@ -108,7 +108,7 @@ function createPostElement(post) {
              
                 ${post.image ? `
                 <div class="mt-3">
-                <img  src="${post.image}" alt="${post.author.player} image de publication" class="w-full myImg rounded-xl border-1 border-gray-700 object-cover max-h-64" />
+                <img  src="${post.image}" alt="${post.author.player} image de publication" class="w-full myImg rounded-xl border-1 border-gray-700 object-cover h-auto max-h-96" />
               </div>
                 ` : ''}
               
@@ -218,7 +218,7 @@ function  createBattleElement(battle){
                                   <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-sm">${battle.type}</span>
                               </div>
                               <div class="flex justify-between items-center mb-4 flex-col">
-                                  <div class="flex items-center">
+                                  <div class="flex items-start">
                                       <img src="${battle.initiator.profile_picture}" alt="${battle.initiator.player}" class="w-12 h-12 rounded-full mr-4">
                                       <div>
                                           <a href="/users/${battle.initiator.username}" class="font-bold hover:text-orange-500 ">
@@ -228,7 +228,7 @@ function  createBattleElement(battle){
                                       </div>
                                   </div>
                                   <i class="fas fa-bolt text-yellow-500 text-2xl"></i>
-                                  <div class="flex items-center">
+                                  <div class="flex items-end">
                                       <div class="text-right mr-4">
                                           <a href="/users/${battle.opponent.username}" class="font-bold hover:text-orange-500 ">
                                               ${battle.opponent.player} ${ battle.winner ? (battle.winner.id == battle.opponent.id ? "<span class='text-green-500'>W</span>": ''):''}
@@ -242,7 +242,7 @@ function  createBattleElement(battle){
                                   <i class="fas fa-gavel mr-2"></i>Propose as Referee
                               </button>`:`
                               <div class='flex justify-between items-center' > 
-                              <a onclick = 'showOverlay()' href="/battles/battle_room/${battle.id}" class="inline-block bg-transparent border border-orange-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
+                              <a onclick = 'showOverlay()' href="/battles/battle_room/${battle.id}" class="inline-block bg-transparent border-1 border-orange-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
                                       voir le combat 
                               </a>
 

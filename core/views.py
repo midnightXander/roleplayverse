@@ -29,7 +29,7 @@ from api.utility import send_push_notification
 import random
 from django.contrib.gis.geoip2 import GeoIP2
 import re
-
+from . import emails
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -612,6 +612,21 @@ def react_post(request,post_id):
         player = Player.objects.get(user = request.user) 
         post  = get_object_or_404(Post, id = post_id)
         reactions = Reaction.objects.filter(post = post, player = player)
+        # try:
+        #     emails.send_email(
+        #         subject = "Test email",
+        #         title = "Test email",
+        #         body = """
+        #         <h2>This is a test email</h2>
+        #         <p>Test email body</p>
+        #         <p>Test email body</p>
+        #         <a href = "roleplayverse.live" class = "button">Click here</a>
+        #         """,
+        #         recipient_email = player.user.email,
+        #     )
+        #     print("email sent")
+        # except Exception as e:
+        #     print("Error sending email:", e)    
 
         reactions_data = [
             {"type":reaction.type,

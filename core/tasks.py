@@ -8,6 +8,7 @@ from events.views import _update_round
 from django.utils import timezone
 from core.views import add_points
 from datetime import datetime
+from . import emails
 # @shared_task
 # def delete_expired_instances():
 #     now = timezone.now()
@@ -56,9 +57,25 @@ def manage_battles_latency():
         
         
 
-        if hours == BATTLE_LATENCY-1:
+        if hours == BATTLE_LATENCY - 2:
             #SEND EMAIL ALERTING PLAYER he is going to lose 
             #Send_email()
+            try: 
+                emails.send_email(
+                    recipient_email = loser.user.email,
+                    title = "Alerte de latence",
+                    subject = "Tu es sur le point de perdre ton combat par latence!",
+                    body = f"""
+                    <h2>Hey {loser},</h2>
+                    <p>Tu es sur le point de perdre ton combat contre {winner} par latence!</p>
+                    <p>Fais ton pavé maintenant!</p>
+                    <a href="/battles/battle_room/{battle.id} class='button'">Accéder au combat</a>
+                    """,
+                    language = loser.user.language
+                )
+            except Exception as e:
+                print(f"Email error: {e}")
+
             alert_notif = Notification.objects.create(
                     target = loser,
                     url = f'/battles/battle_room/{battle.id}',

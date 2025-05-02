@@ -14,8 +14,8 @@ BASE_DIR = Path(__file__).resolve().parent #base url, adding .parent brings to t
 load_dotenv()
 
 
-gmail_adress = "denzelwashington913@gmail.com"
-gmail_pwd = "zimi diux wbvv dbzu"
+gmail_adress = os.environ.get("GMAIL_ADRESS")
+gmail_pwd = os.environ.get("GMAIL_PASSWORD")
 
 
 

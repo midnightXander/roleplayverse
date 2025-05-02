@@ -218,8 +218,20 @@ def password_recover(request):
                 
                 code.save()
                 
-                #sendResetPasswordLink(user_email)                
-                messages.success(request, f"Un lien a été  envoyé a {user_email}")
+                #sendResetPasswordLink(user_email)
+                emails.send_email(
+                    recipient_email = user_email,
+                    title = "Réinitialisation de mot de passe",
+                    subject = "Réinitialisation de mot de passe",
+                    body = f"""
+                    <h2>Salut {user.username},</h2>
+                    <p>Tu as demandé à réinitialiser ton mot de passe. Clique sur le lien ci-dessous pour le faire :</p>
+                    <a href="{link}" class="button">Réinitialiser le mot de passe</a>
+                    <p>Si tu n'as pas demandé cette réinitialisation, ignore cet e-mail.</p>
+                    """,
+                    language = player.user.language
+                )                
+                messages.success(request, f"Un lien a été  envoyé a {user_email}, verifie ta boite mail et tes spams")
             except Exception as e:
                 print(f"Error in sending link to {user_email}: {e}") 
                 messages.error(request, "Une erreur s'est produite pendant l'envoie du mail")   

@@ -11,6 +11,8 @@ from core import emails
 def get_player(user:User):
     try:
         player = Player.objects.get(user = user)
+        
+        #player.profile_picture.url = "https://i.pinimg.com/736x/60/1b/04/601b0478fe7f09eda50d8e478f847e58.jpg"
         player.save()
         return player
     except:
