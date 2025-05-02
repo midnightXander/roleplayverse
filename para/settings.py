@@ -190,6 +190,8 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
 SITE_ID = 2
 
 LOGIN_REDIRECT_URL = '/home'
@@ -317,10 +319,14 @@ mimetypes.add_type("text/css", ".css", True)
 mimetypes.add_type("text/javascript",".js",True)
 LOGIN_URL = "/users/signin"
 
+IS_PRODUCTION = os.environ.get('IS_PRODUCTION', '') == 'True'
 
 #HTTPS settings
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
+if IS_PRODUCTION:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+else:
+    SECURE_SSL_REDIRECT = False    
 
 import dj_database_url
 

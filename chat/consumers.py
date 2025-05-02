@@ -101,6 +101,7 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
             'url' : f'/chats/dm/{sender_name}',
             'icon': '/static/images/logo/logo_1.png'
             },
+            receiver_user,
             
         )
 

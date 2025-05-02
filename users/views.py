@@ -21,7 +21,7 @@ from .users_utility import *
 from django.core.serializers import serialize
 from django.forms.models import model_to_dict
 from django.views.decorators.csrf import csrf_exempt
-
+from core import emails
 import string,random,secrets
 
 
@@ -328,17 +328,12 @@ def register(request):
                 new_player.save()
                 # new_stats.save()
 
-                try:
-                    sendWelcomeEmail(new_user.email)
-                except Exception as e:
-                    print(f"could not send email: {e}")    
-
-                # new_notif = core_views.Notification.objects.create(
-                #     target = new_player,
-                #     url = '#',
-                #     content = f'Bienvenue sur RolePlay Verse {new_player} pourquoi pas commencé un combat amicale pour voir comment ça se passe ici?'
-                # )
-                # new_notif.save()
+                new_notif = core_views.Notification.objects.create(
+                    target = new_player,
+                    url = '#',
+                    content = f'Bienvenue sur RolePlay Verse {new_player} pourquoi pas commencé un combat amicale pour voir comment ça se passe ici?'
+                )
+                new_notif.save()
 
                 #Reward the referer if there is one
                 referall_code = request.GET.get('rc', None)
@@ -487,6 +482,21 @@ def send_invite(request,target_id):
                 target = target,
                 family = sender.family
                 )
+            try:
+                emails.send_email(
+                    recipient_email = target.user.email,
+                    title = "Invitation à rejoindre une famille",
+                    subject = "Invitation à rejoindre une famille",
+                    body = f"""
+                    <h2>Salut {target},</h2>
+                    <p>Tu as ete invite a rejoindre la famille {sender.family}</p>
+                    <p><strong></strong></p>
+                    <a href = "roleplayverse.live/notifications/all" class = "button">Repondre</a>
+                    """,
+                    language = target.user.language
+                    )
+            except Exception as e:
+                print(f"could not send email: {e}")  
             new_player_notification.save()
             print(f'invite sent to {target}')
             return JsonResponse({"status":"success","message": message})
@@ -779,9 +789,6 @@ def get_players(request):
             return JsonResponse({'players': players_data, 'status':'success'})
 
     return JsonResponse({'status':'failed'})    
-            
-
-
 
 
 @login_required

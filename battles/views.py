@@ -391,6 +391,7 @@ def accept_battle(request,request_id):
                 'url' : f'/users/requests/{b_request.sender.user.username}',
                 'icon' : '/static/images/logo/logo_1.png',
                 },
+                b_request.sender.user
                 
             )
 
@@ -465,6 +466,7 @@ def init_battle(request,acceptor_id):
                 'url' : f'/users/battles/{battle_acceptor.player.user.username}',
                 'icon' : '/static/images/logo/logo_1.png',
                 },
+                battle_acceptor.player.user
                 
             )
 
@@ -1546,10 +1548,11 @@ def send_challenge(request, target_id):
                 PushSubscription.objects.filter(user = target.user).first(),
                 {
                 'title' : f"Tu as été défié",
-                'body' : f"{player} t'as défié, tu peux l'accepter ou le refuser",
+                'body' : f"{player} t'as défié pour un combat, tu peux l'accepter ou le refuser",
                 'url' : f'/users/{player.user.username}',
                 'icon' : '/static/images/logo/logo_1.png',
                 },
+                target.user
                 
             )
             
@@ -1612,6 +1615,7 @@ def answer_challenge(request, challenge_id):
                     'url' : f'/users/{player.user.username}',
                     'icon' : '/static/images/logo/logo_1.png',
                     },
+                    challenge.sender.user
                     
                     
                 )

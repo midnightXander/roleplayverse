@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib.gis.geoip2 import GeoIP2
-
+from core import emails
 
 def get_player(user:User):
     try:
@@ -31,11 +31,22 @@ def refer_player(referall_code):
         player = Player.objects.get(referall_code = referall_code)
         player.battle_points += referall_points
         #send email to player congratulating him for the referall points
-        
+        emails.send_email(
+            recipient_email = player.user.email,
+            title = "Félicitations!",
+            subject = "Vous avez gagné des points de parrainage!",
+            body = f"""
+            <h2>Bonjour {player},</h2>
+            <p>vous avez gagné {referall_points} points de parrainage en parrainant un ami!</p>
+            <p><strong>{{ notification_message }}</strong></p>
+            """,
+            language = player.user.language
+        )
         player.save()
 
-    except:
-        return    
+    except Exception as e:
+        print(f"Referall error: {e}")
+        return False
 
 def add_player_to_family(family:Family, player:Player): 
     """Adds a player to a family"""

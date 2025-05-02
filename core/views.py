@@ -652,7 +652,7 @@ def react_post(request,post_id):
                 'title': 'Votre publication a été aimé par 5 personnes',
                 'body': f'Votre publication a été aimé par 5 personnes',
                 'icon': '/static/images/logo/logo_1.png'
-            })
+            },  )
         
         
         return JsonResponse({"status":'success',"message":"liked",'likes':post.likes})

@@ -16,6 +16,9 @@ load_dotenv()
 
 gmail_adress = "denzelwashington913@gmail.com"
 gmail_pwd = "zimi diux wbvv dbzu"
+
+
+
 def sendWelcomeEmail(recipient_email:str,language:str='en'):
     email = EmailMessage()
     email["Subject"] = ""
@@ -24,7 +27,7 @@ def sendWelcomeEmail(recipient_email:str,language:str='en'):
     <html>
     <head>Hello {recipient_email}</head>
     <h3></h3>
-    <p>From Role Play Universe</p>
+    <p>From Role Play Verse</p>
     <em></em>
     
     <a></a>                
@@ -54,7 +57,7 @@ def sendResetPasswordLink(recipient_email:str,language:str='en'):
     <style>
     </head>
     <h3></h3>
-    <p>From Role Play Universe</p>
+    <p>From Role Play Verse</p>
     <em>Here is your reset password link, click to reset your password</em>
     
     <a href ='https://roleplayverse.live/users/signup/'>This Link</a>                
