@@ -5,12 +5,10 @@
 {% block meta_author %} {{post.owner}} {% endblock meta_author %}
 {% block meta_image %} {{post.image.url}} {% endblock meta_image %}
 {% block canonical_url %} {{request.build_absolute_uri}} {% endblock canonical_url %}
-
+{% block language %}{{post.language}}{% endblock language %}
 {% load static %}
-{% load blog_tags %}
-{% load humanize %}
-{% load url from static %}
-{% load blog_tags %}
+{% load i18n %}
+
 
 
 
@@ -60,7 +58,7 @@
     </article>
 
     <div class="mt-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-4">Comments</h2>
+        <h2 class="text-2xl font-bold text-gray-900 mb-4"></h2>
         <div id="commentsSection" class="space-y-4"></div>
     </div>
 </main>
