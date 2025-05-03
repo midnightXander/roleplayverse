@@ -1,5 +1,20 @@
 {% extends "blog/base.html" %}
 {% block title %} {{post.title}} {% endblock title %}
+{% block meta_description %} {{post.meta_description}} {% endblock meta_description %}
+{% block meta_keywords %} {{post.keyword1}}, {{post.keyword2}}, {{post.keyword3}} {% endblock meta_keywords %}
+{% block meta_author %} {{post.owner}} {% endblock meta_author %}
+{% block meta_image %} {{post.image.url}} {% endblock meta_image %}
+{% block canonical_url %} {{request.build_absolute_uri}} {% endblock canonical_url %}
+
+{% load static %}
+{% load blog_tags %}
+{% load humanize %}
+{% load url from static %}
+{% load blog_tags %}
+
+
+
+
 {% block content %}
 <style>
     .blog-content img {
@@ -78,8 +93,8 @@
             <p>Remember, while the Shadow Clone Technique is powerful, it comes with risks. Overuse can lead to chakra exhaustion, so always use it judiciously in battle.</p>
         `,
         comments: [
-            { author: "Naruto Uzumaki", content: "Shadow Clone Jutsu is my favorite technique! Believe it!" },
-            { author: "Sasuke Uchiha", content: "Hn. It's a useful technique, but it has its limitations." }
+            // { author: "Naruto Uzumaki", content: "Shadow Clone Jutsu is my favorite technique! Believe it!" },
+            // { author: "Sasuke Uchiha", content: "Hn. It's a useful technique, but it has its limitations." }
         ]
     };
 
