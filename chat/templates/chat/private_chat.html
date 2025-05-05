@@ -202,8 +202,9 @@
         const fileInput = $('#imageUpload')
 
         const wsprotocol = window.location.protocol === 'https' ? 'wss://' : 'ws://' 
+        console.log("WS Protocol:",wsprotocol)
         const chatSocket  = new WebSocket(
-            'wss://' + 
+            'ws://' + 
             window.location.host + 
             '/ws/chat/private/'+
             room +  "/"
@@ -322,7 +323,7 @@
                             
 
                             messages.forEach((message, i) => {
-                            console.log(message)
+                            
                             if( messages[i-1] && messages[i-1].day !== message.day){
                                 messagesContainer.append(`
                                 <div class="date-divider my-4 text-center text-gray-500 text-sm">

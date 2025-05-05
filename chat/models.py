@@ -5,7 +5,7 @@ import datetime
 
 
 class Chat(models.Model):
-    # id = models.UUIDField(primary_key=True,default=uuid.uuid4)
+    id = models.BigAutoField(primary_key=True)
     initiator = models.ForeignKey(Player,on_delete=models.CASCADE,null=True,default=None)
     recipient = models.ForeignKey(Player,on_delete=models.CASCADE,null=True,default=None,related_name="chat_recipient")
     last_message_abbr = models.TextField()
@@ -27,7 +27,7 @@ def upload_family_message_to(self,filename):
     return f"messages/family/{self.family.name}/{filename}"
 
 class Message(models.Model):
-    #id = models.UUIDField(primary_key=True,default=uuid.uuid4)
+    id = models.BigAutoField(primary_key=True)
     sender = models.ForeignKey(Player,on_delete=models.CASCADE)
     receiver = models.ForeignKey(Player,on_delete=models.SET_NULL,null=True, related_name="message_receiver")
     content = models.TextField(null=True, blank=True)
@@ -44,7 +44,7 @@ class Message(models.Model):
         return self.sender.user.username + " to " + self.receiver.user.username
     
 class FamilyMessage(models.Model):
-    # id = models.UUIDField(primary_key=True,default=uuid.uuid4)
+    id = models.BigAutoField(primary_key=True)
     sender = models.ForeignKey(Player,on_delete=models.SET_NULL,null=True)
     family = models.ForeignKey(Family,on_delete=models.CASCADE,null=True, related_name="family")
     content = models.TextField(null=True, blank=True)

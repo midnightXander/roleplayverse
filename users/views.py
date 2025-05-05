@@ -58,7 +58,7 @@ def validate_info(request):
 
     return render(request,"users/validate_info.html")
 
-def getusernames(users):
+def getusernames(users:QuerySet) -> list:
     usernames = []
     for user in users:
         username = user.username.lower()
@@ -79,6 +79,28 @@ def get_emails(users):
         emails.append(email)
     return emails
 
+def _is_username_valid(name:str) -> bool:
+    """Function to check if the username is valid or not"""
+    all_users = User.objects.all()
+    usernames = getusernames(all_users)
+    name = name.lower()
+    if len(name) < 5:
+        return False
+    elif " " in name:
+        return False
+    elif "/" in name or '\\' in name:
+        return False
+    elif contains_special_chars(name):
+        return False
+    elif name in usernames:
+        return False
+    elif name[0].isdigit():
+        return False
+    
+    #Should not start with a number
+
+    else:
+        return True
 
 def verify_username(request):
     if request.method == "POST":
@@ -103,8 +125,9 @@ def verify_username(request):
         elif username in usernames :
             message = "ce nom d'utlisateur est deja pris, choisi en un autre "
             return JsonResponse({"status":status, "message":message}) 
-        
-        #Should not start with a number
+        elif username[0].isdigit():
+            return False
+            #Should not start with a number
 
         else:
             status = "valid"
@@ -913,17 +936,20 @@ def edit_info(request):
             #1 - unique username
             #2 - sufficient number of characters
             #3 - No special characters
+
             new_name = request.POST.get('username')
             users = User.objects.filter(username = new_name)
-            if users.exists():
-                messages.error(request, 'un utilisateur avec ce nom existe déja')
-            
-            else:
+            # if users.exists():
+            #     messages.error(request, 'un utilisateur avec ce nom existe déja')
+            if _is_username_valid(new_name):
+                print("valid")
                 player.user.username = new_name
-
                 player.user.save()
+            else:
+                print("not valid")
+                messages.error(request, 'Nom d utilisateur non valid, pas de caractères spéciaux et pas d espace')
         player.save()    
-
+        print(player.user.username)
         #return JsonResponse({"status":"success","message":"modified","info":info})
         return HttpResponseRedirect(reverse("users:player", args=[player.user.username]))
     return JsonResponse({"status":"error","message":"nothing modified"})

@@ -119,14 +119,32 @@
         </div>
         
         <div>
-          <h2 class="text-xl font-bold">{{req_player}}</h2>
+          <h2 class="text-xl font-bold">
+            {{req_player}}
+            {% if req_player == player %}
+            <span data-info="name" onclick="toggleEditInfoForm('username')" class="edit-info-btn text-sm text-gray-400"><i class="ml-2 fa-regular fa-pen-to-square cursor-pointer"></i></span>
+            {% endif %}
+        </h2>
+        
           <div class="flex justify-between space-x-2 mt-1">
-            <p class="text-sm text-gray-400">@{{req_player.nickname}}</p>
+            <p class="text-sm text-gray-400">@{{req_player.nickname}} 
+                {% if req_player == player %}
+                <span onclick="toggleEditInfoForm('nickname')" class="text-sm text-gray-400"><i class="ml-2 fa-regular fa-pen-to-square cursor-pointer"></i></span>
+                {% endif %}
+            </p>
           </div>
           
           
           <p class="text-sm mt-1">Class: <span class="font-medium text-orange-600">{{req_player.rank}}</span></p>
+          <form id="edit-info-form" onsubmit="showOverlay()" style="display: none;" method="post" action="{% url 'users:edit_info' %}">
+            {% csrf_token %}
+            <input type="text" name="username"  class="bg-gray-900 border border-gray-700 text-white px-2 py-1 my-2 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-orange-500" value="">
+            
+            <input  type="hidden" name="info" value="username">
+            <button class="" type="submit">Modifier</button>
+        </form>
         </div>
+        
       </div>
 
       {% if  not can_edit %}
@@ -547,11 +565,20 @@ askNotification()
     }
 </script>
 <script>
+
+    function toggleEditInfoForm(data = 'username'){
+        const form = document.querySelector('#edit-info-form');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        form.querySelector('input[name="info"]').value = data;
+        form.querySelector('input[type="text"]').setAttribute('name', data);
+
+    }
+
     $(()=>{
-        $(".edit-info-btn").on("click",(e)=>{
-            form = $(e.target).siblings("form")
-            $(form[0]).toggle()
-        })
+        // $(".edit-info-btn").on("click",(e)=>{
+        //     form = $(e.target).siblings("form")
+        //     $(form[0]).toggle()
+        // })
         $('.showSidebar').on("click",(e)=>{
             
             $(".sidebar").toggle(800)

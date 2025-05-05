@@ -17,7 +17,21 @@ def send_push_notification(subscription :PushSubscription, message, user:User = 
 
     if subscription == None:
         print(f"Subscription does not exist for user.")
-        return
+        try:
+            emails.send_email(
+            recipient_email = user.email,
+            title = {message['title']},
+            subject = {message['title']},
+            body = f"""
+            <h2>Salut {user},</h2>
+            <p><strong>{message['body']}</strong></p>
+            <a href = '{message['url']}' class = "button">Voir</a>
+            """,
+            language = user.language
+            )
+        except:
+            print(f"Failed to send email: {ex}")
+            return
     try: 
         webpush(
             subscription_info= {

@@ -189,7 +189,9 @@ def get_family_messages(request, family_name):
                       "family":message.family.name,
                       "content":decrypt_message(message.content),
                       'image': message.image.url if message.image else None, 
-                        'date_sent': _date_time(message.date_sent),
+                      'date_sent': _date_time(message.date_sent),
+                      'day': message.date_sent.strftime("%A"),
+                      'date': message.date_sent.strftime("%d %b %Y"),
                         
                       
                        }for message in messages

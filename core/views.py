@@ -303,7 +303,8 @@ def _post_data(player:Player, post:Post):
                         'id':post.author.id,
                         "name":post.author.user.username,
                         'player': str(post.author),
-                        'profile_picture':post.author.profile_picture.url
+                        'profile_picture':post.author.profile_picture.url,
+                        'nickname': post.author.nickname if post.author.nickname else post.author.user.username,
                         },
             
             'body_full': post.body,

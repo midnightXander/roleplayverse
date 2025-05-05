@@ -72,7 +72,7 @@ function createPostElement(post) {
             <div class="flex-1">
               <div class="flex justify-between text-sm text-gray-400">
                 <div>
-                  <a href = "/users/${post.author.name}" class="inline-block font-semibold hover:text-orange-600 text-white">${post.author.player}</a> @${post.author.player}
+                  <a href = "/users/${post.author.name}" class="inline-block font-semibold hover:text-orange-600 text-white">${post.author.player}</a> @${post.author.nickname}
                 </div>
                 
     
@@ -81,7 +81,7 @@ function createPostElement(post) {
                   <button onclick = 'togglePostDropdown(this)'  class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
                       <i class="fas fa-ellipsis-v"></i>
                   </button>
-                  <div class="post-dropdown-menu bg-gray-800 w-48 py-2">
+                  <div class="post-dropdown-menu rounded-xl bg-opacity-80 bg-gray-900 border border-gray-700 w-48 py-2">
                         
                         <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="toggleToFavorites('${post.id}')">
                         ${post.is_favorite ? "<i class = 'fas fa-bookmark mr-2'></i>retirer des favoris":"<i class = 'far fa-bookmark mr-2'></i>ajouter aux favoris"}
@@ -222,7 +222,7 @@ function  createBattleElement(battle){
                                       <img src="${battle.initiator.profile_picture}" alt="${battle.initiator.player}" class="w-12 h-12 rounded-full mr-4">
                                       <div>
                                           <a href="/users/${battle.initiator.username}" class="font-bold hover:text-orange-500 ">
-                                              ${battle.initiator.player} ${ battle.winner ? (battle.winner.id == battle.initiator.id ? "<span class='text-green-500'>W</span>": ''):''}
+                                              ${battle.initiator.player}@${battle.initiator.nickname} ${ battle.winner ? (battle.winner.id == battle.initiator.id ? "<span class='text-green-500'>W</span>": ''):''}
                                           </a>
                                           <p class="text-sm text-gray-400">Rank: ${battle.initiator.rank}</p>
                                       </div>
@@ -231,7 +231,7 @@ function  createBattleElement(battle){
                                   <div class="flex items-end">
                                       <div class="text-right mr-4">
                                           <a href="/users/${battle.opponent.username}" class="font-bold hover:text-orange-500 ">
-                                              ${battle.opponent.player} ${ battle.winner ? (battle.winner.id == battle.opponent.id ? "<span class='text-green-500'>W</span>": ''):''}
+                                              ${battle.opponent.player}@${battle.opponent.nickname} ${ battle.winner ? (battle.winner.id == battle.opponent.id ? "<span class='text-green-500'>W</span>": ''):''}
                                           </a>
                                           <p class="text-sm text-gray-400">Rank: ${battle.opponent.rank}</p>
                                       </div>

@@ -814,7 +814,7 @@ function deleteComment(element, id){
                 const wsprotocol = window.location.protocol === 'https' ? 'wss://' : 'ws://'
                 console.log(wsprotocol) 
                 const notificationSocket = new WebSocket(
-                'wss://' + window.location.host + '/ws/notifications/'
+                'ws://' + window.location.host + '/ws/notifications/'
             )
             console.log("connected to receive notifications")
             notificationSocket.onmessage = function(event){
@@ -1000,7 +1000,7 @@ function deleteComment(element, id){
                                     if(entity.etype == "family"){
                                         $(container).append(
                                             `
-                                        <a href = "/users/family/${entity.id}">
+                                        <a href = "/users/family/65744${entity.id}">
                                         <div class = 'p-2 hover:bg-gray-700 my-1 cursor-pointer transition duration-300'>
                                         <div class="flex items-center">
                                            <img src="${entity.profile_picture}" alt="${entity.name} profile picture" class="w-8 h-8 rounded-full mr-2"> 

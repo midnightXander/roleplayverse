@@ -9,6 +9,7 @@
         min-height: 100%;
     }
     
+    
     @media (max-width: 768px) {
         .chats-container{
             display: none;
@@ -16,9 +17,10 @@
         #backArrow{
             display: block;
         }
-        nav{
-        display: none;
+        nav, .bottom-nav{
+            display: none;
         }
+        
         .message-form-container{
             position: absolute;
             bottom: 0;
@@ -28,8 +30,6 @@
         .chats-main{
             padding:0 0;
         } 
-        
-        
     }
     @media (min-width: 768px) {
         
@@ -92,7 +92,7 @@
     
 
  <!-- Message input --> 
-<div class="bg-gray-900 relative message-form-container px-2 py-4">
+<div class="bg-gray-950 relative message-form-container px-2 py-4">
     <p id="image-name" class="hidden top-0 absolute">
         <span class="text-green-500"></span>   
         <i class="fas fa-times cursor-pointer ml-2"></i> 
@@ -100,7 +100,7 @@
     <div class="message-loader top-0 absolute hidden">
         <i class="fas fa-spinner fa-spin text-orange-500"></i>
     </div>
-    <form id="messageForm" class="flex shadow-md border-1 border-gray-800  rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-900">
+    <form id="messageForm" class="flex shadow-md border border-gray-700  rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-900">
         
         <button type="button" id="emojiButton" class="px-4 py-2 text-gray-400 hover:text-white  focus:outline-none">
             <i class="far fa-smile"></i>
@@ -149,6 +149,7 @@
     const fileInput = $('#imageUpload')
 
     const wsprotocol = window.location.protocol === 'https' ? 'wss://' : 'ws://' 
+    console.log("WS Protocol:",wsprotocol)
     const groupChatSocket = new WebSocket(
             'wss://' + 
             window.location.host + 
@@ -168,7 +169,7 @@
                             <span class="text-xs text-gray-300 mx-2">${message.date_sent}</span>
                             <h3 class="font-semibold text-lg text-indigo-500">You</h3>
                         </div>
-                        <p class="body text-gray-300 mt-1 bg-gray-900 border-1 border-gray-900 p-3 min-w-32  rounded-tl-xl rounded-br-xl rounded-bl-xl inline-block">${message.content}</p>
+                        <p class="body text-gray-300 mt-1 bg-gray-900 border border-gray-700 p-3 min-w-32  rounded-tl-xl rounded-br-xl rounded-bl-xl inline-block">${message.content}</p>
                         
                     </div>
                     <a href = '/users/${message.sender.username}'>
@@ -181,7 +182,7 @@
                         <button class="optionsButton round-btn hover:bg-gray-600 text-gray-400 hover:text-white focus:outline-none" id="">
                             <i class="fas fa-ellipsis text-xs"></i>
                         </button>
-                        <div class="optionsMenu absolute left-0 mt-2 mr-2 w-48 bg-gray-700 rounded-md shadow-lg z-10 hidden" id="">
+                        <div class="optionsMenu absolute left-0 mt-2 mr-2 w-36 bg-opacity-80 bg-gray-900 border border-gray-700 rounded-xl shadow-lg z-10 hidden" id="">
                             <ul class="py-1">
                                 <li>
                                     <a href="#" onclick = 'copyLink("${message.content}")' class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
@@ -242,7 +243,7 @@
                         <button class="optionsButton round-btn hover:bg-gray-600 text-gray-400 hover:text-white focus:outline-none" id="">
                             <i class="fas fa-ellipsis text-xs"></i>
                         </button>
-                        <div class="optionsMenu absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg z-10 hidden" id="">
+                        <div class="optionsMenu absolute right-0 mt-2 w-36 bg-gray-900 border border-gray-700 rounded-xl shadow-lg z-10 hidden" id="">
                             <ul class="py-1">
                                 <li>
                                     <a href="#" onclick="copyLink('${message.content}')" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
@@ -284,7 +285,17 @@
                        if(messages.length > 0){
 
                         messagesContainer.empty()
-                        messages.forEach(message => {
+                        messages.forEach((message,i) => {
+                            
+                            if( messages[i-1] && messages[i-1].day !== message.day){
+                                messagesContainer.append(`
+                                <div class="date-divider my-4 text-center text-gray-500 text-sm">
+                                    <span class="bg-gray-800 px-4 py-1 rounded-full">
+                                        ${message.date}
+                                    </span>
+                                </div>
+                                `)   
+                            }
                             
                             if(message.image){
                                 messagesContainer.append(
@@ -313,18 +324,20 @@
                                     <button class="optionsButton bg-gray-500 round-btn hover:bg-gray-600 rounded-full text-gray-400 hover:text-white focus:outline-none" id="">
                                         <i class="fas fa-ellipsis-v text-xs"></i>
                                     </button>
-                                    <div class="optionsMenu absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg z-10 hidden" id="">
+                                    <div class="optionsMenu absolute right-0 mt-2 w-36 bg-opacity-80 bg-gray-900 border border-gray-700 rounded-xl shadow-lg z-10 hidden" id="">
                                         <ul class="py-1">
                                             <li>
-                                                <a href="#" onclick = 'copyLink("${message.content}")' class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
+                                                <a href="#" onclick = 'copyLink("${message.content}")' class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
                                                     <i class="fas fa-copy mr-2"></i> Copy
                                                 </a>
                                             </li>
+                                            <!--
                                             <li>
                                                 <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
-                                                    <i class="fas fa-edit mr-2"></i> Edit
+                                                    <i class="fas fa-reply mr-2"></i> Reply
                                                 </a>
                                             </li>
+                                            -->
                                             ${sender_name === message.sender.username ? `
                                             <li>
                                                 <a href="#" onclick='deletePrivateMessage(this,"${message.id}")' class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-600 hover:text-red-300">
