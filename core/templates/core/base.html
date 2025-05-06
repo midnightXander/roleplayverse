@@ -86,7 +86,10 @@
     } */
     [data-expandable] {
         cursor: pointer;
-    }   
+    } 
+    .body{
+        white-space: pre-wrap;
+    }  
     h1,h2,h3{
         font-family: 'Cal Sans','Noto Sans JP','Gluten', sans-serif;
         font-weight: 400;
@@ -151,6 +154,8 @@ function setupExpandableText() {
     });
     console.log("Expandable text set up for elements:", document.querySelectorAll('[data-expandable]'));
 }
+
+
 
 //document.addEventListener('DOMContentLoaded', () =>{ console.log("expandable set up"); setupExpandableText() });
 

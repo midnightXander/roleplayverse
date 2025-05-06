@@ -135,71 +135,7 @@
 <main class="container mx-auto pb-10 px-4">
    
         
-    <!-- <div class="bg-gray-800 rounded-lg p-6 mb-8">
-        <h2 class="text-2xl font-bold text-orange-500 mb-4">Créer une réquete de combat</h2>
-        <form id="battleRequestForm" class="space-y-4" method="post" action="{% url 'battles:request' %}">
-            {% csrf_token %}
-            <div>
-                
-                <img id="char-img" class="myImg mx-auto w-1/2 h-50 rounded-lg" src="{{characters.0.images.0}}">
-                
-                
-                <div class="my-3">
-                        <label for="character-select" class="block mb-2">Perso:</label>
-                        
-                        <select  id="character-select" name="character" class="w-full bg-gray-600 text-white p-2 rounded-lg">
-                            <option value="">Choisir le personnage</option>
-                            {% for character in characters %}
-                            {% if player.p_character == character.name %}
-                            <option selected value="{{character.name}}" data-img_link="{{character.images.0}}">{{character.name}} </option>
-                            {% else %}
-                            <option value="{{character.name}}" data-img_link="{{character.images.0}}">{{character.name}} </option>
-                            {% endif %}
-                            {% endfor %}
-                        </select>
-                        <p class="mt-2 text-sm text-gray-400">consulte le <a class="text-orange-500 hover:text-orange-600" href="/characters" >catalogue des personnages</a> pour connaitre tous les jutsu de vos personnages préferés</p>
-
-                </div>
-                <div class="my-3">
-                    <label for="battleType-select" class="block mb-2">Type de combat:</label>
-                
-                <select  id="battleType-select" name="type" class="w-full bg-gray-600 text-white p-2 rounded-lg">
-                    <option value = "">choisir le type de combat</option>
-                    <option value = "friendly">Amicale</option>
-                    <option value = "stake">Stake</option>
-                    <option value = "rumble" disabled>Rumble</option>
-                </select>
-                </div>
-                <div class="mb-6">
-                    <p class="mt-2 text-gray-400 text-sm"><i class="fas fa-exclamation-triangle text-xl text-yellow-500 mr-2"></i>  des jetons de combat(JC) seront deduit en créant des RDC de type <span class="font-bold text-yellow-500 text-xl">stake</span>.<br><a href="#" class="text-blue-400">comment ça marçhe</a></p>
-                </div>
-
-                {% for message in messages %}
-                <div class="mb-6">
-                    {% if message.tags == 'error' %}
-                    <p class="text-red-500 mb-2">
-                        <i class="fas fa-exclamation-triangle mr-2"></i>
-                        {{message}}
-                    </p>
-                    <a class="text-yellow-500 border border-yellow-500 p-2 rounded" href="{% url 'core:battle_points' %}">Obtenir des jetons de combat</a>
-                        {% else %}
-                    <p class="text-green-500">
-                    <i class="fas fa-exclamation-triangle mr-2"></i>
-                        {{message}}
-                    </p>
-
-                    <p class="text-gray-400">
-                    Tu peux consulter et voir l'état de tes requètes(RDC) sur ton profile, tes RDC et combats ne sont pas affichés ici
-                    </p>
-                    {% endif %}            
-                </div>
-                {% endfor %}
-            </div>
-            <button onsubmit="disableSubmitButton(this)"  class="request-button form-submit-btn bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition duration-300">
-                <i class="fas fa-fist-raised mr-2"></i>Créer la réquete 
-            </button>
-        </form>
-    </div> -->
+ 
 
     <div class="filter-container w-full mx-auto flex space-x-2 mb-6 overflow-x-auto pb-2">
         <button data-url="/battles/requests" data-=""   class="filter-button border border-gray-700 shadow-md px-4 py-2 rounded-xl hover:bg-gray-500 transition duration-300">
@@ -219,8 +155,66 @@
             <i class="fas fa-flag-checkered mr-2"></i>Terminé
         </button>
     </div>
+    <!-- <div class="max-w-2xl mx-auto space-y-4">
 
+        <!-- Collapsible Section 
+        <div class="border border-gray-700 mb-4 rounded-xl bg-gray-800" id="dsouza-section">
+          <div 
+            class="flex justify-between items-center p-4 cursor-pointer hover:bg-gray-700 transition" 
+            onclick="toggleSection('dsouza-section')"
+          >
+            <span class="text-lg font-semibold">D’souza (5 Requêtes)</span>
+            <svg 
+              class="w-4 h-4 transition-transform transform arrow" 
+              fill="none" stroke="currentColor" stroke-width="2" 
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+          <div class="request-list hidden divide-y divide-gray-700">
+    
+            <div class="p-4 flex justify-between items-center">
+              <span>avec A (Fourth Raikage) — Rang E</span>
+              <button class="bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded">Accepter</button>
+            </div>
+    
+            <div class="p-4 flex justify-between items-center">
+              <span>avec Naruto Uzumaki — Rang E</span>
+              <button class="bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded">Accepter</button>
+            </div>
+    
+            <div class="p-4 flex justify-between items-center">
+              <span>avec Naruto Uzumaki — Rang E</span>
+              <button class="bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded">Accepter</button>
+            </div>
+    
+            <div class="p-4 flex justify-between items-center">
+              <span>avec Naruto Uzumaki — Rang E</span>
+              <button class="bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded">Accepter</button>
+            </div>
+    
+            <div class="p-4 flex justify-between items-center">
+              <span>avec Naruto Uzumaki — Rang E</span>
+              <button class="bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded">Accepter</button>
+            </div>
+    
+          </div>
+        </div>
+    
+      </div> -->
+    
+      <script>
+        function toggleSection(id) {
+          const section = document.getElementById(id);
+          const list = section.querySelector('.request-list');
+          const arrow = section.querySelector('.arrow');
+          const isOpen = list.classList.toggle('hidden');
+          arrow.classList.toggle('rotate-90', !isOpen);
+        }
+      </script>
     <div class="battles-container grid mb-20 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
         {%  for request in requests %} 
             <div class="battle-card border border-gray-600 shadow-md rounded-lg p-6 flex flex-col">
                 <div class="flex justify-between items-center mb-4">

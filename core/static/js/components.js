@@ -9,58 +9,7 @@ function createPostElement(post) {
     //postElement.className = 'post-gradient rounded-xl p-6 border border-gray-700 hover-scale'
     // <span class='ellipsed-text body'>${comment.body}<span>
     //     <span class = 'full-text hidden body'>${comment.body}</span>
-    postElement.innerHTML = `
-        <div class="flex items-center mb-4 relative">
-            <a href = "/users/${post.author.name}">
-            <img src="${post.author.profile_picture}" alt="${post.author.name}" class="w-10 h-10 rounded-full mr-4">
-            <a>
-            <a href = "/users/${post.author.name}">
-            <h3 class="font-bold hover:text-orange-600">${post.author.player}<br><small class='font-semi-bold text-gray-400'>${post.time_posted}</small></h3>
-            </a>
-    
-            <div class="absolute top-2 right-2">
-                  <button onclick = 'togglePostDropdown(this)'  class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
-                      <i class="fas fa-ellipsis-v"></i>
-                  </button>
-                  <div class="post-dropdown-menu w-48 py-2">
-                        
-                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="toggleToFavorites('${post.id}')">
-                        ${post.is_favorite ? "<i class = 'fas fa-bookmark mr-2'></i>retirer des favoris":"<i class = 'far fa-bookmark mr-2'></i>ajouter aux favoris"}
-                        </div>
-                        
-                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="socialShare(this,'https://roleplayverse.llive/posts/${post.id}')"><i class = 'fas fa-share-alt mr-2'></i>Partager</div>
-                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('https://roleplayverse.live/posts/${post.id}')"><i class = 'fas fa-copy mr-2'></i>copier le lien</div>
-                        ${post.author.name == currentPlayerData.username? 
-                        `
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600"><i class = 'fas fa-pencil-square-o mr-2'></i> Edit</a>
-                        <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deletePost(this,'${post.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
-                        `:`
-                      `}
-                      
-                  
-                    </div>
-            </div>
-        </div>
-        
-        <p class="mb-4 content body">${post.body}</p>
-        ${post.image ? `<img src="${post.image}" alt="Post image" class="myImg w-full rounded-lg mb-4 post-image">` : ''}
-        <div class="post-infos flex items-center justify-between">
-            <button class="like-button bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-full flex items-center ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
-                <i class="far fa-heart mr-2"></i>
-                <span class="like-count">${post.likes}</span>
-            </button>
-            <button class="comment-button bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-full flex items-center">
-                <i class="far fa-comment mr-2"></i>
-                <span class = 'comment-count'>${post.n_comments}</span>
-            </button>
-        </div>
-        <div class="comments border-t  border-gray-600  space-y-4 mt-4 overflow-y-auto p-1" style = 'max-height:200px'>
-            ${post.comments.map(comment =>createComment(comment)).join('')}
-        </div>
-        <form onsubmit='sendComment(this, event)' class="comment-form mt-4" data-post-id = ${post.id}>
-            <input type="text" class="bg-gray-600 text-white p-2 rounded w-full  border-0  focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Add a comment...">
-        </form>
-    `;
+
     
     //imgModalListener()
     
@@ -102,8 +51,8 @@ function createPostElement(post) {
                 </div>
               </div>
               
-              <p onclick = 'toggleExpand(this)' class="text-base text-gray-100 mt-1" data-expandable data-full='${post.body_full}'>
-                ${post.body}
+              <p onclick = 'toggleExpand(this)' class="body text-base text-gray-100 mt-1" data-expandable>
+                
               </p>
              
                 ${post.image ? `
@@ -147,6 +96,11 @@ function createPostElement(post) {
             </div>
           </div>
     `
+
+    // Escape the post body and set it as text content
+    const postBodyElement = postElement2.querySelector('p[data-expandable]');
+    postBodyElement.textContent = post.body;
+    postBodyElement.setAttribute('data-full', post.body_full);
     return postElement2
     }
 
