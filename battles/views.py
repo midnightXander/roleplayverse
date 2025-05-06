@@ -167,7 +167,7 @@ def _battles_data(player:Player,battles):
                 "username": battle.opponent.user.username,
                 "profile_picture": battle.opponent.profile_picture.url,
                 "rank":battle.opponent.rank,
-                "nickname": battle.opponent.nickname if battle.opponent.nickname else battle.opponent.user.username,,
+                "nickname": battle.opponent.nickname if battle.opponent.nickname else battle.opponent.user.username,
                 },
             "refree": {
                 "id": battle.refree.id,
