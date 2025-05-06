@@ -110,7 +110,7 @@ EMAIL_TEMPLATE = """
 """
 
 
-def send_email(recipient_email:str,title:str, subject:str,body:str,language:str='en'):
+def send_email(recipient_email:str,title:str, subject:str,body:str,language:str='fr'):
     email = EmailMessage()
     email["Subject"] = subject
     email["From"] = rpv_email

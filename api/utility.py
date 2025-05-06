@@ -27,7 +27,7 @@ def send_push_notification(subscription :PushSubscription, message, user:User = 
             <p><strong>{message['body']}</strong></p>
             <a href = '{message['url']}' class = "button">Voir</a>
             """,
-            language = user.language
+            #language = ""
             )
         except:
             print(f"Failed to send email: {ex}")
@@ -62,7 +62,7 @@ def send_push_notification(subscription :PushSubscription, message, user:User = 
             <p><strong>{message['body']}</strong></p>
             <a href = '{message['url']}' class = "button">Voir</a>
             """,
-            language = user.language
+            #language = user.language
             )
         except:
             print(f"Failed to send email: {ex}")

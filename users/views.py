@@ -252,7 +252,7 @@ def password_recover(request):
                     <a href="{link}" class="button">Réinitialiser le mot de passe</a>
                     <p>Si tu n'as pas demandé cette réinitialisation, ignore cet e-mail.</p>
                     """,
-                    language = player.user.language
+                    #language = player.user.language
                 )                
                 messages.success(request, f"Un lien a été  envoyé a {user_email}, verifie ta boite mail et tes spams")
             except Exception as e:
@@ -528,7 +528,7 @@ def send_invite(request,target_id):
                     <p><strong></strong></p>
                     <a href = "roleplayverse.live/notifications/all" class = "button">Repondre</a>
                     """,
-                    language = target.user.language
+                    #language = target.user.language
                     )
             except Exception as e:
                 print(f"could not send email: {e}")  

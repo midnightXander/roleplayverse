@@ -71,7 +71,7 @@ def manage_battles_latency():
                     <p>Fais ton pavé maintenant!</p>
                     <a href="/battles/battle_room/{battle.id} class='button'">Accéder au combat</a>
                     """,
-                    language = loser.user.language
+                    #language = loser.user.language
                 )
             except Exception as e:
                 print(f"Email error: {e}")
