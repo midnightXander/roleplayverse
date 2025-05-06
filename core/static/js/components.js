@@ -21,7 +21,7 @@ function createPostElement(post) {
             <div class="flex-1">
               <div class="flex justify-between text-sm text-gray-400">
                 <div>
-                  <a href = "/users/${post.author.name}" class="inline-block font-semibold hover:text-orange-600 text-white">${post.author.player}</a> @${post.author.nickname}
+                  <a onlick = 'showOverlay()' href = "/users/${post.author.name}" class="inline-block font-semibold hover:text-orange-600 text-white">${post.author.player}</a> @${post.author.nickname}
                 </div>
                 
     
@@ -162,21 +162,39 @@ function createPostElement(post) {
   
 }
     
+function battleStatusToFrench(status){
+    if(status == 'not_started') return "pas commencé"
+    if(status == 'ongoing') return "en cours"
+    if(status == 'waiting_refree') return "en attente d'arbitrage"
+
+    return status
+}
+
+function battleTypeToFrench(type){
+    if(type == 'friendly') return "Amicale"
+    if(type == 'stake') return "Enjeu"
+
+    return type
+}
+
 
 function  createBattleElement(battle){
   const battleElement = document.createElement('div')
-  battleElement.className = 'battle-card  bg-gray-900 border border-gray-700 rounded-lg p-6 flex flex-col';
+  battleElement.className = 'battle-card  bg-gray-900 border border-gray-700 rounded-2xl p-6 flex flex-col';
+  const status = battleStatusToFrench(battle.status)
+  const type = battleTypeToFrench(battle.type)
+
   battleElement.innerHTML = `
                               <div class="flex justify-between items-center mb-4">
-                                  <h3 class="text-xl font-bold">${battle.status}</h3>
-                                  <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-sm">${battle.type}</span>
+                                  <h3 class="text-xl font-bold">${status}</h3>
+                                  <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-sm">${type}</span>
                               </div>
                               <div class="flex justify-between items-center mb-4 flex-col">
                                   <div class="flex items-start">
                                       <img src="${battle.initiator.profile_picture}" alt="${battle.initiator.player}" class="w-12 h-12 rounded-full mr-4">
                                       <div>
                                           <a href="/users/${battle.initiator.username}" class="font-bold hover:text-orange-500 ">
-                                              ${battle.initiator.player}@${battle.initiator.nickname} ${ battle.winner ? (battle.winner.id == battle.initiator.id ? "<span class='text-green-500'>W</span>": ''):''}
+                                              ${battle.initiator.player}<span class ='text-sm text-semibold text-gray-600'>@${battle.initiator.nickname}</span> ${ battle.winner ? (battle.winner.id == battle.initiator.id ? "<span class='text-green-500'>W</span>": ''):''}
                                           </a>
                                           <p class="text-sm text-gray-400">Rank: ${battle.initiator.rank}</p>
                                       </div>
@@ -185,7 +203,7 @@ function  createBattleElement(battle){
                                   <div class="flex items-end">
                                       <div class="text-right mr-4">
                                           <a href="/users/${battle.opponent.username}" class="font-bold hover:text-orange-500 ">
-                                              ${battle.opponent.player}@${battle.opponent.nickname} ${ battle.winner ? (battle.winner.id == battle.opponent.id ? "<span class='text-green-500'>W</span>": ''):''}
+                                              ${battle.opponent.player}<span class ='text-sm text-semibold text-gray-600'>@${battle.opponent.nickname}</span> ${ battle.winner ? (battle.winner.id == battle.opponent.id ? "<span class='text-green-500'>W</span>": ''):''}
                                           </a>
                                           <p class="text-sm text-gray-400">Rank: ${battle.opponent.rank}</p>
                                       </div>
@@ -193,10 +211,10 @@ function  createBattleElement(battle){
                                   </div>
                               </div>
                               ${battle.can_refree ? `<button data-battle_id="${battle.id}" class= "proposal-btn border border-purple-500 text-purple-500 px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
-                                  <i class="fas fa-gavel mr-2"></i>Propose as Referee
+                                  <i class="fas fa-gavel mr-2"></i>Arbitrer le combat
                               </button>`:`
                               <div class='flex justify-between items-center' > 
-                              <a onclick = 'showOverlay()' href="/battles/battle_room/${battle.id}" class="inline-block bg-transparent border-1 border-orange-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
+                              <a onclick = 'showOverlay()' href="/battles/battle_room/${battle.id}" class="inline-block bg-transparent border border-orange-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition duration-300 mt-auto">
                                       voir le combat 
                               </a>
 
@@ -209,7 +227,87 @@ function  createBattleElement(battle){
   return battleElement
 }
 
-  
+
+function toggleSection(id) {
+    const section = document.getElementById(id);
+    const list = section.querySelector('.request-list');
+    const arrow = section.querySelector('.arrow');
+    const isOpen = list.classList.toggle('hidden');
+    arrow.classList.toggle('rotate-90', !isOpen);
+}
+      
+function createCollapsedRequest(request){
+
+    return `
+    <div class="battle-card p-4 flex justify-between items-center">
+        <span>avec <span class="text-yellow-500">${request.character}</span> — ${request.type}</span>
+        <button data-url="{% url 'battles:accept' ${request.id} %}" data-requesttype="${request.type}" data-character="${request.character}" data-requestsender="${request.sender}" 
+        class="accept-button bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded">Accepter</button>
+    </div>
+    `
+}
+
+function createCollapsedRequests(requestData){
+    const requestElement = document.createElement('div')
+    requestElement.className = 'border border-gray-700 mb-4 rounded-2xl bg-opacity-90 bg-gray-900'
+    requestElement.setAttribute('id', `${requestData.sender}-requests`)
+
+    requestElement.innerHTML = `
+            <div 
+                class="flex justify-between items-center p-4 cursor-pointer hover:bg-gray-700 rounded-xl transition" 
+                onclick="toggleSection('${requestData.sender}-requests')"
+              >
+                <div class="text-lg flex font-semibold"><img src="{{data.sender.profile_picture.url}}" class="w-8 h-8 border border-orange-500 rounded-full mr-2"> {{data.sender}} - <span class="text-orange-500" >{{data.sender.rank}} </span> ({{data.length}} Requêtes)</div>
+                <svg 
+                  class="w-4 h-4 transition-transform transform arrow" 
+                  fill="none" stroke="currentColor" stroke-width="2" 
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+    
+              <div class="request-list hidden divide-y divide-gray-700">
+              ${requestData.requests.map(request => createCollapsedRequest(request)).join('')}
+            </div>
+    
+    `
+
+    return requestElement
+    
+
+    // return `
+    
+    // <div class="border border-gray-700 mb-4 rounded-2xl bg-opacity-90 bg-gray-900" id="{{data.sender}}-requests">
+    //           <div 
+    //             class="flex justify-between items-center p-4 cursor-pointer hover:bg-gray-700 rounded-xl transition" 
+    //             onclick="toggleSection('{{data.sender}}-requests')"
+    //           >
+    //             <div class="text-lg flex font-semibold"><img src="{{data.sender.profile_picture.url}}" class="w-8 h-8 border border-orange-500 rounded-full mr-2"> {{data.sender}} - <span class="text-orange-500" >{{data.sender.rank}} </span> ({{data.length}} Requêtes)</div>
+    //             <svg 
+    //               class="w-4 h-4 transition-transform transform arrow" 
+    //               fill="none" stroke="currentColor" stroke-width="2" 
+    //               viewBox="0 0 24 24"
+    //             >
+    //               <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+    //             </svg>
+    //           </div>
+    
+    //           <div class="request-list hidden divide-y divide-gray-700">
+    //             {% for request in  data.requests %}
+    //             <div class="battle-card p-4 flex justify-between items-center">
+    //               <span>avec <span class="text-yellow-500">{{request.character}}</span> — {{request.type}}</span>
+    //               <button data-url="{% url 'battles:accept' request.id %}" data-requesttype="{{request.type}}" data-character="{{request.character}}" data-requestsender="{{request.sender}}" 
+    //                class="accept-button bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded">Accepter</button>
+    //             </div>
+    //             {% endfor %}
+        
+    //           </div>
+    //         </div>
+    
+    // `
+}
+
 function createRequest(request){
 
   return `

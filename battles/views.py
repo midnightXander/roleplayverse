@@ -233,19 +233,42 @@ def battles(request):
     sorted_characters = sorted(characters["playable_characters"], key = lambda item: item["name"])
     battles = Battle.objects.all().order_by('-date_started')
     requests = BattleRequest.objects.exclude(sender = player).order_by('-date_sent')
+
+    #remove requests where 2 battles had already being inititated from 
+    for req in requests:
+        if len(Battle.objects.filter(request = req)) >=2:
+            req.delete() 
+
+    #get the request senders
+    
+    request_senders = [ ]
+    for req in requests:
+        if req.sender not in request_senders:
+            request_senders.append(req.sender)
+    
+    requests_list2 = [
+        {
+            f'sender': sender,
+            'requests' : requests.filter(sender = sender),
+            'length' : len(requests.filter(sender = sender)),
+        } for sender in request_senders 
+    ]
+    # print(request_senders)
+    # print(requests_list2)
     requests_list = []
 
     #Show Number of battles initiated for each request  
 
     #remove requests where 3 battles had already being inititated from 
-    for b_request in requests:
-        r_battles = Battle.objects.filter(request = b_request)
-        if len(r_battles)<=3:
-            requests_list.append(b_request)
+    # for b_request in requests:
+    #     r_battles = Battle.objects.filter(request = b_request)
+    #     if len(r_battles)<=2:
+    #         requests_list.append(b_request)
 
     battles_data = _battles_data(player, battles)
 
     context = {"requests":requests_list,
+               "packed_requests":requests_list2,
                "characters":sorted_characters,
                "player":player,
                "n_notifs":core_views.get_notifs(player),

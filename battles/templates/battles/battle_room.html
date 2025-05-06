@@ -303,7 +303,8 @@
 
         
 
-        {% if battle.refree != player and   battle.can_send_textpad and last_sender != player %}
+        {% if battle.refree != player and battle.can_send_textpad and last_sender != player %}
+        {% if player == battle.initiator or player == battle.opponent %}
         
 
         <!-- Submit Textpad -->
@@ -375,8 +376,9 @@
             </div>
         </div>
         
-        
-        {%endif%}
+        {% endif %}
+
+        {% endif %}
 
 
 {% if can_rate %}
