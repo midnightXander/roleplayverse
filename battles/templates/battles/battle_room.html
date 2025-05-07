@@ -356,18 +356,19 @@
         </div>
         
         
-
+        {% endif %}
+        
         {% elif battle.refree == player and battle.status == "ongoing" and not battle.can_send_textpad %}
         <!--evaluate a textpad only if there are textpads and players can't send a new textpad(when a player just sent a new textpad)-->
 
         <!-- Referee Actions -->
-        <div class="referee-actions my-6 bg-gray-700 rounded-lg p-4">
+        <div class="referee-actions my-6 border border-gray-700 rounded-2xl p-4">
             <h3 class="text-xl font-semibold text-orange-300 mb-2">Actions arbitrales</h3>
             <div class="flex flex-wrap gap-2">
-                <button id="validateBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                <button id="validateBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-2xl transition duration-300">
                     Validé le pavé
                 </button>
-                <button id="invalidateBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                <button id="invalidateBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-2xl transition duration-300">
                     Refusé le pavé
                 </button>
                 <!-- <button id="endBattleBtn" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition duration-300">
@@ -376,14 +377,14 @@
             </div>
         </div>
         
-        {% endif %}
+        
 
         {% endif %}
 
 
 {% if can_rate %}
         <!-- Referee Rating Section -->
-<div id="refereeRatingSection" class="mt-8 bg-gray-800 rounded-lg p-6 hidden">
+<div id="refereeRatingSection" class="mt-8 bg-gray-900 rounded-lg p-6 hidden">
     <h2 class="text-2xl font-semibold text-orange-400 mb-4">Noter l'arbitre</h2>
     <p class="text-white mb-4">Note ton experience avec larbitre de ce combat</p>
     <div class="flex items-center mb-4">
@@ -416,7 +417,7 @@
             <span class="star" data-value="5">★</span>
         </div>
     </div>
-    <textarea id="refereeComment" class="w-full bg-gray-700 text-white rounded p-2 mb-4" rows="3" placeholder="Additional comments (optional)"></textarea>
+    <textarea id="refereeComment" class="w-full bg-gray-900 text-white rounded p-2 mb-4" rows="3" placeholder="Additional comments (optional)"></textarea>
     <button id="submitRefereeRating" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
         Soumettre la note
     </button>
@@ -426,7 +427,7 @@
 
 <!-- <h1 class="text-2xl font-bold mb-6 text-orange-500">Referee Ratings</h1> -->
         
-        <div id="referee-ratings" class="bg-gray-800 text-white rounded-lg p-4 shadow-md animate-fadeIn">
+        <div id="referee-ratings" class="bg-gray-900 text-white rounded-lg p-4 shadow-md animate-fadeIn">
             <h2 class="text-lg text-orange-500 font-semibold mb-4">Note de l'arbitre:<span class="text-white"> {{battle.refree}}</span>  </h2>
             
             <div class="overflow-x-auto">
@@ -451,23 +452,23 @@
 
 <!-- Popup for accepting battle -->
 <div id="endBattlePopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 animate-scaleIn">
-    <div class="bg-gray-800 text-white rounded-lg p-8 max-w-md w-full mx-4">
+    <div class="bg-gray-900 border border-gray-700 text-white rounded-2xl p-8 max-w-md w-full mx-4">
         <h2 class="text-2xl font-bold mb-4">Arreter le combat</h2>
         <div class="mb-2">
             <h3 class="font-bold">Commenter sur le pavé:</h3>
-            <textarea  id="invalidTextpadComment" rows="4" class="w-full bg-gray-600 mt-2 text-white rounded-lg p-3 mb-3 focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Say why this textpad is not valid"></textarea>
+            <textarea  id="invalidTextpadComment" rows="4" class="w-full bg-gray-800 mt-2 text-white rounded-lg p-3 mb-3 focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Dit pourquoi ce pave n'est pas valid(MC, WTF,...avec explication)"></textarea>
         </div>
         
         <div class="mb-6">
-            <p class="text-yellow-500"><i class="fas fa-exclamation-triangle mr-2"></i>Notice: <span id="winner-notice" class="text-blue-400"></span> <br>
-                <a href="#" class="text-blue-400">Plus d'infos</a>
+            <p class="text-yellow-500"><i class="fas fa-exclamation-triangle mr-2"></i>Notice: <span id="winner-notice" class="text-white"></span> <br>
+                <a href="#" class="text-orange-500">Plus d'infos</a>
             </p>
         </div>
         <div class="flex justify-between">
-            <button id="confirmEndbattle" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
+            <button id="confirmEndbattle" class="bg-green-500 text-white px-4 py-2 rounded-2xl hover:bg-green-600 transition duration-300">
                 <i class="fas fa-check mr-2"></i>Confirmer
             </button>
-            <button id="cancelEndBattle" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
+            <button id="cancelEndBattle" class="bg-red-500 text-white px-4 py-2 rounded-2xl hover:bg-red-600 transition duration-300">
                 <i class="fas fa-times mr-2"></i>Annuler
             </button>
         </div>
@@ -477,9 +478,9 @@
 
 
 
-{% for message in messages %}
+<!-- {% for message in messages %}
 <h5>{{message}}</h5>
-{% endfor %}
+{% endfor %} -->
 
 {{battle.id|json_script:"battle_id" }}
 {{player.user.username|json_script:"username"}}

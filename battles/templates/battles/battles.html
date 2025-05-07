@@ -164,10 +164,22 @@
           const arrow = section.querySelector('.arrow');
           const isOpen = list.classList.toggle('hidden');
           arrow.classList.toggle('rotate-90', !isOpen);
+
+          const reqTypes = section.getElementsByClassName(`${id}-type`);
+          
+        // Convert HTMLCollection to Array and map to French
+        const reqTypesArray = Array.from(reqTypes).map(reqType => {
+            reqType.textContent =  battleTypeToFrench(reqType.textContent)
+        });  
+      
+        }
+        function closeAd(ad) {
+            ad.parentElement.remove();
         }
       </script>
     <div class="battles-container grid mb-20 grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
-        
+        <p class="text-center text-gray-400">Les <span class="text-orange-500">requètes de combat</span> et les combat en cours, en attente, et terminé sont listé ici</p>
+        <span class="text-center text-gray-400">Accepte une requete pour debuter un combat contre un autre joueur</span>
 
             {%  for data in packed_requests %}
             <div class="border border-gray-700 mb-2 rounded-2xl bg-opacity-90 bg-gray-900" id="requests-{{data.sender.id}}">
@@ -188,7 +200,7 @@
               <div class="request-list hidden divide-y divide-gray-700">
                 {% for request in  data.requests %}
                 <div class="battle-card p-4 flex justify-between items-center">
-                  <span>avec <span class="text-yellow-500">{{request.character}}</span> — {{request.type}}</span>
+                  <span>avec <span class="text-yellow-500">{{request.character}}</span> — <span class="requests-{{data.sender.id}}-type">{{request.type}}</span></span>
                   <button data-url="{% url 'battles:accept' request.id %}" data-requesttype="{{request.type}}" data-character="{{request.character}}" data-requestsender="{{request.sender}}" 
                    class="accept-button bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded">Accepter</button>
                 </div>
@@ -203,7 +215,7 @@
             <div class="ad-container game animate-fadeIn">
                 <span class="ad-label">Ad</span>
                 <button onclick = 'closeAd(this)' class="ad-close">&times;</button>
-                <a href='https://sophisticatedappearance.com/bP3nVZ0/P.3-pJvwbhmgV_JiZpDu0/1mNqjCYP0tNmTbAZ4LLpTiU/2UNvjiQD1lMHDMkq' target='_blank' class="ad-content">
+                <a href='https://frequent-doubt.com/b_3eV/0YP.3cpOvgbOmpVMJVZUDz0k2CMzzBMBzSMHjaQo3VLdTuYDzUMkzZM/yINZDvgE' target='_blank' class="ad-content">
                     <p class="text-center">
                         <!-- Your ad content here (300x90) -->
                     </p>

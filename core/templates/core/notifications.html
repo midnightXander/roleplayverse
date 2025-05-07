@@ -66,14 +66,14 @@
     <h1 class="text-2xl text-center text-orange-500 font-semibold">Challenges</h1>
     {% for challenge in challenges  %}
 
-    <div id="challenge-card-{{challenge.id}}" class="challenge-card bg-gray-700 rounded-lg shadow-lg p-6 my-2 mx-auto max-w-md w-full mb-4">
+    <div id="challenge-card-{{challenge.id}}" class="challenge-card bg-gray-900 rounded-2xl shadow-lg p-6 my-2 mx-auto max-w-md w-full mb-4">
 
       <div class="text-center mb-6">
           <i class="fas fa-fire text-4xl text-orange-600 mb-4"></i>
           <h2 class="text-2xl font-semibold">On t'as lancé un challenge!</h2>
       </div>
       
-      <div class="bg-gray-700 rounded-lg p-4 mb-6">
+      <div class="bg-gray-900 rounded-2xl p-4 mb-6">
           <div class="flex items-center mb-4">
             <a href="{% url 'users:player' challenge.sender.user.username %}">
               <img src="{{challenge.sender.profile_picture.url}}" alt="{{challenge.sender}} profile picture" class="w-16 h-16 rounded-full mr-4">
@@ -89,7 +89,7 @@
 
       <div class="mb-4">
         <label for="character" class="block mb-2">Choisi ton perso:</label>
-        <select id="character" name="character" class="character-select w-full bg-gray-700 text-white p-2 rounded-lg">
+        <select id="character" name="character" class="character-select w-full bg-gray-900 text-white p-2 rounded-2xl">
             <option value="">Choisi to perso</option>
                         {% for character in characters %}
                         {% if player.p_character == character.name %}
@@ -123,7 +123,7 @@
       <!-- <i class="fas fa-users text-4xl text-blue-500 mb-4"></i> -->
       <h2 class="text-2xl font-semibold">Un joueur veut rejoindre ta famille !</h2>
     </div>
-     <div class="request-card bg-gray-700 rounded-lg p-4 mb-4 flex flex-col md:flex-row items-center justify-between">
+     <div class="request-card bg-gray-900 rounded-2xl p-4 mb-4 flex flex-col md:flex-row items-center justify-between">
       
       <div class="flex items-center mb-4 md:mb-0">
         <a href="{% url 'users:player' notif.sender.user.username %}"> 
@@ -146,13 +146,13 @@
     </div>
 
     {% elif notif.notif_type == 'invite' %}
-    <div class="invite-card bg-gray-700 rounded-lg shadow-lg p-6 my-2 mx-auto max-w-md w-full mb-4">
+    <div class="invite-card bg-gray-900 rounded-lg shadow-2xl p-6 my-2 mx-auto max-w-md w-full mb-4">
       <div class="text-center mb-6">
           <i class="fas fa-users text-4xl text-blue-500 mb-4"></i>
           <h2 class="text-2xl font-semibold">Tu as été invité!</h2>
       </div>
       
-      <div class="bg-gray-700 rounded-lg p-4 mb-6">
+      <div class="bg-gray-900 rounded-2xl p-4 mb-6">
           <div class="flex items-center mb-4">
             <a href="{% url 'users:family_page' notif.family.id %}">
               <img src="{{notif.family.profile_picture.url}}" alt="Family Leader Avatar" class="w-16 h-16 rounded-full mr-4">
@@ -188,7 +188,7 @@
 
 <!-- Popup for accepting battle -->
 <div id="ChallengePopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 animate-scaleIn">
-  <div class="bg-gray-800 rounded-lg p-8 max-w-md w-full mx-4">
+  <div class="bg-gray-900 rounded-2xl border border-gray-700 p-8 max-w-md w-full mx-4">
       <h2 class="text-2xl font-bold mb-4">Accepter la Requète</h2>
       <div class="mb-4">
           <h3 class="font-bold">Adversaire:</h3>
@@ -425,7 +425,7 @@ function handleRequest(btn,requestId, action) {
 
   function createNotificationCard(notification) {
       const card = document.createElement('div');
-      card.className = 'notification-card bg-gray-700 rounded-lg p-4 shadow-md relative';
+      card.className = 'notification-card bg-gray-900 rounded-2xl border border-gray-700 p-4 shadow-md relative';
       card.innerHTML = `
           <a href="${notification.url}" class="block px-2">
               
@@ -447,9 +447,9 @@ function handleRequest(btn,requestId, action) {
 
   function createPlayerNotificationCard(notification) {
       const card = document.createElement('div');
-      card.className = 'notification-card bg-gray-700 rounded-lg p-4 shadow-md relative';
+      card.className = 'notification-card bg-gray-900 rounded-2xl border border-gray-700 p-4 shadow-md relative';
       card.innerHTML = `
-          <a href="${notification.url}" class="block px-2">
+          <a href="${notification.url}" onclick = 'showOverlay();' class="block px-2">
               
               <p class="text-gray-300  mb-2">${notification.content}</p>
               <p class="text-sm text-gray-400">${notification.timestamp}</p>
