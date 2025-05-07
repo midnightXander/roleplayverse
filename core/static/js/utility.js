@@ -26,3 +26,8 @@
 // }
 
 //document.addEventListener('DOMContentLoaded', () =>{ console.log("expandable set up"); setupExpandableText() });
+function replacePlaceholder(imgElement, src) {
+    imgElement.src = src;
+    imgElement.onerror = null; // Remove the error handler to prevent infinite loop
+    imgElement.classList.remove('placeholder');
+}

@@ -259,9 +259,9 @@
 <!-- Left Sidebar -->
 <aside class="sidebar-left rounded-lg p-4">
 <div class="mb-4">
-    <img src="{{player.profile_picture.url}}" alt="{{player}}" class="myImg w-20 h-20 rounded-full mx-auto">
+    <img src="{% static 'images/loaders/img-loader.gif' %}" onload="replacePlaceholder(this,'{{player.profile_picture.url}}')" alt="{{player}}" class="myImg w-20 h-20 rounded-full mx-auto">
     <h3 class="text-center font-bold mt-2">{{player}}</h3>
-    <p class="text-center text-sm">Progression: {{player.progression}}% | Rang: <b>{{player.rank}}</b></p>
+    <p class="text-center text-sm">Progression: {{player.progression}}% | Class: <b>{{player.rank}}</b></p>
 </div>
 <ul class="space-y-2">
     <li><a href="{% url 'users:families' %}" class="flex items-center py-2 px-4 text-orange-500 hover:bg-gray-600 rounded"><i class="fas fa-users mr-2"></i>{% trans 'Familles' %} </a></li>

@@ -9,6 +9,8 @@ from django.utils import timezone
 from core.views import add_points
 from datetime import datetime
 from . import emails
+from api.utility import send_push_notification
+from api.models import PushSubscription
 # @shared_task
 # def delete_expired_instances():
 #     now = timezone.now()
@@ -57,9 +59,21 @@ def manage_battles_latency():
         
         
 
-        if hours == BATTLE_LATENCY - 2:
+        if hours == BATTLE_LATENCY - 4 and last_textpad.valid:
             #SEND EMAIL ALERTING PLAYER he is going to lose 
             #Send_email()
+            
+            send_push_notification(
+                PushSubscription.objects.filter(user=loser.user)[0],
+                {
+                    "title": "Alerte de latence",
+                    "body": f"Tu es sur le point de perdre ton combat contre {winner} par latence! Fais ton pavé maintenant!",
+                    "url": f"/battles/battle_room/{battle.id}",
+                    "action": "open_battle",
+                    'icon' : '/static/images/logo/logo_1.png',
+                },
+                loser.user,
+                )
             try: 
                 emails.send_email(
                     recipient_email = loser.user.email,
@@ -111,7 +125,17 @@ def manage_battles_latency():
                         target = winner,
                         url = f'/battles/battle_room/{battle.id}',
                         content = f"Tu as été declaré  vainqueur de ton combat contre {loser} par latence"
-                        ) 
+                        )
+            send_push_notification(
+                PushSubscription.objects.filter(user=winner.user)[0],
+                {
+                    "title": "Tu as remporte ton combat",
+                    "body": f"Tu as été declaré  vainqueur de ton combat contre {loser} par latence",
+                    "url": f"https://roleplayverse.live",
+                    'icon' : '/static/images/logo/logo_1.png',
+                },
+                winner.user,
+                ) 
             win_notif.save()
 
             lose_notif = Notification.objects.create(

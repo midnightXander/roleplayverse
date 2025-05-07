@@ -57,7 +57,7 @@ function createPostElement(post) {
              
                 ${post.image ? `
                 <div class="mt-3">
-                <img  src="${post.image}" alt="${post.author.player} image de publication" class="w-full myImg rounded-xl border-1 border-gray-700 object-cover h-auto max-h-96" />
+                <img  src='/static/images/loaders/img-loader.gif' onload = "replacePlaceholder(this, '${post.image}')" alt="${post.author.player} image de publication" class="w-full myImg rounded-xl border-1 border-gray-700 object-cover h-auto max-h-96" />
               </div>
                 ` : ''}
               
@@ -114,7 +114,7 @@ function createPostElement(post) {
   
                       <div class="flex comment rounded-xl items-start space-x-3" data-toggle="tooltip" data-placement='top' title = '${comment.body}'>
                           <a class = "font-semibold inline-block  hover:text-orange-500" href='/users/${comment.author.username}'>
-                                   <img src="${comment.author.profile_picture}" alt="${comment.author.username}" class="w-8 h-8 rounded-full"> 
+                                   <img src="${comment.author.profile_picture}"  alt="${comment.author.username}" class="w-8 h-8 rounded-full"> 
                           </a>
                           <div class="flex-1  rounded-lg p-1">
                               <div class="flex items-center justify-between mb-1 relative">

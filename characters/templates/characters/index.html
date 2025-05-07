@@ -1,5 +1,5 @@
 {% extends "core/base.html" %}
-
+{% load static %}
 {% block meta_keywords  %}
 {% for character in characters %}
 technique de {{character.name}}
@@ -23,9 +23,9 @@ Decouvrez les techniques de tout les personnages de l'univers Naruto
         {% for character in characters %}
         <div class="character bg-gray-900 text-white rounded-lg shadow-lg p-4">
             {% if character.images.1 %}
-            <img src="{{character.images.1}}" alt="{{character.name}}" class="rounded-t-lg h-40 w-full object-cover">
+            <img src="{% static 'images/loaders/img-loader.gif' %}" onload ="replacePlaceholder(this,'{{character.images.1}}')" alt="{{character.name}}" class="rounded-t-lg h-40 w-full object-cover">
             {% else %}
-            <img src="{{character.images.0}}" alt="{{character.name}}" class="rounded-t-lg h-40 w-full object-cover">
+            <img src="{% static 'images/loaders/img-loader.gif' %}" onload ="replacePlaceholder(this,'{{character.images.0}}')" alt="{{character.name}}" class="rounded-t-lg h-40 w-full object-cover">
             {% endif %}
             
             

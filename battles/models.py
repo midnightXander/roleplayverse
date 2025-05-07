@@ -9,7 +9,7 @@ import random
 def generate_custom_id():
     return str(random.randint(10000000, 99999999))
 
-BATTLE_LATENCY = 12
+BATTLE_LATENCY = 20
 f_request_cost = 250
 s_request_cost = 350
 request_cost = 350

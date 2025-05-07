@@ -35,6 +35,8 @@
         <meta property = "og:image" content = "{% static 'images/logo/logo_1.png' %}" >
         <meta property = "og:url" content = "https://roleplayverse.live">
         <link rel="icon" type="image/x-icon" href="{% static 'images/logo/logo_1.png' %}">
+        <meta name="referrer" content="no-referrer-when-downgrade" />
+        <meta name="f98f33015c71e83498cb175245f67798544f0db7" content="f98f33015c71e83498cb175245f67798544f0db7" />
         
         <!-- <link rel="stylesheet" href="{% static 'css/home.css' %}" /> -->
         
@@ -42,8 +44,8 @@
         <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/linkifyjs/dist/linkify.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/linkify-html/dist/linkify-html.min.js' %}"></script>
-        <script src="{% static 'js/components.js' %}" ></script>
         <script src="{% static 'js/utility.js' %}"  ></script> 
+        <script src="{% static 'js/components.js' %}" ></script>
         <script src="{% static 'js/core.js' %}"></script>
         <!-- <script src="{% static 'js/notifications.js' %}"></script>  -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -137,6 +139,12 @@
     el.textContent = fullText;
     el.setAttribute('data-expanded', "true");
     }
+}
+
+function replacePlaceholder(imgElement, src) {
+    imgElement.src = src;
+    imgElement.onerror = null; // Remove the error handler to prevent infinite loop
+    imgElement.classList.remove('placeholder');
 }
 
 function setupExpandableText() {

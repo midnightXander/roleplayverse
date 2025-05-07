@@ -66,16 +66,16 @@
             <label class="relative group cursor-pointer shrink-0">
                 <input type="radio" name="character" value="{{characters.0.name}}" class="hidden peer" checked>
                 
-                <img src="{{characters.0.images.1}}" data-name="{{characters.0.name}}" class="rounded-xl border-2 border-transparent peer-checked:border-orange-500 transition w-28 h-28 object-cover" />
+                <img src="{% static 'images/loaders/img-loader.gif' %}" onload = "replacePlaceholder(this,'{{characters.0.images.1}}')" data-name="{{characters.0.name}}" class="rounded-xl border-2 border-transparent peer-checked:border-orange-500 transition w-28 h-28 object-cover" />
                 <div class="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">{{characters.0.name}}</div>
             </label>
           {% for character in characters|slice:"2:"  %}
             <label class="relative group cursor-pointer shrink-0">
             <input type="radio" name="character" value="{{character.name}}" class="hidden peer">
             {% if character.images.1 %}
-            <img src="{{character.images.1}}" data-name="{{character.name}}" class="rounded-xl border-2 border-transparent peer-checked:border-orange-500 transition w-28 h-28 object-cover" />
+            <img src="{% static 'images/loaders/img-loader.gif' %}" onload ="replacePlaceholder(this,'{{character.images.1}}')" data-name="{{character.name}}" class="rounded-xl border-2 border-transparent peer-checked:border-orange-500 transition w-28 h-28 object-cover" />
             {% else %}
-            <img src="{{character.images.0}}" data-name="{{character.name}}" class="rounded-xl border-2 border-transparent peer-checked:border-orange-500 transition w-28 h-28 object-cover" />
+            <img src="{% static 'images/loaders/img-loader.gif' %}" onload ="replacePlaceholder(this,'{{character.images.0}}')" data-name="{{character.name}}" class="rounded-xl border-2 border-transparent peer-checked:border-orange-500 transition w-28 h-28 object-cover" />
             {% endif %}
             
             <div class="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">{{character.name}}</div>
@@ -170,12 +170,12 @@
         
 
             {%  for data in packed_requests %}
-            <div class="border border-gray-700 mb-2 rounded-2xl bg-opacity-90 bg-gray-900" id="{{data.sender}}-requests">
+            <div class="border border-gray-700 mb-2 rounded-2xl bg-opacity-90 bg-gray-900" id="requests-{{data.sender.id}}">
               <div 
                 class="flex justify-between items-center p-4 cursor-pointer hover:bg-gray-700 rounded-xl transition" 
-                onclick="toggleSection('{{data.sender}}-requests')"
+                onclick="toggleSection('requests-{{data.sender.id}}')"
               >
-                <div class="text-lg flex font-semibold"><img src="{{data.sender.profile_picture.url}}" class="w-8 h-8 border border-orange-500 rounded-full mr-2"> {{data.sender}} - <span class="text-orange-500" >{{data.sender.rank}} </span> ({{data.length}} Requêtes)</div>
+                <div class="text-lg flex font-semibold"><img alt="photo de profile" src="{{data.sender.profile_picture.url}}" class="w-8 h-8 border border-orange-500 rounded-full mr-2"> {{data.sender}} - <span class="text-orange-500" >{{data.sender.rank}} </span> ({{data.length}} Requêtes)</div>
                 <svg 
                   class="w-4 h-4 transition-transform transform arrow" 
                   fill="none" stroke="currentColor" stroke-width="2" 
