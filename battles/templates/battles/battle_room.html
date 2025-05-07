@@ -297,11 +297,6 @@
             </ul>
         </div>
         
-        <!-- Battle Textpads -->
-        <div id="textPads" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        </div>
-
-        
 
         {% if battle.refree != player and battle.can_send_textpad and last_sender != player %}
         {% if player == battle.initiator or player == battle.opponent %}
@@ -381,8 +376,7 @@
 
         {% endif %}
 
-
-{% if can_rate %}
+        {% if can_rate %}
         <!-- Referee Rating Section -->
 <div id="refereeRatingSection" class="mt-8 bg-gray-900 rounded-lg p-6 hidden">
     <h2 class="text-2xl font-semibold text-orange-400 mb-4">Noter l'arbitre</h2>
@@ -447,6 +441,17 @@
         </div>
 
 {% endif %}
+
+        <!-- Battle Textpads -->
+        <div id="textPads" class="grid grid-cols-1 lg:grid-cols-1 gap-6">
+        </div>
+
+        
+
+       
+
+
+
     </div>
 </div>
 

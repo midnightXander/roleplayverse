@@ -32,7 +32,7 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
                 chat=None
             )
         if image_data and image_name:
-            print("setting image")
+            
             new_msg.image.save(image_name, ContentFile(image_data))
             new_msg.save()
         try:
@@ -65,7 +65,7 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
                 last_message_time_sent = new_msg.date_sent,
             )
                 new_msg.chat = new_chat
-                print("New chat between these two")
+                
                 new_chat.save()
 
         except Chat.MultipleObjectsReturned:
@@ -167,7 +167,7 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
             {
                 'type':'new_private_message',
                 'notif_type':'private_message',
-                'content': f'New message: {message[:10]}...',
+                'content': f'nouveau message:{message[:15]}...',
                 "sender": sender_name,
                 'timestamp': _time_since(messageObj.date_sent),
                 'profile_picture': messageObj.sender.profile_picture.url,

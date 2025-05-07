@@ -66,7 +66,8 @@
         <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Edu+AU+VIC+WA+NT+Arrows:wght@400..700&family=Gluten:wght@100..900&family=Noto+Sans+JP:wght@100..900&family=Quicksand:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
 
 
-
+        
+        
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/output.css' %}" >
         <link rel="stylesheet" href="{% static 'css/effects.css' %}" >
@@ -170,7 +171,18 @@ function setupExpandableText() {
 //document.addEventListener('DOMContentLoaded', () =>{ console.log("expandable set up"); setupExpandableText() });
 
     </script>
-
+    <!-- <script>
+        (function(pgzyz){
+        var d = document,
+            s = d.createElement('script'),
+            l = d.scripts[d.scripts.length - 1];
+        s.settings = pgzyz || {};
+        s.src = "\/\/frequent-doubt.com\/ciD\/9\/6hb.2\/5RlQS-WCQQ9ONSjnMDzWMnzGI\/0KNVyd0v2dMezmMDzGMDjnQX4r";
+        s.async = true;
+        s.referrerPolicy = 'no-referrer-when-downgrade';
+        l.parentNode.insertBefore(s, l);
+        })({})
+    </script> -->
     </head>
     <body class="bg-gray-950 h-screen flex flex-col">
         
@@ -322,6 +334,10 @@ function setupExpandableText() {
                   </div>
                 </a>
                 </div>
+            </div>
+
+            <div id="toastContainer" class="fixed bottom-4 right-4 space-y-4" style="z-index: 1999;" >
+                <!-- Toasts will be dynamically added here -->
             </div>
         
         
@@ -550,10 +566,53 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
             }
             
             imgModalListener()
+
             </script>
 
 <!--Sending Comments-->            
 <script>
+
+function showNotificationToast(senderName, profilePicture, messageContent, timestamp, url = "#") {
+    const toastContainer = document.getElementById("toastContainer");
+
+    // Create the toast element
+    const toast = document.createElement("div");
+    toast.className =
+        "flex items-start bg-gray-900 border border-gray-700 text-white rounded-lg shadow-lg p-4 space-x-4 animate-fadeIn"
+
+    // Toast content
+    toast.innerHTML = `
+    
+                    <img src="${profilePicture}" alt="${senderName}" class="w-12 h-12 rounded-full">
+                    <div class="flex-1">
+                        <div class="flex border-b border-gray-700 pb-2 justify-between items-center">
+                            <a href="${url}" class="font-semibold text-orange-500 hover:underline">${senderName}</a>
+                            <small class="text-gray-400">${timestamp}</small>
+                        </div>
+                        <a href="${url}" onclick='showOverlay();' class="inline-block mt-2">${messageContent}</a>
+                    </div>
+                    <button class="text-gray-400 hover:text-white" onclick="removeToast(this)">
+                        <i class="fas fa-times"></i>
+                    </button>
+    
+    `;
+
+    // Append the toast to the container
+    toastContainer.appendChild(toast);
+
+    // Automatically remove the toast after 3 seconds
+    setTimeout(() => {
+        toast.classList.add("animate-fadeOut");
+        setTimeout(() => toast.remove(), 300); // Remove after fade-out animation
+    }, 7000);
+}
+
+function removeToast(button) {
+    const toast = button.parentElement;
+    toast.classList.add("animate-fadeOut");
+    setTimeout(() => toast.remove(), 300);
+}
+
     function createAdElement(url="#"){
     const addElement = document.createElement('div')
     addElement.className = 'ad-container animate-fadeIn'
@@ -831,8 +890,11 @@ function deleteComment(element, id){
                 const notificationSocket = new WebSocket(
                 'ws://' + window.location.host + '/ws/notifications/'
             )
-            console.log("connected to receive notifications")
+            console.log(notificationSocket)
+            
             notificationSocket.onmessage = function(event){
+                console.log("New notification")
+
                 data = JSON.parse(event.data)
                 const sender = data.sender
                 const content = data.content
@@ -841,7 +903,7 @@ function deleteComment(element, id){
                 const message_type =  data.message_type
                 var link = '#'
 
-                console.log("New notification")
+                
                 
                 let n_notifs = parseInt($("#notifier").text())
                 if(n_notifs){
@@ -852,7 +914,7 @@ function deleteComment(element, id){
                 }else{
                     $("#notifier").text("1")
                 }
-                console.log(n_notifs)
+                
                 
                 
                 if (message_type == 'private'){
@@ -860,7 +922,9 @@ function deleteComment(element, id){
                 }else if(message_type == 'family'){
                     link = `/chats/group/${sender}`
                 }
-                // $('.toast-container').removeClass('hidden')
+
+                showNotificationToast(sender,profile_picture,content,timestamp, link);
+                //$('.toast-container').removeClass('hidden')
                 const toastLiveExample = document.getElementById('liveNotificationToast')
                 $("#notif-link").attr("href", link)
                 $(".toast-header #notif-sender").text(sender)
@@ -870,10 +934,9 @@ function deleteComment(element, id){
 
                 const NotificationToast = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
                 NotificationToast.show()
+                console.log("Notification toast shown")
             
             }
-
-            
 
             })
            
