@@ -14,9 +14,11 @@ def _bot_action(character, player_action:dict):
     if action.get('name') == 'Substitution' and player_action.get('name') in not_allowed_substitution_actions:
         action = random.choice(possible_actions)
 
-    elif player_action.get('name') == 'Defend':
-        action = random.choice(SPECIAL_ATTACKS) #Use a special attack if the player defend
-
+    elif player_action.get('name') == 'Defend' or player_action.get('name') == 'Focus':
+        ATTACKS:list = SPECIAL_ATTACKS
+        ATTACKS.append(BASIC_ACTIONS[0]) #attack if the player defend or focus
+        action = random.choice(ATTACKS) #attack if the player defend or focus
+      
     if character.get('chakra') <= 0:
         action = BASIC_ACTIONS[2] #focus if no chakra left    
 
