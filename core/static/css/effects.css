@@ -109,10 +109,21 @@
     animation: float 3s ease-in-out infinite;
 }
 
+.floatingx {
+    animation: floatx 2s ease-in-out infinite;
+}
+
+
 @keyframes float {
     0% { transform: translateY(0px); }
     50% { transform: translateY(-10px); }
     100% { transform: translateY(0px); }
+}
+
+@keyframes floatx {
+    0% { transform: translateX(0px); }
+    50% { transform: translateX(-5px); }
+    100% { transform: translateX(0px); }
 }
 
 

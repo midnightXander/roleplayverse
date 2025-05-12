@@ -1,0 +1,428 @@
+[
+    {
+        "name": "Naruto Uzumaki",
+        "rank": "Jounin",
+        "chakra_pool": 200,
+        "stamina_pool": 180,
+        "jutsus": [
+            {
+                "name": "Shadow Clone Technique",
+                "type": "Ninjutsu",
+                "rank": "B",
+                "chakra_cost": 20,
+                "stamina_cost": 10,
+                "description": "Creates physical copies of the user."
+            },
+            {
+                "name": "Rasengan",
+                "type": "Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 40,
+                "stamina_cost": 20,
+                "description": "A spinning sphere of chakra that causes massive damage."
+            },
+            {
+                "name": "Six Paths: Ultra-Big Ball Rasenshuriken",
+                "type": "Ninjutsu",
+                "rank": "S",
+                "chakra_cost": 90,
+                "stamina_cost": 40,
+                "description": "An immensely powerful Rasenshuriken enhanced by Six Paths chakra."
+            }
+        ],
+        "image": "https://www.gifcen.com/wp-content/uploads/2022/04/naruto-gif-6.gif"
+    },
+    {
+        "name": "Sasuke Uchiha",
+        "rank": "Jounin",
+        "chakra_pool": 190,
+        "stamina_pool": 170,
+        "jutsus": [
+            {
+                "name": "Chidori",
+                "type": "Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 40,
+                "stamina_cost": 15,
+                "description": "High-speed thrusting attack with lightning chakra."
+            },
+            {
+                "name": "Amaterasu",
+                "type": "Ninjutsu",
+                "rank": "S",
+                "chakra_cost": 80,
+                "stamina_cost": 30,
+                "description": "Black flames that burn anything in sight."
+            },
+            {
+                "name": "Inferno Style: Flame Control",
+                "type": "Ninjutsu",
+                "rank": "S",
+                "chakra_cost": 70,
+                "stamina_cost": 25,
+                "description": "Controls the black flames of Amaterasu for shaping and precision."
+            }
+        ],
+        "image": "https://www.gifcen.com/wp-content/uploads/2022/04/sasuke-gif-6.gif"
+    },
+    {
+        "name": "Sakura Haruno",
+        "rank": "Jounin",
+        "chakra_pool": 160,
+        "stamina_pool": 200,
+        "jutsus": [
+            {
+                "name": "Cherry Blossom Impact",
+                "type": "Taijutsu",
+                "rank": "A",
+                "chakra_cost": 30,
+                "stamina_cost": 40,
+                "description": "A chakra-enhanced punch with devastating force."
+            },
+            {
+                "name": "Mystical Palm Technique",
+                "type": "Medical Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 35,
+                "stamina_cost": 10,
+                "description": "Heals physical injuries using medical chakra."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/53/57/92/5357927ba4cf4e27a584a04fe55e8f00.gif"
+    },
+    {
+        "name": "Kakashi Hatake",
+        "rank": "Jounin",
+        "chakra_pool": 180,
+        "stamina_pool": 160,
+        "jutsus": [
+            {
+                "name": "Lightning Blade",
+                "type": "Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 45,
+                "stamina_cost": 20,
+                "description": "A more powerful version of Chidori."
+            },
+            {
+                "name": "Kamui",
+                "type": "Ninjutsu",
+                "rank": "S",
+                "chakra_cost": 85,
+                "stamina_cost": 30,
+                "description": "Space-time jutsu to teleport objects to another dimension."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/61/15/46/611546408e024a83be698547e41a6bf8.gif"
+    },
+    {
+        "name": "Gaara",
+        "rank": "Kage",
+        "chakra_pool": 190,
+        "stamina_pool": 160,
+        "jutsus": [
+            {
+                "name": "Sand Coffin",
+                "type": "Ninjutsu",
+                "rank": "B",
+                "chakra_cost": 30,
+                "stamina_cost": 10,
+                "description": "Traps enemies in sand, crushing them."
+            },
+            {
+                "name": "Sand Burial",
+                "type": "Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 50,
+                "stamina_cost": 20,
+                "description": "Crushes enemies trapped in sand."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/31/d8/fe/31d8fecbd9fb2c0abe449b20e9f14679.gif"
+    },
+    {
+        "name": "Itachi Uchiha",
+        "rank": "S-Class",
+        "chakra_pool": 180,
+        "stamina_pool": 150,
+        "jutsus": [
+            {
+                "name": "Tsukuyomi",
+                "type": "Genjutsu",
+                "rank": "S",
+                "chakra_cost": 70,
+                "stamina_cost": 20,
+                "description": "Illusion that tortures the victim in a fraction of time."
+            },
+            {
+                "name": "Amaterasu",
+                "type": "Ninjutsu",
+                "rank": "S",
+                "chakra_cost": 80,
+                "stamina_cost": 25,
+                "description": "Black flames that can never be extinguished."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/73/13/2c/73132cc52770ee5f4645e43e115f5bd8.gif"
+    },
+    {
+        "name": "Jiraiya",
+        "rank": "Sannin",
+        "chakra_pool": 200,
+        "stamina_pool": 180,
+        "jutsus": [
+            {
+                "name": "Summoning: Toad",
+                "type": "Ninjutsu",
+                "rank": "B",
+                "chakra_cost": 30,
+                "stamina_cost": 15,
+                "description": "Summons giant toads to assist in battle."
+            },
+            {
+                "name": "Sage Mode",
+                "type": "Senjutsu",
+                "rank": "S",
+                "chakra_cost": 100,
+                "stamina_cost": 40,
+                "description": "Greatly enhances chakra, strength, and reflexes."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/a0/97/b3/a097b354a181c139e437d9e5ed74146b.gif"
+    },
+    {
+        "name": "Rock Lee",
+        "rank": "Jounin",
+        "chakra_pool": 100,
+        "stamina_pool": 220,
+        "jutsus": [
+            {
+                "name": "Primary Lotus",
+                "type": "Taijutsu",
+                "rank": "B",
+                "chakra_cost": 10,
+                "stamina_cost": 50,
+                "description": "A high-speed taijutsu attack that launches the opponent."
+            },
+            {
+                "name": "Eight Gates: Gate of Opening",
+                "type": "Taijutsu",
+                "rank": "A",
+                "chakra_cost": 20,
+                "stamina_cost": 80,
+                "description": "Removes the brain\u2019s chakra limiters for extreme power boost."
+            }
+        ],
+        "image": "https://media.tenor.com/lKXEniVzIusAAAAM/port%C3%A3o-interno-rock-lee.gif"
+    },
+    {
+        "name": "Orochimaru",
+        "rank": "Sannin",
+        "chakra_pool": 190,
+        "stamina_pool": 160,
+        "jutsus": [
+            {
+                "name": "Summoning: Snakes",
+                "type": "Ninjutsu",
+                "rank": "B",
+                "chakra_cost": 35,
+                "stamina_cost": 15,
+                "description": "Summons giant snakes in combat."
+            },
+            {
+                "name": "Living Corpse Reincarnation",
+                "type": "Ninjutsu",
+                "rank": "S",
+                "chakra_cost": 90,
+                "stamina_cost": 30,
+                "description": "Transfers his soul into another body."
+            }
+        ],
+        "image": "https://24.media.tumblr.com/a30c3b0ad0322fbc37e85a4fee9a590b/tumblr_mv5ddtezUq1sjhmx6o1_500.gif"
+    },
+    {
+        "name": "Hinata Hyuga",
+        "rank": "Chuunin",
+        "chakra_pool": 140,
+        "stamina_pool": 130,
+        "jutsus": [
+            {
+                "name": "Eight Trigrams Sixty-Four Palms",
+                "type": "Taijutsu",
+                "rank": "B",
+                "chakra_cost": 25,
+                "stamina_cost": 25,
+                "description": "Rapid strikes that seal opponent\u2019s chakra points."
+            },
+            {
+                "name": "Gentle Step Twin Lion Fists",
+                "type": "Taijutsu",
+                "rank": "A",
+                "chakra_cost": 40,
+                "stamina_cost": 30,
+                "description": "Concentrates chakra into lion-shaped fists to strike the enemy."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/01/d8/b9/01d8b98fa5a9a60c258dd2dd0b708da3.gif"
+    },
+    {
+        "name": "Shino Aburame",
+        "chakra_pool": 85,
+        "stamina": 90,
+        "jutsus": [
+            {
+                "name": "Parasitic Insects",
+                "chakra_cost": 15,
+                "stamina_cost": 10
+            },
+            {
+                "name": "Insect Sphere",
+                "chakra_cost": 30,
+                "stamina_cost": 20
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/54/d6/f8/54d6f8c1b23f587f0957d1fbcfb20631.gif"
+    },
+    {
+        "name": "Kiba Inuzuka",
+        "chakra_pool": 90,
+        "stamina": 100,
+        "jutsus": [
+            {
+                "name": "Fang Over Fang",
+                "chakra_cost": 25,
+                "stamina_cost": 30
+            },
+            {
+                "name": "Man Beast Clone",
+                "chakra_cost": 20,
+                "stamina_cost": 15
+            }
+        ],
+        "image": "https://pa1.aminoapps.com/6567/b8c8f981afc56a85d32ee3f5fa7f8468f2215b0b_00.gif"
+    },
+    {
+        "name": "Anko Mitarashi",
+        "chakra_pool": 95,
+        "stamina": 95,
+        "jutsus": [
+            {
+                "name": "Hidden Shadow Snake Hands",
+                "chakra_cost": 20,
+                "stamina_cost": 15
+            },
+            {
+                "name": "Twin Snakes Mutual Death",
+                "chakra_cost": 40,
+                "stamina_cost": 35
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/4d/22/4e/4d224e71a92fce0d13ed3a4b23868472.gif"
+    },
+    {
+        "name": "Konan",
+        "chakra_pool": 120,
+        "stamina": 80,
+        "jutsus": [
+            {
+                "name": "Dance of the Shikigami",
+                "chakra_cost": 35,
+                "stamina_cost": 15
+            },
+            {
+                "name": "Paper Clone",
+                "chakra_cost": 25,
+                "stamina_cost": 10
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/a8/e4/28/a8e428b2b8fdbc033e463b80c2f3db4a.gif"
+    },
+    {
+        "name": "Yamato",
+        "chakra_pool": 130,
+        "stamina": 100,
+        "jutsus": [
+            {
+                "name": "Wood Release: Wood Clone",
+                "chakra_cost": 35,
+                "stamina_cost": 20
+            },
+            {
+                "name": "Mokuton Wall",
+                "chakra_cost": 45,
+                "stamina_cost": 25
+            }
+        ],
+        "image": "https://64.media.tumblr.com/2cc1bcbd66565846b87d697fcee85d03/08a89bed81c8eda7-4b/s500x750/26d7ae96bc3d4cf287bc35e5263b494e69ef289e.gif"
+    },
+    {
+        "name": "Kurenai Yuhi",
+        "chakra_pool": 90,
+        "stamina": 85,
+        "jutsus": [
+            {
+                "name": "Genjutsu: Tree Binding Death",
+                "chakra_cost": 40,
+                "stamina_cost": 20
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/5a/68/3a/5a683a2f9a77b659a7067f6d9580ead0.gif"
+    },
+    {
+        "name": "Hidan",
+        "chakra_pool": 75,
+        "stamina": 110,
+        "jutsus": [
+            {
+                "name": "Curse Ritual",
+                "chakra_cost": 50,
+                "stamina_cost": 40
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/e1/5e/3d/e15e3da58bfb43d9683354d07e581068.gif"
+    },
+    {
+        "name": "Darui",
+        "chakra_pool": 110,
+        "stamina": 100,
+        "jutsus": [
+            {
+                "name": "Storm Style: Laser Circus",
+                "chakra_cost": 40,
+                "stamina_cost": 25
+            },
+            {
+                "name": "Black Panther",
+                "chakra_cost": 35,
+                "stamina_cost": 20
+            }
+        ],
+        "image": "https://pa1.aminoapps.com/6535/e1c0d334dc3ba0900b080ae4d01a1e5b8b724c7e_00.gif"
+    },
+    {
+        "name": "Omoi",
+        "chakra_pool": 85,
+        "stamina": 95,
+        "jutsus": [
+            {
+                "name": "Kenjutsu Slash",
+                "chakra_cost": 20,
+                "stamina_cost": 30
+            }
+        ],
+        "image": "https://media.tenor.com/H0Fec8kWfWoAAAAM/omoi-naruto.gif"
+    },
+    {
+        "name": "Fu Yamanaka",
+        "chakra_pool": 90,
+        "stamina": 85,
+        "jutsus": [
+            {
+                "name": "Mind Puppet Switch Cursed Seal",
+                "chakra_cost": 45,
+                "stamina_cost": 25
+            }
+        ],
+        "image": "https://pa1.aminoapps.com/6604/00d9a0754ee6a0066961a8d44a21f5d76c051074_hq.gif"
+    }
+]

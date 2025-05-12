@@ -13,7 +13,7 @@ import events.models as events_models
 import events.views as events_views
 import uuid
 from datetime import datetime
-from utility import get_characters,get_refree_questions,_parse_number,_time_since
+from utility import get_characters,get_refree_questions,_parse_number,_time_since, get_solo_battle_characters, _solo_battle_character
 import json
 from django.views.decorators.csrf import csrf_exempt
 import core.views as core_views
@@ -21,6 +21,8 @@ import users.views as users_views
 import random
 from api.models import PushSubscription
 from api.utility import send_push_notification
+from .solo_battle import *
+from .solo_battle import _evaluate_actions, _bot_action, _log_actions
 #manage progressions after a battle
 #manage BP for starting a battle
 #refree quizz
@@ -37,7 +39,10 @@ def _character(name:str):
     for character in characters['playable_characters']:
         if str(character['name']).lower() == name.lower():
             
-            return character          
+            return character 
+
+            
+            return character                  
 
 def update_battle_spectators(player:Player, battle:Battle):
     spectators = battle.spectators.all()
@@ -229,6 +234,16 @@ def battles(request):
     player = get_player(request.user)
     if not player:
         return redirect('/users/signin')
+    
+    # jsonTest = JsonTestModel.objects.create(
+    #     json_data = {
+    #         "name": "John",
+    #         "age": 30,
+    #         "city": "New York"
+    #     }
+    # )
+    # jsonTest.save()
+    # print(jsonTest.json_data['name'])
     characters = get_characters()
     sorted_characters = sorted(characters["playable_characters"], key = lambda item: item["name"])
     battles = Battle.objects.all().order_by('-date_started')
@@ -913,6 +928,8 @@ def send_textpad(request, battle_id):
 def get_textpads(request, battle_id):
     battle = Battle.objects.get(id = battle_id)
     textpads = TextPad.objects.filter(battle = battle)
+    
+    
 
     textpads_data = [
         {
@@ -921,8 +938,9 @@ def get_textpads(request, battle_id):
             "text": textpad.text,
             "valid": textpad.valid,
             "character": get_textpad_character(battle,textpad),
-            "time_since": core_views._time_since(textpad.date_sent)
-        } for textpad in textpads
+            "time_since": core_views._time_since(textpad.date_sent),
+            'index': index + 1,
+        } for index,textpad in enumerate(textpads)
     ] 
 
     return JsonResponse({"status":"success","textpads":textpads_data})
@@ -1662,3 +1680,118 @@ def answer_challenge(request, challenge_id):
             notif2.save()
             challenge.delete()
     return JsonResponse({'status':'success', 'message':message})
+
+
+@login_required
+def soloBattle(request):
+    player = get_player(request.user)
+    if not player:
+        return redirect('/users/signin')
+    n_notifs = core_views.get_notifs(player=player)
+    characters = get_solo_battle_characters()
+
+
+
+
+    return render(request,"battles/solo.html", {
+        'player':player,
+        'n_notifs': n_notifs,
+        'characters' : characters,
+    })
+
+@csrf_exempt
+def init_solo_battle(request):
+    player = get_object_or_404(Player, user = request.user)
+    if request.method == "POST":
+        player_character = request.POST.get('character')
+        characters = get_solo_battle_characters()
+        bot_character = characters[random.randint(0, len(characters)-1)]
+        if bot_character['name'] == player_character : 
+            bot_character = characters[random.randint(0, len(characters)-1)]
+        # if player_character not in characters:
+        #     return JsonResponse({'message': 'character not found'})
+        player_character = _solo_battle_character(player_character)
+        player_character['hp'] = 200
+        bot_character['hp'] = 200
+        player_character['chakra'] = player_character.get('chakra_pool',100)
+        bot_character['chakra'] = bot_character.get('chakra_pool',100)
+
+
+        battle = SoloBattle.objects.create(
+            player = player,
+            player_character = player_character,
+            bot_character = bot_character,
+        )
+
+        battle.save()
+
+
+        return JsonResponse({'message': 'battle initialized', 'bot_character': bot_character, 'player_character': player_character})
+
+    return JsonResponse({'message':'bad request'})     
+
+def _reward_player(player:Player):
+    progression_boost = 2
+    player.progression = player.progression + progression_boost
+    player.save()
+
+    return {'xp' : f'{progression_boost}'}
+ 
+def solo_battle_action(request):
+    player = get_object_or_404(Player, user = request.user)
+    if request.method == 'POST':
+        # model = JsonTestModel.objects.get(id = 2)
+        action = request.POST.get('action')
+        
+        battle = SoloBattle.objects.filter(player = player).order_by('-date_started')[0]
+        player_character = battle.player_character
+        bot_character = battle.bot_character
+        possible_actions = BASIC_ACTIONS + player_character['jutsus']
+        
+        player_action = BASIC_ACTIONS[0]
+
+        for act in possible_actions:
+            if act['name'] == action:
+                player_action = act
+
+        bot_action = _bot_action(bot_character, player_action)
+        new_logs = _log_actions(player_action, bot_action, player_character, bot_character)
+        logs = json.loads(battle.log)
+        for log in new_logs:
+            logs.append(log)
+        
+        player_character, bot_character, new_logs, winner =  _evaluate_actions(player_character, bot_character, player_action, bot_action)
+        logs = logs + new_logs
+        # for log in logs:
+        #     print(f"{log.get('timestamp')}: {log.get('text')} : {log.get('result')}")
+
+        # new_log = {
+        #     'text' : f"{action} performed",
+        #     'type' : 'success',
+        #     'result' : 'success',
+        #     'timestamp': datetime.now().strftime("%H:%M"),
+        #     }
+
+        rewards = {}
+        if winner == 'player':
+            rewards = _reward_player(player)
+            battle.result = 'win'
+            battle.finished = True
+            battle.date_ended = datetime.now()
+        elif winner == 'bot':
+            battle.result = 'lose'
+            battle.finished = True
+            battle.date_ended = datetime.now()
+           
+            
+
+        
+        battle.log = json.dumps(logs)
+        battle.save()  
+
+        return JsonResponse({'battle_logs': logs, 'player_character' : player_character, 'bot_character' : bot_character, 'winner' : winner, 'rewards': rewards})    
+
+
+
+
+        

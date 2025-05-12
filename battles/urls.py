@@ -31,6 +31,10 @@ urlpatterns = [
     path('challenge/send/<int:target_id>',views.send_challenge, name='send_challenge'),
     path('challenge/answer/<int:challenge_id>',views.answer_challenge, name='accept_challenge'),
 
+    path('solo',views.soloBattle, name='solo_battle'),
+    path('solo/init',views.init_solo_battle, name='init_solo_battle'),
+    path('solo/action',views.solo_battle_action, name='action_solo_battle'),
+
 
     
 

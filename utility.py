@@ -80,6 +80,33 @@ def get_characters():
         characters = json.load(f)
     return characters
 
+def get_solo_battle_characters():
+    characters_file = os.path.join(BASE_DIR,"characters/naruto_100_characters.json")
+    with open(characters_file,"r") as f:
+        characters = json.load(f)
+    return characters    
+
+def _solo_battle_character(name:str): 
+    for character in get_solo_battle_characters():
+        if str(character['name']).lower() == name.lower():
+            return character
+    return None
+
+#add an image field to the characters
+def _add_image_field():
+    file = os.path.join(BASE_DIR,"characters/naruto_100_characters.json")
+    with open(file, 'r')  as f:
+        characters = json.load(f)
+    #name = "s".lower()    
+    for ch in characters:
+        ch['image'] = 'https://www.gifcen.com/wp-content/uploads/2022/04/sasuke-gif-6.gif'
+
+    #save updated file
+    with open(file, 'w') as f:
+        json.dump(characters, f, indent=4)
+
+#_add_image_field()
+
 
 def get_refree_questions(language='en'):
     if language == 'en':

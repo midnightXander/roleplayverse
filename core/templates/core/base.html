@@ -104,6 +104,38 @@
     } */
 </style>
 
+<style>
+    /* Button Styling */
+.ripple-button {
+  position: relative;
+  overflow: hidden;
+  z-index: 10;
+}
+
+/* Ripple Effect */
+.ripple-effect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  transition: width 0.6s ease, height 0.6s ease, opacity 0.6s ease;
+}
+
+/* Ripple Effect Animation */
+.ripple-button:active .ripple-effect {
+  width: 300%;
+  height: 300%;
+  opacity: 0;
+}
+</style>
+
 
 
 
@@ -165,6 +197,19 @@ function setupExpandableText() {
     });
     console.log("Expandable text set up for elements:", document.querySelectorAll('[data-expandable]'));
 }
+function askNotification(){
+
+// Check if the browser supports notifications
+if(!("Notification" in window)){
+    console.log("Browser doesn't support notifications")
+    return
+}
+if(Notification?.permission !== 'granted'){
+    Notification.requestPermission((permission)=>{
+    })
+}
+}
+
 
 
 
@@ -198,7 +243,7 @@ function setupExpandableText() {
          -->
 
     <!-- Navigation style ='background: transparent;'  -->
-    <nav class="bg-gray-950 fixed bg-opacity-50 w-full z-10 py-2" style="margin-bottom: 1rem;">
+    <nav class="top-nav bg-gray-950 fixed bg-opacity-50 w-full z-10 py-2" style="margin-bottom: 1rem;">
         <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Left side: Logo and Search -->
@@ -305,6 +350,7 @@ function setupExpandableText() {
         <!-- Mobile menu -->
         <div class="md:hidden hidden" id="mobileMenu">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                
                 <a href="{% url 'core:home' %}" class="text-gray-300 text-xl hover:text-white block px-3 py-2"><i class="fas fa-home mr-2"></i>Home</a>
                 <a href="{% url 'chats:all' %}" class="text-gray-300 text-xl hover:text-white block px-3 py-2"><i class="fas fa-comments mr-2"></i>Chats</a>
                 <a href="{% url 'battles:index' %}" class="text-gray-300 text-xl hover:text-white block px-3 py-2"><i class="fas fa-khanda mr-2"></i>Battles</a>
@@ -890,7 +936,7 @@ function deleteComment(element, id){
                 const notificationSocket = new WebSocket(
                 'wss://' + window.location.host + '/ws/notifications/'
             )
-            console.log(notificationSocket)
+            
             
             notificationSocket.onmessage = function(event){
                 console.log("New notification")

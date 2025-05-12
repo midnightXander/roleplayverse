@@ -10,4 +10,6 @@ admin.site.register(TextPad)
 admin.site.register(RefereeRating)
 admin.site.register(Rule)
 admin.site.register(RefreeTest)
+admin.site.register(JsonTestModel)
+admin.site.register(SoloBattle)
 

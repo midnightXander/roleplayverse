@@ -33,7 +33,7 @@ class SavedPost(models.Model):
 
 
 class Comment(models.Model):
-    # id = models.BigAutoField(primary_key=True)
+    id = models.BigAutoField(primary_key=True)
     author = models.ForeignKey(Player, on_delete=models.CASCADE)
     body = models.TextField()
     post = models.ForeignKey(Post,on_delete=models.CASCADE)
@@ -49,7 +49,7 @@ class Comment(models.Model):
 #class CommenReply(models.Model):
 
 class Reaction(models.Model):
-    # id = models.UUIDField(primary_key=True,default=uuid.uuid4)
+    id = models.BigAutoField(primary_key=True)
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     type = models.CharField(max_length=15, choices=[
         (i,i) for i in reaction_list

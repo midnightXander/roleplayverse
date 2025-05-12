@@ -1,3 +1,63 @@
+//Function to create comment element
+function createComment(comment){
+
+    var c_player = {
+        'username': '{{player.user.username}}',
+        'player':'{{player}}',
+    }
+    console.log(c_player)
+
+return `
+
+                    <div class="flex comment rounded-xl items-start space-x-3" data-toggle="tooltip" data-placement='top' title = '${comment.body}'>
+                        <a class = "font-semibold inline-block  hover:text-orange-500" href='/users/${comment.author.username}'>
+                                 <img src="${comment.author.profile_picture}"  alt="${comment.author.username}" class="w-8 h-8 rounded-full"> 
+                        </a>
+                        <div class="flex-1  rounded-lg p-1">
+                            <div class="flex items-center justify-between mb-1 relative">
+                                <div class="flex items-center space-x-2">
+                                    <a href='/users/${comment.author.username}' class="text-orange-500 text-sm font-semibold inline-block hover:text-orange-600 ">${comment.author.player}</a>
+                                    <!--
+                                    <span class="text-xs text-gray-400">${comment.timestamp}</span>
+                                    -->
+                                </div>
+                                <div class="absolute top-0 right-2">
+                                    <button onclick = 'toggleDropdown(this)' class="text-gray-400 hover:text-white post-dropdown-toggle">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+
+                                    <div class="post-dropdown-menu rounded-xl border border-gray-700 bg-gray-800 w-48 py-2">
+                                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('${comment.body}')"><i class = 'fas fa-copy mr-2'></i>copier</div>
+                                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick=""><i class = 'fas fa-flag mr-2'></i> signaler</div>
+                                        
+                                        ${comment.author.username == currentPlayerData.username ?  `
+                                        
+                                        <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deleteComment(this,'${comment.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
+                                        `:``}
+                                    </div>
+                                </div>    
+                        </div>
+                        
+                        <p onclick = 'toggleExpand(this)' class="body text-sm text-gray-300" data-expandable data-full='${comment.body_full}'>${comment.body}</p>
+                        
+                        
+                        <div class="flex items-center space-x-4 mt-2 text-sm">
+                                
+                                <span class="text-xs text-gray-400">${comment.timestamp}</span>
+                                <button data-comment-id="${comment.id}" class='text-xs comment-like-button  rounded-full ${comment.liked ? 'liked' : ''}'>
+                                    <i class="far fa-heart  mr-1"></i>
+                                    <span class='comment-likes-count'>${comment.likes}</span>
+                                </button>
+                                <button data-comment-id="${comment.id}" class="reply-button text-gray-400 text-xs hover:text-orange-500">Reply</button>
+                                <!--
+                                <span class="text-gray-400">5 likes</span>
+                                -->
+                            </div>
+                        </div>
+                    </div>
+`
+
+}
 
 // Function to create a post element
 // // Function to create a post element
@@ -104,63 +164,7 @@ function createPostElement(post) {
     return postElement2
     }
 
-    function createComment(comment){
-      var c_player = {
-          'username': '{{player.user.username}}',
-          'player':'{{player}}',
-      }
-
-  return `
-  
-                      <div class="flex comment rounded-xl items-start space-x-3" data-toggle="tooltip" data-placement='top' title = '${comment.body}'>
-                          <a class = "font-semibold inline-block  hover:text-orange-500" href='/users/${comment.author.username}'>
-                                   <img src="${comment.author.profile_picture}"  alt="${comment.author.username}" class="w-8 h-8 rounded-full"> 
-                          </a>
-                          <div class="flex-1  rounded-lg p-1">
-                              <div class="flex items-center justify-between mb-1 relative">
-                                  <div class="flex items-center space-x-2">
-                                      <a href='/users/${comment.author.username}' class="text-orange-500 text-sm font-semibold inline-block hover:text-orange-600 ">${comment.author.player}</a>
-                                      <!--
-                                      <span class="text-xs text-gray-400">${comment.timestamp}</span>
-                                      -->
-                                  </div>
-                                  <div class="absolute top-0 right-2">
-                                      <button onclick = 'toggleDropdown(this)' class="text-gray-400 hover:text-white post-dropdown-toggle">
-                                          <i class="fas fa-ellipsis-h"></i>
-                                      </button>
-
-                                      <div class="post-dropdown-menu bg-gray-800 w-48 py-2">
-                                          <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('${comment.body}')"><i class = 'fas fa-copy mr-2'></i>copier</div>
-                                          <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick=""><i class = 'fas fa-flag mr-2'></i> signaler</div>
-                                          
-                                          ${comment.author.username == c_player.username ?  `
-                                          
-                                          <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deleteComment(this,'${comment.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
-                                          `:``}
-                                      </div>
-                                  </div>    
-                          </div>
-                          
-                          <p onclick = 'toggleExpand(this)' class="body text-sm text-gray-300" data-expandable data-full='${comment.body_full}'>${comment.body}</p>
-                          
-                          
-                          <div class="flex items-center space-x-4 mt-2 text-sm">
-                                  
-                                  <span class="text-xs text-gray-400">${comment.timestamp}</span>
-                                  <button data-comment-id="${comment.id}" class='text-xs comment-like-button  rounded-full ${comment.liked ? 'liked' : ''}'>
-                                      <i class="far fa-heart  mr-1"></i>
-                                      <span class='comment-likes-count'>${comment.likes}</span>
-                                  </button>
-                                  <button data-comment-id="${comment.id}" class="reply-button text-gray-400 text-xs hover:text-orange-500">Reply</button>
-                                  <!--
-                                  <span class="text-gray-400">5 likes</span>
-                                  -->
-                              </div>
-                          </div>
-                      </div>
-  `
-  
-}
+    
     
 function battleStatusToFrench(status){
     if(status == 'not_started') return "pas commencé"

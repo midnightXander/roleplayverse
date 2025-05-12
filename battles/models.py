@@ -9,6 +9,11 @@ import random
 def generate_custom_id():
     return str(random.randint(10000000, 99999999))
 
+BASIC_ACTIONS = [{ "name": 'Attack', 'chakra_cost': 10, 'stamina_cost' : 10},
+                    { 'name': 'Defend', 'chakra_cost': 0, 'stamina_cost': 20},
+                    { 'name': 'Focus', 'chakra_cost': 0, 'stamina_cost':0 },
+                    { 'name': 'Heal', 'chakra_cost': 20, 'stamina_cost' : 5 },
+                    { 'name': 'Substitution', 'chakra_cost': 15, 'stamina_cost': 10},]
 BATTLE_LATENCY = 20
 f_request_cost = 250
 s_request_cost = 350
@@ -53,6 +58,26 @@ class BattleRequest(models.Model):
         return f"{self.sender} for a {self.type} battle"
     
 
+class SoloBattle(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    player_character = models.JSONField()
+    bot_character = models.JSONField()
+    result = models.CharField(max_length=20, choices=[
+        ("win","win"),
+        ("lose","lose"),
+        ("draw","draw"),
+    ], default = 'lose')
+    finished = models.BooleanField(default=False)
+    date_started = models.DateTimeField(auto_now_add=True)
+    date_ended = models.DateTimeField(blank=True, null=True)
+    log = models.TextField(blank=True, default = "[]")
+
+    def __str__(self):
+        return f"{self.player} at {self.date_started}"
+
+class JsonTestModel(models.Model):
+    text_data = models.TextField(default="[]")
+    json_data = models.JSONField() 
 
 class Battle(models.Model):
     #id = models.BigAutoField(primary_key=True)
