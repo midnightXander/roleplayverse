@@ -216,7 +216,8 @@ if(Notification?.permission !== 'granted'){
 //document.addEventListener('DOMContentLoaded', () =>{ console.log("expandable set up"); setupExpandableText() });
 
     </script>
-    <script>
+    {% block hiltop-popupads %}
+    <!-- <script>
         (function(pgzyz){
         var d = document,
             s = d.createElement('script'),
@@ -227,7 +228,8 @@ if(Notification?.permission !== 'granted'){
         s.referrerPolicy = 'no-referrer-when-downgrade';
         l.parentNode.insertBefore(s, l);
         })({})
-    </script>
+    </script> -->
+    {% endblock hiltop-popupads %}
     </head>
     <body class="bg-gray-950 h-screen flex flex-col">
         

@@ -2,6 +2,21 @@
 {% load static %}
 {% block title %}Combat solo - Roleplay Verse{% endblock title %}
 {% block meta_description%}Une experience de combat unique face a un bot{% endblock meta_description%}
+{% block hiltop-popupads %}
+
+{% endblock hiltop-popupads %}
+<!-- <script>
+  (function(pgzyz){
+  var d = document,
+      s = d.createElement('script'),
+      l = d.scripts[d.scripts.length - 1];
+  s.settings = pgzyz || {};
+  s.src = "\/\/frequent-doubt.com\/ciD\/9\/6hb.2\/5RlQS-WCQQ9ONSjnMDzWMnzGI\/0KNVyd0v2dMezmMDzGMDjnQX4r";
+  s.async = true;
+  s.referrerPolicy = 'no-referrer-when-downgrade';
+  l.parentNode.insertBefore(s, l);
+  })({})
+</script> -->
 {% block content %}
 
 <style>
@@ -126,7 +141,7 @@
                 <span>HP</span>
                 <span id="player-hp-count" ><span>100</span>/100</span>
               </div>
-              <div class="flex items-center bg-gray-700 h-2 w-44 rounded-full mt-1 space-x-2 " >
+              <div class="flex items-center bg-gray-700 h-2 w-32 md:w-44 rounded-full mt-1 space-x-2 " >
                 <div id="player-hp-bar" class="bg-green-500 h-full w-24 rounded-full"></div>
               </div>
               
@@ -153,7 +168,7 @@
                 <span>HP</span>
                 <span id="bot-hp-count"><span>100</span>/100</span>
               </div>
-              <div class="flex  bg-gray-700 rounded-full h-2 w-32 md:w-44 items-center mt-1 space-x-2 ">
+              <div class="flex  bg-gray-700 rounded-full h-2 w-32 md:w-44 items-center items-end mt-1 space-x-2 ">
                 <div id="bot-hp-bar" class="bg-green-500 h-full rounded-full"></div>
               </div>
 
@@ -162,7 +177,7 @@
                 <span>Chakra</span>
                 <span id="bot-chakra-count"><span>100</span>/100</span>
               </div>
-              <div class="flex space-x-2 rounded-full bg-gray-700 h-2 w-44 mt-1">
+              <div class="flex space-x-2 items-end rounded-full bg-gray-700 h-2 w-32 md:w-44 mt-1">
                 <div id="bot-chakra-bar" class="bg-red-500 h-2 rounded-full"></div>
               </div>
               <!-- <div class="flex space-x-2 bg-gray-700 rounded-full h-2 w-44 mt-1">
