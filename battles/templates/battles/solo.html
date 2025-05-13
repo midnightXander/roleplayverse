@@ -635,6 +635,8 @@ function hideBattleEndPopup() {
 
 function restartBattle() {
     hideBattleEndPopup();
+    const battleLog = document.getElementById('battle-log').innerHTML = ''; // Clear existing log entries
+    updateBattleLog('Battle restarted. Choose your actions wisely!', 'info', new Date().toLocaleTimeString());
     goToCharacterSelect(); // Redirect to character selection screen
 }
 

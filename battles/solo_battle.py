@@ -17,8 +17,11 @@ def _bot_action(character, player_action:dict):
     elif player_action.get('name') == 'Defend' or player_action.get('name') == 'Focus':
         ATTACKS:list = SPECIAL_ATTACKS
         ATTACKS.append(BASIC_ACTIONS[0]) #attack if the player defend or focus
-        action = random.choice(ATTACKS) #attack if the player defend or focus
-      
+        weights = [ 1 for weight in range(len(ATTACKS))]  
+        weights[0] = 2 #attack with special attack
+        action = random.choices(ATTACKS, weights=weights) #likely attack with special attack if the player defend or focus
+        
+        action = action[0]
     if character.get('chakra') <= 0:
         action = BASIC_ACTIONS[2] #focus if no chakra left    
 

@@ -1772,7 +1772,7 @@ def solo_battle_action(request):
         #     'timestamp': datetime.now().strftime("%H:%M"),
         #     }
 
-        rewards = {}
+        rewards = {'xp':0, }
         if winner == 'player':
             rewards = _reward_player(player)
             battle.result = 'win'
