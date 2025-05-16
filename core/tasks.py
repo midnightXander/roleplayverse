@@ -104,6 +104,7 @@ def manage_battles_latency():
             battle.winner = winner 
             battle.status = battle_status[3]
             battle.date_ended = datetime.now()
+            battle.defeat_motif = "latency"
 
             progress =  player_progress(battle=battle,loser_rank = loser.rank)
             winner.progression +=  progress
@@ -144,6 +145,16 @@ def manage_battles_latency():
                         content = f"Tu as perdu ton combat contre {winner} par latence"
                     )
             lose_notif.save()  
+            send_push_notification(
+                PushSubscription.objects.filter(user=loser.user)[0],
+                {
+                    "title": "Tu as perdu ton combat",
+                    "body": f"Tu as perdu ton combat contre {winner} par latence",
+                    "url": f"https://roleplayverse.live/notifications",
+                    'icon' : '/static/images/logo/logo_1.png',
+                },
+                loser.user,
+            )
             
             referee_notif = Notification.objects.create(
                         target = battle.refree,
@@ -151,6 +162,16 @@ def manage_battles_latency():
                         content = f"Le combat {winner} vs {loser} que tu arbitrais a été terminé par latence"
                     )
             referee_notif.save()  
+            send_push_notification(
+                PushSubscription.objects.filter(user=battle.refree.user)[0],
+                {
+                    "title": "Le combat a été terminé par latence",
+                    "body": f"Le combat {winner} vs {loser} que tu arbitrais a été terminé par latence",
+                    "url": f"https://roleplayverse.live/notifications",
+                    'icon' : '/static/images/logo/logo_1.png',
+                },
+                battle.refree.user,
+            )
             
             
 
@@ -173,7 +194,23 @@ def add_monthly_points():
             #player.date_points_added = timezone.now()
             player.add_points(MONTHLY_POINTS, True)
             
-            #send email to notify player got monthly points  / or notify normally?      
+            #send email to notify player got monthly points  / or notify normally?
+            Notification.objects.create(
+                target = player,
+                url = f'/users/{player.user.username}',
+                content = f"Tu as reçu {MONTHLY_POINTS} de jetons mensuels!"
+            )
+            send_push_notification(
+                PushSubscription.objects.filter(user=player.user)[0],
+                {
+                    "title": "Jetons mensuels",
+                    "body": f"Tu as reçu tes jetons mensuels de {MONTHLY_POINTS}!",
+                    "url": f"https://roleplayverse.live/users/{player.user.username}",
+                    'icon' : '/static/images/logo/logo_1.png',
+                },
+                player.user,
+                )   
+               
 
 @shared_task
 def newsletter():

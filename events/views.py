@@ -2,7 +2,8 @@ from django.shortcuts import render,get_object_or_404,redirect
 from django.db.models import Q,QuerySet
 from django.urls import reverse
 from django.contrib.auth.models import User,auth
-from django.http import JsonResponse,HttpResponseRedirect
+from django.http import Http404, JsonResponse,HttpResponseRedirect
+from moderator.moderator_utility import get_moderator
 from users.models import Player,PlayerNotification,Family
 from .models import *
 from battles.models import Battle,tournament_cost
@@ -20,7 +21,8 @@ from django.contrib import messages
 import math,random
 from utility import get_characters
 from users.users_utility import get_player
-
+from api.models import PushSubscription
+from api.utility import send_push_notification
 
 def _tournament_data(tournament:Tournament):
 
@@ -54,10 +56,14 @@ def index(request):
 
 @login_required
 def create(request):
-    return redirect('/home')
+    # return redirect('/home')
     player = get_player(request.user)
     if not player:
         return redirect('/users/signin')
+    
+    moderator = get_moderator(request.user)
+    if not moderator:
+        raise Http404
     
     if request.method == "POST":
         event_type = request.POST['event_type']
@@ -65,7 +71,7 @@ def create(request):
             name = request.POST['name']
             start_date = request.POST['start_date']
             rules = request.POST['rules']
-            n_participants = request.POST['n_participants']
+            n_participants = int(request.POST['n_participants'])
 
             # new_tournament_proposal = TournamentRequest.objects.create(
             #     name = name,
@@ -194,6 +200,16 @@ def create_round_battles(tournament:Tournament, fighters, round=1):
             url = f"/events/tournaments/{tournament.id}",
         )
         new_notif.save()
+        send_push_notification(
+            PushSubscription.objects.filter(player = player).first(),
+            {
+                'title': f'Au prochain tour!!',
+                'body': f"le prochain tour du tournoi {tournament.name} dans lequel tu participe a debuté, voici ton prochain adversaire",
+                'icon': '/static/images/logo/logo_1.png',
+                'url' : f'/events/tournaments/{tournament.id}',
+            },
+            player.user
+        )
 
     for ref in referees:
         new_notif = Notification.objects.create(
@@ -202,6 +218,16 @@ def create_round_battles(tournament:Tournament, fighters, round=1):
         url = f"/events/tournaments/{tournament.id}",
     )
         new_notif.save()
+        send_push_notification(
+            PushSubscription.objects.filter(player = ref).first(),
+            {
+                'title': f'Au prochain tour!!',
+                'body': f"le prochain tour du tournoi {tournament.name} dans lequel tu es arbitre a debuté, voici le combat dont tu es chargé",
+                'icon': '/static/images/logo/logo_1.png',
+                'url' : f'/events/tournaments/{tournament.id}',
+            },
+            ref.user
+        )
 
 
 
@@ -266,6 +292,17 @@ def init_tournament(tournament:Tournament):
             url = f"/events/tournaments/{tournament.id}",
         )
         new_notif.save()
+
+        send_push_notification(
+            PushSubscription.objects.filter(player = player).first(),
+            {
+                'title': f'{tournament.name} a commencé',
+                'body': f"le tournoi {tournament.name} dans lequel tu es participe a commencé, voici le tirage au sort et ton premier adversaire.",
+                'icon': '/static/images/logo/logo_1.png',
+                'url' : f'/events/tournaments/{tournament.id}',
+            },
+            player.user
+        )
     for ref in referees:
         new_notif = Notification.objects.create(
         target = ref,
@@ -273,6 +310,16 @@ def init_tournament(tournament:Tournament):
         url = f"/events/tournaments/{tournament.id}",
     )
         new_notif.save()
+        send_push_notification(
+            PushSubscription.objects.filter(player = ref).first(),
+            {
+                'title': f'{tournament.name} a commencé',
+                'body': f"le tournoi {tournament.name} dans lequel tu es arbitre a commencé, voici le tirage au sort et le combat dont tu es chargé",
+                'icon': '/static/images/logo/logo_1.png',
+                'url' : f'/events/tournaments/{tournament.id}',
+            },
+            ref.user
+        )
 
 
 def _roundsBattles(player:Player,tournament:Tournament, rounds):
@@ -323,12 +370,32 @@ def _update_round(battle:Battle):
                 url = f'/events/tournaments/{battle_tournament.id}',
             )
             new_notif.save()
+            send_push_notification(
+            PushSubscription.objects.filter(player = winner).first(),
+            {
+                'title': 'Vainqueur du tournoi',
+                'body': f'Incroyable! tu as remporte le tournoi {battle_tournament.name}, recupere tes recompenses',
+                'icon': '/static/images/logo/logo_1.png',
+                'url' : f'/events/tournaments/{battle_tournament.id}',
+            },
+            winner.user
+        )
 
             new_notif2 = Notification.objects.create(
                 target = loser,
                 content = f'You lost in the final of {battle_tournament.name} tournament, you are rewarded with {reward2} BP',
                 url = f'/events/tournaments/{battle_tournament.id}',
             )
+            send_push_notification(
+            PushSubscription.objects.filter(player = loser).first(),
+            {
+                'title': 'Tu y ete presque!',
+                'body': f'Tu as perdu en final du tournoi {battle_tournament.name}, tu as quand meme eu des recompenses',
+                'icon': '/static/images/logo/logo_1.png',
+                'url' : f'/events/tournaments/{battle_tournament.id}',
+            },
+            loser.user
+        )
             new_notif2.save()
 
             for fighter in battle_tournament.fighters.exclude(
@@ -340,6 +407,16 @@ def _update_round(battle:Battle):
                     content = f'The tournament {battle_tournament.name} has ended with {winner} being the winner',
                     url = f'/events/tournaments/{battle_tournament.id}',
                 )
+                send_push_notification(
+            PushSubscription.objects.filter(player = fighter).first(),
+            {
+                'title': f'{battle_tournament.name} termine',
+                'body': f"le tournoi {battle_tournament.name} a pris fin, voici les details fu tournoi",
+                'icon': '/static/images/logo/logo_1.png',
+                'url' : f'/events/tournaments/{battle_tournament.id}',
+            },
+            fighter.user
+        )
 
                 new_notif.save()
                 battle_tournament.save()
@@ -355,6 +432,16 @@ def _update_round(battle:Battle):
                 url = f'/events/tournaments/{battle_tournament.id}',
             )         
             new_notif.save()
+            send_push_notification(
+            PushSubscription.objects.filter(player = winner).first(),
+            {
+                'title': f'unpeu plus pres du but !!',
+                'body': f"tu passe au prochain tour dans le tournoi {battle_tournament.name} !!",
+                'icon': '/static/images/logo/logo_1.png',
+                'url' : f'/events/tournaments/{battle_tournament.id}',
+            },
+            winner.user
+        )
             
             #if all the battles of the last round are finished, create the battles for the new round
             #get the battles of the last round

@@ -863,7 +863,7 @@ def player(request,name):
 
 
     if request.method == "POST":
-        posts_data = core_views._posts_data(player,posts)
+        posts_data = [ core_views._post_data(player,post) for post in posts ]
 
         return JsonResponse({'posts':posts_data, "status":"success"})
 

@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'blog',
     'moderator',
     'legal',
+    'monetization',
     
 
     #thirdParties

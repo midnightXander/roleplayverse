@@ -1,0 +1,86 @@
+{
+    "questions": [
+        {
+            "question": "Quel est le vrai nom de Tobi dans l'Akatsuki ?",
+            "choices": ["Obito Uchiha", "Madara Uchiha", "Izuna Uchiha", "Kagami Uchiha"],
+            "answer": "Obito Uchiha"
+        },
+        {
+            "question": "Quel est le nom de la technique interdite utilisée par Orochimaru pour ramener les morts à la vie ?",
+            "choices": ["Edo Tensei", "Rinne Tensei", "Kuchiyose no Jutsu", "Shiki Fujin"],
+            "answer": "Edo Tensei"
+        },
+        {
+            "question": "Quel est le nom de l'épée légendaire utilisée par Zabuza Momochi ?",
+            "choices": ["Samehada", "Kubikiribocho", "Kusanagi", "Hiramekarei"],
+            "answer": "Kubikiribocho"
+        },
+        {
+            "question": "Quel est le nom du clan qui possède le Sharingan ?",
+            "choices": ["Senju", "Uzumaki", "Uchiha", "Hyuga"],
+            "answer": "Uchiha"
+        },
+        {
+            "question": "Quel est le nom de la technique ultime de Minato Namikaze ?",
+            "choices": ["Rasengan", "Hiraishin no Jutsu", "Chidori", "Amaterasu"],
+            "answer": "Hiraishin no Jutsu"
+        },
+        {
+            "question": "Quel est le bijū scellé dans Killer Bee ?",
+            "choices": ["Kyūbi", "Hachibi", "Sanbi", "Yonbi"],
+            "answer": "Hachibi"
+        },
+        {
+            "question": "Quel est le nom de la statue utilisée pour extraire les bijū ?",
+            "choices": ["Gedo Mazo", "Shinigami", "Ryūmyaku", "Totsuka"],
+            "answer": "Gedo Mazo"
+        },
+        {
+            "question": "Quel est le nom de la technique utilisée par Itachi pour piéger ses ennemis dans une illusion éternelle ?",
+            "choices": ["Tsukuyomi", "Amaterasu", "Susanoo", "Kotoamatsukami"],
+            "answer": "Tsukuyomi"
+        },
+        {
+            "question": "Quel est le rôle principal d'un arbitre dans une scène de combat roleplay ?",
+            "choices": [
+                "Prendre parti pour le joueur le plus expérimenté",
+                "S'assurer que les règles sont respectées et que le combat est équitable",
+                "Donner des avantages à son personnage préféré",
+                "Interrompre le combat dès qu'il devient intense"
+            ],
+            "answer": "S'assurer que les règles sont respectées et que le combat est équitable"
+        },
+        {
+            "question": "Quel est le véritable objectif du plan 'Œil de la Lune' de Madara Uchiha ?",
+            "choices": [
+                "Créer une armée de Zetsu Blancs",
+                "Plonger le monde dans un Genjutsu éternel",
+                "Devenir le Jinchūriki de Jūbi",
+                "Détruire tous les villages ninja"
+            ],
+            "answer": "Plonger le monde dans un Genjutsu éternel"
+        },
+        {
+            "question": "Quel est le nom complet de la technique utilisée par Nagato pour détruire Konoha ?",
+            "choices": [
+                "Chibaku Tensei",
+                "Shinra Tensei",
+                "Bansho Ten'in",
+                "Tengai Shinsei"
+            ],
+            "answer": "Shinra Tensei"
+        },
+        {
+            "question": "Quel est le nom de l'outil ninja légendaire capable de sceller une âme en lisant ses paroles ?",
+            "choices": [
+                "Benihisago",
+                "Kohaku no Johei",
+                "Shichiseiken",
+                "Bashosen"
+            ],
+            "answer": "Benihisago"
+        }
+        
+                
+    ]
+}

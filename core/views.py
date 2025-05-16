@@ -284,7 +284,8 @@ def _posts_data(player:Player,posts):
                         'player': str(post.author),
                         'profile_picture':post.author.profile_picture.url
                         },
-            'body':post.body,
+            'body_full': post.body,
+            'body': post.body[:200]+'...' if post.body and len(post.body) > 200 else (post.body if post.body else '' ),
             'liked': _liked_post(player, post),
             'likes':_parse_number(post.likes, True),
             'image':post.image.url if post.image else None,

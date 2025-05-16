@@ -239,6 +239,68 @@
 
     /* bg-gray-700 rgba(55,65,81,var(--tw-bg-opacity)) */
 </style>
+<style>
+.animate-headShake{
+    animation: headShake;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+}
+
+.animate-shakeX{
+    animation: shakeX;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-delay: 1.5s;
+}
+
+</style>
+
+<style>
+    /* Tournament Banner Styling */
+#tournament-banner {
+  position: relative;
+  overflow: hidden;
+  animation: slideIn 1s ease-in-out;
+}
+
+#tournament-banner h2 {
+  animation: pulse 2s infinite;
+}
+
+#tournament-banner button {
+  animation: bounce 1.5s infinite;
+}
+
+/* Keyframes for Animations */
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+</style>
 
 
 
@@ -267,12 +329,12 @@
     <p class="text-center text-sm">Progression: {{player.progression}}% | Class: <b>{{player.rank}}</b></p>
 </div>
 <ul class="space-y-2">
-    <li><a href="{% url 'users:families' %}" class="flex items-center py-2 px-4 text-orange-500 hover:bg-gray-600 rounded"><i class="fas fa-users mr-2"></i>{% trans 'Familles' %} </a></li>
-    <li><a href="{% url 'battles:referees' %}" class="flex items-center py-2 px-4 hover:bg-gray-600 text-orange-500 rounded"><i class="fas fa-street-view mr-2"></i>{% trans 'Arbitres' %}</a></li>
-    <li><a href="{% url 'events:index' %}" class="flex items-center py-2 text-orange-500 px-4 hover:bg-gray-600 rounded"><i class="fas fa-calendar-alt mr-2"></i>{% trans 'Evenenements' %}</a></li>
-    <li><a href="{% url 'characters:index' %}" class="flex items-center py-2 px-4 hover:bg-gray-600 text-orange-500 rounded"><i class="fas fa-child mr-2"></i>{% trans 'Personnage' %}</a></li>
-    <li><a href="{% url 'core:rankings' %}" class="flex items-center py-2 px-4 hover:bg-gray-600 text-orange-500 rounded"><i class="fas fa-trophy mr-2"></i>{% trans 'Classements' %}</a></li>
-    <li><a href="{% url 'blog:category' 'Tutorials' %}" target="_blank" class="flex items-center py-2 px-4 hover:bg-gray-600 text-orange-500 rounded"><i class="fas fa-book mr-2"></i>{% trans 'Tutoriels' %}</a></li>
+    <li><a onclick="showOverlay();" href="{% url 'users:families' %}" class="flex items-center py-2 px-4 text-orange-500 hover:bg-gray-600 rounded"><i class="fas fa-users mr-2"></i>{% trans 'Familles' %} </a></li>
+    <li><a onclick="showOverlay();" href="{% url 'battles:referees' %}" class="flex items-center py-2 px-4 hover:bg-gray-600 text-orange-500 rounded"><i class="fas fa-street-view mr-2"></i>{% trans 'Arbitres' %}</a></li>
+    <li><a onclick="showOverlay();" href="{% url 'events:index' %}" class="flex items-center py-2 text-orange-500 px-4 hover:bg-gray-600 rounded"><i class="fas fa-calendar-alt mr-2"></i>{% trans 'Evenenements' %}</a></li>
+    <li><a onclick="showOverlay();" href="{% url 'characters:index' %}" class="flex items-center py-2 px-4 hover:bg-gray-600 text-orange-500 rounded"><i class="fas fa-child mr-2"></i>{% trans 'Personnage' %}</a></li>
+    <li><a onclick="showOverlay();" href="{% url 'core:rankings' %}" class="flex items-center py-2 px-4 hover:bg-gray-600 text-orange-500 rounded"><i class="fas fa-trophy mr-2"></i>{% trans 'Classements' %}</a></li>
+    <li><a onclick="showOverlay();" href="{% url 'blog:category' 'Tutorials' %}" target="_blank" class="flex items-center py-2 px-4 hover:bg-gray-600 text-orange-500 rounded"><i class="fas fa-book mr-2"></i>{% trans 'Tutoriels' %}</a></li>
 
     <li><a onclick="showMyToast('Coming soon')" href="#" class="flex items-center  mt-5 py-2 px-4 hover:bg-gray-600 text-yellow-300 rounded">
         <!-- <i class="fas fa-shopping-cart mr-2"></i> -->
@@ -301,7 +363,32 @@
         </svg> -->
           
     </button>
+   
 <div class="mobile-scroll-container">
+    
+    {% for event in events %}
+    <a href="{% url 'events:tournament' event.id %}" onclick="showOverlay();" id="tournament-banner" class="mobile-scroll-item  relative bg-gradient-to-r from-orange-500 via-red-500 to-purple-500 text-white rounded-xl shadow-lg overflow-hidden ">
+        <div class="p-6 space-y-4">
+          <h2 class="text-3xl font-bold animate-pulse">🏆 Tournoi en Cours: {{ event.name }}</h2>
+          <p class="text-sm text-gray-200">Rejoignez le tournoi et montrez vos compétences pour gagner des récompenses incroyables !</p>
+          <div class="flex items-center space-x-4">
+            <button  class="bg-white text-orange-500 font-semibold py-2 px-4 rounded-lg hover:bg-gray-100 transition">
+              Participer 
+            </button>
+            <span class="bg-black bg-opacity-30 text-xs py-1 px-3 rounded-lg">Fin: {{ event.date_created|date:"d M Y" }}</span>
+          </div>
+        </div>
+        <div class="absolute inset-0 opacity-20">
+          <img src="{{ event.cover.url }}" alt="Tournament Banner" class="w-full h-full object-cover">
+        </div>
+    </a>
+    <!-- <a href="{% url 'events:tournament' event.id %}" class="mobile-scroll-item animate-headShake bg-gray-500 flex flex-col rounded-xl flex flex-col justify-center items-center p-4 mb-4 recent-event" style=" background-image: url('{{event.cover.url}}');">    
+        <span class="bg-blue-500 text-white px-2 py-1 rounded-xl text-sm align-self-start justify-self-start">Tournament</span>
+        <h3 class="text-orange-500 font-bold text-2xl">{{event.name}}</h3>
+        <button class="bg-gray-900  text-orange-500 px-2 py-2 rounded-xl">
+        <i class="fas fa-shield mr-2"></i> Voir</button>
+    </a>  -->
+    {% endfor %} 
     <a href="/battles/solo" onclick="showOverlay()" class="mobile-scroll-item flex justify-center solo-battle-link items-center shine-effect bg-gray-500 rounded-2xl mb-4 covered">    
         <button class="bg-gray-900 hover:bg-gray-800 text-orange-500 px-2 py-2 rounded-xl">
             <i class="fas fa-rocket mr-2"></i>Combat Solo(Beta)</button>
@@ -314,7 +401,7 @@
     {% else %}
     <div class="mobile-scroll-item  shine-effect covered join-family rounded-xl p-4 mb-4" style="display: flex;justify-content: center; align-items: center;">    
         <a href="{% url 'users:families' %}">
-        <button class="font-semibold border-1 hover:text-gray-700 hover:bg-gray-900 transition duration-300 shadow-md text-white  px-2 py-2 rounded-xl">
+        <button class="font-semibold border border-gray-700 hover:text-gray-700 hover:bg-gray-900 transition duration-300 shadow-md text-white  px-2 py-2 rounded-xl">
             <i class="fas fa-users mr-2"></i> Rejoindre une famille
         </button>
         </a>
@@ -322,14 +409,7 @@
     </div> 
     {% endif %}
     
-    {% for event in events %}
-    <a href="{% url 'events:tournament' event.id %}" class="mobile-scroll-item bg-gray-500 flex flex-col rounded-xl flex flex-col justify-center align-center p-4 mb-4 recent-event" style=" background-image: url('{{event.cover.url}}');">    
-        <span class="bg-blue-500 text-white px-2 py-1 rounded-xl text-sm align-self-start justify-self-start">Tournament</span>
-        <h3 class="text-orange-500 font-bold text-2xl">{{event.name}}</h3>
-        <button class="bg-gray-900  text-orange-500 px-2 py-2 rounded-xl">
-        <i class="fas fa-shield mr-2"></i> Voir</button>
-    </a> 
-    {% endfor %}
+    
     
     <span class="v-divider"></span>
     

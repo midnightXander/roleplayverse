@@ -76,13 +76,13 @@ def sendResetPasswordLink(recipient_email:str,language:str='en'):
 
 def get_characters():
     characters_file = os.path.join(BASE_DIR,"characters/playable_characters.json")
-    with open(characters_file,"r") as f:
+    with open(characters_file,"r", encoding = 'utf-8') as f:
         characters = json.load(f)
     return characters
 
 def get_solo_battle_characters():
     characters_file = os.path.join(BASE_DIR,"characters/naruto_100_characters.json")
-    with open(characters_file,"r") as f:
+    with open(characters_file,"r", encoding = 'utf-8') as f:
         characters = json.load(f)
     return characters    
 
@@ -110,9 +110,9 @@ def _add_image_field():
 
 def get_refree_questions(language='en'):
     if language == 'en':
-        question_file = os.path.join(BASE_DIR,"battles/refree_questions/en/questions.json")
+        question_file = os.path.join(BASE_DIR,"battles/refree_questions/fr/questions.json")
     
-        with open(question_file, "r") as f:
+        with open(question_file, "r", encoding='utf-8') as f:
             data = json.load(f)
             return data["questions"]
     else:

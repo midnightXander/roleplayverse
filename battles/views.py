@@ -788,6 +788,8 @@ def battle_room(request,battle_id):
             return False
         else:
             return True
+
+            
      
     
     context = {"player":player,
@@ -796,6 +798,7 @@ def battle_room(request,battle_id):
                "rules":rules, 
                "rules_set": len(rules) >= 3,
                "textpads":textpads_data,
+               "last_textpad": textpads_data[-1],
                'jutsus': ch_jutsus,
                'i_character': i_character,
                'o_character': o_character,
@@ -940,6 +943,7 @@ def get_textpads(request, battle_id):
             "character": get_textpad_character(battle,textpad),
             "time_since": core_views._time_since(textpad.date_sent),
             'index': index + 1,
+            'comment' : textpad.refree_comment,
         } for index,textpad in enumerate(textpads)
     ] 
 
@@ -1490,7 +1494,7 @@ def new_refree(request):
 
     if RefreeTest.objects.filter(player = player).exists():
         eligible = False
-        message = "Tu as deja fait le test récemment, tu seras en mesure de le refaire dans peu de jours"
+        message = "Tu as deja fait le test récemment, tu seras en mesure de le refaire dans 5 de jours"
 
     if refree_badge in player_badges:
         eligible = False
@@ -1509,7 +1513,7 @@ def new_refree(request):
         if step == 1:
             
             
-            quizScore =  request.POST['score']
+            quizScore =  int(request.POST['score'])
 
 
             new_test = RefreeTest.objects.create(
@@ -1518,9 +1522,18 @@ def new_refree(request):
                 situation1 = situation_1,
                 situation2 = situation_2
                 
-            )  
+            )
+            if quizScore >= 60:
+                new_test.validated = True
+            
+                #add player as a refree on validation
+                add_refree(player)
+  
             new_test.save()
-            return JsonResponse({"status":"success","message": f'1ere étape completée'})
+            # return JsonResponse({"status":"success","message": f'1ere étape completée'})
+
+            return JsonResponse({"status":"success","message": f'1ere étape completée', "test_id": new_test.id})
+        #player has completed the test and is eligible to be a refree
         elif step == 2:    
             verdict1 = request.POST['verdict1']
             verdict2 = request.POST['verdict2']
@@ -1543,13 +1556,13 @@ def new_refree(request):
 
             return JsonResponse({"status":"success","message": f'2eme étape completé', "test_passed": test_passed})
         
-    
+    eligible = not refree_badge in player_badges #Just for now, remove after we have sufficient referees to start with
     context = {
         "player" : player,
         "n_notifs" : n_notifs,
         "n_battles" : n_battles,
         "in_family" : in_family,
-        "battles_eligible": battles_eligibilty,
+        "battles_eligibility": battles_eligibilty,
         "rank_eligibility": rank_eligibility, #player's rank should be atleast D
         "has_refreed":has_refreed,
         "eligible":eligible,

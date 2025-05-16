@@ -108,6 +108,13 @@ class Battle(models.Model):
     
     spectators = models.ManyToManyField(Player, through='BattleSpectator', related_name='spectators')
 
+    defeat_motif = models.CharField(max_length=50, blank=True, choices=[
+        ("referee decision","Referee Decision"),
+        ("latency","Latency"),
+        ("abandon","Abandon"),
+        ("draw","Draw"),
+        ("other","Other")], default="referee decision")
+
     def __str__(self):
         return f'{self.type} {self.initiator} vs {self.opponent} '
 

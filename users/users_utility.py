@@ -7,6 +7,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib.gis.geoip2 import GeoIP2
 from core import emails
+from api.utility import send_push_notification
+from api.models import PushSubscription
 
 def get_player(user:User):
     try:
@@ -32,19 +34,30 @@ def refer_player(referall_code):
     try:
         player = Player.objects.get(referall_code = referall_code)
         player.battle_points += referall_points
-        #send email to player congratulating him for the referall points
-        emails.send_email(
-            recipient_email = player.user.email,
-            title = "Félicitations!",
-            subject = "Vous avez gagné des points de parrainage!",
-            body = f"""
-            <h2>Bonjour {player},</h2>
-            <p>vous avez gagné {referall_points} points de parrainage en parrainant un ami!</p>
-            <p><strong>{{ notification_message }}</strong></p>
-            """,
-            language = player.user.language
-        )
         player.save()
+        send_push_notification(
+            PushSubscription.objects.filter(player = player).first(),
+            {
+                'title': 'Recompense',
+                'body': f'Tu as gagné {referall_points} de jetons et des credit RP en parrainant un ami!',
+                'icon': '/static/images/logo/logo_1.png',
+            },
+            player.user
+        )
+        #send email to player congratulating him for the referall points
+        # emails.send_email(
+        #     recipient_email = player.user.email,
+        #     title = "Félicitations!",
+        #     subject = "Vous avez gagné des points de parrainage!",
+        #     body = f"""
+        #     <h2>Bonjour {player},</h2>
+        #     <p>vous avez gagné {referall_points} points de parrainage en parrainant un ami!</p>
+        #     <p><strong>{{ notification_message }}</strong></p>
+        #     """,
+        #     language = player.user.language
+        # )
+
+        
 
     except Exception as e:
         print(f"Referall error: {e}")

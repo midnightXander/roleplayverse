@@ -107,7 +107,7 @@
 </style>
 
 <div class="container mx-auto py-18 mt-20">
-    <div class="bg-gray-800 w-full rounded-lg">
+    <div class="bg-gray-900 w-full rounded-lg">
         <!-- Tournament Header -->
         <div class="bg-gradient-to-r from-orange-500 to-red-500 p-6">
             <h1 id="tournamentName" class="text-3xl font-bold text-white">{{tournament.name}}</h1>
@@ -160,12 +160,24 @@
                                 {% endif %}
                             </p>
                         </li>
+                        {% empty %}
+                        <p class="text-gray-400 text-sm" >Le tirage au sort n'a pas encore été effectué</p>
                         {% endfor %}
                     </ul>
                 </div>
             </div>
+            <div class="bg-gray-900 p-4 rounded-xl shadow space-y-4 animate__pulse">
+                <h2 class="text-lg font-semibold text-gray-200">🏆 Récompenses</h2>
+                <ul class="list-disc list-inside text-sm text-gray-300 space-y-2">
+                    <li>✔️ Au moins<span class="text-orange-500 font-bold"> 1000 crédits RPV($5)</span>.</li>
+                    <li>✔️ <span class="text-blue-500 font-bold">{{tournament.reward}} jetons de combat</span></li>
+                    <li>✔️ Passage au<span class="text-green-500 font-bold"> Rang supérieur</span>.</li>
+                    <!-- <li>✔️ Participer à au moins <span class="text-purple-500 font-bold">3 combats</span> par mois.</li> -->
+                </ul>
+                <a href="/blog" class="text-orange-500 text-sm" target="_blank">En savoir plus</a>
+            </div>
 
-            <div id="tournamentPreview" class="hidden mt-8 p-4 bg-gray-700 rounded-lg">
+            <div id="tournamentPreview" class="hidden mt-8 p-4 bg-gray-800 rounded-lg">
 
                 <h4 class="text-2xl font-semibold text-orange-400 mb-4">Tournament Bracket</h4>
                 
@@ -198,7 +210,7 @@
                             Plus d'arbitres n'est accepter
                             {% endif %}
                         </small>
-                        <div id="refereesList" class="bg-gray-700 rounded-lg p-4 max-h-96 overflow-y-auto">
+                        <div id="refereesList" class="bg-gray-800 rounded-lg p-4 max-h-96 overflow-y-auto">
                             <!-- Referees will be inserted here -->
                             {% for player in referees %}
                             <div class="participant-card">
@@ -230,7 +242,7 @@
                             Plus aucun joueurs ne peut participer
                             {% endif %}
                             </small>
-                        <div id="playersList" class="bg-gray-700 rounded-lg p-4 max-h-96 overflow-y-auto">
+                        <div id="playersList" class="bg-gray-800 rounded-lg p-4 max-h-96 overflow-y-auto">
                             
                             <!-- Players will be inserted here -->
                             {% for player in fighters %} 
@@ -264,7 +276,7 @@
 
 <!-- Join Tournament Popup -->
 <div id="joinPopup" class="fixed inset-0 text-white bg-black bg-opacity-50 flex items-center justify-center animate-scaleIn hidden">
-    <form action="{% url 'events:tournament' tournament.id %}" method="post" class="bg-gray-800 p-6 rounded-lg">
+    <form action="{% url 'events:tournament' tournament.id %}" method="post" class="bg-gray-900 border border-gray-700 p-6 rounded-lg">
         {% csrf_token %}
         <h2 class="text-2xl font-semibold text-orange-400 mb-4">rejoindre le tournois</h2>
         <!-- <p class="text-white mb-4">Are you sure you want to join this tournament?</p> -->
@@ -273,7 +285,7 @@
             
             <div class="mb-4">
                 <label for="yourCharacter" class="block mb-2">Choisis un personnage</label>
-                <select id="yourCharacter" name="character" class="w-full bg-gray-700 text-white p-2 rounded-lg">
+                <select id="yourCharacter" name="character" class="w-full bg-gray-800 text-white p-2 rounded-lg">
                     <option value="">Selectionne un personnage</option>
                                 {% for character in characters %}
                                 {% if player.p_character == character.name %}
@@ -285,7 +297,7 @@
                 </select>
             </div>
             <div class="mb-6">
-                <p class="text-yellow-500"><i class="fas fa-exclamation-triangle mr-2"></i>Notice: <span class="text-orange-500" >{{tournament.participation_cost}} Jetons de combat</span> vont étre deduit pour s'inscrire au tournois<br><a href="#" class="text-blue-400">Voir comment ça marche</a></p>
+                <p class="text-gray-400"><i class="fas fa-exclamation-triangle text-yellow-500 mr-2"></i><span class="text-orange-500" >{{tournament.participation_cost}} Jetons de combat</span> vont étre deduit pour s'inscrire au tournois<br><a href="/blog" target="_blank" class="text-orange-500 text-sm">comment ça marche</a></p>
             </div>
            
         
@@ -303,16 +315,16 @@
 <!-- Referee Tournament Popup -->
 <div id="refereePopup" class="fixed inset-0 text-white bg-black bg-opacity-50 flex items-center justify-center animate-scaleIn hidden">
     
-    <form action="{% url 'events:tournament' tournament.id %}" method="post" class="bg-gray-800 p-6 rounded-lg">
+    <form action="{% url 'events:tournament' tournament.id %}" method="post" class="bg-gray-900 border border-gray-700 p-6 rounded-lg">
         {% csrf_token %}
         <h2 class="text-2xl font-semibold text-orange-400 mb-4">Arbitrer le tournois</h2>
         <!-- <p class="text-white mb-4">Are you sure you want to join this tournament?</p> -->
             <input type="hidden" name="join_type" value="referee">
-            <h2 class="text-2xl font-bold mb-4">Voulez-vous arbitrer ce tournois?</h2>
+            <h2 class="text-2xl font-bold mb-4">Veux-tu etre arbitre dans ce tournois?</h2>
             
             <!-- <div class="mb-4">
                 <label for="yourCharacter" class="block mb-2">Choose your character:</label>
-                <select id="yourCharacter" name="character" class="w-full bg-gray-700 text-white p-2 rounded-lg">
+                <select id="yourCharacter" name="character" class="w-full bg-gray-800 text-white p-2 rounded-lg">
                     <option value="">Select a character</option>
                                 {% for character in characters %}
                                 {% if player.p_character == character.name %}

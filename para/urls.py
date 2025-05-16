@@ -33,6 +33,7 @@ urlpatterns = [
     path('moderator/', include('moderator.urls', namespace = 'moderator')),
     path('legal/', include('legal.urls', namespace = 'legal')),
     path('api/',include('api.urls',namespace='api')),
+    path('monetization/',include('monetization.urls',namespace='monetization')),
     path('accounts/', include('allauth.urls')),
     path('',include('pwa.urls')),
 ]

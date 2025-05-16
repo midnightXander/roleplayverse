@@ -33,7 +33,7 @@
 
 <main class="h-screen flex  items-center justify-center mt-4">
     
-    <div id="refereeSection" class="bg-gray-700 rounded-lg p-6">
+    <div id="refereeSection" class="hidden bg-gray-900 rounded-lg p-6 animate__animated animate__backInLeft">
         <h2 class="text-2xl font-bold mb-4 text-orange-400">Devienir Arbitre Rpv</h2>
         
         <div class="mb-6">
@@ -103,7 +103,7 @@
         
     </div>
     <!--Onboarding-->
-    <div id="instructions" class="max-w-md mx-auto bg-gray-700 p-8 shadow-lg rounded-lg text-gray-300 hidden">
+    <div id="instructions" class="max-w-md mx-auto bg-gray-900 p-8 shadow-lg rounded-lg text-gray-300 animate__animated animate__fadeInLeft hidden">
         <div class="flex gap-4">
             <i id="instructions-back" class="fas fa-arrow-left text-gray-100 text-2xl cursor-pointer"></i>
             <h2 class="text-2xl font-bold mb-4 text-orange-400">Instructions</h2>
@@ -112,19 +112,19 @@
         <p>Le test est en 2 parties</p>
         <p>La première partie est un quizz avec des questions sur l'univers Naruto et le monde du RP</p>
         <p>Si tu obtiens 80% de bonnes tu vas a la prochaine étape</p>
-        <p>Dans la deuxieme partie est la <span class="text-orange-500">mise en situation arbitrale(MSA),</span> tu seras presenter deux situations ou tu devras proposer un verdict</p>
+        <!-- <p>Dans la deuxieme partie est la <span class="text-orange-500">mise en situation arbitrale(MSA),</span> tu seras presenter deux situations ou tu devras proposer un verdict</p>
         <p>
             Tes verdictes seront checké et si accepté, tu deviendras arbitre officiel sur la plateform
-        </p>
+        </p> -->
 
         <button id="start-quiz-btn" class="bg-orange-600 hover:bg-orange-700 py-2 px-4 text-gray-100 my-4 rounded">commencer le quizz</button>
 
     </div>
-    <div id="quizSection" class="hidden max-w-md mx-auto bg-gray-700 p-8 shadow-lg rounded-lg text-gray-300">
+    <div id="quizSection" class="hidden max-w-md mx-auto bg-gray-900 p-8 shadow-lg rounded-lg text-gray-300 animate__animated animate__backInUp ">
         <h1 class="text-2xl font-bold mb-5 text-center text-orange-500">Quiz d'arbitre</h1>
         <div id="quiz-container">
             <div class="mb-4 text-lg font-semibold">Temps restants: <span id="counter" class="text-2xl font-bold text-orange-500">8</span></div>
-            <div id="question" class="mb-4 text-lg font-semibold"></div>
+            <div id="question" class="mb-4 text-lg font-semibold transition duration-300 ease-in-out"></div>
             <div id="choices" class="space-y-2"></div>
             <!-- <button id="next-btn" class="hidden mt-5 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Next</button> -->
         </div>
@@ -133,7 +133,7 @@
     </div>
 
     <div id="refereeTestPart2" class="hidden  fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50  rounded-lg p-6">
-        <div class="bg-gray-700 rounded-lg p-6 max-w-4xl w-full mx-4 flex flex-col h-screen max-h-[90vh]">
+        <div class="bg-gray-900 rounded-lg p-6 max-w-4xl w-full mx-4 flex flex-col h-screen max-h-[90vh]">
             <h2 class="text-2xl font-bold mb-4 text-orange-500">Test d'Arbitre - Partie 2</h2>
             
             <div class="flex-grow overflow-y-auto">
@@ -148,7 +148,7 @@
                 </div>
                 
                 <div class="flex justify-between items-center">
-                    <button id="prevQuestionBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                    <button id="prevQuestionBtn" class="bg-gray-600 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded transition duration-300">
                         Question précédente
                     </button>
                     <button id="submitVerdictBtn" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition duration-300">
@@ -158,6 +158,47 @@
             </div>
         </div>
         
+    </div>
+    <div id="referee-success-screen" class="hidden bg-gray-900 rounded-lg p-6 shadow-lg text-gray-300 animate__animated animate__fadeIn">
+        <h2 class="text-2xl font-bold text-green-500 mb-4">🎉 Félicitations !</h2>
+        <p class="text-lg mb-4">
+            Tu as réussi le test d'arbitrage et tu es maintenant un arbitre officiel sur la plateforme !
+        </p>
+    
+        <!-- Actions Section -->
+        <div class="bg-gray-800 p-4 rounded-lg shadow space-y-4">
+            <h3 class="text-xl font-semibold text-orange-400">Maintenant tu peux :</h3>
+            <ul class="list-disc text-sm list-inside space-y-2">
+                <li>
+                    <a href="#" class="text-gray-400 hover:underline">
+                        Arbitrer des combatsa a en <span class="text-orange-500">jeu, tournoi, rumble...</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="text-gray-400 hover:underline">
+                        Doubler tes credits RP pour le <span class="text-orange-500">programme de monetization</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="text-gray-400 hover:underline">
+                        Arbitrer des <span class="text-orange-500">combats classés</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="text-gray-400 hover:underline">
+                        Contribuer aux classements des joueurs
+                    </a>
+                </li>
+            </ul>
+            <a href="/blog/Infos/posts" onclick="showOverlay();" target="_blank" class="text-orange-500 text-xs">En savoir plus</a>
+        </div>
+    
+        <!-- Call to Action -->
+        <div class="mt-6">
+            <a href="#" class="bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded-lg font-semibold">
+                Retour à l'accueil
+            </a>
+        </div>
     </div>
     
     
@@ -267,41 +308,53 @@
     
     }
 
+    function showRefereeSuccessScreen() {
+        document.getElementById('quizSection').classList.add('hidden')
+        const successScreen = document.getElementById('referee-success-screen');
+        successScreen.classList.remove('hidden');
+        //checkRefereeEligibility();
+    }
+
     function showResult() {
         // $("#loading-overlay").toggleClass("active")
-        let message = "Sorry, your score is insufficient to continue to the next step, you can try again in 12days"
-        const correctPercentage = score/questions.length*100
+        let message = "Desole, ton score est insuffisant pour  continuer a la prochaine etape, tu peux encore essayer dans 2 jours"
+        const correctPercentage = Math.floor(score/questions.length*100)
 
         $.ajax({
             url: "",
             type: "POST",
             data: {
                 csrfmiddlewaretoken:"{{csrf_token}}",
-                "score":correctPercentage,
+                "score":Math.floor(correctPercentage),
                 "step": 1,
             },
                 
             success: function(res){
                 if(res.status == "success"){
-                    console.log(res.message)
+                    
                     $('#quiz-container').hide();
         
         //$('#result').text(`Your score is ${score} out of ${questions.length} ${correctPercentage}% `).removeClass('hidden');
         $('#result').empty()
         $('#result').append(`
         <p class='' >
-            You had <span class='text-2xl text-orange-500'>${correctPercentage}%</span> of correct answers
+            Tu as eu <span class='text-2xl text-orange-500'>${correctPercentage}%</span> de bonne reponse
         </p> `).removeClass('hidden');
 
         if(correctPercentage >= 80){
-            message = 'Congrats, you scored enough to continue to the next step, click on the button to continue'
+            message = 'Bravo, tu es eligible pour passer a la prochaine etape'
             $("#result").append(`
             <p class="text-green-400 font-semibold">${message}</p>
-            <button id='step2-btn' class='bg-orange-600 hover:bg-orange-700 py-2 px-4 text-gray-100 my-2 rounded'>Go to Step 2</button>
+            <!--<button id='step2-btn' class='bg-orange-600 hover:bg-orange-700 py-2 px-4 text-gray-100 my-2 rounded'>Go to Step 2</button>-->
+            <button id='finish-btn' class='bg-orange-600 hover:bg-orange-700 py-2 px-4 text-gray-100 my-2 rounded'>Terminer</button>
             `)
 
             $("#step2-btn").on("click",(e)=>{
                 showRefereeTestPart2()
+            })
+
+            $("#finish-btn").on("click",(e)=>{
+                showRefereeSuccessScreen()
             })
 
         }else{
@@ -347,6 +400,8 @@
     
         //checkRefereeEligibility();
     }
+
+    
     
     function checkRefereeEligibility() {
         // This would typically be fetched from your backend
@@ -500,6 +555,7 @@
                 success: function(res){
                     if(res.status == "success"){
                         console.log(res.message)
+                        showMyToast('Referee test completed! Your results will be reviewed.', 'success')
                         //replace with toast
                         //alert('Referee test completed! Your results will be reviewed.');
                         

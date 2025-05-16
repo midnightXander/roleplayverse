@@ -1,0 +1,52 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}
+  Tableau de Bord Monétisation
+{% endblock title %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'monetization/css/dashboard.css' %}">
+{% endblock styles %}
+
+{% block scripts %}
+  <script src="{% static 'monetization/js/dashboard.js' %}"></script>
+{% endblock scripts %}
+
+{% block content %}
+
+<div class="max-w-3xl mx-auto my-16 p-6">
+    <!-- Header -->
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold flex items-center gap-2">
+            🛠️ Conditions d'Éligibilité à la Monétisation
+        </h1>
+        <p class="text-sm text-gray-400">
+            Découvrez les critères nécessaires pour activer la monétisation sur votre compte.
+        </p>
+    </div>
+
+    <!-- Requirements List -->
+    <div class="bg-gray-900 p-4 rounded-xl shadow space-y-4">
+        <h2 class="text-lg font-semibold text-gray-200">📋 Critères d'Éligibilité</h2>
+        <ul class="list-disc list-inside text-sm text-gray-300 space-y-2">
+            <li>✔️ Avoir un minimum de <span class="text-orange-500 font-bold">500 crédits RP</span>.</li>
+            <!-- <li>✔️ Publier au moins <span class="text-blue-500 font-bold">10 RP</span> par mois.</li> -->
+            <li>✔️ Maintenir un score RP supérieur à <span class="text-green-500 font-bold">750</span>.</li>
+            <li>✔️ Participer à au moins <span class="text-purple-500 font-bold">3 combats</span> par mois.</li>
+            <li>✔️ Respecter les <a href="#" class="text-orange-500 hover:underline">règles de la communauté</a>.</li>
+        </ul>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="bg-gray-900 p-4 rounded-xl shadow mt-6">
+        <h2 class="text-lg font-semibold text-gray-200">🚀 Comment Activer la Monétisation ?</h2>
+        <p class="text-sm text-gray-400 mb-4">
+            Une fois que vous remplissez tous les critères ci-dessus, vous pouvez activer la monétisation depuis votre tableau de bord.
+        </p>
+        <button class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg">
+            Vérifier Mon Éligibilité
+        </button>
+    </div>
+</div>
+
+{% endblock content %}

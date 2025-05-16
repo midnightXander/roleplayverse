@@ -135,8 +135,11 @@ class Player(models.Model):
 
 
     def __str__(self):
+        # referee_badge = Badge.objects.filter(title = 'Referee')
+        # if referee_badge in self.badges.all():
+        #     return  self.user.username + "⚖" 
         if self.family:
-            return self.user.username + f"({self.family})" 
+            return self.user.username + f"({self.family})"
         else:
             return self.user.username
 

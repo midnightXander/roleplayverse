@@ -189,7 +189,20 @@
         </div>
         <p id="progression_bar_text" class="text-sm mt-1">{{req_player.progression}}%</p>
       </div>
-      
+
+
+      <div class="flex justify-between items-center text-xs">
+        {% for badge in badges %}
+        <span class="bg-blue-500 bg-opacity-50 border border-gray-700 px-3 py-1 rounded-2xl">
+            {% if badge.title == 'Referee' %}
+            Arbitre
+            {% else %}
+            {{badge}}
+            {% endif %}
+            🌟
+        </span>
+        {% endfor %}
+      </div>
       
       <div class="flex justify-between text-sm">
         <p>🏆 Victoires: <strong>{{stats.wins}}</strong></p>
@@ -211,12 +224,12 @@
           
           <p class="text-xs text-gray-300 mt-2">Invite des gens a rejoindre la plate-forme par ce lien et obtiens des Jétons de combats et plein d'autres récompense</p>
         </div>
-        <a href="/blog/tutorials/posts" target="_blank" class="inline-block w-full text-center bg-[#d45822] text-white py-2 rounded-xl font-semibold hover:bg-orange-600 transition">📘Tutoriel RP Naruto</a>
+        <a href="/blog/tutorials/posts" target="_blank" class="inline-block w-full text-center bg-[#d45822] text-white py-2 rounded-xl font-semibold hover:bg-orange-600 transition">📘Guide RPV</a>
       </div>
 
     <!-- Quick Access Links -->
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-      <a href="#" onclick="showMyToast(`Tu n'es pas encore eligible a la Monetization`)" class="bg-gray-900 text-center p-4 rounded-xl shadow hover:bg-gray-800 transition">
+      <a href="/monetization/requirements" onclick="showOverlay()" class="bg-gray-900 text-center p-4 rounded-xl shadow hover:bg-gray-800 transition">
         💰<p class="mt-2 text-sm font-medium">Monetization</p>
       </a>
       <a onclick="showOverlay()" href="{% url 'battles:new_refree' %}" class="bg-gray-900 text-center p-4 rounded-xl shadow hover:bg-gray-800 transition">
@@ -736,7 +749,7 @@ function renderPosts() {
             //loader.classList.toggle('active');
         },
         success: function(res){
-            console.log(res)
+            
             const posts = res.posts
             if(posts.length>0){
                 postsFeed.innerHTML = ''
