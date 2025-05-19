@@ -576,6 +576,7 @@ def not_yet_started(request):
 
     return render(request, "battles/not_started.html", context)
 
+@csrf_exempt
 def refree_proposal(request, battle_id):
     if request.method == "POST":
         battle = Battle.objects.get(id = battle_id)
