@@ -391,7 +391,7 @@
     {% endfor %} 
     <a href="/battles/solo" onclick="showOverlay()" class="mobile-scroll-item flex justify-center solo-battle-link items-center shine-effect bg-gray-500 rounded-2xl mb-4 covered">    
         <button class="bg-gray-900 hover:bg-gray-800 text-orange-500 px-2 py-2 rounded-xl">
-            <i class="fas fa-rocket mr-2"></i>Combat Solo(Beta)</button>
+            <i class="fas fa-rocket mr-2"></i>Combat Solo <span class="bg-black text-white rounded-lg py-1 px-2 mx-2">Beta</span></button>
     </a> 
     <a href="{% url 'battles:index' %}" class="mobile-scroll-item shine-effect bg-gray-500 rounded-xl mb-4 covered start-battle" style="display: flex;justify-content: center; align-items: center; ">    
         <button class="bg-gray-900 hover:bg-gray-800 text-orange-500 px-2 py-2 rounded-xl">
@@ -919,7 +919,34 @@ memeElement.innerHTML = `
     return memeElement
 }
 
+//Make referee proposal function
+function makeProposal(battleId){
 
+$.ajax({
+    url : `/battles/refree/send_proposal/${battleId}`,
+    type: "POST",
+    data: { csrfmiddlewaretoken:"{{csrf_token}}" },
+    beforeSend: function(){
+        $('#loading-overlay').toggleClass('active')
+    },
+    success: function(res){
+        if(res.status == "success"){
+           showMyToast(res.message, 'success')
+        }else{
+            showMyToast(res.message, 'info', 5000);
+        }
+        
+    },
+    complete: function(){
+        $('#loading-overlay').toggleClass('active')
+    },
+    error: function(jqXHR, textstatus, errorThrown){
+        showMyToast("Une erreur s'est produite", 'error')
+        console.log(textstatus, errorThrown)
+    }
+})
+
+}
 
 // Function to render posts
 function renderPosts() {
@@ -1050,7 +1077,7 @@ if (window.scrollY + window.innerHeight >= document.body.offsetHeight - 100) {
             //loader.classList.toggle('active');
             // console.log("Fetching...")
             //isLoading = true;
-            console.log("Fetching...")
+            
             
             
         },

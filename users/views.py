@@ -96,6 +96,8 @@ def _is_username_valid(name:str) -> bool:
         return False
     elif name[0].isdigit():
         return False
+    elif name is None:
+        return False
     
     #Should not start with a number
 
@@ -353,12 +355,13 @@ def register(request):
                 new_player.country = get_country(request)
                 print(get_country(request))
                 profile_pics = PlayerDefaultImage.objects.all()
-                #new_player.profile_picture = profile_pics[random.randint(0,len(profile_pics)-1)].image
+                random_pic = random.choice(profile_pics)
+                new_player.profile_picture = random_pic.image
                 
                 new_player.save()
 
                 core_views.add_points(new_player, ENTRY_POINTS)
-
+                
                 new_user.save()
                 new_player.save()
                 # new_stats.save()
@@ -941,7 +944,7 @@ def edit_info(request):
             users = User.objects.filter(username = new_name)
             # if users.exists():
             #     messages.error(request, 'un utilisateur avec ce nom existe déja')
-            if _is_username_valid(new_name):
+            if _is_username_valid(new_name) and new_name:
                 print("valid")
                 player.user.username = new_name
                 player.user.save()

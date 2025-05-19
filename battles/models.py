@@ -196,11 +196,6 @@ class TextPad(models.Model):
     
 #class TextPadComment    
 
-
-
-
-
-
 situations_1 = ['battles/situations/1.jpg','battles/situations/2.jpg','battles/situations/3.jpg']
 situations_2 = ['battles/situations/4.jpg', 'battles/situations/5.jpg', 'battles/situations/6.jpg']
 

@@ -185,7 +185,9 @@ def home(request):
     if not player:
         return redirect('/users/signin')
     
-    
+    player.profile_picture = '\profile-pictures\9.png' 
+
+    player.save()    
 
     feed,created = Feed.objects.get_or_create(player = player)
     
@@ -330,7 +332,7 @@ def get_posts(request):
     #sort both posts and battles
     feed_items = (Post.objects.values('custom_id','date_added')
                   .annotate(date=F('date_added'))
-                  .union(Battle.objects.filter(Q(status = 'finished') |  Q(status = 'ongoing'))
+                  .union(Battle.objects.filter(Q(status = 'finished') |  Q(status = 'ongoing') | Q(status = 'waiting_refree'))
                     .values('custom_id','date_ended')
                     .annotate(date = F('date_ended')), all=True)
                     .order_by('-date'))

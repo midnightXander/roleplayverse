@@ -64,6 +64,6 @@ def send_push_notification(subscription :PushSubscription, message, user:User = 
             """,
             #language = user.language
             )
-        except:
+        except Exception as ex:
             print(f"Failed to send email: {ex}")
                

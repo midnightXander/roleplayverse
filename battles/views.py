@@ -798,7 +798,7 @@ def battle_room(request,battle_id):
                "rules":rules, 
                "rules_set": len(rules) >= 3,
                "textpads":textpads_data,
-               "last_textpad": textpads_data[-1],
+               "last_textpad": textpads_data[-1] if len(textpads_data)>0 else "",
                'jutsus': ch_jutsus,
                'i_character': i_character,
                'o_character': o_character,

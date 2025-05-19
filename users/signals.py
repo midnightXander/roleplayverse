@@ -20,6 +20,9 @@ def create_player(sender, instance, created, **kwargs):
             gender = 'male',
             referall_code = generate_referall_code(instance.username),
         ) 
+        profile_pics = PlayerDefaultImage.objects.all()
+        random_pic = random.choice(profile_pics)
+        new_player.profile_picture = random_pic.image
 
         #Get the country of the user using the ip address
         g = GeoIP2()
@@ -31,7 +34,7 @@ def create_player(sender, instance, created, **kwargs):
             pass
         
         core_views.add_points(new_player, ENTRY_POINTS)
-        
+        new_player.save()
         new_notif = Notification.objects.create(
                     target = new_player,
                     url = '/battles',
