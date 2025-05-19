@@ -53,17 +53,18 @@ def send_push_notification(subscription :PushSubscription, message, user:User = 
     except WebPushException as ex:
         print(f"Failed to send notification: {ex}")
         try:
-            emails.send_email(
-            recipient_email = user.email,
-            title = {message['title']},
-            subject = {message['title']},
-            body = f"""
-            <h2>Salut {user},</h2>
-            <p><strong>{message['body']}</strong></p>
-            <a href = '{message['url']}' class = "button">Voir</a>
-            """,
-            #language = user.language
-            )
+            if user is not None:
+                emails.send_email(
+                recipient_email = user.email,
+                title = {message['title']},
+                subject = {message['title']},
+                body = f"""
+                <h2>Salut {user},</h2>
+                <p><strong>{message['body']}</strong></p>
+                <a href = '{message['url']}' class = "button">Voir</a>
+                """,
+                #language = user.language
+                )
         except Exception as ex:
             print(f"Failed to send email: {ex}")
                
