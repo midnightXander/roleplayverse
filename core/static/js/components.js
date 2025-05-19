@@ -163,7 +163,36 @@ function createPostElement(post) {
     return postElement2
     }
 
+
+//Make referee proposal function
+function makeProposal(battleId){
+
+    $.ajax({
+        url : `/battles/refree/send_proposal/${battleId}`,
+        type: "POST",
+        data: { csrfmiddlewaretoken:"{{csrf_token}}" },
+        beforeSend: function(){
+            $('#loading-overlay').toggleClass('active')
+        },
+        success: function(res){
+            if(res.status == "success"){
+               showMyToast(res.message, 'success')
+            }else{
+                showMyToast(res.message, 'info', 5000);
+            }
+            
+        },
+        complete: function(){
+            $('#loading-overlay').toggleClass('active')
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            showMyToast("Une erreur s'est produite", 'error')
+            console.log(textstatus, errorThrown)
+        }
+    })
     
+    }    
+
     
 function battleStatusToFrench(status){
     if(status == 'not_started') return "pas commencé"
@@ -176,6 +205,7 @@ function battleStatusToFrench(status){
 function battleTypeToFrench(type){
     if(type == 'friendly') return "Amicale"
     if(type == 'stake') return "Enjeu"
+    if(type == 'tournament') return "Tournoi"
 
     return type
 }
