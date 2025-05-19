@@ -8,7 +8,7 @@ from users.models import Player,PlayerNotification,Family
 from django.contrib.auth.decorators import login_required
 from .models import *
 from events.models import Tournament
-from battles.models import Battle,Challenge
+from battles.models import Battle,Challenge, RefreeingProposal
 from chat.models import FamilyMessage
 import battles.views as battle_views
 import users.views as users_views
@@ -348,8 +348,11 @@ def get_posts(request):
             battle = Battle.objects.get(custom_id = feed_item['custom_id'])    
             if battle not in feed.battles.all() and len(feed_data) <= 2:
                 battle_data = battle_views._battle_data(player, battle)
-                feed_data.append(battle_data)
-                feed.battles.add(battle)
+                if battle.status == 'waiting_refree' and RefreeingProposal.objects.filter(player = player, battle = battle).exists():
+                    pass
+                else:    
+                    feed_data.append(battle_data)
+                    feed.battles.add(battle)
 
     #feed the object and created the boolean indicating if the object was created or not
     
