@@ -5,7 +5,6 @@ function createComment(comment){
         'username': '{{player.user.username}}',
         'player':'{{player}}',
     }
-    console.log(c_player)
 
 return `
 
