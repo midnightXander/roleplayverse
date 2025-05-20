@@ -124,7 +124,7 @@
     <div id="quizSection" class="hidden max-w-md mx-auto bg-gray-900 p-8 shadow-lg rounded-lg text-gray-300 animate__animated animate__backInUp ">
         <h1 class="text-2xl font-bold mb-5 text-center text-orange-500">Quiz d'arbitre</h1>
         <div id="quiz-container">
-            <div class="mb-4 text-lg font-semibold">Temps restants: <span id="counter" class="text-2xl font-bold text-orange-500">8</span></div>
+            <div class="mb-4 text-lg font-semibold">Temps restants: <span id="counter" class="text-2xl font-bold text-orange-500">10</span></div>
             <div id="question" class="mb-4 text-lg font-semibold transition duration-300 ease-in-out"></div>
             <div id="choices" class="space-y-2"></div>
             <!-- <button id="next-btn" class="hidden mt-5 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Next</button> -->
@@ -196,7 +196,7 @@
     
         <!-- Call to Action -->
         <div class="mt-6">
-            <a href="roleplayverse.live/blog/posts/3215" target="_blank" class="bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded-lg font-semibold">
+            <a href="/blog/posts/3215" target="_blank" class="bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded-lg font-semibold">
                 Lire le guide
             </a>
         </div>
@@ -242,7 +242,7 @@
             if (currentQuestionIndex < questions.length) {
                     //clearInterval(timer)
                     
-                    $("#counter").text(8)
+                    $("#counter").text(10)
                     loadQuestion();
             } else {
                 
@@ -262,7 +262,7 @@
 
         currentQuestionIndex++
         if (currentQuestionIndex < questions.length) {
-            $("#counter").text(8)
+            $("#counter").text(12)
             loadQuestion();
         } else {
             //clearInterval(timer)

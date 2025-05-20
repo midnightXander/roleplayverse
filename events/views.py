@@ -107,6 +107,21 @@ def create(request):
                 cover = f"tournaments/covers/{tournament_covers[random.randint(0, len(tournament_covers)-1)]}"
             )
             new_tournament.save()
+
+            #send notification to every player 
+            for player in Player.objects.all():    
+                send_push_notification(
+                    PushSubscription.objects.filter(player = player).first(),
+                    {
+                        'title': f"Rejoins l'Arene!",
+                        'body': f"Un nouveau tournoi est disponible, enregistre toi maintenant et montre tes competences",
+                        'icon': '/static/images/logo/logo_1.png',
+                        'url' : f'/events/tournaments/{new_tournament.id}',
+
+                    },
+                    player.user,
+                )
+
             messages.success(request, "Your event proposal has been submited")
             return HttpResponseRedirect(reverse("events:index"))
 

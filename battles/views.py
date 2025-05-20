@@ -1567,7 +1567,7 @@ def new_refree(request):
         "rank_eligibility": rank_eligibility, #player's rank should be atleast D
         "has_refreed":has_refreed,
         "eligible":eligible,
-        "questions":questions,
+        "questions":questions[:8],
         "message":message,
         "situation1": "/media/"+situation_1,
         "situation2": "/media/"+situation_2,
