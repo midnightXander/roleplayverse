@@ -20,7 +20,7 @@ class BlogPost(models.Model):
     keyword3 = models.CharField(max_length=100, null=True, blank=True)
     language = models.CharField(max_length=100, null=True, blank=True, choices = [
         (i,i) for i in ['fr', 'en']
-    ])
+    ],  default= 'fr')
     meta_description = models.CharField(max_length=300, null=True, blank=True)
 
 
