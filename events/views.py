@@ -527,6 +527,12 @@ def tournament(request, id):
     can_participate = _can_participate(player, tournament)
     battles = tournament.battles.all().order_by('-date_started')
 
+    registered_characters = [fighter.character for fighter in FighterTournament.objects.filter(tournament = tournament)]
+    selectable_characters = []
+    for ch in sorted_characters:
+        if ch['name'] not in registered_characters:
+            selectable_characters.append(ch)
+
     if request.method == "POST":
         join_type = request.POST['join_type']
         
@@ -592,7 +598,7 @@ def tournament(request, id):
         "remaining_referees":remaining_referees,
         "player":player,
         "n_notifs":core_views.get_notifs(player),
-        "characters":sorted_characters,
+        "characters":selectable_characters,
         'rounds_battles':rounds_battles,
         'can_participate': can_participate,
         'battles': battle_views._battles_data(player,battles)[:3]
