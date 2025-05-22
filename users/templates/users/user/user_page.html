@@ -876,16 +876,55 @@ if (e.target.closest('.like-button')) {
 }
 });
 
-// Event delegation for comment buttons
-document.getElementById('postsFeed').addEventListener('click', (e) => {
-if (e.target.closest('.comment-button')) {
-    const commentForm = e.target.closest('.post').querySelector('.comment-form');
-    commentForm.classList.toggle('active');
-    if (commentForm.classList.contains('active')) {
-        commentForm.querySelector('input').focus();
-    }
+// Event delegation for popup comment like buttons
+document.getElementById('commentPopup').addEventListener('click', (e) => {
+if (e.target.closest('.comment-like-button')) {
+    const likeButton = e.target.closest('.comment-like-button');
+    const postId = likeButton.dataset.commentId;
+    //$(e.target).toggleClass('animate__animated animate__heartBeat')
+    
+    $.ajax({
+        url:  `/comment/react/${postId}`,
+        type:'POST',
+        beforeSend: function(){
+            
+        },
+        success: function(res){
+            
+            likeButton.querySelector('.comment-likes-count').textContent = res.likes
+            if(res.message == 'liked'){
+                if(!likeButton.classList.contains('liked')){
+                    likeButton.classList.add('liked');
+                } 
+                
+            }else if(res.message == 'unliked'){
+                likeButton.classList.remove('liked');
+            }
+        },
+        complete: function(){
+            
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            //console.log('Error:', textstatus,errorThrown)
+            showMyToast('an error occured please try again', 'error')
+        }
+        
+    })
+
+    
 }
 });
+
+// Event delegation for comment buttons
+// document.getElementById('postsFeed').addEventListener('click', (e) => {
+// if (e.target.closest('.comment-button')) {
+//     const commentForm = e.target.closest('.post').querySelector('.comment-form');
+//     commentForm.classList.toggle('active');
+//     if (commentForm.classList.contains('active')) {
+//         commentForm.querySelector('input').focus();
+//     }
+// }
+// });
 
 function commentListener(){
     const commentForm = $('.comment-form')

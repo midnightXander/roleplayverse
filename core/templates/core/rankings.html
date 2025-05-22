@@ -2,6 +2,209 @@
 {% load static %}
 {% block title %}Classements | RPV{% endblock title %}
 
+{% block not_content %}
+
+<style>
+    .fade-in-up {
+      animation: fadeIn-up 0.3s ease-out forwards;
+    }
+    .fade-out-down {
+      animation: fadeOut-down 0.3s ease-in forwards;
+    }
+    @keyframes fadeIn-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeOut-down {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(20px); }
+    }
+  </style>
+  <script>
+
+function createComment2(comment){
+
+var c_player = {
+    'username': '{{player.user.username}}',
+    'player':'{{player}}',
+}
+const commentElement = document.createElement('div');
+commentElement.className = 'comment  flex items-start gap-3';
+commentElement.innerHTML = `
+            <a class = "inline-block" href='/users/${comment.author.username}'>
+            <img src="${comment.author.profile_picture}" alt="avatar" class="rounded-full w-10 h-10" />
+            </a>
+            
+            <div class="flex-1">
+                    <a href='/users/${comment.author.username}' onclick = 'showOverlay();' class="text-sm font-semibold hover:text-orange-500 ">${comment.author.player}</a>
+                    <p onclick = 'toggleExpand(this)' class="body text-sm text-gray-300" data-expandable data-full='${comment.body_full}'>${comment.body}</p>
+                        <div class="absolute top-0 right-2">
+                            <button onclick = 'toggleDropdown(this);' class="text-gray-400 hover:text-white post-dropdown-toggle">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+
+                            <div class="post-dropdown-menu hidden rounded-xl border border-gray-700 bg-gray-800 w-48 py-2">
+                                <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('${comment.body}')"><i class = 'fas fa-copy mr-2'></i>copier</div>
+                                <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick=""><i class = 'fas fa-flag mr-2'></i> signaler</div>
+                                
+                                ${comment.author.username == currentPlayerData.username ?  `
+                                
+                                <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deleteComment(this,'${comment.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
+                                `:``}
+                        </div>
+                        </div>    
+                    <div class="flex items-center gap-4 mt-1 text-xs text-gray-500">
+                    <span>${comment.timestamp}</span>
+                    <button data-comment-id="${comment.id}" class='text-xs comment-like-button  rounded-full ' class="comment-like-button hover:text-orange-500 ${comment.liked ? 'liked' : ''}">
+                        <i class="fa-regular fa-thumbs-up mr-1"></i> 
+                        <span class='comment-likes-count'>${comment.likes}</span>
+                    </button>
+                    <button class="hover:underline">Répondre</button>
+                </div>
+                    <!--
+                    <button class="ml-4 mt-2 text-sm text-gray-600 hover:text-orange-500 dark:text-gray-400">voir 4 reponses</button>
+                    -->
+              <div></div>
+            </div>
+           
+
+
+`;
+return commentElement;
+
+}
+
+    function getPostData(postId){
+        const popupContent = document.getElementById('popupContent');
+        const commentForm = popupContent.querySelector('#sendCommentForm');
+        commentForm.setAttribute('data-post-id', postId)
+
+        const commentsContainer = document.getElementById('comments-space')
+        const loader = document.createElement("div")
+                loader.classname = 'text-center flex space-x-2 w-full justify-center items-center'
+                loader.innerHTML = `
+                <i class="fas fa-spinner fa-spin text-orange-500"></i> 
+                <span class="text-gray-400 text-sm "> Loading...</span>
+                `
+        $.ajax({
+            url: `/post/1`,
+            type: 'GET',
+            data: {
+                'Content-Type': 'application/json'
+            },
+            beforeSend: function(){
+                commentsContainer.innerHTML = ''
+                commentsContainer.append(loader);
+            },
+            success: function(res){
+                const comments = res.post.comments
+                if(comments.length > 0){
+                    comments.forEach(comment => {
+                    commentsContainer.append(createComment2(comment))
+                });
+                }else{
+                    commentsContainer.innerHTML = `
+                        <p class = 'text-gray-500 text-center px-4 py-8'>
+                            Soit le premier a commenter
+                        </p>
+                    `
+                }
+                
+            },
+            complete: function(){
+                loader.remove()
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                showMyToast('An Error occurred, please try again','error')
+            }
+        })
+    }
+
+    function openCommentPopup(postId) {
+      const popup = document.getElementById('commentPopup');
+      popup.classList.remove('hidden');
+      popup.classList.remove('fade-out-down');
+      popup.classList.add('fade-in-up');
+
+      getPostData(postId)
+
+    }
+
+    function closeCommentPopup() {
+      const popup = document.getElementById('commentPopup');
+      popup.classList.remove('fade-in-up');
+      popup.classList.add('fade-out-down');
+      setTimeout(() => {
+        popup.classList.add('hidden');
+      }, 300);
+    }
+
+    document.addEventListener('click', (e) => {
+      const popup = document.getElementById('commentPopup');
+      const content = document.getElementById('popupContent');
+      if (!popup.classList.contains('hidden') && !content.contains(e.target) && !e.target.closest('button[onclick^="openCommentPopup"]')) {
+        closeCommentPopup();
+      }
+    });
+  </script>
+
+<!-- Exemple de bouton de post pour ouvrir le popup -->
+<div class="p-4 mt-16">
+    <button onclick="openCommentPopup(1)" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg">
+      Voir les commentaires
+    </button>
+</div>
+
+  <!-- Postfeed comments popup -->
+  <div id="commentPopup" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-end  sm:items-center animate__animated  justify-center z-50">
+    <div id="popupContent" class="relative w-full sm:w-3/5 max-h-[70vh]   bg-white dark:bg-gray-900 rounded-t-3xl sm:rounded-xl p-4">
+      <!-- Header -->
+      <div class="flex justify-between items-center border-b pb-3 border-gray-200 dark:border-gray-800">
+        <h2 class="text-lg font-semibold">💬 Commentaires</h2>
+        <button onclick="closeCommentPopup();" class="text-gray-500 hover:text-red-500 text-xl font-bold">&times;</button>
+      </div>
+
+      <!-- Comments list -->
+    <div>
+      <div id="comments-space" class="space-y-4 relative overflow-y-auto max-h-96 my-4 pb-4">
+       
+        <!-- <div class="flex items-start gap-3">
+            <img src="https://i.pravatar.cc/40" alt="avatar" class="rounded-full w-10 h-10" />
+            <div class="flex-1">
+              <p class="text-sm font-semibold">NaraShika</p>
+              <p class="text-sm text-gray-700 dark:text-gray-300">Incroyable ce moment du combat, j’ai cru que Naruto allait perdre !</p>
+              <div class="flex items-center gap-4 mt-1 text-xs text-gray-500">
+                <span>il y a 2 minutes</span>
+                <button class="hover:text-orange-500">👍 4</button>
+                <button class="hover:underline">Répondre</button>
+              </div>
+              <button class="ml-4 mt-2 text-sm text-gray-600 hover:text-orange-500 dark:text-gray-400">voir 4 reponses</button>
+              <div></div>
+            </div>
+          </div>    -->
+        <!-- Plus de commentaires dynamiquement ici -->
+      </div>
+      <div class="mt-6 fixed md:relative w-full bottom-0 left-0 border-t bg-gray-900 py-4 px-2 border-gray-200 dark:border-gray-800">
+        <form onsubmit='sendCommentPopup(this, event)' id="sendCommentForm" data-post-id = "" class="flex gap-2">
+          <!-- <textarea type="text" placeholder="Écris ton commentaire..." rows="2"  class="w-full bg-transparent text-white placeholder-gray-400 border-b border-gray-700 focus:outline-none resize-none" > -->
+            <input type="text" placeholder="Écris ton commentaire..." class="flex-1 px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500" />
+            
+          <!-- </textarea> -->
+          <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-full"><i class="fa-regular fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
+      <!-- New comment input -->
+      <!-- <div class="fixed bottom-2 left-0 w-full bg-gray-900 mt-6 border-t py-4 border-gray-200 dark:border-gray-800  ">
+        <form class="flex gap-2">
+          <input type="text" placeholder="Écris ton commentaire..." class="flex-1 px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500" />
+          <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-full"><i class="fa-regular fa-paper-plane"></i></button>
+        </form>
+      </div> -->
+    </div>
+  </div>
+{% endblock not_content %}
+
 {% block content %}
 <style>
     .bg-orange-custom {
@@ -20,13 +223,13 @@
     </div>
 </header>
 <main class="flex flex-col space-y-4 flex-grow container text-white mx-auto px-4 py-8">
-    <a href="/users/families/rankings" class="bg-gray-700 rounded-lg p-4 shadow-md animate-fadeIn flex flex-col items-center">
+    <a onclick="showOverlay()" href="/users/families/rankings" class="bg-gray-700 rounded-lg p-4 shadow-md animate-fadeIn flex flex-col items-center">
         <div class="p-4 font-bold text-lg items-center bg-gray-700">
             <h2 class="text-2xl font-bold mb-4 text-orange-custom">Familles</h2>
         </div>
     </a>
 
-    <a href="/users/players/rankings" class="bg-gray-700 rounded-lg p-4 shadow-md animate-fadeIn flex flex-col items-center">
+    <a onclick="showOverlay()" href="/users/players/rankings" class="bg-gray-700 rounded-lg p-4 shadow-md animate-fadeIn flex flex-col items-center">
         <div class="p-4 font-bold text-lg items-center bg-gray-700">
             <h2 class="text-2xl font-bold mb-4 text-orange-custom">Joueurs</h2>
         </div>

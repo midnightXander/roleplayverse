@@ -113,7 +113,7 @@ class Battle(models.Model):
         ("latency","Latency"),
         ("abandon","Abandon"),
         ("draw","Draw"),
-        ("other","Other")], default="referee decision")
+        ("other","Other")], default="latency")
 
     def __str__(self):
         return f'{self.type} {self.initiator} vs {self.opponent} '

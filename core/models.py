@@ -61,7 +61,7 @@ class Reaction(models.Model):
 
 
 class CommentReaction(models.Model):
-    # id = models.UUIDField(primary_key=True,default=uuid.uuid4)
+    id = models.BigAutoField(primary_key=True)
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     type = models.CharField(max_length=15, choices=[
         (i,i) for i in reaction_list

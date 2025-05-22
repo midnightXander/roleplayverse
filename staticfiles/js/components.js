@@ -1,3 +1,120 @@
+function openCommentPopup(postId) {
+    const popup = document.getElementById('commentPopup');
+    popup.classList.remove('hidden');
+    popup.classList.remove('fade-out-down');
+    popup.classList.add('fade-in-up');
+
+    getPostData(postId)
+
+  }
+
+
+  function closeCommentPopup() {
+    const popup = document.getElementById('commentPopup');
+    popup.classList.remove('fade-in-up');
+    popup.classList.add('fade-out-down');
+    setTimeout(() => {
+      popup.classList.add('hidden');
+    }, 300);
+  }
+
+  document.addEventListener('click', (e) => {
+    const popup = document.getElementById('commentPopup');
+    const content = document.getElementById('popupContent');
+    if (!popup.classList.contains('hidden') && !content.contains(e.target) && !e.target.closest('button[onclick^="openCommentPopup"]')) {
+      closeCommentPopup();
+    }
+  });
+
+  function getPostData(postId){
+    const popupContent = document.getElementById('popupContent');
+    const commentForm = popupContent.querySelector('#sendCommentForm');
+    commentForm.setAttribute('data-post-id', postId)
+
+    const commentsContainer = document.getElementById('comments-space')
+    const loader = document.createElement("div")
+            loader.classname = 'text-center flex space-x-2 w-full justify-center items-center'
+            loader.innerHTML = `
+            <i class="fas fa-spinner fa-spin text-orange-500"></i> 
+            <span class="text-gray-400 text-sm "> Loading...</span>
+            `
+    $.ajax({
+        url: `/post/${postId}`,
+        type: 'GET',
+        data: {
+            'Content-Type': 'application/json'
+        },
+        beforeSend: function(){
+            commentsContainer.innerHTML = ''
+            commentsContainer.append(loader);
+        },
+        success: function(res){
+            const comments = res.post.comments
+            comments.forEach(comment => {
+                commentsContainer.append(createComment2(comment))
+            });
+        },
+        complete: function(){
+            loader.remove()
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            showMyToast('An Error occurred, please try again','error')
+        }
+    })
+}
+
+  function createComment2(comment){
+
+    var c_player = {
+        'username': '{{player.user.username}}',
+        'player':'{{player}}',
+    }
+    const commentElement = document.createElement('div');
+    commentElement.className = 'comment  flex items-start gap-3';
+    commentElement.innerHTML = `
+                <a class = "inline-block" href='/users/${comment.author.username}'>
+                <img src="${comment.author.profile_picture}" alt="avatar" class="rounded-full w-10 h-10" />
+                </a>
+                
+                <div class="flex-1">
+                        <a href='/users/${comment.author.username}' onclick = 'showOverlay();' class="text-sm font-semibold hover:text-orange-500 ">${comment.author.player}</a>
+                        <p onclick = 'toggleExpand(this)' class="body text-sm text-gray-300" data-expandable data-full='${comment.body_full}'>${comment.body}</p>
+                            <div class="absolute top-0 right-2">
+                                <button onclick = 'toggleDropdown(this);' class="text-gray-400 hover:text-white post-dropdown-toggle">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </button>
+    
+                                <div class="post-dropdown-menu hidden rounded-xl border border-gray-700 bg-gray-800 w-48 py-2">
+                                    <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('${comment.body}')"><i class = 'fas fa-copy mr-2'></i>copier</div>
+                                    <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick=""><i class = 'fas fa-flag mr-2'></i> signaler</div>
+                                    
+                                    ${comment.author.username == currentPlayerData.username ?  `
+                                    
+                                    <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deleteComment(this,'${comment.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
+                                    `:``}
+                            </div>
+                            </div>    
+                        <div class="flex items-center gap-4 mt-1 text-xs text-gray-500">
+                        <span>${comment.timestamp}</span>
+                        <button data-comment-id="${comment.id}" class='text-xs comment-like-button  rounded-full ' class="comment-like-button hover:text-orange-500 ${comment.liked ? 'liked' : ''}">
+                            <i class="fa-regular fa-thumbs-up mr-1"></i> 
+                            <span class='comment-likes-count'>${comment.likes}</span>
+                        </button>
+                        <button class="hover:underline">Répondre</button>
+                    </div>
+                        <!--
+                        <button class="ml-4 mt-2 text-sm text-gray-600 hover:text-orange-500 dark:text-gray-400">voir 4 reponses</button>
+                        -->
+                  <div></div>
+                </div>
+               
+    
+    
+    `;
+    return commentElement;
+    
+    }
+
 //Function to create comment element
 function createComment(comment){
 
@@ -5,6 +122,56 @@ function createComment(comment){
         'username': '{{player.user.username}}',
         'player':'{{player}}',
     }
+    const commentElement = document.createElement('div');
+    commentElement.className = 'flex comment rounded-xl items-start space-x-3';
+    commentElement.innerHTML = `
+    <a class = "font-semibold inline-block  hover:text-orange-500" href='/users/${comment.author.username}'>
+                                 <img src="${comment.author.profile_picture}"  alt="${comment.author.username}" class="w-8 h-8 rounded-full"> 
+                        </a>
+                        <div class="flex-1  rounded-lg p-1">
+                            <div class="flex items-center justify-between mb-1 relative">
+                                <div class="flex items-center space-x-2">
+                                    <a href='/users/${comment.author.username}' class="text-orange-500 text-sm font-semibold inline-block hover:text-orange-600 ">${comment.author.player}</a>
+                                    <!--
+                                    <span class="text-xs text-gray-400">${comment.timestamp}</span>
+                                    -->
+                                </div>
+                                <div class="absolute top-0 right-2">
+                                    <button onclick = 'toggleDropdown(this)' class="text-gray-400 hover:text-white post-dropdown-toggle">
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </button>
+
+                                    <div class="post-dropdown-menu rounded-xl border border-gray-700 bg-gray-800 w-48 py-2">
+                                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('${comment.body}')"><i class = 'fas fa-copy mr-2'></i>copier</div>
+                                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick=""><i class = 'fas fa-flag mr-2'></i> signaler</div>
+                                        
+                                        ${comment.author.username == currentPlayerData.username ?  `
+                                        
+                                        <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deleteComment(this,'${comment.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
+                                        `:``}
+                                    </div>
+                                </div>    
+                        </div>
+                        
+                        <p onclick = 'toggleExpand(this)' class="body text-sm text-gray-300" data-expandable data-full='${comment.body_full}'>${comment.body}</p>
+                        
+                        
+                        <div class="flex items-center space-x-4 mt-2 text-sm">
+                                
+                                <span class="text-xs text-gray-400">${comment.timestamp}</span>
+                                <button data-comment-id="${comment.id}" class='text-xs comment-like-button  rounded-full ${comment.liked ? 'liked' : ''}'>
+                                    <i class="far fa-heart  mr-1"></i>
+                                    <span class='comment-likes-count'>${comment.likes}</span>
+                                </button>
+                                <button data-comment-id="${comment.id}" class="reply-button text-gray-400 text-xs hover:text-orange-500">Reply</button>
+                                <!--
+                                <span class="text-gray-400">5 likes</span>
+                                -->
+                            </div>
+                        </div>
+    
+    `;
+    return commentElement;
 
 return `
 
@@ -125,7 +292,7 @@ function createPostElement(post) {
                 <i class="far fa-heart"></i>
                 <span class="like-count">${post.likes}</span>
                 </button>
-                <button class="comment-button flex items-center space-x-1 hover:text-blue-500">            
+                <button onclick = 'openCommentPopup(${post.id});' class="comment-button flex items-center space-x-1 hover:text-blue-500">            
                 <i class="far fa-comment"></i>
                 <span class = 'comment-count'>${post.n_comments}</span>
                 </button>
@@ -141,10 +308,11 @@ function createPostElement(post) {
               </div>
     
                
-    
+            <!--
               <div class="mt-4 space-y-3 comments max-h-64 overflow-y-auto" style='max-height:300px'>
                  ${post.comments.map(comment =>createComment(comment)).join('')}
               </div>
+            -->  
     
                <form onsubmit='sendComment(this, event)' class="comment-form mt-4" data-post-id = ${post.id}>
                     <input type="text" class="bg-gray-800 text-white p-2 rounded w-full  border-0  focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="ajoute un commentaire...">
@@ -163,7 +331,36 @@ function createPostElement(post) {
     return postElement2
     }
 
+
+//Make referee proposal function
+function makeProposal(battleId){
+
+    $.ajax({
+        url : `/battles/refree/send_proposal/${battleId}`,
+        type: "POST",
+        data: { csrfmiddlewaretoken:"{{csrf_token}}" },
+        beforeSend: function(){
+            $('#loading-overlay').toggleClass('active')
+        },
+        success: function(res){
+            if(res.status == "success"){
+               showMyToast(res.message, 'success')
+            }else{
+                showMyToast(res.message, 'info', 5000);
+            }
+            
+        },
+        complete: function(){
+            $('#loading-overlay').toggleClass('active')
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            showMyToast("Une erreur s'est produite", 'error')
+            console.log(textstatus, errorThrown)
+        }
+    })
     
+    }    
+
     
 function battleStatusToFrench(status){
     if(status == 'not_started') return "pas commencé"
@@ -176,6 +373,7 @@ function battleStatusToFrench(status){
 function battleTypeToFrench(type){
     if(type == 'friendly') return "Amicale"
     if(type == 'stake') return "Enjeu"
+    if(type == 'tournament') return "Tournoi"
 
     return type
 }

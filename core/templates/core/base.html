@@ -140,6 +140,22 @@
   opacity: 0;
 }
 </style>
+<style>
+    .fade-in-up {
+      animation: fadeIn-up 0.3s ease-out forwards;
+    }
+    .fade-out-down {
+      animation: fadeOut-down 0.3s ease-in forwards;
+    }
+    @keyframes fadeIn-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeOut-down {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(20px); }
+    }
+  </style>
 
 
 
@@ -521,32 +537,44 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
 
     
 </script>
+<script>
+
+</script>
 
      {% block content %}
-        {% endblock content %}
+    {% endblock content %}
         
-        <!-- <nav class="bottom-nav">
-            <div class="container mx-auto px-4 py-3">
-                <div class="flex justify-around items-center">
-                    <a href="#home" class="nav-item flex flex-col items-center">
-                        <i class="fas fa-home text-2xl"></i>
-                        <span class="text-xs mt-1">Home</span>
-                    </a>
-                    <a href="#battle" class="nav-item flex flex-col items-center">
-                        <i class="fas fa-sword text-2xl"></i>
-                        <span class="text-xs mt-1">Battle</span>
-                    </a>
-                    <a href="#inventory" class="nav-item flex flex-col items-center">
-                        <i class="fas fa-backpack text-2xl"></i>
-                        <span class="text-xs mt-1">Inventory</span>
-                    </a>
-                    <a href="#profile" class="nav-item flex flex-col items-center">
-                        <i class="fas fa-user text-2xl"></i>
-                        <span class="text-xs mt-1">Profile</span>
-                    </a>
-                </div>
-            </div>
-        </nav>    -->
+        <!-- Postfeed comments popup -->
+  <div id="commentPopup" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-end  sm:items-center animate__animated  justify-center z-50">
+    <div id="popupContent" class="relative w-full sm:w-3/5 h-[70vh] md:min-h-[30vh]    bg-white dark:bg-gray-900 rounded-t-3xl sm:rounded-xl p-4">
+      <!-- Header -->
+      <div class="flex justify-between items-center border-b pb-3 border-gray-200 dark:border-gray-800">
+        <h2 class="text-lg font-semibold">💬 Commentaires</h2>
+        <button onclick="closeCommentPopup();" class="text-gray-500 hover:text-red-500 text-xl font-bold">&times;</button>
+      </div>
+      <!-- Comments list -->
+    <div>
+      <div id="comments-space" class="space-y-4 relative overflow-y-auto max-h-96 my-4 pb-4">
+      </div>
+      <div class="mt-6 fixed md:relative w-full bottom-0 left-0 border-t bg-gray-900 py-4 px-2 border-gray-200 dark:border-gray-800">
+        <form onsubmit='sendCommentPopup(this, event);' id="sendCommentForm" data-post-id = "" class="flex gap-2">
+          <!-- <textarea type="text" placeholder="Écris ton commentaire..." rows="2"  class="w-full bg-transparent text-white placeholder-gray-400 border-b border-gray-700 focus:outline-none resize-none" > -->
+            <input type="text" placeholder="Écris ton commentaire..." class="flex-1 px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500" />
+            
+          <!-- </textarea> -->
+          <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-full"><i class="fa-regular fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
+      <!-- New comment input -->
+      <!-- <div class="fixed bottom-2 left-0 w-full bg-gray-900 mt-6 border-t py-4 border-gray-200 dark:border-gray-800  ">
+        <form class="flex gap-2">
+          <input type="text" placeholder="Écris ton commentaire..." class="flex-1 px-4 py-2 rounded-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500" />
+          <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-full"><i class="fa-regular fa-paper-plane"></i></button>
+        </form>
+      </div> -->
+    </div>
+  </div>
         <!--Bottom navigation bar-->
         <div class="mb-4 md:hidden"></div>
             <span class="opacity-0">element to create margin</span>
@@ -666,19 +694,44 @@ function removeToast(button) {
     setTimeout(() => toast.remove(), 300);
 }
 
-    function createAdElement(url="#"){
+function adClick(url, image){
+    $.ajax({
+        url: '/metrics/ad_click',
+        type : 'POST',
+        data:{
+            url: url,
+            image : image,
+            csrfmiddlewaretoken : '{{csrf_token}}',
+        },
+        success: function(res){
+
+        },
+        complete: function(){
+
+        },
+        error: function(){
+
+        },
+    })
+}
+
+    function createAdElement(url="#", image = null){
     const addElement = document.createElement('div')
-    addElement.className = 'ad-container animate-fadeIn'
+    addElement.className = 'ad-container relative animate-fadeIn'
     addElement.innerHTML = `
             <span class="ad-label">Ad</span>
             <button onclick = 'closeAd(this)' class="ad-close">&times;</button>
-            <a href='${url}' target='_blank' class="ad-content">
+            <a href='${url}' onclick = "adClick('${url}', '${image}')" target='_blank' class="ad-content">
+                ${image ?  `<img class = 'absolute w-full max-h-36 object-cover z-50' src = '${image}'>`:  ''}
+               
                 <p class="text-center">Your ad content here (300x90)</p>
             </a>
 
     `  
     return addElement
 }
+
+
 
         function toggleDropdown(toggle){  
               
@@ -693,6 +746,65 @@ function removeToast(button) {
       
               }
   
+    function sendCommentPopup(element, e){
+    e.preventDefault()
+    //const commentForm = $('.comment-form')
+    
+    e.preventDefault()
+    const postId = e.target.dataset.postId
+    const commentSection = $('#comments-space')
+
+    const body = $(e.target).find('input').val().trim()
+    // const body = $(e.target).find('textarea').val().trim()
+    if(body){
+    $.ajax({
+            url: `/post/comment/new/${postId}`,
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: '{{csrf_token}}',
+                body: body,
+            },
+            beforeSend: function(){
+                $('#loading-overlay').toggleClass('active')
+            },
+            success: function(res){
+                commentsCount = res.comment.comments
+                comment = res.comment
+               
+                $(e.target).find('input').val('')
+                //$(e.target).find('textarea').val('')
+                $(commentSection).prepend(createComment2(res.comment))
+                
+            //Update the comments count
+            //$(e.target).siblings('.post-infos').find('.comment-count').text(commentsCount)
+
+            //scroll to bottom of the comment section
+            commentSection.animate({
+                //scrollTop: commentSection[0].scrollHeight
+                scrollTop: 0
+            },'smooth')
+
+            },
+            complete: function(){
+                $('#loading-overlay').toggleClass('active')
+                document.querySelectorAll('.body').forEach((element)=>{
+                element.innerHTML = linkifyHtml(element.textContent, {
+                target:"_blank",
+                className: 'link'
+                })
+                })
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                showMyToast('An Error occurred, please try again','error')
+            }
+        })
+       
+    }else{
+        showMyToast('please add content', 'info')
+    }
+ 
+}
+
     function sendComment(element, e){
     e.preventDefault()
     //const commentForm = $('.comment-form')

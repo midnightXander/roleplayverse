@@ -344,10 +344,17 @@ print(uuid.uuid1())
 #     # if character.lower() == ch['']:
 
 
-from py_vapid import Vapid
+# from py_vapid import Vapid
 
-print('keys:')
-vapid = Vapid.generate_keys()
-print(vapid)
+# print('keys:')
+# vapid = Vapid.generate_keys()
+# print(vapid)
 # print("public key: ", vapid['publicKey'])
 # print("private key: ", vapid['privateKey'])
+data = {
+    'a' : 10,
+    'b': {
+        'c':'d'
+    }
+}
+print(json.dumps(data))

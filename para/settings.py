@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'moderator',
     'legal',
     'monetization',
+    'metrics',
     
 
     #thirdParties

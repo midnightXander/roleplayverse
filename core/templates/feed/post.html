@@ -1,5 +1,6 @@
 {% extends "core/base.html" %}
-
+{% load static %}
+{% block title %} Publication de {{post.author.name}} {% endblock title %}
 
 {% block content  %}
 <style>
@@ -43,7 +44,7 @@
 </style>
 
 
-<div id="postContainer" class="max-w-xl mx-auto px-4 py-32 space-y-6 text-white flex flex-col items-center justify-center"  >
+<div id="postContainer" class="max-w-2xl mx-auto px-4 py-32 space-y-6 text-white flex flex-col items-center justify-center"  >
 </div>
 <!-- <div class="mb-4">
     <span class="opacity-0">element to create margin</span>
@@ -126,7 +127,7 @@
             success: function(res){
                 if(res.status == 'success'){
                     post = res.post
-                    const adElement = createAdElement('https://sophisticatedappearance.com/b/3KVh0.P/3VpuvzbOmpVEJBZND_0O1bNTj/Yx0/NzTtAE4oLLT-Ur2ONAjoQt1/M/DFkB')
+                    const adElement = createAdElement('https://sophisticatedappearance.com/b/3KVh0.P/3VpuvzbOmpVEJBZND_0O1bNTj/Yx0/NzTtAE4oLLT-Ur2ONAjoQt1/M/DFkB', "{% static 'images/avatars/avatar-2.jpg' %}")
                     const postElement = createPostElement(post);
                     postContainer.appendChild(adElement);
                     postContainer.appendChild(postElement);
@@ -253,15 +254,15 @@
     });
     
     // Event delegation for comment buttons
-    document.getElementById('postContainer').addEventListener('click', (e) => {
-    if (e.target.closest('.comment-button')) {
-        const commentForm = e.target.closest('.post').querySelector('.comment-form');
-        commentForm.classList.toggle('active');
-        if (commentForm.classList.contains('active')) {
-            commentForm.querySelector('input').focus();
-        }
-    }
-    });
+    // document.getElementById('postContainer').addEventListener('click', (e) => {
+    // if (e.target.closest('.comment-button')) {
+    //     const commentForm = e.target.closest('.post').querySelector('.comment-form');
+    //     commentForm.classList.toggle('active');
+    //     if (commentForm.classList.contains('active')) {
+    //         commentForm.querySelector('input').focus();
+    //     }
+    // }
+    // });
     
     function commentListener(){
         const commentForm = $('.comment-form')

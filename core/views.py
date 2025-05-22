@@ -553,25 +553,12 @@ def post(request,id):
             post.delete()
             return JsonResponse({'status':'success','message':'Publication Supprimé'})
         return JsonResponse({'status':'error','message':"l'utlisateur n'est pas l'auteur de cette publication"})
-    else:
-        comments = Comment.objects.filter(post = post)
-
-        post_data = {
-            "author":str(post.author),
-            "body":post.body,
-            "likes":post.likes,
-            "comments":[
-                {
-                "author":str(comment.author),
-                "body":comment.body,
-                    } 
-                for comment in comments
-
-            ],
-                    }
-        
+    elif request.method == 'GET':
+        post_data = _post_data(player, post)
         return JsonResponse({"status":"success","post":post_data})
     
+    else:
+        return JsonResponse({'status':'error', 'message':'Bad request'})
 
 @csrf_exempt
 def delete_post(request,id):

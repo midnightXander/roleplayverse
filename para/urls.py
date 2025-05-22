@@ -34,6 +34,7 @@ urlpatterns = [
     path('legal/', include('legal.urls', namespace = 'legal')),
     path('api/',include('api.urls',namespace='api')),
     path('monetization/',include('monetization.urls',namespace='monetization')),
+    path('metrics/',include('metrics.urls',namespace='metrics')),
     path('accounts/', include('allauth.urls')),
     path('',include('pwa.urls')),
 ]

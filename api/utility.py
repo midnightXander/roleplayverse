@@ -50,7 +50,7 @@ def send_push_notification(subscription :PushSubscription, message, user:User = 
         print(f"Notif sent to {subscription.user}.")
     # except WebPushException as ex:
     #     print(f"Failed to send notification: {ex}")
-    except WebPushException as ex:
+    except Exception as ex:
         print(f"Failed to send notification: {ex}")
         try:
             if user is not None:
