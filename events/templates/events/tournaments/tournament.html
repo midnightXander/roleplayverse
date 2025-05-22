@@ -289,11 +289,16 @@
                 <select id="yourCharacter" name="character" class="w-full bg-gray-800 text-white p-2 rounded-lg">
                     <option value="">Selectionne un personnage</option>
                                 {% for character in characters %}
-                                {% if player.p_character == character.name %}
-                                <option selected value="{{character.name}}" data-img_link="{{character.images.0}}">{{character.name}} </option>
+                                {% if character.selected %}
+                                <option value="{{character.name}}" disabled  data-img_link="{{character.images.0}}">{{character.name}} </option>
                                 {% else %}
                                 <option value="{{character.name}}" data-img_link="{{character.images.0}}">{{character.name}} </option>
                                 {% endif %}
+                                <!-- {% if player.p_character == character.name %}
+                                <option selected value="{{character.name}}" data-img_link="{{character.images.0}}">{{character.name}} </option>
+                                {% else %}
+                                <option value="{{character.name}}"   data-img_link="{{character.images.0}}">{{character.name}} </option>
+                                {% endif %} -->
                                 {% endfor %}
                 </select>
             </div>

@@ -530,8 +530,13 @@ def tournament(request, id):
     registered_characters = [fighter.character for fighter in FighterTournament.objects.filter(tournament = tournament)]
     selectable_characters = []
     for ch in sorted_characters:
-        if ch['name'] not in registered_characters:
-            selectable_characters.append(ch)
+        # if ch['name'] not in registered_characters:
+        #     selectable_characters.append(ch)
+        if ch['name'] in registered_characters:
+            ch['selected'] = True
+        else:
+            ch['selected'] = False    
+        selectable_characters.append(ch)
 
     if request.method == "POST":
         join_type = request.POST['join_type']
