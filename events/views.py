@@ -111,7 +111,7 @@ def create(request):
             #send notification to every player 
             for player in Player.objects.all():    
                 send_push_notification(
-                    PushSubscription.objects.filter(player = player).first(),
+                    PushSubscription.objects.filter(user = player.user).first(),
                     {
                         'title': f"Rejoins l'Arene!",
                         'body': f"Un nouveau tournoi est disponible, enregistre toi maintenant et montre tes competences",
@@ -216,7 +216,7 @@ def create_round_battles(tournament:Tournament, fighters, round=1):
         )
         new_notif.save()
         send_push_notification(
-            PushSubscription.objects.filter(player = player).first(),
+            PushSubscription.objects.filter(user = player.user).first(),
             {
                 'title': f'Au prochain tour!!',
                 'body': f"le prochain tour du tournoi {tournament.name} dans lequel tu participe a debuté, voici ton prochain adversaire",
@@ -234,7 +234,7 @@ def create_round_battles(tournament:Tournament, fighters, round=1):
     )
         new_notif.save()
         send_push_notification(
-            PushSubscription.objects.filter(player = ref).first(),
+            PushSubscription.objects.filter(user = ref.user).first(),
             {
                 'title': f'Au prochain tour!!',
                 'body': f"le prochain tour du tournoi {tournament.name} dans lequel tu es arbitre a debuté, voici le combat dont tu es chargé",
@@ -309,7 +309,7 @@ def init_tournament(tournament:Tournament):
         new_notif.save()
 
         send_push_notification(
-            PushSubscription.objects.filter(player = player).first(),
+            PushSubscription.objects.filter(user = player.user).first(),
             {
                 'title': f'{tournament.name} a commencé',
                 'body': f"le tournoi {tournament.name} dans lequel tu es participe a commencé, voici le tirage au sort et ton premier adversaire.",
@@ -326,7 +326,7 @@ def init_tournament(tournament:Tournament):
     )
         new_notif.save()
         send_push_notification(
-            PushSubscription.objects.filter(player = ref).first(),
+            PushSubscription.objects.filter(user = ref.user).first(),
             {
                 'title': f'{tournament.name} a commencé',
                 'body': f"le tournoi {tournament.name} dans lequel tu es arbitre a commencé, voici le tirage au sort et le combat dont tu es chargé",
@@ -386,7 +386,7 @@ def _update_round(battle:Battle):
             )
             new_notif.save()
             send_push_notification(
-            PushSubscription.objects.filter(player = winner).first(),
+            PushSubscription.objects.filter(user = winner.user).first(),
             {
                 'title': 'Vainqueur du tournoi',
                 'body': f'Incroyable! tu as remporte le tournoi {battle_tournament.name}, recupere tes recompenses',
@@ -402,7 +402,7 @@ def _update_round(battle:Battle):
                 url = f'/events/tournaments/{battle_tournament.id}',
             )
             send_push_notification(
-            PushSubscription.objects.filter(player = loser).first(),
+            PushSubscription.objects.filter(user = loser.user).first(),
             {
                 'title': 'Tu y ete presque!',
                 'body': f'Tu as perdu en final du tournoi {battle_tournament.name}, tu as quand meme eu des recompenses',
@@ -423,7 +423,7 @@ def _update_round(battle:Battle):
                     url = f'/events/tournaments/{battle_tournament.id}',
                 )
                 send_push_notification(
-            PushSubscription.objects.filter(player = fighter).first(),
+            PushSubscription.objects.filter(user = fighter.user).first(),
             {
                 'title': f'{battle_tournament.name} termine',
                 'body': f"le tournoi {battle_tournament.name} a pris fin, voici les details fu tournoi",
@@ -448,7 +448,7 @@ def _update_round(battle:Battle):
             )         
             new_notif.save()
             send_push_notification(
-            PushSubscription.objects.filter(player = winner).first(),
+            PushSubscription.objects.filter(user = winner.user).first(),
             {
                 'title': f'unpeu plus pres du but !!',
                 'body': f"tu passe au prochain tour dans le tournoi {battle_tournament.name} !!",
