@@ -60,9 +60,10 @@ def index(request):
     moderator = get_moderator(request.user)
     if not moderator:
         raise Http404
-    
+    player_emails = [ user.email for user in User.objects.all() ]
     return render(request, "moderator/index.html",{
-        'moderator': moderator
+        'moderator': moderator,
+        'player_emails': player_emails
     })
     
         
