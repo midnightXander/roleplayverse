@@ -11,6 +11,10 @@ from datetime import datetime
 from . import emails
 from api.utility import send_push_notification
 from api.models import PushSubscription
+import praw,os
+from dotenv import load_dotenv
+
+load_dotenv()
 # @shared_task
 # def delete_expired_instances():
 #     now = timezone.now()
@@ -189,7 +193,7 @@ def add_monthly_points():
 
         days_difference = timezone.now() - player.date_points_added
 
-        if days_difference.days == 31:
+        if days_difference.days == 30:
             #add_points(player, MONTHLY_POINTS)
             #player.date_points_added = timezone.now()
             player.add_points(MONTHLY_POINTS, True)
@@ -210,7 +214,32 @@ def add_monthly_points():
                 },
                 player.user,
                 )   
-               
+
+@shared_task
+def fetch_daily_content():
+    try:
+        reddit = praw.Reddit(
+            client_id= os.environ.get("REDDIT_CLIENT_ID"),
+            client_secret=os.environ.get("REDDIT_CLIENT_SECRET"),
+            user_agent='RPV Meme Bot'
+        )
+        subreddit = reddit.subreddit('narutomemes')
+        post_count = 0
+        for post in subreddit.hot(limit=50):
+            if not post.stickied and post.url.endswith(('.jpg', '.png', '.gif', 'jpeg')):
+                if not ContentPost.objects.filter(image_url=post.url).exists() and post_count <= 5:
+                    ContentPost.objects.create(
+                        type = 'meme',
+                        title=post.title,
+                        image_url=post.url,
+                        #reddit_score=post.score
+                    )
+                    ContentPost.save()
+                    post_count = post_count + 1
+                    if post_count == 5: return
+                    
+    except Exception as ex:
+        print(f"Could not Fetch reddit posts, err: {ex}")                               
 
 @shared_task
 def newsletter():

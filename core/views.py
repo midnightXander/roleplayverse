@@ -191,6 +191,7 @@ def home(request):
     
     feed.posts.clear()
     feed.battles.clear()
+    feed.daily_content.clear()
     
     feed.save()
     players = Player.objects.exclude( user = request.user)
@@ -319,6 +320,24 @@ def _post_data(player:Player, post:Post):
             "time_posted": _time_since(post.date_added),
         }
 
+def _daily_content_data(player:Player, content:ContentPost):
+    return {
+            "feed_item": content.type,
+            "id": content.id,
+            'title':content.title,
+            'body_full': content.body,
+            'body': content.body[:200]+'...' if content.body and len(content.body) > 200 else (content.body if content.body else '' ),
+            # 'liked': _liked_content(player, content),
+            # 'likes':_parse_number(content.likes,True),
+            # 'is_favorite': Savedcontent.objects.filter(player = player, content = content).exists(),
+            'image':content.image_url if content.image_url else None,
+            # "comments": get_comments_dict(player,content),
+            # "n_comments": _parse_number(len(get_comments(content)),True),
+            "time_posted": _time_since(content.date_added),
+
+    }
+
+
 def get_posts(request):
     player = Player.objects.get(user = request.user)
     feed = Feed.objects.get(player = player)
@@ -333,6 +352,9 @@ def get_posts(request):
                   .union(Battle.objects.filter(Q(status = 'finished') |  Q(status = 'ongoing') | Q(status = 'waiting_refree'))
                     .values('custom_id','date_ended')
                     .annotate(date = F('date_ended')), all=True)
+                    .union(ContentPost.objects.values('custom_id', 'date_added')
+                    .annotate(date = F('date_added')),
+                    all=True)      
                     .order_by('-date'))
     
     for feed_item in feed_items:
@@ -344,15 +366,27 @@ def get_posts(request):
                 feed_data.append(post_data)
                 feed.posts.add(post)
         except Post.DoesNotExist:
+            try:
+                battle = Battle.objects.get(custom_id = feed_item['custom_id'])    
+                if battle not in feed.battles.all() and len(feed_data) <= 2:
+                    battle_data = battle_views._battle_data(player, battle)
+                    if battle.status == 'waiting_refree' and RefreeingProposal.objects.filter(player = player, battle = battle).exists():
+                        pass
+                    elif battle.status == 'waiting_refree' and len(RefreeingProposal.objects.filter(battle = battle)) > 2:
+                        pass
+                    else:    
+                        feed_data.append(battle_data)
+                        feed.battles.add(battle)
             
-            battle = Battle.objects.get(custom_id = feed_item['custom_id'])    
-            if battle not in feed.battles.all() and len(feed_data) <= 2:
-                battle_data = battle_views._battle_data(player, battle)
-                if battle.status == 'waiting_refree' and RefreeingProposal.objects.filter(player = player, battle = battle).exists():
-                    pass
-                else:    
-                    feed_data.append(battle_data)
-                    feed.battles.add(battle)
+            except Battle.DoesNotExist:
+                print("getting content")
+                content = ContentPost.objects.get(custom_id = feed_item['custom_id'])
+                if content not in feed.daily_content.all() and len(feed_data) <= 2:
+                    content_data = _daily_content_data(player,content)
+                    feed_data.append(content_data)
+                    feed.daily_content.add(content)
+                    
+
 
     #feed the object and created the boolean indicating if the object was created or not
     
@@ -391,8 +425,8 @@ def get_posts(request):
     #         #feed.battles.add(battle)
 
     feed.save()
-    posts_data = _posts_data(player,posts)
-    battles_data = battle_views._battles_data(player,battles)
+    # posts_data = _posts_data(player,posts)
+    # battles_data = battle_views._battles_data(player,battles)
     
     
     

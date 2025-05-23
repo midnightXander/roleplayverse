@@ -312,8 +312,8 @@ def get_website_ip(domain):
 
 # Example usage
 domain = 'mboaflix.com'
-ip = get_website_ip(domain)
-print(f"The IP address of {domain} is {ip}")
+# ip = get_website_ip(domain)
+# print(f"The IP address of {domain} is {ip}")
 
 import string
 import secrets
@@ -358,3 +358,22 @@ data = {
     }
 }
 print(json.dumps(data))
+
+
+
+import praw
+import os
+from dotenv import load_dotenv
+
+reddit = praw.Reddit(
+    client_id = os.environ.get('REDDIT_CLIENT_ID'),
+    client_secret = os.environ.get('REDDIT_CLIENT_SECRET'),
+    user_agent = "RoleplayVerse meme bot",
+)
+
+subreddit = reddit.subreddit("memesfr")
+for post in subreddit.hot(limit = 10):
+    if not post.stickied and post.url.endswith(('.jpg', '.png', '.gif', 'jpeg')):
+        print(f'title: {post.title}')
+        print(f'url  : {post.url}')
+        print("-------")

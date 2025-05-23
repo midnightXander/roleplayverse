@@ -9,6 +9,18 @@ reaction_list = ["like","love","laugh","disapprove"]
 def generate_custom_id():
     return str(random.randint(10000000, 99999999))
 
+class ContentPost(models.Model):
+    TYPE_CHOICES = [('meme', 'Meme'), ('fact', 'Fun Fact')]
+    type = models.CharField(max_length=10, choices=TYPE_CHOICES)
+    title = models.CharField(max_length=255)
+    body = models.TextField(blank=True)
+    image_url = models.URLField(blank=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    custom_id = models.CharField(max_length=20, default=generate_custom_id)
+
+    def __str__(self):
+        return f"{self.title}"
+
 
 class Post(models.Model):
     # id = models.BigAutoField(primary_key=True)
@@ -89,6 +101,7 @@ class Feed(models.Model):
     player = models.ForeignKey(Player, on_delete = models.CASCADE)
     posts = models.ManyToManyField(Post,  through='PostFeed')
     battles = models.ManyToManyField(Battle, through='BattleFeed')
+    daily_content = models.ManyToManyField(ContentPost, through='ContentFeed')
 
     def __str__(self):
         return f"{self.player}"
@@ -107,3 +120,10 @@ class BattleFeed(models.Model):
 
     class Meta:
         unique_together = ('battle','feed')            
+
+class ContentFeed(models.Model):
+    content = models.ForeignKey(ContentPost, on_delete=models.CASCADE)
+    feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('content','feed') 

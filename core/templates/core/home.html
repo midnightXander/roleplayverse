@@ -930,20 +930,41 @@ $.ajax({
 //     // $(".battles-container").append(card)
 //     return battleElement
 // }
-function createMemeElement(meme){
+function createMemeElement(meme) {
     const memeElement = document.createElement('div');
-memeElement.className = 'post bg-gray-700 rounded-lg p-4';
+    memeElement.className = 'post bg-gray-900  rounded-xl shadow overflow-hidden';
 
-memeElement.innerHTML = `
-    <h3>Meme</h3>
-    <img src="${meme}" alt="Meme image" class="myImg w-full rounded-lg mb-4 post-image">
-    
-`
+    memeElement.innerHTML = `
+        <div class="px-4 pt-4 pb-2 flex justify-between items-center">
+            <div>
+                <div class="text-sm font-semibold text-orange-600">🎭 Meme</div>
+                <p class="mt-1 text-base font-bold text-white">${meme.title}</p>
+            </div>
+            <div class="relative">
+                <button class="info-icon text-gray-400 hover:text-orange-500 focus:outline-none">
+                    <i class="fas fa-question-circle"></i>
+                </button>
+                <div class="info-text hidden absolute right-0 mt-2 bg-gray-800 text-gray-300 text-sm p-2 rounded-lg shadow-lg w-64">
+                    Sur RPV, vous recevez des memes d'anime tous les jours pour vous divertir !
+                </div>
+            </div>
+        </div>
+        <img src="${meme.image}" alt="Meme Naruto" class="myImg w-full max-h-[500px] object-cover" />
+        <div class="px-4 py-3 text-sm text-gray-400 flex justify-between items-center">
+            <button class="text-orange-600 hover:underline text-sm">Favoris</button>
+            <button class="text-orange-600 hover:underline text-sm">Partager</button>
+        </div>
+    `;
 
-// <div class="meme w-full h-64 rounded-lg mb-4 post-image" style=" background-image: url(${meme});">
-// </div>
+    // Add event listener for the question mark icon
+    const infoIcon = memeElement.querySelector('.info-icon');
+    const infoText = memeElement.querySelector('.info-text');
 
-    return memeElement
+    infoIcon.addEventListener('click', () => {
+        infoText.classList.toggle('hidden');
+    });
+
+    return memeElement;
 }
 
 
@@ -965,9 +986,9 @@ function renderPosts() {
         },
         success: function(res){
             posts = res.data
-            
+            // console.log(posts)
             //add a meme
-            // const memeElement = createMemeElement('https://preview.redd.it/son-im-proud-of-you-s-v0-fjola4lkoyqd1.jpeg?width=640&crop=smart&auto=webp&s=85eeee3624f8d331e864f68337cb9e6cb1ee42b3')
+            // const memeElement = createMemeElement()
             // postsFeed.appendChild(memeElement)
 
             const adElement = createAdElement('https://sophisticatedappearance.com/b/3KVh0.P/3VpuvzbOmpVEJBZND_0O1bNTj/Yx0/NzTtAE4oLLT-Ur2ONAjoQt1/M/DFkB')
@@ -983,6 +1004,9 @@ function renderPosts() {
                     const battleElement = createBattleElement(post)
                     postsFeed.appendChild(battleElement)
                     
+                }else if(post.feed_item == 'meme'){
+                    const memeElement = createMemeElement(post)
+                    postsFeed.appendChild(memeElement)
                 }
                 
             })
@@ -1102,6 +1126,9 @@ if (window.scrollY + window.innerHeight >= document.body.offsetHeight - 100) {
                     const battleElement = createBattleElement(post)
                     postsFeed.appendChild(battleElement)
                     //postsFeed.appendChild(adElement);
+                }else if(post.feed_item == 'meme'){
+                    const memeElement = createMemeElement(post)
+                    postsFeed.appendChild(memeElement)
                 }
                 
             })
