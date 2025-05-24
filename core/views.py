@@ -349,14 +349,27 @@ def get_posts(request):
     #sort both posts and battles
     feed_items = (Post.objects.values('custom_id','date_added')
                   .annotate(date=F('date_added'))
-                  .union(Battle.objects.filter(Q(status = 'finished') |  Q(status = 'ongoing') | Q(status = 'waiting_refree'))
+                  .union(Battle.objects.filter(status__in = ['finished', 'ongoing', 'waiting_refree'])
+                         
                     .values('custom_id','date_ended')
                     .annotate(date = F('date_ended')), all=True)
                     .union(ContentPost.objects.values('custom_id', 'date_added')
                     .annotate(date = F('date_added')),
                     all=True)      
                     .order_by('-date'))
-    
+
+    #put ongoing battles first before all others
+    for feed_item in feed_items:
+        try: 
+            battle = Battle.objects.get(custom_id = feed_item['custom_id'])    
+            if battle not in feed.battles.all() and len(feed_data) <= 2 and battle.status == 'ongoing':
+                battle_data = battle_views._battle_data(player, battle)    
+                feed_data.append(battle_data)
+                feed.battles.add(battle)     
+
+        except Battle.DoesNotExist:
+            pass        
+
     for feed_item in feed_items:
         try:
             post = Post.objects.get(custom_id = feed_item['custom_id'])
@@ -379,7 +392,7 @@ def get_posts(request):
                         feed.battles.add(battle)
             
             except Battle.DoesNotExist:
-                print("getting content")
+                
                 content = ContentPost.objects.get(custom_id = feed_item['custom_id'])
                 if content not in feed.daily_content.all() and len(feed_data) <= 2:
                     content_data = _daily_content_data(player,content)
