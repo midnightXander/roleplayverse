@@ -971,8 +971,11 @@ def update_rank(player:Player):
 
 def update_points(family:Family, battle:Battle,member_progress):
     #Add points based on the 
-    user_godfather = family.god_father
-    godfather = Player.objects.get(user = user_godfather)
+    if family:
+        user_godfather = family.god_father
+        godfather = Player.objects.get(user = user_godfather)
+    else:
+        godfather = None    
     winner = battle.winner
     if winner and  winner.family == family:
         if battle.type == battle_types[1]:
@@ -981,7 +984,7 @@ def update_points(family:Family, battle:Battle,member_progress):
                 family.points += 3
             family.save()
     
-        if godfather != winner:
+        if godfather and godfather != winner:
             new_notif = core_models.Notification.objects.create(
                 target = godfather,
                 url = f'/users/family/{family.id}',
