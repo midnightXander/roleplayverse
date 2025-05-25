@@ -20,8 +20,8 @@ def send_push_notification(subscription :PushSubscription, message, user:User = 
         try:
             emails.send_email(
             recipient_email = user.email,
-            title = {message['title']},
-            subject = {message['title']},
+            title = message['title'],
+            subject = message['title'],
             body = f"""
             <h2>Salut {user},</h2>
             <p><strong>{message['body']}</strong></p>
@@ -58,8 +58,8 @@ def send_push_notification(subscription :PushSubscription, message, user:User = 
                 try:
                     emails.send_email(
                     recipient_email = user.email,
-                    title = {message['title']},
-                    subject = {message['title']},
+                    title = message['title'],
+                    subject = message['title'],
                     body = f"""
                     <h2>Salut {user},</h2>
                     <p><strong>{message['body']}</strong></p>

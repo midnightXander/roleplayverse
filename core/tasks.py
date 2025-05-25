@@ -52,7 +52,7 @@ def manage_battles_latency():
     for battle in battles:
         now = timezone.now()
         last_textpad = TextPad.objects.filter(battle = battle).last()
-        date_sent = last_textpad.date_sent
+        date_sent = last_textpad.date_validated
         difference = now - date_sent
         seconds = difference.seconds
         hours = seconds // 3600
