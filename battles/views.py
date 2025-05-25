@@ -1627,7 +1627,7 @@ def send_challenge(request, target_id):
     return JsonResponse({'status':'failed', 'message':message})    
 
 def __notify_referees():
-    r_badge = Badge.objects.get(title = 'referee')
+    r_badge = Badge.objects.get(title = 'Referee')
     for pb in  PlayerBadge.objects.filter(badge = r_badge):
         notif = core_models.Notification.objects.create(
             target = pb.player,
