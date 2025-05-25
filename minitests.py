@@ -372,8 +372,12 @@ reddit = praw.Reddit(
 )
 
 subreddit = reddit.subreddit("memesfr")
+post_count = 0
 for post in subreddit.hot(limit = 10):
-    if not post.stickied and post.url.endswith(('.jpg', '.png', '.gif', 'jpeg')):
+    if not post.stickied and post.url.endswith(('.jpg', '.png', '.gif', 'jpeg')) and post_count <=5:
+
         print(f'title: {post.title}')
         print(f'url  : {post.url}')
         print("-------")
+        post_count = post_count + 1
+        if post_count == 5: break

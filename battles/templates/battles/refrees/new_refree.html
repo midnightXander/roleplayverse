@@ -318,7 +318,7 @@
 
     function showResult() {
         // $("#loading-overlay").toggleClass("active")
-        let message = "Desole, ton score est insuffisant pour  continuer a la prochaine etape, tu peux encore essayer dans 2 jours"
+        let message = "Desole, ton score est insuffisant pour  continuer a la prochaine etape, tu peux encore essayer dans un instant"
         const correctPercentage = Math.floor(score/questions.length*100)
 
         $.ajax({
@@ -342,7 +342,7 @@
             Tu as eu <span class='text-2xl text-orange-500'>${correctPercentage}%</span> de bonne reponse
         </p> `).removeClass('hidden');
 
-        if(correctPercentage >= 80){
+        if(correctPercentage >= 60){
             message = 'Bravo, tu es eligible pour passer a la prochaine etape'
             $("#result").append(`
             <p class="text-green-400 font-semibold">${message}</p>

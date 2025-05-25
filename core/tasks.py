@@ -217,10 +217,13 @@ def add_monthly_points():
 
 @shared_task
 def fetch_daily_content():
+    REDDIT_CLIENT_ID = os.environ.get("REDDIT_CLIENT_ID")
+    REDDIT_CLIENT_SECRET = os.environ.get('REDDIT_CLIENT_SECRET')
+    # print(REDDIT_CLIENT_SECRET, REDDIT_CLIENT_ID)
     try:
         reddit = praw.Reddit(
-            client_id= os.environ.get("REDDIT_CLIENT_ID"),
-            client_secret=os.environ.get("REDDIT_CLIENT_SECRET"),
+            client_id= REDDIT_CLIENT_ID,
+            client_secret=REDDIT_CLIENT_SECRET,
             user_agent='RPV Meme Bot'
         )
         subreddit = reddit.subreddit('narutomemes')
@@ -237,6 +240,18 @@ def fetch_daily_content():
                     ContentPost.save()
                     post_count = post_count + 1
                     if post_count == 5: return
+
+        #notify all suscribed players for new memes 
+        suscriptions = PushSubscription.objects.all()
+        for suscription in suscriptions:
+            send_push_notification(suscription,{
+                "title": "De Nouveaux Meme sont disponible 🤩",
+                "body": f"Tous les jours, de nouveaux memes sont ajouté a ton fil pour une bonne séance de rire, en voila de nouveaux",
+                "url": f"https://roleplayverse.live/home",
+                'icon' : '/static/images/logo/logo_1.png',
+            }, suscription.user)
+
+
                     
     except Exception as ex:
         print(f"Could not Fetch reddit posts, err: {ex}")                               
