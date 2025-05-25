@@ -9,6 +9,6 @@ urlpatterns = [
     path('tournaments/create', views.index,name='create_tournament'),
     path('tournament/battles/<int:tournament_id>', views.battles, name = 'battles'),
     path('tournaments/<int:id>', views.tournament, name='tournament'),
-    path('tournament/init/me/<int:id>', views._init_tournament, name='init_tournament'),
+    path('tournament/init/me/<int:tournament_id>', views._init_tournament, name='init_tournament'),
 ]
 
