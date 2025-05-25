@@ -188,6 +188,7 @@ class TextPad(models.Model):
     valid =models.BooleanField(default=False)
     battle = models.ForeignKey(Battle, on_delete=models.SET_NULL, null=True)
     refree_comment = models.TextField(blank=True)
+    date_validated = models.DateTimeField(default = timezone.now)
     
     def __str__(self):
         return f"{self.owner}: {self.text[:20]}... in {self.battle}"

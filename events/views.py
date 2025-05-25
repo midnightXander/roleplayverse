@@ -149,8 +149,8 @@ def _can_start(tournament:Tournament):
         can_start =True
 
     #REMOVE THIS PART WHEN READY TO CREATE TOURNAMENTS IN PROD    
-    elif len(fighters) == tournament.n_participants and len(referees) >= 1:    
-        can_start = True
+    # elif len(fighters) == tournament.n_participants and len(referees) >= 1:    
+    #     can_start = True
 
     return can_start    
 
@@ -248,6 +248,7 @@ def create_round_battles(tournament:Tournament, fighters, round=1):
 
 
 def init_tournament(tournament:Tournament):
+    tournament.battles.clear()
     fighters = list(tournament.fighters.all())
     referees = list(tournament.refrees.all())
     #create the first round battles, the first round has n_participants/2 battles
@@ -301,6 +302,7 @@ def init_tournament(tournament:Tournament):
             continue
     #SEND NOTIFS TO THE PLAYERS AND REFREES INVOLVED
     for player in fighters:
+        
         new_notif = Notification.objects.create(
             target = player,
             content = f"The Tournament {tournament.name} in which you are a fighter has started",
@@ -308,11 +310,12 @@ def init_tournament(tournament:Tournament):
         )
         new_notif.save()
 
+
         send_push_notification(
             PushSubscription.objects.filter(user = player.user).first(),
             {
-                'title': f'{tournament.name} a commencé',
-                'body': f"le tournoi {tournament.name} dans lequel tu es participe a commencé, voici le tirage au sort et ton premier adversaire.",
+                'title': f'{tournament.name} le tirage au sort de {tournament.name} a été effectué',
+                'body': f"le tournoi {tournament.name} dans lequel tu participe a commencé, voici le tirage au sort et ton premier adversaire.",
                 'icon': '/static/images/logo/logo_1.png',
                 'url' : f'/events/tournaments/{tournament.id}',
             },
@@ -328,13 +331,40 @@ def init_tournament(tournament:Tournament):
         send_push_notification(
             PushSubscription.objects.filter(user = ref.user).first(),
             {
-                'title': f'{tournament.name} a commencé',
+                'title': f'{tournament.name} le tirage au sort de {tournament.name} a été effectué',
                 'body': f"le tournoi {tournament.name} dans lequel tu es arbitre a commencé, voici le tirage au sort et le combat dont tu es chargé",
                 'icon': '/static/images/logo/logo_1.png',
                 'url' : f'/events/tournaments/{tournament.id}',
             },
             ref.user
         )
+
+@csrf_exempt
+def _init_tournament(request, tournament_id):
+    if request.method == "POST":
+        tournament = Tournament.objects.get(id = tournament_id)
+        try:
+            labcom = User.objects.get(email = 'labcomvids@gmail.com')
+            requiem = User.objects.get(email='alexngaikama913@gmail.com')
+            renegade = User.objects.get(email='denzeldecode@gmail.com')    
+        except Exception as e:
+            print("error getting users")   
+            return JsonResponse({'message':'error initiating tournament'}) 
+
+        labcom_player = get_player(labcom)
+        requiem_player = get_player(requiem)
+        renegade_player = get_player(renegade)
+
+        if labcom_player not in tournament.refrees.all():  tournament.refrees.add(labcom_player)
+        if requiem_player not in tournament.refrees.all():  tournament.refrees.add(requiem_player)
+        if renegade_player not in tournament.refrees.all():  tournament.refrees.add(renegade_player)
+
+        init_tournament(tournament)
+
+        return JsonResponse({'message':f'tournament {tournament} initiated again'})     
+    else:
+        return JsonResponse({'message':f'bad request'})  
+
 
 
 def _roundsBattles(player:Player,tournament:Tournament, rounds):
@@ -592,7 +622,18 @@ def tournament(request, id):
 
         tournament.save()
         return HttpResponseRedirect(reverse("events:tournament", args=[tournament.id]))
+
+    # for fighter in list(fighters):
+    #         #player = FighterTournament.objects.get(fighter = fighter, tournament = tournament)
+    #         print(fighter.user.email)
+    #         # send_push_notification(
+    #         #     PushSubscription.objects.filter(player = fighter).first(),
+    #         #     {
+    #         #         },
+
+    #         #     )
             
+
     #init_tournament(tournament)
     context = {
         'tournament':tournament,

@@ -10,7 +10,7 @@ rankings = ['E','D','C','B','B+','A','A+','S','SS','SSS']
 FAMILYROLES = ['challenge_head','recruiter', 'casual','fighter']
 referall_points = 450
 MONTHLY_POINTS = 1000
-ENTRY_POINTS =  10300
+ENTRY_POINTS =  1300
 characters_list = get_characters()
 characters_list = sorted(characters_list["playable_characters"], key = lambda item: item["name"])
 ch_names = []
