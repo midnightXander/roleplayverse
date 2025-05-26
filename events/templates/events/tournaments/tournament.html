@@ -180,7 +180,7 @@
 
             <div id="tournamentPreview" class="hidden mt-8 p-4 bg-gray-800 rounded-lg">
 
-                <h4 class="text-2xl font-semibold text-orange-400 mb-4">Tournament Bracket</h4>
+                <h3 class="text-2xl font-semibold text-orange-400 mb-4">Tableau</h3>
                 
                 <div id="bracketContainer" class="overflow-x-auto text-white">
                     <!-- The bracket will be generated here -->
@@ -424,7 +424,7 @@ function generateBracket(participants) {
 
                     const matchDiv = document.createElement('div');
                     matchDiv.className = 'match';
-                    matchDiv.textContent = round === 0 ? `Match ${match + 1} Player1 vs Player2 ` : (round === rounds - 1 ? 'Final' : `Round ${round + 1}`);
+                    matchDiv.textContent = round === 0 ? `Match ${match + 1} Player1 vs Player2 ` : (round === rounds - 1 ? 'Final' : `Tour ${round + 1}`);
                     
                     roundDiv.appendChild(matchDiv);
                     }

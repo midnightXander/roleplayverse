@@ -359,10 +359,11 @@ def get_posts(request):
                     .order_by('-date'))
 
     #put ongoing battles first before all others
+    feed_limit = 4
     for feed_item in feed_items:
         try: 
             battle = Battle.objects.get(custom_id = feed_item['custom_id'])    
-            if battle not in feed.battles.all() and len(feed_data) <= 2 and battle.status == 'ongoing':
+            if battle not in feed.battles.all() and len(feed_data) <= feed_limit and battle.status == 'ongoing':
                 battle_data = battle_views._battle_data(player, battle)    
                 feed_data.append(battle_data)
                 feed.battles.add(battle)     
@@ -374,18 +375,18 @@ def get_posts(request):
         try:
             post = Post.objects.get(custom_id = feed_item['custom_id'])
             
-            if (post not in feed.posts.all()) and len(feed_data) <=2:
+            if (post not in feed.posts.all()) and len(feed_data) <=feed_limit:
                 post_data = _post_data(player,post)
                 feed_data.append(post_data)
                 feed.posts.add(post)
         except Post.DoesNotExist:
             try:
                 battle = Battle.objects.get(custom_id = feed_item['custom_id'])    
-                if battle not in feed.battles.all() and len(feed_data) <= 2:
+                if battle not in feed.battles.all() and len(feed_data) <= feed_limit:
                     battle_data = battle_views._battle_data(player, battle)
                     if battle.status == 'waiting_refree' and RefreeingProposal.objects.filter(player = player, battle = battle).exists():
                         pass
-                    elif battle.status == 'waiting_refree' and len(RefreeingProposal.objects.filter(battle = battle)) > 2:
+                    elif battle.status == 'waiting_refree' and len(RefreeingProposal.objects.filter(battle = battle)) > feed_limit:
                         pass
                     else:    
                         feed_data.append(battle_data)
@@ -394,7 +395,7 @@ def get_posts(request):
             except Battle.DoesNotExist:
                 
                 content = ContentPost.objects.get(custom_id = feed_item['custom_id'])
-                if content not in feed.daily_content.all() and len(feed_data) <= 2:
+                if content not in feed.daily_content.all() and len(feed_data) <= feed_limit:
                     content_data = _daily_content_data(player,content)
                     feed_data.append(content_data)
                     feed.daily_content.add(content)

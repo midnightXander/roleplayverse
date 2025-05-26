@@ -983,7 +983,7 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
                         $("#winner-notice").text(`${tempWinner} will be declared winner`)
                         
                         
-                            res.textpads.forEach(textpad => {
+                            res.textpads.forEach((textpad,i) => {
                              fighterClass = (textpad.owner == username)?"my-textpad":""
                              validText = (textpad.valid)?"validated":"Not validated"
                              
@@ -1006,6 +1006,17 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
                                 </div>
                                 `
                              )
+                           
+                             if(i == res.textpads.length - 1){
+                                const adElement = createAdElement('https://frequent-doubt.com/b_3eV/0YP.3cpOvgbOmpVMJVZUDz0k2CMzzBMBzSMHjaQo3VLdTuYDzUMkzZM/yINZDvgE', '/static/images/ads/eat_cells_1.png')
+                                $('#textPads').append(
+                                    `
+                                    <p class = 'text-center text-gray-400' >Jouer a un mini jeux vite fait ?</p>
+                                    `
+                                )
+                                $('#textPads').append(adElement)
+                             }
+
                              $(`#fighterTextpad-${textpad.id}`).append(textpad.text)
                              
                              $("#battle-room").prepend(`

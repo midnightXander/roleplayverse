@@ -722,7 +722,7 @@ function adClick(url, image){
             <span class="ad-label">Ad</span>
             <button onclick = 'closeAd(this)' class="ad-close">&times;</button>
             <a href='${url}' onclick = "adClick('${url}', '${image}')" target='_blank' class="ad-content">
-                ${image ?  `<img class = 'absolute w-full max-h-36 object-cover z-50' src = '${image}'>`:  ''}
+                ${image ?  `<img class = 'absolute w-full  object-cover z-50' src = '${image}'>`:  ''}
                
                 <p class="text-center">Your ad content here (300x90)</p>
             </a>
