@@ -140,9 +140,9 @@ def notify_all_players(request):
         players = User.objects.all()
         for player in players:
             send_push_notification(
-                subscription = PushSubscription.objects.filter(user=player.user).first(),
+                subscription = PushSubscription.objects.filter(user=player).first(),
                 message = message,
-                user = player.user
+                user = player
             )
         messages.success(request, "Notification envoyée à tous les joueurs.")
         return JsonResponse({'status': 'success', 'message': 'Notification envoyée à tous les joueurs.'})
