@@ -100,7 +100,7 @@ class Battle(models.Model):
     date_started = models.DateTimeField(auto_now_add=True)
     date_ended = models.DateTimeField(blank=True,null=True)
 
-    request = models.ForeignKey(BattleRequest, on_delete=models.SET_NULL, null=True)
+    request = models.ForeignKey(BattleRequest, on_delete=models.SET_NULL, null=True, blank=True)
     
     can_send_textpad = models.BooleanField(default=False)
 
