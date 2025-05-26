@@ -12,7 +12,7 @@ from .moderator_utility import get_moderator
 from .models import *
 import os
 from dotenv import load_dotenv
-
+from django.views.decorators.csrf import csrf_exempt
 load_dotenv()
 
 
@@ -122,7 +122,7 @@ def edit_blog_post(request,post_id):
         'post':post
     })
 
-
+@csrf_exempt
 def notify_all_players(request):
     if request.method == 'POST':
         title = request.POST.get('title')
