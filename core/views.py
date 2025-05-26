@@ -359,7 +359,7 @@ def get_posts(request):
                     .order_by('-date'))
 
     #put ongoing battles first before all others
-    feed_limit = 4
+    feed_limit = 7
     for feed_item in feed_items:
         try: 
             battle = Battle.objects.get(custom_id = feed_item['custom_id'])    
