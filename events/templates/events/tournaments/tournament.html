@@ -132,11 +132,11 @@
                     
                     {% if can_participate.can %}
 
-                    <button id="joinTournamentBtn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-4">
+                    <button id="joinTournamentBtn" onclick = 'showJoinPopup()' class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-4">
                         Rejoindre le Tournois
                     </button>
                     
-                    <button id="refereeTournamentBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded mt-4">
+                    <button id="refereeTournamentBtn" onclick = 'showRefereePopup()' class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded mt-4">
                         Arbitrer le Tournois
                     </button>
                     {% else %}
@@ -479,8 +479,8 @@ updateBracket();
 
     
     // Event listeners
-    document.getElementById('joinTournamentBtn').addEventListener('click', showJoinPopup);
-    document.getElementById('refereeTournamentBtn').addEventListener('click', showRefereePopup);
+    // document.getElementById('joinTournamentBtn').addEventListener('click', showJoinPopup);
+    // document.getElementById('refereeTournamentBtn').addEventListener('click', showRefereePopup);
     
     // Call this function when the page loads
     document.addEventListener('DOMContentLoaded', updateTournamentInfo);
