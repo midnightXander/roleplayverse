@@ -1,6 +1,8 @@
 from django.shortcuts import render,get_object_or_404,redirect
+from api.models import PushSubscription
+from api.utility import send_push_notification
 from blog.models import BlogPost
-from django.http import HttpResponseRedirect,Http404
+from django.http import HttpResponseRedirect,Http404, JsonResponse
 from django.contrib import messages
 from django.contrib.auth.models import User,auth
 from django.contrib.auth import logout,login,authenticate
@@ -121,3 +123,26 @@ def edit_blog_post(request,post_id):
     })
 
 
+def notify_all_players(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        body = request.POST.get('body')
+        url = request.POST.get('url', '/')
+        if not title or not body:
+            return JsonResponse({'status': 'error', 'message': 'Veuillez remplir tous les champs.'})
+        message = {
+            'title': title,
+            'body': body,
+            'url': url,
+            'icon': '/static/images/logo/logo_1.png'
+        }
+
+        players = User.objects.all()
+        for player in players:
+            send_push_notification(
+                subscription = PushSubscription.objects.filter(user=player.user).first(),
+                message = message,
+                user = player.user
+            )
+        messages.success(request, "Notification envoyée à tous les joueurs.")
+        return JsonResponse({'status': 'success', 'message': 'Notification envoyée à tous les joueurs.'})

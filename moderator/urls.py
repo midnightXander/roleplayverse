@@ -8,4 +8,5 @@ urlpatterns = [
     path('signinxyz',views.signin, name = 'signin'),
     path('blog/create',views.create_post,name = 'create_post'),
     path('blog/edit/<int:post_id>',views.edit_blog_post,name = 'edit_post'),
+    path('notifications/notify_all_players', views.notify_all_players, name='notify_all_players'),
 ]
