@@ -673,7 +673,11 @@ def family_page(request,family_id):
     #get family roles  
     roles = []
     # recruiter_badge =  Badge.objects.get(title = 'Recruiter')
-    # roles.append(recruiter_badge)            
+    # roles.append(recruiter_badge)
+    # 
+    if request.method == 'PUT':
+        family_name = request.PUT.get('name')
+        print(family_name)            
     
     context = {
         "family":family,

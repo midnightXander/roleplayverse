@@ -489,7 +489,10 @@ def init_battle(request,acceptor_id):
                 #     battle_request.delete()
 
                 if len(Battle.objects.filter(request = battle_request))>=2:
-                    battle_request.delete()    
+                    #battle_request.delete()
+                    battle_request.hidden = True
+                    battle_request.save()
+                    pass    
                     
                 
                 #Notify the acceptor
@@ -856,6 +859,8 @@ def send_textpad(request, battle_id):
         #player is a fighter in the battle(either initiator or opponent)
         #it is the player's turn
         text = request.POST['text']
+
+        hidden_action = request.POST.get('hidden_action', '')
         if player == battle.initiator or player == battle.opponent:
             #check if player can send the first textpad
             if len(textpads) == 0 and player != battle.initiator:
@@ -870,7 +875,8 @@ def send_textpad(request, battle_id):
                 text_pad = TextPad.objects.create(
                     owner = player,
                     battle= battle,
-                    text=text
+                    text=text,
+                    hidden_action = hidden_action
                 )
                 battle.status = battle_status[2]
                 if battle.type == 'tournament':
@@ -932,7 +938,7 @@ def send_textpad(request, battle_id):
 def get_textpads(request, battle_id):
     battle = Battle.objects.get(id = battle_id)
     textpads = TextPad.objects.filter(battle = battle)
-    
+    player = get_player(request.user)
     
 
     textpads_data = [
@@ -945,6 +951,8 @@ def get_textpads(request, battle_id):
             "time_since": core_views._time_since(textpad.date_sent),
             'index': index + 1,
             'comment' : textpad.refree_comment,
+            'date_validated': textpad.date_validated,
+            'hidden_action' : textpad.hidden_action if player == battle.refree or battle.status == 'finished' else None,
         } for index,textpad in enumerate(textpads)
     ] 
 

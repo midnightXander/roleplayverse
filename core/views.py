@@ -359,7 +359,7 @@ def get_posts(request):
                     .order_by('-date'))
 
     #put ongoing battles first before all others
-    feed_limit = 7
+    feed_limit = 5
     for feed_item in feed_items:
         try: 
             battle = Battle.objects.get(custom_id = feed_item['custom_id'])    
@@ -450,7 +450,7 @@ def get_posts(request):
     #data = serialize('json',posts)
 
     #take only 3 feed item at a time    
-    return JsonResponse({'data':feed_data[:3]}, safe=False)
+    return JsonResponse({'data':feed_data[:feed_limit]}, safe=False)
 
 
 def get_notifications(request):

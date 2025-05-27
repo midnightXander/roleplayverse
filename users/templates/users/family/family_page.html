@@ -92,7 +92,7 @@
 </style>
 
 <div class="container mx-auto py-8">
-    <div class="bg-gray-800 rounded-lg ">
+    <div class="bg-gray-900 mt-6 rounded-lg ">
         <!-- Family Header -->
         <div class="relative">
             <!-- bg-gradient-to-r from-orange-500 to-orange-500 -->
@@ -117,8 +117,8 @@
                     <p id="familyPoints" class="text-white mb-2">{% trans "Points" %}: {{family.points}}</p>
                     <p id="familyMembers" class="text-white mb-2">{% trans  "Membres" %}: {{n_members}}</p>
                     <p id="familyGodfather" class="text-white">{% trans "Parrain" %}: 
-                        <a href="{% url 'users:player' family.god_father.username %}">
-                            <span class="font-bold text-2xl">{{family.god_father}}</span>
+                        <a class="font-bold" href="{% url 'users:player' family.god_father.username %}">
+                            {{family.god_father}}
                         </a>
                         
                     </p>
@@ -172,13 +172,13 @@
             <div class="filter-container justify-center text-white w-full mx-auto flex space-x-3 my-6 overflow-x-auto pb-2">
                 <a href="{% url 'users:family_page' family.id %}">
                     <button data-url="" data-=""  class="filter-button bg-gray-600 px-4 py-2 rounded-full hover:bg-gray-500 transition duration-300">
-                        <i class="fas fa-users mr-2"></i>{% trans "Members" %}
+                        <i class="fas fa-users mr-2"></i>{% trans "Membres" %}
                     </button>
                 </a>
                 
                 <a href="{% url 'users:family_battles' family.id %}">
                     <button  data-url="" class="filter-button bg-gray-600 px-4 py-2 rounded-full hover:bg-gray-500 transition duration-300">
-                        <i class="fas fa-user-shield mr-2"></i>{% trans "Battles" %} 
+                        <i class="fas fa-user-shield mr-2"></i>{% trans "Combats" %} 
                     </button>
                 </a>
                 
@@ -220,7 +220,7 @@
                             </svg>
                         </div>
                         {% endif %}
-                        <a href="{% url 'users:player' member.user.username %}">
+                        <a onclick="showOverlay()" href="{% url 'users:player' member.user.username %}">
                             <img src="{{member.profile_picture.url}}" alt="{{member}}" class="w-16 h-16 rounded-full mx-auto mb-2">
                         </a>
                         <a href="{% url 'users:player' member.user.username %}">
