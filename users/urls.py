@@ -42,6 +42,7 @@ urlpatterns = [
     path('join_family/<int:notif_id>',views.join_family,name="join_family"),
     path('accept_request/<int:notif_id>',views.accept_request,name="accept_request"),
     path('family/65744<int:family_id>',views.family_page,name='family_page'),
+    path('family/edit/<int:family_id>',views.edit_family_info,name = 'edit_family_infos'),
     path('family/65744<int:family_id>/battles',views.family_battles,name='family_battles'),
     path('family/members/<int:family_id>', views.get_members, name = 'family_members'),
     path('family/promote/<int:player_id>',views.promote_member,name = 'promote_member'),

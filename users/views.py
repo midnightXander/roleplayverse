@@ -675,9 +675,7 @@ def family_page(request,family_id):
     # recruiter_badge =  Badge.objects.get(title = 'Recruiter')
     # roles.append(recruiter_badge)
     # 
-    if request.method == 'PUT':
-        family_name = request.PUT.get('name')
-        print(family_name)            
+              
     
     context = {
         "family":family,
@@ -694,6 +692,37 @@ def family_page(request,family_id):
         }
     return render(request,"users/family/family_page.html",context)
 
+def edit_family_info(request, family_id):
+    player = get_player(request.user)
+    if not player:
+        return redirect('/users/signin')
+    
+    family = Family.objects.get(id = family_id)
+    god_father = get_player(family.god_father)
+    if player != god_father:
+        return redirect(f'/users/family/65744/{family_id}')
+    
+    if request.method == 'POST':
+        name = request.POST.get('familyName', family.name)
+        bio = request.POST.get('family-bio', family.description)
+        profile_pic = request.FILES.get('family-picture', None)
+        if not profile_pic:
+            profile_pic = family.profile_picture
+
+        family.name = name
+        family.description = bio
+        family.profile_picture = profile_pic
+        family.save()    
+        return HttpResponseRedirect(reverse('users:family_page', args=[family_id]))
+
+    context = {
+        "family":family,
+        "player":player,
+        'can_add': _can_add_members(player,family),
+        "n_notifs":core_views.get_notifs(player),
+
+        }
+    return render(request,"users/family/edit_family_page.html",context)
 
 def family_battles(request,family_id):
     player = get_player(request.user)

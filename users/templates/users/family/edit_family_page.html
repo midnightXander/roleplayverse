@@ -1,0 +1,163 @@
+{% extends "core/base.html" %}
+{% block title %}Nouvelle Famille{% endblock title %}
+{% block meta_description %}Page de création d'une famille sur Role play verse{% endblock meta_description %}
+{% block content %}
+<style>
+    :root {
+            --dark-grey: #2a2a2a;
+            --light-grey: #3a3a3a;
+            --orange: #ff6600;
+            --light-orange: #ff8533;
+        }
+       
+        
+        .form-container {
+            
+            border: 1px solid var(--light-grey);
+        }
+        .btn {
+            transition: all 0.3s ease;
+            background-color: var(--orange);
+        }
+        .btn:hover {
+            background-color: var(--light-orange);
+            transform: translateY(-2px);
+        }
+        input[type="text"], textarea {
+            
+            color: #e0e0e0;
+            border: 1px solid #4a4a4a;
+        }
+        input[type="file"] {
+            
+            color: #e0e0e0;
+            border: 1px solid #4a4a4a;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+        }
+        input[type="file"]::-webkit-file-upload-button {
+            background-color: var(--orange);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+        input[type="file"]::-webkit-file-upload-button:hover {
+            background-color: var(--light-orange);
+        }
+    
+</style>
+<style>
+    .success,.valid{
+        background: rgba(0, 200, 0, 0.1);
+        color: rgba(0, 200, 0, 0.9);
+        }
+    .error,.invalid{
+        background: rgba(200, 0, 0, 0.1);
+        color: rgba(248, 11, 11, 0.9);
+        }
+</style>
+
+<header class="bg-gray-900 text-white p-4 mt-20">
+    <div class="container flex  mx-auto">
+        <a href="{% url 'users:family_page' family.id %}"><i class="text-orange-500 fas fa-arrow-left mr-2" ></i></a>
+        <h1 class="text-2xl text-orange-500 font-bold">Modifier {{family}}</h1>
+    </div>
+</header>
+
+<main class="flex-grow container  mx-auto px-4 py-8 text-white">
+    <div class="form-container bg-gray-900 max-w-2xl mx-auto rounded-lg p-8 shadow-md">
+        <form onsubmit="showOverlay()" action="{% url 'users:edit_family_infos' family.id %}" method="post" id="create-family-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-6">
+                <label for="family-name" class="block mb-2">Nom de la famille</label>
+                <input type="text"  id="family-name" name="familyName" value="{{family.name}}"
+                       class="w-full bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500">
+                       <div id="family-name-error"></div>
+            </div>
+            <div class="mb-6">
+                <label for="family-picture" class="block mb-2">Changer Logo</label>
+                <img src="{{family.profile_picture.url}}"  class="w-16 h-16 rounded-full mb-2">
+                <input type="file" id="family-picture" name="family-picture" accept="image/*" 
+                       class="w-full bg-gray-800">
+            </div>
+            <div class="mb-6">
+                <label for="family-bio" class="block mb-2">Bio</label>
+                <textarea id="family-bio" name="family-bio" rows="4" 
+                          class="w-full bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        {{family.description}}
+                        </textarea>
+            </div>
+            <div class="text-center">
+                
+                
+                {% for msg in messages %}
+                <div class="{{msg.tags}}">{{msg}}</div>
+                {% endfor  %}
+
+
+                <button id="submit-btn" type="submit" class="px-6 py-2 bg-orange-500 rounded text-white form-submit-btn">
+                    <i class="fas fa-plus mr-2"></i>Modifier
+                </button>
+                
+                
+            </div>
+        </form>
+    </div>
+</main>
+
+<script>
+    $(()=>{
+
+    const familyNameInput = $("#create-family-form #family-name")
+    const nameResponse =  $("#family-name-error")
+    const submitBtn = document.querySelector("#submit-btn")
+    function checkValidity(){
+        let valid = false
+        validCount = 0
+        const containers = [nameResponse]
+        
+        containers.forEach(container => {
+            validCount += container.hasClass("valid")?1:0
+        });
+
+        if(validCount == containers.length && submitBtn ){
+            submitBtn.disabled = false
+        }
+    }
+    
+    familyNameInput.on("input",(e)=>{
+        $.ajax({
+            url: "/users/verify_family_name",
+            type: "POST",
+            data: {
+                "name":familyNameInput.val(), csrfmiddlewaretoken: "{{csrf_token}}"
+            },
+            success: function(res){
+                if(familyNameInput.val() == '{{family.name}}'){
+                    res.status = 'valid' 
+                    res.message = ''
+                }
+                if(res.status == "valid"){
+                    nameResponse.removeClass("invalid")
+                    nameResponse.addClass("valid")
+                    
+                }
+                else if(res.status == "invalid"){
+                    nameResponse.removeClass("valid")
+                    nameResponse.addClass("invalid")
+
+                }
+                nameResponse.text(res.message)
+                checkValidity()
+            
+            }
+        })
+})
+
+    })
+
+</script>
+{% endblock content %}
+
