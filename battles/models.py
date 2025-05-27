@@ -52,7 +52,7 @@ class BattleRequest(models.Model):
     character = models.CharField(max_length=50)
     date_sent = models.DateTimeField(auto_now_add = True)
     expiry_date = models.DateTimeField(default = timezone.now)
-
+    hidden = models.BooleanField(default = False)
     
     def __str__(self):
         return f"{self.sender} for a {self.type} battle"

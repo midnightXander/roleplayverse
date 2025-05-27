@@ -247,12 +247,12 @@ def battles(request):
     characters = get_characters()
     sorted_characters = sorted(characters["playable_characters"], key = lambda item: item["name"])
     battles = Battle.objects.all().order_by('-date_started')
-    requests = BattleRequest.objects.exclude(sender = player).order_by('-date_sent')
+    requests = BattleRequest.objects.filter(hidden = False).exclude(sender = player).order_by('-date_sent')
 
     #remove requests where 2 battles had already being inititated from 
     for req in requests:
         if len(Battle.objects.filter(request = req)) >=2:
-            req.delete() 
+            req.hidden = True 
 
     #get the request senders
     
@@ -391,7 +391,7 @@ def accept_battle(request,request_id):
             message = 'Vous devez étre dans une famille pour faire des combats stake'
         #check if there are more than 3 acceptors for the request already    
         elif len(acceptors)>=2:
-            
+            b_request.hidden = True
             message = "2 combats ont deja été initié de cette RDC"
         
         #check if the player has already accepted this request
@@ -429,11 +429,11 @@ def accept_battle(request,request_id):
                 PushSubscription.objects.filter(user = b_request.sender.user).first(),
                 {
                 'title' : f"Ton combat peut Commencer",
-                'body' : f"{b_request.sender} a accepté ta requète de combat, clique pour commencer le combat",
+                'body' : f"{player} a accepté ta requète de combat, clique pour commencer le combat",
                 'url' : f'/users/requests/{b_request.sender.user.username}',
                 'icon' : '/static/images/logo/logo_1.png',
                 },
-                b_request.sender.user
+                player.user
                 
             )
 
@@ -549,7 +549,7 @@ def battle_requests(request):
     player = get_player(request.user)
     if not player:
         return redirect('/users/signin')
-    requests = BattleRequest.objects.exclude(sender = player).order_by('-date_sent')
+    requests = BattleRequest.objects.filter(hidden = False).exclude(sender = player).order_by('-date_sent')
     
     requests_data = _battle_requests_data(player, requests)
     return JsonResponse({"status":"success","requests":requests_data})    
@@ -952,6 +952,7 @@ def get_textpads(request, battle_id):
             'index': index + 1,
             'comment' : textpad.refree_comment,
             'date_validated': textpad.date_validated,
+            'comment' : textpad.refree_comment,
             'hidden_action' : textpad.hidden_action if player == battle.refree or battle.status == 'finished' else None,
         } for index,textpad in enumerate(textpads)
     ] 
@@ -1138,6 +1139,7 @@ def evaluate_textpad(request, battle_id):
                     battle.winner = winner 
                     battle.status = battle_status[3]
                     battle.date_ended = datetime.now()
+                    battle.defeat_motif =  'referee decision'
 
                     progress =  player_progress(battle=battle,loser_rank = loser.rank)
                     winner.progression +=  progress
@@ -1180,7 +1182,7 @@ def evaluate_textpad(request, battle_id):
 
                 else:
                     notif_content = 'ton pavé a été refusé, tu as perdu le combat'  
-                    textpad.owner.progression  = textpad.owner.progression - 3
+                    #textpad.owner.progression  = textpad.owner.progression - 3
                     textpad.owner.save()  
                 
                 #create a notification for the textpad owner
