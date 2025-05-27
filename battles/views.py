@@ -1086,6 +1086,8 @@ def evaluate_textpad(request, battle_id):
             
             textpad.valid = validity
             textpad.date_validated = timezone.now()
+            textpad.refree_comment = request.POST.get('refree_comment', '')
+            print(textpad.refree_comment)
             #index of the notification type based on if the textpad is accepted or not
             notif_index = 9
             message = "une erreur est survenu pendant l'evaluation du pavé"
@@ -1158,6 +1160,7 @@ def evaluate_textpad(request, battle_id):
                 battle.can_send_textpad = validity
                 if(validity):
                     notif_content = f'Ton pavé a été validé'
+                    textpad.refree_comment = request.POST.get('refree_comment', '')
                     if textpad.owner == battle.initiator:
                         opponent = battle.opponent
                     elif textpad.owner == battle.opponent:

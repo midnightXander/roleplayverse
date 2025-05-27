@@ -415,6 +415,10 @@
         <!-- Referee Actions -->
         <div class="referee-actions my-6 border border-gray-700 rounded-2xl p-4">
             <h3 class="text-xl font-semibold text-orange-300 mb-2">Actions arbitrales</h3>
+            <div class="mb-2">
+                <p class="font-bold">Commenter sur dernier le pavé(Optionel):</p>
+                <textarea  id="refreeComment" rows="2" class="w-full bg-gray-800 mt-2 text-white rounded-lg p-3 mb-3 focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Commente sur le dernier pave...si il est valides, tu n'as pas besoin de le commenter"></textarea>
+            </div>
             <div class="flex flex-wrap gap-2">
                 <button id="validateBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-2xl transition duration-300">
                     Valider le pavé
@@ -718,7 +722,7 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
         $.ajax({
                 url: "{% url 'battles:evaluate_textpad' battle.id  %}",
                 type: "POST",
-                data: {csrfmiddlewaretoken: "{{csrf_token}}", "validity":1},
+                data: {csrfmiddlewaretoken: "{{csrf_token}}", "validity":1, "refree_comment": $('#refreeComment').val()},
                 beforeSend: function(){
                     $("#loading-overlay").toggleClass('active')
                 },
@@ -1029,7 +1033,7 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
                                         <span class="text-gray-500 italic">Action cachée: </span> "${textpad.hidden_action ? textpad.hidden_action : '<span class="italic"></span>'}""
                                     </div> 
                                     <div class="text-gray-400 italic text-sm p-3">
-                                        <span class="text-gray-500 italic">Commentaire de l'arbitre: ${textpad.refree_comment}</span> 
+                                        <span class="text-gray-500 italic">Commentaire de l'arbitre: ${textpad.comment ? textpad.comment : 'Aucun commentaire'}</span> 
                                     </div>    
 
                                     
