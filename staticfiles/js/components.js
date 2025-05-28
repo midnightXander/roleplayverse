@@ -50,9 +50,17 @@ function openCommentPopup(postId) {
         },
         success: function(res){
             const comments = res.post.comments
-            comments.forEach(comment => {
+            if(comments.length > 0){
+                comments.forEach(comment => {
                 commentsContainer.append(createComment2(comment))
             });
+            }else{
+                commentsContainer.innerHTML = `
+                    <p class = 'text-gray-500 text-center px-4 py-8'>
+                        Soit le premier a commenter
+                    </p>
+                `
+            }
         },
         complete: function(){
             loader.remove()
@@ -69,6 +77,7 @@ function openCommentPopup(postId) {
         'username': '{{player.user.username}}',
         'player':'{{player}}',
     }
+    console.log(c_player, currentPlayerData)
     const commentElement = document.createElement('div');
     commentElement.className = 'comment  flex items-start gap-3';
     commentElement.innerHTML = `
@@ -283,7 +292,7 @@ function createPostElement(post) {
              
                 ${post.image ? `
                 <div class="mt-3">
-                <img  src='/static/images/loaders/img-loader.gif' onload = "replacePlaceholder(this, '${post.image}')" alt="${post.author.player} image de publication" class="w-full myImg rounded-xl border-1 border-gray-700 object-cover h-auto max-h-96" />
+                <img  src='/static/images/loaders/img-loader.gif' onload = "replacePlaceholder(this, '${post.image}')" alt="${post.author.player} image de publication" class="w-full myImg rounded-xl border-1 border-gray-700 object-cover h-auto max-h-[500px]" />
               </div>
                 ` : ''}
               
@@ -313,10 +322,11 @@ function createPostElement(post) {
                  ${post.comments.map(comment =>createComment(comment)).join('')}
               </div>
             -->  
-    
+            <!--
                <form onsubmit='sendComment(this, event)' class="comment-form mt-4" data-post-id = ${post.id}>
                     <input type="text" class="bg-gray-800 text-white p-2 rounded w-full  border-0  focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="ajoute un commentaire...">
                 </form>
+            -->    
     
               
         

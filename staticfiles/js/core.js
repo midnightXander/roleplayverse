@@ -19,6 +19,13 @@ close.onclick = function() {
   modal.style.display = "none";
 }
 
+}
+function showImg(src){
+    var modal = document.getElementById('imgModal');
+    var modalImg = document.getElementById("img01");
+    modal.style.display = "block";
+    modalImg.src = src;
+
 }    
 function disableSubmitButton(button){
     button.disabled = true

@@ -949,7 +949,7 @@ function createMemeElement(meme) {
                 </div>
             </div>
         </div>
-        <img src="${meme.image}" alt="Meme Naruto" class="myImg w-full max-h-[500px] object-cover" />
+        <img src="${meme.image}" onclick = 'showImg("${meme.image}")' alt="Meme Naruto" class="w-full max-h-[500px] object-cover" />
         <div class="px-4 py-3 text-sm text-gray-400 flex justify-between items-center">
             <button class="text-orange-600 hover:underline text-sm">Favoris</button>
             <button class="text-orange-600 hover:underline text-sm">Partager</button>
