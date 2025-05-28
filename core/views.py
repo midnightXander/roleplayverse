@@ -141,12 +141,8 @@ def get_notifs(player):
 @login_required
 def home(request):
 
-    # neon = User.objects.get(username = 'Neon365')
-    # send_push_notification(PushSubscription.objects.get(user = neon), {
-    #     'title': 'Welcome from Roleplay Verse',
-    #     'body': 'Your journey begins here',
-    #     'icon': '/static/images/logo/logo_1.png'
-    # })
+    # emails.send_emails(["ralldidierselemani@gmail.com","franckbodo81@gmail.com"], "Le Shinobi Mayhem t'attends!!","Le Shinobi Mayhem t'attends!!",
+    #                    "Le tirage au sort du tournoi Shinobi Mayhem a été effectué, les regles ont ete fixé, ton adversaire t'attends pour entamer les hostilités !!" )
 
     posts = Post.objects.all()
     battles = Battle.objects.filter(status = "finished")
@@ -359,17 +355,23 @@ def get_posts(request):
                     .order_by('-date'))
 
     #put ongoing battles first before all others
-    feed_limit = 5
+    feed_limit = 10
     for feed_item in feed_items:
         try: 
             battle = Battle.objects.get(custom_id = feed_item['custom_id'])    
-            if battle not in feed.battles.all() and len(feed_data) <= feed_limit and battle.status == 'ongoing':
+            if battle not in feed.battles.all() and len(feed_data) <= feed_limit-2 and battle.status == 'ongoing':
                 battle_data = battle_views._battle_data(player, battle)    
                 feed_data.append(battle_data)
                 feed.battles.add(battle)     
 
         except Battle.DoesNotExist:
             pass        
+    #take the two latest Memes and add to feed
+    for content in ContentPost.objects.all().order_by('-date_added')[:2]:
+        if content not in feed.daily_content.all():
+            content_data = _daily_content_data(player,content)
+            feed_data.append(content_data)
+            feed.daily_content.add(content)
 
     for feed_item in feed_items:
         try:

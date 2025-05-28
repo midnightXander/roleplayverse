@@ -14,7 +14,7 @@ import os
 from dotenv import load_dotenv
 from django.views.decorators.csrf import csrf_exempt
 load_dotenv()
-
+import json
 
 def signin(request):
     if request.method == "POST":
@@ -146,3 +146,8 @@ def notify_all_players(request):
             )
         messages.success(request, "Notification envoyée à tous les joueurs.")
         return JsonResponse({'status': 'success', 'message': 'Notification envoyée à tous les joueurs.'})
+
+# @csrf_exempt
+# def send_email(request):
+#     if request.method == 'POST':
+#         body = json.loads(request.body)     

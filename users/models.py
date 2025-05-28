@@ -124,6 +124,7 @@ class Player(models.Model):
 
     date_points_added = models.DateField(auto_now_add=True)
     last_seen = models.DateTimeField(auto_now=True)
+    rp_credits = models.DecimalField(default=0,  max_digits=10, decimal_places=2)
 
     def add_points(self, points:int, monthly_points:bool = False):
         """Adds points(Battle tokens) to the player"""

@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'legal',
     'monetization',
     'metrics',
+    'adventure',
     
 
     #thirdParties

@@ -292,7 +292,7 @@ function createPostElement(post) {
              
                 ${post.image ? `
                 <div class="mt-3">
-                <img  src='/static/images/loaders/img-loader.gif' onload = "replacePlaceholder(this, '${post.image}')" alt="${post.author.player} image de publication" class="w-full myImg rounded-xl border-1 border-gray-700 object-cover h-auto max-h-96" />
+                <img  src='/static/images/loaders/img-loader.gif' onload = "replacePlaceholder(this, '${post.image}')" alt="${post.author.player} image de publication" class="w-full myImg rounded-xl border-1 border-gray-700 object-cover h-auto max-h-[500px]" />
               </div>
                 ` : ''}
               

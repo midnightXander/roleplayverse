@@ -1,11 +1,38 @@
-from django.shortcuts import redirect, render
+from django.contrib.auth.models import User,auth
+from django.urls import reverse
+from django.http import HttpResponseRedirect,JsonResponse,Http404
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from users.models import Player
+from .models import *
+from django.db.models import Q
+from users.models import Player,Family,PlayerStat,PlayerNotification,notification_types,rankings,Badge,PlayerBadge
 from users.users_utility import get_player
+import core.models as core_models
+import events.models as events_models
+import events.views as events_views
+import uuid
+from datetime import datetime
+from utility import get_characters,get_refree_questions,_parse_number,_time_since, get_solo_battle_characters, _solo_battle_character
+import json
+from django.views.decorators.csrf import csrf_exempt
 import core.views as core_views
+import users.views as users_views
+import random
+from api.models import PushSubscription
+from api.utility import send_push_notification
+from battles.models import *
+
+
 
 def eligible_to_monetization(player:Player):
-    return False
+    rank = player.rank
+    battles_finished = Battle.objects.filter(status = 'finished').filter(
+        Q(initiator = player) | Q(opponent = player)
+    )
+    battles_refereed = Battle.objects.filter(refree = player)
+    
+    if rank == 'E':
+        return False
 
 
 @login_required
@@ -39,4 +66,6 @@ def requirements(request):
         'player':player,
         'n_notifs': n_notifs,
     })
+
+
 
