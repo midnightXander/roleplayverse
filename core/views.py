@@ -467,6 +467,8 @@ def get_notifications(request):
             'url':notification.url,
             'timestamp': _time_since(notification.date_sent),
             'type':'generic',
+            'image' : notification.img_url,
+            'clicked' : notification.clicked,
         } for notification in notifications
     ]
 
@@ -854,6 +856,27 @@ def notifications(request):
 
                }
     return render(request, "core/notifications.html", context)   
+
+@csrf_exempt
+def mark_notif_as_read(request, notification_id):
+    notification = get_object_or_404(Notification,id = notification_id)
+    notification.clicked = True
+    notification.save()
+
+    return JsonResponse({'status':'success'})
+
+@csrf_exempt
+def mark_all_notifs_as_read(request):
+    player = get_player(request.user)
+    notifications = Notification.objects.filter(target = player).order_by('-date_sent')
+    
+    for notification in notifications:
+
+        notification.clicked = True
+        print(notification.clicked)
+        notification.save()
+
+    return JsonResponse({'status':'success'})
 
 
 

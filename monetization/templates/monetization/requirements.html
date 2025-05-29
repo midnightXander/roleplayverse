@@ -30,11 +30,12 @@
         <h2 class="text-lg font-semibold text-gray-200">📋 Critères d'Éligibilité</h2>
         <ul class="list-disc list-inside text-sm text-gray-300 space-y-2">
             <li>✔️ Avoir un minimum de <span class="text-orange-500 font-bold">500 crédits RP</span>.</li>
-            <!-- <li>✔️ Publier au moins <span class="text-blue-500 font-bold">10 RP</span> par mois.</li> -->
-            <li>✔️ Maintenir un score RP supérieur à <span class="text-green-500 font-bold">750</span>.</li>
+            <li>✔️ Etre au moins roliste de <span class="text-blue-500 font-bold">rang D </span> .</li>
+            <li>✔️ Avoir arbitrer et ou Completer <span class="text-green-500 font-bold">10</span> combats jusqu'a completion.</li>
             <li>✔️ Participer à au moins <span class="text-purple-500 font-bold">3 combats</span> par mois.</li>
             <li>✔️ Respecter les <a href="#" class="text-orange-500 hover:underline">règles de la communauté</a>.</li>
         </ul>
+        
     </div>
 
     <!-- Call to Action -->
@@ -43,10 +44,41 @@
         <p class="text-sm text-gray-400 mb-4">
             Une fois que vous remplissez tous les critères ci-dessus, vous pouvez activer la monétisation depuis votre tableau de bord.
         </p>
-        <button class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg">
-            Vérifier Mon Éligibilité
-        </button>
+        <p class="text-sm text-gray-400 mb-4">
+            <i class="fa-solid fa-exclamation text-yellow-500"></i> Tu peux aussi remporter un Evenement tels que un <span class="font-bold">Tournoi,grand Quizz...</span> pour debloquer directement la monetization.
+        </p>
+
+        <p class="text-sm text-red-500 mb-4">
+            Tu n'es pas encore eligible a la monetization
+        </p>
+
     </div>
+    <!-- Player Monetization Stats -->
+<div class="bg-gray-900 p-4 rounded-xl shadow mt-6">
+    <h2 class="text-lg font-semibold text-gray-200">📊 Vos Statistiques de Monétisation</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+        
+        <div class="bg-gray-800 p-4 rounded-lg shadow">
+            <h3 class="text-sm font-semibold text-purple-500">🔅 Rang</h3>
+            <p class="text-2xl font-bold text-white">{{ player.rank }}</p>
+        </div>
+        <!-- Battles Completed -->
+        <div class="bg-gray-800 p-4 rounded-lg shadow">
+            <h3 class="text-sm font-semibold text-orange-500">⚔️ Combats Terminés</h3>
+            <p class="text-2xl font-bold text-white">{{ battles_completed }}</p>
+        </div>
+        <!-- Battles Refereed -->
+        <div class="bg-gray-800 p-4 rounded-lg shadow">
+            <h3 class="text-sm font-semibold text-green-500">🧑‍⚖️ Combats Arbitrés</h3>
+            <p class="text-2xl font-bold text-white"> {{ battles_refereed }}</p>
+        </div>
+        <!-- RP Credits -->
+        <div class="bg-gray-800 p-4 rounded-lg shadow">
+            <h3 class="text-sm font-semibold text-blue-500">💰 Crédits RP</h3>
+            <p class="text-2xl font-bold text-white">{{player.rp_credits}}</p>
+        </div>
+    </div>
+</div>
 </div>
 
 {% endblock content %}

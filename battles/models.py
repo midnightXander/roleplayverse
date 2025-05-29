@@ -183,6 +183,9 @@ class RefreeingProposal(models.Model):
     def __str__(self):
         return f"{self.player} wants to referee {self.battle}"
 
+
+
+
 class TextPad(models.Model):
     #status = models.CharField(max_length = 20)
     owner = models.ForeignKey(Player, on_delete=models.CASCADE, null=True)
@@ -192,11 +195,28 @@ class TextPad(models.Model):
     battle = models.ForeignKey(Battle, on_delete=models.SET_NULL, null=True)
     refree_comment = models.TextField(blank=True)
     date_validated = models.DateTimeField(default = timezone.now, blank = True)
-    hidden_action = models.TextField(blank=True, default="")  
+    hidden_action = models.TextField(blank=True, default="") 
+    reactors = models.ManyToManyField(Player, through='TextpadReactor', related_name='reactors' ) 
     
     def __str__(self):
         return f"{self.owner}: {self.text[:20]}... in {self.battle}"
 
+class TextpadReactor(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    type = models.CharField(max_length=15, choices=[
+        ('👍', 'Like'),
+        ('👎', 'Unlike'),
+        ('😂','Laugh'),
+        ('👏', 'Clapping'),
+        ('😱', 'Amazed'),
+        
+
+    ])
+    textpad = models.ForeignKey(TextPad, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('player','textpad')
 
     
 #class TextPadComment    

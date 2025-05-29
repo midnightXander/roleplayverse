@@ -24,6 +24,8 @@ urlpatterns = [
     
     path('notifications', views.notifications, name='notifications'),
     path('notifications/all',views.get_notifications, name='all_notifications'),
+    path('notifications/mark_as_read/all',views.mark_all_notifs_as_read, name='mark_notifications_as_read'),
+    path('notifications/mark_as_read/<int:notification_id>',views.mark_notif_as_read, name='mark_notification_as_read'),
     path('battle points',views.battle_points, name="battle_points"),
 
     path('rankings', views.rankings, name = 'rankings'),

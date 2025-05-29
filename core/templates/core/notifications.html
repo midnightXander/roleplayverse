@@ -1,5 +1,5 @@
 {% extends "core/base.html" %}
-
+{% block title %} Notifications | {{player}} {% endblock title %}
 
 {% block content %}
 <style>
@@ -54,9 +54,22 @@
   <h1 class="text-2xl text-orange-500 font-bold">Notifications</h1>
 </header>
 
-<main class="flex-grow container  md:w-full mx-auto px-4 py-8">
+<main class="flex-grow container  md:w-full mx-auto  py-8">
   <div id="p-notifications-container" class="space-y-4 my-2">
-    
+    <!--In page push ads-->
+    <script>
+      (function(cgkk){
+      var d = document,
+          s = d.createElement('script'),
+          l = d.scripts[d.scripts.length - 1];
+      s.settings = cgkk || {};
+      s.src = "\/\/complete-drink.com\/bMXFVns.dtGtlz0oYNWncm\/eeWm\/9Nu\/Z\/UTlRkdPwTYYAz\/OaDKg\/1nOGThYHtcNvjMM-4IOqDRUK5MNCwl";
+      s.async = true;
+      s.referrerPolicy = 'no-referrer-when-downgrade';
+      l.parentNode.insertBefore(s, l);
+      })({})
+      </script>
+
     {% if player_notifications|length > 0 %}
     <!-- <h1 class="text-2xl text-center text-orange-500 font-semibold">Requests and Invites to join <a href="/users/family/{{player.family.id}}" class="text-white font-bold">{{player.family}}</a></h1> -->
     <h1 class="text-2xl text-center text-orange-500 font-semibold">Requests and Invites</h1>
@@ -181,7 +194,8 @@
      {% endfor %}
 </div>
 <h1 class="text-2xl text-center text-orange-500 mb-3 font-semibold">Personal</h1>
-  <div id="notifications-container" class="space-y-4">
+  <button id="" onclick="markAllAsRead()" class="flex flex-end items-center m-4 px-4 py-2 border border-gray-700 rounded-2xl text-sm"><i class="fas fa-check text-green-500 mr-2" ></i> Tous marquer comme lu</button>
+  <div id="notifications-container" class="">
       <!-- Notifications will be dynamically inserted here -->
   </div>
 </main>
@@ -424,10 +438,12 @@ function handleRequest(btn,requestId, action) {
 
 
   function createNotificationCard(notification) {
+    console.log(notification.clicked)
       const card = document.createElement('div');
-      card.className = 'notification-card bg-gray-900 rounded-2xl border border-gray-700 p-4 shadow-md relative';
+      card.className = `notification-card p-2 ${notification.clicked ? '': 'bg-gray-800'}`;
       card.innerHTML = `
-          <a href="${notification.url}" onclick='showOverlay();' class="block px-2">
+          <div class = 'bg-gray-900 rounded-2xl border border-gray-700 p-4 shadow-md relative'>
+          <a href="${notification.url}" onclick='showOverlay();markAsRead(${notification.id});' class="block px-2">
               
               <p class="text-gray-300  mb-2">${notification.content}</p>
               <p class="text-sm text-gray-400">${notification.timestamp}</p>
@@ -440,6 +456,7 @@ function handleRequest(btn,requestId, action) {
                   <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600" onclick="markAsRead(${notification.id})"><i class = 'fas fa-circle-thin mr-2'></i> Mark as read</a>
                   <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-600"  onclick="deleteNotification(${notification.id},'${notification.type}')"><i class = 'fas fa-trash mr-2'></i>Delete</a>
               </div>
+          </div>
           </div>
       `;
       return card;
@@ -525,8 +542,60 @@ function handleRequest(btn,requestId, action) {
   }
 
   function markAsRead(id) {
+
       console.log(`Marking notification ${id} as read`);
+      $.ajax({
+            url: `/notifications/mark_as_read/${id}`,
+            type: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{csrf_token}}' // Include CSRF token in headers
+              },
+              data:{ 
+                csrfmiddlewaretoken : "{{ csrf_token }}",
+
+              },
+              success: function(res){
+                renderNotifications()
+              },
+              complete: function(){
+                
+              },
+              error: function(jqXHR, textstatus, errorThrown){
+                console.log('error', errorThrown)
+                showMyToast('An error occured please try again','error')
+              }
+          })
+
       // Implement your logic here
+  }
+  function markAllAsRead() {
+      console.log(`Marking all notifications as read`);
+      
+      // Implement your logic here
+      $.ajax({
+            url: `/notifications/mark_as_read/all`,
+            type: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{csrf_token}}' // Include CSRF token in headers
+              },
+              data:{ 
+                csrfmiddlewaretoken : "{{ csrf_token }}",
+
+              },
+              beforeSend: function(){$('#loading-overlay').toggleClass('active')},
+              success: function(res){
+                renderNotifications()
+              },
+              complete: function(){
+                $('#loading-overlay').toggleClass('active')
+              },
+              error: function(jqXHR, textstatus, errorThrown){
+                console.log('error', errorThrown)
+                showMyToast('An error occured please try again','error')
+              }
+          })
   }
 
   function deleteNotification(id,type) {

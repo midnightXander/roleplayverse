@@ -25,6 +25,11 @@
     .rule-item button:hover {
         background-color: #e53e3e;
     }
+    .reaction-button.liked {
+        color: #ed8936;
+        animation: heartBeat;
+        animation-duration: 1.5s;
+    }
 </style>
 
 <style>
@@ -505,7 +510,31 @@
         <!-- Battle Textpads -->
         <div id="textPads" class="grid grid-cols-1 lg:grid-cols-1 gap-6">
         </div>
-        
+        <script>
+            (function(llhxsw){
+            var d = document,
+                s = d.createElement('script'),
+                l = d.scripts[d.scripts.length - 1];
+            s.settings = llhxsw || {};
+            s.src = "\/\/complete-drink.com\/b\/X\/VVs.dHGllA0qYgW-cy\/nesm\/9\/u\/ZEUBl\/kkPMTzYSznOMD\/gX1QNKzAgHtmNZjgMA4COcDCU\/3YOKQu";
+            s.async = true;
+            s.referrerPolicy = 'no-referrer-when-downgrade';
+            l.parentNode.insertBefore(s, l);
+            })({})
+            </script>
+
+            <!-- <script>
+                (function(llhxsw){
+                var d = document,
+                    s = d.createElement('script'),
+                    l = d.scripts[d.scripts.length - 1];
+                s.settings = llhxsw || {};
+                s.src = "\/\/complete-drink.com\/b\/X\/VVs.dHGllA0qYgW-cy\/nesm\/9\/u\/ZEUBl\/kkPMTzYSznOMD\/gX1QNKzAgHtmNZjgMA4COcDCU\/3YOKQu";
+                s.async = true;
+                s.referrerPolicy = 'no-referrer-when-downgrade';
+                l.parentNode.insertBefore(s, l);
+                })({})
+                </script> -->
 
         
 
@@ -685,6 +714,41 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
     }
     
     
+    function reactToTextpad(textpadId, reaction,button){
+            const container = button.parentElement
+            
+
+            $.ajax({
+                type: "POST",
+                url: `/battles/textpads/react/${textpadId}`,
+                data: {
+                    reaction : reaction,
+                    csrfmiddlewaretoken: "{{csrf_token}}",
+                },   
+                
+                //dataType: "json",
+                beforeSend: function(){
+                    //$('#loading-overlay').toggleClass('active')
+                    container.classList.add('bg-opacity-50')
+                    button.classList.contains('liked') ? button.classList.remove('liked') : button.classList.add('liked')
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                        console.log(res.reactions)
+                        const reactionsButton = document.getElementById(`textpadReactions-${textpadId}`)
+                        reactionsButton.textContent = `${res.reactions.length} reactions` 
+                    }
+                        
+                },
+                complete: function(){
+                    //$('#loading-overlay').toggleClass('active')
+                    container.classList.remove('bg-opacity-50')
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast("Une erreur s'est produite", 'error')
+                }
+            })
+        }
 
     
     
@@ -977,13 +1041,13 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
 
 
         function createTextpad(textpad){
-            const padContainer = document.createElement('div')
-            padContainer.className = 'p-4 rounded-lg'
-            const header = document.createElement('h3').className = ''
-            const textContainer = document.createElement('div')
-            textContainer.className = 'body bg-gray-800 text-gray-300 p-3 rounded-lg max-h-64 overflow-y-auto'
+            const textpadElement = document.createElement('div')
+            textpadElement.className = 'p-4 rounded-lg'
+            
 
         }
+
+        
 
         function getTextpads(){
             $.ajax({
@@ -1026,50 +1090,71 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
                                     </div>
                                     <div class="text-gray-300 text-sm p-3 flex justify-between">
                                         <span>${textpad.time_since}</span>
-                                        ${textpad.valid ? '<i class="text-green-500 fa-regular fa-circle-check"></i>' : `<div><span class="text-gray-400 mr-2">En evaluation par l'arbitre</span><i class="text-red-500 fa-regular fa-circle-xmark"></i></div>`}
-                                        <!--<span class = '${textpad.valid? 'text-green-500':'text-red-500'} '>${validText}</span>-->
+                                        <div>
+                                        ${textpad.valid ? `<i class="text-green-500 fa-regular fa-circle-check mr-2"></i> <span> validé il ya ${textpad.date_validated}</span>` : `<div><span class="text-gray-400 mr-2">En evaluation par l'arbitre</span><i class="text-red-500 fa-regular fa-circle-xmark"></i></div>`}
+                                        </div>
+                                        
                                     </div>
                                     <div class="text-gray-400 italic text-sm p-3">
                                         <span class="text-gray-500 italic">Action cachée: </span> "${textpad.hidden_action ? textpad.hidden_action : '<span class="italic"></span>'}""
                                     </div> 
                                     <div class="text-gray-400 italic text-sm p-3">
-                                        <span class="text-gray-500 italic">Commentaire de l'arbitre: ${textpad.comment ? textpad.comment : 'Aucun commentaire'}</span> 
-                                    </div>    
+                                        <span class="text-gray-500 body italic">Commentaire de l'arbitre: ${textpad.comment ? textpad.comment : 'Aucun commentaire'}</span> 
+                                    </div>
+
+                                    <div class='flex justify-between p-3' >
+                                        <button id='textpadReactions-${textpad.id}' class="text-orange-500 hover:text-orange-600 focus:outline-none">
+                                            ${textpad.reactions} reactions
+                                        </button>
+                                        <div class="reactions flex space-x-2  mx-2 right-0  bg-gray-800 text-gray-300 text-sm p-2 rounded-lg shadow-lg">
+                                            <button class='hover:scale-105 reaction-button' onclick = "reactToTextpad('${textpad.id}', '👍', this)">👍</button>
+                                            <button class='hover:scale-105 reaction-button' onclick = "reactToTextpad(${textpad.id}, '👎', this)" >👎</button>
+                                            <button class='hover:scale-105 reaction-button' onclick = "reactToTextpad(${textpad.id}, '👏', this)" >👏</button>
+                                            <button class='hover:scale-105 reaction-button' onclick = "reactToTextpad(${textpad.id}, '😂', this)" >😂</button>
+                                            <button class='hover:scale-105 reaction-button' onclick = "reactToTextpad(${textpad.id}, '😱', this)" >😱</button>
+                                        </div>
+                                        
+                                    </div>
+                                    <!--
+                                    <div class="relative">
+                                        <button class="info-icon text-orange-500 hover:text-orange-600 focus:outline-none">
+                                            Reagir
+                                        </button>
+                                        <div class="info-text flex space-x-2  absolute right-0 mt-2 bg-gray-800 text-gray-300 text-sm p-2 rounded-lg shadow-lg w-64">
+                                            <button class='' onclick = "reactToTextpad('${textpad.id}', '👍')">👍</button>
+                                            <button class='' onclick = "reactToTextpad(${textpad.id}, '👎')" >👎</button>
+                                            <button class='' onclick = "reactToTextpad(${textpad.id}, '👏')" >👏</button>
+                                            <button class='' onclick = "reactToTextpad(${textpad.id}, '😂')" >😂</button>
+                                            <button class='' onclick = "reactToTextpad(${textpad.id}, '😱')" >😱</button>
+                                        </div>
+                                    </div>
+                                    -->
 
                                     
                                 </div>
                                 `
                              )
                            
-                             if(i == res.textpads.length - 1){
-                                const adElement = createAdElement('https://frequent-doubt.com/b_3eV/0YP.3cpOvgbOmpVMJVZUDz0k2CMzzBMBzSMHjaQo3VLdTuYDzUMkzZM/yINZDvgE', '/static/images/ads/eat_cells_1.png')
-                                $('#textPads').append(
-                                    `
-                                    <p class = 'text-center text-gray-400' >Jouer a un mini jeux vite fait ?</p>
-                                    `
-                                )
-                                $('#textPads').append(adElement)
-                             }
+                            //  if(i == res.textpads.length - 1){
+                            //     const adElement = createAdElement('https://frequent-doubt.com/b_3eV/0YP.3cpOvgbOmpVMJVZUDz0k2CMzzBMBzSMHjaQo3VLdTuYDzUMkzZM/yINZDvgE', '/static/images/ads/eat_cells_1.png')
+                            //     $('#textPads').append(
+                            //         `
+                            //         <p class = 'text-center text-gray-400' >Jouer a un mini jeux ?</p>
+                            //         `
+                            //     )
+                            //     $('#textPads').append(adElement)
+                            //  }
 
                              $(`#fighterTextpad-${textpad.id}`).append(textpad.text)
+                            //  const react = memeElement.querySelector('.info-icon');
+                            // const infoText = memeElement.querySelector('.info-text');
+
+                            // infoIcon.addEventListener('click', () => {
+                            //     infoText.classList.toggle('hidden');
+                            // });
+                        
                              
-                             $("#battle-room").prepend(`
-                                <div class="${fighterClass} fighter-text">
-                                <h3>->${textpad.character} - <small>${textpad.owner}</small>:</h3>
-                                <p>${textpad.text}</p>
-                                <span>${validText}</span>
-                                </div>
-                                `)
-                            if(textpad.owner == username){
-                                
-                                $("#text-pads").append(
-                                `<p class="my-textpad">${textpad.text} -> ${textpad.owner}</p>`
-                                )
-                            } else{
-                                $("#text-pads").append(
-                                `<p>${textpad.text} -> ${textpad.owner}</p>`
-                                )
-                            }                           
+                                               
                         });
                         document.querySelectorAll('.body').forEach((element)=>{
                     element.innerHTML = linkifyHtml(element.textContent, {

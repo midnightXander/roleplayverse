@@ -12,4 +12,5 @@ admin.site.register(Rule)
 admin.site.register(RefreeTest)
 admin.site.register(JsonTestModel)
 admin.site.register(SoloBattle)
+admin.site.register(Challenge)
 

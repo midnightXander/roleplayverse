@@ -16,6 +16,7 @@ urlpatterns = [
     path('textpads/get/<int:battle_id>',views.get_textpads, name="get_textpads"),
     path('textpads/send/<int:battle_id>',views.send_textpad, name="send_textpad"),
     path('textpads/evaluate/<int:battle_id>',views.evaluate_textpad, name='evaluate_textpad'),
+    path('textpads/react/<int:textpad_id>',views.react_to_textpad, name='react_to_textpad'),
 
     path('declare_winner/<int:battle_id>', views.declare_winner, name = "declare_winner"),
 

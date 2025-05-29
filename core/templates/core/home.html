@@ -21,7 +21,7 @@
     .post:hover,.battle-card:hover {
         transform: translateY(-5px);
     }
-    .like-button.liked, .comment-like-button.liked {
+    .like-button.liked, .comment-like-button.liked, .reaction-button.liked {
         color: #ed8936;
         animation: heartBeat;
         animation-duration: 1.5s;
@@ -930,6 +930,13 @@ $.ajax({
 //     // $(".battles-container").append(card)
 //     return battleElement
 // }
+function showImg(src){
+    var modal = document.getElementById('imgModal');
+    var modalImg = document.getElementById("img01");
+    modal.style.display = "block";
+    modalImg.src = src;
+
+}    
 function createMemeElement(meme) {
     const memeElement = document.createElement('div');
     memeElement.className = 'post bg-gray-900  rounded-xl shadow overflow-hidden';
@@ -949,7 +956,7 @@ function createMemeElement(meme) {
                 </div>
             </div>
         </div>
-        <img src="${meme.image}" onclick = 'showImg("${meme.image}")' alt="Meme Naruto" class="w-full max-h-[500px] object-cover" />
+        <img src="${meme.image}" onclick='showImg("${meme.image}")' alt="Meme Naruto" class="w-full max-h-[500px] object-cover" />
         <div class="px-4 py-3 text-sm text-gray-400 flex justify-between items-center">
             <button class="text-orange-600 hover:underline text-sm">Favoris</button>
             <button class="text-orange-600 hover:underline text-sm">Partager</button>

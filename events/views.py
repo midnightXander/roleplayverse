@@ -473,7 +473,7 @@ def _update_round(battle:Battle):
 
             new_notif  = Notification.objects.create(
                 target = winner,
-                content = f'You are in for the next round in the tournament {battle_tournament.name}',
+                content = f'tu passe au prochain tour dans le tournoi {battle_tournament.name}',
                 url = f'/events/tournaments/{battle_tournament.id}',
             )         
             new_notif.save()

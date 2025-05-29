@@ -935,6 +935,7 @@ def send_textpad(request, battle_id):
     return JsonResponse({'status':'error', 'message':message})        
 
 
+
 def get_textpads(request, battle_id):
     battle = Battle.objects.get(id = battle_id)
     textpads = TextPad.objects.filter(battle = battle)
@@ -951,13 +952,65 @@ def get_textpads(request, battle_id):
             "time_since": core_views._time_since(textpad.date_sent),
             'index': index + 1,
             'comment' : textpad.refree_comment,
-            'date_validated': textpad.date_validated,
+            'date_validated': core_views._time_since(textpad.date_validated) if textpad.date_validated else 'pas encore validé',
             'comment' : textpad.refree_comment,
             'hidden_action' : textpad.hidden_action if player == battle.refree or battle.status == 'finished' else None,
+            'reactions' : textpad.reactors.all().count()
         } for index,textpad in enumerate(textpads)
     ] 
 
     return JsonResponse({"status":"success","textpads":textpads_data})
+
+def _textpad_reactions_data(textpad_reactor:TextpadReactor):
+    return {
+        'date_added' : _time_since(textpad_reactor.date_added),
+        'reaction' : textpad_reactor.type,
+        'player' : textpad_reactor.player.user.username,
+    }
+
+def react_to_textpad(request, textpad_id):
+    textpad = get_object_or_404(TextPad, id = textpad_id)
+    player = get_player(request.user)
+
+    if request.method == 'POST':
+        
+        reaction = request.POST.get('reaction','😂')
+        
+        reactors = textpad.reactors.all()
+
+        if player in reactors:
+            player_reaction = TextpadReactor.objects.get(player = player, textpad = textpad)
+            if reaction == player_reaction.type:
+                textpad.reactors.remove(player)
+            else:
+                player_reaction.type = reaction  
+                player_reaction.save()      
+        else:
+            textpad.reactors.add(player, through_defaults={'type': reaction})
+            new_notif = core_models.Notification.objects.create(
+                    target = textpad.owner,
+                    url = f'/battles/battle_room/{textpad.battle.id}',
+                    content = f"{player} a reagi a ton  pavé, tu dois l'évaluer",
+                    img_url = player.profile_picture.url
+                )
+            new_notif.save()
+            #send push notification to the opponent and the referee
+            send_push_notification(
+                PushSubscription.objects.filter(user = textpad.owner.user).first(),
+                {
+                'title' : f"Nouvelle reaction sur ton pavé",
+                'body' : f"{player} a reagi par '{reaction}' a ton pavé",
+                'url' : f'/battles/battle_room/{textpad.battle.id}',
+                'icon' : player.profile_picture.url,
+                },
+                
+            )
+
+        textpad.save()
+        reactions = [ _textpad_reactions_data(reactor) for reactor in TextpadReactor.objects.filter(textpad = textpad)]
+
+        return JsonResponse({'status':'success', 'reactions': reactions})
+
 
 def rank_index(rank):
         for i in range(len(rankings)):
