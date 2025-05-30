@@ -965,7 +965,7 @@ def get_textpads(request, battle_id):
             'hidden_action' : textpad.hidden_action if player == battle.refree or battle.status == 'finished' else None,
             'reactions' : textpad.reactors.all().count(),
             'comments' : TextPadComment.objects.filter(textpad = textpad).count(),
-            'most_reaction' : textpad.most_made_reaction()['type']
+            'most_reaction' : textpad.most_made_reaction()['type'] if textpad.most_made_reaction() else 'reagir'
 
         } for index,textpad in enumerate(textpads)
     ] 
@@ -998,24 +998,25 @@ def react_to_textpad(request, textpad_id):
                 player_reaction.save()      
         else:
             textpad.reactors.add(player, through_defaults={'type': reaction})
-            new_notif = core_models.Notification.objects.create(
-                    target = textpad.owner,
-                    url = f'/battles/battle_room/{textpad.battle.id}',
-                    content = f"{player} a reagi a ton  pavé",
-                    img_url = player.profile_picture.url
+            if player == textpad.owner:
+                new_notif = core_models.Notification.objects.create(
+                        target = textpad.owner,
+                        url = f'/battles/battle_room/{textpad.battle.id}',
+                        content = f"{player} a reagi a ton  pavé",
+                        img_url = player.profile_picture.url
+                    )
+                new_notif.save()
+                #send push notification to the opponent and the referee
+                send_push_notification(
+                    PushSubscription.objects.filter(user = textpad.owner.user).first(),
+                    {
+                    'title' : f"Nouvelle reaction sur ton pavé",
+                    'body' : f"{player} a reagi par '{reaction}' a ton pavé",
+                    'url' : f'/battles/battle_room/{textpad.battle.id}',
+                    'icon' : player.profile_picture.url,
+                    },
+                    
                 )
-            new_notif.save()
-            #send push notification to the opponent and the referee
-            send_push_notification(
-                PushSubscription.objects.filter(user = textpad.owner.user).first(),
-                {
-                'title' : f"Nouvelle reaction sur ton pavé",
-                'body' : f"{player} a reagi par '{reaction}' a ton pavé",
-                'url' : f'/battles/battle_room/{textpad.battle.id}',
-                'icon' : player.profile_picture.url,
-                },
-                
-            )
 
         textpad.save()
         reactions = [ _textpad_reactions_data(reactor) for reactor in TextpadReactor.objects.filter(textpad = textpad)]
@@ -1083,6 +1084,51 @@ def add_textpad_comment(request, textpad_id):
         comment = TextPadComment.objects.create(
             textpad=textpad, author=author, text=text, parent=parent
         )
+        comment.save()
+
+        if comment.author != textpad.owner:
+            if comment.parent:
+                if comment.parent.author != comment.author:
+                    new_notif = core_models.Notification.objects.create(
+                        target = comment.parent,
+                        url = f'/battles/battle_room/{textpad.battle.id}',
+                        content = f"{comment.author} a repondu a ton commentaire sur un pavé",
+                        img_url = comment.author.profile_picture.url
+                    )
+                    new_notif.save()
+                    #send push notification to the opponent and the referee
+                    send_push_notification(
+                        PushSubscription.objects.filter(user = comment.author.user).first(),
+                        {
+                        'title' : f"Nouvelle reaction sur ton pavé",
+                        'body' : f"{comment.author} a repondu a ton commentaire sur un pavé",
+                        'url' : f'/battles/battle_room/{textpad.battle.id}',
+                        'icon' : comment.author.profile_picture.url,
+                        },
+                        
+                    )
+            else:
+                new_notif = core_models.Notification.objects.create(
+                    target = textpad.owner,
+                    url = f'/battles/battle_room/{textpad.battle.id}',
+                    content = f"{comment.author} a commenté ton pavé dans un combat",
+                    img_url = comment.author.profile_picture.url
+                )
+                new_notif.save()
+                #send push notification to the opponent and the referee
+                send_push_notification(
+                    PushSubscription.objects.filter(user = textpad.owner.user).first(),
+                    {
+                    'title' : f"Nouvelle reaction sur ton pavé",
+                    'body' : f"{comment.author} a repondu a ton commentaire sur un pavé",
+                    'url' : f'/battles/battle_room/{textpad.battle.id}',
+                    'icon' : comment.author.profile_picture.url,
+                    },
+                    
+                )
+
+                
+                
         return JsonResponse({
             "status": "success",
             "comment": _textpad_comment_data(comment)
