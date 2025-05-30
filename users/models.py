@@ -47,7 +47,7 @@ class Family(models.Model):
     profile_picture = models.ImageField(upload_to="families/profile_pics/",
                                         default="default_picture_f.png")
     god_father = models.OneToOneField(User, on_delete=models.CASCADE)
-    description = models.CharField(max_length=100,blank=True)
+    description = models.TextField(blank=True)
     challenge_head = models.ForeignKey(User, null=True,blank=True, on_delete=models.SET_NULL,related_name='challenge_heads')
     points = models.IntegerField(default=0,validators=[
         MinValueValidator(0)
