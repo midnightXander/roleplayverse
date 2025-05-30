@@ -8,3 +8,5 @@ admin.site.register(Notification)
 admin.site.register(SavedPost)
 admin.site.register(Feed)
 admin.site.register(ContentPost)
+admin.site.register(Image)
+

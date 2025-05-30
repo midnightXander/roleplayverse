@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import Player
 from battles.models import Battle
+from moderator.models import Announcement
 import uuid, random
 from django.utils import timezone
 
@@ -104,6 +105,7 @@ class Feed(models.Model):
     posts = models.ManyToManyField(Post,  through='PostFeed')
     battles = models.ManyToManyField(Battle, through='BattleFeed')
     daily_content = models.ManyToManyField(ContentPost, through='ContentFeed')
+    announcements = models.ManyToManyField(Announcement, through='AnnouncementFeed')
 
     def __str__(self):
         return f"{self.player}"
@@ -129,3 +131,17 @@ class ContentFeed(models.Model):
 
     class Meta:
         unique_together = ('content','feed') 
+
+class AnnouncementFeed(models.Model):
+    announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE)
+    feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('announcement','feed')         
+
+class Image(models.Model):
+    image = models.ImageField()
+    date_added = models.DateTimeField(blank=True, auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.image.url}"        

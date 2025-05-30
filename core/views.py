@@ -185,6 +185,7 @@ def home(request):
 
     feed,created = Feed.objects.get_or_create(player = player)
     
+    feed.announcements.clear()
     feed.posts.clear()
     feed.battles.clear()
     feed.daily_content.clear()
@@ -333,6 +334,27 @@ def _daily_content_data(player:Player, content:ContentPost):
 
     }
 
+def _annoucement_data(announcement:Announcement):
+    return {
+            "feed_item": "announcement",
+            "id": announcement.id,
+            # "author":{  
+            #             'id':announcement.author.id,
+            #             "name":announcement.author.user.username,
+            #             'player': str(announcement.author),
+            #             'profile_picture':announcement.author.profile_picture.url,
+            #             'nickname': announcement.author.nickname if announcement.author.nickname else announcement.author.user.username,
+            #             },
+            'title' : announcement.title,
+            'body_full': announcement.content,
+            'body': announcement.content[:200]+'...' if announcement.content and len(announcement.content) > 200 else (announcement.content if announcement.content else '' ),
+            # 'liked': _liked_announcement(player, announcement),
+            # 'likes':_parse_number(announcement.likes,True),
+            'image':announcement.image.url if announcement.image else None,
+            # "comments": get_comments_dict(player,announcement),
+            # "n_comments": _parse_number(len(get_comments(announcement)),True),
+            "time_posted": _time_since(announcement.date_added),
+        }
 
 def get_posts(request):
     player = Player.objects.get(user = request.user)
@@ -353,9 +375,20 @@ def get_posts(request):
                     .annotate(date = F('date_added')),
                     all=True)      
                     .order_by('-date'))
+    
+
+    
 
     #put ongoing battles first before all others
     feed_limit = 10
+
+    # Put the latest annoucement first
+    announcement = Announcement.objects.filter(active = True).order_by('-date_added').first()
+    if announcement:
+        announcement_data = _annoucement_data(announcement)
+        feed_data.append(announcement_data)
+        feed.announcements.add(announcement)  
+
     for feed_item in feed_items:
         try: 
             battle = Battle.objects.get(custom_id = feed_item['custom_id'])    
@@ -447,7 +480,8 @@ def get_posts(request):
     
     
     # print("FEED",feed_data,len(feed_data))
-    #random.shuffle(feed)
+    #feed_data = feed_data[:feed_limit]
+    #feed_data = random.shuffle(feed_data)
 
     #data = serialize('json',posts)
 

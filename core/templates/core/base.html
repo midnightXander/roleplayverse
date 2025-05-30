@@ -46,6 +46,10 @@
         <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/linkifyjs/dist/linkify.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/linkify-html/dist/linkify-html.min.js' %}"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/tailChase.js"></script>
+
+
+
         <script src="{% static 'js/utility.js' %}"  ></script> 
         <script src="{% static 'js/components.js' %}" ></script>
         <script src="{% static 'js/core.js' %}"></script>
@@ -414,8 +418,13 @@ if(Notification?.permission !== 'granted'){
         <!-- loading Overlay  -->
 <div id="loading-overlay" class="loading-overlay">
     <div class="text-center py-4">
-        <i style="font-size: 30pt;" class="fas fa-spinner fa-spin text-orange-500"></i> 
+        <!-- <i style="font-size: 30pt;" class="fas fa-spinner fa-spin text-orange-500"></i>  -->
         <!-- <span>Loading text...</span> -->
+        <l-tail-chase
+        size="40"
+        speed="1.25"
+        color="orange" 
+      ></l-tail-chase>
     </div>
 </div>
 

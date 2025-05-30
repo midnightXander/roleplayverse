@@ -302,7 +302,51 @@
 }
 </style>
 
+<style>
+    .announcement {
+    position: relative;
+    overflow: hidden;
+    /* animation: slideIn 1s ease-in-out; */
+}
 
+.announcement h2 {
+    animation: pulse 2s infinite;
+}
+
+/* .announcement button {
+    animation: bounce 1.5s infinite;
+} */
+
+/* Keyframes for Animations */
+@keyframes slideIn {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+</style>    
 
 
 <!-- Overlay -->
@@ -974,6 +1018,39 @@ function createMemeElement(meme) {
     return memeElement;
 }
 
+function createAnnouncementElement(announcement) {
+    const announcementElement = document.createElement('div');
+    announcementElement.className = 'announcement animate__animated animate__slideInUp bg-gradient-to-r from-orange-500 via-red-500 to-purple-500 text-white rounded-xl shadow-lg overflow-hidden mb-6';
+
+    announcementElement.innerHTML = `
+         <div class="p-6 space-y-4">
+        <h2 class="text-2xl font-bold animate-pulse">📢 ${announcement.title}</h2>
+        <p class="text-sm text-gray-200">${announcement.body}</p>
+        <div class="flex items-center space-x-4">
+            <a href='/' class="bg-white text-orange-500 font-semibold py-2 px-4 rounded-lg hover:bg-gray-100 transition">
+                En savoir plus
+            </a>
+            <span class="bg-black bg-opacity-30 text-xs py-1 px-3 rounded-lg">${announcement.time_posted}</span>
+        </div>
+    </div>
+    <!--
+    <div class="absolute inset-0 opacity-20">
+        <img src="${ announcement.image }" alt="Announcement Banner" class="w-full h-full object-cover">
+    </div>
+    -->
+    `;
+
+    // Add event listener for the question mark icon
+    // const infoIcon = announcementElement.querySelector('.info-icon');
+    // const infoText = announcementElement.querySelector('.info-text');
+
+    // infoIcon.addEventListener('click', () => {
+    //     infoText.classList.toggle('hidden');
+    // });
+
+    return announcementElement;
+}
+
 
 
 // Function to render posts
@@ -1014,7 +1091,11 @@ function renderPosts() {
                 }else if(post.feed_item == 'meme'){
                     const memeElement = createMemeElement(post)
                     postsFeed.appendChild(memeElement)
+                }else if(post.feed_item == 'announcement'){
+                    const announcementElement = createAnnouncementElement(post)
+                    postsFeed.appendChild(announcementElement)
                 }
+
                 
             })
         },

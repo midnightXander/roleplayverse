@@ -198,8 +198,49 @@ class TextPad(models.Model):
     hidden_action = models.TextField(blank=True, default="") 
     reactors = models.ManyToManyField(Player, through='TextpadReactor', related_name='reactors' ) 
     
+    
     def __str__(self):
         return f"{self.owner}: {self.text[:20]}... in {self.battle}"
+    
+    def most_made_reaction(self):
+        # Count the reactions for this TextPad
+        reactions = TextpadReactor.objects.filter(textpad=self).values('type').annotate(count=models.Count('type')).order_by('-count')
+        if reactions:
+            return reactions[0]  # Return the most made reaction
+        return None  # No reactions found
+
+class TextPadComment(models.Model):
+    textpad = models.ForeignKey(TextPad, on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey(Player, on_delete=models.CASCADE)
+    text = models.TextField()
+    parent = models.ForeignKey(
+        'self', on_delete=models.CASCADE, null=True, blank=True, related_name="replies"
+    )  # For replies to comments
+    date_added = models.DateTimeField(auto_now_add=True)
+    reactors = models.ManyToManyField(Player, through = 'TextpadCommentReactor', related_name='textpad_comment_reactors' ) 
+
+    def __str__(self):
+        return f"{self.author}: {self.text[:20]}..."
+
+REACTIONS = [
+        ('👍', 'Like'),
+        ('👎', 'Unlike'),
+        ('😂','Laugh'),
+        ('👏', 'Clapping'),
+        ('😱', 'Amazed'),
+    ]
+
+class TextPadCommentReactor(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+
+    type = models.CharField(max_length=15, choices= REACTIONS)
+    date_added = models.DateTimeField(auto_now_add=True)
+    comment = models.ForeignKey(TextPadComment, on_delete=models.CASCADE)
+    
+
+    class Meta:
+        unique_together = ('player','comment')
+
 
 class TextpadReactor(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
@@ -209,8 +250,6 @@ class TextpadReactor(models.Model):
         ('😂','Laugh'),
         ('👏', 'Clapping'),
         ('😱', 'Amazed'),
-        
-
     ])
     textpad = models.ForeignKey(TextPad, on_delete=models.CASCADE)
     date_added = models.DateTimeField(auto_now_add=True)
@@ -250,6 +289,7 @@ class RefreeTest(models.Model):
     def __str__(self):
         return f"{self.player.user.username} at {self.date_started}"
     
+
 
 
 

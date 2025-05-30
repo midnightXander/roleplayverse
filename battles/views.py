@@ -934,7 +934,15 @@ def send_textpad(request, battle_id):
 
     return JsonResponse({'status':'error', 'message':message})        
 
+def _most_reaction(textpad:TextPad):
+    reactors = textpad.reactors.all()
+    reactions = [
 
+    ]
+    for reactor in reactors:
+        print(reactor.type)
+
+        
 
 def get_textpads(request, battle_id):
     battle = Battle.objects.get(id = battle_id)
@@ -955,7 +963,10 @@ def get_textpads(request, battle_id):
             'date_validated': core_views._time_since(textpad.date_validated) if textpad.date_validated else 'pas encore validé',
             'comment' : textpad.refree_comment,
             'hidden_action' : textpad.hidden_action if player == battle.refree or battle.status == 'finished' else None,
-            'reactions' : textpad.reactors.all().count()
+            'reactions' : textpad.reactors.all().count(),
+            'comments' : TextPadComment.objects.filter(textpad = textpad).count(),
+            'most_reaction' : textpad.most_made_reaction()['type']
+
         } for index,textpad in enumerate(textpads)
     ] 
 
@@ -990,7 +1001,7 @@ def react_to_textpad(request, textpad_id):
             new_notif = core_models.Notification.objects.create(
                     target = textpad.owner,
                     url = f'/battles/battle_room/{textpad.battle.id}',
-                    content = f"{player} a reagi a ton  pavé, tu dois l'évaluer",
+                    content = f"{player} a reagi a ton  pavé",
                     img_url = player.profile_picture.url
                 )
             new_notif.save()
@@ -1010,6 +1021,79 @@ def react_to_textpad(request, textpad_id):
         reactions = [ _textpad_reactions_data(reactor) for reactor in TextpadReactor.objects.filter(textpad = textpad)]
 
         return JsonResponse({'status':'success', 'reactions': reactions})
+
+def _textpad_comment_data(comment:TextPadComment):
+    data:dict = {    
+                "textpad_id" : comment.textpad.id,
+                "id": comment.id,
+                "text": comment.text,
+                'body_full': comment.text,
+                'body': comment.text[:197]+'...' if len(comment.text) > 200 else comment.text,
+                "author": {
+                    'id' : comment.author.id,
+                    "player": str(comment.author),
+                    "username": comment.author.user.username,
+                    'profile_picture' : comment.author.profile_picture.url,
+                },
+                'parent' : {
+                    "id": comment.parent.id,
+                    "author": {
+                        "id": comment.parent.author.id,
+                        "username": comment.parent.author.user.username,
+                        "player": str(comment.parent.author),
+                        "profile_picture": comment.parent.author.profile_picture.url,
+                    },
+                    # "body_full" : comment.text,
+                    # "body": comment.parent.text[:50] + '...' if len(comment.parent.text) > 50 else comment.parent.text,
+                } if comment.parent else None,
+                "timestamp":  _time_since(comment.date_added),
+                'likes' : 0,
+                'replies' : [ _textpad_comment_data(reply) for reply in TextPadComment.objects.filter(parent = comment).order_by("-date_added") ],
+                #'is_reply' : TextPadComment.objects.filter(parent = ).exists()
+            },
+    
+    # print(type(data))
+    # if comment.parent:
+    #     print(type(data))
+        # data["parent"] = {
+        #     "id": comment.parent.id,
+        #     "author": {
+        #         "id": comment.parent.author.id,
+        #         "username": comment.parent.author.user.username,
+        #         "player": str(comment.parent.author),
+        #         "profile_picture": comment.parent.author.profile_picture.url,
+        #     },
+        #     "body_full" : comment.text,
+        #     "body": comment.parent.text[:50] + '...' if len(comment.parent.text) > 50 else comment.parent.text,
+        # }
+    return data    
+    
+
+def add_textpad_comment(request, textpad_id):
+    if request.method == 'POST':
+        textpad = get_object_or_404(TextPad, id=textpad_id)
+        author = get_player(request.user)  # Assuming Player is linked to User
+        text = request.POST.get("body")
+        parent_id = request.POST.get("parent_id")
+
+        parent = None
+        if parent_id:
+            parent = get_object_or_404(TextPadComment, id=parent_id)
+
+        comment = TextPadComment.objects.create(
+            textpad=textpad, author=author, text=text, parent=parent
+        )
+        return JsonResponse({
+            "status": "success",
+            "comment": _textpad_comment_data(comment)
+        })
+
+def get_textpad_comments(request, textpad_id):
+    textpad = get_object_or_404(TextPad, id=textpad_id)
+    comments = TextPadComment.objects.filter(parent=None, textpad = textpad).order_by("-date_added")
+    data = [_textpad_comment_data(comment) for comment in comments]
+    
+    return JsonResponse({ 'status': 'success', 'comments' : data}, safe=False)         
 
 
 def rank_index(rank):
