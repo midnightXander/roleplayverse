@@ -34,12 +34,13 @@ def refer_player(referall_code):
     try:
         player = Player.objects.get(referall_code = referall_code)
         player.battle_points += referall_points
+        player.rp_credits += 10
         player.save()
         send_push_notification(
             PushSubscription.objects.filter(player = player).first(),
             {
                 'title': 'Recompense',
-                'body': f'Tu as gagné {referall_points} de jetons et des credit RP en parrainant un ami!',
+                'body': f'Tu as gagné {referall_points} de jetons et des credits RP en parrainant un ami!',
                 'icon': '/static/images/logo/logo_1.png',
             },
             player.user

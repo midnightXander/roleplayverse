@@ -38,6 +38,7 @@ class Challenge(models.Model):
     target_character = models.CharField(max_length=40, blank=True)
     accepted = models.BooleanField(default=False)
     date_sent = models.DateTimeField(auto_now_add=True)
+    answered = models.BooleanField(default=False)
     
     def __str__(self):
         return f'{self.sender} to {self.target}'

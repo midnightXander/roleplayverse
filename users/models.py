@@ -87,6 +87,15 @@ class Event(models.Model):
     def __str__(self):
         return f'{self.title}'
 
+def rank_index(rank):
+        for i in range(len(rankings)):
+            if rank == rankings[i]:
+                index = i
+        return index
+
+
+    
+
 class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rank = models.CharField(default='E',max_length=3,choices=[
@@ -125,6 +134,25 @@ class Player(models.Model):
     date_points_added = models.DateField(auto_now_add=True)
     last_seen = models.DateTimeField(auto_now=True)
     rp_credits = models.DecimalField(default=0,  max_digits=10, decimal_places=2)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.update_rank()
+
+    def update_rank(self):
+        r_index = rank_index(self.rank)
+        print(r_index)
+        if r_index < len(rankings):
+            if self.progression >= 100:
+                self.rank = rankings[r_index + 1]
+                self.progression = 0
+            if self.progression < 0:
+                self.progression = 0    
+        else:
+            print(f"{self.user.username} is at the max ranking already")        
+        self.save() 
+        
 
     def add_points(self, points:int, monthly_points:bool = False):
         """Adds points(Battle tokens) to the player"""

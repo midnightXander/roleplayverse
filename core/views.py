@@ -864,7 +864,7 @@ def notifications(request):
         Q(target = player)
     ).order_by("-date_sent")
     notifications = Notification.objects.filter(target = player).order_by('-date_sent')
-    challenges = Challenge.objects.filter(target = player).order_by('-date_sent')
+    challenges = Challenge.objects.filter(target = player, answered = False).order_by('-date_sent')
     characters = get_characters()  
     sorted_characters = sorted(characters["playable_characters"], key = lambda item: item["name"]) 
     

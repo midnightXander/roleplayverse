@@ -965,7 +965,7 @@ def get_textpads(request, battle_id):
             'hidden_action' : textpad.hidden_action if player == battle.refree or battle.status == 'finished' else None,
             'reactions' : textpad.reactors.all().count(),
             'comments' : TextPadComment.objects.filter(textpad = textpad).count(),
-            'most_reaction' : textpad.most_made_reaction()['type'] if textpad.most_made_reaction() else 'reagir'
+            'most_reaction' : textpad.most_made_reaction()['type'] if textpad.most_made_reaction() else '👍'
 
         } for index,textpad in enumerate(textpads)
     ] 
@@ -1808,7 +1808,7 @@ def send_challenge(request, target_id):
                 {
                 'title' : f"Tu as été défié",
                 'body' : f"{player} t'as défié pour un combat, tu peux l'accepter ou le refuser",
-                'url' : f'/users/{player.user.username}',
+                'url' : f'/users/challenges/{player.user.username}',
                 'icon' : '/static/images/logo/logo_1.png',
                 },
                 target.user
@@ -1863,7 +1863,7 @@ def answer_challenge(request, challenge_id):
                 new_notif = core_models.Notification.objects.create(
                     target  = challenge.sender,
                     content = f'{player} a accepté le defi, un arbitre doit etre choisi pour debuter le combat',
-                    url = f'/referees',
+                    url = f'/battles/referees',
                 )
                 #send push notification to the sender of the challenge
                 send_push_notification(
@@ -1871,7 +1871,7 @@ def answer_challenge(request, challenge_id):
                     {
                     'title' : f"Ton défi a été accepté",
                     'body' : f"{player} a accepté le défi, un arbitre doit etre choisi pour debuter le combat",
-                    'url' : f'/users/{player.user.username}',
+                    'url' : f'/users/challenges/{challenge.sender.user}',
                     'icon' : '/static/images/logo/logo_1.png',
                     },
                     challenge.sender.user
@@ -1893,6 +1893,7 @@ def answer_challenge(request, challenge_id):
             )
             notif2.save()
             challenge.delete()
+        challenge.answered = True    
     return JsonResponse({'status':'success', 'message':message})
 
 
@@ -1948,6 +1949,7 @@ def _reward_player(player:Player):
     progression_boost = 2
     player.progression = player.progression + progression_boost
     player.save()
+    update_rank(player)
 
     return {'xp' : f'{progression_boost}'}
  
