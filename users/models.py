@@ -135,6 +135,8 @@ class Player(models.Model):
     last_seen = models.DateTimeField(auto_now=True)
     rp_credits = models.DecimalField(default=0,  max_digits=10, decimal_places=2)
 
+    godfather = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

@@ -321,7 +321,7 @@ def _name_suggestion():
 
 def register(request):
     
-    
+    print(request.GET.get('rc'))
     if request.method == "POST":
         username:str = request.POST["username"]
         username = username.strip()
@@ -376,7 +376,7 @@ def register(request):
                 #Reward the referer if there is one
                 referall_code = request.GET.get('rc', None)
                 if referall_code:
-                    refer_player(referall_code)
+                    refer_player(referall_code, new_player)
 
                 return HttpResponseRedirect(reverse("users:player",args=[new_user.username]))   
 

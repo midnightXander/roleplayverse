@@ -30,14 +30,16 @@ def get_country(request):
 
     return country       
 
-def refer_player(referall_code):
+def refer_player(referall_code, new_player:Player = None):
     try:
         player = Player.objects.get(referall_code = referall_code)
         player.battle_points += referall_points
         player.rp_credits += 10
+        new_player.godfather = player
+        new_player.save()
         player.save()
         send_push_notification(
-            PushSubscription.objects.filter(player = player).first(),
+            PushSubscription.objects.filter(player = player.user).first(),
             {
                 'title': 'Recompense',
                 'body': f'Tu as gagné {referall_points} de jetons et des credits RP en parrainant un ami!',

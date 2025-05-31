@@ -250,7 +250,7 @@
                         <div class="optionsMenu absolute right-0 mt-2 w-36 border border-gray-700 bg-gray-900 bg-opacity-80 rounded-xl shadow-lg z-10 hidden" id="">
                             <ul class="py-1">
                                 <li>
-                                    <a  onclick = 'addReply("${message.id}", "${message.content}")' class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
+                                    <a  onclick = 'addReply("${message.id}", \`${message.content}\`)' class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
                                         <i class="fas fa-reply mr-2"></i> repondre
                                     </a>
                                 </li>
@@ -302,7 +302,7 @@
                         <div class="optionsMenu absolute right-0 mt-2 w-36 bg-gray-900 bg-opacity-80 rounded-xl border border-gray-700 shadow-lg z-10 hidden" id="">
                             <ul class="py-1">
                                 <li>
-                                    <a onclick='addReply("${message.id}", "${message.content}")' class="block cursor-pointer px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
+                                    <a onclick='addReply("${message.id}", \`${message.content}\`)' class="block cursor-pointer px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
                                         <i class="fas fa-reply mr-2"></i> Répondre
                                     </a>
                                 </li>
@@ -384,7 +384,7 @@
                                 <div class="optionsMenu absolute right-0 mt-2 w-48 bg-gray-900 bg-opacity-80 rounded-xl border border-gray-700 shadow-lg z-10 hidden" id="">
                                     <ul class="py-1">
                                         <li>
-                                            <a onclick='addReply("${message.id}", "${message.content ? message.content :'Photo' }")' class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
+                                            <a onclick='addReply("${message.id}", \`${message.content ? message.content :'Photo' }\`)' class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
                                                 <i class="fas fa-reply mr-2"></i> Repondre
                                             </a>
                                         </li>
