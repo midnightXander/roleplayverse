@@ -52,7 +52,7 @@
 
 
 <div id="chatHeader" class="border-b-2 border-b-orange-500 p-3 flex items-center">
-    <a href="{% url 'chat:all' %}">
+    <a onclick="showOverlay()" href="{% url 'chat:all' %}">
         <i id="backArrow" class="fas fa-angle-left mr-2 text-xl hidden"></i>
     </a>
     <img src="{{player.family.profile_picture.url}}" alt="familie's profile picture" class="w-10 h-10 rounded-full mr-3">
@@ -179,14 +179,14 @@
                         ${message.parent ? `
                         <div onclick="scrollToMessage('${message.parent.id}')" class="cursor-pointer bg-gray-800 text-gray-400 text-sm p-2 rounded-lg mb-2">
                             <p>Réponse à: <strong>${message.parent.sender.username}</strong></p>
-                            <p>${message.parent.content? String(message.parent.content).slice(0,10) : 'photo'}</p>
+                            <p>${message.parent.content? String(message.parent.content).slice(0,50) : 'photo'}</p>
                         </div>
                         ` : ''}
                         <p class="body text-gray-300 mt-1 bg-gray-900 border border-gray-700 p-3 min-w-32  rounded-tl-xl rounded-br-xl rounded-bl-xl inline-block">${message.content}</p>
                         
                     </div>
                     <a onclick='showOverlay()' href = '/users/${message.sender.username}'>
-                        <img src="${message.sender.profile_picture}" alt="${message.sender.username}" class="w-8 h-8 rounded-full ml-3">
+                        <img src="${message.sender.profile_picture}" alt="${message.sender.username}" class="min-w-8 h-8 rounded-full ml-3">
                     </a>
                     
                 </div>
@@ -198,7 +198,7 @@
                         <div class="optionsMenu absolute left-0 mt-2 mr-2 w-36 bg-opacity-80 bg-gray-900 border border-gray-700 rounded-xl shadow-lg z-10 hidden" id="">
                             <ul class="py-1">
                                 <li>
-                                    <a onclick='addReply("${message.id}", \`${message.content ? message.content :'Photo' }\`)' class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
+                                    <a data-message-content = "${message.content ? message.content :'Photo' }" onclick='addReply(this,"${message.id}", "")' class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
                                         <i class="fas fa-reply mr-2"></i> Repondre
                                     </a>
                                 </li>
@@ -240,7 +240,7 @@
                 <div class="flex items-start mb-2">
                     
                     <a onclick='showOverlay()' href = '/users/${message.sender.username}'>
-                     <img src="${message.sender.profile_picture}" alt="${message.sender.player}" class="w-8 h-8 rounded-full mr-3">
+                     <img src="${message.sender.profile_picture}" alt="${message.sender.player}" class="min-w-8 h-8 rounded-full mr-3">
                     </a>
                    
                     <div class="flex-grow">
@@ -252,7 +252,7 @@
                         ${message.parent ? `
                         <div onclick="scrollToMessage('${message.parent.id}')" class="cursor-pointer bg-gray-800 text-gray-400 text-sm p-2 rounded-lg mb-2">
                             <p>Réponse à: <strong>${message.parent.sender.username}</strong></p>
-                            <p>${message.parent.content? String(message.parent.content).slice(0,10) : 'photo'}</p>
+                            <p>${message.parent.content? String(message.parent.content).slice(0,50) : 'photo'}</p>
                         </div>
                         ` : ''}
                         <p class="body text-white mt-1 bg-orange-600 w-full p-3 min-w-32  rounded-tr-xl rounded-br-xl rounded-bl-xl inline-block">${message.content}</p>
@@ -271,7 +271,7 @@
                         <div class="optionsMenu absolute right-0 mt-2 w-36 bg-gray-900 border border-gray-700 rounded-xl shadow-lg z-10 hidden" id="">
                             <ul class="py-1">
                                 <li>
-                                    <a onclick='addReply("${message.id}", \`${message.content ? message.content :'Photo' }\`)' class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
+                                    <a data-message-content = "${message.content ? message.content :'Photo' }" onclick='addReply(this,"${message.id}", "")' class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
                                         <i class="fas fa-reply mr-2"></i> Repondre
                                     </a>
                                 </li>
@@ -338,7 +338,7 @@
                                     ${message.parent ? `
                                 <div onclick="scrollToMessage('${message.parent.id}')" class="cursor-pointer bg-gray-800 text-gray-400 text-sm p-2 rounded-lg mb-2">
                                     <p>Réponse à: <strong>${message.parent.sender.username}</strong></p>
-                                    <p>${message.parent.content? String(message.parent.content).slice(0,10) : 'photo'}</p>
+                                    <p>${message.parent.content? String(message.parent.content).slice(0,50) : 'photo'}</p>
                                 </div>
                                 ` : ''}
                                     <img src="${message.image}" alt="Message image" class="myImg w-60 rounded-lg">
@@ -347,14 +347,14 @@
                                 </div>    
                                 ` : `
                                  <a href = '/users/${message.sender.username}'>
-                                <img src="${message.sender.profile_picture}" alt="${message.sender.player}" class="w-8 h-8 rounded-full mr-3">
+                                <img src="${message.sender.profile_picture}" alt="${message.sender.player}" class="min-w-8 h-8 rounded-full mr-3">
                                 </a>
                                 <div>
                                 <a class='font-semibold text-orange-600' href = '/users/${message.sender.username}'>${message.sender.username}</a>
                                 ${message.parent ? `
                                 <div onclick="scrollToMessage('${message.parent.id}')" class="cursor-pointer bg-gray-800 text-gray-400 text-sm p-2 rounded-lg mb-2">
                                     <p>Réponse à: <strong>${message.parent.sender.username}</strong></p>
-                                    <p>${message.parent.content? String(message.parent.content).slice(0,10) : 'photo'}</p>
+                                    <p>${message.parent.content? String(message.parent.content).slice(0,50) : 'photo'}</p>
                                 </div>
                                 ` : ''}
                                 <img src="${message.image}" alt="Message image" class="myImg w-60 rounded-lg">
@@ -370,7 +370,7 @@
                                     <div class="optionsMenu absolute right-0 mt-2 w-36 bg-opacity-80 bg-gray-900 border border-gray-700 rounded-xl shadow-lg z-10 hidden" id="">
                                         <ul class="py-1">
                                             <li>
-                                                <a onclick='addReply("${message.id}", \`$${message.content ? message.content :'Photo' }\`)' class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
+                                                <a data-message-content = "${message.content ? message.content :'Photo' }" onclick='addReply(this,"${message.id}", "")' class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
                                                     <i class="fas fa-reply mr-2"></i> Repondre
                                                 </a>
                                             </li>

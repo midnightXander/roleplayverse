@@ -289,10 +289,12 @@
         let replyToMessageId = null;
 
         // Function to handle "Reply to message" button click
-        function addReply(messageId, messageContent) {
+        function addReply(element, messageId, messageContent2) {
             replyToMessageId = messageId; // Store the message ID
-            replyText.textContent = `Répondre à: "${messageContent}"`; // Set the reply text
+            const messageContent = element.getAttribute('data-message-content');
+            replyText.textContent = `Répondre à: "${String(messageContent).slice(0,50)}"`; // Set the reply text
             replyContainer.classList.remove('hidden'); // Show the reply container
+
         }
 
         // Function to cancel the reply
