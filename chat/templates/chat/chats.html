@@ -290,6 +290,7 @@
 
         // Function to handle "Reply to message" button click
         function addReply(element, messageId, messageContent2) {
+            console.log("clicked")
             replyToMessageId = messageId; // Store the message ID
             const messageContent = element.getAttribute('data-message-content');
             replyText.textContent = `Répondre à: "${String(messageContent).slice(0,50)}"`; // Set the reply text
