@@ -138,7 +138,7 @@ class Player(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.update_rank()
+        # self.update_rank()
 
     def update_rank(self):
         r_index = rank_index(self.rank)

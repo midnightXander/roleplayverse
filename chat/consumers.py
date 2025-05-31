@@ -17,13 +17,12 @@ from api.utility import send_push_notification
 
 class PrivateChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
-    def create_message(self,sender_name,receiver_name,content,image_data=None,image_name=None):
+    def create_message(self,sender_name,receiver_name,content,image_data=None,image_name=None, parent_id = None):
         sender_user = User.objects.get(username = sender_name)
         sender = Player.objects.get(user = sender_user)
 
         receiver_user = User.objects.get(username = receiver_name)
         receiver = Player.objects.get(user = receiver_user)
-
 
         new_msg = Message.objects.create(
                 sender = sender,
@@ -35,6 +34,16 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
             
             new_msg.image.save(image_name, ContentFile(image_data))
             new_msg.save()
+
+        if parent_id:
+            try:
+                parent = Message.objects.get(id = parent_id)
+                new_msg.parent = parent
+                new_msg.save()
+            except Exception as e:
+                print("error setting reply")
+
+
         try:
             #chat = Chat.objects.get(
             #        Q(initiator = sender) | Q(initiator = receiver) &
@@ -135,6 +144,7 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
         fileName = text_data_json.get('fileName')
         file_data = None
         available_file_name = None
+        parent_message_id = text_data_json.get("reply_to")
         print("message receiver: ",receiver_name)
         # print("file data:",base64_file, fileName)
 
@@ -145,7 +155,7 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
             available_file_name = default_storage.get_available_name(valid_file_name)
 
         
-        messageObj = await self.create_message(sender_name,receiver_name,message, file_data, available_file_name)
+        messageObj = await self.create_message(sender_name,receiver_name,message, file_data, available_file_name, parent_message_id)
         
         #await self.create_message(sender_name,receiver_name,message)
 

@@ -128,6 +128,27 @@ def mark_as_read(message:Message):
     message.read = True
     message.save()
 
+def _message_data(message:Message):
+    return{
+        "id":message.id,
+        "sender":{
+            'username':message.sender.user.username,
+            'profile_picture': message.sender.profile_picture.url
+            },
+        "receiver":{
+            'username':message.receiver.user.username,
+            'profile_picture': message.sender.profile_picture.url,
+            },
+        "parent":_message_data(message.parent) if message.parent else None,    
+        "content":decrypt_message(message.content),
+        'image': message.image.url if message.image else None, 
+        'date_sent': _date_time(message.date_sent),
+        'read': message.read,
+        'day': message.date_sent.strftime("%A"),
+        'date': message.date_sent.strftime("%d %b %Y"),
+        
+        }
+
 def get_messages(request,receiver_id):    
     #receiver_user = User.objects.get(username = receiver_name)
     receiver = Player.objects.get(id=receiver_id)
@@ -143,24 +164,7 @@ def get_messages(request,receiver_id):
             msg.mark_as_read()
             #mark_as_read(msg)
 
-    messages_data = [{
-        "id":message.id,
-        "sender":{
-            'username':message.sender.user.username,
-            'profile_picture': message.sender.profile_picture.url
-            },
-        "receiver":{
-            'username':message.receiver.user.username,
-            'profile_picture': message.sender.profile_picture.url,
-            },
-        "content":decrypt_message(message.content),
-        'image': message.image.url if message.image else None, 
-        'date_sent': _date_time(message.date_sent),
-        'read': message.read,
-        'day': message.date_sent.strftime("%A"),
-        'date': message.date_sent.strftime("%d %b %Y"),
-        
-        }
+    messages_data = [ _message_data(message)
         for message in messages]
     return JsonResponse({"message":"success","messages":messages_data})
 

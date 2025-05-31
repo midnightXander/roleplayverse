@@ -69,6 +69,18 @@
         background-color: #374151;
         border-radius: 4px;
     }
+    .highlight {
+    animation: highlight-animation 2s ease-in-out;
+    }
+
+    @keyframes highlight-animation {
+        0% {
+            background-color: rgba(11, 10, 27, 0.5); /* Orange highlight */
+        }
+        100% {
+            background-color: transparent;
+        }
+    }
 </style>
 
 <main class="chats-main  bg-gray-950 rounded-lg p-6 md:mt-16 text-gray-300 flex-grow flex flex-col md:flex-row overflow-hidden" >
@@ -264,7 +276,48 @@
 </script>
 
 <script>
+ // Reference to the reply container and its elements
+ const replyContainer = document.getElementById('replyContainer');
+        const replyText = document.getElementById('replyText');
+        const cancelReplyButton = document.getElementById('cancelReplyButton');
 
+        // Variable to store the ID of the message being replied to
+        let replyToMessageId = null;
+
+        // Function to handle "Reply to message" button click
+        function addReply(messageId, messageContent) {
+            replyToMessageId = messageId; // Store the message ID
+            replyText.textContent = `Répondre à: "${messageContent}"`; // Set the reply text
+            replyContainer.classList.remove('hidden'); // Show the reply container
+        }
+
+        // Function to cancel the reply
+        cancelReplyButton.addEventListener('click', () => {
+            
+            replyToMessageId = null; // Clear the reply message ID
+            replyContainer.classList.add('hidden'); // Hide the reply container
+            replyText.textContent = ''; // Clear the reply text
+        });
+
+        function scrollToMessage(messageId){
+            // Find the message element by its ID
+            const messageElement = document.getElementById(`message-${messageId}`);
+            if (messageElement) {
+                // Scroll to the message element
+                messageElement.scrollIntoView({
+                    behavior: 'smooth', // Smooth scrolling
+                    block: 'center',    // Center the message in the viewport
+                });
+
+                // Optionally, highlight the message for better visibility
+                messageElement.classList.add('highlight');
+                setTimeout(() => {
+                    messageElement.classList.remove('highlight');
+                }, 2000); // Remove the highlight after 2 seconds
+            } else {
+                console.error(`Message with ID ${messageId} not found.`);
+            }
+        }
 
 function messageOptionsListener(){
         

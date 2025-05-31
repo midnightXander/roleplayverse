@@ -35,6 +35,7 @@ class Message(models.Model):
     chat = models.ForeignKey(Chat,on_delete=models.CASCADE,null=True)
     read = models.BooleanField(default=False)
     image = models.ImageField(blank=True,null=True,upload_to = upload_private_message_to)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     
     def mark_as_read(self):
         self.read = True
@@ -51,6 +52,7 @@ class FamilyMessage(models.Model):
     image = models.ImageField(blank=True,null=True, upload_to = upload_family_message_to)
     date_sent = models.DateTimeField(auto_now_add = True)
     readers = models.ManyToManyField(Player, through=('FamilyMessageReader'), related_name = 'readers')
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     
     def __str__(self):
         return self.sender.user.username + " in " + self.family.name
