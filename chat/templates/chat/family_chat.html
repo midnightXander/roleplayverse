@@ -100,6 +100,12 @@
     <div class="message-loader top-0 absolute hidden">
         <i class="fas fa-spinner fa-spin text-orange-500"></i>
     </div>
+    <div id="replyContainer" class="hidden bg-gray-800 text-gray-300 p-2 rounded-lg mb-2 flex items-center justify-between">
+        <div id="replyText" class="text-sm"></div>
+        <button id="cancelReplyButton" class="text-red-500 hover:text-red-400 focus:outline-none">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
     <form id="messageForm" class="flex shadow-md border border-gray-700  rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-900">
         
         <button type="button" id="emojiButton" class="px-4 py-2 text-gray-400 hover:text-white  focus:outline-none">
@@ -160,6 +166,7 @@
     function createUserMessage(message){
         const messageElement = document.createElement('div')
         messageElement.className = 'message  flex-grow container  p-4 flex justify-end'
+        messageElement.id = `message-${message.id}`
         messageElement.innerHTML = `
         <div class="rounded-lg  max-w-2xl min-w-32">
             <div class="relative group">
@@ -169,11 +176,17 @@
                             <span class="text-xs text-gray-300 mx-2">${message.date_sent}</span>
                             <h3 class="font-semibold text-lg text-indigo-500">You</h3>
                         </div>
+                        ${message.parent ? `
+                        <div onclick="scrollToMessage('${message.parent.id}')" class="cursor-pointer bg-gray-800 text-gray-400 text-sm p-2 rounded-lg mb-2">
+                            <p>Réponse à: <strong>${message.parent.sender.username}</strong></p>
+                            <p>${message.parent.content? message.parent.content : 'photo'}</p>
+                        </div>
+                        ` : ''}
                         <p class="body text-gray-300 mt-1 bg-gray-900 border border-gray-700 p-3 min-w-32  rounded-tl-xl rounded-br-xl rounded-bl-xl inline-block">${message.content}</p>
                         
                     </div>
-                    <a href = '/users/${message.sender.username}'>
-                        <img src="${message.sender.profile_picture}" alt="${message.sender.username}" class="w-10 h-10 rounded-full ml-3">
+                    <a onclick='showOverlay()' href = '/users/${message.sender.username}'>
+                        <img src="${message.sender.profile_picture}" alt="${message.sender.username}" class="w-8 h-8 rounded-full ml-3">
                     </a>
                     
                 </div>
@@ -184,6 +197,11 @@
                         </button>
                         <div class="optionsMenu absolute left-0 mt-2 mr-2 w-36 bg-opacity-80 bg-gray-900 border border-gray-700 rounded-xl shadow-lg z-10 hidden" id="">
                             <ul class="py-1">
+                                <li>
+                                    <a onclick='addReply("${message.id}", "${message.content ? message.content :'Photo' }")' class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
+                                        <i class="fas fa-reply mr-2"></i> Repondre
+                                    </a>
+                                </li>
                                 <li>
                                     <a href="#" onclick = 'copyLink("${message.content}")' class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
                                         <i class="fas fa-copy mr-2"></i> Copier
@@ -216,12 +234,13 @@
     function createFamilyMessage(message){
         const messageElement = document.createElement('div')
         messageElement.className = 'rounded-lg p-4 mb-4 max-w-2xl min-w-32'
+        messageElement.id = `message-${message.id}`
         messageElement.innerHTML = `
         <div class="relative group ">
                 <div class="flex items-start mb-2">
                     
-                    <a href = '/users/${message.sender.username}'>
-                     <img src="${message.sender.profile_picture}" alt="${message.sender.player}" class="w-10 h-10 rounded-full mr-3">
+                    <a onclick='showOverlay()' href = '/users/${message.sender.username}'>
+                     <img src="${message.sender.profile_picture}" alt="${message.sender.player}" class="w-8 h-8 rounded-full mr-3">
                     </a>
                    
                     <div class="flex-grow">
@@ -230,6 +249,12 @@
                             <a href = '/users/${message.sender.username}' class="font-semibold text-orange-600">${message.sender.username}</a>
                             
                         </div>
+                        ${message.parent ? `
+                        <div onclick="scrollToMessage('${message.parent.id}')" class="cursor-pointer bg-gray-800 text-gray-400 text-sm p-2 rounded-lg mb-2">
+                            <p>Réponse à: <strong>${message.parent.sender.username}</strong></p>
+                            <p>${message.parent.content? message.parent.content : 'photo'}</p>
+                        </div>
+                        ` : ''}
                         <p class="body text-white mt-1 bg-orange-600 w-full p-3 min-w-32  rounded-tr-xl rounded-br-xl rounded-bl-xl inline-block">${message.content}</p>
                         
                         <br>
@@ -245,6 +270,11 @@
                         </button>
                         <div class="optionsMenu absolute right-0 mt-2 w-36 bg-gray-900 border border-gray-700 rounded-xl shadow-lg z-10 hidden" id="">
                             <ul class="py-1">
+                                <li>
+                                    <a onclick='addReply("${message.id}", "${message.content ? message.content :'Photo' }")' class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
+                                        <i class="fas fa-reply mr-2"></i> Repondre
+                                    </a>
+                                </li>
                                 <li>
                                     <a href="#" onclick="copyLink('${message.content}')" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
                                         <i class="fas fa-copy mr-2"></i> Copier
@@ -282,6 +312,7 @@
                success: function(res){
                    if(res.message === 'success'){
                        const messages = res.messages
+                       
                        if(messages.length > 0){
 
                         messagesContainer.empty()
@@ -300,20 +331,32 @@
                             if(message.image){
                                 messagesContainer.append(
                                     `
-                            <div class="relative group flex mb-4 p-4 rounded-lg ${sender_name === message.sender.username ? 'justify-end' : 'justify-start'} ">
+                            <div id ='message-${message.id}' class="relative group flex mb-4 p-4 rounded-lg ${sender_name === message.sender.username ? 'justify-end' : 'justify-start'} ">
                                 
                                 ${sender_name === message.sender.username ? `
                                 <div>
+                                    ${message.parent ? `
+                                <div onclick="scrollToMessage('${message.parent.id}')" class="cursor-pointer bg-gray-800 text-gray-400 text-sm p-2 rounded-lg mb-2">
+                                    <p>Réponse à: <strong>${message.parent.sender.username}</strong></p>
+                                    <p>${message.parent.content? message.parent.content : 'photo'}</p>
+                                </div>
+                                ` : ''}
                                     <img src="${message.image}" alt="Message image" class="myImg w-60 rounded-lg">
                                 <p class="text-gray-300">${message.content? message.content : ''}</p><br>
                                 <p class="text-xs text-gray-300 mt-1">${message.date_sent}</p>
                                 </div>    
                                 ` : `
                                  <a href = '/users/${message.sender.username}'>
-                                <img src="${message.sender.profile_picture}" alt="${message.sender.player}" class="w-10 h-10 rounded-full mr-3">
+                                <img src="${message.sender.profile_picture}" alt="${message.sender.player}" class="w-8 h-8 rounded-full mr-3">
                                 </a>
                                 <div>
                                 <a class='font-semibold text-orange-600' href = '/users/${message.sender.username}'>${message.sender.username}</a>
+                                ${message.parent ? `
+                                <div onclick="scrollToMessage('${message.parent.id}')" class="cursor-pointer bg-gray-800 text-gray-400 text-sm p-2 rounded-lg mb-2">
+                                    <p>Réponse à: <strong>${message.parent.sender.username}</strong></p>
+                                    <p>${message.parent.content? message.parent.content : 'photo'}</p>
+                                </div>
+                                ` : ''}
                                 <img src="${message.image}" alt="Message image" class="myImg w-60 rounded-lg">
                                 <p class="text-gray-100">${message.content? message.content : ''}</p><br>
                                 <p class="text-xs text-gray-300 mt-1">${message.date_sent}</p>
@@ -327,17 +370,16 @@
                                     <div class="optionsMenu absolute right-0 mt-2 w-36 bg-opacity-80 bg-gray-900 border border-gray-700 rounded-xl shadow-lg z-10 hidden" id="">
                                         <ul class="py-1">
                                             <li>
+                                                <a onclick='addReply("${message.id}", "${message.content ? message.content :'Photo' }")' class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
+                                                    <i class="fas fa-reply mr-2"></i> Repondre
+                                                </a>
+                                            </li>
+                                            <li>
                                                 <a href="#" onclick = 'copyLink("${message.content}")' class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
                                                     <i class="fas fa-copy mr-2"></i> Copy
                                                 </a>
                                             </li>
-                                            <!--
-                                            <li>
-                                                <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
-                                                    <i class="fas fa-reply mr-2"></i> Reply
-                                                </a>
-                                            </li>
-                                            -->
+                                            
                                             ${sender_name === message.sender.username ? `
                                             <li>
                                                 <a href="#" onclick='deletePrivateMessage(this,"${message.id}")' class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-600 hover:text-red-300">
@@ -460,6 +502,9 @@
                 message: content,
                 sender: sender_name,
             }
+        if (replyToMessageId) {
+            data.reply_to = replyToMessageId; // Include the reply message ID
+        }        
         const isImage = file && file.type.startsWith('image/')
         
         if(isImage){
@@ -483,8 +528,11 @@
         if (content || isImage) {
             //send_message(content)
             messageInput[0].value = '';
-            console.log(data)
+            // console.log(data)
             groupChatSocket.send(JSON.stringify(data))
+            replyToMessageId = null; // Clear the reply message ID after sending
+            replyContainer.classList.add('hidden'); // Hide the reply container
+            replyText.textContent = ''; // Clear the reply text
         }else{
             showMyToast('Add content to your message', 'info')
         }
@@ -493,7 +541,7 @@
 
     groupChatSocket.onmessage = function(e){
         const data = JSON.parse(e.data) 
-        console.log(data)
+        // console.log(data)
         get_messages()
     }
     groupChatSocket.onerror = function(e){
@@ -600,6 +648,13 @@
             `<p>${data.message} by <em>${data.sender}</em></p> `
          )*/
         get_messages()
+    }
+
+    groupChatSocket.onerror = function(e){
+        showMyToast('Une erreur est survenue, veuillez recharger la page', 'error')
+    }
+    groupChatSocket.onclose = function(e){
+        showMyToast('Une erreur est survenue, veuillez recharger la page', 'error')
     }
 
 })

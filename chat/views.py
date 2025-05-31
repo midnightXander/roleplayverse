@@ -171,6 +171,31 @@ def get_messages(request,receiver_id):
 def mark_as_reader_family(player,family):
     messages = FamilyMessage.objects.filter(family = family)
 
+def _family_message_data(message:FamilyMessage):
+    return {   "id":message.id,          
+            "sender":{
+                        'username':message.sender.user.username,
+                        'profile_picture': message.sender.profile_picture.url
+                     },
+                      "family":message.family.name,
+                      "content":decrypt_message(message.content),
+                      'image': message.image.url if message.image else None, 
+                      'date_sent': _date_time(message.date_sent),
+                      'day': message.date_sent.strftime("%A"),
+                      'date': message.date_sent.strftime("%d %b %Y"),
+                      'parent' : {
+                          'id': message.parent.id,
+                          "sender":{
+                        'username':message.parent.sender.user.username,
+                        'profile_picture': message.parent.sender.profile_picture.url
+                        },
+                        "content":decrypt_message(message.parent.content),
+                        'image': message.parent.image.url if message.parent.image else None, 
+
+                      } if message.parent else None
+                        
+                      
+                       }
 
 def get_family_messages(request, family_name):
     family = Family.objects.get(name = family_name)
@@ -184,21 +209,8 @@ def get_family_messages(request, family_name):
         if sender not in msg.readers.all():
             msg.readers.add(sender)
 
-    messages_data = [
-        {   "id":message.id,          
-            "sender":{
-                        'username':message.sender.user.username,
-                        'profile_picture': message.sender.profile_picture.url
-                     },
-                      "family":message.family.name,
-                      "content":decrypt_message(message.content),
-                      'image': message.image.url if message.image else None, 
-                      'date_sent': _date_time(message.date_sent),
-                      'day': message.date_sent.strftime("%A"),
-                      'date': message.date_sent.strftime("%d %b %Y"),
-                        
-                      
-                       }for message in messages
+    messages_data = [ _family_message_data(message)
+        for message in messages
     ]
     return JsonResponse({"message":"success","messages":messages_data})
 

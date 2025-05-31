@@ -264,7 +264,7 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
 class GroupChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
-    def create_family_message(self,sender,message,family_name, image_data=None,image_name=None):
+    def create_family_message(self,sender,message,family_name, image_data=None,image_name=None, parent_id = None):
         sender_user = User.objects.get(username = sender)
         player_sender = Player.objects.get(user=sender_user)
         family = Family.objects.get(name = family_name)
@@ -274,6 +274,14 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
             family = family,
             content = encrypt_message(message)
         )
+        if parent_id:
+
+            try:
+                parent = FamilyMessage.objects.get(id = parent_id)
+                new_msg.parent = parent
+                new_msg.save()
+            except Exception as e:
+                print("error setting reply")
         #add the message sender to the list of readers
         new_msg.readers.add(player_sender)
 
@@ -344,6 +352,7 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
         fileName = text_data_json.get('fileName')
         file_data = None
         available_file_name = None
+        parent_message_id = text_data_json.get("reply_to")
 
         #Handle Image Upload
         if base64_file and fileName:
@@ -351,7 +360,7 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
             valid_file_name = get_valid_filename(fileName)
             available_file_name = default_storage.get_available_name(valid_file_name)
         
-        messageObj = await self.create_family_message(sender,message,self.family_name,file_data,available_file_name)
+        messageObj = await self.create_family_message(sender,message,self.family_name,file_data,available_file_name, parent_message_id)
         family = await self.get_family(self.family_name)
 
         await self.channel_layer.group_send(self.group_name,{
