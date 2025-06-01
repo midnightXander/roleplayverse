@@ -842,7 +842,7 @@ function addCommentReply(button,parentId, postId) {
             success: function(res){
                 // commentsCount = res.comment.comments
                 // comment = res.comment
-                console.log(res)
+                
                 //replySection.querySelector('textarea').value = ''
                 $(`#comment-reply-${parentId}`).val('')
 
@@ -890,7 +890,7 @@ function addCommentReply(button,parentId, postId) {
     e.preventDefault()
     //const commentForm = $('.comment-form')
     
-    e.preventDefault()
+    
     const postId = e.target.dataset.postId
     const commentSection = $(e.target).siblings('.comments')
 
