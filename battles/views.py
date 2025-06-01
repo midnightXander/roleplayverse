@@ -415,15 +415,18 @@ def accept_battle(request,request_id):
             core_views.remove_points(player, accept_cost)
             # NOTIFY The head of the family if it is a stake battle
             if b_request.type == 'stake':
-                    god_father_user = player.family.god_father
-                    god_father = Player.objects.get(Player, user = god_father_user)
+                    try:
+                        god_father_user = player.family.god_father
+                        god_father = Player.objects.get(Player, user = god_father_user)
 
-                    notif = core_models.Notification.objects.create(
-                        target = god_father,
-                        url = '/battles',
-                        content = f'{player} A accepté un combat stake pour votre famille',
-                    )
-                    notif.save()
+                        notif = core_models.Notification.objects.create(
+                            target = god_father,
+                            url = '/battles',
+                            content = f'{player} A accepté un combat stake pour votre famille',
+                        )
+                        notif.save()
+                    except Exception as e:
+                        print("An error occured sending notif to a god father in accept_battle view")    
 
             new_notif = core_models.Notification.objects.create(
                 target = b_request.sender,
