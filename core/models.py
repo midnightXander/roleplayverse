@@ -50,7 +50,7 @@ class Comment(models.Model):
     author = models.ForeignKey(Player, on_delete=models.CASCADE)
     body = models.TextField()
     post = models.ForeignKey(Post,on_delete=models.CASCADE)
-    #replies = models.ManyToManyField()
+    parent = models.ForeignKey('self', on_delete = models.CASCADE, blank = True, null = True)
     date_added = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to=f'posts/{author}/comments/',blank=True)
     likes = models.IntegerField(default=0)

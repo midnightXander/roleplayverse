@@ -247,7 +247,8 @@ def battles(request):
     characters = get_characters()
     sorted_characters = sorted(characters["playable_characters"], key = lambda item: item["name"])
     battles = Battle.objects.all().order_by('-date_started')
-    requests = BattleRequest.objects.filter(hidden = False).exclude(sender = player).order_by('-date_sent')
+    #requests = BattleRequest.objects.filter(hidden = False).exclude(sender = player).order_by('-date_sent')
+    requests = BattleRequest.objects.filter(hidden = False).order_by('-date_sent')
 
     #remove requests where 2 battles had already being inititated from 
     for req in requests:
@@ -332,17 +333,21 @@ def create_request(sender:Player, character:str, type:str):
 def request_battle(request):
     if request.method == "POST":
         sender = Player.objects.get(user = request.user)
-        character = request.POST['character']
+        character = request.POST.get('character')
         type = request.POST['type']
         
         #messages.success(request, "request created")
+        if not character:
+            messages.error(request,"Choisi un personnage, clique sur l'image d'un personnage pour le selectionner et envoie ta requete") 
+            return HttpResponseRedirect(reverse("battles:index")) 
+        
         if type == "stake": 
             if sender.battle_points < request_cost:
                 messages.error(request,"Pas assez de Jetons de combat")    
                 
             elif not sender.family:
                 messages.error(request,"Tu dois étre dans une famille pour faire des combats STAKE")    
-                 
+                
             else:    
                 new_request = BattleRequest.objects.create(sender=sender,
                                                         character = character,
@@ -1840,6 +1845,8 @@ def answer_challenge(request, challenge_id):
     if request.method == "POST":
         response = request.POST['response']
         character = request.POST.get('character')
+        challenge.answered = True 
+        challenge.save() 
 
         if response == "accept":
 
@@ -1893,7 +1900,7 @@ def answer_challenge(request, challenge_id):
             )
             notif2.save()
             challenge.delete()
-        challenge.answered = True    
+          
     return JsonResponse({'status':'success', 'message':message})
 
 

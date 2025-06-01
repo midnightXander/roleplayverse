@@ -321,7 +321,7 @@ def _name_suggestion():
 
 def register(request):
     
-    print(request.GET.get('rc'))
+    
     if request.method == "POST":
         username:str = request.POST["username"]
         username = username.strip()

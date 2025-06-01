@@ -71,6 +71,15 @@ function openCommentPopup(postId) {
     })
 }
 
+    function showCommentReplyForm(commentId) {
+    console.log($(`#comment-replies-${commentId}`).siblings('.reply-form').toggleClass('hidden'))
+    //document.getElementById(`replies-${commentId}`).nextSibling('.reply-form').classList.toggle('hidden');
+    }
+    const showCommentReplies = (commentId) => {
+        document.getElementById(`comment-replies-${commentId}`).classList.toggle('hidden')
+    }
+    
+
   function createComment2(comment){
 
     var c_player = {
@@ -109,11 +118,32 @@ function openCommentPopup(postId) {
                             <i class="fa-regular fa-thumbs-up mr-1"></i> 
                             <span class='comment-likes-count'>${comment.likes}</span>
                         </button>
-                        <button class="hover:underline">Répondre</button>
+                        <button onclick = "showCommentReplyForm('${comment.id}')" class="hover:underline">Répondre</button>
                     </div>
-                        <!--
-                        <button class="ml-4 mt-2 text-sm text-gray-600 hover:text-orange-500 dark:text-gray-400">voir 4 reponses</button>
-                        -->
+                       
+                        <button onclick="showCommentReplies('${comment.id}')" class="ml-4 mt-2 text-sm text-gray-600 hover:text-orange-500 dark:text-gray-400">voir ${comment.replies.length} reponses</button>
+                        
+                         <div class='reply-form flex flex-col space-y-2 hidden'>
+                            <textarea id="comment-reply-${comment.id}" class='w-full bg-transparent text-white placeholder-gray-400 border-b border-gray-700 focus:outline-none resize-none' placeholder="Ajouter une reponse..."></textarea>
+                            <button onclick="addCommentReply('${comment.id}', '${comment.post_id}')">Soumettre</button>
+                        </div>
+
+                        <div class='mb-2 max-h-96 overflow-y-auto hidden' id="comment-replies-${comment.id}">
+                        ${comment.replies
+                            .map(
+                                (reply) => `
+                            <div class='text-sm mb-2 flex space-x-2'>
+                                    <img src = '${reply.author.profile_picture}' class='w-8 h-8 rounded-full inline-block' />
+                                    <div>
+                                    <p><a href='/users/${reply.author.username}' onclick='showOverlay()' >${reply.author.username}</a> ${reply.parent ? ` <i class='fas fa-caret-right text-orange-500' ></i> <span class = 'text-gray-400'>${reply.parent.author.player}</span>`: ''} </p>
+                                    <p>${reply.body_full}</p>
+                                    <small class='text-sm text-gray-400'>${reply.timestamp}</small>
+                                    </div>   
+                            </div>
+                        `
+                            )
+                            .join("")}
+                            </div>
                   <div></div>
                 </div>
                

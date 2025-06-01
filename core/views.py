@@ -69,17 +69,27 @@ def get_comments(post):
     return comments
 
 def _get_comment(player:Player,comment:Comment):
-    return  {   
+    return  {
+            'post_id' : comment.post.id,   
             'id': comment.id,
             'author': {
                 'player': str(comment.author),
                 'username': comment.author.user.username,
                 'profile_picture': comment.author.profile_picture.url,
             },
+            'parent' : {
+                    "id": comment.parent.id,
+                    "author": {
+                        "id": comment.parent.author.id,
+                        "username": comment.parent.author.user.username,
+                        "player": str(comment.parent.author),
+                        "profile_picture": comment.parent.author.profile_picture.url,
+                    },
+                } if comment.parent else None,
             'comments': len(Comment.objects.filter(post = comment.post)),
             'liked': _liked_comment(player, comment),
             'likes': _parse_number(len(CommentReaction.objects.filter(comment = comment))),
-            
+            'replies' : [ _get_comment(player, reply) for reply in Comment.objects.filter(parent = comment).order_by("-date_added") ],
             'body_full': comment.body,
             'body': comment.body[:197]+'...' if len(comment.body) > 200 else comment.body,
             'timestamp': _time_since(comment.date_added)  
@@ -92,6 +102,7 @@ def get_comments_dict(player:Player,post:Post):
 
     data = [
         {   
+            'post_id' : comment.post.id,   
             'id': comment.id,
             'author': {
                 'id': comment.author.id ,
@@ -99,10 +110,33 @@ def get_comments_dict(player:Player,post:Post):
                 'username': comment.author.user.username,
                 'profile_picture': comment.author.profile_picture.url,
             },
+            'parent' : {
+                    "id": comment.parent.id,
+                    "author": {
+                        "id": comment.parent.author.id,
+                        "username": comment.parent.author.user.username,
+                        "player": str(comment.parent.author),
+                        "profile_picture": comment.parent.author.profile_picture.url,
+                    },
+                } if comment.parent else None,
             'liked': _liked_comment(player, comment),
             'likes': _parse_number(len(CommentReaction.objects.filter(comment = comment))),
             'body_full': comment.body,
             'body': comment.body[:197]+'...' if len(comment.body) > 200 else comment.body,
+            'replies' : [ {
+                'post_id' : reply.post.id,   
+                'id': reply.id,
+                'author': {
+                    'id': reply.author.id ,
+                    'player': str(reply.author),
+                    'username': reply.author.user.username,
+                    'profile_picture': reply.author.profile_picture.url,
+                },
+                'body_full': reply.body,
+                'body': reply.body[:197]+'...' if len(reply.body) > 200 else reply.body,
+                'timestamp': _time_since(reply.date_added)
+                
+            } for reply in Comment.objects.filter(parent = comment).order_by("-date_added") ],
             'timestamp': _time_since(comment.date_added)  
 
         } for comment in comments
@@ -823,30 +857,55 @@ def create_comment(request,post_id):
         if body != "":
             post  = get_object_or_404(Post, id = post_id)
             player = Player.objects.get(user = request.user)
+            parent_id = request.POST.get("parent_id")
 
-            commentid = len(Comment.objects.all()) + 1
+            parent = None
+            notification_text = f"{player} a commenté votre publication" 
+            if parent_id:
+                parent = get_object_or_404(Comment, id=parent_id)
+                notification_text = f"{player} a repondu ton commentaire sur une publication" 
             new_comment = Comment.objects.create(
-                
                 author = player,
                 post = post,
                 body = body,
+                parent = parent,
             )
+
             
 
             #send a notification to the post author
             if player != post.author:
                 new_notif = Notification.objects.create(
                     target = post.author,
-                    content = f'{player} a commenté votre publication',
+                    content = notification_text,
                     url = f'/posts/{post.id}',
+                    img_url = f"{player.profile_picture.url}"
                 )
                 new_notif.save()
                 #send a push notification to the post author
                 send_push_notification(PushSubscription.objects.filter(user = post.author.user).first(), {
-                    'title': f'{player} a commenté votre publication',
+                    'title': notification_text,
                     'body': f'{new_comment.body[:20]}...',
-                    'icon': '/static/images/logo/logo_1.png'
+                    'icon': f"{player.profile_picture.url}"
                 })
+            if new_comment.parent and new_comment.parent.author != new_comment.author:
+                new_notif = Notification.objects.create(
+                    target = new_comment.parent.author,
+                    content = f"{player} a repondu a ton commentaire sur une publication",
+                    url = f'/posts/{post.id}',
+                    img_url = f"{new_comment.author.profile_picture.url}"
+                )
+                new_notif.save()
+                #send a push notification to the post author
+                send_push_notification(PushSubscription.objects.filter(user = new_comment.parent.author.user).first(), {
+                    'title': f"{new_comment.author} a repondu a ton commentaire sur une publication",
+                    'body': f'{new_comment.body[:20]}...',
+                    'icon': f"{new_comment.author.profile_picture.url}",
+                    'url' : f'/posts/{post.id}',
+                },
+                user = new_comment.parent.author.user
+                )  
+
 
             new_comment.save()
             comment = _get_comment(player, new_comment)

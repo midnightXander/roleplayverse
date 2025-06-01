@@ -102,11 +102,11 @@
 
       <div class="mb-4">
         <label for="character" class="block mb-2">Choisi ton perso:</label>
-        <select id="character" name="character" class="character-select w-full bg-gray-900 text-white p-2 rounded-2xl">
+        <select id="character" name="character" class="character-select w-full border border-orange-500 bg-gray-900 text-white p-2 rounded-2xl">
             <option value="">Choisi to perso</option>
                         {% for character in characters %}
                         {% if player.p_character == character.name %}
-                        <option selected value="{{character.name}}" data-img_link="{{character.images.0}}">
+                        <option  value="{{character.name}}" data-img_link="{{character.images.0}}">
                           {{character.name}}
                         </option>
                         {% else %}
@@ -278,7 +278,7 @@ function answerChallenge(element, challengeId, answer){
                 }
             })
   }else{
-    showMyToast('Please choose a character to accept the challenge')
+    showMyToast('choisi un personnage pour accepter le challenge')
   }
   }else{
     $.ajax({
@@ -444,9 +444,13 @@ function handleRequest(btn,requestId, action) {
       card.innerHTML = `
           <div class = 'bg-gray-900 rounded-2xl border border-gray-700 p-4 shadow-md relative'>
           <a href="${notification.url}" onclick='showOverlay();markAsRead(${notification.id});' class="block px-2">
-              
+              <div class = 'flex space-x-2' >
+                ${notification.image ? `<img src = '${notification.image}' class='w-10 h-10 rounded-full' />` : ''}
+              <div>  
               <p class="text-gray-300  mb-2">${notification.content}</p>
               <p class="text-sm text-gray-400">${notification.timestamp}</p>
+              <div>
+              </div>
           </a>
           <div class="absolute top-2 right-2">
               <button class="text-gray-300 hover:text-white focus:outline-none dropdown-toggle" data-notification-id="${notification.id}">

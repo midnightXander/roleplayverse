@@ -759,10 +759,11 @@ function adClick(url, image){
     e.preventDefault()
     //const commentForm = $('.comment-form')
     
-    e.preventDefault()
+    
     const postId = e.target.dataset.postId
     const commentSection = $('#comments-space')
-
+    const button = $(e.target).find('button')
+    const input = $(e.target).find('input')    
     const body = $(e.target).find('input').val().trim()
     // const body = $(e.target).find('textarea').val().trim()
     if(body){
@@ -775,6 +776,8 @@ function adClick(url, image){
             },
             beforeSend: function(){
                 $('#loading-overlay').toggleClass('active')
+                button.addClass('bg-opacity-50')
+                button[0].setAttribute('disabled', true)
             },
             success: function(res){
                 commentsCount = res.comment.comments
@@ -795,6 +798,8 @@ function adClick(url, image){
 
             },
             complete: function(){
+                button.removeClass('bg-opacity-50')
+                button[0].setAttribute('disabled', false)
                 $('#loading-overlay').toggleClass('active')
                 document.querySelectorAll('.body').forEach((element)=>{
                 element.innerHTML = linkifyHtml(element.textContent, {
@@ -812,6 +817,73 @@ function adClick(url, image){
         showMyToast('please add content', 'info')
     }
  
+}
+
+function addCommentReply(button,parentId, postId) {
+    
+    const text = document.getElementById(`comment-reply-${parentId}`).value;
+    const commentSection = $('#comments-space');
+    const replySection = document.getElementById(`comment-replies-${parentId}`);
+
+    
+
+        $.ajax({
+            url: `/post/comment/new/${postId}`,
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: '{{csrf_token}}',
+                body: text,
+                parent_id : parentId,
+            },
+            beforeSend: function(){
+                $('#loading-overlay').toggleClass('active')
+                button.disabled = true
+            },
+            success: function(res){
+                // commentsCount = res.comment.comments
+                // comment = res.comment
+                console.log(res)
+                //replySection.querySelector('textarea').value = ''
+                $(`#comment-reply-${parentId}`).val('')
+
+                //$(replySection).prepend(createTextpadComment(res.comment[0]))
+                $(replySection).prepend(`
+                    <div class='text-sm flex space-x-2'>
+                        <img src = '${res.comment.author.profile_picture}' class='w-8 h-8 rounded-full inline-block' />
+                        <div>
+                        <p><a href='/users/${res.comment.author.username}' onclick='showOverlay()' >${res.comment.author.username}</a> ${res.comment.parent ? ` <i class='fas fa-caret-right text-orange-500' ></i> <span class = 'text-gray-400'>${res.comment.parent.author.player}</span>`: ''} </p>
+                        <p>${res.comment.body_full}</p>
+                        <small class='text-sm text-gray-400'>${res.comment.timestamp}</small>
+                        </div>   
+                    </div>
+                `)
+                showMyToast('reponse ajouté')
+            //Update the comments count
+            //$(e.target).siblings('.post-infos').find('.comment-count').text(commentsCount)
+
+            //scroll to bottom of the comment section
+            // replySection.animate({
+            //     //scrollTop: commentSection[0].scrollHeight
+            //     scrollTop: 0
+            // },'smooth')
+
+            },
+            complete: function(){
+                button.disabled = false
+                $('#loading-overlay').toggleClass('active')
+                document.querySelectorAll('.body').forEach((element)=>{
+                element.innerHTML = linkifyHtml(element.textContent, {
+                target:"_blank",
+                className: 'link'
+                })
+                })
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                showMyToast('An Error occurred, please try again','error')
+            }
+        })
+       
+    
 }
 
     function sendComment(element, e){

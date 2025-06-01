@@ -49,7 +49,7 @@
 
     <!-- Battle Request Creation -->
     
-    <form id="battleRequestForm" class="bg-gray-900 rounded-2xl shadow-md p-5 space-y-4" method="post" action="{% url 'battles:request' %}">
+    <form onsubmit="showOverlay();console.log('submitted')" id="battleRequestForm" class="bg-gray-900 rounded-2xl shadow-md p-5 space-y-4" method="post" action="{% url 'battles:request' %}">
             {% csrf_token %} 
       <h2 class="text-xl font-semibold">Créer une Réquete de Combat</h2>
 
@@ -63,15 +63,15 @@
 
         <!-- Character Scrollable Selection -->
         <div id="character-list" class="flex relative w-96 h-32 overflow-x-auto gap-4 pb-2">
-            <label class="relative group cursor-pointer shrink-0">
+            <!-- <label class="relative group cursor-pointer shrink-0">
                 <input type="radio" name="character" value="{{characters.0.name}}" class="hidden peer" checked>
                 
                 <img src="{% static 'images/loaders/img-loader.gif' %}" onload = "replacePlaceholder(this,'{{characters.0.images.1}}')" data-name="{{characters.0.name}}" class="rounded-xl border-2 border-transparent peer-checked:border-orange-500 transition w-28 h-28 object-cover" />
                 <div class="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">{{characters.0.name}}</div>
-            </label>
-          {% for character in characters|slice:"2:"  %}
+            </label> -->
+          {% for character in characters  %}
             <label class="relative group cursor-pointer shrink-0">
-            <input type="radio" name="character" value="{{character.name}}" class="hidden peer">
+            <input type="radio" name="character" value="{{character.name}}" class="character-input hidden peer">
             {% if character.images.1 %}
             <img src="{% static 'images/loaders/img-loader.gif' %}" onload ="replacePlaceholder(this,'{{character.images.1}}')" data-name="{{character.name}}" class="rounded-xl border-2 border-transparent peer-checked:border-orange-500 transition w-28 h-28 object-cover" />
             {% else %}
@@ -120,14 +120,14 @@
                     </p>
 
                     <p class="text-gray-400">
-                    Tu peux consulter et voir l'état de tes requètes(RDC) sur ton profile, tes RDC et combats ne sont pas affichés ici
+                    Tu peux consulter et voir l'état de tes requètes(RDC) <a class="text-orange-500" onclick="showOverlay()" href="/users/requests/{{player.user.username}}" >ici</a>
                     </p>
                     {% endif %}            
                 </div>
                 {% endfor %}
 
       <!-- Submit Button -->
-      <button onsubmit="disableSubmitButton(this); showOverlay(); "  class="request-button w-full bg-[#d45822] hover:bg-orange-600 text-white py-2 rounded-xl font-semibold transition">🚀 Envoyer la Requete</button>
+      <button onclick="disableSubmitButton(this); "  class="request-button w-full bg-[#d45822] hover:bg-orange-600 text-white py-2 rounded-xl font-semibold transition">🚀 Envoyer la Requete</button>
     </form>
     <!-- Existing sections remain unchanged -->
   </div>
@@ -200,8 +200,10 @@
                 {% for request in  data.requests %}
                 <div class="battle-card p-4 flex justify-between items-center">
                   <span>avec <span class="text-yellow-500">{{request.character}}</span> — <span class="requests-{{data.sender.id}}-type">{{request.type}}</span></span>
+                  {% if request.sender != player %}
                   <button data-url="{% url 'battles:accept' request.id %}" data-requesttype="{{request.type}}" data-character="{{request.character}}" data-requestsender="{{request.sender}}" 
                    class="accept-button bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded">Accepter</button>
+                   {%endif%}
                 </div>
                 {% endfor %}
         
