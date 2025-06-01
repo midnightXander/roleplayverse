@@ -49,7 +49,7 @@
 
     <!-- Battle Request Creation -->
     
-    <form onsubmit="showOverlay();console.log('submitted')" id="battleRequestForm" class="bg-gray-900 rounded-2xl shadow-md p-5 space-y-4" method="post" action="{% url 'battles:request' %}">
+    <form onsubmit="showOverlay()" id="battleRequestForm" class="bg-gray-900 rounded-2xl shadow-md p-5 space-y-4" method="post" action="{% url 'battles:request' %}">
             {% csrf_token %} 
       <h2 class="text-xl font-semibold">Créer une Réquete de Combat</h2>
 
@@ -127,7 +127,7 @@
                 {% endfor %}
 
       <!-- Submit Button -->
-      <button onclick="disableSubmitButton(this); "  class="request-button w-full bg-[#d45822] hover:bg-orange-600 text-white py-2 rounded-xl font-semibold transition">🚀 Envoyer la Requete</button>
+      <button  class="request-button w-full bg-[#d45822] hover:bg-orange-600 text-white py-2 rounded-xl font-semibold transition">🚀 Envoyer la Requete</button>
     </form>
     <!-- Existing sections remain unchanged -->
   </div>
