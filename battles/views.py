@@ -23,6 +23,7 @@ from api.models import PushSubscription
 from api.utility import send_push_notification
 from .solo_battle import *
 from .solo_battle import _evaluate_actions, _bot_action, _log_actions
+from .solo_battle import _bot_action_minimax
 #manage progressions after a battle
 #manage BP for starting a battle
 #refree quizz
@@ -1980,7 +1981,10 @@ def solo_battle_action(request):
             if act['name'] == action:
                 player_action = act
 
-        bot_action = _bot_action(bot_character, player_action)
+        # bot_action = _bot_action(bot_character, player_action)
+        # print(bot_action.get('name'))
+        bot_action = _bot_action_minimax(player_character, bot_character)
+        #print(bot_action.get('name'))
         new_logs = _log_actions(player_action, bot_action, player_character, bot_character)
         logs = json.loads(battle.log)
         for log in new_logs:

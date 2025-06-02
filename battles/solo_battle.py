@@ -5,6 +5,8 @@ import random
 from datetime import datetime
 
 
+    
+
 def _bot_action(character, player_action:dict):
     SPECIAL_ATTACKS = character.get('jutsus')
     possible_actions = BASIC_ACTIONS + SPECIAL_ATTACKS
@@ -181,7 +183,7 @@ def _evaluate_actions(player_character:dict, bot_character:dict, player_action:d
         bot_character['chakra'] = min(current_chakra, chakra_pool)
     elif bot_action.get('name') == 'Heal':
         current_hp = bot_character.get('hp') + 30
-        bot_character['hp'] = min(current_hp, 100)
+        bot_character['hp'] = min(current_hp, 200)
 
     # elif bot_action.get('name') == 'Defend':
     #     text = f" {bot_character['name']} took a defensive  stance"
@@ -242,3 +244,115 @@ def _evaluate_actions(player_character:dict, bot_character:dict, player_action:d
     #     })
 
     return player_character, bot_character, new_log , winner      
+
+
+
+def evaluate_state(player_character, bot_character):
+    #Example evaluation function
+    # print("State: ",(bot_character['hp'] - player_character['hp']) + (bot_character['chakra'] - player_character['chakra']) )
+    return (bot_character['hp'] - player_character['hp']) * 2 + (bot_character['chakra'] - player_character['chakra']) 
+
+
+def _simulate_action(character, opponent, action, is_bot):
+    attacks = [ jutsu['name'] for jutsu in character['jutsus']] 
+    attacks.append(BASIC_ACTIONS[0]['name'])  # Add the basic attack action
+    # print(attacks)
+    if action['name'] in attacks:
+        # If the action is an attack, calculate damage and apply it to the opponent
+        damage = _damage(action.get('chakra_cost'))
+        opponent['hp'] = max(opponent['hp'] - damage, 0)
+    elif action['name'] == 'Focus':
+        character['chakra'] = min(character['chakra'] + 40, character['chakra_pool'])
+    elif action['name'] == 'Heal':
+        character['hp'] = min(character['hp'] + 30, 200)
+    elif action['name'] == 'Defend':
+        # Reduce damage from opponent's attack
+        pass
+    elif action['name'] == 'Substitution':
+        # Avoid damage from opponent's attack
+        pass
+    
+
+
+def minimax(player_character, bot_character, depth, is_maximizing, alpha, beta):
+    # Base case: Check for terminal state (win/loss) or maximum depth
+    winner = _check_winner(player_character, bot_character)
+    if winner == 'player':
+        return 1000 #player wins
+    elif winner == 'bot':
+        return -1000
+    elif depth == 0:
+        return evaluate_state(player_character, bot_character)
+    
+    # Recursive case: Simulate actions
+    if is_maximizing:
+        max_eval = float('-inf')
+        for action in bot_character['jutsus'] + BASIC_ACTIONS:
+            # Simulate bot's action
+            simulated_bot = bot_character.copy()
+            simulated_player = player_character.copy()
+            _simulate_action(simulated_bot, simulated_player, action, is_bot=True)
+
+            # Recursively evaluate the state
+            eval = minimax(simulated_player, simulated_bot, depth - 1, False, alpha, beta)
+            max_eval = max(max_eval, eval)
+            alpha = max(alpha, eval)
+            if beta <= alpha:
+                break  # Alpha-beta pruning
+        return max_eval
+    else:
+        min_eval = float('inf')
+        for action in player_character['jutsus'] + BASIC_ACTIONS:
+            # Simulate player's action
+            simulated_bot = bot_character.copy()
+            simulated_player = player_character.copy()
+            _simulate_action(simulated_player, simulated_bot, action, is_bot=False)
+
+            # Recursively evaluate the state
+            eval = minimax(simulated_player, simulated_bot, depth - 1, True, alpha, beta)
+            min_eval = min(min_eval, eval)
+            beta = min(beta, eval)
+            if beta <= alpha:
+                break  # Alpha-beta pruning
+        return min_eval
+
+def _bot_action_minimax(player_character, bot_character, depth=3):
+    best_action = None
+    max_eval = float('-inf')
+
+    
+
+    for action in bot_character['jutsus'] + BASIC_ACTIONS:
+        # Simulate bot's action
+        simulated_bot = bot_character.copy()
+        simulated_player = player_character.copy()
+        _simulate_action(simulated_bot, simulated_player, action, is_bot=True)
+
+        # Evaluate the action using Minimax
+        eval = minimax(simulated_player, simulated_bot, depth - 1, False, float('-inf'), float('inf'))
+        if eval > max_eval:
+            max_eval = eval
+            best_action = action
+    
+    #If the bot can reduce the hp level of the player to less than 30, it will attack
+    bot_attacks = bot_character['jutsus']
+    bot_attacks.append(BASIC_ACTIONS[0])  # Add the basic attack action
+    max_damage = 0
+    
+    for action in bot_attacks:
+        damage = _damage(action['chakra_cost'])
+        if damage > max_damage:
+            max_damage = damage
+            best_action = action
+
+    player_hp_after_attack = max(player_character['hp'] - max_damage, 0)
+    if player_hp_after_attack < 30 and best_action['name'] != 'Substitution':
+        # If the bot can reduce the player's HP to less than 30, it will attack
+        return best_action    
+
+    #Focus if bot does not have enough chakra needed for his attack
+    # print(bot_character['chakra'], best_action['chakra_cost'])
+    if best_action['chakra_cost'] > bot_character['chakra']:
+        best_action = BASIC_ACTIONS[2]  # Focus action
+
+    return best_action    
