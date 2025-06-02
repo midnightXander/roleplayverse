@@ -86,7 +86,7 @@ function openCommentPopup(postId) {
         'username': '{{player.user.username}}',
         'player':'{{player}}',
     }
-    console.log(c_player, currentPlayerData)
+    
     const commentElement = document.createElement('div');
     commentElement.className = 'comment  flex items-start gap-3';
     commentElement.innerHTML = `
@@ -121,11 +121,11 @@ function openCommentPopup(postId) {
                         <button onclick = "showCommentReplyForm('${comment.id}')" class="hover:underline">Répondre</button>
                     </div>
                        
-                        <button onclick="showCommentReplies('${comment.id}')" class="ml-4 mt-2 text-sm text-gray-600 hover:text-orange-500 dark:text-gray-400">voir ${comment.replies.length} reponses</button>
+                        <button onclick="showCommentReplies('${comment.id}')" class="ml-4 my-2 text-sm text-gray-600 hover:text-orange-500 dark:text-gray-400">voir ${comment.replies.length} reponses</button>
                         
-                         <div class='reply-form flex flex-col space-y-2 hidden'>
+                         <div class='reply-form flex flex-col space-y-2 mb-2 hidden'>
                             <textarea id="comment-reply-${comment.id}" class='w-full bg-transparent text-white placeholder-gray-400 border-b border-gray-700 focus:outline-none resize-none' placeholder="Ajouter une reponse..."></textarea>
-                            <button onclick="addCommentReply('${comment.id}', '${comment.post_id}')">Soumettre</button>
+                            <button onclick="addCommentReply(this,'${comment.id}', '${comment.post_id}')">Soumettre</button>
                         </div>
 
                         <div class='mb-2 max-h-96 overflow-y-auto hidden' id="comment-replies-${comment.id}">

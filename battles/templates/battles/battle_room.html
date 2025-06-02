@@ -156,7 +156,11 @@
                 <div class="profile-container mx-auto">
                     <div class="profile-border border-top"></div>
                     <img src="{{battle.initiator.profile_picture.url}}" alt="Hero" class="profile-image profile-image-top shadow-lg">
+                    {% if i_character.images.1 %}
+                    <img src="{{i_character.images.1}}" alt="image de {{i_character.name}}" class="profile-image profile-image-bottom shadow-lg">
+                    {% else %}
                     <img src="{{i_character.images.0}}" alt="image de {{i_character.name}}" class="profile-image profile-image-bottom shadow-lg">
+                    {% endif %}
                     <div class="profile-border border-bottom"></div>
                 </div>
                 <div class="mt-8">
@@ -178,7 +182,11 @@
                 <div class="profile-container mx-auto">
                     <div class="profile-border border-top"></div>
                     <img src="{{battle.opponent.profile_picture.url}}" alt="Hero" class="profile-image profile-image-top shadow-lg">
+                    {% if o_character.images.1 %}
+                    <img src="{{o_character.images.1}}" alt="image de {{o_character.name}}" class="profile-image profile-image-bottom shadow-lg">
+                    {% else %}
                     <img src="{{o_character.images.0}}" alt="image de {{o_character.name}}" class="profile-image profile-image-bottom shadow-lg">
+                    {% endif %}
                     <div class="profile-border border-bottom"></div>
                 </div>
                 <div class="mt-8">

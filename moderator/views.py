@@ -8,6 +8,8 @@ from django.contrib.auth.models import User,auth
 from django.contrib.auth import logout,login,authenticate
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+
+from users.models import Player
 from .moderator_utility import get_moderator
 from .models import *
 import os
@@ -146,6 +148,34 @@ def notify_all_players(request):
             )
         messages.success(request, "Notification envoyée à tous les joueurs.")
         return JsonResponse({'status': 'success', 'message': 'Notification envoyée à tous les joueurs.'})
+    
+@csrf_exempt
+def notify_player(request, email):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        body = request.POST.get('body')
+        url = request.POST.get('url', '/')
+        if not title or not body:
+            return JsonResponse({'status': 'error', 'message': 'Veuillez remplir tous les champs.'})
+        message = {
+            'title': title,
+            'body': body,
+            'url': url,
+            'icon': '/static/images/logo/logo_1.png'
+        }
+
+    
+        user = get_object_or_404(User, email=email)
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Joueur non trouvé.'}) 
+        send_push_notification(
+            subscription = PushSubscription.objects.filter(user=user).first(),
+            message = message,
+            user = user
+        )
+        messages.success(request, f"Notification envoyée à {user}.")
+        return JsonResponse({'status': 'success', 'message': 'Notification envoyée à tous les joueurs.'})    
 
 # @csrf_exempt
 # def send_email(request):

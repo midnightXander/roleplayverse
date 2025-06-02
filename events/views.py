@@ -211,7 +211,7 @@ def create_round_battles(tournament:Tournament, fighters, round=1):
     for player in fighters:
         new_notif = Notification.objects.create(
             target = player,
-            content = f"The next round of the tournament {tournament.name} in which you are a fighter has started",
+            content = f"le prochain tour du tournoi {tournament.name} dans lequel tu participe a debuté, voici ton prochain adversaire",
             url = f"/events/tournaments/{tournament.id}",
         )
         new_notif.save()
@@ -229,7 +229,7 @@ def create_round_battles(tournament:Tournament, fighters, round=1):
     for ref in referees:
         new_notif = Notification.objects.create(
         target = ref,
-        content = f"The next round of the tournament {tournament.name} in which you are a referee has started",
+        content = f"le prochain tour du tournoi {tournament.name} dans lequel tu es arbitre a debuté, voici le combat dont tu es chargé",
         url = f"/events/tournaments/{tournament.id}",
     )
         new_notif.save()
@@ -411,7 +411,7 @@ def _update_round(battle:Battle):
 
             new_notif = Notification.objects.create(
                 target = winner,
-                content = f'Congratulations you won the {battle_tournament.name} tournament, you are rewarded with {battle_tournament.reward} BP',
+                content = f'Felicitations tu as remporte le tournoi {battle_tournament.name}, voici tes recompense {battle_tournament.reward}',
                 url = f'/events/tournaments/{battle_tournament.id}',
             )
             new_notif.save()
@@ -428,7 +428,7 @@ def _update_round(battle:Battle):
 
             new_notif2 = Notification.objects.create(
                 target = loser,
-                content = f'You lost in the final of {battle_tournament.name} tournament, you are rewarded with {reward2} BP',
+                content = f'Tu as perdu en final du tournoi {battle_tournament.name}, tu as quand meme eu des recompenses',
                 url = f'/events/tournaments/{battle_tournament.id}',
             )
             send_push_notification(
@@ -449,14 +449,14 @@ def _update_round(battle:Battle):
 
                 new_notif = Notification.objects.create(
                     target = fighter,
-                    content = f'The tournament {battle_tournament.name} has ended with {winner} being the winner',
+                    content = f'Le tournoi {battle_tournament.name} a pris fin, {winner} est le gagnant',
                     url = f'/events/tournaments/{battle_tournament.id}',
                 )
                 send_push_notification(
             PushSubscription.objects.filter(user = fighter.user).first(),
             {
                 'title': f'{battle_tournament.name} termine',
-                'body': f"le tournoi {battle_tournament.name} a pris fin, voici les details fu tournoi",
+                'body': f"le tournoi {battle_tournament.name} a pris fin, voici les details du tournoi",
                 'icon': '/static/images/logo/logo_1.png',
                 'url' : f'/events/tournaments/{battle_tournament.id}',
             },
