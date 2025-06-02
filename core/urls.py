@@ -30,4 +30,12 @@ urlpatterns = [
 
     path('rankings', views.rankings, name = 'rankings'),
 
+
+
+
+
+
+    #EZOIC
+    path('ezoic-3jZENPJ2HyQHll4Ye2ZCBVIua866XL.html', views.ezoic_file, name = 'ezoic_file'),
+
 ]

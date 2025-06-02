@@ -1039,3 +1039,6 @@ def rankings(request):
         'n_notifs':get_notifs(player),
     }
     return render(request, 'core/rankings.html', context )
+
+def ezoic_file(request):
+    return render(request, 'core/ezoic-3jZENPJ2HyQHll4Ye2ZCBVIua866XL.html', {})
