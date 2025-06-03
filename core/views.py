@@ -646,6 +646,20 @@ def create_post(request):
             
             new_post_data = _post_data(player,new_post)
             new_post.save()
+            if body and len(body) > 30:
+                users = User.objects.exclude(username = player.user.username)
+                users = users.order_by('?')[:50] #get 15 random users
+                for user in users:
+                    send_push_notification(
+                        PushSubscription.objects.filter(user = user).last(),
+                        {
+                            'title': f'{player}',
+                            'body': f'{new_post.body[:30]}...',
+                            'icon': f'{player.profile_picture.url}',
+                            'url': f'/posts/{new_post.id}'
+                        },
+                    )
+
             return JsonResponse({'status':'success', 'post':new_post_data})
 
         # return HttpResponseRedirect(reverse('core:home'))    
@@ -775,7 +789,7 @@ def react_post(request,post_id):
 
         #Send Push Notification if likes exceeds 10
         if post.likes == 5:
-            send_push_notification(PushSubscription.objects.filter(user = post.author.user).first(), {
+            send_push_notification(PushSubscription.objects.filter(user = post.author.user).last(), {
                 'title': 'Votre publication a été aimé par 5 personnes',
                 'body': f'Votre publication a été aimé par 5 personnes',
                 'icon': '/static/images/logo/logo_1.png'
@@ -841,7 +855,7 @@ def react_comment(request, comment_id):
         likes = len(CommentReaction.objects.filter(comment = comment))
         #Send Push Notification if likes exceeds 10
         if likes == 10:
-            send_push_notification(PushSubscription.objects.filter(user = comment.author.user).first(), {
+            send_push_notification(PushSubscription.objects.filter(user = comment.author.user).last(), {
                 'title': 'Votre commentaire a été aimé par 10 personnes',
                 'body': f'Votre commentaire sur la publication de {comment.post.author} a été aimé par 10 personnes',
                 'icon': '/static/images/logo/logo_1.png'
@@ -883,7 +897,7 @@ def create_comment(request,post_id):
                 )
                 new_notif.save()
                 #send a push notification to the post author
-                send_push_notification(PushSubscription.objects.filter(user = post.author.user).first(), {
+                send_push_notification(PushSubscription.objects.filter(user = post.author.user).last(), {
                     'title': notification_text,
                     'body': f'{new_comment.body[:20]}...',
                     'icon': f"{player.profile_picture.url}"
@@ -897,7 +911,7 @@ def create_comment(request,post_id):
                 )
                 new_notif.save()
                 #send a push notification to the post author
-                send_push_notification(PushSubscription.objects.filter(user = new_comment.parent.author.user).first(), {
+                send_push_notification(PushSubscription.objects.filter(user = new_comment.parent.author.user).last(), {
                     'title': f"{new_comment.author} a repondu a ton commentaire sur une publication",
                     'body': f'{new_comment.body[:20]}...',
                     'icon': f"{new_comment.author.profile_picture.url}",

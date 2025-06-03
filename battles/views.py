@@ -317,7 +317,7 @@ def create_request(sender:Player, character:str, type:str):
     for player in Player.objects.exclude(sender):
         if player.family != sender.family:
             send_push_notification(
-                PushSubscription.objects.filter(user = player.user).first(),
+                PushSubscription.objects.filter(user = player.user).last(),
                 {
                 'title' : f"Requète de combat",
                 'body' : f"{sender} a envoyé une requète de combat, clique pour répondre",
@@ -435,7 +435,7 @@ def accept_battle(request,request_id):
                 url = f'/users/requests/{b_request.sender.user.username}',
             )
             send_push_notification(
-                PushSubscription.objects.filter(user = b_request.sender.user).first(),
+                PushSubscription.objects.filter(user = b_request.sender.user).last(),
                 {
                 'title' : f"Ton combat peut Commencer",
                 'body' : f"{player} a accepté ta requète de combat, clique pour commencer le combat",
@@ -513,7 +513,7 @@ def init_battle(request,acceptor_id):
                 )
                 new_notif.save()
                 send_push_notification(
-                PushSubscription.objects.filter(user = battle_acceptor.player.user).first(),
+                PushSubscription.objects.filter(user = battle_acceptor.player.user).last(),
                 {
                 'title' : f"Message de {battle_acceptor.player.user.username}",
                 'body' : f"Ton combat contre {player} a été initié, un arbitre doit maintenant etre designé",
@@ -625,7 +625,7 @@ def refree_proposal(request, battle_id):
                 new_notif.save()
 
                 send_push_notification(
-                    PushSubscription.objects.filter(user = battle.initiator.user).first(),
+                    PushSubscription.objects.filter(user = battle.initiator.user).last(),
                     {
                     'title' : f"Proposition d'arbitrage",
                     'body' : f"{player} veut arbitrer un de tes combats, clique pour répondre",
@@ -682,7 +682,7 @@ def validate_refree(request, proposal_id):
                 new_notif2.save()
 
                 send_push_notification(
-                    PushSubscription.objects.filter(user = battle.opponent.user).first(),
+                    PushSubscription.objects.filter(user = battle.opponent.user).last(),
                     {
                     'title' : f"Ton combat peut Commencer",
                     'body' : f"ton combat contre {battle.initiator} est prét a commencé",
@@ -693,7 +693,7 @@ def validate_refree(request, proposal_id):
                 )
 
                 send_push_notification(
-                    PushSubscription.objects.filter(user = proposal.player.user).first(),
+                    PushSubscription.objects.filter(user = proposal.player.user).last(),
                     {
                     'title' : f"Proposition d'arbitrage acceptée",
                     'body' : f"Ta proposition d'arbitrer le combat {battle.initiator} vs {battle.opponent} a été accepté, tu dois a présent mettre en place les régles du combat",
@@ -914,7 +914,7 @@ def send_textpad(request, battle_id):
 
                 #send push notification to the opponent and the referee
                 send_push_notification(
-                    PushSubscription.objects.filter(user = opponent.user).first(),
+                    PushSubscription.objects.filter(user = opponent.user).last(),
                     {
                     'title' : f"Ton adversaire a envoyé son pavé",
                     'body' : f"{player} a envoyé son pavé dans votre combat",
@@ -925,7 +925,7 @@ def send_textpad(request, battle_id):
                 )
 
                 send_push_notification(
-                    PushSubscription.objects.filter(user = battle.refree.user).first(),
+                    PushSubscription.objects.filter(user = battle.refree.user).last(),
                     {
                     'title' : f"Un pavé a été envoyé",
                     'body' : f"{player} a envoyé un pavé, tu dois l'évaluer",
@@ -1017,7 +1017,7 @@ def react_to_textpad(request, textpad_id):
                 new_notif.save()
                 #send push notification to the opponent and the referee
                 send_push_notification(
-                    PushSubscription.objects.filter(user = textpad.owner.user).first(),
+                    PushSubscription.objects.filter(user = textpad.owner.user).last(),
                     {
                     'title' : f"Nouvelle reaction sur ton pavé",
                     'body' : f"{player} a reagi par '{reaction}' a ton pavé",
@@ -1107,7 +1107,7 @@ def add_textpad_comment(request, textpad_id):
                     new_notif.save()
                     #send push notification to the opponent and the referee
                     send_push_notification(
-                        PushSubscription.objects.filter(user = comment.author.user).first(),
+                        PushSubscription.objects.filter(user = comment.author.user).last(),
                         {
                         'title' : f"Nouvelle reaction sur ton pavé",
                         'body' : f"{comment.author} a repondu a ton commentaire sur un pavé",
@@ -1126,7 +1126,7 @@ def add_textpad_comment(request, textpad_id):
                 new_notif.save()
                 #send push notification to the opponent and the referee
                 send_push_notification(
-                    PushSubscription.objects.filter(user = textpad.owner.user).first(),
+                    PushSubscription.objects.filter(user = textpad.owner.user).last(),
                     {
                     'title' : f"Nouvelle reaction sur ton pavé",
                     'body' : f"{comment.author} a repondu a ton commentaire sur un pavé",
@@ -1316,7 +1316,7 @@ def evaluate_textpad(request, battle_id):
                     win_notif.save()
 
                     send_push_notification(
-                        PushSubscription.objects.filter(user = winner.user).first(),
+                        PushSubscription.objects.filter(user = winner.user).last(),
                         {
                         'title' : f"Tu as été declaré vainqueur du combat",
                         'body' : f"Tu as été declaré vainqueur du combat",
@@ -1365,7 +1365,7 @@ def evaluate_textpad(request, battle_id):
                     )
                     notif.save()
                     send_push_notification(
-                        PushSubscription.objects.filter(user = opponent.user).first(),
+                        PushSubscription.objects.filter(user = opponent.user).last(),
                         {
                         'title' : f"Le pavé de ton adversaire a été validé",
                         'body' : f"Le pavé de ton adversaire a été validé, tu peux maintenant faire le tiens",
@@ -1387,7 +1387,7 @@ def evaluate_textpad(request, battle_id):
                     content = notif_content
                 )
                 send_push_notification(
-                    PushSubscription.objects.filter(user = textpad.owner.user).first(),
+                    PushSubscription.objects.filter(user = textpad.owner.user).last(),
                     {
                     'title' : f"Ton combat",
                     'body' : notif_content,
@@ -1495,7 +1495,7 @@ def rules(request,battle_id):
             )
 
             send_push_notification(
-                PushSubscription.objects.filter(user = battle.initiator.user).first(),
+                PushSubscription.objects.filter(user = battle.initiator.user).last(),
                 {
                 'title' : f"Les régles de ton combat ont été fixées",
                 'body' : f"{battle.refree} a fixé les regles d'un de tes combats, tu peux desormais envoyé le premier pavé",
@@ -1512,7 +1512,7 @@ def rules(request,battle_id):
             )
 
             send_push_notification(
-                PushSubscription.objects.filter(user = battle.opponent.user).first(),
+                PushSubscription.objects.filter(user = battle.opponent.user).last(),
                 {
                 'title' : f"Les régles de ton combat ont été fixées",
                 'body' : f"{battle.refree} a fixé les regles d'un combat dont tu participe",
@@ -1813,7 +1813,7 @@ def send_challenge(request, target_id):
 
             #send push notification to the target
             send_push_notification(
-                PushSubscription.objects.filter(user = target.user).first(),
+                PushSubscription.objects.filter(user = target.user).last(),
                 {
                 'title' : f"Tu as été défié",
                 'body' : f"{player} t'as défié pour un combat, tu peux l'accepter ou le refuser",
@@ -1878,7 +1878,7 @@ def answer_challenge(request, challenge_id):
                 )
                 #send push notification to the sender of the challenge
                 send_push_notification(
-                    PushSubscription.objects.filter(user = challenge.sender.user).first(),
+                    PushSubscription.objects.filter(user = challenge.sender.user).last(),
                     {
                     'title' : f"Ton défi a été accepté",
                     'body' : f"{player} a accepté le défi, un arbitre doit etre choisi pour debuter le combat",
@@ -1981,7 +1981,7 @@ def solo_battle_action(request):
             if act['name'] == action:
                 player_action = act
 
-        # bot_action = _bot_action(bot_character, player_action)
+        bot_action = _bot_action(bot_character, player_action)
         # print(bot_action.get('name'))
         bot_action = _bot_action_minimax(player_character, bot_character)
         #print(bot_action.get('name'))

@@ -68,7 +68,7 @@ def manage_battles_latency():
             #Send_email()
             
             send_push_notification(
-                PushSubscription.objects.filter(user=loser.user)[0],
+                PushSubscription.objects.filter(user=loser.user).last(),
                 {
                     "title": "Alerte de latence",
                     "body": f"Tu es sur le point de perdre ton combat contre {winner} par latence! Fais ton pavé maintenant!",
@@ -132,7 +132,7 @@ def manage_battles_latency():
                         content = f"Tu as été declaré  vainqueur de ton combat contre {loser} par latence"
                         )
             send_push_notification(
-                PushSubscription.objects.filter(user=winner.user)[0],
+                PushSubscription.objects.filter(user=winner.user).last(),
                 {
                     "title": "Tu as remporte ton combat",
                     "body": f"Tu as été declaré  vainqueur de ton combat contre {loser} par latence",
@@ -150,7 +150,7 @@ def manage_battles_latency():
                     )
             lose_notif.save()  
             send_push_notification(
-                PushSubscription.objects.filter(user=loser.user)[0],
+                PushSubscription.objects.filter(user=loser.user).last(),
                 {
                     "title": "Tu as perdu ton combat",
                     "body": f"Tu as perdu ton combat contre {winner} par latence",
@@ -167,7 +167,7 @@ def manage_battles_latency():
                     )
             referee_notif.save()  
             send_push_notification(
-                PushSubscription.objects.filter(user=battle.refree.user)[0],
+                PushSubscription.objects.filter(user=battle.refree.user).last(),
                 {
                     "title": "Le combat a été terminé par latence",
                     "body": f"Le combat {winner} vs {loser} que tu arbitrais a été terminé par latence",
@@ -205,7 +205,7 @@ def add_monthly_points():
                 content = f"Tu as reçu {MONTHLY_POINTS} de jetons mensuels!"
             )
             send_push_notification(
-                PushSubscription.objects.filter(user=player.user)[0],
+                PushSubscription.objects.filter(user=player.user).last(),
                 {
                     "title": "Jetons mensuels",
                     "body": f"Tu as reçu tes jetons mensuels de {MONTHLY_POINTS}!",
@@ -242,14 +242,16 @@ def fetch_daily_content():
                     if post_count == 5: return
 
         #notify all suscribed players for new memes 
-        suscriptions = PushSubscription.objects.all()
-        for suscription in suscriptions:
-            send_push_notification(suscription,{
+        # suscriptions = PushSubscription.objects.all()
+        users = User.objects.all()
+        users = users.order_by('?')[:50] #get 15 random users
+        for user in users:
+            send_push_notification(PushSubscription.objects.filter(user = user).last(),{
                 "title": "De Nouveaux Meme sont disponible 🤩",
                 "body": f"Tous les jours, de nouveaux memes sont ajouté a ton fil pour une bonne séance de rire, en voila de nouveaux",
                 "url": f"https://roleplayverse.live/home",
                 'icon' : '/static/images/logo/logo_1.png',
-            }, suscription.user)
+            }, user)
 
 
                     

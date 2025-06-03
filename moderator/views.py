@@ -142,7 +142,7 @@ def notify_all_players(request):
         players = User.objects.all()
         for player in players:
             send_push_notification(
-                subscription = PushSubscription.objects.filter(user=player).first(),
+                subscription = PushSubscription.objects.filter(user=player).last(),
                 message = message,
                 user = player
             )
@@ -170,7 +170,7 @@ def notify_player(request, email):
         if not player:
             return JsonResponse({'status': 'error', 'message': 'Joueur non trouvé.'}) 
         send_push_notification(
-            subscription = PushSubscription.objects.filter(user=user).first(),
+            subscription = PushSubscription.objects.filter(user=user).last(),
             message = message,
             user = user
         )
