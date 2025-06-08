@@ -842,7 +842,7 @@ def battle_room(request,battle_id):
             {'category': 'Communication', 'initiator': initiator_rating.communication, 'opponent': opponent_rating.communication},
             {'category': 'Fairness', 'initiator': initiator_rating.fairness, 'opponent': opponent_rating.fairness }
         ]
-        opponent_rating = RefereeRating.objects.get(player = battle.opponent)
+        opponent_rating = RefereeRating.objects.filter(player = battle.opponent).last()
         context['initiator_rating'] = initiator_rating
         context['opponent_rating'] = opponent_rating
         context['ratings'] = ratings
