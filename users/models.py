@@ -142,7 +142,8 @@ class Player(models.Model):
 
         # self.update_rank()
 
-    def update_rank(self):
+    def update_rank(self, rankings = rankings, force = False):
+        """Updates the rank of the player based on the progression and current rank"""
         r_index = rank_index(self.rank)
         print(r_index)
         if r_index < len(rankings):
@@ -150,7 +151,9 @@ class Player(models.Model):
                 self.rank = rankings[r_index + 1]
                 self.progression = 0
             if self.progression < 0:
-                self.progression = 0    
+                self.progression = 0
+            if force:
+                self.rank = rankings[r_index + 1]        
         else:
             print(f"{self.user.username} is at the max ranking already")        
         self.save() 
@@ -163,6 +166,11 @@ class Player(models.Model):
         if monthly_points: self.date_points_added = timezone.now()
 
         self.save()
+
+    def award_credits(self, credits):
+        # self.rp_credits = self.rp_credits + credits
+        # self.save()  
+        pass  
 
 
     def __str__(self):

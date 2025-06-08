@@ -87,6 +87,10 @@
         <script src="https://cdn.tiny.cloud/1/j4yc51tqbhmqbmoqot1d4l8uircpwyr932mazjpidtzv6yt7/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
         <script src="https://cdn.cinetpay.com/seamless/main.js"></script>
 
+        <!--Google ads-->
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7259227698391457"
+     crossorigin="anonymous"></script>
+
         {% block styles %}
         {% endblock styles %}
         
@@ -226,18 +230,9 @@ function setupExpandableText() {
     });
     console.log("Expandable text set up for elements:", document.querySelectorAll('[data-expandable]'));
 }
-function askNotification(){
-console.log("rerquestng notification")
-// Check if the browser supports notifications
-if(!("Notification" in window)){
-    console.log("Browser doesn't support notifications")
-    return
-}
-if(Notification?.permission !== 'granted'){
-    Notification.requestPermission((permission)=>{
-    })
-}
-}
+
+
+
 
 
 
@@ -484,12 +479,73 @@ if(Notification?.permission !== 'granted'){
     
 </div>
 
+<!-- Popup for subscribing for notifications -->
+<div id="notificationPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 animate-scaleIn">
+    <div class="bg-gray-900 border border-gray-700 rounded-2xl p-8 max-w-md w-full mx-4">
+        <h2 class="text-2xl text-orange-500 font-bold mb-4">Recevoir des Notifications</h2>
+        <div class="mb-6">
+            <p class="text-gray-400">
+            Pour ne pas rater tes messages, des mis a jour et informations sur tes combats 
+            </p>
+        </div>
+        <div class="flex justify-between">
+            <button id="acceptNotification" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition duration-300">
+                <i class="fas fa-check mr-2"></i>Confirmer
+            </button>
+            <button id="refuseNotification" onclick="hideNotificationPopup()" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
+                <i class="fas fa-times mr-2"></i>Annuler
+            </button>
+        </div>
+    </div>
+</div>
+
+
 {{ playerName|json_script:'player' }}
 {{ player.user.username | json_script:'username' }}
 
 <script>
     
-const VAPID_PUBLIC_KEY = "BGCLJh08s1sUp-PyGLvD1KwqmIK9WSnwbzJscdiOef-o7usOuFaSefB-Fn-XEWD0oJVH8opYXoz6mJ_ejIQpE50";
+    const notificationPopup = document.getElementById('notificationPopup')
+
+    function askNotification(){
+console.log("rerquestng notification")
+// Check if the browser supports notifications
+if(!("Notification" in window)){
+    console.log("Browser doesn't support notifications")
+    return
+}
+if(Notification?.permission !== 'granted'){
+    console.log('not granted yet')
+    showNotificationPopup()
+    
+}
+}
+
+    askNotification()
+
+    function showNotificationPopup(){
+        
+        const acceptNotificationBtn = notificationPopup.querySelector('#acceptNotification')
+        const refuseNotificationBtn = notificationPopup.querySelector('#refuseNotification')
+
+        notificationPopup.classList.remove('hidden')
+        acceptNotificationBtn.onclick = function(){
+            Notification.requestPermission((permission)=>{
+                hideNotificationPopup()
+            })
+        }
+        
+    }
+
+    function hideNotificationPopup(){
+        notificationPopup.classList.add('hidden')
+    }
+
+    
+    
+
+
+    const VAPID_PUBLIC_KEY = "BGCLJh08s1sUp-PyGLvD1KwqmIK9WSnwbzJscdiOef-o7usOuFaSefB-Fn-XEWD0oJVH8opYXoz6mJ_ejIQpE50";
 
 // Register service worker
 async function subscribeUser() {
@@ -499,6 +555,7 @@ async function subscribeUser() {
     userVisibleOnly: true,
     applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
   });
+
 
 
   // Send subscription to backend

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mode Aventure - RPV</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+
+</head>
+<!-- <body class="bg-gray-950 text-white min-h-screen">
+    <div class="w-full relative h-screen bg-gray-950 text-white flex flex-col">
+
+        
+        <div class="flex-1 flex items-center justify-center relative">
+          <img
+            src="https://w0.peakpx.com/wallpaper/8/121/HD-wallpaper-valley-of-the-end-naruto-naruto-nature-naruto-shippuden-thumbnail.jpg"
+            alt="Carte Aventure"
+            class="w-full h-full object-cover absolute top-0 left-0 opacity-40"
+          />
+  
+          
+          <div class="relative z-10 text-center">
+            <h1 class="text-2xl font-bold mb-2">🗺️ Zone actuelle : Vallée de la fin</h1>
+            <p class="text-sm text-gray-300">Des ennemis peuvent surgir à tout moment...</p>
+          </div>
+        </div>
+  
+        
+        <div class="bg-gray-900 px-4 py-2 flex justify-around items-center text-sm">
+          <div class="text-orange-400">❤️ Santé : 85%</div>
+          <div class="text-blue-400">🔵 Chakra : 60%</div>
+          <div class="text-green-400">🌱 Niveau : 3</div>
+        </div>
+  
+        
+        <!-- <nav class="bg-gray-950 border-t border-gray-800 p-3 flex justify-around items-center">
+            <button class="flex flex-col items-center text-xs text-gray-300 hover:text-primary">
+              🧭 <span>Explorer</span>
+            </button>
+            <button class="flex flex-col items-center text-xs text-gray-300 hover:text-primary">
+              ⚔️ <span>Combattre</span>
+            </button>
+            <button class="flex flex-col items-center text-xs text-gray-300 hover:text-primary">
+              🎒 <span>Inventaire</span>
+            </button>
+            <button class="flex flex-col items-center text-xs text-gray-300 hover:text-primary">
+              📜 <span>Quêtes</span>
+            </button>
+            <button class="flex flex-col items-center text-xs text-gray-300 hover:text-primary">
+              🧍 <span>Profil</span>
+            </button>
+          </nav> 
+
+          
+      </div>
+
+
+</body> -->
+
+<body class="bg-gray-950 text-white min-h-screen flex flex-col">
+
+    <!-- Scrollable Map Section -->
+    <div class="flex-1 flex items-center justify-center relative">
+      <!-- <div class="relative z-10 text-center">
+        <h1 class="text-2xl font-bold mb-2">🗺️ Zone actuelle : Vallée de la fin</h1>
+        <p class="text-sm text-gray-300">Des ennemis peuvent surgir à tout moment...</p>
+      </div> -->
+      <nav class=" fixed top-0 left-0 w-full flex items-center justify-between px-4 py-3 shadow-lg z-50">
+        <!-- Quit Adventure Mode Button -->
+        <a href="/" class="text-sm text-gray-300 hover:text-red-500 flex items-center">
+          <i class="fas fa-arrow-left mr-2"></i> Quitter le mode aventure
+        </a>
+      
+        <!-- Player Info -->
+        <div class="flex items-center space-x-4">
+          <!-- Player Level -->
+          <div class="text-sm text-green-400 font-semibold">
+            🌱 Niveau : 3
+          </div>
+      
+          <!-- Character Appearance -->
+          <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-orange-500">
+            <img src="https://i.imgur.com/rtpJgEF.jpeg" alt="Character Appearance" class="w-full h-full object-cover">
+          </div>
+        </div>
+      </nav>
+      <div class=" p-5">
+        <h2 class="text-xl font-semibold mb-4">🌍 Adventure Mode - Explore the Shinobi World</h2>
+        <div class="relative w-full h-64 bg-gradient-to-br from-[#1f2937] to-[#d45822] rounded-xl overflow-auto shadow-inner">
+          <!-- Points of Interest -->
+          <button class="absolute top-4 left-4 bg-gray-800 text-xs px-3 py-1 rounded-full shadow">Village</button>
+          <button class="absolute bottom-8 right-4 bg-gray-800 text-xs px-3 py-1 rounded-full shadow">Training Grounds</button>
+          <button class="absolute top-16 right-1/3 bg-gray-800 text-xs px-3 py-1 rounded-full shadow">Forest</button>
+          <button class="absolute bottom-4 left-1/4 bg-gray-800 text-xs px-3 py-1 rounded-full shadow">Enemy Camp</button>
+      
+          <!-- Player Icon -->
+          <div class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div class="w-10 h-10 bg-orange-500 text-white flex items-center justify-center rounded-full shadow-lg text-sm font-bold border-4 border-white dark:border-gray-800">
+              🧍
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 text-sm text-gray-600 dark:text-gray-300">
+          <p>You are currently near the Hidden Leaf Village. Enemies may appear as you explore.</p>
+          <button class="mt-3 w-full bg-[#d45822] hover:bg-orange-600 text-white py-2 rounded-xl font-semibold transition">
+            Continue Exploring
+          </button>
+        </div>
+      </div>
+      <div class="absolute hidden inset-0 p-4">
+        <div class="map-container w-3/4 h-3/4 bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+          <div class="map-content  bg-cover bg-center" style="background-image: url('https://w0.peakpx.com/wallpaper/8/121/HD-wallpaper-valley-of-the-end-naruto-naruto-nature-naruto-shippuden-thumbnail.jpg');">
+            <!-- Add markers or interactive elements here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Bottom Navigation Bar -->
+    <nav class="bg-gray-900 fixed bottom-10 left-1/2 transform -translate-x-1/2 w-[90%] max-w-md rounded-full shadow-lg p-3 flex justify-around items-center">
+      <button class="flex flex-col items-center text-xs text-gray-300 hover:text-orange-500">
+        🧭 <span>Explorer</span>
+      </button>
+      <button class="flex flex-col items-center text-xs text-gray-300 hover:text-orange-500">
+        ⚔️ <span>Combattre</span>
+      </button>
+      <button class="flex flex-col items-center text-xs text-gray-300 hover:text-orange-500">
+        🎒 <span>Inventaire</span>
+      </button>
+      <button class="flex flex-col items-center text-xs text-gray-300 hover:text-orange-500">
+        📜 <span>Quêtes</span>
+      </button>
+      <button class="flex flex-col items-center text-xs text-gray-300 hover:text-orange-500">
+        🧍 <span>Profil</span>
+      </button>
+    </nav>
+  
+  </body>

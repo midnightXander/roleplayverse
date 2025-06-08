@@ -50,6 +50,8 @@
   }
 </style>
 
+
+
 <header class="bg-gray-800 text-white p-4 mt-20">
   <h1 class="text-2xl text-orange-500 font-bold">Notifications</h1>
 </header>
@@ -445,7 +447,7 @@ function handleRequest(btn,requestId, action) {
           <div class = 'bg-gray-900 rounded-2xl border border-gray-700 p-4 shadow-md relative'>
           <a href="${notification.url}" onclick='showOverlay();markAsRead(${notification.id});' class="block px-2">
               <div class = 'flex space-x-2' >
-                ${notification.image ? `<img src = '${notification.image}' class='w-10 h-10 rounded-full' />` : ''}
+                ${notification.image ? `<img src = '${notification.image}' class='min-w-12 h-12 rounded-full' />` : ''}
               <div>  
               <p class="text-gray-300  mb-2">${notification.content}</p>
               <p class="text-sm text-gray-400">${notification.timestamp}</p>

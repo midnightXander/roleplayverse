@@ -18,6 +18,9 @@ class Announcement(models.Model):
     title = models.CharField(max_length=100, default = 'Important')
     content = models.TextField()
     image = models.ImageField(upload_to='anouncements/images')
+    url = models.URLField(blank=True, null=True)
+    redirect_url = models.CharField(max_length=100, blank=True, null=True)
+    moderator = models.ForeignKey(Moderator, on_delete=models.CASCADE)  
     date_added = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default  = True)
     def __str__(self):

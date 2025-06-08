@@ -404,10 +404,13 @@ def _update_round(battle:Battle):
 
             #Reward winner
             core_views.add_points(winner,battle_tournament.reward)
+            winner.award_credits(1000)
+            winner.update_rank(force=True)
             
             #Reward second
             reward2 = int(battle_tournament.reward / 2) 
             core_views.add_points(loser,reward2)
+            loser.award_credits(250)
 
             new_notif = Notification.objects.create(
                 target = winner,
@@ -415,6 +418,21 @@ def _update_round(battle:Battle):
                 url = f'/events/tournaments/{battle_tournament.id}',
             )
             new_notif.save()
+            Notification.objects.create(
+                target = winner,
+                content = f'Tu as recu {battle_tournament.reward} jetons de combats',
+                url = f'/events/tournaments/{battle_tournament.id}',
+            ).save()
+            Notification.objects.create(
+                target = winner,
+                content = f'Tu as recu 1000 Credits RPV et tu debloque la monetization',
+                url = f'/events/tournaments/{battle_tournament.id}',
+            ).save()
+            Notification.objects.create(
+                target = winner,
+                content = f'Tu passe au rang superieur !!',
+                url = f'/events/tournaments/{battle_tournament.id}',
+            ).save()
             send_push_notification(
             PushSubscription.objects.filter(user = winner.user).last(),
             {
@@ -431,6 +449,16 @@ def _update_round(battle:Battle):
                 content = f'Tu as perdu en final du tournoi {battle_tournament.name}, tu as quand meme eu des recompenses',
                 url = f'/events/tournaments/{battle_tournament.id}',
             )
+            Notification.objects.create(
+                target = winner,
+                content = f'Tu as recu 250 Credits RPV pour ta performance en tournoi',
+                url = f'/events/tournaments/{battle_tournament.id}',
+            ).save()
+            Notification.objects.create(
+                target = winner,
+                content = f'Tu as recu {reward2} jetons de combats',
+                url = f'/events/tournaments/{battle_tournament.id}',
+            ).save()
             send_push_notification(
             PushSubscription.objects.filter(user = loser.user).last(),
             {

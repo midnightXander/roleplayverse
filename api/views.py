@@ -4,6 +4,11 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import PushSubscription
 from pywebpush import webpush, WebPushException
+from rest_framework import generics
+from rest_framework.views import APIView
+from .serializers import *
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from django.contrib.auth.models import User
 
 from dotenv import load_dotenv
 import os
@@ -26,5 +31,15 @@ def save_subscription(request):
     return JsonResponse({'status': 'error, unauthorized or bad request'}, status=400)
 
 
+class CreateUserView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+
+
+class feed(APIView):
+    def get(self, request):
+        user = request.user
+        return JsonResponse({ 'status':'success', 'username':f'{user}' }, safe=False)
 
     

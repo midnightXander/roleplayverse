@@ -60,6 +60,11 @@ class BattleRequest(models.Model):
     
 
 class SoloBattle(models.Model):
+    type = models.CharField(max_length=20, choices=[
+        ("training","training"),
+        ("adventure","adventure"),
+        ("casual","casual"),
+    ], default = 'casual')
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     player_character = models.JSONField()
     bot_character = models.JSONField()
@@ -101,6 +106,16 @@ class Battle(models.Model):
     date_started = models.DateTimeField(auto_now_add=True)
     date_ended = models.DateTimeField(blank=True,null=True)
     hidden = models.BooleanField(default = False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.award_winner_credits()
+
+    def award_winner_credits(self):
+        if self.winner:
+            # Assuming Player has a method to award credits
+            self.winner.award_credits(15.8)
+    
 
 
 

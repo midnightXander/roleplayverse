@@ -1099,7 +1099,7 @@ def add_textpad_comment(request, textpad_id):
             if comment.parent:
                 if comment.parent.author != comment.author:
                     new_notif = core_models.Notification.objects.create(
-                        target = comment.parent,
+                        target = comment.parent.author,
                         url = f'/battles/battle_room/{textpad.battle.id}',
                         content = f"{comment.author} a repondu a ton commentaire sur un pavé",
                         img_url = comment.author.profile_picture.url
@@ -1107,12 +1107,12 @@ def add_textpad_comment(request, textpad_id):
                     new_notif.save()
                     #send push notification to the opponent and the referee
                     send_push_notification(
-                        PushSubscription.objects.filter(user = comment.author.user).last(),
+                        PushSubscription.objects.filter(user = comment.parent.author.user).last(),
                         {
                         'title' : f"Nouvelle reaction sur ton pavé",
                         'body' : f"{comment.author} a repondu a ton commentaire sur un pavé",
                         'url' : f'/battles/battle_room/{textpad.battle.id}',
-                        'icon' : comment.author.profile_picture.url,
+                        'icon' : '/static/images/logo/logo_1.png',
                         },
                         
                     )
@@ -1982,9 +1982,9 @@ def solo_battle_action(request):
                 player_action = act
 
         bot_action = _bot_action(bot_character, player_action)
-        # print(bot_action.get('name'))
+        print(bot_action.get('name'))
         bot_action = _bot_action_minimax(player_character, bot_character)
-        #print(bot_action.get('name'))
+        print(bot_action.get('name'))
         new_logs = _log_actions(player_action, bot_action, player_character, bot_character)
         logs = json.loads(battle.log)
         for log in new_logs:
@@ -2002,7 +2002,7 @@ def solo_battle_action(request):
         #     'timestamp': datetime.now().strftime("%H:%M"),
         #     }
 
-        rewards = {'xp':0, }
+        rewards = {'xp' : 0, }
         if winner == 'player':
             rewards = _reward_player(player)
             battle.result = 'win'

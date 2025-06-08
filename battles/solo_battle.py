@@ -113,13 +113,16 @@ def _evaluate_actions(player_character:dict, bot_character:dict, player_action:d
     damage = 0
     text = f"{player_character['name']} used {player_action.get('name')}"
     if player_action.get('name') == 'Focus':
+        
         chakra_pool = player_character.get('chakra_pool')
         current_chakra =  player_character.get('chakra') + 40
         player_character['chakra'] = min(current_chakra, chakra_pool)
         
     elif player_action.get('name') == 'Heal':
+        
         current_hp = player_character.get('hp') + 30
         player_character['hp'] = min(current_hp, 200)
+        print(f'player heal: ', player_character['hp'])
         #_update_chakra(player_character, player_action.get('chakra_cost'))
 
     elif player_action.get('name') == 'Defend':
@@ -159,6 +162,7 @@ def _evaluate_actions(player_character:dict, bot_character:dict, player_action:d
         damage = 0
         text = f" you dodged with substitution"
         type = 'success' 
+        print(f'player substituted: ', player_character['hp'])
 
     else:
         text = f"{player_character['name']} used {player_action.get('name')} on {bot_character['name']}"
@@ -197,7 +201,7 @@ def _evaluate_actions(player_character:dict, bot_character:dict, player_action:d
         #     type = 'info'
         # current_hp = bot_character.get('hp') - damage
         # bot_character['hp'] = max(current_hp, 0)
-    elif bot_action.get('name') not in non_offensive_actions and player_action.get('name') != 'Defend':
+    elif bot_action.get('name') not in non_offensive_actions and player_action.get('name') not in ['Defend', 'Substitution']:
         damage = _damage(bot_action.get('chakra_cost'))
         text = f"you took {damage} damage"
         type = 'danger'
@@ -265,12 +269,18 @@ def _simulate_action(character, opponent, action, is_bot):
         character['chakra'] = min(character['chakra'] + 40, character['chakra_pool'])
     elif action['name'] == 'Heal':
         character['hp'] = min(character['hp'] + 30, 200)
+        character['chakra'] = max(character['chakra'] - 20, 0)
     elif action['name'] == 'Defend':
         # Reduce damage from opponent's attack
-        pass
+        damage = _damage(action.get('chakra_cost'))
+        damage = damage // 2
+        opponent['hp'] = max(opponent['hp'] - damage, 0)
     elif action['name'] == 'Substitution':
         # Avoid damage from opponent's attack
-        pass
+        damage = 0
+        character['hp'] = min(character['hp'] + 100, 200)
+        character['chakra'] = max(character['chakra'] - 5, 0)
+
     
 
 
@@ -345,14 +355,17 @@ def _bot_action_minimax(player_character, bot_character, depth=3):
             max_damage = damage
             best_action = action
 
+    #Focus if bot does not have enough chakra needed for his attack
+    print(bot_character['chakra'], best_action['chakra_cost'])
+    if best_action['chakra_cost'] >= bot_character['chakra']:
+        best_action = BASIC_ACTIONS[2]  # Focus action
+        return best_action
+    
     player_hp_after_attack = max(player_character['hp'] - max_damage, 0)
     if player_hp_after_attack < 30 and best_action['name'] != 'Substitution':
         # If the bot can reduce the player's HP to less than 30, it will attack
         return best_action    
 
-    #Focus if bot does not have enough chakra needed for his attack
-    # print(bot_character['chakra'], best_action['chakra_cost'])
-    if best_action['chakra_cost'] > bot_character['chakra']:
-        best_action = BASIC_ACTIONS[2]  # Focus action
+    
 
     return best_action    

@@ -103,7 +103,7 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
         )
         #create a notification for the sender
         send_push_notification(
-            PushSubscription.objects.filter(user = receiver_user).first(),
+            PushSubscription.objects.filter(user = receiver_user).last(),
             {
             'title' : f"Message de {sender_name}",
             'body' : f"{sender_name} t'a envoyé un message",
@@ -301,7 +301,7 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
             new_notif.save()
             #send push notification to the family members
             send_push_notification(
-                PushSubscription.objects.filter(user = member.user).first(),
+                PushSubscription.objects.filter(user = member.user).last(),
                 {
                 'title' : f"Message de {sender}",
                 'body' : f"{sender} a envoyé un message dans {family}",
