@@ -232,6 +232,17 @@
                     
                     <p class="text-gray-300"><span class="font-semibold text-orange-500"><i class="fa-regular fa-calendar-days" ></i> : </span> <span class="font-bold" id="fighter1">{{battle.date_started | date:'d M Y'}}</span> </p>
                     <p class="text-gray-300"><span class="font-semibold text-orange-500"><i class="fa-regular fa-calendar" ></i> : </span> <span class="font-bold" id="referee">{{battle.date_ended | date:'d M Y' }}</span></p>
+                    
+                        <p class="text-sm font-semibold">lien du combat:</p>
+                        <div class="flex flex-wrap">
+                          <input onfocus="copyLink('https:\/\/roleplayverse.live/battles/battle_room/{{battle.id}}')" type="text" readonly value="https://roleplayverse.live/battles/battle_room/{{battle.id}}" class="w-full mt-1 px-3 py-2 rounded-lg border border-gray-700 bg-gray-800 text-sm" />
+                          <!-- <button onclick="copyLink('https:\/\/roleplayverse.live/users/signup?rc={{player.referall_code}}')" class="text-sm px-4 py-1.5 rounded-full">
+                              <i class="fas fa-clone mr-2"></i>
+                          </button> -->
+                        </div>
+                        
+                        <p class="text-xs text-gray-300 mt-2">Clique pour copier</p>
+                      
                 </div>
             </div>
         </div>
@@ -895,12 +906,12 @@ function createTextpadComment(comment){
                         
                         ${comment.parent  ? '' : ''}
                         ${comment.replies.length > 0 && comment.parent == null  ? `
-                        <button onclick="showReplies('${comment.id}')" class="ml-4 mt-2 text-sm text-gray-600 hover:text-orange-500 dark:text-gray-400">voir ${comment.replies.length} reponses</button>
+                        <button onclick="showReplies('${comment.id}')" class="ml-4 mt-2 text-sm text-gray-600 hover:text-orange-500 dark:text-gray-400">voir les reponses</button>
                         
                         ` : ''}
                         
                         <div class='reply-form flex flex-col space-y-2 my-4 hidden'>
-                            <textarea id="reply-${comment.id}" class='w-full bg-transparent text-white placeholder-gray-400 border-b border-gray-700 focus:outline-none resize-none' placeholder="Ajouter une reponse..."></textarea>
+                            <textarea id="reply-${comment.id}" class='w-full bg-transparent text-white placeholder-gray-400 border-b border-gray-700 focus:outline-none resize-none' placeholder="repondre a ${comment.author.username}..."></textarea>
                             <button onclick="addReply('${comment.id}', '${comment.textpad_id}')">Soumettre</button>
                         </div>
                         <div class='mb-2 max-h-96 overflow-y-auto hidden' id="replies-${comment.id}">
