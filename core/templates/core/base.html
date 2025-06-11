@@ -819,6 +819,7 @@ function adClick(url, image){
   
     function sendCommentPopup(element, e){
     e.preventDefault()
+
     //const commentForm = $('.comment-form')
     
     
@@ -887,6 +888,10 @@ function addCommentReply(button,parentId, postId) {
     const commentSection = $('#comments-space');
     const replySection = document.getElementById(`comment-replies-${parentId}`);
 
+    const topParentCommentElement = $(replySection).closest('.parent-comment')[0]
+    const topParentId = topParentCommentElement.getAttribute('data-id')
+    const topParentReplySection = topParentCommentElement.querySelector(`#comment-replies-${topParentId}`)
+
     
 
         $.ajax({
@@ -909,16 +914,24 @@ function addCommentReply(button,parentId, postId) {
                 $(`#comment-reply-${parentId}`).val('')
 
                 //$(replySection).prepend(createTextpadComment(res.comment[0]))
-                $(replySection).prepend(`
-                    <div class='text-sm flex space-x-2'>
-                        <img src = '${res.comment.author.profile_picture}' class='w-8 h-8 rounded-full inline-block' />
-                        <div>
-                        <p><a href='/users/${res.comment.author.username}' onclick='showOverlay()' >${res.comment.author.username}</a> ${res.comment.parent ? ` <i class='fas fa-caret-right text-orange-500' ></i> <span class = 'text-gray-400'>${res.comment.parent.author.player}</span>`: ''} </p>
-                        <p>${res.comment.body_full}</p>
-                        <small class='text-sm text-gray-400'>${res.comment.timestamp}</small>
-                        </div>   
-                    </div>
-                `)
+                // $(replySection).prepend(`
+                //     <div class='text-sm flex space-x-2'>
+                //         <img src = '${res.comment.author.profile_picture}' class='w-8 h-8 rounded-full inline-block' />
+                //         <div>
+                //         <p><a href='/users/${res.comment.author.username}' onclick='showOverlay()' >${res.comment.author.username}</a> ${res.comment.parent ? ` <i class='fas fa-caret-right text-orange-500' ></i> <span class = 'text-gray-400'>${res.comment.parent.author.player}</span>`: ''} </p>
+                //         <p>${res.comment.body_full}</p>
+                //         <small class='text-sm text-gray-400'>${res.comment.timestamp}</small>
+                //         </div>   
+                //     </div>
+                // `)
+                
+                topParentReplySection.classList.remove('hidden')
+                topParentReplySection.appendChild(createComment2(res.comment));
+
+                $(topParentReplySection).animate({
+                scrollTop: topParentReplySection.scrollHeight,
+                },'smooth')
+
                 showMyToast('reponse ajouté')
             //Update the comments count
             //$(e.target).siblings('.post-infos').find('.comment-count').text(commentsCount)

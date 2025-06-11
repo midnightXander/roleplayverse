@@ -76,7 +76,14 @@ function openCommentPopup(postId) {
     //document.getElementById(`replies-${commentId}`).nextSibling('.reply-form').classList.toggle('hidden');
     }
     const showCommentReplies = (commentId) => {
-        document.getElementById(`comment-replies-${commentId}`).classList.toggle('hidden')
+        //document.getElementById(`comment-replies-${commentId}`).classList.toggle('hidden')
+        const repliesSection = document.getElementById(`comment-replies-${commentId}`) 
+        repliesSection.classList.toggle('hidden')
+        const replies = repliesSection.querySelectorAll('.comment')
+        //repliesSection.innerHTML = ''
+        replies.forEach(commentElement => {
+            repliesSection.appendChild(commentElement)
+        });
     }
     
 
@@ -86,16 +93,20 @@ function openCommentPopup(postId) {
         'username': '{{player.user.username}}',
         'player':'{{player}}',
     }
+
+    console.log(comment)
     
     const commentElement = document.createElement('div');
-    commentElement.className = 'comment  flex items-start gap-3';
+    commentElement.className = `comment ${comment.parent ? '' : `parent-comment`} flex items-start gap-3`;
+    commentElement.id = `${comment.parent ? '' : `parent-comment-${comment.id}`}`
+    commentElement.setAttribute('data-id', comment.id)
     commentElement.innerHTML = `
                 <a class = "inline-block" href='/users/${comment.author.username}'>
-                <img src="${comment.author.profile_picture}" alt="avatar" class="rounded-full w-10 h-10" />
+                <img src="${comment.author.profile_picture}" alt="avatar" class="rounded-full border border-orange-500 w-10 h-10" />
                 </a>
                 
                 <div class="flex-1">
-                        <a href='/users/${comment.author.username}' onclick = 'showOverlay();' class="text-sm font-semibold hover:text-orange-500 ">${comment.author.player}</a>
+                        <a href='/users/${comment.author.username}' onclick = 'showOverlay();' class="text-sm font-semibold hover:text-orange-500 ">${comment.author.player} ${comment.parent ? ` <i class='fas fa-caret-right text-orange-500' ></i> <span class = 'text-gray-400'>${comment.parent.author.player}</span>`: ''}</a>
                         <p onclick = 'toggleExpand(this)' class="body text-sm text-gray-300" data-expandable data-full='${comment.body_full}'>${comment.body}</p>
                             <div class="absolute top-0 right-2">
                                 <button onclick = 'toggleDropdown(this);' class="text-gray-400 hover:text-white post-dropdown-toggle">
@@ -121,8 +132,10 @@ function openCommentPopup(postId) {
                         <button onclick = "showCommentReplyForm('${comment.id}')" class="hover:underline">Répondre</button>
                     </div>
                        
-                        <button onclick="showCommentReplies('${comment.id}')" class="ml-4 my-2 text-sm text-gray-600 hover:text-orange-500 dark:text-gray-400">voir ${comment.replies.length} reponses</button>
-                        
+                    ${comment.replies.length > 0 && comment.parent == null  ? `
+                        <button onclick="showCommentReplies('${comment.id}')" class="ml-4 mt-2 text-sm text-gray-600 hover:text-orange-500 dark:text-gray-400">voir les reponses</button>
+                        ` : ''}
+
                          <div class='reply-form flex flex-col space-y-2 mb-2 hidden'>
                             <textarea id="comment-reply-${comment.id}" class='w-full bg-transparent text-white placeholder-gray-400 border-b border-gray-700 focus:outline-none resize-none' placeholder="Ajouter une reponse..."></textarea>
                             <button onclick="addCommentReply(this,'${comment.id}', '${comment.post_id}')">Soumettre</button>
@@ -132,7 +145,8 @@ function openCommentPopup(postId) {
                         ${comment.replies
                             .map(
                                 (reply) => `
-                            <div class='text-sm mb-2 flex space-x-2'>
+                            <!--
+                                <div class='text-sm mb-2 flex space-x-2'>
                                     <img src = '${reply.author.profile_picture}' class='w-8 h-8 rounded-full inline-block' />
                                     <div>
                                     <p><a href='/users/${reply.author.username}' onclick='showOverlay()' >${reply.author.username}</a> ${reply.parent ? ` <i class='fas fa-caret-right text-orange-500' ></i> <span class = 'text-gray-400'>${reply.parent.author.player}</span>`: ''} </p>
@@ -140,16 +154,19 @@ function openCommentPopup(postId) {
                                     <small class='text-sm text-gray-400'>${reply.timestamp}</small>
                                     </div>   
                             </div>
+                            -->
                         `
+
                             )
                             .join("")}
                             </div>
                   <div></div>
                 </div>
-               
-    
-    
     `;
+
+    comment.replies.forEach(reply => 
+    commentElement.querySelector(`#comment-replies-${comment.id}`).appendChild(createComment2(reply)) )
+
     return commentElement;
     
     }

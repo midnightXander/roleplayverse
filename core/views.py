@@ -123,20 +123,7 @@ def get_comments_dict(player:Player,post:Post):
             'likes': _parse_number(len(CommentReaction.objects.filter(comment = comment))),
             'body_full': comment.body,
             'body': comment.body[:197]+'...' if len(comment.body) > 200 else comment.body,
-            'replies' : [ {
-                'post_id' : reply.post.id,   
-                'id': reply.id,
-                'author': {
-                    'id': reply.author.id ,
-                    'player': str(reply.author),
-                    'username': reply.author.user.username,
-                    'profile_picture': reply.author.profile_picture.url,
-                },
-                'body_full': reply.body,
-                'body': reply.body[:197]+'...' if len(reply.body) > 200 else reply.body,
-                'timestamp': _time_since(reply.date_added)
-                
-            } for reply in Comment.objects.filter(parent = comment).order_by("-date_added") ],
+            'replies' : [ _get_comment(player, reply) for reply in Comment.objects.filter(parent = comment).order_by("-date_added") ],
             'timestamp': _time_since(comment.date_added)  
 
         } for comment in comments
@@ -675,7 +662,14 @@ def comment(request,id):
             comment.delete()
             return JsonResponse({'status':'success','message':'commentaire Supprimé'})
         return JsonResponse({'status':'error','message':"l'utlisateur n'est pas l'auteur de ce commentaire"})
+
+def get_post_comments(request, post_id):
+    player  = get_player(request.user)
+    post = get_object_or_404(Post, id=post_id)
+    comments = Comment.objects.filter(parent=None, post = post).order_by("-date_added")
+    data = [_get_comment(player, comment) for comment in comments]
     
+    return JsonResponse({ 'status': 'success', 'comments' : data}, safe=False)     
         
         
 @csrf_exempt

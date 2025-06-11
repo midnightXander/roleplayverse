@@ -12,6 +12,7 @@ urlpatterns = [
     path('post/delete/<int:id>',views.delete_post,name='delete_post'),
     path('post/modify/<int:id>',views.modify_post,name = 'modify_post'),
     path('post/<int:id>',views.post, name = 'post'),
+    path('post/<int:post_id>/comments',views.get_post_comments, name = 'post'),
     path('comment/<int:id>',views.comment, name = 'comment_action'),
     path('posts/<int:id>',views.post_page, name = 'post_page'),
     path('post/favorite/<int:id>',views.favorite, name = "favorite"),
