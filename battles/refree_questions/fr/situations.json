@@ -1,0 +1,53 @@
+[
+    {
+    "textpad_1" : {
+        "character" : "Temari",
+        "text" : "Temari s’avance dans la clairière, son éventail déjà déployé. Le vent se lève, en parfaite harmonie avec son chakra. Elle connaît la réputation de Sasori, notamment sa redoutable maîtrise des marionnettes et du poison. Gardant une distance stratégique de 15 mètres, elle agit immédiatement. Elle libère une première Danse de la Faucheuse (Kamaitachi no Mai), envoyant une puissante lame de vent chargée de chakra en arc de cercle, visant à balayer l’environnement devant elle et désorienter Sasori.Enchaînant sans attendre, elle bondit dans un arbre à sa droite, utilisant une feinte de position. Profitant du chaos généré par la tempête de vent, elle lance trois kunaï explosifs en parabole, pour retomber derrière un tronc massif, restant camouflée.Elle garde son chakra en réserve pour une éventuelle deuxième technique Fûton ou une esquive instantanée si le besoin s’en fait sentir."
+    },
+    "textpad_2" : {
+        "character" : "Sasori",
+        "text" : "Toujours dans sa marionnette Hiruko, Sasori observe l’attaque de Temari avec son calme froid. Au moment où la lame de vent balaye la zone, il reste immobile et l’encaisse de plein fouet. Cependant, grâce à une couche de chakra invisible qui entoure sa marionnette, la technique ne lui cause cependant aucun dégât, le chakra du vent n'est pas assez dense pour affecter une structure aussi dure que Hiruko. Alors que les kunaïs explosent autour de lui, il émerge indemne, le feu des explosions est trop dispersé. les projectiles ont été déviés par la carapace incurvée de sa marionnette. il lève le bras gauche de Hiruko et déclenche un tir d’aiguilles empoisonnées dans toutes les directions, prédisant forcément la position de Temari avec une telle zone de couverture. Enfin, sans aucun délai, le gaz toxique contenu dans Hiruko se répand en masse dans toute la clairière en moins d’une seconde, empêchant tout mouvement à Temari sans qu'elle ait le temps de réagir."
+    }
+
+    },
+
+    {
+        "textpad_1" : {
+            "character" : "Kakashi Hatake",
+            "text" : "À une distance de 15 mètres, Kakashi analyse le terrain(clairiere rocheuse sans obstacle) avec son Sharingan activé. Il remarque une marionnette humaine se préparant à l’attaque. Sans perdre de temps, il crée un clone d’ombre qui se disperse vers la droite pour détourner l’attention. Simultanément, il compose des mudras rapides et libère un Suiton : Suiryūdan no Jutsu (Dragon aqueux), dirigé vers Sasori. L’eau provient d’une source à proximité (un petit lac mentionné dans la description de l’environnement). L’objectif est de forcer Sasori à reculer pour interrompre le mécanisme de sa marionnette principale. Pendant ce temps, le vrai Kakashi reste caché dans les fourrés, prêt à enchaîner si l’ouverture est créée."
+        },
+        "textpad_2" : {
+            "character" : "Sasori",
+            "text" : "Sasori observe le dragon aqueux foncer sur lui. Avec calme, il effectue une substitution avec un tronc d’arbre. Depuis cette nouvelle position, il utilise une marionnette humaine explosive, qui se téléporte à côté de Kakashi. Cette marionnette active immédiatement un sceau d’auto-destruction avec un rayon d’explosion de 10 mètres."
+        }
+    
+    },
+
+    {
+        "textpad_1" : {
+            "character" : "Neiji Hyuga",
+            "text" : "Neji active son Byakugan à 100 mètres de Deidara. Il repère instantanément l’argile explosive dissimulée dans les airs. Il accélère d’un pas rapide en utilisant le Jūken pour trancher net l’approche de deux oiseaux en argile. Il effectue alors un Kaiten (rotation divine), générant une barrière défensive repoussant une vague d’explosions mineures et créant une ouverture temporaire dans le ciel. Il se positionne en hauteur sur une paroi rocheuse pour avoir une meilleure vue."
+        },
+        "textpad_2" : {
+            "character" : "Deidara",
+            "text" : "Depuis les airs, Deidara crée un dragon C2 en moins d’une seconde, qu’il chevauche immédiatement. Il envoie ensuite 15 micro-araignées explosives qui se déplacent silencieusement à une vitesse de 50 m/s, malgré leur composition en argile dense. Aucune de ces araignées n’est repérée par le Byakugan de Neji. L’explosion est déclenchée simultanément alors que Deidara est encore en vol, mais il n’est pas affecté malgré la proximité."
+        }
+    
+    },
+
+    {
+        "textpad_1" : {
+            "character" : "Tsunade",
+            "text" : "Tsunade s’avance, concentrant son chakra dans ses jambes pour bondir et frapper Orochimaru à pleine puissance. En l’air, elle déclenche un punch tectonique qui fissure le sol sur une large zone (chose conforme à ses capacités). Elle utilise sa régénération de Mitotic pour encaisser une blessure reçue lors du saut (un shuriken empoisonné qu’elle a remarqué). Elle tombe au sol mais reste sur ses appuis."
+        },
+        "textpad_2" : {
+            "character" : "Orichimaru",
+            "text" : "Touché par la secousse, Orochimaru s’effondre… mais se relève immédiatement sans blessures, sa mue s’etant activée instantanément pour encaisser le choc. Il utilise ensuite Kusanagi no Tsurugi qu’il allonge jusqu’à 30 mètres, ciblant Tsunade, qu’il transperce en une fraction de seconde, alors qu’elle est encore sous effet de sa régénération. Il parvient également à l’attacher avec des serpents invoqués…, les serpents sortant directement de ses bras."
+        }
+    
+    }
+
+
+
+
+]

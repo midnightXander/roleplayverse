@@ -32,7 +32,19 @@ class CharacaterAppearance(models.Model):
 
     def __str__(self):
         return f"Image for {self.image.name}"   
-    
+
+class MapZone(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    level_required = models.IntegerField(default=1)
+    # min_level = models.IntegerField(default=1)
+    # max_level = models.IntegerField(default=100)
+    image = models.ImageField(upload_to='adventure/maps/zones', blank=True, null=True)
+    data = models.JSONField(blank=True, null=True, help_text="Zone data in JSON format")
+
+    def __str__(self):
+        return self.name    
+
 MISSION_TYPES = [
     ('defeat', 'Vaincre un ennemi'),
     ('collect', 'Trouver un objet'),
@@ -46,11 +58,12 @@ class MissionTemplate(models.Model):
     min_level = models.IntegerField(default=1)
     max_level = models.IntegerField(default=100)
     mission_type = models.CharField(max_length=20, choices=MISSION_TYPES)
-    target = models.JSONField(max_length=100, help_text="Nom de l'ennemi, de l'objet ou zone", null=True, blank=True)
+    target = models.CharField(max_length=100, help_text="Nom de l'ennemi, de l'objet ou zone", null=True, blank=True)
     quantity = models.IntegerField(default=1)
     reward_exp = models.IntegerField(default=50)
     reward_item = models.CharField(max_length=100, blank=True, null=True)
     rarity = models.CharField(max_length=50, default='common', choices=[('common', 'Commune'), ('rare', 'Rare'), ('epic', 'Épique')])
+    zone = models.ForeignKey(MapZone, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return f"{self.title}"

@@ -1,0 +1,467 @@
+[
+    {
+        "name": "Zetsu Kuro",
+        "rank": "Rogue Ninja",
+        "level": 10,
+        "chakra_pool": 80,
+        "stamina_pool": 70,
+        "jutsus": [
+            {
+                "name": "Shadow Spikes",
+                "type": "Ninjutsu",
+                "rank": "C",
+                "chakra_cost": 20,
+                "stamina_cost": 10,
+                "description": "Summons spikes from the shadows to attack enemies."
+            },
+            {
+                "name": "Dark Clone Technique",
+                "type": "Ninjutsu",
+                "rank": "C",
+                "chakra_cost": 15,
+                "stamina_cost": 10,
+                "description": "Creates clones infused with dark chakra."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/54/d6/f8/54d6f8c1b23f587f0957d1fbcfb20631.gif"
+    },
+    {
+        "name": "Ryo Ketsueki",
+        "rank": "Mercenary",
+        "level": 5,
+        "chakra_pool": 60,
+        "stamina_pool": 50,
+        "jutsus": [
+            {
+                "name": "Blood Mist Slash",
+                "type": "Kenjutsu",
+                "rank": "C",
+                "chakra_cost": 10,
+                "stamina_cost": 20,
+                "description": "A sword technique that creates a mist of blood."
+            }
+        ],
+        "image": "https://media.tenor.com/H0Fec8kWfWoAAAAM/omoi-naruto.gif"
+    },
+    {
+        "name": "Kaito Arashi",
+        "rank": "Rogue Ninja",
+        "level": 8,
+        "chakra_pool": 70,
+        "stamina_pool": 60,
+        "jutsus": [
+            {
+                "name": "Storm Style: Thunder Strike",
+                "type": "Ninjutsu",
+                "rank": "C",
+                "chakra_cost": 25,
+                "stamina_cost": 15,
+                "description": "Summons a bolt of lightning to strike the enemy."
+            }
+        ],
+        "image": "https://pa1.aminoapps.com/6535/e1c0d334dc3ba0900b080ae4d01a1e5b8b724c7e_00.gif"
+    },
+    {
+        "name": "Hana Kumo",
+        "rank": "Bandit",
+        "level": 3,
+        "chakra_pool": 50,
+        "stamina_pool": 40,
+        "jutsus": [
+            {
+                "name": "Poison Mist",
+                "type": "Ninjutsu",
+                "rank": "D",
+                "chakra_cost": 15,
+                "stamina_cost": 10,
+                "description": "Releases a poisonous mist to weaken enemies."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/a8/e4/28/a8e428b2b8fdbc033e463b80c2f3db4a.gif"
+    },
+    {
+        "name": "Shiro Oni",
+        "rank": "Rogue Ninja",
+        "level": 10,
+        "chakra_pool": 90,
+        "stamina_pool": 80,
+        "jutsus": [
+            {
+                "name": "Demonic Flame Barrage",
+                "type": "Ninjutsu",
+                "rank": "B",
+                "chakra_cost": 30,
+                "stamina_cost": 20,
+                "description": "Shoots multiple demonic fireballs at the enemy."
+            },
+            {
+                "name": "Hellfire Cloak",
+                "type": "Ninjutsu",
+                "rank": "B",
+                "chakra_cost": 40,
+                "stamina_cost": 15,
+                "description": "Cloaks the user in flames for enhanced attacks."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/61/15/46/611546408e024a83be698547e41a6bf8.gif"
+    },
+    {
+        "name": "Akuma Retsu",
+        "rank": "Rogue Ninja",
+        "level": 7,
+        "chakra_pool": 70,
+        "stamina_pool": 60,
+        "jutsus": [
+            {
+                "name": "Shadow Bind",
+                "type": "Ninjutsu",
+                "rank": "C",
+                "chakra_cost": 20,
+                "stamina_cost": 10,
+                "description": "Uses shadows to immobilize the opponent."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/31/d8/fe/31d8fecbd9fb2c0abe449b20e9f14679.gif"
+    },
+    {
+        "name": "Kuro Zangetsu",
+        "rank": "Bandit Leader",
+        "level": 9,
+        "chakra_pool": 80,
+        "stamina_pool": 70,
+        "jutsus": [
+            {
+                "name": "Moonlight Slash",
+                "type": "Kenjutsu",
+                "rank": "C",
+                "chakra_cost": 15,
+                "stamina_cost": 25,
+                "description": "A sword technique enhanced by moonlight."
+            }
+        ],
+        "image": "https://media.tenor.com/H0Fec8kWfWoAAAAM/omoi-naruto.gif"
+    },
+    {
+        "name": "Tetsuya Kage",
+        "rank": "Rogue Ninja",
+        "level": 6,
+        "chakra_pool": 65,
+        "stamina_pool": 55,
+        "jutsus": [
+            {
+                "name": "Earth Style: Rock Wall",
+                "type": "Ninjutsu",
+                "rank": "C",
+                "chakra_cost": 20,
+                "stamina_cost": 10,
+                "description": "Creates a rock wall to block attacks."
+            }
+        ],
+        "image": "https://64.media.tumblr.com/2cc1bcbd66565846b87d697fcee85d03/08a89bed81c8eda7-4b/s500x750/26d7ae96bc3d4cf287bc35e5263b494e69ef289e.gif"
+    },
+    {
+        "name": "Rika Yami",
+        "rank": "Mercenary",
+        "level": 4,
+        "chakra_pool": 55,
+        "stamina_pool": 45,
+        "jutsus": [
+            {
+                "name": "Silent Killing",
+                "type": "Taijutsu",
+                "rank": "D",
+                "chakra_cost": 10,
+                "stamina_cost": 20,
+                "description": "A stealthy attack that eliminates enemies silently."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/4d/22/4e/4d224e71a92fce0d13ed3a4b23868472.gif"
+    },
+    {
+        "name": "Hiroshi Kumo",
+        "rank": "Rogue Ninja",
+        "level": 2,
+        "chakra_pool": 40,
+        "stamina_pool": 30,
+        "jutsus": [
+            {
+                "name": "Lightning Spark",
+                "type": "Ninjutsu",
+                "rank": "D",
+                "chakra_cost": 10,
+                "stamina_cost": 5,
+                "description": "Shoots a small spark of lightning at the enemy."
+            }
+        ],
+        "image": "https://pa1.aminoapps.com/6535/e1c0d334dc3ba0900b080ae4d01a1e5b8b724c7e_00.gif"
+    },
+    
+    {
+        "name": "Riku Senju",
+        "rank": "Jounin",
+        "level": 45,
+        "chakra_pool": 180,
+        "stamina_pool": 160,
+        "jutsus": [
+            {
+                "name": "Wood Release: Forest Creation",
+                "type": "Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 50,
+                "stamina_cost": 20,
+                "description": "Creates a dense forest to trap enemies."
+            },
+            {
+                "name": "Wood Release: Binding Roots",
+                "type": "Ninjutsu",
+                "rank": "B",
+                "chakra_cost": 30,
+                "stamina_cost": 15,
+                "description": "Roots emerge to immobilize the opponent."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/61/15/46/611546408e024a83be698547e41a6bf8.gif"
+    },
+    {
+        "name": "Akira Hyuga",
+        "rank": "Chuunin",
+        "level": 30,
+        "chakra_pool": 140,
+        "stamina_pool": 130,
+        "jutsus": [
+            {
+                "name": "Eight Trigrams Thirty-Two Palms",
+                "type": "Taijutsu",
+                "rank": "B",
+                "chakra_cost": 20,
+                "stamina_cost": 20,
+                "description": "A rapid series of strikes to seal chakra points."
+            },
+            {
+                "name": "Gentle Fist: Palm Strike",
+                "type": "Taijutsu",
+                "rank": "C",
+                "chakra_cost": 15,
+                "stamina_cost": 10,
+                "description": "A precise strike to disrupt chakra flow."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/01/d8/b9/01d8b98fa5a9a60c258dd2dd0b708da3.gif"
+    },
+    {
+        "name": "Taro Uchiha",
+        "rank": "Jounin",
+        "level": 50,
+        "chakra_pool": 190,
+        "stamina_pool": 170,
+        "jutsus": [
+            {
+                "name": "Fire Style: Dragon Flame Jutsu",
+                "type": "Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 40,
+                "stamina_cost": 20,
+                "description": "A powerful stream of fire shaped like a dragon."
+            },
+            {
+                "name": "Sharingan: Illusion Bind",
+                "type": "Genjutsu",
+                "rank": "A",
+                "chakra_cost": 50,
+                "stamina_cost": 15,
+                "description": "Traps the opponent in a powerful illusion."
+            },
+            {
+                "name": "Fire Style: Phoenix Flower Jutsu",
+                "type": "Ninjutsu",
+                "rank": "B",
+                "chakra_cost": 30,
+                "stamina_cost": 15,
+                "description": "Shoots multiple fireballs at the enemy."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/73/13/2c/73132cc52770ee5f4645e43e115f5bd8.gif"
+    },
+    {
+        "name": "Hana Aburame",
+        "rank": "Chuunin",
+        "level": 25,
+        "chakra_pool": 120,
+        "stamina_pool": 100,
+        "jutsus": [
+            {
+                "name": "Insect Swarm",
+                "type": "Ninjutsu",
+                "rank": "B",
+                "chakra_cost": 25,
+                "stamina_cost": 15,
+                "description": "Summons a swarm of insects to attack the enemy."
+            },
+            {
+                "name": "Insect Clone",
+                "type": "Ninjutsu",
+                "rank": "C",
+                "chakra_cost": 20,
+                "stamina_cost": 10,
+                "description": "Creates a clone made of insects."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/54/d6/f8/54d6f8c1b23f587f0957d1fbcfb20631.gif"
+    },
+    {
+        "name": "Kenta Inuzuka",
+        "rank": "Chuunin",
+        "level": 28,
+        "chakra_pool": 130,
+        "stamina_pool": 140,
+        "jutsus": [
+            {
+                "name": "Fang Over Fang",
+                "type": "Taijutsu",
+                "rank": "B",
+                "chakra_cost": 25,
+                "stamina_cost": 30,
+                "description": "A high-speed spinning attack with a partner."
+            },
+            {
+                "name": "Man Beast Transformation",
+                "type": "Ninjutsu",
+                "rank": "C",
+                "chakra_cost": 20,
+                "stamina_cost": 15,
+                "description": "Transforms into a beast-like form for enhanced combat."
+            }
+        ],
+        "image": "https://pa1.aminoapps.com/6567/b8c8f981afc56a85d32ee3f5fa7f8468f2215b0b_00.gif"
+    },
+    {
+        "name": "Renji Sarutobi",
+        "rank": "Jounin",
+        "level": 40,
+        "chakra_pool": 170,
+        "stamina_pool": 160,
+        "jutsus": [
+            {
+                "name": "Fire Style: Flame Wall",
+                "type": "Ninjutsu",
+                "rank": "B",
+                "chakra_cost": 30,
+                "stamina_cost": 15,
+                "description": "Creates a wall of fire to block attacks."
+            },
+            {
+                "name": "Summoning: Monkey King",
+                "type": "Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 50,
+                "stamina_cost": 20,
+                "description": "Summons the Monkey King for assistance in battle."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/61/15/46/611546408e024a83be698547e41a6bf8.gif"
+    },
+    {
+        "name": "Kaede Uzumaki",
+        "rank": "Jounin",
+        "level": 48,
+        "chakra_pool": 200,
+        "stamina_pool": 180,
+        "jutsus": [
+            {
+                "name": "Sealing Technique: Chains of Binding",
+                "type": "Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 40,
+                "stamina_cost": 20,
+                "description": "Creates chakra chains to immobilize the enemy."
+            },
+            {
+                "name": "Rasengan Barrage",
+                "type": "Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 50,
+                "stamina_cost": 25,
+                "description": "Multiple Rasengan attacks in quick succession."
+            }
+        ],
+        "image": "https://www.gifcen.com/wp-content/uploads/2022/04/naruto-gif-6.gif"
+    },
+    {
+        "name": "Shiori Nara",
+        "rank": "Chuunin",
+        "level": 27,
+        "chakra_pool": 140,
+        "stamina_pool": 120,
+        "jutsus": [
+            {
+                "name": "Shadow Possession Jutsu",
+                "type": "Ninjutsu",
+                "rank": "B",
+                "chakra_cost": 30,
+                "stamina_cost": 10,
+                "description": "Extends the user's shadow to control the opponent."
+            },
+            {
+                "name": "Shadow Strangle Jutsu",
+                "type": "Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 40,
+                "stamina_cost": 15,
+                "description": "Uses shadows to strangle the opponent."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/31/d8/fe/31d8fecbd9fb2c0abe449b20e9f14679.gif"
+    },
+    {
+        "name": "Haruto Akimichi",
+        "rank": "Chuunin",
+        "level": 25,
+        "chakra_pool": 150,
+        "stamina_pool": 180,
+        "jutsus": [
+            {
+                "name": "Expansion Jutsu",
+                "type": "Ninjutsu",
+                "rank": "B",
+                "chakra_cost": 30,
+                "stamina_cost": 20,
+                "description": "Expands the user's body for powerful attacks."
+            },
+            {
+                "name": "Calorie Control",
+                "type": "Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 40,
+                "stamina_cost": 25,
+                "description": "Uses stored calories to enhance strength and speed."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/73/13/2c/73132cc52770ee5f4645e43e115f5bd8.gif"
+    },
+    {
+        "name": "Mizuki Yuki",
+        "rank": "Jounin",
+        "level": 42,
+        "chakra_pool": 180,
+        "stamina_pool": 160,
+        "jutsus": [
+            {
+                "name": "Ice Style: Ice Prison",
+                "type": "Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 40,
+                "stamina_cost": 20,
+                "description": "Traps the enemy in a prison of ice."
+            },
+            {
+                "name": "Ice Style: Frozen Barrage",
+                "type": "Ninjutsu",
+                "rank": "B",
+                "chakra_cost": 30,
+                "stamina_cost": 15,
+                "description": "Launches sharp ice shards at the enemy."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/61/15/46/611546408e024a83be698547e41a6bf8.gif"
+    }
+]

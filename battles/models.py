@@ -293,6 +293,9 @@ class RefreeTest(models.Model):
         (i,i) for i in situations_2
     ])
     verdict2 = models.TextField(blank=True)
+
+    situation_a = models.JSONField(blank = True, null=True)
+    situation_b = models.JSONField(blank = True, null=True)
     
     #fields filled by the moderator
     validated = models.BooleanField(blank=True, null=True, default=False)

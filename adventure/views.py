@@ -13,6 +13,12 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth import logout,login,authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from pathlib import Path
+import os
+import json
+
+
+BASE_DIR = Path(__file__).resolve().parent
 # Create your views here.
 # {
 #     "name": "Naruto Uzumaki",
@@ -67,17 +73,139 @@ def create_character(request):
 
     return render(request, 'adventure/create.html')
 
+
+def create_zones():
+    MapZone.objects.create(
+                    name='Default Zone',
+                    description="Default zone for later",
+                    # min_level=zone.get('min_level', 1),
+                    # max_level=zone.get('max_level', 100),
+                    level_required=random.randint(1, 3),
+                    data={}
+                ).save()
+    zones_file = os.path.join(BASE_DIR, 'static/jsons/zones.json')
+    if not os.path.exists(zones_file):
+        raise FileNotFoundError(f"Zones file not found at {zones_file}")
+    with open(zones_file, 'r', encoding='utf-8') as file:
+        zones_data = json.load(file)
+        count = 0
+        for zone in zones_data:
+            zone_data = zone.get('data', {})
+            if MapZone.objects.filter(name = zone['name'] ).exists():
+                pass
+            else:
+                MapZone.objects.create(
+                    name=zone['name'],
+                    description=zone['description'],
+                    # min_level=zone.get('min_level', 1),
+                    # max_level=zone.get('max_level', 100),
+                    level_required=zone.get('level_required', random.randint(1, 3)),
+                    image=zone.get('image', None),
+                    data=zone_data
+                ).save()
+                count += 1
+
+    print(f'created {count} zones')            
+
+def assign_zones_to_missions():
+    missions_file = os.path.join(BASE_DIR, 'static/jsons/missions.json')
+    if not os.path.exists(missions_file):
+        raise FileNotFoundError(f"missions file not found at {missions_file}")
+    with open(missions_file, 'r', encoding='utf-8') as file:
+        missions_data = json.load(file)
+        for mission in missions_data:
+            min_level = mission.get('min_level',1)
+            max_level = mission.get('max_level', 5)
+
+            mission_zone = MapZone.objects.filter(level_required = min_level).order_by('?').first()
+            if mission_zone:
+                mission['zone'] = mission_zone.name
+            else:
+                mission['zone'] = 'Default Zone'    
+
+    with open(missions_file, 'w') as f:
+        json.dump(missions_data, f, indent=4)        
+
+
+def create_missions():
+    missions_file = os.path.join(BASE_DIR, 'static/jsons/missions.json')
+    if not os.path.exists(missions_file):
+        raise FileNotFoundError(f"missions file not found at {missions_file}")
+    with open(missions_file, 'r', encoding='utf-8') as file:
+        missions_data = json.load(file)
+        count = 0
+        for mission in missions_data:
+            mission_data = mission.get('data', {})
+            # obj,created = MissionTemplate.objects.get_or_create(
+            #     title = mission['title'],
+            #     defaults = mission,
+            # )
+            MissionTemplate.objects.create(
+                title=mission['title'],
+                description=mission['description'],
+                min_level=mission.get('min_level', 1),
+                max_level=mission.get('max_level', 100),
+                mission_type=mission['mission_type'],
+                target=mission.get('target', ''),
+                quantity=mission.get('quantity', 1),
+                reward_exp=mission.get('reward_exp', 50),
+                reward_item=mission.get('reward_item', ''),
+                zone = MapZone.objects.filter(name=mission.get('zone', 'Default Zone')).first()  # Assuming a default zone if not specified
+
+            ).save()
+            count += 1
+
+        print(f"Created {count} missions")    
+
+
+def _mission_data(mission:MissionTemplate):
+    return {
+        'title' : mission.title,
+        'description' : mission.description,
+        'min_level' : mission.min_level,
+        'max_level' : mission.max_level,
+        'type' : mission.mission_type,
+        'target' : mission.target,
+        'reward_exp' : mission.reward_exp,
+        # 'zone' : {
+        #     'name' : mission.zone.name
+        # }
+    }
+
+
+def _zone_data(zone:MapZone):
+    return {
+        'id' : zone.id,
+        'name'  : zone.name,
+        'key' : zone.name.strip().lower().replace(' ', '-').replace("'", ''),
+        'description' : zone.description,
+        'missions' : [ _mission_data(mission) for mission in MissionTemplate.objects.filter(zone = zone) ]
+    }
+
+
 @login_required
 def game(request):
+    
     player = Player.objects.get(user=request.user)
     adventure_player = AdventurePlayer.objects.filter(player= player).first()
+    
     if not adventure_player:
         return redirect('adventure:create_character')
     
+    # create_zones()
+    # assign_zones_to_missions()
+    # create_missions()
+    # assign_random_mission(player)
+
+    zones = MapZone.objects.filter(level_required__lte = adventure_player.level)
+    zones = [_zone_data(zone) for zone in zones]
+       
+
 
     return render(request, 'adventure/game.html',{
         'player': player,
         'adventure_player': adventure_player,
+        'zones' : zones
     })
 
 def training(request):
@@ -176,6 +304,8 @@ def training_battle_action(request):
 def assign_random_mission(player):
     adventure_player = AdventurePlayer.objects.get(player = player)
     current_level = adventure_player.level
+    
+    
     eligible_missions = MissionTemplate.objects.filter(min_level__lte=current_level, max_level__gte=current_level)
 
     # Exclure missions déjà reçues récemment

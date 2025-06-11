@@ -10,4 +10,5 @@ urlpatterns = [
     path('blog/edit/<int:post_id>',views.edit_blog_post,name = 'edit_post'),
     path('notifications/notify_player/<str:email>', views.notify_player, name='notify_player'),
     path('notifications/notify_all_players', views.notify_all_players, name='notify_all_players'),
+    path('referee/add/<str:email>', views.add_player_as_refree, name='add_refereee'),
 ]

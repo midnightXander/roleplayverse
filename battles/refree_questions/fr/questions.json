@@ -16,14 +16,14 @@
             "answer": "Kubikiribocho"
         },
         {
-            "question": "Quel est le nom du clan qui possède le Sharingan ?",
-            "choices": ["Senju", "Uzumaki", "Uchiha", "Hyuga"],
-            "answer": "Uchiha"
+            "question": "Une personnage dit sensorielle est il capable de detecter des presences sous-terre?",
+            "choices": ["Oui", "Non", "Seulement si elles sont puissantes", "Seulement si elles sont proches"],
+            "answer": "Oui"
         },
         {
-            "question": "Quel est le nom de la technique ultime de Minato Namikaze ?",
-            "choices": ["Rasengan", "Hiraishin no Jutsu", "Chidori", "Amaterasu"],
-            "answer": "Hiraishin no Jutsu"
+            "question": "Parmis les 8 portes psychiques q'utilise souvent Gai Maito , Comment est appelé la deuxieme ?",
+            "choices": ["La Porte de la Vie", "La Porte initiale", "La Porte de l'Extase", "La Porte de la Rétention"],
+            "answer": "La Porte de la Vie"
         },
         {
             "question": "Quel est le bijū scellé dans Killer Bee ?",

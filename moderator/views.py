@@ -15,6 +15,7 @@ from .models import *
 import os
 from dotenv import load_dotenv
 from django.views.decorators.csrf import csrf_exempt
+from battles.views import add_refree
 load_dotenv()
 import json
 
@@ -177,7 +178,14 @@ def notify_player(request, email):
         messages.success(request, f"Notification envoyée à {user}.")
         return JsonResponse({'status': 'success', 'message': 'Notification envoyée à tous les joueurs.'})    
 
-# @csrf_exempt
-# def send_email(request):
-#     if request.method == 'POST':
-#         body = json.loads(request.body)     
+
+def add_player_as_refree(request, email):
+    try:
+        user = User.objects.get(email=email)
+        player = Player.objects.get(user=user)
+        add_refree(player)
+        return JsonResponse({'status': 'success', 'message': f"{player} ajouté en tant que refree."})
+    except Exception as e:
+        print(f"Erreur lors de l'ajout du joueur  en tant que arbitre: {e}")
+        return JsonResponse({'status': 'error', 'message': 'Erreur lors de l\'ajout du joueur en tant que arbitre.'})
+    

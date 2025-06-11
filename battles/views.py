@@ -4,6 +4,8 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect,JsonResponse,Http404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+import os
+from moderator.models import Moderator
 from .models import *
 from django.db.models import Q
 from users.models import Player,Family,PlayerStat,PlayerNotification,notification_types,rankings,Badge,PlayerBadge
@@ -24,6 +26,11 @@ from api.utility import send_push_notification
 from .solo_battle import *
 from .solo_battle import _evaluate_actions, _bot_action, _log_actions
 from .solo_battle import _bot_action_minimax
+from pathlib import Path
+import random
+
+BASE_DIR = Path(__file__).resolve().parent
+
 #manage progressions after a battle
 #manage BP for starting a battle
 #refree quizz
@@ -94,7 +101,7 @@ def _referee_proposals_data(proposals):
             "profile_picture": proposal.player.profile_picture.url,
         },
         
-        "ratings": (get_referee_rating(proposal.player)['timeliness']+get_referee_rating(proposal.player)['communication']+get_referee_rating(proposal.player)['fairness'])/3,
+        "ratings": round((get_referee_rating(proposal.player)['timeliness']+get_referee_rating(proposal.player)['communication']+get_referee_rating(proposal.player)['fairness'])/3, 1),
         "date_sent":  _time_since(proposal.date_sent),
 
     } for proposal in proposals ]
@@ -615,10 +622,11 @@ def refree_proposal(request, battle_id):
                 else:
                     message = "Tu dois étre un arbitre officiel pour arbitrer un combat STAKE , Fais le teste d'arbitrage pour devenir arbitre officiel"
             else:
+                notification_url = f'/users/challenges/{battle.initiator.user.username}' if battle.type == 'challenge' else f'/users/requests/{battle.initiator.user.username}'
                 new_notif = core_models.Notification.objects.create(
                 target = battle.initiator,
                 content = f"{player} veut arbitrer un de tes combats, clique pour répondre",
-                url = f'/users/requests/{battle.initiator.user.username}',
+                url = notification_url,
                 )    
                 new_proposal = RefreeingProposal.objects.create(player=player, battle=battle)
                 new_proposal.save()
@@ -629,7 +637,7 @@ def refree_proposal(request, battle_id):
                     {
                     'title' : f"Proposition d'arbitrage",
                     'body' : f"{player} veut arbitrer un de tes combats, clique pour répondre",
-                    'url' : f'/users/requests/{battle.initiator.user.username}',
+                    'url' : notification_url,
                     'icon' : '/static/images/logo/logo_1.png',
                     },
                     
@@ -1341,6 +1349,7 @@ def evaluate_textpad(request, battle_id):
                     #update the player's rank if progression reached 100%
                     update_rank(winner)
                     update_points(family = winner.family, battle=battle, member_progress=progress)
+                    winner.award_credits(40)
 
                     winner.save()
                     battle.save()
@@ -1542,7 +1551,7 @@ def rate_referee(request,battle_id):
         print(comment)
         message = ''
         if player == battle.refree:
-            message = "tu ne peux pas de noter toi meme"
+            message = "tu ne peux pas te noter toi meme"
         elif RefereeRating.objects.filter(battle = battle, player = player).exists():
             message = "Tu as déja donné une note a l'arbitre de ce combat"
         elif player != battle.initiator and player != battle.opponent:
@@ -1671,6 +1680,13 @@ def new_refree(request):
     random_index = random.randint(0, len(situations_1)-1)
     situation_1 = situations_1[random_index]
     situation_2 = situations_2[random_index]
+    
+    situations_file = os.path.join(BASE_DIR, 'refree_questions', 'fr\situations.json')
+
+    with open(situations_file, 'r', encoding='utf-8') as file:
+        situations_data = json.load(file)
+        situation_1 = random.choice(situations_data)
+        situation_2 = random.choice(situations_data)
 
     message = ""
 
@@ -1721,23 +1737,20 @@ def new_refree(request):
         step = int(step)
         
         if step == 1:
-            
-            
             quizScore =  int(request.POST['score'])
-
 
             new_test = RefreeTest.objects.create(
                 player = player,
                 quizScore = quizScore,
-                situation1 = situation_1,
-                situation2 = situation_2
-                
+                situation_a = situation_1,
+                situation_b = situation_2,
             )
             if quizScore >= 60:
-                new_test.validated = True
+                pass
+                # new_test.validated = True
             
-                #add player as a refree on validation
-                add_refree(player)
+                # #add player as a refree on validation
+                # add_refree(player)
   
             new_test.save()
             # return JsonResponse({"status":"success","message": f'1ere étape completée'})
@@ -1747,7 +1760,7 @@ def new_refree(request):
         elif step == 2:    
             verdict1 = request.POST['verdict1']
             verdict2 = request.POST['verdict2']
-            test = RefreeTest.objects.get(player = player)
+            test = RefreeTest.objects.filter(player = player).last()
             test.verdict1  = verdict1
             test.verdict2 = verdict2
 
@@ -1757,16 +1770,32 @@ def new_refree(request):
             # test.validated =  test_passed
             
             #simulate validation
-            test.validated = True
+            # test.validated = True
             
-            #add player as a refree on validation
-            add_refree(player)
+            # #add player as a refree on validation
+            # add_refree(player)
 
             test.save()
+
+            moderators = Moderator.objects.all()
+            for moderator in moderators:
+                print(f"sending notif to {moderator.user}")
+                send_push_notification(PushSubscription.objects.filter(user = moderator.user).last(),
+                {
+                'title' : f"Nouveau test d'arbitrage",
+                'body' : f"{player} a passer le test d'arbitrage, tu dois l'evaluer",
+                'url' : f'/moderator',
+                'icon' : '/static/images/logo/logo_1.png',
+                },
+                moderator.user
+                )
+
 
             return JsonResponse({"status":"success","message": f'2eme étape completé', "test_passed": test_passed})
         
     eligible = not refree_badge in player_badges #Just for now, remove after we have sufficient referees to start with
+    #eligible = True
+    
     context = {
         "player" : player,
         "n_notifs" : n_notifs,
@@ -1778,8 +1807,8 @@ def new_refree(request):
         "eligible":eligible,
         "questions":questions[:8],
         "message":message,
-        "situation1": "/media/"+situation_1,
-        "situation2": "/media/"+situation_2,
+        "situation1": situation_1,
+        "situation2": situation_2,
         }
     
     return render(request,"battles/refrees/new_refree.html",context)
