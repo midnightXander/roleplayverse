@@ -168,9 +168,9 @@ class Player(models.Model):
         self.save()
 
     def award_credits(self, credits):
-        # self.rp_credits = self.rp_credits + credits
-        # self.save()  
-        pass  
+        self.rp_credits = self.rp_credits + credits
+        self.save()  
+        
 
 
     def __str__(self):

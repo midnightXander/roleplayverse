@@ -9,6 +9,7 @@ from django.db.models import Q
 from users.models import Player,Family,PlayerStat,PlayerNotification,notification_types,rankings,Badge,PlayerBadge
 from users.users_utility import get_player
 import core.models as core_models
+import battles.models as battle_models
 import events.models as events_models
 import events.views as events_views
 import uuid
@@ -42,6 +43,36 @@ def eligible_to_monetization(player:Player):
     
     return False    
 
+def battle_views(player):
+    """Function to get the total number of views from the battles of the player"""
+    battles = Battle.objects.filter(Q(initiator=player) | Q(opponent=player))
+    total_views = 0
+    for battle in battles:
+        total_views += battle.spectators.all().count()
+    return total_views
+
+def reactions_from_posts(player):
+    """Function to get the total number of reactions and comments from the posts and textpads of the player"""
+    posts = core_models.Post.objects.filter(author=player)
+    #textpads = battle_models.TextPad.objects.filter(owner=player)
+    total_reactions = 0
+    for post in posts:
+        total_reactions += post.likes
+        comments = core_models.Comment.objects.filter(post = post).count()
+        total_reactions += comments
+    return total_reactions
+
+def battles_finished(player):
+    return Battle.objects.filter(status = 'finished').filter(
+        Q(initiator = player) | Q(opponent = player)
+    ).count()
+
+def battles_refereed(player):
+    return Battle.objects.filter(refree = player, status = 'finished').count()
+
+def available_gains(rp_credits):
+    gains = round(rp_credits/200,2)
+    return gains
 
 @login_required
 def index(request):
@@ -57,6 +88,11 @@ def index(request):
     return render(request,"monetization/index.html", {
         'player':player,
         'n_notifs': n_notifs,
+        'battle_views' : battle_views(player),
+        'reactions' : reactions_from_posts(player),
+        'battles_finished' : battles_finished(player),
+        'battles_refereed' : battles_refereed(player), 
+        'gains' : available_gains(player.rp_credits)
     })
 
 @login_required

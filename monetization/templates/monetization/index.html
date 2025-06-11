@@ -27,16 +27,16 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       <div class="bg-gray-900 p-4 rounded-xl shadow text-center">
         <h2 class="text-sm text-gray-500">Score RP</h2>
-        <p class="text-3xl font-bold text-orange-500">842</p>
+        <p class="text-3xl font-bold text-orange-500">178</p>
       </div>
       <div class="bg-gray-900 p-4 rounded-xl shadow text-center">
         <h2 class="text-sm text-gray-500">Crédits RP</h2>
-        <p class="text-3xl font-bold text-blue-500">1 270</p>
-        <p class="text-xs text-gray-400">1000 crédits = 5€</p>
+        <p class="text-3xl font-bold text-blue-500">{{player.rp_credits}}</p>
+        <p class="text-xs text-gray-400">200 crédits = 1€</p>
       </div>
       <div class="bg-gray-900 p-4 rounded-xl shadow text-center">
         <h2 class="text-sm text-gray-500">Gains Disponibles</h2>
-        <p class="text-3xl font-bold text-green-500">6,35€</p>
+        <p class="text-3xl font-bold text-green-500">{{gains}}€</p>
       </div>
     </div>
 
@@ -44,19 +44,19 @@
     <div class="bg-gray-900 p-4 rounded-xl shadow mb-6">
       <h2 class="text-lg font-semibold mb-3">🔍 Détails de l'Activité</h2>
       <ul class="text-sm text-gray-300 space-y-2">
-        <li>✔️ 12 RP publiés cette semaine</li>
-        <li>✔️ 34 réactions (likes + commentaires)</li>
-        <li>✔️ 5 combats terminés</li>
-        <li>✔️ 2 arbitrages validés</li>
+        <li>✔️ {{battle_views}} Spectateurs sur vos combats</li>
+        <li>✔️ {{reactions}} réactions (likes + commentaires)</li>
+        <li>✔️ {{battles_finished}} combats terminés</li>
+        <li>✔️ {{battles_refereed}} combats arbitrés</li>
       </ul>
     </div>
 
     <!-- Withdraw Section -->
     <div class="bg-gray-900 p-4 rounded-xl shadow">
       <h2 class="text-lg font-semibold mb-3">📤 Paiement</h2>
-      <p class="text-sm text-gray-400 mb-4">Une fois atteint le seuil de 5€, vous pouvez demander un retrait via Mobile Money ou PayPal.</p>
+      <p class="text-sm text-gray-400 mb-4">Une fois atteint le seuil de 10€, vous pouvez demander un retrait via Mobile Money ou PayPal.</p>
       <button class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg disabled:opacity-50" disabled>Demander un Paiement</button>
-      <p class="text-xs text-gray-500 mt-2">Minimum requis : 5€ • Dernier paiement : 12 avril 2025</p>
+      <p class="text-xs text-gray-500 mt-2">Minimum requis : 10€ • Dernier paiement : </p>
     </div>
   </div>
 
