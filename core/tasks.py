@@ -116,6 +116,7 @@ def manage_battles_latency():
             #update the player's rank if progression reached 100%
             update_rank(winner)
             update_points(family = winner.family, battle=battle, member_progress=progress)
+            winner.award_credits(40)
 
             winner.save()
             last_textpad.save()

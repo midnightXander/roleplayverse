@@ -1794,7 +1794,7 @@ def new_refree(request):
             return JsonResponse({"status":"success","message": f'2eme étape completé', "test_passed": test_passed})
         
     eligible = not refree_badge in player_badges #Just for now, remove after we have sufficient referees to start with
-    #eligible = True
+    # eligible = True
     
     context = {
         "player" : player,

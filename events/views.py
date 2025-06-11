@@ -397,6 +397,7 @@ def _update_round(battle:Battle):
 
         #if the current round is the last round(final), award the winner, send a notification to all fighters of the tournament and end the tournament
         if current_round == rounds:
+            print("Terminating tournament...")
             if winner == battle.initiator:
                 loser = battle.opponent
             elif winner == battle.opponent:

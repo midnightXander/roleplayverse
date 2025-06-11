@@ -248,7 +248,7 @@ def home(request):
 
     families  = Family.objects.all()
     top_families = sorted(families, key = lambda family : family.points ,reverse=True)[:2]
-    events = Tournament.objects.all().order_by('-date_created')[:2]
+    events = Tournament.objects.filter(status__in = ['registering', 'ongoing', 'not_started']).order_by('-date_created')[:2]
     to_translate = _("Chats")
 
     context = {

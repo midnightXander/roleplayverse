@@ -1,6 +1,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from api.models import PushSubscription
 from api.utility import send_push_notification
+from battles.models import Battle
 from blog.models import BlogPost
 from django.http import HttpResponseRedirect,Http404, JsonResponse
 from django.contrib import messages
@@ -8,7 +9,7 @@ from django.contrib.auth.models import User,auth
 from django.contrib.auth import logout,login,authenticate
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-
+from events import models as events_models
 from users.models import Player
 from .moderator_utility import get_moderator
 from .models import *
@@ -16,6 +17,7 @@ import os
 from dotenv import load_dotenv
 from django.views.decorators.csrf import csrf_exempt
 from battles.views import add_refree
+from events.views import _update_round
 load_dotenv()
 import json
 
@@ -178,7 +180,7 @@ def notify_player(request, email):
         messages.success(request, f"Notification envoyée à {user}.")
         return JsonResponse({'status': 'success', 'message': 'Notification envoyée à tous les joueurs.'})    
 
-
+@csrf_exempt
 def add_player_as_refree(request, email):
     try:
         user = User.objects.get(email=email)
@@ -188,4 +190,14 @@ def add_player_as_refree(request, email):
     except Exception as e:
         print(f"Erreur lors de l'ajout du joueur  en tant que arbitre: {e}")
         return JsonResponse({'status': 'error', 'message': 'Erreur lors de l\'ajout du joueur en tant que arbitre.'})
-    
+
+@csrf_exempt    
+def update_tournament_round(request, battle_id):
+    try:
+        battle = Battle.objects.get(id=battle_id)
+        _update_round(battle)
+        return JsonResponse({'status': 'success', 'message': 'Round mis à jour avec succès.'})
+            
+    except Exception as e:
+        print(f"Erreur lors de la mise à jour du round du tournoi: {e}")
+        return JsonResponse({'status': 'error', 'message': 'Erreur lors de la mise à jour du round du tournoi.'})

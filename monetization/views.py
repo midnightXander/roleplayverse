@@ -81,6 +81,7 @@ def requirements(request):
         'n_notifs': n_notifs,
         'battles_completed': len(battles_finished),
         'battles_refereed': len(battles_refereed),
+        
     })
 
 

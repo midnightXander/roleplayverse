@@ -11,4 +11,6 @@ urlpatterns = [
     path('notifications/notify_player/<str:email>', views.notify_player, name='notify_player'),
     path('notifications/notify_all_players', views.notify_all_players, name='notify_all_players'),
     path('referee/add/<str:email>', views.add_player_as_refree, name='add_refereee'),
+
+    path('tournament/update_round/<int:battle_id>', views.update_tournament_round, name='update_tournament_round'),
 ]
