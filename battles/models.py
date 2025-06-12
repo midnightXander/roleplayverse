@@ -109,7 +109,7 @@ class Battle(models.Model):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.award_winner_credits()
+        #self.award_winner_credits()
 
     def award_winner_credits(self):
         if self.winner:

@@ -158,6 +158,7 @@ class Player(models.Model):
             print(f"{self.user.username} is at the max ranking already")        
         self.save() 
         
+        
 
     def add_points(self, points:int, monthly_points:bool = False):
         """Adds points(Battle tokens) to the player"""

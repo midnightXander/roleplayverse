@@ -112,6 +112,8 @@ def requirements(request):
     if eligible_to_monetization(player):
         return redirect('/monetization')
     
+    
+    
     return render(request,"monetization/requirements.html", {
         'player':player,
         'n_notifs': n_notifs,
