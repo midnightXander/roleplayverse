@@ -103,7 +103,7 @@
 
           </div>
 
-          <div class="flex justify-between">
+          <div class="flex  justify-between">
             <button  onclick="showScreen('screen-1')" class="px-4 py-2 text-sm">
                 <i class="fa-solid fa-arrow-left"></i>
             </button>
@@ -132,9 +132,9 @@
 
           <div>
             <p class="text-sm text-gray-400 mb-2" ><i class="fas fa-caret-right text-orange-500 mr-2" ></i>  Une fois qu'un joueur accepte ta requête, un arbitre doit être désigné, un troisième joueur qui devra s'occuper de valider les actions écrites pendant le combat.</p>
-            <p class="text-sm text-gray-400"> Des joueurs verront des propositions pour arbitrer ton combat et, une fois une proposition validée, le joueur désigné pour arbitrer mettra en place les règles et ensuite les combattants pourront envoyer leurs pavés de texte. </p>
-          <p class="text-sm text-gray-400 mb-2"><i class="fas fa-caret-right text-orange-500 mr-2" ></i>Des joueurs verront des propositions pour arbitrer ton combat et, une fois une proposition validée, le joueur désigné pour arbitrer mettra en place les règles et ensuite les combattants pourront envoyer leurs pavés de texte. </p>
-          <p class="text-sm text-gray-400 mb-2"><i class="fas fa-caret-right text-orange-500 mr-2" ></i>Des joueurs verront des propositions pour arbitrer ton combat et, une fois une proposition validée, le joueur désigné pour arbitrer mettra en place les règles et ensuite les combattants pourront envoyer leurs pavés de texte.</p>
+            <p class="text-sm text-gray-400"> Des joueurs enverront des propositions pour arbitrer ton combat et, une fois une proposition validée, le joueur désigné pour arbitrer mettra en place les règles et ensuite les combattants pourront envoyer leurs pavés de texte. </p>
+          
+          
           </div>
           
           <div class="flex justify-between">
@@ -319,12 +319,18 @@
 
 
   <script>
-
+    
     const showScreen = (id) => {
       document.querySelectorAll('#onboardingContainer > div').forEach(div => div.classList.add('hidden'));
       document.getElementById(id).classList.remove('hidden');
       //document.getElementById(id).classList.add('animate-scaleIn');
     };
+
+    $(document).ready(function() {
+      // Initial screen
+      $('.top-nav').hide();
+      $('.bottom-nav').hide();
+    });
 
     // const goToCharacterSelect = () => showScreen('character-select-screen');
     // const goToBotCharacterSelectionScreen = () => showScreen('bot-selection-screen');
