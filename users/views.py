@@ -378,7 +378,8 @@ def register(request):
                 if referall_code:
                     refer_player(referall_code, new_player)
 
-                return HttpResponseRedirect(reverse("users:player",args=[new_user.username]))   
+                # return HttpResponseRedirect(reverse("users:player",args=[new_user.username])) 
+                return HttpResponseRedirect(reverse("core:onboarding"))   
 
         else:
             messages.error(request,"Les mots de passes ne correspondent pas")    

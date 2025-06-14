@@ -5,6 +5,7 @@ app_name = 'core'
 
 urlpatterns = [
     path('',views.index,name='index'),
+    path('onboarding',views.onboarding,name='onboarding'),
     path('home',views.home,name='home'),
     path('search/<str:scope>',views.search_all,name = "search"),
     path('feed',views.get_posts,name='feed'),

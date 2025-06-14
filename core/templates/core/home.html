@@ -376,7 +376,7 @@
     <li><a onclick="showOverlay();" href="{% url 'users:families' %}" class="flex items-center py-2 px-4 text-orange-500 hover:bg-gray-600 rounded"><i class="fas fa-users mr-2"></i>{% trans 'Familles' %} </a></li>
     <li><a onclick="showOverlay();" href="{% url 'battles:referees' %}" class="flex items-center py-2 px-4 hover:bg-gray-600 text-orange-500 rounded"><i class="fas fa-street-view mr-2"></i>{% trans 'Arbitres' %}</a></li>
     <li><a onclick="showOverlay();" href="{% url 'events:index' %}" class="flex items-center py-2 text-orange-500 px-4 hover:bg-gray-600 rounded"><i class="fas fa-calendar-alt mr-2"></i>{% trans 'Evenenements' %}</a></li>
-    <li><a onclick="showOverlay();" href="{% url 'characters:index' %}" class="flex items-center py-2 px-4 hover:bg-gray-600 text-orange-500 rounded"><i class="fas fa-child mr-2"></i>{% trans 'Personnage' %}</a></li>
+    <li><a onclick="showOverlay();" href="{% url 'characters:index' %}" class="flex items-center py-2 px-4 hover:bg-gray-600 text-orange-500 rounded"><i class="fas fa-child mr-2"></i>{% trans 'Personnages' %}</a></li>
     <li><a onclick="showOverlay();" href="{% url 'core:rankings' %}" class="flex items-center py-2 px-4 hover:bg-gray-600 text-orange-500 rounded"><i class="fas fa-trophy mr-2"></i>{% trans 'Classements' %}</a></li>
     <li><a onclick="showOverlay();" href="{% url 'blog:category' 'Tutorials' %}" target="_blank" class="flex items-center py-2 px-4 hover:bg-gray-600 text-orange-500 rounded"><i class="fas fa-book mr-2"></i>{% trans 'Tutoriels' %}</a></li>
 
@@ -1027,7 +1027,7 @@ function createAnnouncementElement(announcement) {
         <h2 class="text-2xl font-bold animate-pulse">📢 ${announcement.title}</h2>
         <p class="text-sm text-gray-200">${announcement.body}</p>
         <div class="flex items-center space-x-4">
-            <a href='/' class="bg-white text-orange-500 font-semibold py-2 px-4 rounded-lg hover:bg-gray-100 transition">
+            <a onclick='showOverlay()' href='${announcement.redirect}' class="bg-white text-orange-500 font-semibold py-2 px-4 rounded-lg hover:bg-gray-100 transition">
                 En savoir plus
             </a>
             <span class="bg-black bg-opacity-30 text-xs py-1 px-3 rounded-lg">${announcement.time_posted}</span>

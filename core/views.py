@@ -158,7 +158,22 @@ def get_notifs(player):
         return "9+"
     else:
         return f"{n_notifs}"
-        
+
+@login_required
+def onboarding(request):
+    player = get_player(request.user)
+    if not player:
+        return redirect('/users/signin')
+    
+
+    context = {
+        "player":player,
+        "n_notifs":get_notifs(player),
+    }
+    
+    return render(request,"core/onboarding.html",context)
+
+
 @login_required
 def home(request):
 
@@ -170,8 +185,6 @@ def home(request):
     
 
     characters = get_characters()  
-    
-    
 
     posts = list(posts)
     battles = list(battles)
@@ -375,6 +388,8 @@ def _annoucement_data(announcement:Announcement):
             # "comments": get_comments_dict(player,announcement),
             # "n_comments": _parse_number(len(get_comments(announcement)),True),
             "time_posted": _time_since(announcement.date_added),
+            'redirect': announcement.redirect_url,
+            'url' : announcement.url
         }
 
 def get_posts(request):

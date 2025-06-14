@@ -257,7 +257,7 @@
                 <a target="_blank"  href="/blog/News/posts" class="text-xs text-orange-500" >En apprendre plus</a>
             </div>
             
-            <ul id="battleRules" class="list-none list-inside text-gray-300 max-h-64 overflow-y-auto">
+            <ul id="battleRules" class="list-none list-inside text-gray-300 ">
                 <li class="text-gray-400 text-sm"> <i class="fas fa-caret-right text-orange-500 mr-2"></i>Tour: {{battle.initiator}} -> {{battle.opponent}}</li>
             {% for rule in rules %}
                 
@@ -1492,7 +1492,7 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
                                     <h3 class="text-xl font-semibold text-orange-500 mb-2"><i class='fas fa-user-ninja mr-2' ></i><a class='underline' onclick="showOverlay()" href='/users/${textpad.owner}' >${textpad.owner}</a>: <span class='text-blue-500' id=""> ${textpad.character}</span></h3>
                                     <span class='text-sm text-gray-600'>${textpad.index}</span>
                                     </div>
-                                    <div id="fighterTextpad-${textpad.id}" class="body text-gray-300 p-3 pl-3 border-l-2 border-gray-400 rounded-lg max-h-96 overflow-y-auto">
+                                    <div id="fighterTextpad-${textpad.id}" class="body text-gray-300 p-3 pl-4 border-l-2 border-gray-400 rounded-lg max-h-96 overflow-y-auto">
                                         
                                     </div>
                                     <div class="text-gray-300 text-sm p-3 flex justify-between">

@@ -39,7 +39,7 @@ function openCommentPopup(postId) {
             <span class="text-gray-400 text-sm "> Loading...</span>
             `
     $.ajax({
-        url: `/post/${postId}`,
+        url: `/post/${postId}/comments`,
         type: 'GET',
         data: {
             'Content-Type': 'application/json'
@@ -49,7 +49,7 @@ function openCommentPopup(postId) {
             commentsContainer.append(loader);
         },
         success: function(res){
-            const comments = res.post.comments
+            const comments = res.comments
             if(comments.length > 0){
                 comments.forEach(comment => {
                 commentsContainer.append(createComment2(comment))
@@ -94,10 +94,10 @@ function openCommentPopup(postId) {
         'player':'{{player}}',
     }
 
-    console.log(comment)
+    
     
     const commentElement = document.createElement('div');
-    commentElement.className = `comment ${comment.parent ? '' : `parent-comment`} flex items-start gap-3`;
+    commentElement.className = `comment ${comment.parent ? '' : `parent-comment`} flex items-start mb-4 gap-3`;
     commentElement.id = `${comment.parent ? '' : `parent-comment-${comment.id}`}`
     commentElement.setAttribute('data-id', comment.id)
     commentElement.innerHTML = `
@@ -133,11 +133,11 @@ function openCommentPopup(postId) {
                     </div>
                        
                     ${comment.replies.length > 0 && comment.parent == null  ? `
-                        <button onclick="showCommentReplies('${comment.id}')" class="ml-4 mt-2 text-sm text-gray-600 hover:text-orange-500 dark:text-gray-400">voir les reponses</button>
+                        <button onclick="showCommentReplies('${comment.id}')" class="ml-4 mt-2 mb-4 text-sm text-gray-600 hover:text-orange-500 dark:text-gray-400">voir les reponses</button>
                         ` : ''}
 
-                         <div class='reply-form flex flex-col space-y-2 mb-2 hidden'>
-                            <textarea id="comment-reply-${comment.id}" class='w-full bg-transparent text-white placeholder-gray-400 border-b border-gray-700 focus:outline-none resize-none' placeholder="Ajouter une reponse..."></textarea>
+                         <div class='reply-form flex flex-col space-y-2 my-2 hidden'>
+                            <textarea id="comment-reply-${comment.id}" class='w-full bg-transparent text-white placeholder-gray-400 border-b border-gray-700 focus:outline-none resize-none' placeholder="Repondre a ${comment.author.username} ..."></textarea>
                             <button onclick="addCommentReply(this,'${comment.id}', '${comment.post_id}')">Soumettre</button>
                         </div>
 
