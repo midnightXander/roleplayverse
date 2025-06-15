@@ -168,7 +168,16 @@
       to { opacity: 0; transform: translateY(20px); }
     }
   </style>
-
+<style>
+    /* Styles personnalisés si nécessaire, par exemple pour cacher la scrollbar mais permettre le défilement */
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .hide-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+</style>
 
 
 
@@ -723,6 +732,14 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
 
 <!--Sending Comments-->            
 <script>
+
+function autoExpand(textarea) {
+                    // Réinitialise la hauteur pour calculer la hauteur de défilement correcte
+                    textarea.style.height = 'auto';
+                    // Définit la hauteur sur la hauteur de défilement, mais pas plus de 5 lignes
+                    const maxHeight = parseInt(getComputedStyle(textarea).lineHeight) * 5; // Supposons une hauteur de ligne par défaut
+                    textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + 'px';
+                }
 
 function showNotificationToast(senderName, profilePicture, messageContent, timestamp, url = "#") {
     const toastContainer = document.getElementById("toastContainer");
