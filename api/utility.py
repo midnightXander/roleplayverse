@@ -43,8 +43,8 @@ def send_push_notification(subscription :PushSubscription, message, user:User = 
                     }
                 },
                 data=json.dumps(message),
-                vapid_private_key=os.environ.get('VAPID_PRIVATE_KEY'),
-                vapid_claims={
+                vapid_private_key = os.environ.get('VAPID_PRIVATE_KEY'),
+                vapid_claims = {
                     'sub': 'mailto:alexngaikama913@gmail.com' 
                     }
             )

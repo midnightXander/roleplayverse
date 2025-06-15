@@ -13,7 +13,7 @@ from api.utility import send_push_notification
 from api.models import PushSubscription
 import praw,os
 from dotenv import load_dotenv
-
+import time
 load_dotenv()
 # @shared_task
 # def delete_expired_instances():
@@ -189,22 +189,24 @@ def add_monthly_points():
     for player in Player.objects.all():
         #REVIEW THIS, SHOULD BE WITH DAYS
 
-        last_day_added = player.date_points_added.day
-        current_day = timezone.now().day
+        last_date_added = timezone.make_aware(datetime.datetime.combine(player.date_points_added, datetime.time.min))
+        current_time = timezone.now()
 
-        days_difference = timezone.now() - player.date_points_added
+        # Calculate the difference
+        days_difference = (current_time - last_date_added).days
 
-        if days_difference.days == 30:
+        print(days_difference)
+        if days_difference >= 30:
             #add_points(player, MONTHLY_POINTS)
-            #player.date_points_added = timezone.now()
+            player.date_points_added = timezone.now()
             player.add_points(MONTHLY_POINTS, True)
-            
+            player.save()
             #send email to notify player got monthly points  / or notify normally?
             Notification.objects.create(
                 target = player,
                 url = f'/users/{player.user.username}',
                 content = f"Tu as reçu {MONTHLY_POINTS} de jetons mensuels!"
-            )
+            ).save()
             send_push_notification(
                 PushSubscription.objects.filter(user=player.user).last(),
                 {
@@ -220,16 +222,18 @@ def add_monthly_points():
 def fetch_daily_content():
     REDDIT_CLIENT_ID = os.environ.get("REDDIT_CLIENT_ID")
     REDDIT_CLIENT_SECRET = os.environ.get('REDDIT_CLIENT_SECRET')
-    # print(REDDIT_CLIENT_SECRET, REDDIT_CLIENT_ID)
+    if not REDDIT_CLIENT_ID or not REDDIT_CLIENT_SECRET:
+        raise ValueError("Reddit API credentials are missing!")
     try:
         reddit = praw.Reddit(
             client_id= REDDIT_CLIENT_ID,
             client_secret=REDDIT_CLIENT_SECRET,
-            user_agent='RPV Meme Bot'
+            user_agent='RolePlayVerse Meme Bot v1.0 by /u/Helpful-Fish-9569'
         )
         subreddit = reddit.subreddit('narutomemes')
         post_count = 0
         for post in subreddit.hot(limit=50):
+            time.sleep(2)
             if not post.stickied and post.url.endswith(('.jpg', '.png', '.gif', 'jpeg')):
                 if not ContentPost.objects.filter(image_url=post.url).exists() and post_count <= 5:
                     ContentPost.objects.create(
@@ -240,6 +244,7 @@ def fetch_daily_content():
                     )
                     ContentPost.save()
                     post_count = post_count + 1
+                    print(f"New meme added: {post.title} - {post.url} {post_count} out of {len(subreddit.hot(limit=50))}")
                     if post_count == 5: return
 
         #notify all suscribed players for new memes 
@@ -253,7 +258,6 @@ def fetch_daily_content():
                 "url": f"https://roleplayverse.live/home",
                 'icon' : '/static/images/logo/logo_1.png',
             }, user)
-
 
                     
     except Exception as ex:

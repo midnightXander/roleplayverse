@@ -30,6 +30,7 @@ import random
 from django.contrib.gis.geoip2 import GeoIP2
 import re
 from . import emails
+import praw,time
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -182,7 +183,7 @@ def home(request):
 
     posts = Post.objects.all()
     battles = Battle.objects.filter(status = "finished")
-    
+   
 
     characters = get_characters()  
 
