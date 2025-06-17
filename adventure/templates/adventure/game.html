@@ -5,7 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mode Aventure - RPV</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/ping.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/dotStream.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
   
   
 <style>
@@ -101,6 +107,85 @@
     background-size: cover;
   }
 </style>
+<style>
+  /* Styles personnalisés si nécessaire, par exemple pour cacher la scrollbar mais permettre le défilement */
+  .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+  }
+  .hide-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+  }
+</style>
+<style>
+  .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(10, 10, 10, 0.5);
+      z-index: 99999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+  }
+
+.loading-overlay.active {
+  display: flex;
+}
+  </style>
+<style>
+    .my-toast {
+        max-width: 300px;
+        min-width: 150px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        margin: auto;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        animation: fadeInDown 0.5s forwards;
+        /* animation-duration: 0.5s;
+        animation-fill-mode: forwards;  */
+    }
+
+.my-toast-success {
+/* background-color: #10B981; */
+border: 1px solid #10B981;
+color: #ffffff;
+}
+
+.my-toast-error {
+/* background-color: #EF4444; */
+border: 1px solid #EF4444;
+color: #ffffff;
+}
+
+.my-toast-warning {
+background-color: #F59E0B;
+border: 1px solid #F59E0B;
+color: #ffffff;
+}
+
+.my-toast-info {
+/* background-color: #3B82F6; */
+border: 1px solid #3B82F6;
+color: #ffffff;
+}
+
+.my-toast-close {
+background: none;
+border: none;
+color: #ffffff;
+cursor: pointer;
+font-size: 16px;
+margin-left: 10px;
+}
+</style>
+
 </head>
 <!-- <body class="bg-gray-950 text-white min-h-screen">
     <div class="w-full relative h-screen bg-gray-950 text-white flex flex-col">
@@ -154,6 +239,19 @@
 
 <body class="bg-gray-950 text-white min-h-screen flex flex-col">
 
+  <!-- loading Overlay  -->
+<div id="loading-overlay" class="loading-overlay">
+  <div class="text-center py-4">
+<l-dot-stream
+  size="60"
+  speed="2.5"
+  color="#ed8936" 
+></l-dot-stream>
+  </div>
+</div>
+
+<div id="top-toastContainer" class="flex justify-center w-full fixed top-4 right-4 z-50"></div>
+{% block content %}
     <!-- Scrollable Map Section -->
     <div class="flex-1 flex items-center justify-center relative">
       <!-- <div class="relative z-10 text-center">
@@ -182,7 +280,7 @@
       <div class=" p-5">
         <h2 class="text-xl font-semibold mb-4">🌍 Adventure Mode - Explore the Shinobi World</h2>
         <!-- <div class="relative w-full h-[40vh] bg-gradient-to-br from-[#1f2937] to-[#d45822] rounded-xl overflow-auto shadow-inner"> -->
-          <div id="mapContainer" class="relative w-full h-[40vh] map-container contour-line-bg rounded-xl overflow-auto shadow-inner">
+          <div id="mapContainer" class="relative w-full h-[40vh] map-container hide-scrollbar contour-line-bg rounded-xl overflow-auto shadow-inner">
           <!-- Points of Interest -->
           <!-- <button  class="map-zone absolute tilt-in-fwd-tr top-4 left-4 bg-gray-800 border border-gray-700 text-xs px-3 py-1 rounded-full shadow" data-zone-key="village">
             Village
@@ -243,7 +341,7 @@
 
     <!-- Popup Modal -->
 <div id="missionPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center slide-in-bottom hidden z-50">
-  <div class="bg-gray-900 rounded-lg shadow-lg w-96 p-6">
+  <div class="bg-gray-900 rounded-2xl shadow-lg w-96 p-6">
     <h2 id="zoneName" class="text-xl font-bold text-orange-500 mb-4">Zone: Village</h2>
     <p id="zoneDescription" class="text-sm text-gray-300 mb-4">Explore the village and help the villagers.</p>
     <ul id="missionList" class="space-y-3">
@@ -254,7 +352,9 @@
     </button>
   </div>
 </div>
-  
+
+
+
 <script>
   
 </script>
@@ -358,16 +458,20 @@ function openPopup(zoneKey) {
   const missionList = document.getElementById("missionList");
   missionList.innerHTML = ""; // Clear previous missions
   zone.missions.forEach((mission) => {
-    const missionItem = document.createElement("li");
-    missionItem.className = "p-3 flex items-center rounded-lg shadow";
+    const missionItem = document.createElement("a");
+    missionItem.href = `/adventure/game/mission/${mission.id}`; // Prevent default link behavior
+    
+    missionItem.className = "p-3 flex items-center border-l-2 border-orange-700 hover:bg-gray-800 transition duration-200  cursor-pointer";
     missionItem.innerHTML = `
-      <i class="fa-regular fa-circle text-xl"></i>
-      <div>
+      <div onclick ='showOverlay()' >
       <h3 class="text-lg font-semibold text-orange-500">${mission.title}</h3>
-      <p class="text-sm text-gray-300">Difficulty: ${mission.difficulty}</p>
-      <p class="text-sm text-gray-300">Reward: ${mission.reward_exp}</p>
+      <p class="text-sm text-gray-400"><span class='text-gray-300' >Difficulty</span>: ${mission.difficulty}</p>
+      <p class="text-sm text-gray-400"><span class='text-gray-300' >Reward</span>: ${mission.reward_exp}</p>
+      <div class='text-sm mt-2 text-orange-500'>
+        Details de la mission <i></i>
       </div>
-      <a>Aller</a>
+      </div>
+      
     `;
     missionList.appendChild(missionItem);
   });
@@ -390,4 +494,45 @@ document.querySelectorAll(".map-zone").forEach((zoneElement) => {
 });
 </script>
 
+{% endblock content %}
+<script>
+  function showOverlay(){
+        document.querySelector('#loading-overlay').classList.add('active')
+      }
+      const toastContainer = document.getElementById('top-toastContainer');
+      function showMyToast(message, type = 'info', duration = 3000) {
+        
+        document.querySelectorAll('.my-toast').forEach(el =>{
+            el.remove()
+        })
+        
+        const toast = document.createElement('div');
+        toast.className = `my-toast my-toast-${type} text-sm`;
+        
+        const messageSpan = document.createElement('span');
+        messageSpan.textContent = message;
+        
+        const closeButton = document.createElement('button');
+        closeButton.className = 'my-toast-close';
+        closeButton.innerHTML = '&times;';
+        closeButton.onclick = () => removeToast(toast);
+        
+        toast.appendChild(messageSpan);
+        toast.appendChild(closeButton);
+        
+        toastContainer.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.animation = 'fadeOut 0.3s ease-out';
+            setTimeout(() => removeToast(toast), 300);
+        }, duration);
+    }    
+    function removeToast(toast) {
+        if(toast.parentNode == toastContainer){
+            toastContainer.removeChild(toast);
+        }   
+    }
+    
+    //showMyToast("Welcome to the Adventure Game!", "info", 5000);
+</script>
   </body>

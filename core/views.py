@@ -31,7 +31,7 @@ from django.contrib.gis.geoip2 import GeoIP2
 import re
 from . import emails
 import praw,time
-
+from api.views import export_battle_data
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 def get_characters():
@@ -216,7 +216,7 @@ def home(request):
     if not player:
         return redirect('/users/signin')
     
-      
+    export_battle_data()  
 
     feed,created = Feed.objects.get_or_create(player = player)
     
@@ -266,7 +266,6 @@ def home(request):
     to_translate = _("Chats")
 
     context = {
-        
         "posts":posts,
         "players":players,
         'playerName': str(player),

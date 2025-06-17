@@ -377,7 +377,7 @@ function enableActionButtons(){
                 const playerStats = {
                     current_hp: data.player_character.hp,
                     current_chakra: data.player_character.chakra,
-                    hp:  data.player_character.hp,      // Player HP as a percentage
+                    hp:  data.bot_character.hp / data.bot_character.health  * 100,      // Player HP as a percentage
                     chakra: (data.player_character.chakra/data.player_character.chakra_pool) * 100,  // Player Chakra as a percentage
                     chakra_pool: data.player_character.chakra_pool,
                     stamina: data.player_character.stamina, // Player Stamina as a percentage
@@ -386,7 +386,7 @@ function enableActionButtons(){
                 const botStats = {
                     current_hp: data.bot_character.hp,
                     current_chakra: data.bot_character.chakra,
-                    hp: data.bot_character.hp / 200 * 100,      // Bot HP as a percentage
+                    hp: data.bot_character.hp / data.player_character.health * 100,      // Bot HP as a percentage
                     chakra: (data.bot_character.chakra/data.bot_character.chakra_pool) * 100,  // Bot Chakra as a percentage
                     chakra_pool : data.bot_character.chakra_pool,
                     stamina: data.bot_character.stamina, // Bot Stamina as a percentage

@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
-
+from battles.models import *
 from dotenv import load_dotenv
 import os
 
@@ -42,4 +42,28 @@ class feed(APIView):
         user = request.user
         return JsonResponse({ 'status':'success', 'username':f'{user}' }, safe=False)
 
+def export_battle_data():
+    # This function is a placeholder for exporting battle data.
+    # You can implement the logic to export battle data as needed.
+
+    battles = Battle.objects.all()
+
+    for battle in battles:
+        textpads = TextPad.objects.filter(battle=battle).order_by('date_sent')
+        if len(textpads) >= 2:
+            for textpad_1,textpad_2 in zip(textpads[::2], textpads[1::2]):
+                if textpad_1 and textpad_2:
+                    try:
+                        data = {
+                            'text_1' : { 'character' :battle.i_character, 'text': textpad_1.text},
+                            'text_2' : { 'character' :battle.o_character, 'text': textpad_2.text},
+                        }
+                        print(data)
+                    except Exception as e:
+                        print(f"Error exporting data for battle {battle.id}: {e}")    
+        else:
+            continue
+
+    #return JsonResponse({'status': 'success', 'message': 'Battle data exported successfully.'})
+    return {'status': 'success', 'message': 'Battle data exported successfully.'}
     

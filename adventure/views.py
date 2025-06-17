@@ -6,7 +6,7 @@ from battles.solo_battle import _bot_action_minimax
 from battles.solo_battle import _log_actions
 from battles.solo_battle import _evaluate_actions
 from users.models import Player
-from utility import _solo_battle_character, get_solo_battle_characters
+from utility import _solo_battle_character, get_solo_battle_characters, get_adventure_character, get_adventure_characters
 from .models import *
 import json, random
 from django.http import HttpResponseRedirect, JsonResponse
@@ -36,7 +36,11 @@ def create_character(request):
     player = Player.objects.get(user=request.user)
     if request.method == 'POST':
         character_appearances = [ appearance.image.url for appearance in CharacaterAppearance.objects.all() ]
-        appearance = request.FILES.get('appearance') if request.FILES.get('appearance') else random.choice(character_appearances)
+        new_appearance = CharacaterAppearance.objects.create(
+            image=request.FILES.get('appearance'))
+        new_appearance.save()
+        appearance = new_appearance.image.url if request.FILES.get('appearance') else random.choice(character_appearances)
+        
         name = request.POST.get('name') 
         clan = request.POST.get('clan', random.choice(CLANS)),  # Randomly select a clan if not provided),
         character_data = {
@@ -63,10 +67,10 @@ def create_character(request):
             'jutsus' : [] # no special skills by default
         }
         
-        adventure_player = AdventurePlayer.objects.create(
+        AdventurePlayer.objects.create(
             player=player,
             character=character_data,
-        )
+        ).save()
         
         return HttpResponseRedirect('/adventure/game')
 
@@ -160,6 +164,7 @@ def create_missions():
 
 def _mission_data(mission:MissionTemplate):
     return {
+        'id': mission.id,
         'title' : mission.title,
         'description' : mission.description,
         'min_level' : mission.min_level,
@@ -338,3 +343,110 @@ def check_mission_completion(player:Player, mission:PlayerMission):
         if mission.template.reward_item:
             player.inventory.append(mission.template.reward_item)
         player.save()
+
+@login_required
+def mission(request, mission_id):
+    player = Player.objects.get(user=request.user)
+    adventure_player = AdventurePlayer.objects.filter(player=player).first()
+    if not adventure_player:
+        return redirect('adventure:create_character')
+
+    #mission = get_object_or_404(PlayerMission, id=mission_id, player=player)
+    missionTemplate = get_object_or_404(MissionTemplate, id=mission_id)
+    mission,created = PlayerMission.objects.get_or_create(
+        player=player, template = missionTemplate)
+
+    
+    # if request.method == 'POST':
+    #     check_mission_completion(player, mission)
+    #     return redirect('adventure:game')
+
+    return render(request, 'adventure/mission.html', {
+        'player': player,
+        'adventure_player': adventure_player,
+        'mission': mission
+    })
+
+def init_mission(request, mission_id):
+    player = Player.objects.get(user=request.user)
+    adventure_player = AdventurePlayer.objects.filter(player=player).first()
+    player_mission = get_object_or_404(PlayerMission, id=mission_id, player=player)
+    target = player_mission.template.target
+    if request.method == 'POST':
+        
+        player_character = adventure_player.character
+        # bot_character = get_adventure_character(target)
+        bot_character = get_adventure_character("Bandit")
+        if not bot_character:
+            return JsonResponse({'message': 'target character not found'})
+        
+        #set the health based on the character level
+        bot_character['health'] = bot_character.get('health', 100) + (bot_character.get('level') * 10)
+
+        player_character['hp'] = player_character['health']
+        bot_character['hp'] = bot_character.get('health', 100)
+        player_character['chakra'] = player_character.get('chakra_pool',100)
+        bot_character['chakra'] = bot_character.get('chakra_pool',100)
+        #bot_character['image'] = bot_character.get('image', 'default_image.png')  # Ensure bot has an image
+
+        battle = SoloBattle.objects.create(
+            type = 'adventure',
+            player = player,
+            player_character = player_character,
+            bot_character = bot_character,
+        )
+
+        battle.save()
+
+
+        return JsonResponse({'message': 'battle initialized', 'bot_character': bot_character, 'player_character': player_character})
+
+def mission_battle_action(request, mission_id):
+    """Handle the battle action during a mission."""
+    player = get_object_or_404(Player, user=request.user)
+    adventure_player = AdventurePlayer.objects.filter(player=player).first()
+    mission = get_object_or_404(PlayerMission, id=mission_id, player=player)
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        battle = SoloBattle.objects.filter(player=player).last()
+        player_character = battle.player_character
+        bot_character = battle.bot_character
+        possible_actions = player_character['basic_actions'] + player_character['jutsus']
+
+        player_action = player_character['basic_actions'][0]
+
+        for act in possible_actions:
+            if act['name'] == action:
+                player_action = act
+
+        bot_action = _bot_action(bot_character, player_action)
+        bot_action = _bot_action_minimax(player_character, bot_character)
+
+        new_logs = _log_actions(player_action, bot_action, player_character, bot_character)
+        logs = json.loads(battle.log)
+        for log in new_logs:
+            logs.append(log)
+
+        player_character, bot_character, new_logs, winner =  _evaluate_actions(player_character, bot_character, player_action, bot_action)
+        logs = logs + new_logs
+
+
+        rewards = {'xp' : 0, }
+        if winner == 'player':
+            rewards['xp'] += 50
+            #rewards = _reward_player(player)
+            battle.result = 'win'
+            battle.finished = True
+            battle.date_ended = datetime.now()
+            check_mission_completion(player, mission)
+
+        elif winner == 'bot':
+            battle.result = 'lose'
+            battle.finished = True
+            battle.date_ended = datetime.now()
+
+        battle.log = json.dumps(logs)
+        battle.save()
+
+        return JsonResponse({'battle_logs': logs, 'player_character' : player_character, 'bot_character' : bot_character, 'winner' : winner, 'rewards': rewards})

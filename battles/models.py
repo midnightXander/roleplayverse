@@ -124,7 +124,7 @@ class Battle(models.Model):
     can_send_textpad = models.BooleanField(default=False)
 
     winner = models.ForeignKey(Player, on_delete=models.SET_NULL, null=True, related_name="battle_winner", blank=True)
-    
+    viewers = models.IntegerField(default=0)
     spectators = models.ManyToManyField(Player, through='BattleSpectator', related_name='spectators')
 
     defeat_motif = models.CharField(max_length=50, blank=True, choices=[

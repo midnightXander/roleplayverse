@@ -121,7 +121,7 @@ def _evaluate_actions(player_character:dict, bot_character:dict, player_action:d
     elif player_action.get('name') == 'Heal':
         
         current_hp = player_character.get('hp') + 30
-        player_character['hp'] = min(current_hp, 200)
+        player_character['hp'] = min(current_hp, player_character.get('health', 200))
         print(f'player heal: ', player_character['hp'])
         #_update_chakra(player_character, player_action.get('chakra_cost'))
 
@@ -187,7 +187,7 @@ def _evaluate_actions(player_character:dict, bot_character:dict, player_action:d
         bot_character['chakra'] = min(current_chakra, chakra_pool)
     elif bot_action.get('name') == 'Heal':
         current_hp = bot_character.get('hp') + 30
-        bot_character['hp'] = min(current_hp, 200)
+        bot_character['hp'] = min(current_hp, bot_character.get('health', 200))
 
     # elif bot_action.get('name') == 'Defend':
     #     text = f" {bot_character['name']} took a defensive  stance"
@@ -268,7 +268,7 @@ def _simulate_action(character, opponent, action, is_bot):
     elif action['name'] == 'Focus':
         character['chakra'] = min(character['chakra'] + 40, character['chakra_pool'])
     elif action['name'] == 'Heal':
-        character['hp'] = min(character['hp'] + 30, 200)
+        character['hp'] = min(character['hp'] + 30, character.get('health', 200))
         character['chakra'] = max(character['chakra'] - 20, 0)
     elif action['name'] == 'Defend':
         # Reduce damage from opponent's attack
@@ -278,7 +278,7 @@ def _simulate_action(character, opponent, action, is_bot):
     elif action['name'] == 'Substitution':
         # Avoid damage from opponent's attack
         damage = 0
-        character['hp'] = min(character['hp'] + 100, 200)
+        character['hp'] = min(character['hp'] + 100, character.get('health', 200))
         character['chakra'] = max(character['chakra'] - 5, 0)
 
     

@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     
 
     #Myapps
+    'ai',
     'api',
     'core',
     'users',

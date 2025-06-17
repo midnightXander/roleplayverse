@@ -107,6 +107,21 @@ def _add_image_field():
 
 #_add_image_field()
 
+def get_adventure_characters():
+    characters_file = os.path.join(BASE_DIR,"adventure/static/jsons/adventure_characters.json")
+    with open(characters_file,"r", encoding = 'utf-8') as f:
+        characters = json.load(f)
+    return characters 
+
+def get_adventure_character(name:str):
+    """Function to get  a specific character from the adventure characters list"""
+    characters = get_adventure_characters()
+    for character in characters:
+        if str(character['name']).lower() == name.lower():
+            return character
+    return None
+    
+
 
 def get_refree_questions(language='en'):
     if language == 'en':

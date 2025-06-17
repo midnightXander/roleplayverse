@@ -119,6 +119,8 @@ def _battle_data(player,battle):
             "id":battle.id,
             "status": battle.status,
             "isFighter":player == battle.opponent or player == battle.initiator,
+            "isReferee": player == battle.refree,
+            "isSpectator": player in battle.spectators.all(),
             "initiator": {
                 "id": battle.initiator.id,
                 "player":str(battle.initiator),
@@ -152,7 +154,7 @@ def _battle_data(player,battle):
             "o_character": battle.o_character,
             "type":battle.type,
             "can_refree": can_refree(player, battle),
-            "spectators": _parse_number(len(battle.spectators.all()), True),
+            "spectators": _parse_number(len(battle.spectators.all()+ battle.viewers), True),
             "referee_proposals": _referee_proposals(battle,player),
             "date": core_views._time_since(battle.date_started),
         }
@@ -166,6 +168,8 @@ def _battles_data(player:Player,battles):
             "id":battle.id,
             "status": battle.status,
             "isFighter":player == battle.opponent or player == battle.initiator,
+            "isReferee": player == battle.refree,
+            "isSpectator": player in battle.spectators.all(),
             "initiator": {
                 "id": battle.initiator.id,
                 "player":str(battle.initiator),
@@ -199,7 +203,7 @@ def _battles_data(player:Player,battles):
             "o_character": battle.o_character,
             "type":battle.type,
             "can_refree": can_refree(player, battle),
-            "spectators": _parse_number(len(battle.spectators.all()),True),
+            "spectators": _parse_number(len(battle.spectators.all() + battle.viewers),True),
             "referee_proposals":_referee_proposals(battle,player),
             "date": core_views._time_since(battle.date_started),
         } for battle in battles
@@ -752,7 +756,8 @@ def battle_room(request,battle_id):
     battle = Battle.objects.get(id=battle_id)
     
     update_battle_spectators(player,battle)
-    
+    battle.viewers += 1
+    battle.save()
     
     rules = Rule.objects.filter(battle = battle)
     

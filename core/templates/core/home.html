@@ -1025,7 +1025,7 @@ function createAnnouncementElement(announcement) {
     announcementElement.innerHTML = `
          <div class="p-6 space-y-4">
         <h2 class="text-2xl font-bold animate-pulse">📢 ${announcement.title}</h2>
-        <p class="text-sm text-gray-200">${announcement.body}</p>
+        <p class="text-sm text-gray-200">${announcement.body_full}</p>
         <div class="flex items-center space-x-4">
             <a onclick='showOverlay()' href='${announcement.redirect}' class="bg-white text-orange-500 font-semibold py-2 px-4 rounded-lg hover:bg-gray-100 transition">
                 En savoir plus
