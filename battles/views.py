@@ -154,7 +154,7 @@ def _battle_data(player,battle):
             "o_character": battle.o_character,
             "type":battle.type,
             "can_refree": can_refree(player, battle),
-            "spectators": _parse_number(len(battle.spectators.all()+ battle.viewers), True),
+            "spectators": _parse_number(len(battle.spectators.all())+ battle.viewers, True),
             "referee_proposals": _referee_proposals(battle,player),
             "date": core_views._time_since(battle.date_started),
         }
@@ -203,7 +203,7 @@ def _battles_data(player:Player,battles):
             "o_character": battle.o_character,
             "type":battle.type,
             "can_refree": can_refree(player, battle),
-            "spectators": _parse_number(len(battle.spectators.all() + battle.viewers),True),
+            "spectators": _parse_number(len(battle.spectators.all())+ battle.viewers,True),
             "referee_proposals":_referee_proposals(battle,player),
             "date": core_views._time_since(battle.date_started),
         } for battle in battles
@@ -828,7 +828,7 @@ def battle_room(request,battle_id):
                'jutsus': ch_jutsus,
                'i_character': i_character,
                'o_character': o_character,
-               'spectators':  _parse_number(len(battle.spectators.all()),True),
+               'spectators':  _parse_number(len(battle.spectators.all()) + battle.viewers,True),
                  "last_sender":l_sender,
                  "role":role,
                  "can_rate": can_rate(battle),

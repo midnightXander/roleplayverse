@@ -153,7 +153,8 @@ def create_missions():
                 target=mission.get('target', ''),
                 quantity=mission.get('quantity', 1),
                 reward_exp=mission.get('reward_exp', 50),
-                reward_item=mission.get('reward_item', ''),
+                # reward_item=mission.get('reward_item', ''), #Make reward_item a JSON field first
+
                 zone = MapZone.objects.filter(name=mission.get('zone', 'Default Zone')).first()  # Assuming a default zone if not specified
 
             ).save()
@@ -321,13 +322,19 @@ def assign_random_mission(player):
         selected = random.choice(filtered)
         return PlayerMission.objects.create(player=player, template=selected)
 
-def check_mission_completion(player:Player, mission:PlayerMission):
+def check_mission_completion(player:AdventurePlayer, mission:PlayerMission):
     """    Vérifie si une mission est terminée et met à jour le statut du joueur en conséquence.
     """
     success = False
-
+    
     if mission.template.mission_type == 'defeat':
-        success = player.defeated_targets.count(mission.template.target) >= mission.template.quantity
+        #success = player.defeated_targets.count(mission.template.target) >= mission.template.quantity
+        # Ajouter récompenses
+        player.experience += mission.template.reward_exp 
+        if mission.template.reward_item:
+            player.inventory.append(mission.template.reward_item)
+        
+        player.save()
 
     elif mission.template.mission_type == 'collect':
         success = player.inventory.count(mission.template.target) >= mission.template.quantity
@@ -343,6 +350,8 @@ def check_mission_completion(player:Player, mission:PlayerMission):
         if mission.template.reward_item:
             player.inventory.append(mission.template.reward_item)
         player.save()
+    mission.status = 'done'
+    mission.save()    
 
 @login_required
 def mission(request, mission_id):
@@ -351,11 +360,18 @@ def mission(request, mission_id):
     if not adventure_player:
         return redirect('adventure:create_character')
 
+    for mission in MissionTemplate.objects.all():
+        mission.reward_item = None
+        mission.save()
+
     #mission = get_object_or_404(PlayerMission, id=mission_id, player=player)
     missionTemplate = get_object_or_404(MissionTemplate, id=mission_id)
     mission,created = PlayerMission.objects.get_or_create(
         player=player, template = missionTemplate)
 
+    if mission.status == 'done':
+        messages.info(request, "Mission already completed.")
+        return redirect('adventure:game')
     
     # if request.method == 'POST':
     #     check_mission_completion(player, mission)
@@ -375,13 +391,13 @@ def init_mission(request, mission_id):
     if request.method == 'POST':
         
         player_character = adventure_player.character
-        # bot_character = get_adventure_character(target)
-        bot_character = get_adventure_character("Bandit")
+        bot_character = get_adventure_character(target)
+        # bot_character = get_adventure_character("Bandit")
         if not bot_character:
             return JsonResponse({'message': 'target character not found'})
         
         #set the health based on the character level
-        bot_character['health'] = bot_character.get('health', 100) + (bot_character.get('level') * 10)
+        bot_character['health'] = bot_character.get('health', 100) + (bot_character.get('level') * 25)
 
         player_character['hp'] = player_character['health']
         bot_character['hp'] = bot_character.get('health', 100)
@@ -432,19 +448,21 @@ def mission_battle_action(request, mission_id):
         logs = logs + new_logs
 
 
-        rewards = {'xp' : 0, }
+        rewards = {'xp' : 0, 'items' : [mission.template.reward_item] } 
         if winner == 'player':
             rewards['xp'] += 50
-            #rewards = _reward_player(player)
+    
             battle.result = 'win'
             battle.finished = True
             battle.date_ended = datetime.now()
-            check_mission_completion(player, mission)
+            check_mission_completion(adventure_player, mission)
 
         elif winner == 'bot':
             battle.result = 'lose'
             battle.finished = True
             battle.date_ended = datetime.now()
+
+        print(winner)    
 
         battle.log = json.dumps(logs)
         battle.save()

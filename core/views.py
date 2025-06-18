@@ -216,7 +216,7 @@ def home(request):
     if not player:
         return redirect('/users/signin')
     
-    export_battle_data()  
+    #export_battle_data()  
 
     feed,created = Feed.objects.get_or_create(player = player)
     

@@ -61,7 +61,7 @@ class MissionTemplate(models.Model):
     target = models.CharField(max_length=100, help_text="Nom de l'ennemi, de l'objet ou zone", null=True, blank=True)
     quantity = models.IntegerField(default=1)
     reward_exp = models.IntegerField(default=50)
-    reward_item = models.CharField(max_length=100, blank=True, null=True)
+    reward_item = models.JSONField(max_length=100, blank=True, null=True)
     rarity = models.CharField(max_length=50, default='common', choices=[('common', 'Commune'), ('rare', 'Rare'), ('epic', 'Épique')])
     zone = models.ForeignKey(MapZone, on_delete=models.CASCADE, null=True, blank=True)
 

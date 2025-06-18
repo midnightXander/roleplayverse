@@ -454,7 +454,7 @@ function  createBattleElement(battle){
                                           <a href="/users/${battle.initiator.username}" class="font-bold hover:text-orange-500 ">
                                               ${battle.initiator.player}<span class ='text-sm text-semibold text-gray-600'>@${battle.initiator.nickname}</span> ${ battle.winner ? (battle.winner.id == battle.initiator.id ? "<span class='text-green-500'>W</span>": ''):''}
                                           </a>
-                                          <p class="text-sm text-gray-400">Rank: ${battle.initiator.rank}</p>
+                                          <p class="text-sm text-gray-400">Rang: <span class='text-orange-500' >${battle.initiator.rank}</span></p>
                                       </div>
                                   </div>
                                   <i class="fas fa-bolt text-yellow-500 text-2xl"></i>
@@ -463,11 +463,14 @@ function  createBattleElement(battle){
                                           <a href="/users/${battle.opponent.username}" class="font-bold hover:text-orange-500 ">
                                               ${battle.opponent.player}<span class ='text-sm text-semibold text-gray-600'>@${battle.opponent.nickname}</span> ${ battle.winner ? (battle.winner.id == battle.opponent.id ? "<span class='text-green-500'>W</span>": ''):''}
                                           </a>
-                                          <p class="text-sm text-gray-400">Rank: ${battle.opponent.rank}</p>
+                                          <p class="text-sm text-gray-400">Rang: <span class='text-orange-500' >${battle.opponent.rank}</span></p>
                                       </div>
                                       <img src="${battle.opponent.profile_picture}" alt="${battle.opponent.player}" class="w-12 h-12 rounded-full">
                                   </div>
                               </div>
+                              ${battle.iReferee ? `
+                                <span class = 'text-green-500 rounded-2xl border border-green-800 bg-green-500 bg-opacity-50 px-3 py-1 text-xs mr-2'>Tu arbitres ce combat</span>`:''}
+                                
                               ${battle.can_refree ? `<button data-battle_id="${battle.id}" onclick ='makeProposal(${battle.id})' class= "proposal-btn border border-purple-500 text-purple-500 px-4 py-2 rounded-lg  transition duration-300 mt-auto">
                                   <i class="fas fa-gavel mr-2"></i>Proposer d'arbitrer le combat
                               </button>`:`
@@ -476,8 +479,12 @@ function  createBattleElement(battle){
                                       voir le combat 
                               </a>
 
-                              <div><i class="fas fa-eye mr-2"></i>: <span  class='text-orange-500' >${battle.spectators}</span></div>
                               <div>
+                              
+
+                              <i class="fas fa-eye mr-2"></i>: <span  class='text-orange-500' >${battle.spectators}</span>
+                              </div>
+                              </div>
                               
                               ` }
                           `

@@ -254,7 +254,7 @@ def _evaluate_actions(player_character:dict, bot_character:dict, player_action:d
 def evaluate_state(player_character, bot_character):
     #Example evaluation function
     # print("State: ",(bot_character['hp'] - player_character['hp']) + (bot_character['chakra'] - player_character['chakra']) )
-    return (bot_character['hp'] - player_character['hp']) * 2 + (bot_character['chakra'] - player_character['chakra']) 
+    return (bot_character['hp'] - player_character['hp']) * 3 + (bot_character['chakra'] - player_character['chakra']) 
 
 
 def _simulate_action(character, opponent, action, is_bot):
@@ -268,7 +268,7 @@ def _simulate_action(character, opponent, action, is_bot):
     elif action['name'] == 'Focus':
         character['chakra'] = min(character['chakra'] + 40, character['chakra_pool'])
     elif action['name'] == 'Heal':
-        character['hp'] = min(character['hp'] + 30, character.get('health', 200))
+        character['hp'] = min(character['hp'] + 100, character.get('health', 200))
         character['chakra'] = max(character['chakra'] - 20, 0)
     elif action['name'] == 'Defend':
         # Reduce damage from opponent's attack
