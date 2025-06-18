@@ -105,7 +105,7 @@
 
         
         
-        <div class="bg-gray-900 relative  message-form-container px-2 py-4 ">
+        <div class="relative border-t border-gray-700 message-form-container px-2 py-4 ">
             <p id="image-name" class="hidden top-0 absolute">
                 <span class="text-green-500"></span>   
                 <i class="fas fa-times cursor-pointer ml-2"></i> 
@@ -119,17 +119,18 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <form id="messageForm" class="flex items-center shadow-md border border-gray-700  rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-900" enctype="multipart/form-data">
+            <form id="messageForm" class="flex items-center focus:outline-none focus:ring-2 focus:ring-gray-500" enctype="multipart/form-data">
                     
                 
                 <button type="button" id="emojiButton" class="px-4 py-2 self-end text-gray-400 hover:text-white  focus:outline-none">
                     <i class="far fa-smile"></i>
                 </button>
-                <textarea type="text" oninput="autoExpand(this)" id="messageInput" placeholder="Ecrit ton message ✒️" class="hide-scrollbar pr-4 flex-grow max-h-40 bg-transparent text-white focus:outline-none" rows="1"></textarea>
-
-                <label for="imageUpload" class="cursor-pointer   text-white self-end py-2 px-2 rounded-full  transition duration-300">
+                <label for="imageUpload" class="cursor-pointer   text-white self-end py-2 px-2 pr-4 rounded-full  transition duration-300">
                     <i class="fas fa-image"></i>
                 </label>
+                <textarea type="text" oninput="autoExpand(this)" id="messageInput" placeholder="Ecrit ton message ✒️" class="hide-scrollbar pr-4 flex-grow max-h-40 bg-transparent text-white focus:outline-none border border-gray-700 px-4 py-2 rounded-3xl" rows="1"></textarea>
+
+                
                 <input type="file" id="imageUpload" accept="image/*" class="hidden">
                 
                 <button type="submit" class=" opacity-8 self-end  text-white px-6 py-2 rounded-full  transition duration-300">

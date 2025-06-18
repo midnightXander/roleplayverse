@@ -261,14 +261,14 @@ margin-left: 10px;
       <nav class=" fixed top-0 left-0 w-full flex items-center justify-between px-4 py-3 shadow-lg z-50">
         <!-- Quit Adventure Mode Button -->
         <a href="/" class="text-sm text-red-500 hover:text-red-500 flex items-center">
-          <i class="fas fa-arrow-left mr-2"></i> Quitter le mode aventure
+          <i class="fas fa-arrow-left mr-2"></i> Quitter 
         </a>
       
         <!-- Player Info -->
         <div class="flex items-center space-x-4">
           <!-- Player Level -->
           <div class="text-sm text-green-400 font-semibold">
-            🌱 Niveau : 3
+            🌱 Niveau : {{adventure_player.level}}
           </div>
       
           <!-- Character Appearance -->
@@ -458,13 +458,14 @@ function openPopup(zoneKey) {
   const missionList = document.getElementById("missionList");
   missionList.innerHTML = ""; // Clear previous missions
   zone.missions.forEach((mission) => {
-    const missionItem = document.createElement("a");
-    missionItem.href = `/adventure/game/mission/${mission.id}`; // Prevent default link behavior
+    const missionItem = document.createElement("li");
+    //missionItem.href = `/adventure/game/mission/${mission.id}`; // Prevent default link behavior
     
     missionItem.className = "p-3 flex items-center border-l-2 border-orange-700 hover:bg-gray-800 transition duration-200  cursor-pointer";
     missionItem.innerHTML = `
-      <div onclick ='showOverlay()' >
+      <div ${mission.status == 'done' ? '' : `onclick ="gotoPage('/adventure/game/mission/${mission.id}')"`} >
       <h3 class="text-lg font-semibold text-orange-500">${mission.title}</h3>
+      ${mission.status == 'done' ? '<span class="text-green-500 text-sm">✔️ Completé</span>' : ''}
       <p class="text-sm text-gray-400"><span class='text-gray-300' >Difficulty</span>: ${mission.difficulty}</p>
       <p class="text-sm text-gray-400"><span class='text-gray-300' >Reward</span>: ${mission.reward_exp}</p>
       <div class='text-sm mt-2 text-orange-500'>
@@ -499,6 +500,13 @@ document.querySelectorAll(".map-zone").forEach((zoneElement) => {
   function showOverlay(){
         document.querySelector('#loading-overlay').classList.add('active')
       }
+
+  function gotoPage(url) {
+    // Show loading overlay
+    showOverlay();
+    // Redirect to the specified URL 
+    window.location.href = url; // Adjust the delay as needed
+  }    
       const toastContainer = document.getElementById('top-toastContainer');
       function showMyToast(message, type = 'info', duration = 3000) {
         

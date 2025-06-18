@@ -29,6 +29,7 @@ for ch in characters_list:
     ch_names.append(ch['name'])
 
 battle_status = ["waiting_refree","not_started","ongoing", "finished"]
+BATTLE_STATUS_SET = [("waiting_refree", "En Attente d'arbitrge"), ("not_started", "Pas commencer"), ("ongoing", "En Cours"), ("finished", "Terminer")]
 battle_types = ["friendly","stake","tournament","challenge"]
 
 class Challenge(models.Model):
@@ -91,8 +92,7 @@ class Battle(models.Model):
     type = models.CharField(max_length=30,choices=[
         (i,i) for i in battle_types
     ])
-    status = models.CharField(max_length=40,default="waiting_refree", choices=(
-        (i,i) for i in battle_status ))
+    status = models.CharField(max_length=40,default="waiting_refree", choices=BATTLE_STATUS_SET)
     flags = models.TextField(blank=True)        
     initiator = models.ForeignKey(Player, on_delete=models.SET_NULL, null=True)
 
