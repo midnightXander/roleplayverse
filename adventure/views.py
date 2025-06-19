@@ -369,9 +369,9 @@ def mission(request, mission_id):
     mission,created = PlayerMission.objects.get_or_create(
         player=player, template = missionTemplate)
 
-    if mission.status == 'done':
-        messages.info(request, "Mission already completed.")
-        return redirect('adventure:game')
+    # if mission.status == 'done':
+    #     messages.info(request, "Mission already completed.")
+    #     return redirect('adventure:game')
     
     # if request.method == 'POST':
     #     check_mission_completion(player, mission)

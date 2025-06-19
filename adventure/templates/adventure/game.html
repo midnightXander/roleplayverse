@@ -466,7 +466,7 @@ function openPopup(zoneKey) {
       <div ${mission.status == 'done' ? '' : `onclick ="gotoPage('/adventure/game/mission/${mission.id}')"`} >
       <h3 class="text-lg font-semibold text-orange-500">${mission.title}</h3>
       ${mission.status == 'done' ? '<span class="text-green-500 text-sm">✔️ Completé</span>' : ''}
-      <p class="text-sm text-gray-400"><span class='text-gray-300' >Difficulty</span>: ${mission.difficulty}</p>
+      <p class="text-sm text-gray-400"><span class='text-gray-300' >Difficulty</span>: facile</p>
       <p class="text-sm text-gray-400"><span class='text-gray-300' >Reward</span>: ${mission.reward_exp}</p>
       <div class='text-sm mt-2 text-orange-500'>
         Details de la mission <i></i>
