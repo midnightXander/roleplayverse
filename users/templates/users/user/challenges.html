@@ -13,50 +13,54 @@
 </style>
 {% for battle in battles %}
 <div class="bg-gray-900 rounded-lg shadow-md p-6 mb-8">
-    <div class="py-2">vs <a href="/users/{{battle.opponent.username}}" class="text-2xl font-semibold text-orange-500 mb-4">{{battle.opponent.player}}</a></div>
-    <p class="text-gray-200 mb-2 ">Persos : {{battle.i_character}}(Toi) vs {{battle.o_character}}({{battle.opponent.username}})</p>
-    <!-- <p class="text-gray-200 mb-2">Participants : Toi vs <a href="/users/{{battle.opponent.username}}" class="font-semibold hover:text-orange-500 " >{{battle.opponent.player}}</a></p> -->
-    
-    {% if battle.status != 'waiting_refree' %}
-    <div  class="my-2 border rounded-lg inline px-4 py-2">
-        <a href="/battles/battle_room/{{battle.id}}" class=" font-semibold hover:text-orange-500 " >Aller au combat</a>
+    <div class="py-2 flex justify-between">
+        <div>Defi contre  <a href="/users/{{battle.opponent.username}}" class="underline font-semibold text-orange-500 mb-4">{{battle.opponent.player}}</a>
+        </div>
+        
+        {% if battle.status != 'waiting_refree' %}
+            <a href="/battles/battle_room/{{battle.id}}" class=" font-semibold hover:text-orange-500 " >Aller au combat</a>
+        {% endif %}
     </div>
     
-    {% endif %}
+    <p class="text-gray-200 mb-2 ">Persos : {{battle.i_character}} vs {{battle.o_character}}</p>
+    <!-- <p class="text-gray-200 mb-2">Participants : Toi vs <a href="/users/{{battle.opponent.username}}" class="font-semibold hover:text-orange-500 " >{{battle.opponent.player}}</a></p> -->
+    
+    
 
 
     <div class="space-y-6" id="referee-proposals">
-        <h4 class="text-lg text-orange-500 font-semibold my-4">Propositions d'arbitrage:</h4>
+        <h3 class=" text-orange-500 font-semibold underline">Propositions d'arbitrage :</h3>
         {% for proposal in battle.referee_proposals %}
-        <div class="border border-orange-500 text-white rounded-lg p-4 flex flex-col md:flex-row justify-between items-start md:items-center">
-            <div class="flex space-x-2">
+        <div class="border-b border-orange-500 text-white rounded-2xl p-4 pt-0 flex flex-row justify-between items-start md:items-center">
+            <div class="flex items-center space-x-2">
                 <a href="/users/{{proposal.player.username}}" >
-                    <img src="{{proposal.player.profile_picture}}" alt="{{proposal.player.player}} Profile Picture" class="w-20 h-20 rounded-full mb-2">
+                    <img src="{{proposal.player.profile_picture}}" alt="{{proposal.player.player}} Profile Picture" class="w-10 h-10  rounded-full mb-2">
                 </a>
                 <div>
-                  <a href="/users/{{proposal.player.username}}" class="text-xl font-semibold hover:text-orange-500">{{proposal.player.player}}</a>
+                  <a href="/users/{{proposal.player.username}}" class="font-semibold hover:text-orange-500">{{proposal.player.player}}</a>
                 <p class="text-gray-500 text-sm ">Rang : {{proposal.player.rank}}</p>
-                <p class="">Note d'arbitrage: <i class="fas fa-star text-yellow-500" ></i> {{proposal.ratings}}/5</p>
+                <p class="text-sm">Note : <i class="fas fa-star text-yellow-500" ></i> {{proposal.ratings}}/5</p>
                 <p class="text-gray-500 text-sm ">{{proposal.date_sent}}</p>  
                 </div>
                 
             </div>
-            <div class="mt-4 md:mt-0 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+            <div class="mt-4 md:mt-0 flex space-x-4  space-y-2 sm:space-y-0 sm:space-x-2">
                 {% if proposal.player.id == battle.refree.id %}
-                <button disabled class="bg-green-600  text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+                <button disabled class="bg-green-600 text-sm text-white font-bold py-1 px-3 rounded-3xl transition duration-300 ease-in-out">
                     <i class="fas fa-check-circle mr-2"></i> Validé
                 </button>
                 {% else %}
-                <button onclick="answerProposal('{{proposal.id}}','accepted')" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+                <button onclick="answerProposal('{{proposal.id}}','accepted')" class="border border-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-2xl transition duration-300 ease-in-out">
                     <i class="fas fa-check"></i>
                 </button>
-                <button onclick="answerProposal('{{proposal.id}}','declined')" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
+                <button onclick="answerProposal('{{proposal.id}}','declined')" class="border border-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-2xl transition duration-300 ease-in-out">
                     <i class="fas fa-times"></i>
                 </button>
                 {% endif %}
             </div>
         </div>
         {% empty %}
+            <p class="text-gray-400">Aucune proposition d'arbitrage pour ce défi.</p>
         {% endfor %}
     </div>
     

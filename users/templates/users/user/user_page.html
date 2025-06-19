@@ -224,9 +224,10 @@
             </button> -->
           </div>
           
-          <p class="text-xs text-gray-300 mt-2">Invite des gens a rejoindre la plate-forme par ce lien et obtiens des Jétons de combats et plein d'autres récompense</p>
+          <p class="text-xs text-gray-300 mt-2">Invite des gens a rejoindre la plate-forme par ce lien et obtiens des Jétons de combats, des credits RP et pleins d'autres récompense</p>
         </div>
-        <a href="/blog/tutorials/posts" target="_blank" class="inline-block w-full text-center bg-[#d45822] text-white py-2 rounded-xl font-semibold hover:bg-orange-600 transition">📘Guide RPV</a>
+        <a href="/onboarding" class="inline-block w-full text-center bg-white text-orange-500 py-2 rounded-xl font-semibold  transition">📘Tutoriel RPV</a>
+        <a href="/blog" target="_blank" class="inline-block w-full text-center bg-[#d45822] text-white py-2 rounded-xl font-semibold hover:bg-orange-600 transition">📘Guide RPV</a>
       </div>
 
     <!-- Quick Access Links -->
@@ -244,7 +245,7 @@
     {% endif %}
 
     <!-- Post Filters -->
-    <div class="flex flex-wrap gap-2  justify-between">
+    <div class="flex justify-between space-x-2 pb-2 overflow-y-auto w-full">
         
       <a onclick="showOverlay()" href="{% url 'users:player' req_player.user.username %}" class = "filter-button bg-gray-700 text-sm px-4 py-1.5 rounded-full hover:bg-gray-300 hover:bg-gray-600">Publications</a>
       <a onclick="showOverlay()" href="{% url 'users:player_battles' req_player.user.username  %}" class = "filter-button bg-gray-700 text-sm px-4 py-1.5 rounded-full hover:bg-gray-300 hover:bg-gray-600">Combats</a>
