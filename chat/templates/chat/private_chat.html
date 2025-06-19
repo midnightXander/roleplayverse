@@ -224,10 +224,10 @@
         messageElement.className = `message  max-w-2xl min-w-32`;
         messageElement.id = `message-${message.id}`
         messageElement.innerHTML = `
-        <div class="rounded-lg  max-w-2xl">
+       
             <div class="relative group">
                 <div class="flex items-start  mb-2 justify-end">
-                    <img src = '${message.sender.profile_picture}' alt="${message.sender.username}" class="min-w-8 h-8 rounded-full mr-2">
+                    <img src = '${message.sender.profile_picture}' alt="${message.sender.username}" class="w-8 h-8 rounded-full mr-2">
                     <div class="flex-grow pl-3">
                         ${message.parent ? `
                         <div onclick="scrollToMessage('${message.parent.id}')" class="cursor-pointer bg-gray-800 text-gray-400 text-sm p-2 rounded-lg mb-2">
@@ -235,9 +235,10 @@
                             <p>${String(message.parent.content).slice(0,50)}</p>
                         </div>
                         ` : ''}
-                        <div class="flex items-center justify-end mb-1"></div>
-                        <p class="text-gray-300 border-l-2 pl-3 border-orange-500 body mt-1 ">${message.content}</p>
-                        <span class="text-xs text-gray-400 mr-2">${message.date_sent}</span>
+                        
+                        <p class="body  text-gray-300 mt-1 border-l-2 border-orange-500 w-full p-3 min-w-32 rounded-tr-xl inline-block">${message.content}</p>
+                        <br>
+                        <span class="text-xs text-gray-400 pl-3">${message.date_sent}</span> 
                     </div>
                    
                     
@@ -270,7 +271,7 @@
                     </div>
                 </div>
                 
-            </div>
+            
         `
 
         return messageElement
@@ -283,14 +284,14 @@
         <div class="relative group ">
                 <div class="flex items-start mb-2">
                     <img src = '${message.sender.profile_picture}' alt="${message.sender}" class="w-8 h-8 rounded-full mr-2">
-                    <div class="flex-grow">
+                    <div class="flex-grow pl-3">
                         ${message.parent ? `
                         <div onclick="scrollToMessage('${message.parent.id}')" class="cursor-pointer bg-gray-800 text-gray-400 text-sm p-2 rounded-lg mb-2">
                             <p>Réponse à: <strong>${message.parent.sender.username}</strong></p>
                             <p>${String(message.parent.content).slice(0,50)}</p>
                         </div>
                         ` : ''}
-                        <p class="body  text-gray-300 mt-1 border-l-2 border-gray-600 w-full p-3 min-w-32 rounded-tr-xl rounded-br-xl rounded-bl-xl inline-block">${message.content}</p>
+                        <p class="body  text-gray-300 mt-1 border-l-2 border-gray-600 w-full p-3 min-w-32 rounded-tr-xl inline-block">${message.content}</p>
                         <br>
                         <span class="text-xs text-gray-400 pl-3">${message.date_sent}</span>    
                     </div>   
