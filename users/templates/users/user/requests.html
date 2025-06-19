@@ -2,7 +2,7 @@
 {% block filterContent %}
 
 <!-- Content area for filtered results -->
-<div class="bg-gray-900 rounded-2xl shadow-md p-5 space-y-4">
+<div class="bg-gray-950 rounded-2xl shadow-md p-5 space-y-4">
     <h2 class="text-xl font-semibold">🗡️ Tes Requètes de combat</h2>
     <p class="text-sm text-gray-400"><i class="text-yellow-500 fas fa-exclamation-triangle mr-2"></i>Les Requetes de combat(RDC) seront supprimées après 3 combats initités depuis la requète <br><a target="_blank" class="text-orange-500 hover:text-orange-600" href="/blog/News/posts">comment ça marche</a></p>
     <!-- Example Request -->
@@ -10,7 +10,7 @@
         {% for request in requests %}
       <div class="flex justify-between items-center">
         <div>
-          <p class="text-sm text-gray-500"><i class="fas fa-khanda text-orange-500 mr-2" ></i> 1v1 {{request.type}} - Persos: <span class="font-medium text-orange-500">{{request.character}}</span></p>
+          <p class="text-sm text-gray-500"><i class="fas fa-khanda text-orange-500 mr-2" ></i> 1v1 {{request.type}} - Perso: <span class="font-medium text-orange-500">{{request.character}}</span></p>
           <p class="text-xs text-gray-400">Envoyé il ya {{request.date_sent}}</p>
         </div>
         <!-- <span class="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full font-semibold">Pending Match</span> -->
@@ -19,7 +19,7 @@
 
       <!-- Accepted Players -->
       <div>
-        <h4 class="text-sm font-semibold mb-1">Joueurs ayant accepte:</h4>
+        <h4 class="text-sm font-semibold mb-1">Joueurs ayant accepter:</h4>
         <div class="space-y-2">
             {% for acceptor in request.acceptors %}
             <div class="flex items-center justify-between px-3 py-2 bg-gray-800 rounded-xl text-xs">

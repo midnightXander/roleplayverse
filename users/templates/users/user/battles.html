@@ -9,7 +9,7 @@
             
             <div class="flex flex-col justify-center items-center">
                 <p class="text-center text-gray-400">Aucun combat pour l'instant</p>
-            <a onclick="showOverlay()" class="text-center text-orange-500 hover:text-orange-600 text-sm" href="/battles">comment faire un combat</a>
+            <a onclick="showOverlay()" class="text-center text-orange-500 hover:text-orange-600 text-sm" href="/blog">comment faire un combat</a>
             </div>
         <!-- </div> -->
     </div>
@@ -65,9 +65,10 @@ $(()=>{
         success: function(res){
         const battles = res.battles
         if(res.battles.length > 0){
-            const battleCards = battles.map(battle => createBattleCard(battle)).join('');
+            battlesList.innerHTML = "";
+            const battleCards = battles.map(battle => battlesList.appendChild(createBattleElement(battle))).join('');
             // battlesList.querySelector('.grid').innerHTML = battleCards;
-            battlesList.innerHTML = battleCards;
+            //battlesList.innerHTML = battleCards;
         }
         
         },
