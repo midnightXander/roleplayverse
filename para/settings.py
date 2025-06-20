@@ -76,6 +76,9 @@ INSTALLED_APPS = [
     'django_celery_results',
     'rest_framework',
     'corsheaders',
+    'tailwind',
+    'theme',
+    'django_browser_reload',
     
 
     #Allauth
@@ -101,6 +104,8 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 
     'corsheaders.middleware.CorsMiddleware',
+
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = 'para.urls'
@@ -123,6 +128,9 @@ TEMPLATES = [
         },
     },
 ]
+
+TAILWIND_APP_NAME = 'theme'
+NPM_BIN_PATH = 'npm.cmd'
 
 WSGI_APPLICATION = 'para.wsgi.application'
 ASGI_APPLICATION = 'para.routing.application'
