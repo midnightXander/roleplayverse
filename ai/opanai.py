@@ -52,7 +52,7 @@ def sample_response(content="Hello, how can you assist me today?", model="gpt-3.
 
 
 # client = OpenAI(
-#   api_key="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"
+#   api_key=""
 # )
 
 # def sample_response2():
