@@ -2,3 +2,5 @@
 node_modules
 *.dll
 *.lib
+env/Lib/site-packages/torch/lib/torch_cpu.dll
+env/Lib/site-packages/torch/lib/dnnl.lib
