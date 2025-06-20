@@ -43,16 +43,7 @@
         <!-- <link rel="stylesheet" href="{% static 'css/home.css' %}" /> -->
         
 
-        <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/linkifyjs/dist/linkify.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/linkify-html/dist/linkify-html.min.js' %}"></script>
-        <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/tailChase.js"></script>
-
-
-
-        <script src="{% static 'js/utility.js' %}"  ></script> 
-        <script src="{% static 'js/components.js' %}" ></script>
-        <script src="{% static 'js/core.js' %}"></script>
+        
         <!-- <script src="{% static 'js/notifications.js' %}"></script>  -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         
@@ -77,16 +68,10 @@
         <link rel="stylesheet" href="{% static 'css/effects.css' %}" >
         <link rel="stylesheet" href="{% static 'css/ads.css' %}" >
         <link rel="stylesheet" href="{% static 'css/styles.css' %}" >
-    
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.0/gsap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script> -->
-        <script src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.2/sharer.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script src="https://cdn.tiny.cloud/1/j4yc51tqbhmqbmoqot1d4l8uircpwyr932mazjpidtzv6yt7/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-        <script src="https://cdn.cinetpay.com/seamless/main.js"></script>
 
+        
+        <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
         <!--Google ads-->
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7259227698391457"
      crossorigin="anonymous"></script>
@@ -94,8 +79,6 @@
         {% block styles %}
         {% endblock styles %}
         
-        {% block scripts %}
-        {% endblock scripts %}
 
 
 <style>
@@ -513,6 +496,7 @@ function setupExpandableText() {
 {{ playerName|json_script:'player' }}
 {{ player.user.username | json_script:'username' }}
 
+
 <script>
     
     const notificationPopup = document.getElementById('notificationPopup')
@@ -686,7 +670,27 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
         <!--Linkify js-->
  
         
+        
+        <script type="text/javascript" src="{% static 'js/linkifyjs/dist/linkify.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/linkify-html/dist/linkify-html.min.js' %}"></script>
+        <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/tailChase.js"></script>
+
+        <script src="{% static 'js/utility.js' %}"  ></script> 
+        <script src="{% static 'js/components.js' %}" ></script>
+        <script src="{% static 'js/core.js' %}"></script>
+    
        
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- <script src="https://cdn.tiny.cloud/1/j4yc51tqbhmqbmoqot1d4l8uircpwyr932mazjpidtzv6yt7/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script> -->
+        
+
+        {% block scripts  %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.0/gsap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/sharer.js@0.5.2/sharer.min.js"></script>
+        <script src="https://cdn.cinetpay.com/seamless/main.js"></script>
+        {% endblock scripts %}
 <!--Image Modal script-->
         <script>
             
