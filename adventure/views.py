@@ -184,6 +184,7 @@ def _zone_data(zone:MapZone):
         'id' : zone.id,
         'name'  : zone.name,
         'key' : zone.name.strip().lower().replace(' ', '-').replace("'", ''),
+        'coordinates' : {'x':0,'y':0,},
         'description' : zone.description,
         'missions' : [ _mission_data(mission) for mission in MissionTemplate.objects.filter(zone = zone) ]
     }
