@@ -117,7 +117,7 @@ def assign_zones_to_missions():
         raise FileNotFoundError(f"missions file not found at {missions_file}")
     with open(missions_file, 'r', encoding='utf-8') as file:
         missions_data = json.load(file)
-        for mission in missions_data:
+        for mission in missions_data[:2]:
             min_level = mission.get('min_level',1)
             max_level = mission.get('max_level', 5)
 
@@ -138,7 +138,7 @@ def create_missions():
     with open(missions_file, 'r', encoding='utf-8') as file:
         missions_data = json.load(file)
         count = 0
-        for mission in missions_data:
+        for mission in missions_data[:2]: #create only the first two missions for testing
             mission_data = mission.get('data', {})
             # obj,created = MissionTemplate.objects.get_or_create(
             #     title = mission['title'],
@@ -147,6 +147,7 @@ def create_missions():
             MissionTemplate.objects.create(
                 title=mission['title'],
                 description=mission['description'],
+                long_tail_description=mission['long_tail_description'],
                 min_level=mission.get('min_level', 1),
                 max_level=mission.get('max_level', 100),
                 mission_type=mission['mission_type'],
@@ -163,30 +164,32 @@ def create_missions():
         print(f"Created {count} missions")    
 
 
-def _mission_data(mission:MissionTemplate):
+def _mission_data(mission:PlayerMission):
     return {
         'id': mission.id,
-        'title' : mission.title,
-        'description' : mission.description,
-        'min_level' : mission.min_level,
-        'max_level' : mission.max_level,
-        'type' : mission.mission_type,
-        'target' : mission.target,
-        'reward_exp' : mission.reward_exp,
+        'title' : mission.template.title,
+        'description' : mission.template.description,
+        'min_level' : mission.template.min_level,
+        'max_level' : mission.template.max_level,
+        'type' : mission.template.mission_type,
+        'target' : mission.template.target,
+        'reward_exp' : mission.template.reward_exp,
+        'status' : mission.status
         # 'zone' : {
         #     'name' : mission.zone.name
         # }
     }
 
 
-def _zone_data(zone:MapZone):
+
+def _zone_data(zone:MapZone, player:Player):
     return {
         'id' : zone.id,
         'name'  : zone.name,
         'key' : zone.name.strip().lower().replace(' ', '-').replace("'", ''),
-        'coordinates' : {'x':0,'y':0,},
+        'coordinates' : {'x': zone.data.get('x'),'y':zone.data.get('y'),},
         'description' : zone.description,
-        'missions' : [ _mission_data(mission) for mission in MissionTemplate.objects.filter(zone = zone) ]
+        'missions' : [ _mission_data(mission) for mission in PlayerMission.objects.filter(template__zone = zone, player = player) ]
     }
 
 
@@ -199,21 +202,33 @@ def game(request):
     if not adventure_player:
         return redirect('adventure:create_character')
     
-    # create_zones()
+    #create_zones()
     # assign_zones_to_missions()
-    # create_missions()
-    # assign_random_mission(player)
+    #create_missions()
+    #assign_random_mission(player)
+    #assign_missions(player)
 
     zones = MapZone.objects.filter(level_required__lte = adventure_player.level)
-    zones = [_zone_data(zone) for zone in zones]
+    zones = [_zone_data(zone, player) for zone in zones]
        
 
 
     return render(request, 'adventure/game.html',{
         'player': player,
         'adventure_player': adventure_player,
+        'experience' : adventure_player.experience,
         'zones' : zones
     })
+
+def save_player_position(request):
+    player = Player.objects.get(user=request.user)
+    adventure_player = AdventurePlayer.objects.filter(player= player).first()
+
+    coordinates = request.POST.get('coordinates')
+    adventure_player.character_data['coordinates'] = coordinates
+    adventure_player.save()
+
+    return JsonResponse({'status':'success'})
 
 def training(request):
     player = Player.objects.get(user=request.user)
@@ -323,6 +338,17 @@ def assign_random_mission(player):
         selected = random.choice(filtered)
         return PlayerMission.objects.create(player=player, template=selected)
 
+def assign_missions(player):
+    adventure_player = AdventurePlayer.objects.get(player = player)
+    current_level = adventure_player.level
+    
+    eligible_missions = MissionTemplate.objects.filter(min_level__lte=current_level, max_level__gte=current_level)
+    already_received = PlayerMission.objects.filter(player=player).values_list('template_id', flat=True)
+    filtered = eligible_missions.exclude(id__in=already_received)
+    for mission in filtered[:1]:
+        PlayerMission.objects.create(player=player, template=mission).save()    
+        print(f"assigned mission to {player}")
+
 def check_mission_completion(player:AdventurePlayer, mission:PlayerMission):
     """    Vérifie si une mission est terminée et met à jour le statut du joueur en conséquence.
     """
@@ -361,14 +387,11 @@ def mission(request, mission_id):
     if not adventure_player:
         return redirect('adventure:create_character')
 
-    for mission in MissionTemplate.objects.all():
-        mission.reward_item = None
-        mission.save()
 
     #mission = get_object_or_404(PlayerMission, id=mission_id, player=player)
-    missionTemplate = get_object_or_404(MissionTemplate, id=mission_id)
-    mission,created = PlayerMission.objects.get_or_create(
-        player=player, template = missionTemplate)
+    mission = get_object_or_404(PlayerMission, id=mission_id)
+    # mission,created = PlayerMission.objects.get_or_create(
+    #     player=player, template = missionTemplate)
 
     # if mission.status == 'done':
     #     messages.info(request, "Mission already completed.")
@@ -378,11 +401,18 @@ def mission(request, mission_id):
     #     check_mission_completion(player, mission)
     #     return redirect('adventure:game')
 
-    return render(request, 'adventure/mission.html', {
+    context = {
         'player': player,
         'adventure_player': adventure_player,
         'mission': mission
-    })
+    }
+
+    if mission.template.mission_type == 'defeat':
+        template = 'adventure/mission.html'
+    else:
+        template = 'adventure/mission_collect.html'    
+
+    return render(request, template, context )
 
 def init_mission(request, mission_id):
     player = Player.objects.get(user=request.user)

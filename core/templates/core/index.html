@@ -75,11 +75,10 @@
     <title>RolePlay Verse</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Edu+AU+VIC+WA+NT+Arrows:wght@400..700&family=Gluten:wght@100..900&family=Noto+Sans+JP:wght@100..900&family=Quicksand:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
+
         <link rel="stylesheet" href="{% static 'css/output.css' %}" >
         <link rel="stylesheet" href="{% static 'css/index.css' %}" >
         <link rel="stylesheet" href="{% static 'css/effects.css' %}" >
@@ -105,6 +104,10 @@
             z-index: 50;
             transition: width 0.3s ease;
         }
+        h1,h2,h3{
+        font-family: 'Cal Sans','Noto Sans JP','Gluten', sans-serif;
+        font-weight: 400;
+    }
         .transition-smooth {
             transition: all 0.3s ease-in-out;
         }
@@ -113,7 +116,7 @@
             text-decoration: none;
         }
         .font-quicksand{
-            font-family: 'Quicksand';
+            font-family: 'Noto Sans JP';
             font-weight:900;
         }
     </style>
@@ -144,7 +147,7 @@
 </head>
 <body class="bg-gray-900 text-white">
     <div class="scroll-indicator"></div>
-    <div id="mobileMenu" class="fixed inset-0 bg-gray-800 px-4  z-50  transform translate-x-full transition-transform duration-300 ease-in-out">
+    <div id="mobileMenu" class="fixed inset-0 bg-gray-900 px-4  z-50  transform translate-x-full transition-transform duration-300 ease-in-out">
         <header class="flex border-b border-gray-700 mb-4 justify-between">
             <div>
                 <img class="h-20 w-auto" src="{% static 'images/logo/logo_1.png' %}" alt="Logo">
@@ -164,7 +167,7 @@
             </ul>  
             
             <a href="{% url 'users:login' %}">
-                <button class="bg-orange-500  mx-auto w-full hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+                <button class="bg-orange-500  mx-auto w-full hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-2xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
                    Se Connecter
                 </button>
             </a>
@@ -209,21 +212,26 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center justify-center bg-cover bg-center shine-effect" style="background-image: url('https://wallpaperaccess.com/full/2932932.jpg');">
-        <div class="bg-black bg-opacity-50 p-12 rounded-lg text-center">
-            <h1 class="text-5xl font-quicksand  font-bold mb-4 animate-pulse">RolePlay Verse</h1>
-            <p class="text-xl  mb-8">L'experience ultime du RP Naruto.</p>
-            <a href="/users/signup" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-full text-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-                Commencer a RP
+    <section id="home" class="min-h-screen relative flex items-center justify-center bg-cover bg-center bg-[url(https://i.pinimg.com/736x/db/8a/4a/db8a4ad7bef43646b7ed9d94d7c496bb.jpg)] sm:bg-[url(https://wallpapercave.com/wp/wp7498255.jpg)] ">
+        <div class="bg-black bg-opacity-50 flex flex-col justify-center items-center absolute h-full w-full p-12 rounded-lg text-center">
+            <h1 class="text-5xl bg-gradient-to-r from-orange-500 to-orange-800 text-transparent bg-clip-text font-bold mb-4 animate-pulse">RolePlay Verse</h1>
+            <p class="text-xl  mb-8">L'experience ultime du RolePlay Naruto.</p>
+            <a href="/users/signup" class="bg-orange-500 hover:bg-orange-600 mb-8 text-white font-bold py-3 px-6 rounded-2xl text-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+                Commencer a jouer
+            </a>
+            <a href="#features" class="text-orange-500  rounded-full hover:bg-opacity-90 floating transition duration-300 mb-6">
+                <!-- <svg class="" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewBox="0 0 448 512">
+                    <path d="M207.029 381.476L12.686 187.029c-15.124-15.124-4.412-40.971 16.971-40.971h96V40c0-22.091 17.909-40 40-40h128c22.091 0 40 17.909 40 40v106.058h96c21.383 0 32.095 25.847 16.971 40.971L240.971 381.476c-9.373 9.373-24.569 9.373-33.942 0z"/>
+                </svg>   -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16" width="200" height="200" viewBox="0 0 1024 1024"><path fill="currentColor" d="M0 512c0 282.784 229.232 512 512 512c282.784 0 512-229.216 512-512C1024 229.232 794.784 0 512 0C229.232 0 0 229.232 0 512zm961.008 0c0 247.024-201.969 448-449.009 448s-448-200.976-448-448s200.976-448 448-448s449.009 200.976 449.009 448zM479.663 287.68v360.448l-115.76-115.76c-12.496-12.496-32.752-12.496-45.248 0s-12.496 32.752 0 45.248l194.016 189.008l194-189.008c6.256-6.256 9.376-14.432 9.376-22.624s-3.12-16.368-9.376-22.624c-12.496-12.496-32.752-12.496-45.248 0l-117.744 117.76V287.68c0-17.68-14.336-32-32-32s-32.016 14.32-32.016 32z"/></svg>
             </a>
         </div>
     </section>
     
-    <section id="features" class="hero-pattern min-h-screen relative overflow-hidden">
+    <section id="features" class="hero-pattern mx-auto min-h-screen relative overflow-hidden">
         
         <!-- Families feature -->
         <div class="">
-            
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 mb-8 ">
                 <div class="grid lg:grid-cols-2 gap-12 items-center">
                     <!-- Left Content -->
@@ -266,11 +274,11 @@
 
                         <!-- CTA Buttons -->
                         <div class="flex flex-wrap gap-4">
-                            <a href="/users/signup" class="px-8 py-3 bg-orange-500 hover:bg-orange-600 rounded-lg font-semibold transition flex items-center">
+                            <a href="/users/signup" class="px-8 py-3 bg-orange-500 hover:bg-orange-600 rounded-3xl font-semibold transition flex items-center">
                                 <i class="fas fa-plus-circle mr-2"></i>
                                 Créer une famille
                             </a>
-                            <a href="/users/signup" class="px-8 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg font-semibold transition flex items-center">
+                            <a href="/users/signup" class="px-8 py-3 bg-gray-700 hover:bg-gray-600 rounded-3xl font-semibold transition flex items-center">
                                 <i class="fas fa-search mr-2"></i>
                                 Catalogue des Families
                             </a>
@@ -389,8 +397,8 @@
                         Elements de publication interactif
                     </li>
                 </ul>
-                <a href="/users/signup" class="inline-block bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg transition duration-300">
-                    Commencer a publier
+                <a href="/users/signup" class="inline-block bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-2xl transition duration-300">
+                    Faire un post
                 </a>
             </div>
             
@@ -398,10 +406,10 @@
             <div class="lg:w-1/2 relative">
                 <div class="image-stack">
                     <div class="image-stack__item--bottom">
-                        <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg shadow-lg transform rotate-6"></div>
+                        <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500 rounded-3xl shadow-3xl transform rotate-6"></div>
                     </div>
                     <div class="image-stack__item--top floating">
-                        <img src="{% static 'images/screenshots/015643.png' %}" alt="RPG Post Screenshot" class="w-full h-auto rounded-lg shadow-2xl border-4 border-gray-800">
+                        <img src="{% static 'images/screenshots/3.png' %}" alt="RPG Post Screenshot" class="w-full h-auto rounded-3xl shadow-2xl border-4 border-gray-800">
                     </div>
                 </div>
             </div>
@@ -443,7 +451,7 @@
                         
                     </li>
                 </ul>
-                <a href="/users/signup" class="inline-block bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg transition duration-300">
+                <a href="/users/signup" class="inline-block bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-2xl transition duration-300">
                     Entrer dans l'arène
                 </a>
             </div>
@@ -495,12 +503,15 @@
         </div>
 
         <!-- Screenshots -->
-        <div class="mb-16">
+        <div class="mb-16 mx-auto">
             <h3 class="text-3xl md:text-4xl font-bold mb-6 text-center bg-gradient-to-r from-orange-500 to-yellow-500 text-transparent bg-clip-text ">Contre qui sera to prochain combat ?</h3>
-            <div class="screenshot-grid">
-                <img src="{% static 'images/screenshots/021459.png' %}" alt="Battle Screenshot 1" class="w-full floating h-auto rounded-lg shadow-lg">
+            <div class="screenshot-grid mx-auto grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3  gap-4">
+                <!-- <img src="{% static 'images/screenshots/021459.png' %}" alt="Battle Screenshot 1" class="w-full floating h-auto rounded-lg shadow-lg">
                 <img src="{% static 'images/screenshots/021759.png' %}" alt="Battle Screenshot 2" class="w-full h-auto rounded-lg shadow-lg">
-                <img src="{% static 'images/screenshots/022129.png' %}" alt="Battle Screenshot 3" class="w-full floating h-auto rounded-lg shadow-lg">
+                <img src="{% static 'images/screenshots/022129.png' %}" alt="Battle Screenshot 3" class="w-full floating h-auto rounded-lg shadow-lg"> -->
+                <img src="{% static 'images/screenshots/4.png' %}" alt="Battle Screenshot 1" class="floating h-auto rounded-3xl shadow-lg">
+                <img src="{% static 'images/screenshots/12.png' %}" alt="Battle Screenshot 2" class="h-auto rounded-3xl shadow-lg">
+                <img src="{% static 'images/screenshots/6.png' %}" alt="Battle Screenshot 3" class="floating h-auto rounded-3xl shadow-lg">
             </div>
         </div>
 
@@ -525,27 +536,27 @@
         </div> -->
         
         <!-- Characters -->
-        <div class="feature max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="feature max-w-2xl mx-auto px-4 ">
             <h2 class="text-3xl font-bold text-center mb-2">Explore le catalogue de <span class="text-orange-500">Personnages</span> et leurs <span class="text-orange-500">jutsus</span></h2>
             <p class="text-xl text-gray-400 text-center max-w-3xl mx-auto mb-12">
                 Affine ton utilisation de tes personnages préférées en sachant quels jutsus ils utlisent et comment les utiliser
             </p>
             <div class="flex flex-wrap justify-center gap-8">
-                <div class="character-card w-64 bg-gray-800 rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+                <div class="character-card w-64 bg-gray-800 rounded-3xl overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
                     <img src="https://i0.wp.com/anitrendz.net/news/wp-content/uploads/2022/10/roadtonarutopv_screenshot.png?fit=1920%2C1080&ssl=1" alt="Naruto" class="w-full h-64 object-cover">
                     <div class="p-4">
                         <h3 class="text-xl text-orange-500 font-semibold mb-2">Naruto Uzumaki</h3>
                         <p class="text-gray-400">Le protagoniste principal et futur Hokage. Son incroyable chakra lui confère un avantage considérable en combat.</p>
                     </div>
                 </div>
-                <div class="character-card w-64 bg-gray-800 rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+                <div class="character-card w-64 bg-gray-800 rounded-3xl overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
                     <img src="https://static.beebom.com/wp-content/uploads/2023/11/sasuke.jpg?w=1250&quality=75" alt="Sasuke" class="w-full h-64 object-cover">
                     <div class="p-4">
                         <h3 class="text-xl text-orange-500 font-semibold mb-2">Sasuke Uchiha</h3>
                         <p class="text-gray-400">Rival de Naruto et dernier Uchiwa survivant. Ses Rinnegans sont un atout majeur dans les combats de type Roleplay.</p>
                     </div>
                 </div>
-                <div class="character-card w-64 bg-gray-800 rounded-lg overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
+                <div class="character-card w-64 bg-gray-800 rounded-3xl overflow-hidden shadow-lg transform transition duration-500 hover:scale-105">
                     <img src="https://i.pinimg.com/736x/34/8c/59/348c5978272fa68fc53a1b5813ee8a93.jpg" alt="Sakura" class="w-full h-64 object-cover">
                     <div class="p-4">
                         <h3 class="text-xl text-orange-500 font-semibold mb-2">Sakura Haruno</h3>

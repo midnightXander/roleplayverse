@@ -46,11 +46,11 @@
             </svg>
             {{mission.template}}
           </h1>
-          <p class="text-sm text-gray-400">{{mission.template.description}}.</p>
+          <p class="text-sm text-gray-400">{{mission.template.long_tail_description}}.</p>
           <ul class="text-sm text-gray-500 list-disc pl-5">
-            <li>{{mission.template.target}}</li>
-            <li>Le bot utilisera des jutsus stratégiquement</li>
-            <li>Ton adversaire sera selectionné de facon aléatoire</li>
+            <li>Cible: {{mission.template.target}}</li>
+            <!-- <li>Le bot utilisera des jutsus stratégiquement</li>
+            <li>Ton adversaire sera selectionné de facon aléatoire</li> -->
             <li>Récompenses : XP(points de progression) + objets bonus</li>
           </ul>
           <button onclick="initBattle()" class="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-xl font-semibold transition">Suivant</button>

@@ -3,6 +3,7 @@ import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import PushSubscription
+from core.models import Post
 from pywebpush import webpush, WebPushException
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -12,7 +13,7 @@ from django.contrib.auth.models import User
 from battles.models import *
 from dotenv import load_dotenv
 import os
-
+import core.views as core_views 
 
 @csrf_exempt
 def save_subscription(request):
@@ -40,7 +41,14 @@ class CreateUserView(generics.CreateAPIView):
 class feed(APIView):
     def get(self, request):
         user = request.user
-        return JsonResponse({ 'status':'success', 'username':f'{user}' }, safe=False)
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        
+        posts = Post.objects.all()
+        posts_data = [core_views._post_data(player, post) for post in posts ]
+
+        return JsonResponse({ 'status':'success', 'username':f'{user}', 'posts': posts_data }, safe=False)
 
 def export_battle_data():
     # This function is a placeholder for exporting battle data.

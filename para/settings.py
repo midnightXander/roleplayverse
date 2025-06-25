@@ -105,7 +105,7 @@ MIDDLEWARE = [
 
     'corsheaders.middleware.CorsMiddleware',
 
-    #"django_browser_reload.middleware.BrowserReloadMiddleware",
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = 'para.urls'

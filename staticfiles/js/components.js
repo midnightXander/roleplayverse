@@ -468,14 +468,14 @@ function  createBattleElement(battle){
                                       <img src="${battle.opponent.profile_picture}" alt="${battle.opponent.player}" class="w-12 h-12 rounded-full">
                                   </div>
                               </div>
-                              ${battle.iReferee ? `
-                                <span class = 'text-green-500 rounded-2xl border border-green-800 bg-green-500 bg-opacity-50 px-3 py-1 text-xs mr-2'>Tu arbitres ce combat</span>`:''}
+                              ${battle.isReferee ? `
+                                <span class = 'mb-2 text-green-500 mx-auto rounded-2xl border border-green-800 bg-green-500 bg-opacity-50 px-3 py-1 text-xs'>Tu arbitres ce combat</span>`:``}
                                 
                               ${battle.can_refree ? `<button data-battle_id="${battle.id}" onclick ='makeProposal(${battle.id})' class= "proposal-btn border border-purple-500 text-purple-500 px-4 py-2 rounded-lg  transition duration-300 mt-auto">
                                   <i class="fas fa-gavel mr-2"></i>Proposer d'arbitrer le combat
                               </button>`:`
                               <div class='flex justify-between items-center' > 
-                              <a onclick = 'showOverlay()' href="/battles/battle_room/${battle.id}" class="inline-block bg-transparent border border-orange-500 text-white px-4 py-2 rounded-lg  transition duration-300 mt-auto">
+                              <a onclick = 'showOverlay()' href="/battles/battle_room/${battle.id}" class="inline-block bg-transparent border border-orange-500 text-white px-4 py-2 rounded-2xl  transition duration-300 mt-auto">
                                       voir le combat 
                               </a>
 

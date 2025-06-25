@@ -1,34 +1,37 @@
 [
     {
-        "title": "Collecter des cristaux lumineux",
-        "description": "Explore la grotte scintillante et rapporte des cristaux lumineux au village.",
+        "title": "Collecter des parchemins",
+        "description": "Explore la For\u00eat Interdite et rapporte des parchemins au village.",
+        "long_tail_description": "Pendant une mission, des ninjas du village aurait fait tomber des parchemins importants dans la For\u00eat Interdite. Ces parchemins contiennent des informations cruciales pour le village. Tu dois les retrouver a tous prix.",
         "min_level": 1,
         "max_level": 3,
         "mission_type": "collect",
-        "target": "Cristal lumineux",
+        "target": "Parchemin Secrets",
         "quantity": 3,
-        "reward_exp": 50,
-        "reward_item": "Pierre brillante",
+        "reward_exp": 5,
+        "reward_item": "",
         "rarity": "common",
-        "zone": "Village D\u00e9vast\u00e9"
+        "zone": "For\u00eat Interdite"
     },
     {
         "title": "Vaincre un bandit solitaire",
         "description": "Affronte un bandit solitaire qui terrorise les habitants.",
+        "long_tail_description": "Dans la For\u00eat Interdite, un bandit solitaire a \u00e9t\u00e9 rep\u00e9r\u00e9. Il est connu pour attaquer les voyageurs et voler leurs biens. Pr\u00e9pare-toi \u00e0 le combattre et \u00e0 prot\u00e9ger les habitants. Il serait du clan Aburame, connu pour leur maitrise des insectes.",
         "min_level": 1,
         "max_level": 3,
         "mission_type": "defeat",
-        "target": "Bandit solitaire",
+        "target": "Sen Aburame",
         "quantity": 1,
-        "reward_exp": 50,
+        "reward_exp": 5,
         "reward_item": "Potion de soin",
         "rarity": "common",
-        "zone": "Temple Abandonn\u00e9"
+        "zone": "For\u00eat Interdite"
     },
     {
         "title": "\u00c3\u2030liminer un voleur de reliques",
         "description": "Capture un voleur qui a vol\u00c3\u00a9 une relique pr\u00c3\u00a9cieuse.",
-        "min_level": 2,
+        "long_tail_description": "",
+        "min_level": 1,
         "max_level": 4,
         "mission_type": "defeat",
         "target": "Voleur de reliques",
@@ -36,12 +39,13 @@
         "reward_exp": 70,
         "reward_item": "Relique ancienne",
         "rarity": "rare",
-        "zone": "Montagne Maudite"
+        "zone": "Canyon des Vents"
     },
     {
         "title": "Vaincre un ninja rebelle",
         "description": "Localise et \u00c3\u00a9limine un ninja rebelle dans la for\u00c3\u00aat interdite.",
-        "min_level": 2,
+        "long_tail_description": "",
+        "min_level": 1,
         "max_level": 5,
         "mission_type": "defeat",
         "target": "Ninja rebelle",
@@ -49,12 +53,13 @@
         "reward_exp": 100,
         "reward_item": "",
         "rarity": "common",
-        "zone": "Grotte Scintillante"
+        "zone": "Canyon des Vents"
     },
     {
         "title": "\u00c3\u2030liminer un espion ennemi",
         "description": "Capture un espion ennemi qui collecte des informations sur le village.",
-        "min_level": 3,
+        "long_tail_description": "",
+        "min_level": 1,
         "max_level": 5,
         "mission_type": "defeat",
         "target": "Espion ennemi",
@@ -62,12 +67,13 @@
         "reward_exp": 120,
         "reward_item": "Cl\u00c3\u00a9 secr\u00c3\u00a8te",
         "rarity": "rare",
-        "zone": "Default Zone"
+        "zone": "For\u00eat Interdite"
     },
     {
         "title": "Vaincre un ninja de l'ombre",
         "description": "Affronte un ninja de l'ombre qui attaque les voyageurs.",
-        "min_level": 4,
+        "long_tail_description": "",
+        "min_level": 1,
         "max_level": 5,
         "mission_type": "defeat",
         "target": "Ninja de l'ombre",
@@ -75,11 +81,12 @@
         "reward_exp": 140,
         "reward_item": "Cape de l'ombre",
         "rarity": "epic",
-        "zone": "Default Zone"
+        "zone": "Canyon des Vents"
     },
     {
         "title": "\u00c3\u2030liminer un voleur de parchemins",
         "description": "Capture un voleur qui a vol\u00c3\u00a9 des parchemins interdits.",
+        "long_tail_description": "",
         "min_level": 1,
         "max_level": 3,
         "mission_type": "defeat",
@@ -88,12 +95,13 @@
         "reward_exp": 60,
         "reward_item": "Parchemin ancien",
         "rarity": "common",
-        "zone": "Village D\u00e9vast\u00e9"
+        "zone": "Temple Abandonn\u00e9"
     },
     {
         "title": "Vaincre un ninja tra\u00c3\u00aetre",
         "description": "Affronte un ninja tra\u00c3\u00aetre qui a d\u00c3\u00a9sert\u00c3\u00a9 le village.",
-        "min_level": 2,
+        "long_tail_description": "",
+        "min_level": 1,
         "max_level": 4,
         "mission_type": "defeat",
         "target": "Ninja tra\u00c3\u00aetre",
@@ -101,12 +109,13 @@
         "reward_exp": 80,
         "reward_item": "",
         "rarity": "common",
-        "zone": "Grotte Scintillante"
+        "zone": "Canyon des Vents"
     },
     {
         "title": "\u00c3\u2030liminer un chef de bandits",
         "description": "Affronte le chef des bandits qui terrorise la r\u00c3\u00a9gion.",
-        "min_level": 3,
+        "long_tail_description": "",
+        "min_level": 2,
         "max_level": 5,
         "mission_type": "defeat",
         "target": "Chef des bandits",
@@ -114,11 +123,12 @@
         "reward_exp": 130,
         "reward_item": "\u00c3\u2030p\u00c3\u00a9e maudite",
         "rarity": "rare",
-        "zone": "Ruines Anciennes"
+        "zone": "Grotte Scintillante"
     },
     {
         "title": "Vaincre un ninja masqu\u00c3\u00a9",
         "description": "Affronte un ninja masqu\u00c3\u00a9 qui attaque les voyageurs.",
+        "long_tail_description": "",
         "min_level": 4,
         "max_level": 5,
         "mission_type": "defeat",
@@ -132,6 +142,7 @@
     {
         "title": "\u00c3\u2030liminer un mercenaire dangereux",
         "description": "Capture un mercenaire dangereux qui menace les habitants.",
+        "long_tail_description": "",
         "min_level": 2,
         "max_level": 4,
         "mission_type": "defeat",
@@ -140,11 +151,12 @@
         "reward_exp": 90,
         "reward_item": "",
         "rarity": "common",
-        "zone": "Grotte Scintillante"
+        "zone": "Default Zone"
     },
     {
         "title": "Trouver une plume rare",
         "description": "Cherche une plume rare dans la for\u00c3\u00aat des oiseaux l\u00c3\u00a9gendaires.",
+        "long_tail_description": "",
         "min_level": 2,
         "max_level": 4,
         "mission_type": "collect",
@@ -153,11 +165,12 @@
         "reward_exp": 70,
         "reward_item": "Potion de vitesse",
         "rarity": "common",
-        "zone": "Montagne Maudite"
+        "zone": "Ruines Anciennes"
     },
     {
         "title": "Explorer le temple abandonn\u00c3\u00a9",
         "description": "D\u00c3\u00a9couvre les secrets cach\u00c3\u00a9s dans le temple abandonn\u00c3\u00a9.",
+        "long_tail_description": "",
         "min_level": 3,
         "max_level": 5,
         "mission_type": "explore",
@@ -171,6 +184,7 @@
     {
         "title": "Vaincre un ninja rebelle",
         "description": "Localise et \u00c3\u00a9limine un shinobi d\u00c3\u00a9serteur dans la zone actuelle.",
+        "long_tail_description": "",
         "min_level": 2,
         "max_level": 5,
         "mission_type": "defeat",
@@ -179,11 +193,12 @@
         "reward_exp": 100,
         "reward_item": "",
         "rarity": "common",
-        "zone": "Grotte Scintillante"
+        "zone": "Montagne Maudite"
     },
     {
         "title": "Survivre \u00c3\u00a0 une embuscade",
         "description": "Tiens 2 rounds contre une embuscade ennemie sans tomber.",
+        "long_tail_description": "",
         "min_level": 4,
         "max_level": 6,
         "mission_type": "survive",
@@ -197,6 +212,7 @@
     {
         "title": "R\u00c3\u00a9cup\u00c3\u00a9rer un parchemin vol\u00c3\u00a9",
         "description": "Retrouve le parchemin vol\u00c3\u00a9 dans le camp ennemi.",
+        "long_tail_description": "",
         "min_level": 5,
         "max_level": 7,
         "mission_type": "collect",
@@ -210,6 +226,7 @@
     {
         "title": "Explorer les ruines anciennes",
         "description": "D\u00c3\u00a9couvre les myst\u00c3\u00a8res des ruines anciennes.",
+        "long_tail_description": "",
         "min_level": 6,
         "max_level": 8,
         "mission_type": "explore",
@@ -223,6 +240,7 @@
     {
         "title": "Vaincre le chef des bandits",
         "description": "Affronte et \u00c3\u00a9limine le chef des bandits dans la for\u00c3\u00aat sombre.",
+        "long_tail_description": "",
         "min_level": 7,
         "max_level": 9,
         "mission_type": "defeat",
@@ -236,6 +254,7 @@
     {
         "title": "Collecter des fleurs m\u00c3\u00a9dicinales",
         "description": "Cherche des fleurs m\u00c3\u00a9dicinales dans la vall\u00c3\u00a9e des herbes.",
+        "long_tail_description": "",
         "min_level": 1,
         "max_level": 3,
         "mission_type": "collect",
@@ -244,11 +263,12 @@
         "reward_exp": 60,
         "reward_item": "Potion de soin",
         "rarity": "common",
-        "zone": "Temple Abandonn\u00e9"
+        "zone": "Canyon des Vents"
     },
     {
         "title": "Explorer la for\u00c3\u00aat interdite",
         "description": "Rends-toi dans la for\u00c3\u00aat interdite et trouve l'entr\u00c3\u00a9e cach\u00c3\u00a9e.",
+        "long_tail_description": "",
         "min_level": 3,
         "max_level": 5,
         "mission_type": "explore",
@@ -257,11 +277,12 @@
         "reward_exp": 90,
         "reward_item": "Cl\u00c3\u00a9 ancienne",
         "rarity": "rare",
-        "zone": "Canyon des Vents"
+        "zone": "Default Zone"
     },
     {
         "title": "Survivre \u00c3\u00a0 une attaque de loups",
         "description": "Tiens 3 rounds contre une meute de loups sauvages.",
+        "long_tail_description": "",
         "min_level": 4,
         "max_level": 6,
         "mission_type": "survive",
@@ -275,6 +296,7 @@
     {
         "title": "Vaincre un ninja de l'ombre",
         "description": "Affronte un ninja de l'ombre dans la grotte sombre.",
+        "long_tail_description": "",
         "min_level": 5,
         "max_level": 7,
         "mission_type": "defeat",
@@ -288,6 +310,7 @@
     {
         "title": "Trouver un artefact perdu",
         "description": "Cherche un artefact perdu dans les ruines anciennes.",
+        "long_tail_description": "",
         "min_level": 6,
         "max_level": 8,
         "mission_type": "collect",
@@ -301,6 +324,7 @@
     {
         "title": "Explorer le canyon des vents",
         "description": "D\u00c3\u00a9couvre les secrets du canyon des vents.",
+        "long_tail_description": "",
         "min_level": 7,
         "max_level": 9,
         "mission_type": "explore",
@@ -314,6 +338,7 @@
     {
         "title": "Survivre \u00c3\u00a0 une embuscade ennemie",
         "description": "Tiens 4 rounds contre une embuscade ennemie.",
+        "long_tail_description": "",
         "min_level": 8,
         "max_level": 10,
         "mission_type": "survive",
@@ -327,6 +352,7 @@
     {
         "title": "Vaincre un ninja l\u00c3\u00a9gendaire",
         "description": "Affronte et \u00c3\u00a9limine un ninja l\u00c3\u00a9gendaire dans la vall\u00c3\u00a9e interdite.",
+        "long_tail_description": "",
         "min_level": 9,
         "max_level": 10,
         "mission_type": "defeat",
@@ -340,6 +366,7 @@
     {
         "title": "Collecter des pierres pr\u00c3\u00a9cieuses",
         "description": "Cherche des pierres pr\u00c3\u00a9cieuses dans la grotte scintillante.",
+        "long_tail_description": "",
         "min_level": 1,
         "max_level": 3,
         "mission_type": "collect",
@@ -348,11 +375,12 @@
         "reward_exp": 50,
         "reward_item": "Pierre brillante",
         "rarity": "common",
-        "zone": "Vall\u00e9e des Herbes"
+        "zone": "Temple Abandonn\u00e9"
     },
     {
         "title": "Explorer le lac gel\u00c3\u00a9",
         "description": "D\u00c3\u00a9couvre les secrets cach\u00c3\u00a9s sous le lac gel\u00c3\u00a9.",
+        "long_tail_description": "",
         "min_level": 4,
         "max_level": 6,
         "mission_type": "explore",
@@ -366,6 +394,7 @@
     {
         "title": "Survivre \u00c3\u00a0 une attaque de bandits",
         "description": "Tiens 3 rounds contre une bande de bandits.",
+        "long_tail_description": "",
         "min_level": 5,
         "max_level": 7,
         "mission_type": "survive",
@@ -379,6 +408,7 @@
     {
         "title": "Vaincre un ninja tra\u00c3\u00aetre",
         "description": "Affronte un ninja tra\u00c3\u00aetre dans la for\u00c3\u00aat interdite.",
+        "long_tail_description": "",
         "min_level": 6,
         "max_level": 8,
         "mission_type": "defeat",
@@ -392,6 +422,7 @@
     {
         "title": "Vaincre un ninja rebelle",
         "description": "Tu dois localiser et \u00c3\u00a9liminer un shinobi d\u00c3\u00a9serteur dans la zone actuelle.",
+        "long_tail_description": "",
         "min_level": 2,
         "max_level": 5,
         "mission_type": "defeat",
@@ -400,11 +431,12 @@
         "reward_exp": 100,
         "reward_item": "",
         "rarity": "common",
-        "zone": "Camp Ennemi"
+        "zone": "Montagne Maudite"
     },
     {
         "title": "Trouver une herbe m\u00c3\u00a9dicinale rare",
         "description": "Explore la for\u00c3\u00aat et rapporte cette herbe pr\u00c3\u00a9cieuse au village.",
+        "long_tail_description": "",
         "min_level": 1,
         "max_level": 3,
         "mission_type": "collect",
@@ -413,11 +445,12 @@
         "reward_exp": 80,
         "reward_item": "Potion de soin",
         "rarity": "common",
-        "zone": "Vall\u00e9e des Herbes"
+        "zone": "For\u00eat Interdite"
     },
     {
         "title": "Explorer la grotte secr\u00c3\u00a8te",
         "description": "Rends-toi dans la grotte interdite et active l'ancien sceau.",
+        "long_tail_description": "",
         "min_level": 4,
         "max_level": 8,
         "mission_type": "explore",
@@ -431,6 +464,7 @@
     {
         "title": "Survivre \u00c3\u00a0 un assaut ennemi",
         "description": "Tiens 3 rounds contre une vague d'ennemis sans tomber.",
+        "long_tail_description": "",
         "min_level": 5,
         "max_level": 10,
         "mission_type": "survive",

@@ -1,13 +1,20 @@
 [   
     {
-        "name": "Bandit",
+        "name": "Sen Aburame",
         "rank": "Rogue Ninja",
         "level": 1,
         "chakra_pool": 40,
         "stamina_pool": 50,
         "health": 100,
         "jutsus": [
-            
+            {
+                "name": "Pluie d'insectes",
+                "type": "Ninjutsu",
+                "rank": "C",
+                "chakra_cost": 20,
+                "stamina_cost": 10,
+                "description": "Fait apparaitre une avalanche d'insectes pour attaquer l'ennemi."
+            }
         ],
         "image": "https://i.pinimg.com/originals/54/d6/f8/54d6f8c1b23f587f0957d1fbcfb20631.gif"
     },

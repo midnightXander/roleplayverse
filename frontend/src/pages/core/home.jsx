@@ -1,15 +1,38 @@
 // Home.jsx
 import React, { useEffect, useState } from "react";
 import api from "../../services/api";
-
-
+import Post from "./components/post";
+import BottomNav from "./components/bottomNav";
+import TopNav from "./components/topNav";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
 
+  const [posts,setPosts] = useState([]);
+  const navigate = useNavigate();
+
   const getPosts = async () =>{
-    const res = await api.get('feed')
-    console.log(res.data.username)
+    try{
+      const res = await api.get('feed')
+      const posts = res.data.posts;
+      console.log(posts)
+  
+      return posts
+    }catch(err){
+      console.error("Error fetching posts:", err);
+      navigate('/login');
+      return [];
+    }
+
   } 
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const posts = await getPosts();
+      setPosts(posts);
+    };
+    fetchPosts();
+  }, [])
 
   
 
@@ -17,10 +40,16 @@ export default function Home() {
 
 
   return (
-    <div className="bg-dark text-white min-h-screen flex flex-col md:flex-row">
+    
+    <>
+    
+    <TopNav />
+    <div className="text-white relative min-h-screen flex flex-col md:flex-row">
+
+
 
       {/* Left Sidebar */}
-      <aside className="hidden md:block md:w-64 bg-gray-900 p-4 border-r border-gray-800">
+      <aside className="hidden md:block md:w-64  p-4 border-r border-gray-800">
         <h2 className="text-xl font-bold mb-4">📚 Navigation</h2>
         <nav className="space-y-3">
           <a href="/families" className="block text-gray-300 hover:text-primary">👪 Familles</a>
@@ -31,8 +60,8 @@ export default function Home() {
       </aside>
 
       {/* Mobile Menu Toggle */}
-      <div className="md:hidden fixed top-0 left-0 w-full z-50">
-        <details className="bg-gray-900 border-b border-gray-800">
+      {/* <div className="md:hidden fixed top-0 left-0 w-full z-50">
+        <details className=" border-b border-gray-800">
           <summary className="p-4 cursor-pointer font-bold text-primary">📚 Menu</summary>
           <nav className="flex flex-col gap-3 p-4">
             <a href="/families" className="text-gray-300 hover:text-primary">👪 Familles</a>
@@ -41,27 +70,31 @@ export default function Home() {
             <a href="/adventure" className="text-gray-300 hover:text-primary">🗺️ Mode Aventure</a>
           </nav>
         </details>
-      </div>
+      </div> */}
 
       {/* Feed Section */}
-      <main className="flex-1 mt-16 md:mt-0 p-4">
+      <main className="flex-1 mt-16 md:mt-0 p-8">
         <h1 className="text-2xl font-bold mb-4 text-primary">📰 Fil d'actualité</h1>
-        {/* Simulated Feed Item */}
-        <div className="bg-gray-800 rounded-xl p-4 mb-4">
-          <p className="text-white">Naruto a défié Sasuke dans la vallée de la fin ! ⚔️🔥</p>
-        </div>
-        <div className="bg-gray-800 rounded-xl p-4 mb-4">
-          <p className="text-white">Un nouveau tournoi a été lancé, participe maintenant ! 🏆</p>
-        </div>
-
-        <div className="bg-gray-800 rounded-xl p-4 mb-4">
-          <button onClick={getPosts} className="text-white">get posts</button>
-        </div>
+        
+        { posts.length > 0 ? ( 
+          <div className="space-y-6">
+            {posts.map((post, index) => (
+              <>
+              <Post key={index} post={post} />
+              <div class="border-b border-gray-700 w-full"></div>
+              </>
+              
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-400">Aucun post disponible pour le moment.</p>
+        )  
+        }
 
       </main>
 
       {/* Right Sidebar */}
-      <aside className="hidden lg:block lg:w-72 bg-gray-900 p-4 border-l border-gray-800">
+      <aside className="hidden lg:block lg:w-72  p-4 border-l border-gray-800">
         <h2 className="text-xl font-bold mb-4">🥇 Top Joueurs</h2>
         <ul className="text-sm space-y-2">
           <li>1. ItachiUchiwa</li>
@@ -108,6 +141,10 @@ export default function Home() {
           </div>
         </details>
       </div>
+
+      <BottomNav />
     </div>
+
+    </>
   );
 }

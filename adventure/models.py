@@ -55,6 +55,7 @@ MISSION_TYPES = [
 class MissionTemplate(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
+    long_tail_description = models.TextField()
     min_level = models.IntegerField(default=1)
     max_level = models.IntegerField(default=100)
     mission_type = models.CharField(max_length=20, choices=MISSION_TYPES)

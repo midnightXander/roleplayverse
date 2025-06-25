@@ -3,6 +3,11 @@
         "name": "Forêt Interdite",
         "description": "Une forêt dense et mystérieuse où des ninjas rebelles se cachent.",
         "difficulty": "Medium",
+        "level_required" : 1,
+        "data": {
+            "x" : 15,
+            "y" : 300
+        },
         "missions": [
             "Explorer la forêt interdite",
             "Vaincre un ninja rebelle",
@@ -13,6 +18,11 @@
         "name": "Vallée des Herbes",
         "description": "Une vallée paisible connue pour ses plantes médicinales rares.",
         "difficulty": "Easy",
+        "level_required" : 1,
+        "data": {
+            "x" : 150,
+            "y" : 285
+        },
         "missions": [
             "Collecter des fleurs médicinales",
             "Explorer la vallée des herbes",
@@ -23,8 +33,13 @@
         "name": "Temple Abandonné",
         "description": "Un ancien temple rempli de secrets et de reliques précieuses.",
         "difficulty": "Hard",
+        "level_required" : 1,
+        "data": {
+            "x" : 200,
+            "y" : 315
+        },
         "missions": [
-            "Explorer le temple abandonné",
+            "Explorer le tem    ple abandonné",
             "Récupérer un parchemin volé",
             "Trouver un artefact perdu"
         ]
@@ -33,6 +48,11 @@
         "name": "Canyon des Vents",
         "description": "Un canyon dangereux où des vents violents rendent l'exploration difficile.",
         "difficulty": "Hard",
+        "level_required" : 1,
+        "data": {
+            "x" : 1,
+            "y" : 2
+        },
         "missions": [
             "Explorer le canyon des vents",
             "Survivre à une embuscade ennemie",
@@ -43,6 +63,11 @@
         "name": "Grotte Scintillante",
         "description": "Une grotte remplie de cristaux lumineux et de pierres précieuses.",
         "difficulty": "Medium",
+        "level_required" : 2,
+        "data": {
+            "x" : 2,
+            "y" : 2
+        },
         "missions": [
             "Collecter des cristaux lumineux",
             "Explorer la grotte scintillante",
@@ -53,6 +78,11 @@
         "name": "Village Dévasté",
         "description": "Un village abandonné après une attaque de bandits.",
         "difficulty": "Medium",
+        "level_required" : 2,
+        "data": {
+            "x" : 2,
+            "y" : 2
+        },
         "missions": [
             "Vaincre un bandit solitaire",
             "Éliminer un voleur de reliques",
@@ -63,6 +93,11 @@
         "name": "Camp Ennemi",
         "description": "Un camp rempli de mercenaires et de ninjas traîtres.",
         "difficulty": "Hard",
+        "level_required" : 2,
+        "data": {
+            "x" : 2,
+            "y" : 2
+        },
         "missions": [
             "Éliminer un chef de bandits",
             "Vaincre un ninja masqué",
@@ -73,6 +108,11 @@
         "name": "Lac Gelé",
         "description": "Un lac mystérieux recouvert de glace éternelle.",
         "difficulty": "Medium",
+        "level_required" : 2,
+        "data": {
+            "x" : 2,
+            "y" : 2
+        },
         "missions": [
             "Explorer le lac gelé",
             "Trouver un artefact perdu",
@@ -83,6 +123,11 @@
         "name": "Ruines Anciennes",
         "description": "Des ruines oubliées où des reliques sacrées sont cachées.",
         "difficulty": "Hard",
+        "level_required" : 2,
+        "data": {
+            "x" : 2,
+            "y" : 2
+        },
         "missions": [
             "Explorer les ruines anciennes",
             "Récupérer un parchemin volé",
@@ -93,6 +138,11 @@
         "name": "Montagne Maudite",
         "description": "Une montagne dangereuse où des créatures hostiles rôdent.",
         "difficulty": "Hard",
+        "level_required" : 2,
+        "data": {
+            "x" : 2,
+            "y" : 2
+        },
         "missions": [
             "Survivre à une embuscade ennemie",
             "Vaincre un ninja légendaire",
