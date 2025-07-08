@@ -25,14 +25,126 @@ from .vertex_ai import ask_gemini
 from .prompts import *
 from users.users_utility import get_player
 import events.views as events_views
+import os
+import json
+import base64
+from google.oauth2 import service_account
+import vertexai
+import tempfile
+
 load_dotenv()
 
 api_key = os.environ.get('GEMINI_API_KEY') 
-
-
 BASE_DIR = Path(__file__).resolve().parent
 
-client =  genai.Client(http_options= HttpOptions(api_version='v1'))
+
+
+
+# # Check if the raw JSON content is available in an environment variable
+# if "GOOGLE_APPLICATION_CREDENTIALS_JSON" in os.environ:
+#     credentials_json_base64 = os.environ["GOOGLE_APPLICATION_CREDENTIALS_JSON"]
+#     try:
+#         # Decode if it was Base64 encoded
+#         credentials_json_bytes = base64.b64decode(credentials_json_base64)
+#         credentials_info = json.loads(credentials_json_bytes)
+#     except Exception:
+#         # If not Base64 encoded, assume it's raw JSON
+#         credentials_info = json.loads(credentials_json_base64)
+
+#     credentials = service_account.Credentials.from_service_account_info(credentials_info)
+#     print("Authenticated using JSON content from environment variable.")
+
+# # If the JSON content environment variable is not set, fall back to GOOGLE_APPLICATION_CREDENTIALS
+# # This is for local development if you still want to use the file path
+# elif "GOOGLE_APPLICATION_CREDENTIALS" in os.environ:
+#     credentials_path = os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
+#     credentials = service_account.Credentials.from_service_account_file(credentials_path)
+#     print(f"Authenticated using file path from GOOGLE_APPLICATION_CREDENTIALS: {credentials_path}")
+# else:
+#     # Fallback for when no credentials are explicitly provided (might use default ADC)
+#     # This might not work in all scenarios, depending on your setup
+#     credentials = None # Or raise an error, or attempt default application credentials
+#     print("No explicit Google Cloud credentials found. Attempting default application credentials.")
+
+# Now you can use 'credentials' to initialize your Google Cloud client
+# For example, with Google Cloud Storage:
+# client = storage.Client(credentials=credentials)
+
+def authenticate_genai_with_service_account():
+    """
+    Authenticates genai for Vertex AI using a service account JSON 
+    stored in an environment variable.
+    """
+    if "GOOGLE_APPLICATION_CREDENTIALS_JSON" in os.environ:
+        credentials_json_base64 = os.environ["GOOGLE_APPLICATION_CREDENTIALS_JSON"]
+        try:
+            # Decode if it was Base64 encoded
+            credentials_json_bytes = base64.b64decode(credentials_json_base64)
+            credentials_info = json.loads(credentials_json_bytes)
+        except Exception:
+            # If not Base64 encoded, assume it's raw JSON
+            credentials_info = json.loads(credentials_json_base64)
+
+        # Create a temporary file for the service account key
+        # This is crucial because google.auth expects a file path
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as temp_key_file:
+            json.dump(credentials_info, temp_key_file)
+            temp_file_path = temp_key_file.name
+
+        # Set GOOGLE_APPLICATION_CREDENTIALS to the path of the temporary file
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = temp_file_path
+        print(f"Temporary service account file created at: {temp_file_path}")
+
+        # Important: Initialize Vertex AI. This will pick up GOOGLE_APPLICATION_CREDENTIALS
+        project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
+        location = os.getenv("GOOGLE_CLOUD_LOCATION")
+
+        if not project_id or not location:
+            raise ValueError("GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION must be set when using Vertex AI.")
+
+        vertexai.init(project=project_id, location=location)
+        print(f"Vertex AI initialized for project: {project_id}, location: {location}")
+
+        # Now, the genai client can be initialized for Vertex AI
+        # It will automatically use the credentials set via GOOGLE_APPLICATION_CREDENTIALS
+        # client = genai.GenerativeModel('gemini-pro', 
+        #                              # The vertexai=True parameter is often inferred if vertexai.init is called
+        #                              # but explicitly setting it can be good for clarity.
+        #                              # The client will also pick up project/location from vertexai.init()
+        #                              # You can also pass them explicitly here if not using vertexai.init()
+        #                              # vertexai=True, project=project_id, location=location
+        #                             )
+        client =  genai.Client(http_options= HttpOptions(api_version='v1'))
+
+        print("GenAI client initialized for Vertex AI.")
+        return client, temp_file_path # Return temp_file_path so it can be cleaned up
+    else:
+        print("GOOGLE_APPLICATION_CREDENTIALS_JSON not found. Falling back to default ADC or API key.")
+        # Fallback for local development or if using API key
+        # If GOOGLE_APPLICATION_CREDENTIALS is set locally, it will be used
+        # Otherwise, it might try to use GOOGLE_API_KEY or default ADC
+        try:
+            # # This will try to use GOOGLE_API_KEY if set, or ADC if available
+            # if os.getenv("GOOGLE_GENAI_USE_VERTEXAI") == "True":
+            #      project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
+            #      location = os.getenv("GOOGLE_CLOUD_LOCATION")
+            #      if not project_id or not location:
+            #          raise ValueError("GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION must be set when using Vertex AI.")
+            #      vertexai.init(project=project_id, location=location)
+            #      client = genai.GenerativeModel('gemini-pro')
+            # else:
+            #     client = genai.GenerativeModel('gemini-pro')
+            # return client, None
+            client =  genai.Client(http_options= HttpOptions(api_version='v1'))
+            return client,None
+        except Exception as e:
+            print(f"Could not initialize GenAI client without explicit credentials: {e}")
+            return None, None
+
+
+
+# client =  genai.Client(http_options= HttpOptions(api_version='v1'), credentials = credentials)
+client, temp_file = authenticate_genai_with_service_account()
 
 
 def enable_ai_refreeing(request, battle_id):
@@ -99,11 +211,18 @@ def create_rules(request, battle_id):
         #credentials = load_credentials_from_file("E:\work\\alex\google\secure_keys\\roleplay-verse-5163419666ba.json")
         #client = genai.Client(http_options=HttpOptions(api_version='v1'), credentials=credentials)
         if battle.ai_refereeing and not battle.ai_rules:
-            
-            response = client.models.generate_content(
-            model = "gemini-2.0-flash-001",
-            contents = prompt,
-            )
+            try:
+                response = client.models.generate_content(
+                model = "gemini-2.0-flash-001",
+                contents = prompt,
+                )
+            except Exception as e:
+                print(f"Error generating content: {e}")
+                return JsonResponse({'status':'error', 'message':'Erreur lors de la génération des règles, réessayez plus tard.'})
+            finally:
+                if temp_file and os.path.exists(temp_file):
+                    os.remove(temp_file)
+                    print(f"Cleaned up temporary service account file: {temp_file}")    
             battle.ai_rules = response.text
             battle.can_send_textpad = True
             battle.save()
@@ -174,10 +293,18 @@ def make_verdict(request, battle_id):
             hidden_actions = _get_hidden_actions(battle)
             
             prompt = battle_verdict_prompt(battle.ai_rules, context, character, last_textpad.text, battle, hidden_actions=hidden_actions)
-            response = client.models.generate_content(
-            model = "gemini-2.0-flash-001",
-            contents = prompt,
-            )
+            try:
+                response = client.models.generate_content(
+                model = "gemini-2.0-flash-001",
+                contents = prompt,
+                )
+            except Exception as e:
+                print(f"Error generating content: {e}")
+                return JsonResponse({'status':'error', 'message':'Erreur lors de la génération du verdict, réessayez plus tard.'})    
+            finally:
+                if temp_file and os.path.exists(temp_file):
+                    os.remove(temp_file)
+                    print(f"Cleaned up temporary service account file: {temp_file}")
             # try:
             response_string = str(response.text).replace("```json", "").replace("```", "").strip()    
             ai_response = json.loads(response_string)

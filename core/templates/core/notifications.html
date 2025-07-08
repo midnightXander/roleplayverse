@@ -440,7 +440,7 @@ function handleRequest(btn,requestId, action) {
 
 
   function createNotificationCard(notification) {
-    console.log(notification.clicked)
+    
       const card = document.createElement('div');
       card.className = `notification-card p-2 ${notification.clicked ? '': 'bg-gray-800'}`;
       card.innerHTML = `

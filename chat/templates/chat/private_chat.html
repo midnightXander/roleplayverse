@@ -240,11 +240,10 @@
                         <br>
                         <span class="text-xs text-gray-400 pl-3">${message.date_sent}</span> 
                     </div>
-                   
-                    
-                </div>
-                
-                <div class="message-options absolute top-0 right-0 mt-1 ml-1 opacity-100 group-hover:opacity-100">
+                    <button data-message-content = "${message.content ? message.content :'Photo' }" onclick = 'addReply(this, "${message.id}", "")' class="cursor-pointer  block px-4 rounded-full text-sm text-gray-300  hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class='w-8 h-8'  viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.8 6l-5.6 5a1 1 0 0 0 0 1.5l5.7 5m5.7-3.1V16a1 1 0 0 1-1.5.8l-5.2-4.2a1.1 1.1 0 0 1 0-1.7l5.2-4.2a1 1 0 0 1 1.5.8v1.7c3.3 0 6 3 6 6.7v1.3a.7.7 0 0 1-1.4.4a5.2 5.2 0 0 0-4.6-3.2"/></svg>
+                    </button>
+                    <div class="message-options ml-4 opacity-100 group-hover:opacity-100">
                     <div class="relative">
                         <button class="optionsButton text-gray-400  round-btn hover:bg-gray-600 hover:text-white focus:outline-none" id="">
                             <i class="fas fa-ellipsis text-xs"></i>
@@ -252,7 +251,7 @@
                         <div class="optionsMenu absolute right-0 mt-2 w-36 border border-gray-700 bg-gray-900 bg-opacity-80 rounded-xl shadow-lg z-10 hidden" id="">
                             <ul class="py-1">
                                 <li>
-                                    <a  o data-message-content = "${message.content ? message.content :'Photo' }" onclick = 'addReply(this, "${message.id}", "")' class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
+                                    <a  data-message-content = "${message.content ? message.content :'Photo' }" onclick = 'addReply(this, "${message.id}", "")' class="cursor-pointer block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">
                                         <i class="fas fa-reply mr-2"></i> repondre
                                     </a>
                                 </li>
@@ -270,6 +269,9 @@
                         </div>
                     </div>
                 </div>
+                </div>
+                
+                
                 
             
         `
@@ -278,7 +280,7 @@
     } 
     function createFriendMessage(message){
         const messageElement = document.createElement('div')
-        messageElement.className = `rounded-lg max-w-2xl min-w-32`
+        messageElement.className = `rounded-lg max-w-2xl min-w-32 select-none`
         messageElement.id = `message-${message.id}`
         messageElement.innerHTML = `
         <div class="relative group ">
@@ -295,8 +297,10 @@
                         <br>
                         <span class="text-xs text-gray-400 pl-3">${message.date_sent}</span>    
                     </div>   
-                </div>
-                <div class="message-options absolute top-2 right-2 mt-1 mr-1 opacity-100 group-hover:opacity-100">
+                    <button  data-message-content = "${message.content ? message.content :'Photo' }" onclick = 'addReply(this, "${message.id}", "")' class="cursor-pointer  block px-4 rounded-full text-sm text-gray-300  hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class='w-8 h-8'  viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.8 6l-5.6 5a1 1 0 0 0 0 1.5l5.7 5m5.7-3.1V16a1 1 0 0 1-1.5.8l-5.2-4.2a1.1 1.1 0 0 1 0-1.7l5.2-4.2a1 1 0 0 1 1.5.8v1.7c3.3 0 6 3 6 6.7v1.3a.7.7 0 0 1-1.4.4a5.2 5.2 0 0 0-4.6-3.2"/></svg>
+                    </button>
+                    <div class="message-options   ml-4 opacity-100 group-hover:opacity-100">
                     <div class="relative">
                         <button class="optionsButton text-gray-400  round-btn hover:bg-gray-600 hover:text-white focus:outline-none" id="">
                             <i class="fas fa-ellipsis text-xs"></i>
@@ -322,6 +326,9 @@
                         </div>
                     </div>
                 </div>
+                </div>
+                
+                
             </div>
         
         `
