@@ -15,7 +15,12 @@
 
 
 
-  
+  <style>
+    .select-none{
+      -webkit-user-select: none;
+      user-select: none;
+    }
+  </style>
   
 <style>
 
@@ -321,14 +326,14 @@ margin-left: 10px;
 </div>
 
 <div id="top-toastContainer" class="flex justify-center w-full fixed top-4 right-4 z-50"></div>
-{% block content %}
+  {% block all_content %}
     <!-- Scrollable Map Section -->
     <div class="flex-1 flex items-center justify-center relative">
       <!-- <div class="relative z-10 text-center">
         <h1 class="text-2xl font-bold mb-2">🗺️ Zone actuelle : Vallée de la fin</h1>
         <p class="text-sm text-gray-300">Des ennemis peuvent surgir à tout moment...</p>
       </div> -->
-      <nav class=" fixed top-0 left-0 w-full flex items-center justify-between px-4 py-3 shadow-lg z-50">
+      <nav class=" fixed top-0 left-0 w-full flex items-center justify-between px-4 py-3 z-50">
         <!-- Quit Adventure Mode Button -->
         <a href="/" class="text-sm text-red-500 hover:text-red-500 flex items-center">
           <i class="fas fa-arrow-left mr-2"></i> Quitter 
@@ -356,6 +361,7 @@ margin-left: 10px;
           </div>
         </div>
       </nav>
+      {% block content %}
       <div class=" p-5">
         <h2 class="text-xl font-semibold mb-4">🌍 Adventure Mode - Explore the Shinobi World</h2>
         <!-- <div class="relative w-full h-[40vh] bg-gradient-to-br from-[#1f2937] to-[#d45822] rounded-xl overflow-auto shadow-inner"> -->
@@ -387,20 +393,21 @@ margin-left: 10px;
       </div>
     </div>
   
+    {% endblock content %}
     <!-- Bottom Navigation Bar -->
     <nav class="bg-gray-900 fixed bottom-10 left-1/2 transform -translate-x-1/2 w-[90%] max-w-md rounded-full shadow-lg p-3 flex justify-around items-center">
-      <button class="flex flex-col items-center text-xs text-gray-300 hover:text-orange-500">
+      <button onclick = "gotoPage('/adventure/game')" class="flex flex-col items-center text-xs text-gray-300 hover:text-orange-500">
         🧭 <span>Explorer</span>
       </button>
-      <button class="flex flex-col items-center text-xs text-gray-300 hover:text-orange-500">
+      <button onclick = "gotoPage('/adventure/training')" class="flex flex-col items-center text-xs text-gray-300 hover:text-orange-500">
         ⚔️ <span>Combattre</span>
       </button>
-      <button class="flex flex-col items-center text-xs text-gray-300 hover:text-orange-500">
+      <button onclick = "gotoPage('/adventure/inventory')" class="flex flex-col items-center text-xs text-gray-300 hover:text-orange-500">
         🎒 <span>Inventaire</span>
       </button>
-      <button class="flex flex-col items-center text-xs text-gray-300 hover:text-orange-500">
+      <!-- <button class="flex flex-col items-center text-xs text-gray-300 hover:text-orange-500">
         📜 <span>Quêtes</span>
-      </button>
+      </button> -->
       <button class="flex flex-col items-center text-xs text-gray-300 hover:text-orange-500">
         🧍 <span>Profil</span>
       </button>
@@ -420,22 +427,89 @@ margin-left: 10px;
   </div>
 </div>
 
+{% endblock all_content %}
 
 
-<script>
-  
-</script>
 
 {{zones|json_script:"zones" }}
-<script>
 
+{% block scripts_global %}
+<script>
+  function showOverlay(){
+        document.querySelector('#loading-overlay').classList.add('active')
+      }
+      
+  function gotoPage(url) {
+    // Show loading overlay
+    showOverlay();
+    // Redirect to the specified URL 
+    window.location.href = url; // Adjust the delay as needed
+  }    
+      const toastContainer = document.getElementById('top-toastContainer');
+      function showMyToast(message, type = 'info', duration = 3000) {
+        
+        document.querySelectorAll('.my-toast').forEach(el =>{
+            el.remove()
+        })
+        
+        const toast = document.createElement('div');
+        toast.className = `my-toast my-toast-${type} text-sm`;
+        
+        const messageSpan = document.createElement('span');
+        messageSpan.textContent = message;
+        
+        const closeButton = document.createElement('button');
+        closeButton.className = 'my-toast-close';
+        closeButton.innerHTML = '&times;';
+        closeButton.onclick = () => removeToast(toast);
+        
+        toast.appendChild(messageSpan);
+        toast.appendChild(closeButton);
+        
+        toastContainer.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.animation = 'fadeOut 0.3s ease-out';
+            setTimeout(() => removeToast(toast), 300);
+        }, duration);
+    }    
+    function removeToast(toast) {
+        if(toast.parentNode == toastContainer){
+            toastContainer.removeChild(toast);
+        }   
+    }
+    
+    function setPlayerProgress(){
+    //const playerProgress = JSON.parse(document.getElementById("player_experience").textContent)
+    const playerProgressBar = document.getElementById('progression_bar')
+    // if(parseInt(playerProgress) == 0){
+    //     playerProgressBar.style.width = `1%`
+    // }else{
+    //     playerProgressBar.style.width = `${playerProgress}%`
+    // }
+    if(playerProgressBar){
+      playerProgressBar.style.width = `{{adventure_player.experience}}%`
+    }
+    
+    }
+
+    document.addEventListener('DOMContentLoaded',()=>{
+      setPlayerProgress()
+    })
+</script>
+{% endblock scripts_global %}
+
+
+{% block scripts %}
+<script>
+const playerLevel = '{{adventure_player.level}}'  
 const mapContainer = document.getElementById("mapContainer");
 //const playerIcon = document.querySelector("#playerIcon");
 const playerIcon = document.createElement('div')
 playerIcon.id = "playerIcon"
-playerIcon.className = "absolute slide-in-bottom  transform"
+playerIcon.className = "absolute slide-in-bottom select-none transform"
 playerIcon.innerHTML = `
-            <div class="w-10 h-10 bg-orange-500 text-white flex items-center justify-center rounded-full shadow-lg overflow-hidden text-sm font-bold border-4 border-white dark:border-gray-800">
+            <div class="w-10 h-10 bg-orange-500 text-white flex items-center justify-center rounded-full shadow-lg overflow-hidden text-sm font-bold border-4 border-gray-300">
               <img src="{{adventure_player.character.appearance}}" alt="Character Appearance" class="w-full h-full object-cover">
             </div>
 `
@@ -447,7 +521,7 @@ const savedPosition = JSON.parse(localStorage.getItem("playerPosition"));
 function setPlayerIconPosition(position){
   playerIcon.classList.remove('hidden')
   left = 300
-  top = 10000
+  top = 1000
 
   if(!position){
     left = position.left;
@@ -473,22 +547,11 @@ function setPlayerIconPosition(position){
 
 }
 
-function setPlayerProgress(){
-    //const playerProgress = JSON.parse(document.getElementById("player_experience").textContent)
-    const playerProgressBar = document.getElementById('progression_bar')
-    // if(parseInt(playerProgress) == 0){
-    //     playerProgressBar.style.width = `1%`
-    // }else{
-    //     playerProgressBar.style.width = `${playerProgress}%`
-    // }
-    playerProgressBar.style.width = `{{adventure_player.experience}}%`
-}
+
 
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  
-  setPlayerProgress()
 
   // mapContainer.addEventListener("scroll", () => {
   //   const scrollLeft = mapContainer.scrollLeft;
@@ -591,7 +654,7 @@ function setZonePosition(element, container, coordinates) {
     var y = coordinates.y; //Math.floor(Math.random() * maxY);
 
     element.style.left =  x + 'px'; //430 is display max
-    element.style.top =   10000 - y + 'px';
+    element.style.top =   1000 - y + 'px';
     //element.style.bottom =  `1000px`;
 }
 
@@ -613,7 +676,8 @@ function displayZones(zones){
   
   zones.forEach((zone, i) => {
     const zoneElement = document.createElement('button')
-    zoneElement.className = 'map-zone absolute scale-in-center  text-xs  py-1 rounded-full shadow'
+    zoneElement.className = `map-zone absolute scale-in-center  text-xs  py-1 rounded-full shadow ${playerLevel < zone.level_required ? 'text-gray-500' : 'text-green-400 font-bold' }`
+    // zoneElement.style.zIndex = 1000 - i; // Ensure zones are stacked correctly
     //zoneElement.className = 'map-zone absolute scale-in-center bg-green-400 bg-opacity-50 px-3 text-xs  py-1 rounded-full shadow'
     zoneElement.setAttribute('data-zone-key', zone.key)
     zoneElement.setAttribute('data-zone-id', zone.id)
@@ -655,6 +719,11 @@ function openPopup(zoneKey) {
   // Populate mission list
   const missionList = document.getElementById("missionList");
   missionList.innerHTML = ""; // Clear previous missions
+  
+  if(playerLevel < zone.level_required){
+    showMyToast(`Vous devez être au moins niveau ${zone.level_required} pour explorer cette zone.`, 'warning', 5000)
+    return
+  }
   zone.missions.forEach((mission) => {
     const missionItem = document.createElement("li");
     //missionItem.href = `/adventure/game/mission/${mission.id}`; // Prevent default link behavior
@@ -687,52 +756,9 @@ function closePopup() {
 
 </script>
 
-{% endblock content %}
-<script>
-  function showOverlay(){
-        document.querySelector('#loading-overlay').classList.add('active')
-      }
 
-  function gotoPage(url) {
-    // Show loading overlay
-    showOverlay();
-    // Redirect to the specified URL 
-    window.location.href = url; // Adjust the delay as needed
-  }    
-      const toastContainer = document.getElementById('top-toastContainer');
-      function showMyToast(message, type = 'info', duration = 3000) {
-        
-        document.querySelectorAll('.my-toast').forEach(el =>{
-            el.remove()
-        })
-        
-        const toast = document.createElement('div');
-        toast.className = `my-toast my-toast-${type} text-sm`;
-        
-        const messageSpan = document.createElement('span');
-        messageSpan.textContent = message;
-        
-        const closeButton = document.createElement('button');
-        closeButton.className = 'my-toast-close';
-        closeButton.innerHTML = '&times;';
-        closeButton.onclick = () => removeToast(toast);
-        
-        toast.appendChild(messageSpan);
-        toast.appendChild(closeButton);
-        
-        toastContainer.appendChild(toast);
-        
-        setTimeout(() => {
-            toast.style.animation = 'fadeOut 0.3s ease-out';
-            setTimeout(() => removeToast(toast), 300);
-        }, duration);
-    }    
-    function removeToast(toast) {
-        if(toast.parentNode == toastContainer){
-            toastContainer.removeChild(toast);
-        }   
-    }
-    
-    //showMyToast("Welcome to the Adventure Game!", "info", 5000);
-</script>
+
+{% endblock scripts %}
+
+
   </body>

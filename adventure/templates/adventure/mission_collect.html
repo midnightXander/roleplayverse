@@ -1,7 +1,7 @@
 {% extends "adventure/game.html" %}
 {% load static %}
 
-{% block content %}
+{% block all_content %}
 
 <style>
     .fade-enter {
@@ -21,11 +21,42 @@
       transition: opacity 3s ease-in-out;
     }
 
+    .plain-bg{
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1000%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='%230e2a47'%3e%3c/rect%3e%3cpath d='M490.45 580.07 L549.34 572.1800000000001L561.2035958530762 617.4335958530762z' stroke='%23e73635' stroke-width='1' stroke-dasharray='2%2c 2'%3e%3c/path%3e%3cpath d='M568.0699999999999 154.74 L593.67 304.21000000000004L501.6768726390486 308.6681273609513z' fill='%23037b0b'%3e%3c/path%3e%3ccircle r='46.666666666666664' cx='1171.09' cy='160.07' fill='%23d3b714'%3e%3c/circle%3e%3crect width='360' height='360' clip-path='url(%26quot%3b%23SvgjsClipPath1001%26quot%3b)' x='67.02' y='-85.57' fill='url(%26quot%3b%23SvgjsPattern1002%26quot%3b)' transform='rotate(128.02%2c 247.02%2c 94.43)'%3e%3c/rect%3e%3ccircle r='46.666666666666664' cx='880.87' cy='238.19' fill='%23e73635'%3e%3c/circle%3e%3cpath d='M865.65 523.98L872.2 512.97 884.37 516.94 890.92 505.93 903.1 509.9 909.64 498.9 921.82 502.87' stroke='%23d3b714' stroke-width='1.45' stroke-dasharray='2%2c 2'%3e%3c/path%3e%3crect width='127.8' height='127.8' clip-path='url(%26quot%3b%23SvgjsClipPath1003%26quot%3b)' x='78.3' y='292.35' fill='url(%26quot%3b%23SvgjsPattern1004%26quot%3b)' transform='rotate(191.89%2c 142.2%2c 356.25)'%3e%3c/rect%3e%3crect width='108' height='108' clip-path='url(%26quot%3b%23SvgjsClipPath1005%26quot%3b)' x='310.31' y='380.59' fill='url(%26quot%3b%23SvgjsPattern1006%26quot%3b)' transform='rotate(8.95%2c 364.31%2c 434.59)'%3e%3c/rect%3e%3cpath d='M1142.23 407.52L1142.51 420.32 1130.08 423.41 1130.36 436.21 1117.94 439.3 1118.22 452.1 1105.79 455.19' stroke='%23d3b714' stroke-width='2.84' stroke-dasharray='2%2c 2'%3e%3c/path%3e%3cpath d='M240.67 582.8100000000001 L290.1 599.53L229.0538714426656 627.5011285573345z' stroke='%23037b0b' stroke-width='1' stroke-dasharray='3%2c 2'%3e%3c/path%3e%3crect width='132' height='132' clip-path='url(%26quot%3b%23SvgjsClipPath1007%26quot%3b)' x='1350.94' y='40.86' fill='url(%26quot%3b%23SvgjsPattern1008%26quot%3b)' transform='rotate(211.22%2c 1416.94%2c 106.86)'%3e%3c/rect%3e%3crect width='60' height='60' clip-path='url(%26quot%3b%23SvgjsClipPath1009%26quot%3b)' x='339.33' y='212.4' fill='url(%26quot%3b%23SvgjsPattern1010%26quot%3b)' transform='rotate(40.72%2c 369.33%2c 242.4)'%3e%3c/rect%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1000'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3cpattern x='0' y='0' width='9' height='9' patternUnits='userSpaceOnUse' id='SvgjsPattern1002'%3e%3cpath d='M0 9L4.5 0L9 9' stroke='%23d3b714' fill='none'%3e%3c/path%3e%3c/pattern%3e%3cclipPath id='SvgjsClipPath1001'%3e%3ccircle r='90' cx='247.02' cy='94.43'%3e%3c/circle%3e%3c/clipPath%3e%3cpattern x='0' y='0' width='127.8' height='12.78' patternUnits='userSpaceOnUse' id='SvgjsPattern1004'%3e%3crect width='127.8' height='6.39' x='0' y='0' fill='%23d3b714'%3e%3c/rect%3e%3crect width='127.8' height='6.39' x='0' y='6.39' fill='rgba(0%2c 0%2c 0%2c 0)'%3e%3c/rect%3e%3c/pattern%3e%3cclipPath id='SvgjsClipPath1003'%3e%3ccircle r='31.95' cx='142.2' cy='356.25'%3e%3c/circle%3e%3c/clipPath%3e%3cpattern x='0' y='0' width='6' height='6' patternUnits='userSpaceOnUse' id='SvgjsPattern1006'%3e%3cpath d='M0 6L3 0L6 6' stroke='%23037b0b' fill='none'%3e%3c/path%3e%3c/pattern%3e%3cclipPath id='SvgjsClipPath1005'%3e%3ccircle r='27' cx='364.31' cy='434.59'%3e%3c/circle%3e%3c/clipPath%3e%3cpattern x='0' y='0' width='6' height='6' patternUnits='userSpaceOnUse' id='SvgjsPattern1008'%3e%3cpath d='M3 1L3 5M1 3L5 3' stroke='%23e73635' fill='none' stroke-width='1'%3e%3c/path%3e%3c/pattern%3e%3cclipPath id='SvgjsClipPath1007'%3e%3ccircle r='33' cx='1416.94' cy='106.86'%3e%3c/circle%3e%3c/clipPath%3e%3cpattern x='0' y='0' width='6' height='6' patternUnits='userSpaceOnUse' id='SvgjsPattern1010'%3e%3cpath d='M0 6L3 0L6 6' stroke='%23037b0b' fill='none'%3e%3c/path%3e%3c/pattern%3e%3cclipPath id='SvgjsClipPath1009'%3e%3ccircle r='15' cx='369.33' cy='242.4'%3e%3c/circle%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e");
+    }
+    
+  .grass-item{
+    z-index: 2;
+  }
+  .target-item{
+    z-index: 1;
+  }
+
+  .grass-item, .target-item {
+  position: absolute;
+  font-size: 24px; /* Adjust size of the grass emoji */
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.grass-item:hover,.target-item:hover {
+  transform: scale(1.2); /* Slightly enlarge on hover */
+  opacity: 0.8;
+}
+
+
+
+*{
+  -webkit-user-select: none;
+  user-select: none;
+}
+
    
   </style>
 
-  <div class="mt-20 mb-8 h-screen p-4">
-    <div id="findItemdApp" class="flex h-screen">
+  <div class="p-4">
+    <div id="findItemdApp" class="flex items-center">
       <!-- Introduction Screen -->
       <div id="intro-screen" class="fade-enter-active mx-auto w-full max-w-md animate__slideInUp">
         <a class="text-orange-500 cursor-pointer mb-4" href="/adventure/game" onclick="showOverlay()">
@@ -67,21 +98,34 @@
    </div>
 
       <!-- Battle Screen -->
-      <div id="collectScreen" class="hidden mx-auto md:max-w-2xl h-full w-full fade-enter-active hide-scrollbar animate__fadeInLeftBig ">
-        <div id="zoneContainer" class="relative w-full h-[40vh] map-container  contour-line-bg rounded-xl overflow-auto shadow-inner">
+      <div id="collectScreen" class="hidden mx-auto md:max-w-2xl h-full w-full  fade-enter-active hide-scrollbar animate-scaleIn">
+        <div class="text-center text-lg font-bold text-orange-500 mb-4">
+          Temps Restants: <span id="timer">1:00</span>
         </div>
+        <!-- <div class="mb-2">Objectif: 📜</div> -->
+        <div class="mb-2">Touche les elements pour les enlever</div>
+        <div class="mb-4">
+          <p class="font-semibold" >Legendes</p>
+          <div>📜 : Cible a retrouver</div>
+          <div>🔎 : Indice</div>
+          <div>🍁🍀🍂 : Terrain</div>
+
+        </div>
+        <div id="zoneContainer" class="relative w-full h-[60vh] map-container hide-scrollbar plain-bg rounded-xl overflow-auto shadow-inner">
+        </div>
+        <div class="mt-4 font-semibold">Indice: <span id="hintText" class="text-green-400" ></span></div>
       </div>
     </div>
     
   </div>
 
-  <!-- Battle End Popup -->
-<div id="battle-end-popup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate__slideInUp">
+
+<div id="mission-end-popup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate__slideInUp">
   <div class="bg-gray-900 rounded-lg p-6 max-w-md w-full text-center space-y-6 shadow-xl">
-    <h2 id="battle-end-title" class="text-2xl font-semibold text-gray-200">Battle Ended</h2>
-    <p id="battle-end-message" class="text-sm text-gray-400">Congratulations! You won the battle.</p>
-    <div id="battle-reward" class="text-sm text-gray-300">
-      <p>Rewards:</p>
+    <h2 id="mission-end-title" class="text-2xl font-semibold text-gray-200">mission Ended</h2>
+    <p id="mission-end-message" class="text-sm text-gray-400">Felicitations! Tu as reussi la mission.</p>
+    <div id="mission-reward" class="text-sm text-gray-300">
+      <p>Recompenses:</p>
       <ul class="list-disc list-inside">
         <li id="reward-xp">XP: 2</li>
         <li id="reward-items">Items: </li>
@@ -93,24 +137,340 @@
   </div>
 </div>
 
+{% block scripts %}
   <script>
     
+    const items = {
+      "🗺️" :"Map",
+      "🧭" :"Compass",
+      "🪙" :"Coin",
+      "💎" :"Gem",
+      "🗝️" :"Key",
+      "📜" :"Scroll",
+      "🪓" :"Axe",
+      "🏺" :"Artifact",
+      "🏕️" :"Camp",
+      "🔦" :"Flashlight",
+      "🛡️" :"Shield",
+      "⚔️" :"Sword",
+      "🐾" :"Footprints",
+      "🌟" :"Star",
+      "🏔️" :"Mountain",
+      "🌳" :"Tree",
+      "🏞️" :"Valley",
+      "🕳️" :"Hole",
+      "🐚" :"Shell",
+      "🎒" :"Backpack",
+  }
 
     const showScreen = (id) => {
       document.querySelectorAll('#findItemdApp > div').forEach(div => div.classList.add('hidden'));
       document.getElementById(id).classList.remove('hidden');
       //document.getElementById(id).classList.add('animate-scaleIn');
+
+      if (id === 'collectScreen') {
+      const timerElement = document.getElementById("timer");
+      startTimer(90, timerElement); // Start a 60-second timer
+  }
+
     };
 
     const goToCharacterSelect = () => showScreen('character-select-screen');
     const goToBotCharacterSelectionScreen = () => showScreen('bot-selection-screen');
     const goToBattleScreen = () => {showScreen('battle-screen'); $('.top-nav').toggle() };
+    const mapItems = [
+
+    ]
+
     
+
+
+    function showMissionEndPopup(result, rewards) {
+    console.log(result)
+    const popup = document.getElementById('mission-end-popup');
+    const title = document.getElementById('mission-end-title');
+    const message = document.getElementById('mission-end-message');
+    const rewardXp = document.getElementById('reward-xp');
+    const rewardItems = document.getElementById('reward-items');
+    const endActionsContainer = document.getElementById('endActions')
+
+    // Update the popup content based on the result
+    if (result === 'win') {
+        title.textContent = 'Victoire!';
+        message.textContent = 'Felicitations! Tu as reussi la mission.';
+        endActionsContainer.innerHTML = `
+            <button onclick="quitBattle()" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-3xl">Continuer</button>
+        `;
+        
+    } else if (result === 'lose') {
+        title.textContent = 'Pas de chance!';
+        message.textContent = "Tu n'as pas reussi la mission. Reessaie!";
+        endActionsContainer.innerHTML = `
+            <!--<button onclick="restartBattle()" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-3xl">Recommencer</button>-->
+            <button onclick="quitBattle()" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-3xl">Quitter</button>
+        `;
+    } else {
+        title.textContent = 'Draw';
+        message.textContent = 'The battle ended in a draw.';
+    }
+
+    // Update rewards
+    rewardXp.textContent = `XP: ${rewards.xp}`;
+    rewardItems.textContent = `Items: ${rewards.items.map(item => item.icon).join(', ')}`;
+
+    // Show the popup
+    popup.classList.remove('hidden');
+}
+
+    function placeRandomGrass(element, container) {
+    var containerRect = container.getBoundingClientRect();
+    var elementWidth = element.offsetWidth;
+    var elementHeight = element.offsetHeight;
+    var maxX = containerRect.width - elementWidth;
+    var maxY = containerRect.height - elementHeight;
+
+    var x = Math.floor(Math.random() * maxX);
+    var y = Math.floor(Math.random() * maxY);
+
+    element.style.left = 100 + x + 'px';
+    element.style.top =  y + 200 + 'px';
+}
+
+
+let timerInterval;
+
+function startTimer(duration, displayElement) {
+  let timeRemaining = duration;
+
+  // Clear any existing timer interval
+  clearInterval(timerInterval);
+
+  // Update the timer every second
+  timerInterval = setInterval(() => {
+    const minutes = Math.floor(timeRemaining / 60);
+    const seconds = timeRemaining % 60;
+
+    // Update the timer text
+    displayElement.textContent = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    displayElement.setAttribute("data-time", timeRemaining);
+
+    // Stop the timer when it reaches zero
+    if (timeRemaining <= 0) {
+      clearInterval(timerInterval);
+      endMission('lose', 0) // Call a function when the timer ends
+    }
+
+    timeRemaining--;
+  }, 1000);
+}
+
+function handleTimerEnd() {
+  alert("Time's up!"); // Replace with your desired logic when the timer ends
+}
+
+function endTImer(){
+  clearInterval(timerInterval);
+}
+
+
+
+
+// function placeAdditionItems(container) {
+//   const grassItems = container.querySelectorAll(".grass-item");
+//   const randomIndex = Math.floor(Math.random() * grassItems.length);
+//   const targetItem = grassItems[randomIndex];
+
+//   // Mark this grass as the target
+//   targetItem.innerHTML = "📜"
+//   targetItem.dataset.isTarget = "true";
+// }
+
+// function placeHints(container) {
+//   const grassItems = container.querySelectorAll(".grass-item");
+//   const randomIndex = Math.floor(Math.random() * grassItems.length);
+//   const hintItem = grassItems[randomIndex];
+
+//   // Mark this grass as the target
+//   hintItem.innerHTML = "📜"
+// }
+
+
+function placeTarget(container) {
+  const mapItems = container.querySelectorAll(".grass-item");
+  const randomIndex = Math.floor(Math.random() * mapItems.length);
+  const mapItem = mapItems[randomIndex];
+
+  const targetItem = document.createElement("div");
+  targetItem.className = "target-item absolute cursor-pointer";
+  // Mark this grass as the target
+  targetItem.innerHTML = "📜"
+  targetItem.dataset.isTarget = "true";
+  targetItem.style.left = mapItem.style.left;
+  targetItem.style.top = mapItem.style.top; 
+
+  container.appendChild(targetItem);
+  generateHint(container, targetItem);
+  targetItem.addEventListener("click", () => {
+    console.log("Found it")    
+    targetItem.remove();
+    const timerElement = document.getElementById("timer")
+    endTImer()
+    endMission('win', timerElement.dataset.time) // Call a function when the timer ends
+        //checkForTarget(mapItem); // Check if the clicked mapItem hides the target
+
+    });
+
+    return targetItem;
+}
+
+function placeHint(container, target) {
+  const mapItems = container.querySelectorAll(".grass-item");
+  const randomIndex = Math.floor(Math.random() * mapItems.length);
+  const mapItem = mapItems[randomIndex];
+
+  const hintItem = document.createElement("div");
+  hintItem.className = "grass-item absolute cursor-pointer";
+  // Mark this grass as the target
+  hintItem.innerHTML = "🔎"
+  hintItem.style.left = mapItem.style.left;
+  hintItem.style.top = mapItem.style.top; 
+  container.appendChild(hintItem);
+  hintItem.dataset.hint= generateHint2(hintItem,container, target);
+  // generateHint(container, hintItem);
+  hintItem.addEventListener("click", () => {
+    // console.log(hintItem.dataset.hint)
+    document.getElementById('hintText').textContent = hintItem.dataset.hint    
+    hintItem.remove();
+        //checkForTarget(mapItem); // Check if the clicked mapItem hides the target
+    });
+
+    return hintItem;
+}
+
+function generateHint(container, target) {
+  // Get the container's dimensions and current scroll position
+  const containerRect = container.getBoundingClientRect();
+  const scrollLeft = container.scrollLeft;
+  const scrollTop = container.scrollTop;
+
+  // Calculate the center of the visible area
+  const visibleCenterX = scrollLeft + containerRect.width / 2;
+  const visibleCenterY = scrollTop + containerRect.height / 2;
+
+  // Get the target's position
+  const targetX = parseInt(target.style.left, 10);
+  const targetY = parseInt(target.style.top, 10);
+
+  // Determine the direction of the target relative to the visible center
+  let hint = "";
+
+  if (targetY < visibleCenterY) {
+    hint += "Le Nord";
+  } else if (targetY > visibleCenterY) {
+    hint += "Le Sud";
+  }
+
+  if (targetX < visibleCenterX) {
+    hint += hint ? " Ouest" : "Ouest";
+  } else if (targetX > visibleCenterX) {
+    hint += hint ? " East" : "East";
+  }
+
+  // Display the hint
+  console.log(`Hint: The target is to the ${hint}`);
+  // const hintElement = document.getElementById("hint");
+  // if (hintElement) {
+  //   hintElement.textContent = `Hint: The target is to the ${hint}`;
+  // }
+  return `la cible est vers ${hint}`
+}
+
+function generateHint2(hintElement, container, target) {
+  // Get the container's dimensions and current scroll position
+  const containerRect = container.getBoundingClientRect();
+  const scrollLeft = container.scrollLeft;
+  const scrollTop = container.scrollTop;
+
+  // Calculate the center of the visible area
+  const visibleCenterX = scrollLeft + containerRect.width / 2;
+  const visibleCenterY = scrollTop + containerRect.height / 2;
+
+  // Get the target's position
+  const targetX = parseInt(target.style.left, 10);
+  const targetY = parseInt(target.style.top, 10);
+
+  const hintElementX = parseInt(hintElement.style.left, 10);
+  const hintElementY = parseInt(hintElement.style.top, 10);
+
+  // Determine the direction of the target relative to the visible center
+  let hint = "";
+
+  if (targetY < hintElementY) {
+    hint += "au Nord";
+  } else if (targetY > hintElementY) {
+    hint += "au Sud";
+  }
+
+  if (targetX < hintElementX) {
+    hint += hint ? " Ouest" : "a l'Ouest";
+  } else if (targetX > hintElementX) {
+    hint += hint ? " Est" : "a l'Est";
+  }
+
+  // Display the hint
+  //console.log(`Hint: The target is to the ${hint}`);
+  // const hintElement = document.getElementById("hint");
+  // if (hintElement) {
+  //   hintElement.textContent = `Hint: The target is to the ${hint}`;
+  // }
+  return `La cible est  ${hint}`
+}
+
+function populateMapItems(container, grassCount, items = ["🍁","🍀","🍂"]) {
+  // Get the container's dimensions
+  const containerRect = container.getBoundingClientRect();
+
+  // Randomly position the grass within the container
+  // const x = Math.floor(Math.random() * (containerRect.width + 850)); // Subtract 50 to prevent overflow
+  // const y = Math.floor(Math.random() * (containerRect.height + 1550));
+
+  for (let i = 0; i < grassCount; i++) {
+    // Create a grass element
+    
+
+    // // Randomly position the grass within the container
+    const x = Math.floor(Math.random() * (containerRect.width + 850)); // Subtract 50 to prevent overflow
+    const y = Math.floor(Math.random() * (containerRect.height + 1550));
+
+    
+
+    for(let j = 0; j < grassCount/2; j++){
+        const grass = document.createElement("div");
+        grass.className = "grass-item absolute cursor-pointer";
+        grass.innerHTML = items[Math.floor(Math.random() * items.length)];
+        grass.style.left = `${x + j * 10}px`;
+        grass.style.top = `${ y + i * 5 }px`;
+        container.appendChild(grass);
+
+        grass.addEventListener("click", () => {
+        grass.remove();
+        //checkForTarget(grass); // Check if the clicked grass hides the target
+    });
+    }
+
+    // Add click event to remove grass and reveal what's behind it
+    
+
+    // Append the grass to the container
+    
+  }
+}
+
 
     function initMission(){
         
             $.ajax({
-            url : `/adventure/battles/mission/{{mission.id}}/init`,
+            url : `/adventure/battles/mission/{{mission.id}}/inits`,
             type : 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}'
@@ -122,91 +482,10 @@
             beforeSend: function() {
                 // Show loading spinner or overlay
                 // document.getElementById('battle-log').innerHTML = '<p class="text-gray-600 dark:text-gray-300">Loading...</p>';
-                goToBotCharacterSelectionScreen()
+                
             },
             success: function(data) {
-                // Hide loading spinner or overlay
-                // document.getElementById('battle-log').innerHTML = data.battle_log;
-                // console.log(data)
-                
-                const basicActions = [
-                    { name: 'Attack', chakraCost: 10, bgColor: 'orange', icon: `
-                    
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-red-500" stroke="currentColor" stroke-width="2"  viewBox="0 0 48 48"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M24.18 42.5c4.5-3.65 11.36-7.11 11.36-21.86v-9.2c-4 0-7.49-1.88-11.4-3.48c-3.69 1.53-7.61 3.5-11.85 3.46v9.27C12.45 34.75 19 39 24.18 42.5Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M24.18 14.28a39.65 39.65 0 0 1-6.94 1.77c-.47 8.27 2.47 14 6.94 18.39C28.73 30 30.75 24 30.68 16.37a26.8 26.8 0 0 1-6.5-2.09Zm9.12 18.46c3.86 3 5.93 6.45 8 9.72a29.35 29.35 0 0 1-9.51-7.11m-17.23-2.94c-3.94 3.4-6.73 6.6-8.08 9.83c3.36-2 6.34-3.64 9.43-7.33M6.73 5.83l5.6 5.59m-.96-.96l3.27-2.79m-6.06 6.06l2.79-3.27m29.8-4.62l-5.59 5.6m.96-.96l2.79 3.27m-6.06-6.07l3.27 2.8"/></svg>
-                    ` },
-                    { name: 'Defend', chakraCost: 0, bgColor: 'gray', icon: `
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 2l9 4.5v5c0 5.25-3.75 9.75-9 11-5.25-1.25-9-5.75-9-11v-5L12 2z" />
-                    </svg>
-                    ` },
-                    { name: 'Focus', chakraCost: 0, bgColor: 'blue', icon: `
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-yellow-500"  viewBox="0 0 512 512"><path fill="currentColor" d="M179.813 20.72v81.25L135.78 75.624l17.564 46.938l-115.656-20.938l84.718 49.906H20v27.345l110.47 14.875l96.593-29.188c-11.303-11.87-18.594-30.743-18.594-52c0-35.926 20.87-65.062 46.624-65.062c25.753 0 46.625 29.136 46.625 65.063c0 20.847-7.038 39.375-17.97 51.28l99.03 29.907l112.5-15.156V151.53H394.19l84.718-49.905l-120.437 21.78l17.874-47.718l-48.656 29.126V20.72H179.813zM495.28 223.343l-112.5 22.437l-55.405-13.124l-28.03 118.313l16.592 145h51.688L329.25 351.22l46.53 27.842l-21.31-56.937l124.436 22.5l-91.125-53.688h107.5v-67.593zM20 223.75v67.188h108.813l-91.125 53.687L157.31 322.97L136.345 379l38.47-23l-28.595 139.97h48.155l12.905-144.41l-21.685-118.84l-55.125 13.06L20 223.75z"/></svg>
-                    ` },
-                    { name: 'Heal', chakraCost: 20, bgColor: 'green', icon: `
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                  </svg>
-                    ` },
-                    { name: 'Substitution', chakraCost: 5, bgColor: 'red', icon: `
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l-6.5 6.5m0 0L3 21l4.75-.25m-4.5-4.5l6.5-6.5m6.5 6.5l6.5-6.5m0 0L21 3l-4.75.25m4.5 4.5l-6.5 6.5" />
-                    </svg>          
-                    ` },
-                ]
-
-                const specialActions = data.player_character.jutsus.map(action => {
-                    return { name: action.name, chakraCost: action.chakra_cost, bgColor: 'purple', icon: `
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-3.197m1.414-1.414a2.828 2.828 0 114 4L12 21l-4-4 7.97-7.97z" />
-                    </svg>
-                    ` };
-                });
-
-                CharacterActions = basicActions.concat(specialActions);
-                fillActionButtons(CharacterActions);
-
-                // Update character names and health bars
-                document.getElementById('player-character').innerHTML = data.player_character.name;
-                document.getElementById('bot-character').innerHTML = data.bot_character.name;
-                
-                const playerStats = {
-                    current_hp: data.player_character.hp,
-                    current_chakra: data.player_character.chakra,
-                    hp:  100,      // Player HP as a percentage
-                    health: data.player_character.health,
-                    chakra: (data.player_character.chakra/data.player_character.chakra_pool) * 100,  // Player Chakra as a percentage
-                    chakra_pool: data.player_character.chakra_pool,
-                    stamina: 100, // Player Stamina as a percentage
-                };
-
-                const botStats = {
-                    current_hp: data.bot_character.hp,
-                    current_chakra: data.bot_character.chakra,
-                    hp: 100,      // Bot HP as a percentage
-                    health: data.bot_character.health,
-                    chakra: (data.bot_character.chakra/data.bot_character.chakra_pool) * 100,  // Bot Chakra as a percentage
-                    chakra_pool : data.bot_character.chakra_pool,
-                    stamina: 100, // Bot Stamina as a percentage
-                };
-
-                updateCharacterImages(data.player_character.image, data.bot_character.image)
-                updateStatBars(playerStats, botStats);
-
-                const battleLogs = [
-                ]
-                
-                battleLogs.forEach(log => {
-                    updateBattleLog(log.text, log.type);
-                });
-                
-                // Update the battle log with the initial message
-                setTimeout(() => {
-                    // document.getElementById('battle-log').innerHTML = data.battle_log;
-                    goToBattleScreen()
-
-                }, 2000);
-                //goToBattleScreen() // 2 seconds delay for the bot selection screen
-                
+            
 
             },
             error: function(xhr, status, error) {
@@ -218,6 +497,39 @@
         })
         
         
+    }
+
+    function endMission(result, timeRemaining){
+      $.ajax({
+            url : `/adventure/mission/{{mission.id}}/end`,
+            type : 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: {
+              result: result,
+              timeRemaining : timeRemaining,
+            },
+            beforeSend: function() {
+                // Show loading spinner or overlay
+                // document.getElementById('battle-log').innerHTML = '<p class="text-gray-600 dark:text-gray-300">Loading...</p>';
+                
+            },
+            success: function(res) {
+              console.log(res)
+              showMissionEndPopup(result, {
+              xp: res.xp,
+              items: res.reward_items
+            });
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error('Error:', error);
+                showMyToast("Une erreur s'est produite.", 'error');
+            }   
+        })
+      
+      
     }
 
 
@@ -271,12 +583,31 @@ function restartBattle() {
 
 
 function quitBattle() {
-    hideBattleEndPopup();
+    //hideBattleEndPopup();
     showOverlay()
     window.location.href = '/adventure/game'; // Redirect to battles page or home
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  const mapContainer = document.getElementById("zoneContainer");
+
+  // Populate the map with 50 grass emojis
+  for(let i = 0 ; i<5; i++){
+    populateMapItems(mapContainer, 20);
+  }
+  
+  // Randomly place the target item under one of the grass elements
+  const target = placeTarget(mapContainer);
+
+  for(let i = 0 ; i<10; i++){
+    placeHint(mapContainer, target);
+  }
+
+  // mapContainer.addEventListener('scroll', () => {
+  //     //generateHint(mapContainer, target )
+  // })
+});
   </script>
+{% endblock scripts %}
 
-
-{% endblock content %}
+{% endblock all_content %}

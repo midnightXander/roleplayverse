@@ -74,6 +74,6 @@ class PlayerMission(models.Model):
     template = models.ForeignKey(MissionTemplate, on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=[('pending', 'En cours'), ('done', 'Terminée')], default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
-
+    tries = models.IntegerField(default=0)
     def __str__(self):
         return f"{self.player} - {self.template.title} ({self.status})"

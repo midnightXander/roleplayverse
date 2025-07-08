@@ -102,11 +102,12 @@ class Battle(models.Model):
         (i,i) for i in ch_names ))
 
     opponent = models.ForeignKey(Player, on_delete=models.SET_NULL, null=True, related_name="battle_challenger")
-    refree = models.ForeignKey(Player, on_delete=models.SET_NULL, null=True, related_name="battle_refree")
+    refree = models.ForeignKey(Player, on_delete=models.SET_NULL,blank=True, null=True, related_name="battle_refree")
     date_started = models.DateTimeField(auto_now_add=True)
     date_ended = models.DateTimeField(blank=True,null=True)
     hidden = models.BooleanField(default = False)
-
+    ai_refereeing = models.BooleanField(default = False)
+    ai_rules = models.TextField(blank = True, null=True)
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         #self.award_winner_credits()

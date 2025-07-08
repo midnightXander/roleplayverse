@@ -361,23 +361,39 @@ print(json.dumps(data))
 
 
 
-import praw
-import os
-from dotenv import load_dotenv
+# import praw
+# import os
+# from dotenv import load_dotenv
 
-reddit = praw.Reddit(
-    client_id = os.environ.get('REDDIT_CLIENT_ID'),
-    client_secret = os.environ.get('REDDIT_CLIENT_SECRET'),
-    user_agent = "RoleplayVerse meme bot",
-)
+# reddit = praw.Reddit(
+#     client_id = os.environ.get('REDDIT_CLIENT_ID'),
+#     client_secret = os.environ.get('REDDIT_CLIENT_SECRET'),
+#     user_agent = "RoleplayVerse meme bot",
+# )
 
-subreddit = reddit.subreddit("memesfr")
-post_count = 0
-for post in subreddit.hot(limit = 10):
-    if not post.stickied and post.url.endswith(('.jpg', '.png', '.gif', 'jpeg')) and post_count <=5:
+# subreddit = reddit.subreddit("memesfr")
+# post_count = 0
+# for post in subreddit.hot(limit = 10):
+#     if not post.stickied and post.url.endswith(('.jpg', '.png', '.gif', 'jpeg')) and post_count <=5:
 
-        print(f'title: {post.title}')
-        print(f'url  : {post.url}')
-        print("-------")
-        post_count = post_count + 1
-        if post_count == 5: break
+#         print(f'title: {post.title}')
+#         print(f'url  : {post.url}')
+#         print("-------")
+#         post_count = post_count + 1
+#         if post_count == 5: break
+
+data = """
+[
+{ "a": 1, "b":2 },
+{ "c": 3, "b":4 }
+]
+"""
+
+try:
+    json_data = json.loads(data)
+    print(json_data)
+except json.JSONDecodeError as e:
+    print(f"JSON Decode Error: {e}")  
+
+
+ 

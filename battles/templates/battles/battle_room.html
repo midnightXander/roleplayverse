@@ -209,7 +209,13 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                 <div>
                   
-                    <p class="text-gray-300"><span class="font-semibold text-orange-500">Arbitre<i class="fa-solid fa-gavel ml-2" ></i> :</span> <a href="/users/{{battle.refree.user.username}}"> <img class="h-6 w-6 inline-block rounded-full" src="{{battle.refree.profile_picture.url}}" alt="{{battle.refree.user.username}} profile picture"> <span class="font-bold hover:text-orange-600" id="referee">{{battle.refree}}</span></a></p>
+                    <p class="text-gray-300"><span class="font-semibold text-orange-500">Arbitre ⚖ :</span> 
+                        {% if battle.ai_refereeing %}
+                        <span class="bg-blue-500 bg-opacity-50 px-3 py-1 rounded-full text-sm">IA</span> <div class="text-gray-400 text-xs mt-2">ce combat est arbitré par <span class="text-orange-500">Benimaru AI</span> notre intelligence artificielle, expert en Roleplay Combat</div>
+                        {% elif battle.refree %}
+                        <a href="/users/{{battle.refree.user.username}}"> <img class="h-6 w-6 inline-block rounded-full" src="{{battle.refree.profile_picture.url}}" alt="{{battle.refree.user.username}} profile picture"> <span class="font-bold hover:text-orange-600" id="referee">{{battle.refree}}</span></a>
+                        {% endif  %}
+                    </p>
                 </div>
                 <div>
                     <!-- <p class="text-gray-300"><span class="font-semibold text-orange-500">Status:</span> <span id="battleStatus">{{battle.status}}</span></p> -->
@@ -244,6 +250,7 @@
                         <p class="text-xs text-gray-300 mt-2">Clique pour copier</p>
                       
                 </div>
+                
             </div>
         </div>
         
@@ -256,20 +263,43 @@
                 <!-- <p>Ce qui veut dire que chaque joueurs dispose de 12h max pour envoyer son pavé auquel cas son adversaire est declaré vainqueur automatiquement</p> -->
                 <a target="_blank"  href="/blog/News/posts" class="text-xs text-orange-500" >En apprendre plus</a>
             </div>
+            <div id="aiRulesContainer" class = "mb-4 max-h-96 overflow-y-auto overflow-x-hidden">
+                {% if battle.ai_rules %}
+                    <p class="body text-gray-400">
+                        {{battle.ai_rules}}
+                    </p>
+                     <div class="text-gray-200 text-xs mt-2">ces règles ont été générer par <span class="text-orange-500">Benimaru AI</span> notre intelligence artificielle, expert en Roleplay Combat</div>
+                {% else %}
+                    <p>Active l'arbitrage par IA pour ce combat pour générer les règles automatiquement</p>    
+                {% endif %}
+            </div>
+            
             
             <ul id="battleRules" class="list-none list-inside text-gray-300 ">
                 <li class="text-gray-400 text-sm"> <i class="fas fa-caret-right text-orange-500 mr-2"></i>Tour: {{battle.initiator}} -> {{battle.opponent}}</li>
+            
             {% for rule in rules %}
                 
                 <li> <i class="fas fa-caret-right text-orange-500 mr-2"></i> {{rule}}</li>
 
                 {% empty %}
-                {% if player != battle.refree %}
+                {% if battle.ai_refereeing %}
+                <div class=" my-4" >
+                    <button onclick="generateRules('{{battle.id}}')"
+                      class="w-full bg-blue-600 hover:bg-blue-700 text-white animate-pulse py-2 rounded-xl font-semibold transition">
+                      🤖 Generer les regles avec IA <span class="bg-opacity-50 rounded bg-black py-1 px-2 ml-2">Beta</span>
+                    </button>
+                </div>
+                
+                {% else %}
+                {% if player != battle.refree  %}
                 <div>Les règles du combat n'ont pas encore été etablies!</div>
                 <div>Envoie un message a l'arbitre <a class="font-bold hover:text-orange-600" href="/chats/dm/{{battle.refree.user.username}}">{{battle.refree}}</a> pour établir les règles</div>
-            
-                <button class="mt-4" onclick="copyLink('https:\/\/roleplayverse.live/battles/battle_room/{{battle.id}}')">
-                    <i class="fas fa-copy mr-2"></i>Copier le lien du combat</button>
+                
+                <div class="flex flex-wrap">
+                    <input onfocus="copyLink('https:\/\/roleplayverse.live/battles/battle_room/{{battle.id}}')" type="text" readonly value="https://roleplayverse.live/battles/battle_room/{{battle.id}}" class="w-full mt-1 px-3 py-2 rounded-lg border border-gray-700 bg-gray-800 text-sm" />
+                </div>        
+                <div class="mt-2 text-gray-300">Clique pour copier le lien du combat</div>
                 {% else %}
                
                 <div class="container px-4 py-8">
@@ -317,7 +347,9 @@
                     </button>
                 </div>
                 {% endif %}
+                {% endif %}
         {% endfor %}
+        
             </ul>
         </div>
 
@@ -384,7 +416,7 @@
 {% endif %}
         
 
-        {% if battle.refree != player and battle.can_send_textpad and last_sender != player %}
+    {% if battle.refree != player and battle.can_send_textpad and last_sender != player %}
         {% if player == battle.initiator or player == battle.opponent %}
         
 
@@ -442,36 +474,7 @@
                     </button>
                 </div>
             </form>
-            
-            <!-- <div class="w-full max-w-2xl bg-white rounded-3xl shadow-xl p-4 sm:p-6 flex flex-col">
-                <div class="flex-grow overflow-y-auto mb-4 p-2">
-                    <div class="mb-4 text-gray-700">
-                        <span class="font-semibold">Utilisateur :</span> Bonjour, comment vas-tu ?
-                    </div>
-                    <div class="mb-4 text-blue-700">
-                        <span class="font-semibold">IA :</span> Je vais bien, merci ! Comment puis-je vous aider aujourd'hui ?
-                    </div>
-                    </div>
         
-                <div class="relative flex items-center border border-gray-300 rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all duration-200">
-                    <textarea
-                        id="messageInput"
-                        class="flex-grow p-3 pr-12 text-gray-800 text-base rounded-lg resize-none outline-none focus:outline-none hide-scrollbar"
-                        placeholder="Envoyer un message..."
-                        rows="1"
-                        oninput="autoExpand(this)"
-                    ></textarea>
-                    <button
-                        class="absolute right-3 p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-200"
-                        aria-label="Envoyer le message"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                            <path d="M3.478 2.405a.75.75 0 0 0-.926.94l2.432 7.917H3.75a.75.75 0 0 0-.75.75 1.5 1.5 0 0 1-1.5 1.5c-.77 0-1.077-.078-1.5-.22l-.182-.06a.75.75 0 0 0-.17-.084l-1.393-.523A.75.75 0 0 0 .041 12l.182.06c.423.142.73.22 1.5.22a.75.75 0 0 0 .75-.75h-.002a.75.75 0 0 0-.75-.75L.75 4.398ZM12 3a.75.75 0 0 1 .75.75v16.5a.75.75 0 0 1-1.5 0V3.75A.75.75 0 0 1 12 3Z" />
-                            <path fill-rule="evenodd" d="M11.968 1.488a.75.75 0 0 1 .912.063l9.75 7.5a.75.75 0 0 1 0 1.188l-9.75 7.5a.75.75 0 0 1-.912-.063.75.75 0 0 1-.145-.985.75.75 0 0 1-.035-.044l9.04-6.955-9.04-6.955a.75.75 0 0 1 .035-.044.75.75 0 0 1 .145-.985Z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                </div>
-            </div> -->
         
             <script>
                 
@@ -486,10 +489,24 @@
         
         
         {% endif %}
-        
-        {% elif battle.refree == player and battle.status == "ongoing" and not battle.can_send_textpad %}
-        <!--evaluate a textpad only if there are textpads and players can't send a new textpad(when a player just sent a new textpad)-->
 
+        
+        {% elif battle.status == "ongoing" and not battle.can_send_textpad %}
+        <!--evaluate a textpad only if there are textpads and players can't send a new textpad(when a player just sent a new textpad)-->
+        {% if battle.ai_refereeing and isFighter  %}
+
+        <div class="referee-actions my-6 border border-gray-700 rounded-2xl p-4">
+            <h3 class="text-xl font-semibold text-orange-300 mb-2">Actions arbitrales IA</h3>
+            <button onclick="makeVerdict('{{battle.id}}')" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-2xl transition duration-300">
+                Generer le verdict par IA
+            </button>
+            
+        </div>
+        <div id="aiVerdictContainer">
+            
+        </div>
+
+        {% elif battle.refree == player %}
         <!-- Referee Actions -->
         <div class="referee-actions my-6 border border-gray-700 rounded-2xl p-4">
             <h3 class="text-xl font-semibold text-orange-300 mb-2">Actions arbitrales</h3>
@@ -509,12 +526,13 @@
                 </button> -->
             </div>
         </div>
+        {% endif %}
         
         
 
         {% endif %}
 
-        {% if can_rate %}
+        {% if can_rate and battle.refree %}
         <!-- Referee Rating Section -->
 <div id="refereeRatingSection" class="mt-8 bg-gray-900 rounded-lg p-6 hidden">
     <h2 class="text-2xl font-semibold text-orange-400 mb-4">Noter l'arbitre</h2>
@@ -698,6 +716,88 @@
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 
+
+<script>
+    function typeWriterEffect(element, text, speed = 50) {
+  let index = 0;
+
+  function type() {
+    if (index < text.length) {
+      element.textContent += text.charAt(index);
+      index++;
+      setTimeout(type, speed);
+    }else{
+        window.location.reload();
+    }
+  }
+
+  type();
+}
+    function generateRules(battleId){
+        $.ajax({
+        url: `/ai/battle/${battleId}/rules`,
+        type: 'POST',
+        data: {
+            csrfmiddlewaretoken: '{{csrf_token}}',
+        },
+        beforeSend: function(){
+            $('#loading-overlay').toggleClass('active')
+        },
+        success: function(res){
+            if(res.status == 'success'){
+                const ruleContainer = document.getElementById('aiRulesContainer')
+                const ruleElement = document.createElement('p')
+                ruleElement.className = 'body text-gray-400'
+                //ruleElement.textContent = res.response 
+                let text = `
+                `
+                ruleContainer.appendChild(ruleElement)
+                typeWriterEffect(ruleElement, res.response, 35); // Adjust speed as needed
+            }else{
+                showMyToast(res.message, 'info')
+            }
+        },
+        complete: function(){
+            $('#loading-overlay').toggleClass('active')
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            showMyToast('An Error occurred, please try again','error')
+        }
+    })
+    }
+    function makeVerdict(battleId){
+        $.ajax({
+        url: `/ai/battle/${battleId}/verdict`,
+        type: 'POST',
+        data: {
+            csrfmiddlewaretoken: '{{csrf_token}}',
+        },
+        beforeSend: function(){
+            $('#loading-overlay').toggleClass('active')
+        },
+        success: function(res){
+            if(res.status == 'success'){
+                const verdictContainer = document.getElementById('aiVerdictContainer')
+                const verdictElement = document.createElement('p')
+                verdictElement.className = 'body text-gray-400'
+                //verdictElement.textContent = res.response 
+                let text = `
+                `
+                verdictContainer.appendChild(verdictElement)
+                typeWriterEffect(verdictElement, res.response, 35); // Adjust speed as needed
+            }else{
+                showMyToast(res.message, 'info')
+            }
+        },
+        complete: function(){
+            $('#loading-overlay').toggleClass('active')
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            showMyToast('An Error occurred, please try again','error')
+        }
+    })
+    }
+</script>
 
 <script>
 function openTextpadCommentPopup(textpadId) {
@@ -1030,6 +1130,8 @@ const showReplies = (commentId, parentId) => {
 
 </script>
 <script>
+
+
 const ratings = JSON.parse(document.getElementById('ratings').textContent)
 
         // const ratings = [
@@ -1370,7 +1472,7 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
             if(submitTextpadForm){
                 submitTextpadForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                const textpadContent = newTextpad.value.trim();
+                var textpadContent = newTextpad.value.trim();
                 const hiddenAction = document.getElementById('hiddenActionInput').value.trim();
                 
                 if (textpadContent.length === 0) {
@@ -1411,7 +1513,7 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
                         
                     },
                     complete: function(){
-                        $("#loading-overlay").toggleClass('active')
+                        //$("#loading-overlay").toggleClass('active')
                     },
                     error: function(jqXHR, textstatus, errorThrown){
                     showMyToast("Une erreur s'est produite, recharge la page ", 'error')
@@ -1529,10 +1631,12 @@ const ratings = JSON.parse(document.getElementById('ratings').textContent)
                                 `
                                 <div class=" rounded-lg p-4">
                                     <div class = 'flex justify-between'>
-                                    <h3 class="text-xl font-semibold text-orange-500 mb-2"><i class='fas fa-user-ninja mr-2' ></i><a class='underline' onclick="showOverlay()" href='/users/${textpad.owner}' >${textpad.owner}</a>: <span class='text-blue-500' id=""> ${textpad.character}</span></h3>
+                                        
+                                        <!--<a class='underline' onclick="showOverlay()" href='/users/${textpad.owner}' >${textpad.owner}</a> -->
+                                    <h3 class="text-xl font-semibold text-orange-500 mb-2"><i class='fas fa-user-ninja mr-2' ></i> <span class='text-blue-500 italic' id=""> ${textpad.character}</span></h3>
                                     <span class='text-sm text-gray-600'>${textpad.index}</span>
                                     </div>
-                                    <div id="fighterTextpad-${textpad.id}" class="body text-gray-300 p-3 pl-4 border-l-2 border-gray-400 rounded-lg max-h-96 overflow-y-auto">
+                                    <div id="fighterTextpad-${textpad.id}" class="body text-gray-300 p-3 pl-4 pr-4 border-l-2 border-r-2 border-gray-400  max-h-96 overflow-y-auto">
                                         
                                     </div>
                                     <div class="text-gray-300 text-sm p-3 flex justify-between">

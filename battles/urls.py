@@ -24,6 +24,7 @@ urlpatterns = [
 
     path('refree/send_proposal/<int:battle_id>',views.refree_proposal,name="refree_proposal"),
     path('refree/validate/<int:proposal_id>',views.validate_refree, name='validate_refree'),
+    path('referee/ai/<int:battle_id>',views.enable_ai_refreeing, name='enable_ai_refree'),
     path('referees',views.referees, name ='referees'),
     path('refrees/new_refree',views.new_refree, name ='new_refree'),
     path('referee/rate/<int:battle_id>',views.rate_referee, name = 'rate_referee'),

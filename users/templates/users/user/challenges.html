@@ -29,6 +29,12 @@
 
 
     <div class="space-y-6" id="referee-proposals">
+        <div>
+            <button onclick="enableAiRefereeing('{{battle.id}}')"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white animate-pulse py-2 rounded-xl font-semibold transition">
+              🤖 Activer l'arbitrage IA <span class="bg-opacity-50 rounded bg-black py-1 px-2 ml-2">Beta</span>
+            </button>
+        </div>
         <h3 class=" text-orange-500 font-semibold underline">Propositions d'arbitrage :</h3>
         {% for proposal in battle.referee_proposals %}
         <div class="border-b border-orange-500 text-white rounded-2xl p-4 pt-0 flex flex-row justify-between items-start md:items-center">
@@ -60,7 +66,7 @@
             </div>
         </div>
         {% empty %}
-            <p class="text-gray-400">Aucune proposition d'arbitrage pour ce défi.</p>
+            <p class="text-gray-400">Aucune proposition d'arbitrage pour ce défi. <a onclick="showOverlay()" class="text-orange-500" href="/battles/referees">Voir les arbitres disponible</a> </p>
         {% endfor %}
     </div>
     
@@ -126,6 +132,35 @@
 {% endblock fetchContent %}
 
 <script>
+    function enableAiRefereeing(battle_id){
+        console.log(battle_id)
+        //window.location.reload();
+        $.ajax({
+            url: `/battles/referee/ai/${battle_id}`,
+            type:"POST",
+            data:{csrfmiddlewaretoken:"{{csrf_token}}"},
+            beforeSend: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+            success: function(res){
+                if(res.status == "success"){
+                    showMyToast(res.message, 'success')
+                    window.location.reload();
+                    
+                }else{
+                    showMyToast(res.message)
+                    
+                }
+            },
+            complete: function(){
+                  $('#loading-overlay').toggleClass('active')
+                  
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                  showMyToast("An error occured", 'error')
+                }
+        })
+    }
     function answerProposal(proposal_id, response){
         $.ajax({
             url: `/battles/refree/validate/${proposal_id}`,

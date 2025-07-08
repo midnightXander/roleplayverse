@@ -6,6 +6,7 @@ import BottomNav from "./components/bottomNav";
 import TopNav from "./components/topNav";
 import { useNavigate } from "react-router-dom";
 
+
 export default function Home() {
 
   const [posts,setPosts] = useState([]);

@@ -724,6 +724,57 @@ def validate_refree(request, proposal_id):
             message = "Tu es l'auteur de la requète "
     return JsonResponse({"status":"failed","message":message})
 
+def enable_ai_refreeing(request, battle_id):
+    player = get_object_or_404(Player, user = request.user) 
+    if request.method == "POST":
+        battle = Battle.objects.get(id = battle_id)
+
+        message = ''
+       
+        battle.status = battle_status[1]
+        battle.ai_refereeing = True
+        new_notif = core_models.Notification.objects.create(
+            target = battle.initiator,
+            content = f"ton combat contre {battle.opponent} est prét a commencé avec l'arbitrage IA, clique pour aller générer les regles du combat ",
+            url = f'/battles/battle_room/{battle.id}',
+        ) 
+        new_notif2 = core_models.Notification.objects.create(
+            target = battle.opponent,
+            content = f"{player} a activé l'arbitrage IA sur votre combat {battle.i_character} vs {battle.o_character}, tu peux desormais generer les regles du combat",
+            url = f'/battles/battle_room/{battle.id}',
+        ) 
+        new_notif.save() 
+        new_notif2.save()
+
+        send_push_notification(
+            PushSubscription.objects.filter(user = battle.opponent.user).last(),
+            {
+            'title' : f"Ton combat peut Commencer",
+            'body' : f"{player} a activé l'arbitrage IA sur votre combat {battle.i_character} vs {battle.o_character}, tu peux desormais generer les règles du combat et envoyer ton pave",
+            'url' : f'/battles/battle_room/{battle.id}',
+            'icon' : '/static/images/logo/logo_1.png',
+            },
+            
+        )
+
+        send_push_notification(
+            PushSubscription.objects.filter(user = player.user).last(),
+            {
+            'title' : f"Proposition d'arbitrage acceptée",
+            'body' : f"Ta proposition d'arbitrer le combat {battle.initiator} vs {battle.opponent} a été accepté, tu dois a présent mettre en place les régles du combat",
+            'url' : f'/battles/battle_room/{battle.id}',
+            'icon' : '/static/images/logo/logo_1.png',
+            },
+            
+        )
+
+        battle.save()
+        new_notif.save()
+        message = "Arbitre IA activé, tu peux maintnenant generer les règles"
+        return JsonResponse({"status":"success","message": message})
+        
+    return JsonResponse({"status":"failed","message":message})
+
 
 def get_textpad_character(battle:Battle,textpad):
     if textpad.owner == battle.initiator:
@@ -820,7 +871,7 @@ def battle_room(request,battle_id):
     
     context = {"player":player,
                "battle":battle,
-               
+               "isFighter" : player in [battle.initiator, battle.opponent],
                "rules":rules, 
                "rules_set": len(rules) >= 3,
                "textpads":textpads_data,
@@ -829,11 +880,11 @@ def battle_room(request,battle_id):
                'i_character': i_character,
                'o_character': o_character,
                'spectators':  _parse_number(len(battle.spectators.all()) + battle.viewers,True),
-                 "last_sender":l_sender,
-                 "role":role,
-                 "can_rate": can_rate(battle),
-                 'referee_rated': referee_rated(battle),
-                 "n_notifs":core_views.get_notifs(player=player),
+                "last_sender":l_sender,
+                "role":role,
+                "can_rate": can_rate(battle),
+                'referee_rated': referee_rated(battle),
+                "n_notifs":core_views.get_notifs(player=player),
                  
 
                  }
@@ -886,7 +937,7 @@ def send_textpad(request, battle_id):
         if player == battle.initiator or player == battle.opponent:
             #check if player can send the first textpad
             if len(textpads) == 0 and player != battle.initiator:
-                message = f"L'adversaire {battle.initiator} doit envoyé le premier pavé"
+                message = f"C'est a ton adversaire {battle.initiator} d'envoyer le premier pavé"
             elif len(text) == 0:
                 message = "Le pavé ne peut pas étre vide" 
             elif l_sender == player:
@@ -919,38 +970,42 @@ def send_textpad(request, battle_id):
                     url = f'/battles/battle_room/{battle_id}',
                     content = f'{player} a envoyé son pavé dans votre combat',
                 )
-                new_notif2 = core_models.Notification.objects.create(
-                    target = battle.refree,
-                    url = f'/battles/battle_room/{battle_id}',
-                    content = f"{player} a envoyé un pavé, tu dois l'évaluer",
-                )
 
                 #send push notification to the opponent and the referee
                 send_push_notification(
                     PushSubscription.objects.filter(user = opponent.user).last(),
                     {
                     'title' : f"Ton adversaire a envoyé son pavé",
-                    'body' : f"{player} a envoyé son pavé dans votre combat",
+                    'body' : f"{player} a envoyé son pavé dans votre combat.",
                     'url' : f'/battles/battle_room/{battle_id}',
                     'icon' : '/static/images/logo/logo_1.png',
                     },
                     
                 )
 
-                send_push_notification(
-                    PushSubscription.objects.filter(user = battle.refree.user).last(),
-                    {
-                    'title' : f"Un pavé a été envoyé",
-                    'body' : f"{player} a envoyé un pavé, tu dois l'évaluer",
-                    'url' : f'/battles/battle_room/{battle_id}',
-                    'icon' : '/static/images/logo/logo_1.png',
-                    },
-                )
+                if battle.refree:
+                    new_notif2 = core_models.Notification.objects.create(
+                        target = battle.refree,
+                        url = f'/battles/battle_room/{battle_id}',
+                        content = f"{player} a envoyé un pavé, tu dois l'évaluer",
+                    )
+                    new_notif2.save()
+                    send_push_notification(
+                        PushSubscription.objects.filter(user = battle.refree.user).last(),
+                        {
+                        'title' : f"Un pavé a été envoyé",
+                        'body' : f"{player} a envoyé un pavé, tu dois l'évaluer",
+                        'url' : f'/battles/battle_room/{battle_id}',
+                        'icon' : '/static/images/logo/logo_1.png',
+                        },
+                    )
+                
+
                 
                 battle.save()
                 text_pad.save()
                 new_notif.save()
-                new_notif2.save()
+                
                 message = 'pavé envoyé'
                 return JsonResponse({'status':'success', 'message':message})
 
@@ -1894,7 +1949,7 @@ def answer_challenge(request, challenge_id):
                 message = 'Vous avez deja accepté ce challenge'
                  
             else:    
-                message = "Challenge accepté,  en attente d'un arbitre pour le combat"
+                message = "Challenge accepté,  en attente d'un arbitre pour le combat, tu peux aussi choisir l'arbitre IA."
 
                 new_battle = Battle.objects.create(
                         initiator = challenge.sender,
@@ -1907,15 +1962,15 @@ def answer_challenge(request, challenge_id):
                     )
                 new_notif = core_models.Notification.objects.create(
                     target  = challenge.sender,
-                    content = f'{player} a accepté le defi, un arbitre doit etre choisi pour debuter le combat',
-                    url = f'/battles/referees',
+                    content = f"{player} a accepté le défi, un arbitre doit etre choisi pour debuter le combat, tu peux aussi activé l'arbitrage IA pour commencer immediatement.",
+                    url = f'/users/challenges/{challenge.sender.user}',
                 )
                 #send push notification to the sender of the challenge
                 send_push_notification(
                     PushSubscription.objects.filter(user = challenge.sender.user).last(),
                     {
                     'title' : f"Ton défi a été accepté",
-                    'body' : f"{player} a accepté le défi, un arbitre doit etre choisi pour debuter le combat",
+                    'body' : f"{player} a accepté le défi, un arbitre doit etre choisi pour debuter le combat, tu peux aussi activé l'arbitrage IA pour commencer immediatement.",
                     'url' : f'/users/challenges/{challenge.sender.user}',
                     'icon' : '/static/images/logo/logo_1.png',
                     },

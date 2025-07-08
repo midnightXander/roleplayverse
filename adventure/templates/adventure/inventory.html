@@ -1,0 +1,119 @@
+{% extends "adventure/game.html" %}
+
+{% block content %}
+<div class="p-4 max-w-lg mx-auto h-[70vh] overflow-auto hide-scrollbar">
+    <h1 class="text-2xl font-bold text-primary mb-6 text-center animate-fade-in">🎒 Inventaire</h1>
+
+    <!-- Jutsus Section -->
+    <div class="mb-6">
+        <h2 class="text-lg font-semibold mb-3 text-center">🌀 Jutsus Appris</h2>
+        <div id="jutsusContainer" class="flex flex-wrap items-center justify-center gap-4">
+            
+        </div>
+        <p id="jutsusSubText" class="text-xs text-gray-400 mt-2 text-center">Max. 3 jutsus peuvent être équipés.</p>
+    </div>
+
+    <!-- Items Section -->
+    <div class="mb-6">
+        <h2 class="text-lg font-semibold mb-3 text-center">🧪 Objets Possédés</h2>
+        <div id="itemsContainer" class="flex flex-wrap items-center justify-center gap-4">
+        </div>
+        <p id="itemsSubText" class="text-xs text-gray-400 mt-2 text-center"></p>
+    </div>
+
+    <!-- Equipped Jutsus Section -->
+    <div>
+        <h2 class="text-lg font-semibold mb-3 text-center">⚔️ Jutsus Équipés</h2>
+        <div class="flex flex-wrap justify-center gap-2">
+            <div class="bg-green-800 px-3 py-1 rounded-full text-xs shadow">Rasengan</div>
+            <div class="bg-green-800 px-3 py-1 rounded-full text-xs shadow">Clone de l'ombre</div>
+            <!-- Add dynamically -->
+        </div>
+    </div>
+</div>
+
+{{items|json_script:"items" }}
+{{jutsus|json_script:"jutsus" }}
+
+<style>
+    .animate-fade-in {
+        animation: fadeIn 0.6s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 640px) {
+        .grid-cols-2 {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock content %}
+
+
+{% block scripts %}
+
+<script>
+    
+    function createItemComponent(item){
+        
+        const itemDiv = document.createElement('div');
+        itemDiv.className = "border-b border-red-700 p-3 rounded-2xl text-center shadow hover:shadow-lg transition-shadow transition-transform duration-300 hover:scale-105";
+        itemDiv.innerHTML = `
+            <h3 class="font-bold text-primary text-sm">${item.icon} ${item.name} (x${item.count})</h3>
+                <p class="text-xs text-gray-300">${item.description}.</p>
+                <button onclick = "useItem(${item})" class="mt-2 px-2 py-1 text-xs text-red-500 rounded-3xl">Utiliser</button>
+        `;
+
+        return itemDiv
+    }
+    function createJutsuComponent(jutsu){
+        
+        const jutsuDiv = document.createElement('div');
+        jutsuDiv.className = "border-b border-blue-700 p-3 rounded-2xl text-center shadow hover:shadow-lg transition-shadow transition-transform duration-300 hover:scale-105";
+        jutsuDiv.innerHTML = `
+            <h3 class="font-bold text-primary text-sm">${jutsu.name}</h3>
+                <p class="text-xs text-gray-300">${jutsu.description}.</p>
+                <button onclick = "equipJutsu(${jutsu})" class="mt-2 px-2 py-1 text-xs text-blue-500 rounded-3xl">Équiper</button>
+        `;
+
+        return jutsuDiv
+    }
+    function populateItems(){
+        const items = JSON.parse(document.getElementById('items').textContent);
+        const container = document.getElementById('itemsContainer');
+        if(items.length > 0){
+            container.innerHTML = ``
+            items.forEach(item => {
+            container.appendChild(createItemComponent(item));
+        });
+        }else{
+            document.getElementById('itemsSubText').textContent = `Aucun objet trouvé`;
+        }
+        
+    }
+    function populateJutsus(){
+        const jutsus = JSON.parse(document.getElementById('jutsus').textContent);
+        const container = document.getElementById('jutsusContainer');
+        if(jutsus.length > 0){
+            container.innerHTML = ``
+            jutsus.forEach(jutsu => {
+            container.appendChild(createJutsuComponent(jutsu));
+        });
+        }else{
+            
+            document.getElementById('jutsusSubText').textContent = `Aucun jutsu appris pour l'instant. Trouve un parchemin d'une technique pour l'apprendre`;
+        }
+        
+    }
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+        populateItems();
+        populateJutsus();
+    })
+</script>
+
+{% endblock scripts %}

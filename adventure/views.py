@@ -31,7 +31,7 @@ BASE_DIR = Path(__file__).resolve().parent
 #   }
 
 
-
+@login_required
 def create_character(request):
     player = Player.objects.get(user=request.user)
     if request.method == 'POST':
@@ -187,10 +187,61 @@ def _zone_data(zone:MapZone, player:Player):
         'id' : zone.id,
         'name'  : zone.name,
         'key' : zone.name.strip().lower().replace(' ', '-').replace("'", ''),
-        'coordinates' : {'x': zone.data.get('x'),'y':zone.data.get('y'),},
+        'level_required' : zone.level_required,
+        #'coordinates' : {'x': zone.data.get('x'),'y':zone.data.get('y'),},
+        'coordinates' : {'x': random.randint(10, 750) ,'y':random.randint(zone.level_required*250, zone.level_required*250 + 250),},
         'description' : zone.description,
         'missions' : [ _mission_data(mission) for mission in PlayerMission.objects.filter(template__zone = zone, player = player) ]
     }
+
+def get_inventory_item_count(item_name, items):
+    """Get the count of a specific item in the inventory."""
+    count = 0
+    for item in items:
+        if item['name'] == item_name:
+            count += 1
+    return count
+
+@login_required
+def inventory(request):
+    player = Player.objects.get(user=request.user)
+    adventure_player = AdventurePlayer.objects.filter(player= player).first()
+    
+    if not adventure_player:
+        return redirect('adventure:create_character')
+    
+    items = adventure_player.inventory
+    grouped_items = {}
+    for item in items:
+        item_name = item['name']
+        if item_name in grouped_items:
+            grouped_items[item_name]['count'] += 1
+        else:
+            grouped_items[item_name] = item
+            item['count'] = 1
+
+    grouped_items_list =  list(grouped_items.values())           
+    
+
+
+    jutsus = []
+    
+    return render(request, 'adventure/inventory.html',{
+        'player': player,
+        'adventure_player': adventure_player,
+        'experience' : adventure_player.experience,
+        'items' : grouped_items_list,
+        'jutsus' : jutsus
+    })
+
+def inventory_items(request):
+    player = Player.objects.get(user=request.user)
+    adventure_player = AdventurePlayer.objects.filter(player= player).first()
+
+    items = json.loads(adventure_player.inventory)
+    jutsus = []
+
+    return JsonResponse({'status':'success'})
 
 
 @login_required
@@ -201,14 +252,14 @@ def game(request):
     
     if not adventure_player:
         return redirect('adventure:create_character')
-    
+
     #create_zones()
     # assign_zones_to_missions()
     #create_missions()
     #assign_random_mission(player)
     #assign_missions(player)
 
-    zones = MapZone.objects.filter(level_required__lte = adventure_player.level)
+    zones = MapZone.objects.filter(level_required__lte = adventure_player.level+3)
     zones = [_zone_data(zone, player) for zone in zones]
        
 
@@ -421,32 +472,31 @@ def init_mission(request, mission_id):
     target = player_mission.template.target
     if request.method == 'POST':
         
-        player_character = adventure_player.character
-        bot_character = get_adventure_character(target)
-        # bot_character = get_adventure_character("Bandit")
-        if not bot_character:
-            return JsonResponse({'message': 'target character not found'})
-        
-        #set the health based on the character level
-        bot_character['health'] = bot_character.get('health', 100) + (bot_character.get('level') * 25)
+        if player_mission.template.mission_type == 'defeat':
+            player_character = adventure_player.character
+            bot_character = get_adventure_character(target)
+            # bot_character = get_adventure_character("Bandit")
+            if not bot_character:
+                return JsonResponse({'message': 'target character not found'})
+            
+            #set the health based on the character level
+            bot_character['health'] = bot_character.get('health', 100) + (bot_character.get('level') * 25)
 
-        player_character['hp'] = player_character['health']
-        bot_character['hp'] = bot_character.get('health', 100)
-        player_character['chakra'] = player_character.get('chakra_pool',100)
-        bot_character['chakra'] = bot_character.get('chakra_pool',100)
-        #bot_character['image'] = bot_character.get('image', 'default_image.png')  # Ensure bot has an image
+            player_character['hp'] = player_character['health']
+            bot_character['hp'] = bot_character.get('health', 100)
+            player_character['chakra'] = player_character.get('chakra_pool',100)
+            bot_character['chakra'] = bot_character.get('chakra_pool',100)
+            #bot_character['image'] = bot_character.get('image', 'default_image.png')  # Ensure bot has an image
 
-        battle = SoloBattle.objects.create(
-            type = 'adventure',
-            player = player,
-            player_character = player_character,
-            bot_character = bot_character,
-        )
-
-        battle.save()
-
-
-        return JsonResponse({'message': 'battle initialized', 'bot_character': bot_character, 'player_character': player_character})
+            battle = SoloBattle.objects.create(
+                type = 'adventure',
+                player = player,
+                player_character = player_character,
+                bot_character = bot_character,
+            )
+            battle.save()
+            return JsonResponse({'message': 'battle initialized', 'bot_character': bot_character, 'player_character': player_character})
+        return JsonResponse({'status':'error'})    
 
 def mission_battle_action(request, mission_id):
     """Handle the battle action during a mission."""
@@ -499,3 +549,44 @@ def mission_battle_action(request, mission_id):
         battle.save()
 
         return JsonResponse({'battle_logs': logs, 'player_character' : player_character, 'bot_character' : bot_character, 'winner' : winner, 'rewards': rewards})
+
+def _get_random_item(level):
+    items_file = os.path.join(BASE_DIR, 'static/jsons/items.json')    
+    if not os.path.exists(items_file):
+        raise FileNotFoundError(f"Items file not found at {items_file}")
+    with open(items_file, 'r', encoding='utf-8') as file:
+        items_data = json.load(file)
+        eligible_items = [item for item in items_data if item.get('level', 1) <= level]
+        if eligible_items:
+            return random.choice(eligible_items)
+        else:
+            return None
+
+def end_mission(request, mission_id):
+    player = get_object_or_404(Player, user=request.user)
+    adventure_player = AdventurePlayer.objects.filter(player=player).first()
+    mission = get_object_or_404(PlayerMission, id=mission_id, player=player)
+    template = mission.template
+    mission.tries += 1
+    if request.method == 'POST':
+        if mission.status == 'done':
+            return JsonResponse({'status':'success', 'message': 'Mission already completed.'})
+        
+        if mission.template.mission_type == 'collect':
+            time_remaining = request.POST.get('time_remaining', 0)
+            result = request.POST.get('result', 'lose')
+            reward_exp = max(0,template.reward_exp - mission.tries*2)
+            bonus_reward_item = _get_random_item(adventure_player.level)
+            if result == 'win':
+                mission.status = 'done'
+                adventure_player.experience += reward_exp
+                if template.reward_item:
+                    adventure_player.inventory.append(template.reward_item)
+                if bonus_reward_item:
+                    adventure_player.inventory.append(bonus_reward_item)
+                adventure_player.save()
+                mission.save()
+                reward_items = [bonus_reward_item]
+                return JsonResponse({'status': 'success', 'message': 'Mission completed successfully.', 'xp': reward_exp, 'reward_items':reward_items })
+
+                    
