@@ -137,7 +137,11 @@ def _battle_context(battle:Battle):
     if textpads.count() <= 1:
         return "Le combat vient de debuter, aucune action precedente"
     else:
-        textpads.last().refree_comment 
+        context = """ """
+        for textpad in textpads:
+            context += f"""  {textpad.refree_comment}\n """ 
+            # return [f"""  {textpad.refree_comment}\n """ for textpad in textpads ]
+        return context           
 
 def _get_hidden_actions(battle:Battle):
     textpads = TextPad.objects.filter(battle = battle)
@@ -166,8 +170,9 @@ def make_verdict(request, battle_id):
                 return JsonResponse({'status':'error', 'message':'Déja Evalué'})
             character = battle.i_character if last_textpad.owner == battle.initiator else battle.o_character
             context = _battle_context(battle)
+            print(context)
             hidden_actions = _get_hidden_actions(battle)
-            print(hidden_actions)
+            
             prompt = battle_verdict_prompt(battle.ai_rules, context, character, last_textpad.text, battle, hidden_actions=hidden_actions)
             response = client.models.generate_content(
             model = "gemini-2.0-flash-001",
@@ -178,7 +183,6 @@ def make_verdict(request, battle_id):
             ai_response = json.loads(response_string)
             verdict = ai_response.get('verdict')
             validity = ai_response.get('end_fight') == "false"
-            print(verdict,validity)
             last_textpad.valid = validity
             last_textpad.date_validated = timezone.now()
             last_textpad.refree_comment = verdict

@@ -46,13 +46,15 @@ def battle_verdict_prompt(rules, context, character, action, battle:Battle, hidd
     Prend en compte les actions cachées qui seront fournis, si il y en a, sans les reveler dans ton verdict, Revele l'action caché associé uniquement si le personnage la devoile dans ses actions.
     Une fois qu'une action cachée est revelé dans le combat, n'y fait plus allusion.
     Retourne la reponse en format JSON : { "end_fight":"true"/"false", "verdict":"Ton verdict et le reste des infos que j'ai demander" }  pour pouvoir utliser ta reponse pour mettre a jour l'etat du combat dans ma base de donnees. sachant que 'end_fight' sera 'true' si le contre/action n'est pas valid et le personnage encaisse une attaque mortel.
+    Quand un personnage lance une attaque, laisse toujours la possibilite a l'adversaire de decrire un contre, puis termine le combat si le contre en question n'est pas valide ou ne respect pas les capacites de son personnage.
     si le contre décrit n'est pas acceptée au vu de la situation et de la difference en puissance et en pertinence de la technique utilisée, il devra causé l'encaissement de l'attaque, et si l'attaque est mortel alors le combat devra prendre fin. 
     """,
     f""" REGLES: 
     {battle.i_character} VS {battle.o_character}
     {rules}
     """,
-    f"""Contexte, Etat et resumer: {context} 
+    f"""Contexte, Etat et resumer: 
+    {context} 
     """,
     f"""
     Actions cachées: 
