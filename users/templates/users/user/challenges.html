@@ -29,12 +29,14 @@
 
 
     <div class="space-y-6" id="referee-proposals">
+        {% if battle.status == 'waiting_refree' %}
         <div>
             <button onclick="enableAiRefereeing('{{battle.id}}')"
               class="w-full bg-blue-600 hover:bg-blue-700 text-white animate-pulse py-2 rounded-xl font-semibold transition">
               🤖 Activer l'arbitrage IA <span class="bg-opacity-50 rounded bg-black py-1 px-2 ml-2">Beta</span>
             </button>
         </div>
+        {% endif %}
         <h3 class=" text-orange-500 font-semibold underline">Propositions d'arbitrage :</h3>
         {% for proposal in battle.referee_proposals %}
         <div class="border-b border-orange-500 text-white rounded-2xl p-4 pt-0 flex flex-row justify-between items-start md:items-center">
