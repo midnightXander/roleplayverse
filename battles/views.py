@@ -1056,6 +1056,8 @@ def _textpad_reactions_data(textpad_reactor:TextpadReactor):
         'player' : textpad_reactor.player.user.username,
     }
 
+
+
 def react_to_textpad(request, textpad_id):
     textpad = get_object_or_404(TextPad, id = textpad_id)
     player = get_player(request.user)
@@ -1130,20 +1132,7 @@ def _textpad_comment_data(comment:TextPadComment):
                 #'is_reply' : TextPadComment.objects.filter(parent = ).exists()
             },
     
-    # print(type(data))
-    # if comment.parent:
-    #     print(type(data))
-        # data["parent"] = {
-        #     "id": comment.parent.id,
-        #     "author": {
-        #         "id": comment.parent.author.id,
-        #         "username": comment.parent.author.user.username,
-        #         "player": str(comment.parent.author),
-        #         "profile_picture": comment.parent.author.profile_picture.url,
-        #     },
-        #     "body_full" : comment.text,
-        #     "body": comment.parent.text[:50] + '...' if len(comment.parent.text) > 50 else comment.parent.text,
-        # }
+    
     return data    
     
 

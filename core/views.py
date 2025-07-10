@@ -352,6 +352,7 @@ def _post_data(player:Player, post:Post):
         }
 
 def _daily_content_data(player:Player, content:ContentPost):
+    
     return {
             "feed_item": content.type,
             "id": content.id,
@@ -365,6 +366,9 @@ def _daily_content_data(player:Player, content:ContentPost):
             # "comments": get_comments_dict(player,content),
             # "n_comments": _parse_number(len(get_comments(content)),True),
             "time_posted": _time_since(content.date_added),
+            'reactions' : content.reactors.all().count(),
+            'comments' : ContentComment.objects.filter(content = content).count(),
+            'most_reaction' : content.most_made_reaction()['type'] if content.most_made_reaction() else '👍'
 
     }
 
@@ -936,6 +940,144 @@ def create_comment(request,post_id):
             })
     return JsonResponse({"status":"error","message":"Une erreur est survenu"})
 
+def _content_reactions_data(content_reactor:ContentReactor):
+    return {
+        'date_added' : _time_since(content_reactor.date_added),
+        'reaction' : content_reactor.type,
+        'player' : content_reactor.player.user.username,
+        }
+
+def react_to_content(request, content_id):
+    content = get_object_or_404(ContentPost, id = content_id)
+    player = get_player(request.user)
+
+    if request.method == 'POST':
+        
+        reaction = request.POST.get('reaction','😂')
+        
+        reactors = content.reactors.all()
+
+        if player in reactors:
+            player_reaction = ContentReactor.objects.get(player = player, content = content)
+            if reaction == player_reaction.type:
+                content.reactors.remove(player)
+            else:
+                player_reaction.type = reaction  
+                player_reaction.save()      
+        else:
+            content.reactors.add(player, through_defaults={'type': reaction})
+            
+
+        content.save()
+        reactions = [ _content_reactions_data(reactor) for reactor in ContentReactor.objects.filter(content = content)]
+
+        return JsonResponse({'status':'success', 'reactions': reactions})
+
+def _content_comment_data(comment:ContentComment):
+    data:dict = {    
+                "content_id" : comment.content.id,
+                "id": comment.id,
+                "text": comment.text,
+                'body_full': comment.text,
+                'body': comment.text[:197]+'...' if len(comment.text) > 200 else comment.text,
+                "author": {
+                    'id' : comment.author.id,
+                    "player": str(comment.author),
+                    "username": comment.author.user.username,
+                    'profile_picture' : comment.author.profile_picture.url,
+                },
+                'parent' : {
+                    "id": comment.parent.id,
+                    "author": {
+                        "id": comment.parent.author.id,
+                        "username": comment.parent.author.user.username,
+                        "player": str(comment.parent.author),
+                        "profile_picture": comment.parent.author.profile_picture.url,
+                    },
+                    # "body_full" : comment.text,
+                    # "body": comment.parent.text[:50] + '...' if len(comment.parent.text) > 50 else comment.parent.text,
+                } if comment.parent else None,
+                "timestamp":  _time_since(comment.date_added),
+                'likes' : 0,
+                'replies' : [ _content_comment_data(reply) for reply in ContentComment.objects.filter(parent = comment).order_by("-date_added") ],
+                #'is_reply' : contentComment.objects.filter(parent = ).exists()
+            },
+    
+    
+    return data 
+
+def add_content_comment(request, content_id):
+    if request.method == 'POST':
+        content = get_object_or_404(ContentPost, id=content_id)
+        author = get_player(request.user)  # Assuming Player is linked to User
+        text = request.POST.get("body")
+        parent_id = request.POST.get("parent_id")
+
+        parent = None
+        if parent_id:
+            parent = get_object_or_404(ContentComment, id=parent_id)
+
+        comment = ContentComment.objects.create(
+            content=content, author=author, text=text, parent=parent
+        )
+        comment.save()
+
+        
+        if comment.parent:
+            if comment.parent.author != comment.author:
+                new_notif = Notification.objects.create(
+                    target = comment.parent.author,
+                    url = f'/contents/{content.id}',
+                    content = f"{comment.author} a repondu a ton commentaire sur un meme",
+                    img_url = comment.author.profile_picture.url
+                )
+                new_notif.save()
+                #send push notification to the opponent and the referee
+                send_push_notification(
+                    PushSubscription.objects.filter(user = comment.parent.author.user).last(),
+                    {
+                    'title' : f"Nouvelle reaction sur ton meme",
+                    'body' : f"{comment.author} a repondu a ton commentaire sur un meme",
+                    'url' : f'/contents/{content.id}',
+                    'icon' : '/static/images/logo/logo_1.png',
+                    },
+                    
+                )
+            
+                
+
+                
+                
+        return JsonResponse({
+            "status": "success",
+            "comment": _content_comment_data(comment)
+        })
+
+def get_content_comments(request, content_id):
+    content = get_object_or_404(ContentPost, id=content_id)
+    comments = ContentComment.objects.filter(parent=None, content = content).order_by("-date_added")
+    data = [_content_comment_data(comment) for comment in comments]
+    
+    return JsonResponse({ 'status': 'success', 'comments' : data}, safe=False) 
+
+@login_required
+def content_post_page(request, id):
+    player = get_player(request.user)
+    if not player:
+        return redirect('/users/signin')
+    
+    content = get_object_or_404(ContentPost,id= id)
+    n_notifs = get_notifs(player)
+
+    content_data =  _daily_content_data(player, content)
+
+    if request.method == "POST":
+        data = content_data
+        return JsonResponse({'status':'success', 'content':data})
+
+
+    context = {"player":player, "content":content_data, "n_notifs":n_notifs}
+    return render(request, "feed/content.html", context)
 
 @login_required
 def notifications(request):

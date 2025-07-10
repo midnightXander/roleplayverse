@@ -18,9 +18,60 @@ class ContentPost(models.Model):
     image_url = models.URLField(blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
     custom_id = models.CharField(max_length=20, default=generate_custom_id)
+    reactors = models.ManyToManyField(Player, through='ContentReactor', related_name='content_reactors' ) 
 
     def __str__(self):
         return f"{self.title}"
+    
+    def most_made_reaction(self):
+        # Count the reactions for this Content
+        reactions = ContentReactor.objects.filter(content=self).values('type').annotate(count=models.Count('type')).order_by('-count')
+        if reactions:
+            return reactions[0]  # Return the most made reaction
+        return None  # No reactions found
+
+class ContentComment(models.Model):
+    content = models.ForeignKey(ContentPost, on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey(Player, on_delete=models.CASCADE)
+    text = models.TextField()
+    parent = models.ForeignKey(
+        'self', on_delete=models.CASCADE, null=True, blank=True, related_name="replies"
+    )  # For replies to comments
+    date_added = models.DateTimeField(auto_now_add=True)
+    reactors = models.ManyToManyField(Player, through = 'ContentCommentReactor', related_name='content_comment_reactors' ) 
+
+    def __str__(self):
+        return f"{self.author}: {self.text[:20]}..."
+
+REACTIONS = [
+        ('👍', 'Like'),
+        ('👎', 'Unlike'),
+        ('😂','Laugh'),
+        ('😲', 'Surprise'),
+        ('☹️', 'Unlike'),
+    ]
+
+class ContentReactor(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    type = models.CharField(max_length=15, choices=REACTIONS)
+    content = models.ForeignKey(ContentPost, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('player','content')
+
+class ContentCommentReactor(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+
+    type = models.CharField(max_length=15, choices= REACTIONS)
+    date_added = models.DateTimeField(auto_now_add=True)
+    comment = models.ForeignKey(ContentComment, on_delete=models.CASCADE)
+    
+
+    class Meta:
+        unique_together = ('player','comment')
+
+
 
 
 class Post(models.Model):
