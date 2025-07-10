@@ -803,8 +803,8 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
 
   document.addEventListener('click', (e) => {
     const popup = document.getElementById('contentCommentPopup');
-    const content = document.querySelector('#contentPopupContent');
-    //const content = popup.querySelector('#contentPopupContent');
+    //const content = document.querySelector('#contentPopupContent');
+    const content = popup.querySelector('#contentPopupContent');
     console.log(content)
     
     if (!popup.classList.contains('hidden') && !content.contains(e.target) && !e.target.closest('button[onclick^="openContentCommentPopup"]')) {
