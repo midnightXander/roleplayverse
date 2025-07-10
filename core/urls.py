@@ -17,12 +17,16 @@ urlpatterns = [
     path('comment/<int:id>',views.comment, name = 'comment_action'),
     path('posts/<int:id>',views.post_page, name = 'post_page'),
     path('post/favorite/<int:id>',views.favorite, name = "favorite"),
-    
 
     
     path('post/react/<int:post_id>',views.react_post,name="react"),
     path('post/comment/new/<int:post_id>',views.create_comment, name="comment"),
     path('comment/react/<int:comment_id>',views.react_comment,name="react_comment"),
+
+    path('contents/<int:id>',views.content_post_page, name = 'content_post_page'),
+    path('contents/<int:content_id>/comments',views.get_content_comments, name = 'content_comments'),
+    path('contents/<int:content_id>/comments/add',views.add_content_comment, name = 'content_comments'),
+    path('contents/react/<int:content_id>',views.react_to_content, name='react_to_content'),
     
     path('notifications', views.notifications, name='notifications'),
     path('notifications/all',views.get_notifications, name='all_notifications'),

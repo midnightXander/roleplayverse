@@ -1,0 +1,100 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %} {{content.title}} {% endblock title %}
+
+{% block content  %}
+<style>
+   
+</style>
+
+
+<div id="contentContainer" class="max-w-2xl mx-auto  py-32 space-y-6 text-white flex flex-col items-center justify-center"  >
+</div>
+
+
+{{ playerName|json_script:'player' }}
+{{ player.user.username | json_script:'username' }}
+<script>
+           
+    // Get the modal
+
+</script>
+
+<!-- toast management -->
+
+<script>
+
+    var currentPlayerData = {
+            player: '{{player}}',
+            username: '{{player.user.username}}',
+        }
+          
+        $(()=>{
+    
+            const currentPlayer = JSON.parse(document.getElementById('player').textContent)
+            const currentPlayerUsername = JSON.parse(document.getElementById('username').textContent)
+          
+    
+    
+
+
+   
+    
+    // Function to render posts
+    function renderContent() {
+    
+        const contentContainer = document.getElementById('contentContainer');
+        const loader = document.getElementById('loading-overlay');
+        
+        $.ajax({
+            url:"",
+            type:"POST",
+            data: {
+                csrfmiddlewaretoken: '{{csrf_token}}'
+            },
+            beforeSend: function(){
+                loader.classList.toggle('active');
+            },
+            success: function(res){
+                if(res.status == 'success'){
+                    content = res.content
+                    const adElement = createAdElement('https://sophisticatedappearance.com/b/3KVh0.P/3VpuvzbOmpVEJBZND_0O1bNTj/Yx0/NzTtAE4oLLT-Ur2ONAjoQt1/M/DFkB', "{% static 'images/avatars/avatar-2.jpg' %}")
+                    const contentElement = createMemeElement(content);
+                    contentContainer.appendChild(contentElement);
+                    contentContainer.appendChild(adElement);
+                    
+
+                }
+            },
+            complete: function(){
+                    document.querySelectorAll('.body').forEach((element)=>{
+                    element.innerHTML = linkifyHtml(element.textContent, {
+                        target:"_blank",
+                        className: 'link'
+                    })
+                    
+                })
+                imgModalListener()
+                loader.classList.toggle('active');
+            },
+            error: function(jqXHR, textstatus, errorThrown){      
+                showMyToast('An error occured, please try reloading page','error')
+            }
+        })
+    
+    // Animate posts appearance
+    gsap.from('.post', {
+        y: 50,
+        opacity: 0,
+        duration: 0.5,
+        stagger: 0.2,
+        ease: 'power2.out'
+    });
+    }
+    
+    
+    renderContent();
+  
+})
+</script>
+{% endblock content %}
