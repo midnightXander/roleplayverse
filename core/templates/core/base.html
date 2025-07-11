@@ -653,7 +653,7 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
   </div>
 
   <div id="contentCommentPopup" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-end  sm:items-center animate__animated  justify-center z-50">
-    <div id="contentPopupContent" class="relative w-full sm:w-3/5 h-[70vh] md:min-h-[30vh]    bg-gray-900 rounded-t-3xl sm:rounded-xl p-4">
+    <div id="ContentPopupContent" class="relative w-full sm:w-3/5 h-[70vh] md:min-h-[30vh]    bg-gray-900 rounded-t-3xl sm:rounded-xl p-4">
       <!-- Header -->
       <div class="flex justify-between items-center border-b pb-3 border-gray-800">
         <h2 class="text-lg font-semibold">💬 Commentaires</h2>
@@ -665,7 +665,7 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
       </div>
       <div class="mt-6 fixed md:relative w-full bottom-0 left-0 border-t bg-gray-900 py-4 px-2 border-gray-800">
         <form onsubmit='sendContentCommentPopup(this, event);' id="sendContentCommentForm" data-content-id = "" parent-id = '' class="flex gap-2">
-          <textarea type="text" placeholder="Écris ton commentaire..." rows="1"  class="w-full bg-transparent px-4 py-2 text-white rounded-3xl border border-gray-700 focus:outline-none resize-none" ></textarea>
+          <textarea oninput="autoExpand(this)" type="text" placeholder="Écris ton commentaire..." rows="1"  class="w-full bg-transparent px-4 py-2 text-white rounded-3xl border border-gray-700 focus:outline-none resize-none" ></textarea>
           <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-full"><i class="fa-regular fa-paper-plane"></i></button>
         </form>
       </div>
@@ -801,20 +801,23 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
     }, 300);
   }
 
-  document.addEventListener('click', (e) => {
+  
+    document.addEventListener('click', (e) => {
     const popup = document.getElementById('contentCommentPopup');
-    //const content = document.querySelector('#contentPopupContent');
-    const content = popup.querySelector('#contentPopupContent');
-    console.log(content)
+    //const content = document.querySelector('#ContentPopupContent');
+    const content = popup.querySelector('#ContentPopupContent');
     
     if (!popup.classList.contains('hidden') && !content.contains(e.target) && !e.target.closest('button[onclick^="openContentCommentPopup"]')) {
       closeContentCommentPopup();
     }
   });
 
+
+  
+
   function getContentData(contentId){
     
-    const popupContent = document.getElementById('contentPopupContent');
+    const popupContent = document.getElementById('ContentPopupContent');
     const commentForm = document.getElementById('sendContentCommentForm');
     commentForm.setAttribute('data-content-id', contentId)
 
@@ -832,10 +835,12 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
             'Content-Type': 'application/json'
         },
         beforeSend: function(){
+            
             commentsContainer.innerHTML = ''
             commentsContainer.append(loader);
         },
         success: function(res){
+            
             const comments = res.comments
             if(comments.length > 0){
                 comments.forEach(comment => {
@@ -1000,7 +1005,7 @@ function addContentCommentReply(parentId, contentId) {
 }
 
 function createContentComment(comment){
-
+    
 var c_player = {
     'username': '{{player.user.username}}',
     'player':'{{player}}',
@@ -1073,9 +1078,6 @@ commentElement.querySelector(`#contentComment-replies-${comment.id}`).appendChil
 
 
 return commentElement;
-
-
-
 }
 
 const showContentCommentReplies = (commentId, parentId) => {
@@ -1090,8 +1092,6 @@ const showContentCommentReplies = (commentId, parentId) => {
 }
 
 function reactToContent(contentId, reaction,button){
-            
-
             // Remove animation class after the animation ends
             // setTimeout(() => {
             // button.classList.remove('clicked');
@@ -1165,8 +1165,7 @@ function reactToContent(contentId, reaction,button){
                 <i class="fa-regular fa-comment mr-2"></i> ${meme.comments}
             </button>
             </div>
-            
-            
+
             <div class="reactions flex space-x-2  mx-2 right-0  border border-gray-700 text-gray-300 text-sm p-2 rounded-3xl shadow-lg">
                 <button class='hover:scale-105 text-xl reaction-button' onclick = "reactToContent(${meme.id}, '😂', this)" >😂</button>
                 <button class='hover:scale-105 text-xl reaction-button' onclick = "reactToContent('${meme.id}', '👍', this)">👍</button>
