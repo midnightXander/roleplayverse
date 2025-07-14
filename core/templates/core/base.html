@@ -327,7 +327,7 @@ function setupExpandableText() {
     </head>
     <body class="bg-gray-950 h-screen flex flex-col">
         
-        <div id="top-toastContainer" class="flex justify-center w-full fixed top-4 right-4 z-50"></div>
+        <div id="top-toastContainer" class="flex justify-center w-full fixed top-4 right-4"></div>
 
         <div class="scroll-indicator"></div>
         
@@ -579,7 +579,72 @@ function setupExpandableText() {
 </div>
 
 
-
+<script>
+    function answerChallenge(element, challengeId, answer){
+  const card = document.getElementById(`challenge-card-${challengeId}`)
+  const character = $(card).find("select").val()
+  if(answer == "accept"){
+    if(character){
+      $.ajax({
+                url: `/battles/challenge/answer/${challengeId}`,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}", character: character, response: answer},
+                beforeSend: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                      showMyToast(res.message, 'success')
+                      
+                      $(card).hide(300)
+                    //   card.classList.add('opacity-0', 'scale-95');
+                    //   card.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+                      
+                    }else{
+                        showMyToast(res.message)
+                    }
+                },
+                complete: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                  showMyToast("An error occured", 'error')
+                }
+            })
+  }else{
+    showMyToast('choisi un personnage pour accepter le challenge')
+  }
+  }else{
+    $.ajax({
+                url: `/battles/challenge/answer/${challengeId}`,
+                type : "POST",
+                data:{csrfmiddlewaretoken:"{{ csrf_token }}", character: character, response: answer},
+                beforeSend: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                      showMyToast(res.message, 'success')
+                      
+                      $(card).hide(300)
+                    //   card.classList.add('opacity-0', 'scale-95');
+                    //   card.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+                      
+                    }else{
+                        showMyToast(res.message)
+                    }
+                },
+                complete: function(){
+                  $('#loading-overlay').toggleClass('active')
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                  showMyToast("An error occured", 'error')
+                }
+            })
+  }
+ 
+}
+</script>
 <!-- <script>
 
 function createNotificationCard(notification) {

@@ -91,70 +91,71 @@ function deleteNotification(id,type) {
           })
   }
 
-  function answerChallenge(element, challengeId, answer){
-  const card = document.getElementById(`challenge-card-${challengeId}`)
-  const character = $(card).find("select").val()
-  if(answer == "accept"){
-    if(character){
-      $.ajax({
-                url: `/battles/challenge/answer/${challengeId}`,
-                type : "POST",
-                data:{csrfmiddlewaretoken:"{{ csrf_token }}", character: character, response: answer},
-                beforeSend: function(){
-                  $('#loading-overlay').toggleClass('active')
-                },
-                success: function(res){
-                    if(res.status == "success"){
-                      showMyToast(res.message, 'success')
+//   function answerChallenge(element, challengeId, answer){
+//   const card = document.getElementById(`challenge-card-${challengeId}`)
+//   const character = $(card).find("select").val()
+//   console.log('{{csrf_token}}')
+//   if(answer == "accept"){
+//     if(character){
+//       $.ajax({
+//                 url: `/battles/challenge/answer/${challengeId}`,
+//                 type : "POST",
+//                 data:{csrfmiddlewaretoken:"{{ csrf_token }}", character: character, response: answer},
+//                 beforeSend: function(){
+//                   $('#loading-overlay').toggleClass('active')
+//                 },
+//                 success: function(res){
+//                     if(res.status == "success"){
+//                       showMyToast(res.message, 'success')
                       
-                      $(card).hide(300)
-                    //   card.classList.add('opacity-0', 'scale-95');
-                    //   card.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+//                       $(card).hide(300)
+//                     //   card.classList.add('opacity-0', 'scale-95');
+//                     //   card.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
                       
-                    }else{
-                        showMyToast(res.message)
-                    }
-                },
-                complete: function(){
-                  $('#loading-overlay').toggleClass('active')
-                },
-                error: function(jqXHR, textstatus, errorThrown){
-                  showMyToast("An error occured", 'error')
-                }
-            })
-  }else{
-    showMyToast('choisi un personnage pour accepter le challenge')
-  }
-  }else{
-    $.ajax({
-                url: `/battles/challenge/answer/${challengeId}`,
-                type : "POST",
-                data:{csrfmiddlewaretoken:"{{ csrf_token }}", character: character, response: answer},
-                beforeSend: function(){
-                  $('#loading-overlay').toggleClass('active')
-                },
-                success: function(res){
-                    if(res.status == "success"){
-                      showMyToast(res.message, 'success')
+//                     }else{
+//                         showMyToast(res.message)
+//                     }
+//                 },
+//                 complete: function(){
+//                   $('#loading-overlay').toggleClass('active')
+//                 },
+//                 error: function(jqXHR, textstatus, errorThrown){
+//                   showMyToast("An error occured", 'error')
+//                 }
+//             })
+//   }else{
+//     showMyToast('choisi un personnage pour accepter le challenge')
+//   }
+//   }else{
+//     $.ajax({
+//                 url: `/battles/challenge/answer/${challengeId}`,
+//                 type : "POST",
+//                 data:{csrfmiddlewaretoken:"{{ csrf_token }}", character: character, response: answer},
+//                 beforeSend: function(){
+//                   $('#loading-overlay').toggleClass('active')
+//                 },
+//                 success: function(res){
+//                     if(res.status == "success"){
+//                       showMyToast(res.message, 'success')
                       
-                      $(card).hide(300)
-                    //   card.classList.add('opacity-0', 'scale-95');
-                    //   card.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+//                       $(card).hide(300)
+//                     //   card.classList.add('opacity-0', 'scale-95');
+//                     //   card.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
                       
-                    }else{
-                        showMyToast(res.message)
-                    }
-                },
-                complete: function(){
-                  $('#loading-overlay').toggleClass('active')
-                },
-                error: function(jqXHR, textstatus, errorThrown){
-                  showMyToast("An error occured", 'error')
-                }
-            })
-  }
+//                     }else{
+//                         showMyToast(res.message)
+//                     }
+//                 },
+//                 complete: function(){
+//                   $('#loading-overlay').toggleClass('active')
+//                 },
+//                 error: function(jqXHR, textstatus, errorThrown){
+//                   showMyToast("An error occured", 'error')
+//                 }
+//             })
+//   }
  
-}
+// }
 
 function handleInvite(btn,inviteId, action) {
             // Simulated API call (replace with actual API call)
