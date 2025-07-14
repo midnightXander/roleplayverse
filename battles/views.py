@@ -47,10 +47,9 @@ def _character(name:str):
     for character in characters['playable_characters']:
         if str(character['name']).lower() == name.lower():
             
-            return character 
+            return character                   
 
-            
-            return character                  
+
 
 def update_battle_spectators(player:Player, battle:Battle):
     spectators = battle.spectators.all()

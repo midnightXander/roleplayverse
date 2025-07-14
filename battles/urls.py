@@ -4,6 +4,9 @@ app_name = 'battles'
 
 urlpatterns = [
     path('',views.battles,name='index'),
+
+    
+
     path('request',views.request_battle,name='request'),
     path('requests', views.battle_requests, name = 'requests'),
     path('waiting_refree',views.waiting_refree, name='waiting_refree'),

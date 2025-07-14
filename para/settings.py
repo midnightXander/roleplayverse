@@ -92,6 +92,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -103,8 +104,6 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
 
     'allauth.account.middleware.AccountMiddleware',
-
-    'corsheaders.middleware.CorsMiddleware',
 
     "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
@@ -379,5 +378,8 @@ if 'DATABASE_URL' in os.environ:
 #     },
 # }    
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWS_CREDENTIALS = True

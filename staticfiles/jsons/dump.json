@@ -1,0 +1,122 @@
+[
+    {
+      "name": "Ancient Scroll",
+      "description": "A scroll containing forbidden techniques.",
+      "level": 1,
+      "emoji": "📜"
+    },
+    {
+      "name": "Healing Herb",
+      "description": "A rare herb that restores health.",
+      "level": 1,
+      "emoji": "🌿"
+    },
+    {
+      "name": "Chakra Crystal",
+      "description": "A crystal that boosts chakra regeneration.",
+      "level": 2,
+      "emoji": "💎"
+    },
+    {
+      "name": "Kunai Set",
+      "description": "A set of sharp kunai for combat.",
+      "level": 2,
+      "emoji": "🔪"
+    },
+    {
+      "name": "Fireball Charm",
+      "description": "A charm that enhances fire-based attacks.",
+      "level": 3,
+      "emoji": "🔥"
+    },
+    {
+      "name": "Shadow Cloak",
+      "description": "A cloak that increases stealth abilities.",
+      "level": 3,
+      "emoji": "🧥"
+    },
+    {
+      "name": "Wind Blade",
+      "description": "A lightweight blade infused with wind chakra.",
+      "level": 4,
+      "emoji": "⚔️"
+    },
+    {
+      "name": "Earth Shield",
+      "description": "A shield that provides strong defense.",
+      "level": 4,
+      "emoji": "🛡️"
+    },
+    {
+      "name": "Lightning Orb",
+      "description": "An orb that enhances lightning-based techniques.",
+      "level": 5,
+      "emoji": "⚡"
+    },
+    {
+      "name": "Water Amulet",
+      "description": "An amulet that boosts water-based attacks.",
+      "level": 5,
+      "emoji": "💧"
+    },
+    {
+      "name": "Phoenix Feather",
+      "description": "A mystical feather that revives fallen allies.",
+      "level": 6,
+      "emoji": "🪶"
+    },
+    {
+      "name": "Dragon Scale",
+      "description": "A scale that increases durability and strength.",
+      "level": 6,
+      "emoji": "🐉"
+    },
+    {
+      "name": "Mystic Potion",
+      "description": "A potion that temporarily boosts all stats.",
+      "level": 7,
+      "emoji": "🧪"
+    },
+    {
+      "name": "Golden Shuriken",
+      "description": "A rare shuriken with enhanced accuracy.",
+      "level": 7,
+      "emoji": "🌟"
+    },
+    {
+      "name": "Celestial Robe",
+      "description": "A robe that grants immunity to status effects.",
+      "level": 8,
+      "emoji": "👘"
+    },
+    {
+      "name": "Spirit Gem",
+      "description": "A gem that enhances spiritual energy.",
+      "level": 8,
+      "emoji": "💠"
+    },
+    {
+      "name": "Ethereal Bow",
+      "description": "A bow that shoots chakra-infused arrows.",
+      "level": 9,
+      "emoji": "🏹"
+    },
+    {
+      "name": "Void Mask",
+      "description": "A mask that increases perception and awareness.",
+      "level": 9,
+      "emoji": "🎭"
+    },
+    {
+      "name": "Infinity Blade",
+      "description": "A legendary blade with limitless power.",
+      "level": 10,
+      "emoji": "🗡️"
+    },
+    {
+      "name": "Divine Relic",
+      "description": "An ancient relic that grants unparalleled abilities.",
+      "level": 10,
+      "emoji": "🕊️"
+    }
+  ]

@@ -2,7 +2,7 @@
     {
         "title": "Collecter des parchemins",
         "description": "Explore la For\u00eat Interdite et rapporte des parchemins au village.",
-        "long_tail_description": "Pendant une mission, des ninjas du village en effectuant une mission aurait fait tomber des parchemins importants dans la For\u00eat Interdite. Ces parchemins contiennent des informations cruciales pour le village. Tu dois les retrouver et les rapporter.",
+        "long_tail_description": "Pendant une mission, des ninjas du village aurait fait tomber des parchemins importants dans la For\u00eat Interdite. Ces parchemins contiennent des informations cruciales pour le village. Tu dois les retrouver a tous prix.",
         "min_level": 1,
         "max_level": 3,
         "mission_type": "collect",

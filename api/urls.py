@@ -7,10 +7,6 @@ urlpatterns = [
     path('user/register/', views.CreateUserView.as_view(), name='register' ),
     path('token/', TokenObtainPairView.as_view(), name ='get_token'),
     path('token/refresh', TokenRefreshView.as_view(), name = 'refresh'),
-    
     path('feed', views.feed.as_view(), name= 'feed' ),
     path('save-subscription/', views.save_subscription, name='save_subscriptions'),
-    
-
-
 ]
