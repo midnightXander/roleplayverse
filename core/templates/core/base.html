@@ -585,12 +585,15 @@ function setupExpandableText() {
 function updateNotificationCount(count){
 
 const notifier = document.getElementById('notifier');
-if(count > 0){
-notifier.textContent = count;
-notifier.classList.remove('hidden');
-}else{
-notifier.classList.add('hidden');
+if(notifier){
+    if(count > 0){
+    notifier.textContent = count;
+    notifier.classList.remove('hidden');
+    }else{
+    notifier.classList.add('hidden');
+    }
 }
+
 //             let n_notifs = parseInt($("#notifier").text())
 //             if(n_notifs){
 //                 n_notifs++
