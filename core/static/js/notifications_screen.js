@@ -374,25 +374,6 @@ function renderNotifications() {
       });
   }
 
-    function updateNotificationCount(count){
-
-                const notifier = document.getElementById('notifier');
-                if(count > 0){
-                notifier.textContent = count;
-                notifier.classList.remove('hidden');
-                }else{
-                notifier.classList.add('hidden');
-                }
-    //             let n_notifs = parseInt($("#notifier").text())
-    //             if(n_notifs){
-    //                 n_notifs++
-    //             $("#notifier").text(n_notifs)
-    //             }else if(n_notifs == 9){
-    //                 $("#notifier").text("9+")
-    //             }else{
-    //                 $("#notifier").text("1")
-    // }
-    }
         
 
     function openNotificationsScreen() {
