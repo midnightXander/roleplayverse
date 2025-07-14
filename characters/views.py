@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from .models import Character
 from users.models import Player
@@ -19,3 +20,10 @@ def index(request):
     sorted_characters = sorted(characters["playable_characters"], key = lambda item: item["name"])
     context = {"characters":sorted_characters, "player":player}
     return render(request,'characters/index.html',context)
+
+def all_characters(request):
+    characters = get_characters()
+    sorted_characters = sorted(characters["playable_characters"], key = lambda item: item["name"])
+    return JsonResponse({ 'characters': sorted_characters })
+
+    

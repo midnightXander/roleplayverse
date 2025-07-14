@@ -5,4 +5,5 @@ app_name = "characters"
 
 urlpatterns = [
     path('',views.index, name='index'),
+    path('all',views.all_characters, name='all_characters'),
 ]

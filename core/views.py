@@ -533,9 +533,20 @@ def get_notifications(request):
     player = Player.objects.get(user = request.user)
     player_notifs = PlayerNotification.objects.filter(target= player).order_by('-date_sent')
     notifications = Notification.objects.filter(target = player).order_by('-date_sent')
+    challenges = Challenge.objects.filter(target = player, answered = False).order_by('-date_sent')
+    characters = get_characters()  
+    sorted_characters = sorted(characters["playable_characters"], key = lambda item: item["name"]) 
+    
+    for notification in notifications:
+        notification.read = True
+        notification.save()
+    for notification in player_notifs:
+        notification.read = True
+        notification.save()    
 
     data = [
-        {
+        {   
+            'type': 'generic',
             'id':notification.id,
             "content": notification.content,
             'url':notification.url,
@@ -543,10 +554,53 @@ def get_notifications(request):
             'type':'generic',
             'image' : notification.img_url,
             'clicked' : notification.clicked,
+            'read' : notification.read,
         } for notification in notifications
     ]
+    challenges = [
+        {
+            'type': 'challenge',
+            'id': challenge.id,
+            'sender': {
+                'id': challenge.sender.id,
+                'username': challenge.sender.user.username,
+                'player': str(challenge.sender),
+                'profile_picture': challenge.sender.profile_picture.url,
+            },
+            'sender_character': challenge.sender_character,
+            'timestamp': _time_since(challenge.date_sent),
+        } for challenge in challenges
+    ]
+    invites = [
+        {
+            'id' : invite.id,
+            'family' : {
+                'id' : invite.family.id,
+                'name' : invite.family.name,
+                'profile_picture' : invite.family.profile_picture.url,
+                'god_father' : {
+                    'username' : invite.family.god_father.username,
+                }
+            }
 
-    return JsonResponse({'status':'success', 'notifications': data})
+        } for invite in player_notifs.filter(notif_type = 'invite').order_by('-date_sent')
+    ]
+
+    requests = [
+        {
+            'id' : request.id,
+            'sender' : {
+                'id' : request.sender.id,
+                'username' : request.sender.user.username,
+                'player' : str(request.sender),
+                'rank' : request.sender.rank,
+                'progression' : request.sender.progression,
+            }
+            
+        } for request in player_notifs.filter(notif_type = 'request').order_by('-date_sent')
+    ]
+
+    return JsonResponse({'status':'success', 'notifications': data, 'invites': invites, 'requests' : requests, 'challenges' : challenges, 'characters':sorted_characters})
 
 
 def _string_found(search_string, main_string):
@@ -885,7 +939,6 @@ def create_comment(request,post_id):
             post  = get_object_or_404(Post, id = post_id)
             player = Player.objects.get(user = request.user)
             parent_id = request.POST.get("parent_id")
-
             parent = None
             notification_text = f"{player} a commenté votre publication" 
             if parent_id:
@@ -897,8 +950,6 @@ def create_comment(request,post_id):
                 body = body,
                 parent = parent,
             )
-
-            
 
             #send a notification to the post author
             if player != post.author:
@@ -1129,9 +1180,8 @@ def mark_all_notifs_as_read(request):
     notifications = Notification.objects.filter(target = player).order_by('-date_sent')
     
     for notification in notifications:
-
+        notification.read = True
         notification.clicked = True
-        print(notification.clicked)
         notification.save()
 
     return JsonResponse({'status':'success'})

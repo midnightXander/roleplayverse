@@ -654,7 +654,7 @@
         <div class="flex items-center gap-3">
           <img  src="{{player.profile_picture}}" alt="{{player.user.username}}" class="w-10 h-10 rounded-full" />
           <div>
-            <a onclick="showOverlay()" href="/users/family/{{family.id}}" class="font-semibold">{{forloop.counter}}. {{player.player.username}}</a>
+            <a onclick="showOverlay()" href="/users/{{player.player.username}}" class="font-semibold">{{forloop.counter}}. {{player.player.username}}</a>
             <p class="text-xs text-gray-500">{{player.wins}} victoires</p>
           </div>
         </div>

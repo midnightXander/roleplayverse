@@ -83,7 +83,7 @@
 
     <div id="challenge-card-{{challenge.id}}" class="challenge-card bg-gray-900 rounded-2xl shadow-lg p-6 my-2 mx-auto max-w-md w-full mb-4">
 
-      <div class="text-center mb-6">
+      <div class="text-center mb-4">
           <i class="fas fa-fire text-4xl text-orange-600 mb-4"></i>
           <h2 class="text-2xl font-semibold">On t'as lancé un challenge!</h2>
       </div>
@@ -106,17 +106,17 @@
         <label for="character" class="block mb-2">Choisi ton perso:</label>
         <select id="character" name="character" class="character-select w-full border border-orange-500 bg-gray-900 text-white p-2 rounded-2xl">
             <option value="">Choisi to perso</option>
-                        {% for character in characters %}
-                        {% if player.p_character == character.name %}
-                        <option  value="{{character.name}}" data-img_link="{{character.images.0}}">
-                          {{character.name}}
-                        </option>
-                        {% else %}
-                        <option value="{{character.name}}" data-img_link="{{character.images.0}}">
-                          {{character.name}}
-                        </option>
-                        {% endif %}
-                        {% endfor %}
+              {% for character in characters %}
+              {% if player.p_character == character.name %}
+              <option  value="{{character.name}}" data-img_link="{{character.images.0}}">
+                {{character.name}}
+              </option>
+              {% else %}
+              <option value="{{character.name}}" data-img_link="{{character.images.0}}">
+                {{character.name}}
+              </option>
+              {% endif %}
+              {% endfor %}
         </select>
     </div>
 

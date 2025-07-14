@@ -1,0 +1,122 @@
+[
+    {
+      "name": "Shadow Clone Jutsu",
+      "description": "Creates multiple clones of the user to confuse enemies.",
+      "level": 1,
+      "chakra_cost": 10
+    },
+    {
+      "name": "Transformation Jutsu",
+      "description": "Allows the user to transform into another person or object.",
+      "level": 1,
+      "chakra_cost": 5
+    },
+    {
+      "name": "Fireball Jutsu",
+      "description": "Shoots a large fireball at the enemy.",
+      "level": 2,
+      "chakra_cost": 15
+    },
+    {
+      "name": "Lightning Blade",
+      "description": "A concentrated lightning attack that pierces through enemies.",
+      "level": 3,
+      "chakra_cost": 25
+    },
+    {
+      "name": "Water Dragon Jutsu",
+      "description": "Summons a dragon made of water to attack enemies.",
+      "level": 3,
+      "chakra_cost": 20
+    },
+    {
+      "name": "Earth Wall Jutsu",
+      "description": "Creates a defensive wall made of earth.",
+      "level": 4,
+      "chakra_cost": 15
+    },
+    {
+      "name": "Wind Blade Jutsu",
+      "description": "Enhances a weapon with wind chakra for sharper attacks.",
+      "level": 4,
+      "chakra_cost": 10
+    },
+    {
+      "name": "Summoning Jutsu",
+      "description": "Summons a creature to assist in battle.",
+      "level": 5,
+      "chakra_cost": 30
+    },
+    {
+      "name": "Rasengan",
+      "description": "A spinning ball of chakra that deals massive damage.",
+      "level": 5,
+      "chakra_cost": 25
+    },
+    {
+      "name": "Chidori",
+      "description": "A high-speed lightning attack that pierces through enemies.",
+      "level": 6,
+      "chakra_cost": 30
+    },
+    {
+      "name": "Sage Mode",
+      "description": "Enhances the user's physical and chakra abilities.",
+      "level": 6,
+      "chakra_cost": 40
+    },
+    {
+      "name": "Amaterasu",
+      "description": "Summons black flames that burn anything they touch.",
+      "level": 7,
+      "chakra_cost": 50
+    },
+    {
+      "name": "Susano'o",
+      "description": "Creates a giant chakra warrior for defense and attack.",
+      "level": 8,
+      "chakra_cost": 60
+    },
+    {
+      "name": "Tailed Beast Bomb",
+      "description": "A massive chakra blast used by tailed beasts.",
+      "level": 8,
+      "chakra_cost": 70
+    },
+    {
+      "name": "Flying Thunder God Technique",
+      "description": "Allows instant teleportation to marked locations.",
+      "level": 9,
+      "chakra_cost": 50
+    },
+    {
+      "name": "Reaper Death Seal",
+      "description": "Seals the enemy's soul at the cost of the user's life.",
+      "level": 9,
+      "chakra_cost": 100
+    },
+    {
+      "name": "Infinite Tsukuyomi",
+      "description": "Traps all enemies in an eternal illusion.",
+      "level": 10,
+      "chakra_cost": 80
+    },
+    {
+      "name": "Creation Rebirth",
+      "description": "Heals the user completely by consuming chakra.",
+      "level": 10,
+      "chakra_cost": 70
+    },
+    {
+      "name": "Rinnegan Techniques",
+      "description": "Unlocks various abilities such as gravity manipulation and soul extraction.",
+      "level": 10,
+      "chakra_cost": 90
+    },
+    {
+      "name": "Eight Gates Release",
+      "description": "Unlocks the user's full physical potential at the cost of their life.",
+      "level": 10,
+      "chakra_cost": 100
+    }
+  ]
