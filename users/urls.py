@@ -23,6 +23,7 @@ urlpatterns = [
 
     path('profile',views.player_profile, name='profile'),
 
+
     # path('family',views.family,name="family"),
     path('family/new',views.new_family,name='new_family'),
     path('verify_family_name', views.verify_family_name, name="verify_family_name"),

@@ -50,7 +50,7 @@ class Tournament(models.Model):
 
     participation_cost = models.IntegerField(default=500)
     reward = models.IntegerField(default=2000)
-
+    cash_prize = models.IntegerField(default=30)
     rules = models.TextField(default='rules')
     date_created = models.DateField(auto_now_add = True )
     #cover = models.ImageField(default = f'tournaments/covers/{tournament_covers[randint(0, len(tournament_covers)-1)]}',upload_to=tournament_upload_to)
