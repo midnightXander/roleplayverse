@@ -309,12 +309,14 @@ def make_verdict(request, battle_id):
             response_string = str(response.text).replace("```json", "").replace("```", "").strip()    
             ai_response = json.loads(response_string)
             verdict = ai_response.get('verdict')
-            validity = ai_response.get('end_fight') == "false"
+            validity = ai_response.get('valid') == "true"
+            end_fight = ai_response.get('end_fight') == "false"
             last_textpad.valid = validity
             last_textpad.date_validated = timezone.now()
             last_textpad.refree_comment = verdict
             last_textpad.save()
             
+            print(ai_response)
             
             #set the possibility to send a new text pad if the last one is valid 
             battle.can_send_textpad = validity
