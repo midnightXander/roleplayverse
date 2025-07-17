@@ -14,6 +14,8 @@ from battles.models import *
 from dotenv import load_dotenv
 import os
 import core.views as core_views 
+from . import get_data
+
 
 @csrf_exempt
 def save_subscription(request):
@@ -47,8 +49,9 @@ class feed(APIView):
         
         posts = Post.objects.all()
         posts_data = [core_views._post_data(player, post) for post in posts ]
-
-        return JsonResponse({ 'status':'success', 'username':f'{user}', 'posts': posts_data }, safe=False)
+        feed_items = get_data.feed_items(request)
+        
+        return JsonResponse({ 'status':'success', 'username':f'{user}', 'posts': posts_data, 'feed_items': feed_items }, safe=False)
 
 def export_battle_data():
     # This function is a placeholder for exporting battle data.

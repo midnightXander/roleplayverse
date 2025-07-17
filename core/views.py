@@ -397,6 +397,7 @@ def _annoucement_data(announcement:Announcement):
         }
 
 def get_posts(request):
+    
     player = Player.objects.get(user = request.user)
     feed = Feed.objects.get(player = player)
     #posts criterias:

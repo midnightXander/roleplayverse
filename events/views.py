@@ -192,6 +192,7 @@ def create_round_battles(tournament:Tournament, fighters, round=1):
             i_character = fighter1_character,
             o_character = fighter2_character,
             refree = referee,
+            ai_refereeing = True,
             #can_send_textpad = True
         )   
             tournament.battles.add(new_battle)
@@ -553,17 +554,17 @@ def _can_participate(player:Player,tournament:Tournament):
     }
     if tournament.status != 'registering':
         can_participate['can'] = False
-        can_participate['message'] = "Des joueurs ne peuvent plus s'inscrire a ce tournois"
+        can_participate['message'] = "Des joueurs ne peuvent plus s'inscrire a ce tournoi"
     elif player  in fighters:
         can_participate['can'] = False
-        can_participate['message'] = "Vous participer déja a ce tournois en tant que joueur"
+        can_participate['message'] = "Vous participer déja a ce tournoi en tant que joueur"
 
     elif player in referees:
         can_participate['can'] = False
-        can_participate['message'] = "Vous étes un arbitre dans ce tournois"   
+        can_participate['message'] = "Vous étes un arbitre dans ce tournoi"   
     elif  len(fighters) >= tournament.n_participants:
         can_participate['can'] = False
-        can_participate['message'] = "Le nombre de participants pour ce tournois est déja atteint" 
+        can_participate['message'] = "Le nombre de participants pour ce tournoi est déja atteint" 
     
     return can_participate
 

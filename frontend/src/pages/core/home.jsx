@@ -16,7 +16,9 @@ export default function Home() {
     try{
       const res = await api.get('feed')
       const posts = res.data.posts;
+      const feedItems = res.data.feed_items
       console.log(posts)
+      console.log(feedItems)
   
       return posts
     }catch(err){

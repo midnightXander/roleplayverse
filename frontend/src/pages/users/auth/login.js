@@ -17,9 +17,13 @@ export default function Login() {
     setLoading(true)
     try{
       const res = await api.post('token/' , {username, password})
-      localStorage.setItem(ACCESS_TOKEN, res.data.access)
-      localStorage.setItem(REFRESH_TOKEN, res.data.refresh)
-      navigate('/home')
+      if(res.status == 200){
+        localStorage.setItem(ACCESS_TOKEN, res.data.access)
+        localStorage.setItem(REFRESH_TOKEN, res.data.refresh)
+        console.log(res)
+        navigate('/home')
+      }
+      
     }catch(e){
       alert(e)
     }finally{
