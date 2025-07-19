@@ -399,6 +399,26 @@ except json.JSONDecodeError as e:
 arr = [  'aa', 'bb', 'v']
 arr = arr
 
+import requests
 
+url = "https://api.lygosapp.com/v1/gateway"
+
+payload = {
+    "amount": 123,
+    "shop_name": "Roleplay Verse",
+    "message": "Jetons de combats",
+    "success_url": "",
+    "failure_url": "",
+    "order_id": "p125797863l"
+}
+headers = {
+    "api-key": "lygosapp-d95f9945-bcae-4b8d-bb5b-5f9414068a19",
+    "Content-Type": "application/json"
+}
+
+response = requests.request("POST", url, json=payload, headers=headers)
+
+
+print("Res: ",response.text)
 
  

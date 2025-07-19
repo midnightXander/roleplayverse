@@ -7,6 +7,7 @@ from core.models import Post
 from pywebpush import webpush, WebPushException
 from rest_framework import generics
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from .serializers import *
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
@@ -15,6 +16,7 @@ from dotenv import load_dotenv
 import os
 import core.views as core_views 
 from . import get_data
+from . import post_data as post_functions
 
 
 @csrf_exempt
@@ -52,6 +54,44 @@ class feed(APIView):
         feed_items = get_data.feed_items(request)
         
         return JsonResponse({ 'status':'success', 'username':f'{user}', 'posts': posts_data, 'feed_items': feed_items }, safe=False)
+
+
+
+class post(APIView):
+    def get(self, request, pk):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        post = Post.objects.filter(id = pk).first()
+        data = core_views._post_data(player, post) if post else None
+        if not post:
+            return JsonResponse({'status': 'error', 'message': 'Post not found'}, status=404)
+        return JsonResponse({ 'status':'success', 'post':data }, safe=False)
+    
+    
+    def post(self, request):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        else:
+            post = post_functions.create_post(request)
+            return JsonResponse({'post': post}, status=200)
+
+    def delete(self, request, pk):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        post = Post.objects.filter(id = pk).first()
+        if not post:
+            return JsonResponse({'status': 'error', 'message': 'Post not found'}, status=404)
+        if post.author != player:
+            return JsonResponse({'status': 'error', 'message': 'You are not authorized to delete this post'}, status=403)
+        post.delete()
+        return JsonResponse({'status': 'success', 'message': 'Post deleted successfully'}, status=200)           
+
+
+
 
 def export_battle_data():
     # This function is a placeholder for exporting battle data.

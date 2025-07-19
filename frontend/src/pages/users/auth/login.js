@@ -20,7 +20,6 @@ export default function Login() {
       if(res.status == 200){
         localStorage.setItem(ACCESS_TOKEN, res.data.access)
         localStorage.setItem(REFRESH_TOKEN, res.data.refresh)
-        console.log(res)
         navigate('/home')
       }
       

@@ -4,6 +4,7 @@ from django.db.models import Case, When,F
 from django.urls import reverse
 from django.contrib.auth.models import User,auth
 from django.http import JsonResponse,HttpResponseRedirect
+from monetization.models import Payment
 from users.models import Player,PlayerNotification,Family
 from django.contrib.auth.decorators import login_required
 from .models import *
@@ -18,6 +19,7 @@ from django.forms.models import model_to_dict
 import os
 import json
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
 import datetime
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
@@ -32,6 +34,7 @@ import re
 from . import emails
 import praw,time
 from api.views import export_battle_data
+import requests
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 def get_characters():
@@ -1202,10 +1205,57 @@ def battle_points(request):
         new_points = int(new_points)
         player.battle_points += new_points
         player.save()
-        return HttpResponseRedirect(reverse("core:home"))
+        # return HttpResponseRedirect(reverse("core:home"))
+        return JsonResponse({"status":"success", "message":"Battle points updated successfully", "points": player.battle_points})
 
     context = {"player":player}
     return render(request,"core/battle_points.html",context)
+
+def battle_points_success(request):
+    player = get_player(request.user)
+    if not player:
+        return redirect('/users/signin')
+
+
+    new_points = request.GET.get("points")
+    order_id = request.GET.get('order_id')
+    new_points = int(new_points)
+    
+    try:
+        payment = Payment.objects.get(order_id = order_id)
+        print("already paid")
+    except Payment.DoesNotExist: 
+        player.battle_points += new_points
+        player.save()
+        payment = Payment.objects.create(
+            player = player,
+            amount = new_points,
+            order_id = order_id,
+            # type = 'battle_points',
+            status = 'completed',
+        )
+        payment.save()
+        print("Now paid")
+        #send a notification to the player
+        new_notif = Notification.objects.create(
+            target = player,
+            content = f'Vous avez reçu {new_points} jetons de combat',
+            url = '/battle_points',
+            img_url = player.profile_picture.url
+        )
+        new_notif.save()
+        send_push_notification(
+            PushSubscription.objects.filter(user = player.user).last(),
+            {
+                'title': 'jetons de combat reçus',
+                'body': f'Vous avez reçu {new_points} jetons de combats',
+                'icon': player.profile_picture.url,
+                'url': '/notifications'
+            }
+        )
+    context = {"player":player, 'n_notifs': get_notifs(player)}
+    return render(request,"core/battle_points_sucess.html", context)
+
 
 def favorite(request, id):
     player = Player.objects.get(user = request.user)

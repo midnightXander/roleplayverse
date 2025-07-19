@@ -33,9 +33,9 @@ urlpatterns = [
     path('notifications/mark_as_read/all',views.mark_all_notifs_as_read, name='mark_notifications_as_read'),
     path('notifications/mark_as_read/<int:notification_id>',views.mark_notif_as_read, name='mark_notification_as_read'),
     path('battle points',views.battle_points, name="battle_points"),
+    path('battle_points/success',views.battle_points_success, name="battle_points_success"),
 
     path('rankings', views.rankings, name = 'rankings'),
-
 
     #EZOIC
     path('ezoic-3jZENPJ2HyQHll4Ye2ZCBVIua866XL.html', views.ezoic_file, name = 'ezoic_file'),
