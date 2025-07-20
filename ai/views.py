@@ -324,8 +324,8 @@ def make_verdict(request, battle_id):
             if end_fight: 
                 
                 print('fight is ended')
-                winner_character = ai_response.get('winner')
-                winner = battle.initiator if winner_character == battle.i_character else battle.opponent
+                winner_character:str = ai_response.get('winner')
+                winner = battle.initiator if winner_character.strip().lower() == battle.i_character.strip().lower() else battle.opponent
                 loser = battle.opponent if winner == battle.initiator else battle.initiator
                 #loser = last_textpad.owner
                 #winner = battle.initiator if loser == battle.opponent else battle.opponent
