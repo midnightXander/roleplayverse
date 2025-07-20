@@ -310,7 +310,7 @@ def make_verdict(request, battle_id):
             ai_response = json.loads(response_string)
             verdict = ai_response.get('verdict')
             validity = ai_response.get('valid') == "true"
-            end_fight = ai_response.get('end_fight') == "false"
+            end_fight = ai_response.get('end_fight') == "true"
             last_textpad.valid = validity
             last_textpad.date_validated = timezone.now()
             last_textpad.refree_comment = verdict
@@ -319,11 +319,16 @@ def make_verdict(request, battle_id):
             print(ai_response)
             
             #set the possibility to send a new text pad if the last one is valid 
-            battle.can_send_textpad = validity
-            if not validity : 
+            # battle.can_send_textpad = validity
+            battle.can_send_textpad = not end_fight
+            if end_fight: 
+                
                 print('fight is ended')
-                loser = last_textpad.owner
-                winner = battle.initiator if loser == battle.opponent else battle.opponent
+                winner_character = ai_response.get('winner')
+                winner = battle.initiator if winner_character == battle.i_character else battle.opponent
+                loser = battle.opponent if winner == battle.initiator else battle.initiator
+                #loser = last_textpad.owner
+                #winner = battle.initiator if loser == battle.opponent else battle.opponent
                 win_notif = core_models.Notification.objects.create(
                 target = winner,
                 url = f'/battles/battle_room/{battle.id}',

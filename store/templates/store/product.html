@@ -1,0 +1,396 @@
+{% extends "store/base.html" %}
+{% load static %}
+
+{% block title %} {{product.title}} {% endblock title %}
+
+{% block meta_keywords %}
+{{product.title}} Anime Naruto
+{% endblock meta_keywords %}
+
+
+{% block meta_description %}
+{{product.description}}
+{% endblock meta_description %}
+
+
+
+{% block content %}
+
+
+<!-- MODAL COMMANDE -->
+<div id="orderModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center z-50">
+  <div class="bg-gray-800 p-6 rounded-lg w-full max-w-md relative animate-fade-in">
+    <h2 class="text-xl font-bold mb-4 text-orange-400">📦 Finaliser la commande</h2>
+
+    <form class="space-y-4">
+      <div>
+        <label class="block text-sm mb-1">Nom complet</label>
+        <input type="text" class="w-full p-2 rounded bg-gray-700 border border-gray-600 focus:outline-none" required>
+      </div>
+      <div>
+        <label class="block text-sm mb-1">Adresse de livraison</label>
+        <input type="text" class="w-full p-2 rounded bg-gray-700 border border-gray-600" required>
+      </div>
+      <div>
+        <label class="block text-sm mb-1">Téléphone</label>
+        <input type="text" class="w-full p-2 rounded bg-gray-700 border border-gray-600" required>
+      </div>
+      <div>
+        <label class="block text-sm mb-1">Méthode de paiement</label>
+        <select class="w-full p-2 rounded bg-gray-700 border border-gray-600">
+          <option>MTN Mobile Money</option>
+          <option>Orange Money</option>
+          <option>Cash à la livraison</option>
+        </select>
+      </div>
+      <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white p-2 rounded">
+        Confirmer la commande
+      </button>
+    </form>
+
+    <!-- Bouton de fermeture -->
+    <button onclick="closeModal()" class="absolute top-2 right-3 text-white text-xl">&times;</button>
+  </div>
+</div>
+
+<style>
+  .animate-fade-in {
+    animation: fadeIn 0.4s ease-in-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<script>
+  function openModal() {
+    document.getElementById("orderModal").classList.remove("hidden");
+    document.getElementById("orderModal").classList.add("flex");
+  }
+
+  function closeModal() {
+    document.getElementById("orderModal").classList.add("hidden");
+  }
+
+  // Fermer en cliquant en dehors
+  window.addEventListener('click', function(e) {
+    const modal = document.getElementById('orderModal');
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+</script>
+
+<main class="container mx-auto px-6 py-8">
+    <div class="flex flex-col md:flex-row">
+        
+        
+        <div class="w-full md:w-1/2 mb-8 md:mb-0">
+            <div class="mb-4">
+                <img id="main-image" src="{{product.images.0}}" alt="Image principale du produit" class="w-full h-auto  rounded-lg shadow-md">
+            </div>
+            <div class="grid grid-cols-4 gap-4" id="thumbnail-container">
+                <!-- Thumbnails will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="w-full md:w-1/2 md:pl-8">
+            <h1 class="text-3xl font-bold text-orange-500 mb-4">{{product.title}}</h1>
+            <p class="text-gray-300 mb-4">Réf: {{product.ref}}</p>
+            <div class="flex items-center mb-4">
+                <div class="flex text-yellow-400 mr-2">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <span class="text-gray-300">(4.5/5, 8 avis)</span>
+            </div>
+            <p class="text-2xl font-bold text-gray-300 mb-4">{{product.price}} $</p>
+            <p class="text-gray-700 mb-6">{{product.provider.name}}</p>
+            
+            <div class="mb-6">
+                <h3 class="font-semibold text-gray-300 mb-2">Details :</h3>
+                <!-- <div class="flex space-x-2">
+                    <button class="w-8 h-8 rounded-full bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"></button>
+                    <button class="w-8 h-8 rounded-full bg-brown-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brown-500"></button>
+                    <button class="w-8 h-8 rounded-full bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"></button>
+                </div> -->
+                <div class="flex flex-col space-y-2">
+                    <p class=""> <i class="fa fa-truck text-orange-500 mr-2" ></i>  <span class="font-bold text-gray-500">2 jours de livraison max </span></p>
+                    <p class=""> 
+                        <i class="fas fa-truck text-orange-500 mr-2"></i> 
+                        <span class="font-semibold text-gray-500">Livraison dans tout les pays d'Afrique et d'ailleurs</span></span></p>
+                    <p class=""> <i class="fas fa-location-dot text-orange-500 mr-2" ></i>Livraison depuis la Chine <span class="font-semibold text-gray-500"></span></span></p>
+                    <p class=""> <i class="fas fa-circle text-orange-500 mr-2" ></i> <span class="font-semibold text-gray-500"></span> {{product.type}}</span></p>
+                </div> 
+
+            </div>
+            
+
+            <div class="mb-6">
+                <h3 class="font-semibold text-gray-300 mb-2">Quantité:</h3>
+                <div class="flex text-gray-500 items-center">
+                    <button class="bg-gray-200 px-3 py-1 rounded-l-md focus:outline-none">-</button>
+                    <input type="number" value="1" min="1" class="w-16 text-center border-t border-b border-gray-200 py-1 focus:outline-none">
+                    <button class="bg-gray-200 px-3 py-1 rounded-r-md focus:outline-none">+</button>
+                </div>
+            </div>
+
+            <!-- <button onclick="add_to_cart('{{product.id}}')"  class="bg-orange-500 text-white px-6 py-3 mb-4 rounded-md font-semibold hover:bg-[#5A0B00] transition-smooth w-full md:w-auto"><i class = "fas fa-shopping-cart mr-2 " ></i>Ajouter au Panier</button> -->
+            <button onclick="openModal()"  class="bg-orange-500 text-white px-6 py-3 rounded-md font-semibold mb-4 hover:bg-orange-600 transition-smooth w-full md:w-auto"><i class = "fas fa-shopping-cart mr-2 " ></i>Commander</button>
+        </div>
+    </div>
+
+    <!-- Product Description -->
+    <div class="mt-12">
+        <h2 class="text-2xl font-bold text-gray-300 mb-4">Description du Produit</h2>
+        <p class="text-gray-400 body mb-4">
+            {{product.description}}
+        </p>
+        <!-- <ul class="list-disc list-inside text-gray-700 mb-4">
+            <li>Bracelet en cuir véritable</li>
+            <li>Cadran en acier inoxydable</li>
+            <li>Mouvement à quartz précis</li>
+            <li>Résistant à l'eau jusqu'à 30 mètres</li>
+            <li>Garantie de 2 ans</li>
+        </ul> -->
+    </div>
+
+    <!-- Customer Reviews -->
+  
+
+  
+        <div class="md:p-8">
+            <h2 class="text-3xl font-bold text-gray-300 mb-6 text-center">Avis Clients</h2>
+            
+            <div id="reviewList" class="space-y-6 mb-8 max-h-96  overflow-y-auto">
+                <!-- Existing reviews will be dynamically added here -->
+            </div>
+            
+            <form  id="reviewForm" class="bg-gray-950 p-6 rounded-lg">
+                <h3 class="text-xl font-semibold text-gray-300 mb-4">Laissez un avis</h3>
+                <div class="mb-4">
+                    <label for="reviewerName" class="block text-sm font-medium text-gray-300 mb-1">Votre Nom</label>
+                    <input type="text" name="name" id="reviewerName" required class="w-full bg-gray-900 px-3 py-2  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-300 mb-1">Note</label>
+                    <div class="flex items-center">
+                        <input type="radio" id="star5" name="rating" value="5" class="hidden peer" required>
+                        <label for="star5" class="text-3xl text-gray-300 peer-checked:text-yellow-400 cursor-pointer">★</label>
+                        <input type="radio" id="star4" name="rating" value="4" class="hidden peer">
+                        <label for="star4" class="text-3xl text-gray-300 peer-checked:text-yellow-400 cursor-pointer">★</label>
+                        <input type="radio" id="star3" name="rating" value="3" class="hidden peer">
+                        <label for="star3" class="text-3xl text-gray-300 peer-checked:text-yellow-400 cursor-pointer">★</label>
+                        <input type="radio" id="star2" name="rating" value="2" class="hidden peer">
+                        <label for="star2" class="text-3xl text-gray-300 peer-checked:text-yellow-400 cursor-pointer">★</label>
+                        <input type="radio" id="star1" name="rating" value="1" class="hidden peer">
+                        <label for="star1" class="text-3xl text-gray-300 peer-checked:text-yellow-400 cursor-pointer">★</label>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="reviewContent" class="block text-sm font-medium text-gray-300 mb-1">Votre avis</label>
+                    <textarea id="reviewContent" name="content" required class="w-full bg-gray-900 px-3 py-2  rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 h-32"></textarea>
+                </div>
+                
+                <button type="submit" class="w-full bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition duration-300">Envoyer</button>
+            </form>
+        </div>
+    
+</main>
+
+
+{{ product|json_script:"product"}}
+{{ reviews|json_script:"reviews"}}
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const reviewList = document.getElementById('reviewList');
+        const reviewForm = document.getElementById('reviewForm');
+        
+        // Sample existing reviews (replace with actual data from your backend)
+        const existingReviews = JSON.parse(document.getElementById('reviews').textContent)
+        
+        function displayReviews(){
+            $.ajax({
+            url : `/reviews/{{product.id}}`,
+            type: 'GET',
+            
+            beforeSend: function(){
+                $('#loading-overlay').toggleClass('active')
+            },
+            success: function(res) {
+                
+                if(res.status == 'success'){
+                    // Reset form
+                    $(reviewList).empty()
+                    reviews = res.reviews
+                    reviews.forEach((review)=>{
+                        reviewList.append(createReview(review))
+                    })
+
+                }else{
+                    
+                }
+            },
+            complete: function(){
+                $('#loading-overlay').toggleClass('active')
+            },
+            error: function(jqXHR,textstatus,errorThrown){
+                alert("une erreur est survenu, svp réessayer")
+            }
+        })
+        }
+
+        // Function to create a star rating string
+        function getStarRating(rating) {
+            return '<i class="fas fa-star text-yellow-400"></i>'.repeat(rating) + 
+                   '<i class="far fa-star text-gray-300"></i>'.repeat(5 - rating);
+        }
+
+        // Function to add a review to the list
+        function addReviewToList(review) {
+            const reviewItem = document.createElement('div');
+            reviewItem.className = 'bg-white p-4 rounded-lg shadow';
+            reviewItem.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <span class="font-semibold text-gray-300">${review.name}</span>
+                    <span class="text-sm text-gray-500">${review.date_added}</span>
+                </div>
+                <div class="mb-2">${getStarRating(review.rating)}</div>
+                <p class="text-gray-700">${review.content}</p>
+            `;
+            reviewList.prepend(reviewItem);
+        }
+
+        function createReview(review) {
+            const reviewItem = document.createElement('div');
+            reviewItem.className = 'bg-white p-4 rounded-lg shadow';
+            reviewItem.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <span class="font-semibold text-gray-300">${review.name}</span>
+                    <span class="text-sm text-gray-500">${review.date_added}</span>
+                </div>
+                <div class="mb-2">${getStarRating(review.rating)}</div>
+                <p class="text-gray-700">${review.content}</p>
+            `;
+            return reviewItem
+        }
+
+        // Add existing reviews
+        // existingReviews.forEach(addReviewToList);
+
+        // Handle form submission
+        reviewForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('reviewerName').value;
+            const rating = document.querySelector('input[name="rating"]:checked').value;
+            const content = document.getElementById('reviewContent').value;
+
+            // const newReview = { name, date, rating: parseInt(rating), content };
+            // addReviewToList(newReview);
+            $.ajax({
+            url : `/reviews/{{product.id}}`,
+            type: 'POST',
+            data: { 
+                csrfmiddlewaretoken: '{{csrf_token}}',
+                rating: rating,
+                name: name,
+                content: content,
+                
+             },
+            beforeSend: function(){
+                // $('#loading-overlay').toggleClass('active')
+            },
+            success: function(res) {
+                
+                if(res.status == 'success'){
+                    // Reset form
+                    displayReviews()
+                    reviewForm.reset();
+                    
+                }else{
+                    alert(res.message)
+                }
+            },
+            complete: function(){
+                // $('#loading-overlay').toggleClass('active')
+            },
+            error: function(jqXHR,textstatus,errorThrown){
+                alert("une erreur est survenu, svp réessayer")
+            }
+        })
+
+        });
+
+        //displayReviews()
+    });
+</script>
+<script>
+    
+    
+    const product = JSON.parse(document.getElementById('product').textContent)
+    const productImages = product.images.map((image) => image);
+    
+    function createThumbnail(src, index) {
+        return `
+            <img src="${src}" alt="Thumbnail ${index + 1}" class="w-full h-auto rounded cursor-pointer hover:opacity-75 transition-smooth" onclick="changeMainImage('${src}')">
+        `;
+    }
+
+    function changeMainImage(src) {
+        document.getElementById('main-image').src = src;
+    }
+
+    const thumbnailContainer = document.getElementById('thumbnail-container');
+    productImages.forEach((src, index) => {
+        if(src){
+            thumbnailContainer.innerHTML += createThumbnail(src, index);
+        }
+        
+    });
+
+    function add_to_cart(item_id){
+        $.ajax({
+            url : `/cart/add_item/${item_id}`,
+            type: 'POST',
+            data: { csrfmiddlewaretoken: '{{csrf_token}}' },
+            beforeSend: function(){
+
+            },
+            success: function(res) {
+                console.log(res)
+                if(res.status == 'success'){
+                    alert(res.message)
+                    $('#n_cart_items').text(res.cart_items)
+                }else{
+                    alert(res.message)
+                }
+            },
+            complete: function(){
+
+            },
+            error: function(jqXHR,textstatus,errorThrown){
+
+            }
+        })
+    }
+
+
+    
+
+
+    
+</script>
+
+
+{% endblock content %}

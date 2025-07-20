@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+{% load pwa %}
+{% progressive_web_app_meta %}   
+{% load static %} 
+<link rel="manifest" href="manifest.json">
+<head>    
+<meta name="theme-color" content="#1f2937">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>{% block title %}Roleplay Verse{% endblock title %}</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="{% block meta_description %} page d'acceuille de la plateforme roleplay verse  {% endblock meta_description %}">
+
+<meta name="keywords" content="{% block meta_keywords %} 
+Naruto Text Pave Anime Manga RPG jeux en ligne communauté messagerie privée jeu de role naruto shippuden réseau social RPG Anime role-playing rolleur community {% endblock meta_keywords %}">
+<meta property = "og:image" content = "{% static 'images/logo/logo_1.png' %}" >
+<meta property = "og:url" content = "https://roleplayverse.live">
+<link rel="icon" type="image/x-icon" href="{% static 'images/logo/logo_1.png' %}">
+
+<!--hiltop ads-->
+<meta name="referrer" content="no-referrer-when-downgrade" />
+<meta name="f98f33015c71e83498cb175245f67798544f0db7" content="f98f33015c71e83498cb175245f67798544f0db7" />
+
+<!-- <script src="{% static 'js/notifications.js' %}"></script>  -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<!-- <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css"> -->
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Edu+AU+VIC+WA+NT+Arrows:wght@400..700&family=Gluten:wght@100..900&family=Noto+Sans+JP:wght@100..900&family=Quicksand:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
+
+
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/output.css' %}" >
+
+
+
+<script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<!--Google ads-->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7259227698391457"
+crossorigin="anonymous"></script>
+<style>
+    body {
+        font-family: 'Nunito', sans-serif;
+    }
+    .animate-scaleIn {
+        animation: scaleIn 0.3s ease-in-out;
+    }
+    @keyframes scaleIn {
+        from {
+            transform: scale(0.5);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    } 
+    .body{
+        white-space: pre-wrap;
+    }  
+    h1,h2,h3{
+        font-family: 'Cal Sans','Noto Sans JP','Gluten', sans-serif;
+        font-weight: 400;
+    }
+    .text-wrap{
+     word-wrap: break-word;
+     overflow: break-word;
+    }
+</style>
+{% block styles %}
+{% endblock styles %}
+
+</head>
+<body class="bg-gray-950 text-gray-300 h-screen flex flex-col">
+    <nav class="w-full z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between ">
+                <div class="flex items-center">
+                    <a href="/" class="flex-shrink-0">
+                        <img class="h-20 w-auto" src="{% static 'images/logo/logo_1_nobg.png' %}" alt="Logo">
+                    </a>
+                </div>
+                <div>
+                    <h2 class="text-xl text-orange-500 font-bold mb-2" >Boutique</h2>
+                </div>
+                <div class="block">
+                    {% if  request.user.is_authenticated %}
+                    <button class="flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-orange-800 focus:ring-white">
+                        <img class="h-12 w-12 rounded-full border border-orange-500" src="{{player.profile_picture.url}}" alt="{{player}} profile">
+                    </button>
+                    {% else %}
+                    <a href="{% url 'users:login' %}">
+                        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+                           Se Connecter
+                        </button>
+                    </a>
+                    {% endif %}
+                    
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% block content %}
+
+    {% endblock content %}
+    <footer class="border-t border-gray-700 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap justify-between">
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <img src="{% static 'images/logo/logo_1_nobg.png' %}" alt="Logo RolePlay Verse" class="w-24 h-24 mb-4">
+                    <h3 class="text-xl font-bold mb-2">RolePlay Verse</h3>
+                    <p class="text-gray-400">L'experience ultime du RP Naruto.</p>
+                </div>
+                <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                    <h3 class="text-xl font-bold mb-2">Liens Utils</h3>
+                    <ul>
+                        <li><a href="/home" class="text-gray-400 hover:text-white">Acceuil</a></li>
+                        <li><a href="/blog" class="text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="/characters" class="text-gray-400 hover:text-white">Personnages</a></li>
+                        <li><a href="/" class="text-gray-400 hover:text-white">Store</a></li>
+                        <br>
+                        <li><a href="/legal/terms#privacy" class="text-gray-400 hover:text-white">Politique de confidentialité</a></li>
+                        <li><a href="/legal/terms#terms" class="text-gray-400 hover:text-white">Termes d'utilisations</a></li>
+                    </ul>
+                </div>
+                <div class="w-full md:w-1/3">
+                    <h3 class="text-xl font-bold mb-2">Rejoins nous sur les réseaux-sociaux</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 border-t border-gray-700 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2024 RolePlay Verse. Tous droits reservé.</p>
+            </div>
+        </div>
+    </footer>
+</body>

@@ -55,8 +55,9 @@ def battle_verdict_prompt(rules, context, character, action, battle:Battle, hidd
     Soit rigoureux avec le timing des contres decrits ainsi que les puissances des ninjutsu, un kunai ne pourrait quand meme pas parer une epée de susano...  
     Prend en compte les actions cachées qui seront fournis, si il y en a, sans les reveler dans ton verdict, Revele l'action caché associé uniquement si le personnage la devoile dans ses actions.
     Une fois qu'une action cachée est revelé dans le combat, n'y fait plus allusion.
-    Retourne la reponse en format JSON : { "verdict":"Ton verdict et le reste des infos que j'ai demander", "valid" : "true/false",  }  pour pouvoir utliser ta reponse pour mettre a jour l'etat du combat dans ma base de donnees.
-    
+    Retourne la reponse en format JSON : { "verdict":"Ton verdict et le reste des infos que j'ai demander", "valid" : "true/false", "end_fight":"true"/"false", "winner": "character_name" }  pour pouvoir utliser ta reponse pour mettre a jour l'etat du combat dans ma base de donnees.
+    sachant que 'end_fight' sera 'true' si le contre/action n'est pas valid et le personnage encaisse une attaque mortel. 
+    Tandis que winner sera le nom du personnage(épellé de la meme facon que dans les regles du combat ) qui remporte le combat dans le cas ou end_fight est "true" et que le combat est terminé.
     "valid" sera true si l'action ou le contre decrit est  valid.
     
     Un contre non valid est un contre qui n'est pas possible au vu de la situation, distance entre les personnages, de la puissance et la vitesse apprixamtive du personnage et de la technique utilisée par l'adversaire.
