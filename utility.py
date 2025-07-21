@@ -288,7 +288,7 @@ def generate_referall_code(username:str):
 
 """
 [
-    Afghanistan	AF	AFG	004
+Afghanistan	AF	AFG	004
 Albania	AL	ALB	008
 Algeria	DZ	DZA	012
 American Samoa	AS	ASM	016

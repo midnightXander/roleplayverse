@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User,auth
 from django.http import JsonResponse,HttpResponseRedirect
 from monetization.models import Payment
+from store.models import Product
 from users.models import Player,PlayerNotification,Family
 from django.contrib.auth.decorators import login_required
 from .models import *
@@ -34,6 +35,7 @@ import re
 from . import emails
 import praw,time
 from api.views import export_battle_data
+from store.views import product_data
 import requests
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -408,6 +410,7 @@ def get_posts(request):
     #2. Recent posts
     feed_data = []
 
+
     #sort both posts and battles
     feed_items = (Post.objects.values('custom_id','date_added')
                   .annotate(date=F('date_added'))
@@ -520,8 +523,8 @@ def get_posts(request):
     feed.save()
     # posts_data = _posts_data(player,posts)
     # battles_data = battle_views._battles_data(player,battles)
-    
-    
+    product = random.choice(Product.objects.all())
+    _product_data = product_data(product)
     
     # print("FEED",feed_data,len(feed_data))
     #feed_data = feed_data[:feed_limit]
@@ -530,7 +533,7 @@ def get_posts(request):
     #data = serialize('json',posts)
 
     #take only 3 feed item at a time    
-    return JsonResponse({'data':feed_data[:feed_limit]}, safe=False)
+    return JsonResponse({'data':feed_data[:feed_limit], 'product':_product_data}, safe=False)
 
 
 def get_notifications(request):
@@ -1122,13 +1125,15 @@ def content_post_page(request, id):
         return redirect('/users/signin')
     
     content = get_object_or_404(ContentPost,id= id)
+    product_ad  = random.choice(Product.objects.all()) 
     n_notifs = get_notifs(player)
 
     content_data =  _daily_content_data(player, content)
+    _product = product_data(product_ad) if product_ad else None
 
     if request.method == "POST":
         data = content_data
-        return JsonResponse({'status':'success', 'content':data})
+        return JsonResponse({'status':'success', 'content':data, 'product':_product})
 
 
     context = {"player":player, "content":content_data, "n_notifs":n_notifs}

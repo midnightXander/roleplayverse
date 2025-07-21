@@ -601,7 +601,17 @@
         <!-- Battle Textpads -->
         <div id="textPads" class="grid grid-cols-1 lg:grid-cols-1 gap-6">
         </div>
-
+        
+        <!--Ad Placement-->
+        <div class="bg-gradient-to-r from-orange-600 to-orange-400 rounded-lg overflow-hidden shadow-md flex items-center p-4 text-white mb-6">
+            <img src="{{product.images.0}}" alt="{{product.title}}" class="w-20 h-20 rounded-lg object-cover mr-4">
+            <div class="flex-1">
+              <h3 class="text-lg font-bold">🔥 Nouveau ! {{product.title}}</h3>
+              <p class="text-sm">{{product.short_description}}</p>
+            </div>
+            <a href="/store/products/{{product.id}}" target="_blank" class="bg-white text-orange-600 font-semibold px-3 py-1 rounded hover:bg-gray-100 transition">Voir</a>
+        </div>
+          
         <!-- <script>
             (function(llhxsw){
             var d = document,

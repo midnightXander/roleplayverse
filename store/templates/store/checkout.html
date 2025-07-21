@@ -1,0 +1,110 @@
+{% extends "store/base.html" %}
+{% load static %}
+
+{% block title %} Commande de {{product.title}} {% endblock title %}
+
+
+{% block content %}
+  <div class="max-w-6xl mx-auto p-4">
+    <h1 class="text-3xl font-bold text-orange-600 mb-6">💳 Finaliser votre commande</h1>
+
+    <form method="post" action="{% url 'store:checkout' product.id %}" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {% csrf_token %}
+      <!-- Infos client -->
+      <div class="md:col-span-2 bg-gray-900 p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Informations de livraison</h2>
+        <div method="post" action="{% url 'store:checkout' product.id %}" class="space-y-4">
+          <div class="flex w-full space-x-2">
+            <div>
+                <label class="block text-gray-200 mb-1 text-sm font-medium">Prenom</label>
+                <input type="text" name="firstName" required placeholder="Naruto" class="w-full bg-gray-800 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+            </div>
+            <div>
+                <label class="block text-gray-200 mb-1 text-sm font-medium">Nom</label>
+                <input type="text" name="lastName" required placeholder="Uzumaki" class="w-full bg-gray-800 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+            </div>
+          </div>
+          
+          <div>
+            <label class="block text-gray-200 mb-1 text-sm font-medium">Email</label>
+            <input type="text" name="email" required placeholder="naruto@example.com" class="w-full bg-gray-800 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+          </div>
+          <div>
+            <label class="block text-gray-200 mb-1 text-sm font-medium">Téléphone</label>
+            <input type="tel" name="phone" placeholder="+X XX XX XX XX" class="w-full bg-gray-800 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+          </div>
+          <div>
+            <label class="block text-gray-200 mb-1 text-sm font-medium">Pays</label>
+            <select required name="country" class="w-full bg-gray-800 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+              {% for country in countries %}
+                <option value="{{country.name}}">{{country.name}}</option>
+              {% endfor %}
+              <!-- <option>Cash à la livraison</option> -->
+            </select>
+          </div>
+          <div>
+            <label class="block text-gray-200 mb-1 text-sm font-medium">Region/Etat</label>
+            <input type="text" name="state" required placeholder="Region..." class="w-full bg-gray-800 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+          </div>
+          <div>
+            <label class="block text-gray-200 mb-1 text-sm font-medium">Ville</label>
+            <input type="text" name="city" required placeholder="ville..." class="w-full bg-gray-800 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+          </div>
+          <div>
+            <label class="block text-gray-200 mb-1 text-sm font-medium">Méthode de paiement</label>
+            <select required name="paymentMethod" class="w-full bg-gray-800 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-500">
+              <option>Paiement Mobile</option>
+              <option>Carte</option>
+              <!-- <option>Cash à la livraison</option> -->
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Récapitulatif commande -->
+      <div class="bg-gray-900 p-6 rounded-lg shadow">
+        <h2 class="text-lg font-semibold mb-4">🛍️ Votre commande</h2>
+        <div class="flex items-center gap-4 mb-4">
+          <img src="{{product.images.0}}" class="w-16 h-16 rounded object-cover" alt="{{product.title}}">
+          <div>
+            <p class="font-medium">{{product.title}}</p>
+            <!-- <p class="text-sm text-gray-500">Taille M</p> -->
+            
+          </div>
+          <div class="ml-auto text-orange-600 font-semibold">{{product.price}} $</div>
+        </div>
+
+        <div class="mb-4">
+            <h3 class="font-semibold text-gray-300 mb-2">Quantité:</h3>
+            <div class="flex text-gray-500 items-center">
+                <button class="bg-gray-200 px-3 py-1 rounded-l-md focus:outline-none">-</button>
+                <input name="quantity" type="number" value="1" min="1" class="w-16 text-center border-t border-b border-gray-200 py-1 focus:outline-none">
+                <button class="bg-gray-200 px-3 py-1 rounded-r-md focus:outline-none">+</button>
+            </div>
+        </div>
+
+        <div class="border-t pt-4 text-sm text-gray-500">
+          <div class="flex justify-between mb-1">
+            <span>Sous-total</span>
+            <span>{{product.price}} $</span>
+          </div>
+          <div class="flex justify-between mb-1">
+            <span>Livraison</span>
+            <span>XX $</span>
+          </div>
+          <div class="flex justify-between font-bold text-gray-400 text-base mt-2">
+            <span>Total</span>
+            <span>{{product.price}} $</span>
+          </div>
+        </div>
+
+        <button type="submit" class="mt-6 w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-2 rounded-md transition">
+          ✅ Confirmer la commande
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+
+  {% endblock content %}

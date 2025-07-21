@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import os
 from moderator.models import Moderator
+from store.models import Product
 from .models import *
 from django.db.models import Q
 from users.models import Player,Family,PlayerStat,PlayerNotification,notification_types,rankings,Badge,PlayerBadge
@@ -28,6 +29,7 @@ from .solo_battle import _evaluate_actions, _bot_action, _log_actions
 from .solo_battle import _bot_action_minimax
 from pathlib import Path
 import random
+from store.views import product_data
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -866,7 +868,8 @@ def battle_room(request,battle_id):
             return True
 
             
-     
+    product = random.choice(Product.objects.all())
+    _product_data = product_data(product)
     
     context = {"player":player,
                "battle":battle,
@@ -884,6 +887,7 @@ def battle_room(request,battle_id):
                 "can_rate": can_rate(battle),
                 'referee_rated': referee_rated(battle),
                 "n_notifs":core_views.get_notifs(player=player),
+                'product': _product_data
                  
 
                  }

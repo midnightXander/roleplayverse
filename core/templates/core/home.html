@@ -394,6 +394,16 @@
     </a>
 </li>
 </ul>
+<div class=" rounded-lg p-3 shadow-md text-gray-800 w-full">
+    <img src="https://autods-scraper-images.s3-us-west-2.amazonaws.com/ce8d89dfc9bf4990e636b2ae6ad1928e.png" alt="Figurine Kakashi" class="w-full h-40 object-cover rounded-md mb-2">
+    <h4 class="font-bold font-gray-300 text-sm">Figurine Kakashi</h4>
+    <p class="text-xs text-gray-400">Parfaite pour ta collection</p>
+    <div class="flex justify-between items-center mt-2">
+      <span class="text-orange-600 font-semibold text-sm">7 500 FCFA</span>
+      <a href="/boutique/figurine-kakashi" class="text-sm text-blue-600 hover:underline">Acheter</a>
+    </div>
+  </div>
+  
 </aside>
 
 <!-- Right Sidebar (for mobile) -->
@@ -577,6 +587,19 @@
     </div>
   </div>
 
+  <!-- <div class="overflow-x-auto whitespace-nowrap flex gap-4 pb-3">
+    <div class="inline-block w-48 rounded-3xl p-3 shadow">
+      <img src="https://autods-scraper-images.s3-us-west-2.amazonaws.com/ce8d89dfc9bf4990e636b2ae6ad1928e.png" class="h-32 w-full object-cover rounded" />
+      <h4 class="font-bold text-sm mt-2">T-shirt Sharingan</h4>
+      <p class="text-orange-600 font-semibold text-sm">8 000 FCFA</p>
+    </div>
+    <div class="inline-block w-48 rounded-3xl p-3 shadow">
+      <img src="https://autods-scraper-images.s3-us-west-2.amazonaws.com/ce8d89dfc9bf4990e636b2ae6ad1928e.png" class="h-32 w-full object-cover rounded" />
+      <h4 class="font-bold text-sm mt-2">Hoodie Itachi</h4>
+      <p class="text-orange-600 font-semibold text-sm">15 000 FCFA</p>
+    </div>
+    <!-- Ajouter plus d'éléments... 
+  </div> -->
   
   
 <!-- Posts feed -->
@@ -1066,9 +1089,9 @@ function renderPosts() {
             // const memeElement = createMemeElement()
             // postsFeed.appendChild(memeElement)
 
-            const adElement = createAdElement('https://sophisticatedappearance.com/b/3KVh0.P/3VpuvzbOmpVEJBZND_0O1bNTj/Yx0/NzTtAE4oLLT-Ur2ONAjoQt1/M/DFkB')
+            const adElement = createProductSocialAdElement(res.product)
 
-            //postsFeed.appendChild(adElement)
+            postsFeed.appendChild(adElement)
             posts.forEach(post =>{
                 if(post.feed_item == "post"){
                     const postElement = createPostElement(post);
@@ -1089,6 +1112,7 @@ function renderPosts() {
 
                 
             })
+            
         },
         complete: function(){
             //addDropdownListeners()
@@ -1192,9 +1216,9 @@ if (window.scrollY + window.innerHeight >= document.body.offsetHeight - 100) {
             // const memeElement = createMemeElement('https://preview.redd.it/son-im-proud-of-you-s-v0-fjola4lkoyqd1.jpeg?width=640&crop=smart&auto=webp&s=85eeee3624f8d331e864f68337cb9e6cb1ee42b3')
             // postsFeed.appendChild(memeElement)
 
-            const adElement = createAdElement('https://sophisticatedappearance.com/b/3KVh0.P/3VpuvzbOmpVEJBZND_0O1bNTj/Yx0/NzTtAE4oLLT-Ur2ONAjoQt1/M/DFkB')
+            const adElement = createProductSocialAdElement(res.product)
             if(posts.length>0){
-                //postsFeed.appendChild(adElement)
+            postsFeed.appendChild(adElement)
             posts.forEach(post =>{
                 
                 if(post.feed_item == "post"){

@@ -224,7 +224,7 @@
         const options = {
         method: 'POST',
         headers: {'api-key': 'lygosapp-d95f9945-bcae-4b8d-bb5b-5f9414068a19', 'Content-Type': 'application/json'},
-        body: '{"amount":' + amount + `,"shop_name":"Roleplay Verse","message":"Acheter des Jetons de combats","success_url":"https://roleplayverse.live/battle_points/success?points=${BT}&order_id=${orderId}","failure_url":"https://roleplayverse.live/battle points","order_id":"' + String(Math.floor(Math.random() * 100000000).toString()) + '"}`
+        body: '{"amount":' + amount + `,"shop_name":"Roleplay Verse","message":"Acheter des Jetons de combats","success_url":"https://roleplayverse.live/battle_points/success?points=${BT}&order_id=${orderId}","failure_url":"https://roleplayverse.live/battle points","order_id":"${orderId}"}`
         };
         $('#loading-overlay').toggleClass('active')
         fetch('https://api.lygosapp.com/v1/gateway', options)

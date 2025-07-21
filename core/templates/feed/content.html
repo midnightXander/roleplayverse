@@ -8,9 +8,23 @@
 </style>
 
 
-<div id="contentContainer" class="max-w-2xl mx-auto  py-32 space-y-6 text-white flex flex-col items-center justify-center"  >
+<div id="contentContainer" class="max-w-2xl mx-auto  pt-32 pb-8 space-y-6 text-white flex flex-col items-center justify-center"  >
 </div>
-
+<!-- <div class="rounded-lg p-3 pb-8 border border-orange-500 mb-6">
+    <div class="flex items-center mb-2">
+      <img src="{% static 'images/logo/logo_1_nobg.png' %}" class="h-6 w-6 mr-2">
+      <span class="text-sm text-gray-600">Sponsorisé par la Boutique RPV</span>
+    </div>
+    <div class="flex gap-4">
+      <img src="https://autods-scraper-images.s3-us-west-2.amazonaws.com/ce8d89dfc9bf4990e636b2ae6ad1928e.png" class="h-24 w-24 object-cover rounded" />
+      <div>
+        <h4 class="font-bold text-sm">Sac ninja personnalisable</h4>
+        <p class="text-xs text-gray-500">Pour transporter ton équipement RP</p>
+        <a href="/boutique/sac-ninja" class="text-sm text-orange-600 hover:underline">Voir produit</a>
+      </div>
+    </div>
+</div> -->
+  
 
 {{ playerName|json_script:'player' }}
 {{ player.user.username | json_script:'username' }}
@@ -38,7 +52,7 @@
     
 
 
-   
+    
     
     // Function to render posts
     function renderContent() {
@@ -58,10 +72,11 @@
             success: function(res){
                 if(res.status == 'success'){
                     content = res.content
-                    const adElement = createAdElement('https://sophisticatedappearance.com/b/3KVh0.P/3VpuvzbOmpVEJBZND_0O1bNTj/Yx0/NzTtAE4oLLT-Ur2ONAjoQt1/M/DFkB', "{% static 'images/avatars/avatar-2.jpg' %}")
+                    const adElement = createProductSocialAdElement(res.product)
                     const contentElement = createMemeElement(content);
                     contentContainer.appendChild(contentElement);
                     contentContainer.appendChild(adElement);
+                    //document.append(adElement);
                     
 
                 }
