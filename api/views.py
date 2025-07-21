@@ -42,7 +42,7 @@ class CreateUserView(generics.CreateAPIView):
     permission_classes = [AllowAny]
 
 
-class feed(APIView):
+class Feed(APIView):
     def get(self, request):
         user = request.user
         player = Player.objects.filter(user=user).first()
@@ -57,7 +57,7 @@ class feed(APIView):
 
 
 
-class post(APIView):
+class Post(APIView):
     def get(self, request, pk):
         user = request.user
         player = Player.objects.filter(user=user).first()
@@ -91,7 +91,36 @@ class post(APIView):
         return JsonResponse({'status': 'success', 'message': 'Post deleted successfully'}, status=200)           
 
 
+class Comment(APIView):
+    def get(self, request, id):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        comment = Comment.objects.filter(id = id).first()
+        if not comment:
+            return JsonResponse({'status': 'error', 'message': 'Comment not found'}, status=404)
+        data = core_views._get_comment(player, comment)
+        return JsonResponse({'status': 'success', 'comment': data}, status=200)
+    def post(self, request, id):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        else:
+            comment = post_functions.create_comment(request, id)
+            return JsonResponse({'comment': comment}, status=200)
 
+    def delete(self, request, id):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        comment = Comment.objects.filter(id = id).first()
+        if not comment:
+            return JsonResponse({'status': 'error', 'message': 'Comment not found'}, status=404)
+        if comment.author != player:
+            return JsonResponse({'status': 'error', 'message': 'You are not authorized to delete this comment'}, status=403)
+        comment.delete()
+        return JsonResponse({'status': 'success', 'message': 'Comment deleted successfully'}, status=200)
 
 def export_battle_data():
     # This function is a placeholder for exporting battle data.

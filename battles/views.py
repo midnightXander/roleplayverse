@@ -888,7 +888,6 @@ def battle_room(request,battle_id):
                 'referee_rated': referee_rated(battle),
                 "n_notifs":core_views.get_notifs(player=player),
                 'product': _product_data
-                 
 
                  }
     

@@ -1,10 +1,13 @@
 from django.db.models import Q,QuerySet
 from django.db.models import Case, When,F
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 from api.utility import send_push_notification
 import core.views as core_views
 from users.models import Player,PlayerNotification,Family
 from django.contrib.auth.decorators import login_required
+
+from users.users_utility import get_player
 from .models import *
 from core.models import *
 from battles.models import Battle,Challenge, RefreeingProposal
@@ -105,5 +108,13 @@ def feed_items(request):
 
     #take only 3 feed item at a time    
     return feed_data[:feed_limit]
+
+def get_post_comments(request, post_id):
+    player  = get_player(request.user)
+    post = get_object_or_404(Post, id=post_id)
+    comments = Comment.objects.filter(parent=None, post = post).order_by("-date_added")
+    data = [core_views._get_comment(player, comment) for comment in comments]
+    
+    return { 'comments' : data}     
 
   

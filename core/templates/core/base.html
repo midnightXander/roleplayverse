@@ -1885,7 +1885,7 @@ function reactToContent(contentId, reaction,button){
                 </div>
             </div>
         </div>
-        <img src="${meme.image}" onclick='showImg("${meme.image}")' alt="Meme Naruto" class=" w-full max-h-[500px] object-cover" />
+        <img src="/static/images/loaders/img-loader.gif" onload = "replacePlaceholder(this, '${meme.image}')" onclick='showImg("${meme.image}")' alt="Meme Naruto" class=" w-full max-h-[500px] object-cover" />
         <!--
         <div class="px-4 py-3 text-sm text-gray-400 flex justify-between items-center">
             <button class="text-orange-600 hover:underline text-sm">Favoris</button>
@@ -2019,7 +2019,7 @@ function createProductSocialAdElement(product){
                 <span class="text-sm text-gray-600">Sponsorisé par la Boutique RPV</span>
                 </div>
                 <div class="flex gap-4">
-                <img src="${product.images[0]}" class="h-24 w-24 object-cover rounded" />
+                <img src="/static/images/loaders/img-loader.gif" onload = "replacePlaceholder(this, '${product.images[0]}')" class="h-24 w-24 object-cover rounded" />
                 <div>
                     <h4 class="font-bold text-sm">${product.title}</h4>
                     <p class="text-xs text-gray-500">${product.short_description}</p>
