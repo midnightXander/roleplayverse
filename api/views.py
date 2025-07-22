@@ -2,8 +2,10 @@ from django.shortcuts import render
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+
+from users.models import PlayerNotification
 from .models import PushSubscription
-from core.models import Post
+from core.models import Comment, Post
 from pywebpush import webpush, WebPushException
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -57,7 +59,7 @@ class Feed(APIView):
 
 
 
-class Post(APIView):
+class PostApi(APIView):
     def get(self, request, pk):
         user = request.user
         player = Player.objects.filter(user=user).first()
@@ -68,16 +70,6 @@ class Post(APIView):
         if not post:
             return JsonResponse({'status': 'error', 'message': 'Post not found'}, status=404)
         return JsonResponse({ 'status':'success', 'post':data }, safe=False)
-    
-    
-    def post(self, request):
-        user = request.user
-        player = Player.objects.filter(user=user).first()
-        if not player:
-            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
-        else:
-            post = post_functions.create_post(request)
-            return JsonResponse({'post': post}, status=200)
 
     def delete(self, request, pk):
         user = request.user
@@ -91,7 +83,31 @@ class Post(APIView):
         return JsonResponse({'status': 'success', 'message': 'Post deleted successfully'}, status=200)           
 
 
-class Comment(APIView):
+class PostListCreate(APIView):
+    def get(self, request):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+
+        posts = Post.objects.all()
+        posts_data = [core_views._post_data(player, post) for post in posts ]
+    
+        return JsonResponse({ 'status':'success', 'posts':posts_data }, safe=False)
+    
+    
+    def post(self, request):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        else:
+            post = post_functions.create_post(request)
+            return JsonResponse({'post': post}, status=200)
+
+   
+
+class CommentApi(APIView):
     def get(self, request, id):
         user = request.user
         player = Player.objects.filter(user=user).first()
@@ -102,14 +118,7 @@ class Comment(APIView):
             return JsonResponse({'status': 'error', 'message': 'Comment not found'}, status=404)
         data = core_views._get_comment(player, comment)
         return JsonResponse({'status': 'success', 'comment': data}, status=200)
-    def post(self, request, id):
-        user = request.user
-        player = Player.objects.filter(user=user).first()
-        if not player:
-            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
-        else:
-            comment = post_functions.create_comment(request, id)
-            return JsonResponse({'comment': comment}, status=200)
+    
 
     def delete(self, request, id):
         user = request.user
@@ -121,6 +130,86 @@ class Comment(APIView):
             return JsonResponse({'status': 'error', 'message': 'You are not authorized to delete this comment'}, status=403)
         comment.delete()
         return JsonResponse({'status': 'success', 'message': 'Comment deleted successfully'}, status=200)
+
+class CommentListCreate(APIView):
+    def get(self, request, post_id):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        comments = Comment.objects.filter(parent=None, post__id=post_id).order_by("-date_added")
+        data = [core_views._get_comment(player, comment) for comment in comments]
+        return JsonResponse({'status': 'success', 'comments': data}, status=200)
+    
+    def post(self, request, post_id):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        else:
+            comment = post_functions.create_comment(request, post_id)
+            return JsonResponse({'comment': comment}, status=200)
+
+class NotificationLst(APIView):
+    def get(self, request):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+
+        data = get_data.get_notifications(request)
+        
+        return JsonResponse({'status': 'success', 'notifications': data}, status=200)
+    
+
+class TextPadListCreate(APIView):
+    def get(self, request, battle_id):
+        data = get_data.get_textpads(request,battle_id)
+        return JsonResponse({'data': data})
+    
+    def post(self, request, battle_id):
+        data = post_functions.send_textpad(request, battle_id)
+        return JsonResponse({'textpad': data}, status=200)
+
+class TextPadCommentList(APIView):
+    def get(self, request, textpad_id):
+        data = get_data.get_textpad_comments(textpad_id)
+        return JsonResponse({'comments': data})
+
+
+class BattleRequestsList(APIView):
+    def get(self, request):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        data = get_data.battle_requests(request)
+        return JsonResponse({'requests': data})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def export_battle_data():
     # This function is a placeholder for exporting battle data.

@@ -25,7 +25,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from django.utils.translation import gettext as _
-from users.users_utility import get_player
+from users.users_utility import get_country, get_player
 from utility import _time_since,_parse_number,decrypt_message,sendWelcomeEmail,generate_referall_code
 from api.models import PushSubscription
 from api.utility import send_push_notification
@@ -215,12 +215,18 @@ def home(request):
 
     #sort the list of characters
     sorted_characters = sorted(characters["playable_characters"], key = lambda item: item["name"]) 
-
+    
     # player = get_object_or_404(Player, user = request.user )
     player = get_player(request.user)
     if not player:
         return redirect('/users/signin')
     
+    player.country = get_country(request)
+    print(player.country)
+    print(f"{player} IP: ",request.META.get('REMOTE_ADDR'))
+    player.ip_adress = request.META.get('REMOTE_ADDR')
+    player.save()
+
     #export_battle_data()  
 
     feed,created = Feed.objects.get_or_create(player = player)

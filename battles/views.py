@@ -232,6 +232,25 @@ def _battle_requests_data(player:Player,battle_requests):
 
     return data
 
+def _battle_request_data(player:Player,battle_request):
+    data = {
+            "id":battle_request.id,
+            "type": battle_request.type,
+            "sender": {
+                "player":str(battle_request.sender),
+                "username": battle_request.sender.user.username,
+                "profile_picture": battle_request.sender.profile_picture.url,
+                "rank":battle_request.sender.rank,
+                },
+            "character": battle_request.character,
+            "date_sent": core_views._time_since(battle_request.date_sent),
+            
+
+        } 
+    
+
+    return data
+
 def _isReferee(player:Player):
     isRefree = False
 
@@ -241,6 +260,25 @@ def _isReferee(player:Player):
         return True
     
     return False
+
+def _textpad_data(player:Player,textpad: TextPad):
+    battle = textpad.battle
+    return {
+            'id' : textpad.id,
+            "owner": textpad.owner.user.username,
+            "text": textpad.text,
+            "valid": textpad.valid,
+            "character": get_textpad_character(battle,textpad),
+            "time_since": core_views._time_since(textpad.date_sent),
+            'comment' : textpad.refree_comment,
+            'date_validated': core_views._time_since(textpad.date_validated) if textpad.date_validated else 'pas encore validé',
+            'comment' : textpad.refree_comment,
+            'hidden_action' : textpad.hidden_action if player == battle.refree or battle.status == 'finished' else None,
+            'reactions' : textpad.reactors.all().count(),
+            'comments' : TextPadComment.objects.filter(textpad = textpad).count(),
+            'most_reaction' : textpad.most_made_reaction()['type'] if textpad.most_made_reaction() else '👍'
+
+        }
 
 @login_required
 def battles(request):
@@ -544,9 +582,6 @@ def init_battle(request,acceptor_id):
             message = "Vous n'etes pas l'auteur de la requète"    
         
     return JsonResponse({"status":"failed","message":message})
-
-
-
 
 
 def filter_battle(request, filter_num):

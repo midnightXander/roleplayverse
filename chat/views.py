@@ -46,6 +46,8 @@ def get_player_last_seen(player:Player):
     last_seen = player.last_seen
     return _time_since_last_seen(last_seen)
 
+def _get_private_messages_unreads(player:Player):
+    return Message.objects.filter(receiver = player, read = False).count()
 
 def _get_family_unreads(player:Player):
     family = player.family

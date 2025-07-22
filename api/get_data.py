@@ -8,9 +8,10 @@ from users.models import Player,PlayerNotification,Family
 from django.contrib.auth.decorators import login_required
 
 from users.users_utility import get_player
+from utility import _time_since, get_characters
 from .models import *
 from core.models import *
-from battles.models import Battle,Challenge, RefreeingProposal
+from battles.models import Battle, BattleRequest,Challenge, RefreeingProposal, TextPad, TextPadComment,battle_status
 import battles.views as battle_views
 
 
@@ -117,4 +118,131 @@ def get_post_comments(request, post_id):
     
     return { 'comments' : data}     
 
-  
+def get_notifications(request):
+    player = Player.objects.get(user = request.user)
+    player_notifs = PlayerNotification.objects.filter(target= player).order_by('-date_sent')
+    notifications = Notification.objects.filter(target = player).order_by('-date_sent')
+    challenges = Challenge.objects.filter(target = player, answered = False).order_by('-date_sent')
+    characters = get_characters()  
+    sorted_characters = sorted(characters["playable_characters"], key = lambda item: item["name"]) 
+    
+    for notification in notifications:
+        notification.read = True
+        notification.save()
+    for notification in player_notifs:
+        notification.read = True
+        notification.save()    
+
+    data = [
+        {   
+            'type': 'generic',
+            'id':notification.id,
+            "content": notification.content,
+            'url':notification.url,
+            'timestamp': _time_since(notification.date_sent),
+            'type':'generic',
+            'image' : notification.img_url,
+            'clicked' : notification.clicked,
+            'read' : notification.read,
+        } for notification in notifications
+    ]
+    challenges = [
+        {
+            'type': 'challenge',
+            'id': challenge.id,
+            'sender': {
+                'id': challenge.sender.id,
+                'username': challenge.sender.user.username,
+                'player': str(challenge.sender),
+                'profile_picture': challenge.sender.profile_picture.url,
+            },
+            'sender_character': challenge.sender_character,
+            'timestamp': _time_since(challenge.date_sent),
+        } for challenge in challenges
+    ]
+    invites = [
+        {
+            'id' : invite.id,
+            'family' : {
+                'id' : invite.family.id,
+                'name' : invite.family.name,
+                'profile_picture' : invite.family.profile_picture.url,
+                'god_father' : {
+                    'username' : invite.family.god_father.username,
+                }
+            }
+
+        } for invite in player_notifs.filter(notif_type = 'invite').order_by('-date_sent')
+    ]
+
+    requests = [
+        {
+            'id' : request.id,
+            'sender' : {
+                'id' : request.sender.id,
+                'username' : request.sender.user.username,
+                'player' : str(request.sender),
+                'rank' : request.sender.rank,
+                'progression' : request.sender.progression,
+            }
+            
+        } for request in player_notifs.filter(notif_type = 'request').order_by('-date_sent')
+    ]
+
+    return {'notifications': data, 'invites': invites, 'requests' : requests, 'challenges' : challenges, 'characters':sorted_characters}
+
+
+def get_textpads(request, battle_id):
+    battle = Battle.objects.get(id = battle_id)
+    textpads = TextPad.objects.filter(battle = battle)
+    player = get_player(request.user)
+
+    textpads_data = [
+        {
+            'id' : textpad.id,
+            "owner": textpad.owner.user.username,
+            "text": textpad.text,
+            "valid": textpad.valid,
+            "character": battle_views.get_textpad_character(battle,textpad),
+            "time_since": core_views._time_since(textpad.date_sent),
+            'index': index + 1,
+            'comment' : textpad.refree_comment,
+            'date_validated': core_views._time_since(textpad.date_validated) if textpad.date_validated else 'pas encore validé',
+            'comment' : textpad.refree_comment,
+            'hidden_action' : textpad.hidden_action if player == battle.refree or battle.status == 'finished' else None,
+            'reactions' : textpad.reactors.all().count(),
+            'comments' : TextPadComment.objects.filter(textpad = textpad).count(),
+            'most_reaction' : textpad.most_made_reaction()['type'] if textpad.most_made_reaction() else '👍'
+
+        } for index,textpad in enumerate(textpads)
+    ] 
+
+    return textpads_data
+
+def get_textpad_comments(textpad_id):
+    textpad = get_object_or_404(TextPad, id=textpad_id)
+    comments = TextPadComment.objects.filter(parent=None, textpad = textpad).order_by("-date_added")
+    data = [battle_views._textpad_comment_data(comment) for comment in comments]
+    
+    return data 
+
+def battle_requests(request):
+    player = get_player(request.user)
+    requests = BattleRequest.objects.filter(hidden = False).exclude(sender = player).order_by('-date_sent')
+    requests_data = battle_views._battle_requests_data(player, requests)
+
+    return requests_data
+
+
+def filter_battle(request, filter_num):
+        #filter_num = int(request.GET['filter'])
+        player = get_player(request.user)
+        battles = Battle.objects.filter(status = battle_status[filter_num]).order_by('-date_started')
+        if filter_num == 0:
+            battles = battles.exclude(
+                Q(initiator=player) | Q(opponent=player)
+            )
+        message = "..."
+        battles_data = battle_views._battles_data(player, battles)
+        return {"message":message ,"battles":battles_data}
+    

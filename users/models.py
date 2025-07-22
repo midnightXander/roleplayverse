@@ -134,7 +134,7 @@ class Player(models.Model):
     date_points_added = models.DateField(auto_now_add=True)
     last_seen = models.DateTimeField(auto_now=True)
     rp_credits = models.DecimalField(default=0,  max_digits=10, decimal_places=2)
-
+    ip_adress = models.CharField(max_length=50, blank=True, null=True)
     godfather = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE)
 
     def __init__(self, *args, **kwargs):
@@ -157,6 +157,15 @@ class Player(models.Model):
         else:
             print(f"{self.user.username} is at the max ranking already")        
         self.save() 
+
+    def unread_messages(self):
+        from chat.models import Message
+        from chat.views import _get_family_unreads,_get_private_messages_unreads
+        """Returns the number of unread messages for the player"""
+        private_messages = Message.objects.filter(receiver = self, read = False).count()
+        family_messages = _get_family_unreads(self)
+            
+        return  private_messages + family_messages
         
         
 
