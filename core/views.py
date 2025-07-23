@@ -189,6 +189,14 @@ def home(request):
     posts = Post.objects.all()
     battles = Battle.objects.filter(status = "finished")
    
+    g = GeoIP2()
+    ip = "134.201.250.155"
+    try:
+        country = g.country(ip)
+    except Exception as e:
+        print(f"Country error: {e}")
+        country = 'unknown'    
+    print("Country: ", country)
 
     characters = get_characters()  
 

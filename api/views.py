@@ -37,12 +37,10 @@ def save_subscription(request):
         return JsonResponse({'status': 'subscription saved'})
     return JsonResponse({'status': 'error, unauthorized or bad request'}, status=400)
 
-
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
-
 
 class Feed(APIView):
     def get(self, request):
@@ -56,8 +54,6 @@ class Feed(APIView):
         feed_items = get_data.feed_items(request)
         
         return JsonResponse({ 'status':'success', 'username':f'{user}', 'posts': posts_data, 'feed_items': feed_items }, safe=False)
-
-
 
 class PostApi(APIView):
     def get(self, request, pk):
@@ -82,7 +78,6 @@ class PostApi(APIView):
         post.delete()
         return JsonResponse({'status': 'success', 'message': 'Post deleted successfully'}, status=200)           
 
-
 class PostListCreate(APIView):
     def get(self, request):
         user = request.user
@@ -105,7 +100,27 @@ class PostListCreate(APIView):
             post = post_functions.create_post(request)
             return JsonResponse({'post': post}, status=200)
 
-   
+class PostReactionListCreate(APIView):
+    # def get(self, request, post_id):
+    #     user = request.user
+    #     player = Player.objects.filter(user=user).first()
+    #     if not player:
+    #         return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+
+        # posts = Post.objects.all()
+        # posts_data = [core_views._post_data(player, post) for post in posts ]
+    
+        # return JsonResponse({ 'status':'success', 'posts':posts_data }, safe=False)
+    
+    
+    def post(self, request, post_id):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        else:
+            data = post_functions.react_post(request, post_id)
+            return JsonResponse({'data': data}, status=200)
 
 class CommentApi(APIView):
     def get(self, request, id):
@@ -150,6 +165,28 @@ class CommentListCreate(APIView):
             comment = post_functions.create_comment(request, post_id)
             return JsonResponse({'comment': comment}, status=200)
 
+class CommentReactionListCreate(APIView):
+    # def get(self, request, post_id):
+    #     user = request.user
+    #     player = Player.objects.filter(user=user).first()
+    #     if not player:
+    #         return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+
+        # posts = Post.objects.all()
+        # posts_data = [core_views._post_data(player, post) for post in posts ]
+    
+        # return JsonResponse({ 'status':'success', 'posts':posts_data }, safe=False)
+    
+    
+    def post(self, request, comment_id):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        else:
+            data = post_functions.react_comment(request, comment_id)
+            return JsonResponse({'data': data}, status=200)
+
 class NotificationLst(APIView):
     def get(self, request):
         user = request.user
@@ -161,7 +198,6 @@ class NotificationLst(APIView):
         
         return JsonResponse({'status': 'success', 'notifications': data}, status=200)
     
-
 class TextPadListCreate(APIView):
     def get(self, request, battle_id):
         data = get_data.get_textpads(request,battle_id)
@@ -171,13 +207,43 @@ class TextPadListCreate(APIView):
         data = post_functions.send_textpad(request, battle_id)
         return JsonResponse({'textpad': data}, status=200)
 
+class TextpadReactionListCreate(APIView):
+    # def get(self, request, post_id):
+    #     user = request.user
+    #     player = Player.objects.filter(user=user).first()
+    #     if not player:
+    #         return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+
+        # posts = Post.objects.all()
+        # posts_data = [core_views._post_data(player, post) for post in posts ]
+    
+        # return JsonResponse({ 'status':'success', 'posts':posts_data }, safe=False)
+    
+    
+    def post(self, request, textpad_id):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'message': 'Player not found'}, status=404)
+        else:
+            data = post_functions.react_to_textpad(request, textpad_id)
+            return JsonResponse({'data': data}, status=200)
+
 class TextPadCommentList(APIView):
     def get(self, request, textpad_id):
         data = get_data.get_textpad_comments(textpad_id)
         return JsonResponse({'comments': data})
+    
+    def post(self, request, battle_id):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        else:
+            comment = post_functions.send_textpad(request, battle_id)
+            return JsonResponse({'comment': comment}, status=200)
 
-
-class BattleRequestsList(APIView):
+class BattleRequestsListCreate(APIView):
     def get(self, request):
         user = request.user
         player = Player.objects.filter(user=user).first()
@@ -185,8 +251,25 @@ class BattleRequestsList(APIView):
             return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
         data = get_data.battle_requests(request)
         return JsonResponse({'requests': data})
+    
+    def post(self, request):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        else:
+            battle_request = post_functions.request_battle(request)
+            return JsonResponse({'battle_request': battle_request}, status=200)
 
-
+class BattleAccept(APIView):
+    def post(self, request, request_id):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        else:
+            data = post_functions.accept_battle(request, request_id)
+            return JsonResponse({'data': data}, status=200)    
 
 
 

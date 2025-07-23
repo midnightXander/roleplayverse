@@ -428,8 +428,6 @@ def request_battle(request):
 
         return HttpResponseRedirect(reverse("battles:index")) 
                     
-        
-    
 def accept_battle(request,request_id):
     if request.method == "POST":
         player = Player.objects.get(user = request.user)
@@ -504,8 +502,6 @@ def accept_battle(request,request_id):
         
         return JsonResponse({"status":"failed","message":message})
         
-
-
 def init_battle(request,acceptor_id):
     player = get_object_or_404(Player, user = request.user) 
     if request.method == "POST":
@@ -582,7 +578,6 @@ def init_battle(request,acceptor_id):
             message = "Vous n'etes pas l'auteur de la requète"    
         
     return JsonResponse({"status":"failed","message":message})
-
 
 def filter_battle(request, filter_num):
     if request.method == "GET":
