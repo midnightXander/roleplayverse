@@ -2,7 +2,7 @@
     {
         "title": "Collecter des parchemins",
         "description": "Explore la For\u00eat Interdite et rapporte des parchemins au village.",
-        "long_tail_description": "Pendant une mission, des ninjas du village aurait fait tomber des parchemins importants dans la For\u00eat Interdite. Ces parchemins contiennent des informations cruciales pour le village. Tu dois les retrouver a tous prix.",
+        "long_tail_description": "Pendant une mission, des ninjas du village aurait fait tomber des parchemins importants dans la For\u00eat Interdite. Ces parchemins contiennent des informations cruciales pour le village. Tu dois les retrouver a tous prix. C'est l'occasion parfaite pour gagner la confiance des habitants du village",
         "min_level": 1,
         "max_level": 3,
         "mission_type": "collect",
@@ -11,12 +11,12 @@
         "reward_exp": 5,
         "reward_item": "",
         "rarity": "common",
-        "zone": "For\u00eat Interdite"
+        "zone": "Forêt des interdits"
     },
     {
         "title": "Vaincre un bandit solitaire",
         "description": "Affronte un bandit solitaire qui terrorise les habitants.",
-        "long_tail_description": "Dans la For\u00eat Interdite, un bandit solitaire a \u00e9t\u00e9 rep\u00e9r\u00e9. Il est connu pour attaquer les voyageurs et voler leurs biens. Pr\u00e9pare-toi \u00e0 le combattre et \u00e0 prot\u00e9ger les habitants. Il serait du clan Aburame, connu pour leur maitrise des insectes.",
+        "long_tail_description": "Dans la For\u00eat des Interdits, un bandit solitaire a \u00e9t\u00e9 rep\u00e9r\u00e9. Il est connu pour attaquer les voyageurs et voler leurs biens. Pr\u00e9pare-toi \u00e0 le combattre et \u00e0 prot\u00e9ger les habitants. Il serait du clan Aburame, connu pour leur maitrise des insectes.",
         "min_level": 1,
         "max_level": 3,
         "mission_type": "defeat",
@@ -25,7 +25,7 @@
         "reward_exp": 5,
         "reward_item": "Potion de soin",
         "rarity": "common",
-        "zone": "For\u00eat Interdite"
+        "zone": "Forêt des interdits"
     },
     {
         "title": "\u00c3\u2030liminer un voleur de reliques",

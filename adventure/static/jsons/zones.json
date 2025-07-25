@@ -1,6 +1,6 @@
 [
     {
-        "name": "Forêt Interdite",
+        "name": "Forêt des interdits",
         "description": "Une forêt dense et mystérieuse où des ninjas rebelles se cachent.",
         "difficulty": "Medium",
         "level_required" : 1,
@@ -15,7 +15,7 @@
         ]
     },
     {
-        "name": "Vallée des Herbes",
+        "name": "Vallée Herbeuse",
         "description": "Une vallée paisible connue pour ses plantes médicinales rares.",
         "difficulty": "Easy",
         "level_required" : 1,
@@ -30,7 +30,7 @@
         ]
     },
     {
-        "name": "Temple Abandonné",
+        "name": "Vieux temple abandonné",
         "description": "Un ancien temple rempli de secrets et de reliques précieuses.",
         "difficulty": "Hard",
         "level_required" : 1,
@@ -60,10 +60,10 @@
         ]
     },
     {
-        "name": "Grotte Scintillante",
-        "description": "Une grotte remplie de cristaux lumineux et de pierres précieuses.",
+        "name": "Grotte de la redemption",
+        "description": "Une grotte remplie de cristaux lumineux et de pierres précieuses. Ou les ninjas les plus corrompu trouve le salut",
         "difficulty": "Medium",
-        "level_required" : 2,
+        "level_required" : 1,
         "data": {
             "x" : 2,
             "y" : 2
@@ -75,10 +75,10 @@
         ]
     },
     {
-        "name": "Village Dévasté",
-        "description": "Un village abandonné après une attaque de bandits.",
+        "name": "Canyon des Crocs d'Acier",
+        "description": "Une gorge escarpée, connue pour les entraînements intensifs des utilisateurs de taijutsu et potentiellement habitée par des invocations canines géantes.",
         "difficulty": "Medium",
-        "level_required" : 2,
+        "level_required" : 1,
         "data": {
             "x" : 2,
             "y" : 2
@@ -89,9 +89,11 @@
             "Survivre à une attaque de bandits"
         ]
     },
+
+    
     {
-        "name": "Camp Ennemi",
-        "description": "Un camp rempli de mercenaires et de ninjas traîtres.",
+        "name": "Marais des Soupirs Silencieux",
+        "description": "Une zone marécageuse lugubre, réputée pour ses ninjas traîtres et ses techniques de camouflage.",
         "difficulty": "Hard",
         "level_required" : 2,
         "data": {
@@ -105,8 +107,8 @@
         ]
     },
     {
-        "name": "Lac Gelé",
-        "description": "Un lac mystérieux recouvert de glace éternelle.",
+        "name": "Quartier du Soleil Levant",
+        "description": " Un district animé de Konoha, où l'on trouve des boutiques d'armes, des restaurants de ramen et des centres de mission pour genin.",
         "difficulty": "Medium",
         "level_required" : 2,
         "data": {
@@ -120,8 +122,8 @@
         ]
     },
     {
-        "name": "Ruines Anciennes",
-        "description": "Des ruines oubliées où des reliques sacrées sont cachées.",
+        "name": "Les Racines du Grand Arbre Shinju",
+        "description": "Un réseau souterrain labyrinthique sous un arbre colossal, vestige d'une ère lointaine.",
         "difficulty": "Hard",
         "level_required" : 2,
         "data": {
@@ -135,10 +137,164 @@
         ]
     },
     {
-        "name": "Montagne Maudite",
-        "description": "Une montagne dangereuse où des créatures hostiles rôdent.",
+        "name": "Le Sentier des Moines Ascètes",
+        "description": "Un chemin montagneux isolé menant à un monastère où des ninjas aux techniques spirituelles s'entraînent.",
         "difficulty": "Hard",
         "level_required" : 2,
+        "data": {
+            "x" : 2,
+            "y" : 2
+        },
+        "missions": [
+            "Survivre à une embuscade ennemie",
+            "Vaincre un ninja légendaire",
+            "Explorer la montagne maudite"
+        ]
+    },
+    {
+        "name": "Désert des Cristaux Miroitants ",
+        "description": "Une étendue aride où des gisements de cristaux aux propriétés uniques attirent autant les ninjas chercheurs que les pillards.",
+        "difficulty": "Hard",
+        "level_required" : 2,
+        "data": {
+            "x" : 2,
+            "y" : 2
+        },
+        "missions": [
+            "Survivre à une embuscade ennemie",
+            "Vaincre un ninja légendaire",
+            "Explorer la montagne maudite"
+        ]
+    },
+    {
+        "name": "La Fonderie du Vent Noir",
+        "description": "Une forge secrète où des armes et outils ninjas uniques sont créés, potentiellement par un clan spécialisé.",
+        "difficulty": "Hard",
+        "level_required" : 2,
+        "data": {
+            "x" : 2,
+            "y" : 2
+        },
+        "missions": [
+            "Survivre à une embuscade ennemie",
+            "Vaincre un ninja légendaire",
+            "Explorer la montagne maudite"
+        ]
+    },
+
+
+    {
+        "name": "Archipel des Sept Brumes Éternelles",
+        "description": "Un groupe d'îles constamment enveloppé de brouillard, repaire d'anciens clans maritimes ou de ninjas renégats.",
+        "difficulty": "Hard",
+        "level_required" : 3,
+        "data": {
+            "x" : 2,
+            "y" : 2
+        },
+        "missions": [
+            "Survivre à une embuscade ennemie",
+            "Vaincre un ninja légendaire",
+            "Explorer la montagne maudite"
+        ]
+    },
+    {
+        "name": "Le Colisée de Bethesda",
+        "description": "Une arène de combat clandestine ou officielle, où des ninjas de divers villages s'affrontent pour la gloire ou des informations.",
+        "difficulty": "Hard",
+        "level_required" : 3,
+        "data": {
+            "x" : 2,
+            "y" : 2
+        },
+        "missions": [
+            "Survivre à une embuscade ennemie",
+            "Vaincre un ninja légendaire",
+            "Explorer la montagne maudite"
+        ]
+    },
+    {
+        "name": "Forêt des Jūki",
+        "description": " Une forêt dense où la flore elle-même semble vivante et dangereuse, imprégnée de chakra naturel ou maudit.",
+        "difficulty": "Hard",
+        "level_required" : 3,
+        "data": {
+            "x" : 2,
+            "y" : 2
+        },
+        "missions": [
+            "Survivre à une embuscade ennemie",
+            "Vaincre un ninja légendaire",
+            "Explorer la montagne maudite"
+        ]
+    },
+    {
+        "name": "Le Nexus des Cinq Kages",
+        "description": "Un lieu symbolique, potentiellement secret, où les Kages se réunissaient autrefois pour des sommets cruciaux.",
+        "difficulty": "Hard",
+        "level_required" : 3,
+        "data": {
+            "x" : 2,
+            "y" : 2
+        },
+        "missions": [
+            "Survivre à une embuscade ennemie",
+            "Vaincre un ninja légendaire",
+            "Explorer la montagne maudite"
+        ]
+    },
+    {
+        "name": "Le Puits des Chagrins Éternels ",
+        "description": "Un lieu maudit ou sacré, lié à des âmes errantes ou à des résidus de chakra de batailles passées.",
+        "difficulty": "Hard",
+        "level_required" : 3,
+        "data": {
+            "x" : 2,
+            "y" : 2
+        },
+        "missions": [
+            "Survivre à une embuscade ennemie",
+            "Vaincre un ninja légendaire",
+            "Explorer la montagne maudite"
+        ]
+    },
+    {
+        "name": "Les Ruines du Palais du Daimyō Déchu",
+        "description": "Un ancien complexe royal en ruines, théâtre d'intrigues politiques et potentiellement de techniques de manipulation rares.",
+        "difficulty": "Hard",
+        "level_required" : 3,
+        "data": {
+            "x" : 2,
+            "y" : 2
+        },
+        "missions": [
+            "Survivre à une embuscade ennemie",
+            "Vaincre un ninja légendaire",
+            "Explorer la montagne maudite"
+        ]
+    },
+    {
+        "name": "La Caverne des Salamandres Géantes",
+        "description": "Un antre souterrain humide, peuplé d'invocations de type batracien ou de ninjas spécialisés dans les poisons.",
+        "difficulty": "Hard",
+        "level_required" : 3,
+        "data": {
+            "x" : 2,
+            "y" : 2
+        },
+        "missions": [
+            "Survivre à une embuscade ennemie",
+            "Vaincre un ninja légendaire",
+            "Explorer la montagne maudite"
+        ]
+    },
+
+
+    {
+        "name": "Le Passage du Croc d'Argile",
+        "description": "Un défilé étroit et rocheux, souvent utilisé pour les embuscades ou comme point de contrôle stratégique par les ninjas sensoriels.",
+        "difficulty": "Hard",
+        "level_required" : 4,
         "data": {
             "x" : 2,
             "y" : 2

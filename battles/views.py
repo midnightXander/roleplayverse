@@ -1762,7 +1762,8 @@ def new_refree(request):
     situation_1 = situations_1[random_index]
     situation_2 = situations_2[random_index]
     
-    situations_file = os.path.join(BASE_DIR, 'refree_questions', 'fr\situations.json')
+    situations_file = os.path.join(BASE_DIR, 'refree_questions', 'fr', 'situations.json')
+    print(situations_file)
 
     with open(situations_file, 'r', encoding='utf-8') as file:
         situations_data = json.load(file)

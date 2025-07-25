@@ -604,7 +604,7 @@
         
         <!--Ad Placement-->
         <div class="bg-gradient-to-r from-orange-600 to-orange-400 rounded-lg overflow-hidden shadow-md flex items-center p-4 text-white mb-6">
-            <img src="{{product.images.0}}" alt="{{product.title}}" class="w-20 h-20 rounded-lg object-cover mr-4">
+            <img src="/static/images/loaders/img-loader.gif" onload = "replacePlaceholder(this, '{{product.cover}}')" alt="{{product.title}}" class="w-20 h-20 rounded-lg object-cover mr-4">
             <div class="flex-1">
               <h3 class="text-lg font-bold">🔥 Nouveau ! {{product.title}}</h3>
               <p class="text-sm">{{product.short_description}}</p>

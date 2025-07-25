@@ -156,6 +156,7 @@ def enable_ai_refreeing(request, battle_id):
        
         battle.status = battle_status[1]
         battle.ai_refereeing = True
+        
         new_notif = core_models.Notification.objects.create(
             target = battle.initiator,
             content = f"ton combat contre {battle.opponent} est prét a commencé avec l'arbitrage IA, clique pour aller générer les regles du combat ",
@@ -191,6 +192,7 @@ def enable_ai_refreeing(request, battle_id):
             
         )
 
+        
         battle.save()
         new_notif.save()
         message = "Arbitre IA activé, tu peux maintnenant generer les règles"

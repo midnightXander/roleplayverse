@@ -289,6 +289,7 @@ def init_tournament(tournament:Tournament):
             i_character = fighter1_character,
             o_character = fighter2_character,
             refree = referee,
+            ai_refereeing = True,
             #can_send_textpad = True
         )   
             tournament.battles.add(tournament_battle)

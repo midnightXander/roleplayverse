@@ -12,7 +12,7 @@ import json
 from django.utils import timezone
 from dotenv import load_dotenv
 from core.emails import send_email
-
+import random
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -29,6 +29,7 @@ def product_data(product:Product):
         'is_active': product.is_active,
         'created_at': product.created_at.strftime('%Y-%m-%d %H:%M:%S'),
         'images': [image.image.url for image in ProductImage.objects.filter(product = product)],
+        'cover' : random.choice([image.image.url for image in ProductImage.objects.filter(product = product)])
     }
 
 def product(request, product_id):
