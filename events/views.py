@@ -256,7 +256,7 @@ def init_tournament(tournament:Tournament):
     registered_referees = []
 
     while len(registered_fighters) != len(fighters):
-        
+        print(f"registered:{len(registered_fighters)}")
         random.shuffle(fighters)
         random.shuffle(referees)
         fighter1 = fighters[0]
@@ -268,38 +268,38 @@ def init_tournament(tournament:Tournament):
             #continue to shuffle if either of the fighters is already registered 
             continue
         
-        if (referee in registered_referees and len(referees) == len(registered_referees)) or (referee not in registered_referees and len(referees) != len(registered_referees)):
+        #if (referee in registered_referees and len(referees) == len(registered_referees)) or (referee not in registered_referees and len(referees) != len(registered_referees)):
             #register the fighters and the referee(assuring all referees are assigned a battle) if 
-            registered_fighters.append(fighter1)
-            registered_fighters.append(fighter2)
-            registered_referees.append(referee)
-            # fighter1_character = tournament.fighters.through.objects.get(tournament = tournament, fighter = fighter1).character
-            # fighter2_character = tournament.fighters.through.objects.get(tournament = tournament, fighter = fighter2).character
+        registered_fighters.append(fighter1)
+        registered_fighters.append(fighter2)
+        registered_referees.append(referee)
+        # fighter1_character = tournament.fighters.through.objects.get(tournament = tournament, fighter = fighter1).character
+        # fighter2_character = tournament.fighters.through.objects.get(tournament = tournament, fighter = fighter2).character
 
-            fighter1_character = FighterTournament.objects.get(tournament = tournament, fighter = fighter1).character
-            fighter2_character = FighterTournament.objects.get(tournament = tournament, fighter = fighter2).character
+        fighter1_character = FighterTournament.objects.get(tournament = tournament, fighter = fighter1).character
+        fighter2_character = FighterTournament.objects.get(tournament = tournament, fighter = fighter2).character
 
-            tournament_battle = Battle.objects.create(
-            type = 'tournament',
-            status = "not_started",
-            initiator = fighter1,
-            opponent = fighter2,
-            i_character = fighter1_character,
-            o_character = fighter2_character,
-            refree = referee,
-            ai_refereeing = True,
-            #can_send_textpad = True
-        )   
-            tournament.battles.add(tournament_battle)
-            
-            #set the battleTournament round to the next round here for other rounds
-            tournament.status = "not_started"
-            tournament.start_date = timezone.now()
-            tournament_battle.save()
+        tournament_battle = Battle.objects.create(
+        type = 'tournament',
+        status = "not_started",
+        initiator = fighter1,
+        opponent = fighter2,
+        i_character = fighter1_character,
+        o_character = fighter2_character,
+        refree = referee,
+        ai_refereeing = True,
+        #can_send_textpad = True
+    )   
+        tournament.battles.add(tournament_battle)
+        
+        #set the battleTournament round to the next round here for other rounds
+        tournament.status = "not_started"
+        tournament.start_date = timezone.now()
+        tournament_battle.save()
 
            
-        else:
-            continue
+        #else:
+            #continue
     #SEND NOTIFS TO THE PLAYERS AND REFREES INVOLVED
     for player in fighters:
         

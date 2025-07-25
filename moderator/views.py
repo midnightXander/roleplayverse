@@ -17,7 +17,7 @@ import os
 from dotenv import load_dotenv
 from django.views.decorators.csrf import csrf_exempt
 from battles.views import add_refree
-from events.views import _update_round
+from events.views import _update_round,init_tournament
 load_dotenv()
 import json
 
@@ -201,3 +201,14 @@ def update_tournament_round(request, battle_id):
     except Exception as e:
         print(f"Erreur lors de la mise à jour du round du tournoi: {e}")
         return JsonResponse({'status': 'error', 'message': 'Erreur lors de la mise à jour du round du tournoi.'})
+
+@csrf_exempt    
+def update_tournament_round(request, tournament_id):
+    try:
+        tournament = events_models.Tournament.objects.get(id=tournament_id)
+        init_tournament(tournament)
+        return JsonResponse({'status': 'success', 'message': 'Tournament initiated.'})
+            
+    except Exception as e:
+        print(f"Erreur lors de l'initialisation du tournoi: {e}")
+        return JsonResponse({'status': 'error', 'message': f"Erreur lors de l'initialisation du tournoi: {e}"})    
