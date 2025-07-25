@@ -4,14 +4,17 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from api.utility import send_push_notification
 import core.views as core_views
+from store.models import Product
+from store.views import product_data
 from users.models import Player,PlayerNotification,Family
 from django.contrib.auth.decorators import login_required
 
 from users.users_utility import get_player
-from utility import _time_since, get_characters
+from users.views import _player_data
+from utility import _parse_number, _time_since, get_characters
 from .models import *
 from core.models import *
-from battles.models import Battle, BattleRequest,Challenge, RefreeingProposal, TextPad, TextPadComment,battle_status
+from battles.models import Battle, BattleRequest,Challenge, RefereeRating, RefreeingProposal, Rule, TextPad, TextPadComment,battle_status
 import battles.views as battle_views
 
 
@@ -245,4 +248,123 @@ def filter_battle(request, filter_num):
         message = "..."
         battles_data = battle_views._battles_data(player, battles)
         return {"message":message ,"battles":battles_data}
+
+
+@login_required
+def _battle_room(request,battle_id, player:Player):
+    
+    battle = Battle.objects.get(id=battle_id)
+    
+    battle_views.update_battle_spectators(player,battle)
+    battle.viewers += 1
+    battle.save()
+    
+    rules = Rule.objects.filter(battle = battle)
+    rules_data = [{
+        'text': rule.text
+    } for rule in rules ]
+
+    role = "Spectateur"
+    
+    if player == battle.refree:
+        role = "Arbitre"
+        
+    elif player == battle.initiator or player == battle.opponent:
+        role = "Combattant"    
+
+    ch_jutsus = ''
+    character = ''
+    i_character =  battle_views._character(battle.i_character)
+    o_character = battle_views._character(battle.o_character)
+    if player == battle.initiator:
+        ch_jutsus = battle_views._character_jutsus(battle.i_character)
+        character = battle_views._character(battle.i_character)
+    if player == battle.opponent:
+        ch_jutsus = battle_views._character_jutsus(battle.o_character)    
+        character = battle_views._character(battle.o_character)
+
+
+    textpads = TextPad.objects.filter(battle = battle)
+
+    if len(textpads)>0:
+        last_textpad = textpads.last()
+        l_sender  = last_textpad.owner
+    else:
+        l_sender = None    
+
+    textpads_data = [
+        {
+            "textpad":battle_views._textpad_data(player,textpad),
+            "character":battle_views.get_textpad_character(battle, textpad)
+        }
+        for textpad in textpads 
+    ]
+    
+    #get the last player to send a  textpad
+    def can_rate(battle:Battle):
+        if player == battle.refree:
+            return False
+        elif battle.type == 'friendly':
+            return False
+        elif RefereeRating.objects.filter(battle = battle, player = player).exists():
+            return False
+        elif player != battle.initiator and player != battle.opponent:
+            return False    
+        elif len(RefereeRating.objects.filter(battle = battle)) >= 2:
+            return False
+        elif battle.status != 'finished':
+            return False
+        else:
+            return True
+
+            
+    product = random.choice(Product.objects.all())
+    _product_data = product_data(product)
+    
+    context = {
+
+               "battle":battle_views._battle_data(player,battle),
+               "isFighter" : player in [battle.initiator, battle.opponent],
+               "rules":rules_data, 
+               "rules_set": len(rules) >= 3,
+               "textpads":textpads_data,
+            #    "last_textpad": textpads_data[-1] if len(textpads_data)>0 else "",
+               'jutsus': ch_jutsus,
+               'i_character': i_character,
+               'o_character': o_character,
+               'spectators':  _parse_number(len(battle.spectators.all()) + battle.viewers,True),
+                "last_sender":_player_data(l_sender),
+                "role":role,
+                "can_rate": can_rate(battle),
+                'referee_rated': battle_views.referee_rated(battle),
+                'product': _product_data
+                 }
+    
+
+
+    if battle_views.referee_rated(battle):
+        initiator_rating = RefereeRating.objects.get(player = battle.initiator,battle = battle)
+        def _rating_data(rating:RefereeRating):
+            return {
+                'player': {
+                    'username': str(rating.player),
+                    'player': rating.player.user.username,
+                },
+                'fairness': rating.fairness,
+                'communication': rating.communication,
+                'timeliness':rating.timeliness,
+                'comment' : rating.comment
+            }
+        opponent_rating = RefereeRating.objects.get(player = battle.opponent,battle = battle)
+        ratings = [
+            { 'category': 'Timeliness', 'initiator': initiator_rating.timeliness, 'opponent': opponent_rating.timeliness  },
+            {'category': 'Communication', 'initiator': initiator_rating.communication, 'opponent': opponent_rating.communication},
+            {'category': 'Fairness', 'initiator': initiator_rating.fairness, 'opponent': opponent_rating.fairness }
+        ]
+        opponent_rating = RefereeRating.objects.filter(player = battle.opponent).last()
+        context['initiator_rating'] = _rating_data(initiator_rating)
+        context['opponent_rating'] = _rating_data(opponent_rating)
+        context['ratings'] = ratings
+
+    return context
     

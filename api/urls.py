@@ -22,6 +22,7 @@ urlpatterns = [
     path('battles/textpads/<int:battle_id>/comments', views.TextPadCommentList.as_view()),
     path('battles/requests', views.BattleRequestsListCreate.as_view()),
     path('battles/accept/<int:request_id>', views.BattleAccept.as_view()),
-    
+    path('battles/battle_room/<int:battle_id>',views.BattleRoom.as_view()),
+
     path('save-subscription/', views.save_subscription, name='save_subscriptions'),
 ]

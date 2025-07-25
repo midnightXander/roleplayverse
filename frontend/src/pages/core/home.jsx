@@ -15,11 +15,8 @@ export default function Home() {
   const getPosts = async () =>{
     try{
       const res = await api.get('feed')
-      // const res2 = await api.post('posts',{
-      //   body : 'TestXY',
-
-      // })
-      // console.log(res2.data);
+      const res2 = await api.get('battles/battle_room/9')
+      console.log(res2.data);
       const posts = res.data.posts;
       const feedItems = res.data.feed_items
       if(!posts || posts.length === 0){

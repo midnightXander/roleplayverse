@@ -271,8 +271,15 @@ class BattleAccept(APIView):
             data = post_functions.accept_battle(request, request_id)
             return JsonResponse({'data': data}, status=200)    
 
+class BattleRoom(APIView):
+    def get(self, request, battle_id):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        battle_data = get_data._battle_room(request, battle_id, player)
 
-
+        return JsonResponse({'battle_data': battle_data})
 
 
 

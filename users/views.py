@@ -837,8 +837,6 @@ def _player_data(player:Player):
         'ranking' : 10,
         'nickname' : player.nickname,
         'wins': _total_wins(player)
-        
-
     }
 
 def _sent_invite(sender, target):

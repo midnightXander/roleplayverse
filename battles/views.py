@@ -114,7 +114,7 @@ def _referee_proposals(battle:Battle, player:Player):
     else:
         return None
 
-def _battle_data(player,battle):
+def _battle_data(player,battle:Battle):
     data = {
             "feed_item":'battle',
             "id":battle.id,
@@ -158,6 +158,8 @@ def _battle_data(player,battle):
             "spectators": _parse_number(len(battle.spectators.all())+ battle.viewers, True),
             "referee_proposals": _referee_proposals(battle,player),
             "date": core_views._time_since(battle.date_started),
+            'ai_refereeing' : battle.ai_refereeing,
+            'ai_rules' : battle.ai_rules
         }
     return data
 
@@ -1763,7 +1765,7 @@ def new_refree(request):
     situation_2 = situations_2[random_index]
     
     situations_file = os.path.join(BASE_DIR, 'refree_questions', 'fr', 'situations.json')
-    print(situations_file)
+    
 
     with open(situations_file, 'r', encoding='utf-8') as file:
         situations_data = json.load(file)
@@ -1771,7 +1773,6 @@ def new_refree(request):
         situation_2 = random.choice(situations_data)
 
     message = ""
-
 
     #update this condition to take only batttles refreed COMPLETELY and length > X
     has_refreed = len(

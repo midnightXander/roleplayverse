@@ -145,7 +145,8 @@ def _can_start(tournament:Tournament):
     can_start = False
     fighters = tournament.fighters.all()
     referees = tournament.refrees.all()
-    if len(fighters) == tournament.n_participants and len(referees) == (tournament.n_participants/2):
+    # if len(fighters) == tournament.n_participants and len(referees) == (tournament.n_participants/2):
+    if len(fighters) == tournament.n_participants and len(referees) >= 2:
         can_start =True
 
     #REMOVE THIS PART WHEN READY TO CREATE TOURNAMENTS IN PROD    
@@ -244,9 +245,6 @@ def create_round_battles(tournament:Tournament, fighters, round=1):
             },
             ref.user
         )
-
-
-
 
 def init_tournament(tournament:Tournament):
     tournament.battles.clear()
