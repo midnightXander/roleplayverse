@@ -203,7 +203,7 @@ def update_tournament_round(request, battle_id):
         return JsonResponse({'status': 'error', 'message': 'Erreur lors de la mise à jour du round du tournoi.'})
 
 @csrf_exempt    
-def update_tournament_round(request, tournament_id):
+def start_tournament(request, tournament_id):
     try:
         tournament = events_models.Tournament.objects.get(id=tournament_id)
         init_tournament(tournament)

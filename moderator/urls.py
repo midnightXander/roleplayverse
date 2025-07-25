@@ -13,5 +13,5 @@ urlpatterns = [
     path('referee/add/<str:email>', views.add_player_as_refree, name='add_refereee'),
 
     path('tournament/update_round/<int:battle_id>', views.update_tournament_round, name='update_tournament_round'),
-    path('tournament/init/<int:tournament_id>', views.update_tournament_round, name='init_tournament'),
+    path('tournament/init/<int:tournament_id>', views.start_tournament, name='init_tournament'),
 ]
