@@ -14,7 +14,7 @@ BASIC_ACTIONS = [{ "name": 'Attack', 'chakra_cost': 10, 'stamina_cost' : 10},
                     { 'name': 'Focus', 'chakra_cost': 0, 'stamina_cost':0 },
                     { 'name': 'Heal', 'chakra_cost': 20, 'stamina_cost' : 5 },
                     { 'name': 'Substitution', 'chakra_cost': 15, 'stamina_cost': 10},]
-BATTLE_LATENCY = 20
+BATTLE_LATENCY = 24
 f_request_cost = 250
 s_request_cost = 350
 request_cost = 350
@@ -117,6 +117,22 @@ class Battle(models.Model):
             # Assuming Player has a method to award credits
             self.winner.award_credits(15.8)
     
+    def latency_passed(self):
+        now = timezone.now()
+        last_textpad = TextPad.objects.filter(battle = self).last()
+        date_sent = last_textpad.date_validated
+        difference = now - date_sent
+        days = difference.days
+        seconds = difference.seconds
+        print(difference.days, seconds)
+        hours = seconds // 3600
+
+        print(hours)
+        if days < 1:
+            return hours >= BATTLE_LATENCY and last_textpad.valid
+        else:
+            return last_textpad.valid
+
 
 
 

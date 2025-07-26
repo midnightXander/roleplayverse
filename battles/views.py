@@ -919,7 +919,8 @@ def battle_room(request,battle_id):
                 "can_rate": can_rate(battle),
                 'referee_rated': referee_rated(battle),
                 "n_notifs":core_views.get_notifs(player=player),
-                'product': _product_data
+                'product': _product_data,
+                'latency_passed' : battle.latency_passed()
 
                  }
     
@@ -1053,7 +1054,81 @@ def _most_reaction(textpad:TextPad):
     for reactor in reactors:
         print(reactor.type)
 
-        
+
+def end_battle(request, battle_id):
+    battle = Battle.objects.get(id = battle_id)
+    last_textpad = TextPad.objects.filter(battle = battle).last()
+    
+    motif = request.GET.get('motif')
+
+    message = "Ce combat est deja terminé"
+    if not battle.winner and request.method == 'POST':
+        #the winner here is the owner of the last textpad and the loser is the other player
+        winner = last_textpad.owner
+        loser = battle.initiator if winner == battle.opponent else battle.opponent
+        message = "La latence n'est pas depassé"
+        if motif == 'latency':
+            if battle.latency_passed():
+                #END BATTLE
+                battle.winner = winner 
+                battle.status = battle_status[3]
+                battle.date_ended = datetime.now()
+                battle.defeat_motif = "latency"
+
+                progress =  player_progress(battle=battle,loser_rank = loser.rank)
+                winner.progression +=  progress
+                
+                #update the player's rank if progression reached 100%
+                update_rank(winner)
+                update_points(family = winner.family, battle=battle, member_progress=progress)
+                winner.award_credits(40)
+
+                winner.save()
+                last_textpad.save()
+                battle.save()
+                    
+                if(battle.type == 'tournament'):
+                    events_views._update_round(battle)
+                battle.can_send_textpad = False
+                
+                battle.save()    
+                win_notif = core_models.Notification.objects.create(
+                            target = winner,
+                            url = f'/battles/battle_room/{battle.id}',
+                            content = f"Tu as été declaré  vainqueur de ton combat contre {loser} par latence"
+                            )
+                send_push_notification(
+                    PushSubscription.objects.filter(user=winner.user).last(),
+                    {
+                        "title": "Tu as remporte ton combat",
+                        "body": f"Tu as été declaré  vainqueur de ton combat contre {loser} par latence",
+                        "url": f"https://roleplayverse.live",
+                        'icon' : '/static/images/logo/logo_1.png',
+                    },
+                    winner.user,
+                    ) 
+                win_notif.save()
+
+                lose_notif = core_models.Notification.objects.create(
+                            target = loser,
+                            url = f'/battles/battle_room/{battle.id}',
+                            content = f"Tu as perdu ton combat contre {winner} par latence"
+                        )
+                lose_notif.save()  
+                send_push_notification(
+                    PushSubscription.objects.filter(user=loser.user).last(),
+                    {
+                        "title": "Tu as perdu ton combat",
+                        "body": f"Tu as perdu ton combat contre {winner} par latence",
+                        "url": f"/notifications",
+                        'icon' : '/static/images/logo/logo_1.png',
+                    },
+                    loser.user,
+                )
+                
+                  
+                return JsonResponse({'status':'success','message': 'combat terminé'})
+    return JsonResponse({'status':'error','message': message})
 
 def get_textpads(request, battle_id):
     battle = Battle.objects.get(id = battle_id)
@@ -1089,8 +1164,6 @@ def _textpad_reactions_data(textpad_reactor:TextpadReactor):
         'reaction' : textpad_reactor.type,
         'player' : textpad_reactor.player.user.username,
     }
-
-
 
 def react_to_textpad(request, textpad_id):
     textpad = get_object_or_404(TextPad, id = textpad_id)

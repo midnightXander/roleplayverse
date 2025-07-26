@@ -212,7 +212,7 @@ def create_rules(request, battle_id):
 
         #credentials = load_credentials_from_file("E:\work\\alex\google\secure_keys\\roleplay-verse-5163419666ba.json")
         #client = genai.Client(http_options=HttpOptions(api_version='v1'), credentials=credentials)
-        if battle.ai_refereeing and not battle.ai_rules:
+        if battle.ai_refereeing and not battle.ai_rules and player in [battle.initiator, battle.opponent]:
             try:
                 response = client.models.generate_content(
                 model = "gemini-2.0-flash-001",
