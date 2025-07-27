@@ -1235,7 +1235,7 @@ def _textpad_comment_data(comment:TextPadComment):
                 } if comment.parent else None,
                 "timestamp":  _time_since(comment.date_added),
                 'likes' : 0,
-                'replies' : [ _textpad_comment_data(reply) for reply in TextPadComment.objects.filter(parent = comment).order_by("-date_added") ],
+                'replies' : [ _textpad_comment_data(reply) for reply in TextPadComment.objects.filter(parent = comment).order_by("date_added") ],
                 #'is_reply' : TextPadComment.objects.filter(parent = ).exists()
             },
     

@@ -11,7 +11,7 @@
     "reward_exp": 5,
     "reward_item": "",
     "rarity": "common",
-    "zone": "Forêt des interdits"
+    "zone": "Zone de commerce"
     },
     {
         "title": "Collecter des parchemins",
@@ -22,7 +22,7 @@
         "mission_type": "collect",
         "target": "Parchemin Secrets",
         "quantity": 3,
-        "reward_exp": 5,
+        "reward_exp": 15,
         "reward_item": "",
         "rarity": "common",
         "zone": "Forêt des interdits"
@@ -36,7 +36,7 @@
         "mission_type": "defeat",
         "target": "Sen Aburame",
         "quantity": 1,
-        "reward_exp": 5,
+        "reward_exp": 20,
         "reward_item": "Potion de soin",
         "rarity": "common",
         "zone": "Forêt des interdits"
@@ -50,7 +50,7 @@
         "mission_type": "defeat",
         "target": "Tenchi B",
         "quantity": 1,
-        "reward_exp": 20,
+        "reward_exp": 17,
         "reward_item": "Relique ancienne",
         "rarity": "rare",
         "zone": "Vallée Herbeuse"
@@ -62,37 +62,37 @@
         "min_level": 1,
         "max_level": 5,
         "mission_type": "dialogue",
-        "target": "Shin Tadako",
+        "target": "Ynma",
         "quantity": 1,
-        "reward_exp": 18,
+        "reward_exp": 5,
         "reward_item": "Medaillon des ames",
         "rarity": "common",
         "zone": "Vallée Herbeuse"
     },
     {
         "title": "Obtenir des informations",
-        "description": "Capture un espion ennemi qui collecte des informations sur le village.",
-        "long_tail_description": "Les rumeurs d'étranges événements (disparitions, attaques isolées) commencent à circuler, mais elles sont ignorées par les autorités.",
+        "description": "Discute avec des victimes.",
+        "long_tail_description": "Les rumeurs d'étranges événements (disparitions, attaques isolées) commencent à circuler, mais elles sont ignorées par les autorités. Ces événements cachent un mystère peut-être plus profond que ça en a l'air. Tu dois absolumment en savoir plus. Discute avec les victimes pour plus avoir des informations.",
         "min_level": 1,
         "max_level": 5,
-        "mission_type": "defeat",
-        "target": "Espion ennemi",
+        "mission_type": "dialogue",
+        "target": "Victimes",
         "quantity": 1,
-        "reward_exp": 120,
+        "reward_exp": 20,
         "reward_item": "Cl\u00c3\u00a9 secr\u00c3\u00a8te",
         "rarity": "rare",
-        "zone": "For\u00eat Interdite"
+        "zone": "Terrier"
     },
     {
-        "title": "Vaincre un ninja de l'ombre",
+        "title": "Trouver le parchemin",
         "description": "Affronte un ninja de l'ombre qui attaque les voyageurs.",
         "long_tail_description": "",
         "min_level": 1,
         "max_level": 5,
         "mission_type": "defeat",
-        "target": "Ninja de l'ombre",
+        "target": "📜",
         "quantity": 1,
-        "reward_exp": 140,
+        "reward_exp": 10,
         "reward_item": "Cape de l'ombre",
         "rarity": "epic",
         "zone": "Canyon des Vents"
