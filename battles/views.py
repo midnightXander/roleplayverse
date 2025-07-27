@@ -1081,7 +1081,7 @@ def end_battle(request, battle_id):
                 #update the player's rank if progression reached 100%
                 update_rank(winner)
                 update_points(family = winner.family, battle=battle, member_progress=progress)
-                winner.award_credits(40)
+                winner.award_credits(20)
 
                 winner.save()
                 last_textpad.save()

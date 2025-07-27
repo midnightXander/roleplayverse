@@ -181,7 +181,7 @@
             <div id="tournamentPreview" class="hidden mt-8 p-4 bg-gray-800 rounded-lg">
 
                 <h3 class="text-2xl font-semibold text-orange-400 mb-4">Tableau du tournoi</h3>
-                
+                <div class="text-gray-400 my-4 text-sm ">Clique sur un combat pour en voir les details</div>
                 <div id="bracketContainer" class="overflow-x-auto text-white">
                     <!-- The bracket will be generated here -->
                     <div id="preview-loader" class="text-center p-4 hidden">
@@ -412,7 +412,7 @@ function generateBracket(participants) {
                     if(roundBattle){
                         const matchLink = document.createElement('a')
                     matchLink.setAttribute('href',`/battles/battle_room/${roundBattle.id}`)
-                    // matchLink.onclick = showOverlay()
+                    matchLink.addEventListener('click', showOverlay())
 
                     const matchDiv = document.createElement('div');
                     matchDiv.className = 'match';
