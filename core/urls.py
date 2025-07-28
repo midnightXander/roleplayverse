@@ -36,6 +36,7 @@ urlpatterns = [
     path('battle_points/success',views.battle_points_success, name="battle_points_success"),
 
     path('rankings', views.rankings, name = 'rankings'),
+    path('players', views.fetch_players),
 
     #EZOIC
     path('ezoic-3jZENPJ2HyQHll4Ye2ZCBVIua866XL.html', views.ezoic_file, name = 'ezoic_file'),

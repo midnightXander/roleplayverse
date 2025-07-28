@@ -16,7 +16,7 @@ import re
 from dateutil.relativedelta import relativedelta
 import datetime
 import core.views as core_views
-from utility import _time_since,sendWelcomeEmail,sendResetPasswordLink
+from utility import _time_since, _time_since_last_seen,sendWelcomeEmail,sendResetPasswordLink
 from .users_utility import *
 from django.core.serializers import serialize
 from django.forms.models import model_to_dict
@@ -826,6 +826,7 @@ def _player_data(player:Player):
     return{
         'id': player.id,
         'name': str(player),
+        'nickname' : player.nickname,
         'user':{
             'id': player.user.id,
             'username':player.user.username,
@@ -836,7 +837,8 @@ def _player_data(player:Player):
         'progression': player.progression,
         'ranking' : 10,
         'nickname' : player.nickname,
-        'wins': _total_wins(player)
+        'wins': _total_wins(player),
+        'last_seen' : _time_since_last_seen(player.last_seen)
     }
 
 def _sent_invite(sender, target):
@@ -1512,18 +1514,14 @@ def get_families_rankings(request):
     return JsonResponse({'status':'success', 'families':data})
 
 def _winner_data(battle:Battle):
-    return{
-            'id': battle.winner.id,
-            "player":{
+    data = _player_data(battle.winner)
+    data['wins'] = 0
+    data['player'] = {
                 'player': str(battle.winner),
                 'username':battle.winner.user.username,
-            },
-            'profile_picture': battle.winner.profile_picture.url,
-            'progress': battle.winner.progression,
-            'rank': battle.winner.rank,    
-            'family': battle.winner.family.name if battle.winner.family else None,
-            'wins':0,
             }
+    
+    return data
 
 def _monthly_players_ranking():
     stats = []

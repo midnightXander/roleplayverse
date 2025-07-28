@@ -146,6 +146,49 @@
     .fade-out-down {
       animation: fadeOut-down 0.3s ease-in forwards;
     }
+
+    .border-gradient{
+        border: 1px solid transparent; /* Transparent base border */
+        border-radius: 8px; /* Optional: rounded corners */
+        background: linear-gradient(white, white) padding-box, 
+                    linear-gradient(90deg, orange, red, purple, orange) border-box;
+    }
+
+    .animated-border{
+        position: relative;
+    display: inline-block;
+    padding: 20px;
+    border: 4px solid transparent; /* Transparent base border */
+    border-radius: 8px; /* Optional: rounded corners */
+    background: linear-gradient(white, white) padding-box, 
+                linear-gradient(90deg, orange, red, purple, orange) border-box;
+    animation: borderHighlight 4s linear infinite;
+    }
+    .content {
+    position: relative;
+    z-index: 1;
+    background-color: #1a202c; /* Matches your theme */
+    color: #e2e8f0; /* Matches your theme */
+    padding: 20px;
+    border-radius: 8px; /* Optional: rounded corners */
+}
+
+    .animated-border-box {
+    position: relative; /* Needed for absolute positioning of pseudo-element */
+    overflow: hidden; /* Crucial to hide the pseudo-element outside the border */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+
+    .animated-border-box::before {
+        content: '';
+        position: absolute;
+        /* Initial position and size of the glowing segment */
+        width: 50px; /* Length of the highlight */
+        height: 50px; /* This will be the thickness of the glow */
+        background: linear-gradient(45deg, transparent, #00ffff, transparent); /* Glowing effect */
+        animation: border-glow 4s linear infinite; /* Animation definition */
+    }
     @keyframes fadeIn-up {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -154,6 +197,49 @@
       from { opacity: 1; transform: translateY(0); }
       to { opacity: 0; transform: translateY(20px); }
     }
+    @keyframes borderAnimation {
+    0% {
+        border: 0% highlighted;
+    }
+    }
+
+    @keyframes borderHighlight {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 100% 0%;
+    }
+}
+
+    @keyframes border-glow {
+  0% {
+    top: -25px; /* Half of height, to start outside the top border */
+    left: -25px; /* Half of width, to start outside the left border */
+    transform: rotate(0deg);
+  }
+  25% {
+    top: -25px;
+    left: calc(100% - 25px); /* Move right */
+    transform: rotate(90deg);
+  }
+  50% {
+    top: calc(100% - 25px); /* Move down */
+    left: calc(100% - 25px);
+    transform: rotate(180deg);
+  }
+  75% {
+    top: calc(100% - 25px);
+    left: -25px; /* Move left */
+    transform: rotate(270deg);
+  }
+  100% {
+    top: -25px;
+    left: -25px; /* Back to start */
+    transform: rotate(360deg);
+  }
+}
+    
   </style>
 <style>
     /* Styles personnalisés si nécessaire, par exemple pour cacher la scrollbar mais permettre le défilement */
@@ -668,543 +754,6 @@ if(notifier){
 }
 </script>
 <!-- <script>
-
-function createNotificationCard(notification) {
-    
-    const card = document.createElement('div');
-    card.className = `notification-card p-2 ${notification.clicked ? '': 'bg-gray-800'}`;
-    card.innerHTML = `
-        <div class = 'bg-gray-900 rounded-2xl border border-gray-700 p-4 shadow-md relative'>
-        <a href="${notification.url}" onclick='showOverlay();markAsRead(${notification.id});' class="block px-2">
-            <div class = 'flex space-x-2' >
-              ${notification.image ? `<img src = '${notification.image}' class='min-w-12 h-12 rounded-full' />` : ''}
-            <div>  
-            <p class="text-gray-300  mb-2">${notification.content}</p>
-            <p class="text-sm text-gray-400">${notification.timestamp}</p>
-            <div>
-            </div>
-        </a>
-        <div class="absolute top-2 right-2">
-            <button class="text-gray-300 hover:text-white focus:outline-none dropdown-toggle" data-notification-id="${notification.id}">
-                <i class="fas fa-ellipsis-v"></i>
-            </button>
-            <div class="dropdown-menu w-48 py-2">
-                <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-600" onclick="markAsRead(${notification.id})"><i class = 'fas fa-circle-thin mr-2'></i> Mark as read</a>
-                <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-600"  onclick="deleteNotification(${notification.id},'${notification.type}')"><i class = 'fas fa-trash mr-2'></i>Delete</a>
-            </div>
-        </div>
-        </div>
-    `;
-    return card;
-}
-function deleteNotification(id,type) {
-      console.log(`Deleting notification ${id}, ${type}`);
-          $.ajax({
-            url: `/users/notification/${id}/${type}`,
-            type: 'DELETE',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-CSRFToken': '{{csrf_token}}' // Include CSRF token in headers
-              },
-              data:{ 
-                csrfmiddlewaretoken : "{{ csrf_token }}",
-
-              },
-              beforeSend: function(){
-                $('#loading-overlay').toggleClass('active')
-              },
-              success: function(res){
-                if(res.status == 'success'){
-                  showMyToast('Deleted','success')
-                }
-              },
-              complete: function(){
-                $('#loading-overlay').toggleClass('active')
-                
-                renderNotifications();
-              },
-              error: function(jqXHR, textstatus, errorThrown){
-                console.log('error', errorThrown)
-                showMyToast('An error occured please try again','error')
-              }
-          })
-          
-      
-  }
-  function markAllAsRead() {
-      // Implement your logic here
-      $.ajax({
-            url: `/notifications/mark_as_read/all`,
-            type: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-CSRFToken': '{{csrf_token}}' // Include CSRF token in headers
-              },
-              data:{ 
-                csrfmiddlewaretoken : "{{ csrf_token }}",
-
-              },
-              beforeSend: function(){
-                showMyToast("Lu","success")
-              },
-              success: function(res){
-                renderNotifications()
-              },
-              complete: function(){
-                
-              },
-              error: function(jqXHR, textstatus, errorThrown){
-                console.log('error', errorThrown)
-                showMyToast('An error occured please try again','error')
-              }
-          })
-  }
-
-  function answerChallenge(element, challengeId, answer){
-  const card = document.getElementById(`challenge-card-${challengeId}`)
-  const character = $(card).find("select").val()
-  if(answer == "accept"){
-    if(character){
-      $.ajax({
-                url: `/battles/challenge/answer/${challengeId}`,
-                type : "POST",
-                data:{csrfmiddlewaretoken:"{{ csrf_token }}", character: character, response: answer},
-                beforeSend: function(){
-                  $('#loading-overlay').toggleClass('active')
-                },
-                success: function(res){
-                    if(res.status == "success"){
-                      showMyToast(res.message, 'success')
-                      
-                      $(card).hide(300)
-                    //   card.classList.add('opacity-0', 'scale-95');
-                    //   card.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-                      
-                    }else{
-                        showMyToast(res.message)
-                    }
-                },
-                complete: function(){
-                  $('#loading-overlay').toggleClass('active')
-                },
-                error: function(jqXHR, textstatus, errorThrown){
-                  showMyToast("An error occured", 'error')
-                }
-            })
-  }else{
-    showMyToast('choisi un personnage pour accepter le challenge')
-  }
-  }else{
-    $.ajax({
-                url: `/battles/challenge/answer/${challengeId}`,
-                type : "POST",
-                data:{csrfmiddlewaretoken:"{{ csrf_token }}", character: character, response: answer},
-                beforeSend: function(){
-                  $('#loading-overlay').toggleClass('active')
-                },
-                success: function(res){
-                    if(res.status == "success"){
-                      showMyToast(res.message, 'success')
-                      
-                      $(card).hide(300)
-                    //   card.classList.add('opacity-0', 'scale-95');
-                    //   card.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-                      
-                    }else{
-                        showMyToast(res.message)
-                    }
-                },
-                complete: function(){
-                  $('#loading-overlay').toggleClass('active')
-                },
-                error: function(jqXHR, textstatus, errorThrown){
-                  showMyToast("An error occured", 'error')
-                }
-            })
-  }
- 
-}
-
-function handleInvite(btn,inviteId, action) {
-            // Simulated API call (replace with actual API call)
-            const inviteCard = btn.closest('.invite-card')
-            if(action == 'accept'){
-              $.ajax({
-                url: `/users/join_family/${inviteId}`,
-                type : "POST",
-                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
-                beforeSend: function(){
-                  $('#loading-overlay').toggleClass('active')
-                },
-                success: function(res){
-                    if(res.status == "success"){
-                      showMyToast(res.message, 'success')
-                      
-                      $(inviteCard).hide()
-                      // inviteCard.classList.add('opacity-0', 'scale-95');
-                      // inviteCard.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-                      
-                    }else{
-                        showMyToast(res.message)
-                    }
-                },
-                complete: function(){
-                  $('#loading-overlay').toggleClass('active')
-                },
-                error: function(jqXHR, textstatus, errorThrown){
-                  showMyToast("An error occured", 'error')
-                }
-            })
-            }else if(action == 'decline'){
-              $.ajax({
-                url: `/users/notification/${inviteId}/game`,
-                type : "DELETE",
-                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
-                beforeSend: function(){
-                  $('#loading-overlay').toggleClass('active')
-                },
-                success: function(res){
-                    if(res.status == "success"){
-                      showMyToast(res.message, 'success')
-                     
-                      $(inviteCard).hide(300)
-                    //   inviteCard.classList.add('opacity-0', 'scale-95');
-                    //   inviteCard.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-                      
-                    }else{
-                        showMyToast(res.message)
-                    }
-                },
-                complete: function(){
-                  $('#loading-overlay').toggleClass('active')
-                  
-                },
-                error: function(jqXHR, textstatus, errorThrown){
-                  showMyToast("An error occured", 'error')
-                }
-            })
-            }
-           
-           
-      }
-
-function handleRequest(btn,requestId, action) {
-            // Simulated API call (replace with actual API call)
-            if(action == 'accept'){
-              $.ajax({
-                url: `/users/accept_request/${requestId}`,
-                type : "POST",
-                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
-                beforeSend: function(){
-                  $('#loading-overlay').toggleClass('active')
-                },
-                success: function(res){
-                    if(res.status == "success"){
-                      showMyToast(res.message, 'success')
-                      const requestCard = btn.closest('.request-card')
-                      $(requestCard).hide(300)
-                    //   requestCard.classList.add('opacity-0', 'scale-95');
-                    //   requestCard.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-                      
-                    }else{
-                        showMyToast(res.message)
-                    }
-                },
-                complete: function(){
-                  
-                  $('#loading-overlay').toggleClass('active')
-                },
-                error: function(jqXHR, textstatus, errorThrown){
-                  showMyToast("An error occured", 'error')
-                }
-            })
-            }else if(action == 'refuse'){
-              $.ajax({
-                url: `/users/notification/${requestId}/game`,
-                type : "DELETE",
-                data:{csrfmiddlewaretoken:"{{ csrf_token }}"},
-                beforeSend: function(){
-                  $('#loading-overlay').toggleClass('active')
-                },
-                success: function(res){
-                    if(res.status == "success"){
-                      showMyToast(res.message, 'success')
-                      const requestCard = btn.closest('.request-card')
-                      //$(requestCard).hide(300)
-                      requestCard.classList.add('opacity-0', 'scale-95');
-                      requestCard.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-                      
-                    }else{
-                        showMyToast(res.message)
-                    }
-                },
-                complete: function(){
-                  $('#loading-overlay').toggleClass('active')
-                  
-                },
-                error: function(jqXHR, textstatus, errorThrown){
-                  showMyToast("An error occured", 'error')
-                }
-            })
-            }
-            
-      }
-
-
-function renderNotifications() {
-    $.ajax({
-      url: '/notifications/all',
-      type:'GET',
-      data: {csrfmiddlewaretoken:'{{csrf_token}}'},
-      beforeSend: function(){
-        $('#notificationsList').html(`
-          <div id='notifLoader' class="flex justify-center items-center h-full">
-            <i class="fas fa-spinner fa-spin text-orange-500 text-3xl"></i>
-          </div>
-        `);
-      },
-      success: function(res){
-        updateNotificationCount(0)
-        if(res.status == 'success'){
-            const characters = res.characters
-            const notifications = res.notifications
-            const container = document.getElementById('notificationsList');
-            container.innerHTML = '';
-            if(notifications.length > 0){
-              notifications.forEach(notification => {
-                container.appendChild(createNotificationCard(notification));
-      });
-            }else{
-              // <svg class="m-auto w-[48px] h-[48px] dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-              //   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="m10.827 5.465-.435-2.324m.435 2.324a5.338 5.338 0 0 1 6.033 4.333l.331 1.769c.44 2.345 2.383 2.588 2.6 3.761.11.586.22 1.171-.31 1.271l-12.7 2.377c-.529.099-.639-.488-.749-1.074C5.813 16.73 7.538 15.8 7.1 13.455c-.219-1.169.218 1.162-.33-1.769a5.338 5.338 0 0 1 4.058-6.221Zm-7.046 4.41c.143-1.877.822-3.461 2.086-4.856m2.646 13.633a3.472 3.472 0 0 0 6.728-.777l.09-.5-6.818 1.277Z"/>
-              //   </svg>
-              $(container).append(`
-              <div id="no-notifications" class="">
-              <div class="no-notifications rounded-lg p-8 text-center">
-                <p class="text-xl text-gray-400">No personal notifications</p>
-               <i class = 'fas fa-bell-slash text-3xl'></i>
-                <p class="text-sm text-gray-500 mt-2">You're all caught up!</p>
-              </div>
-            </div>
-              `)
-            }
-
-            const challenges = res.challenges
-            const invites = res.invites
-            const requests = res.requests
-
-            const pContainer = document.getElementById('pNotificationsList');
-            pContainer.innerHTML = '';
-            if(challenges.length > 0){
-              challenges.forEach(challenge => {
-                pContainer.appendChild(createChallengeCard(challenge, characters));
-            });
-            }
-            if(invites.length > 0){
-              invites.forEach(invite => {
-                pContainer.appendChild(createInviteCard(invite));
-            });
-            }
-            if(requests.length > 0){
-              requests.forEach(request => {
-                pContainer.appendChild(createRequestCard(request));
-            });
-            }
-            
-      addNotifDropdownListeners();
-    
-          }
-      },
-      complete: function(){
-        document.getElementById('notifLoader')?.remove();
-      },
-      error: function(jqXHR, textstatus, errorThrown){
-        console.log('Error: ',errorThrown)
-        showMyToast('An error occured','error')
-      }
-    })  
-    
-  }
-
-  function addNotifDropdownListeners() {
-      document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
-          toggle.addEventListener('click', (e) => {
-              e.stopPropagation();
-              const dropdown = toggle.nextElementSibling;
-              dropdown.classList.toggle('active');
-          });
-      });
-
-      document.addEventListener('click', () => {
-          document.querySelectorAll('.dropdown-menu').forEach(menu => {
-              menu.classList.remove('active');
-          });
-      });
-  }
-
-    function updateNotificationCount(count){
-
-                const notifier = document.getElementById('notifier');
-                if(count > 0){
-                notifier.textContent = count;
-                notifier.classList.remove('hidden');
-                }else{
-                notifier.classList.add('hidden');
-                }
-    //             let n_notifs = parseInt($("#notifier").text())
-    //             if(n_notifs){
-    //                 n_notifs++
-    //             $("#notifier").text(n_notifs)
-    //             }else if(n_notifs == 9){
-    //                 $("#notifier").text("9+")
-    //             }else{
-    //                 $("#notifier").text("1")
-    // }
-    }
-        
-
-    function openNotificationsScreen() {
-      const screen = document.getElementById('notificationsScreen');
-      const content = document.querySelector('.notifications-content');
-      screen.classList.remove('hidden');
-      content.classList.add('active');
-      renderNotifications()
-    }
-  
-    function closeNotificationsScreen() {
-      const screen = document.getElementById('notificationsScreen');
-      const content = document.querySelector('.notifications-content');
-      content.classList.remove('active');
-      setTimeout(() => {
-        screen.classList.add('hidden');
-      }, 300); // Match the CSS transition duration
-    }
-
-    function createChallengeCard(challenge,characters){
-        
-    const card = document.createElement('div');
-    card.className = `challenge-card bg-gray-900 rounded-2xl shadow-lg p-6 my-2 mx-auto max-w-md w-full mb-4`;
-    
-    card.id = `challenge-card-${challenge.id}`
-    
-    card.innerHTML = `
-        <div class="text-center mb-4">
-          <i class="fas fa-fire text-4xl text-orange-600 mb-4"></i>
-          <h2 class="text-2xl font-semibold">On t'as lancé un challenge!</h2>
-      </div>
-
-      
-      <div class="bg-gray-900 rounded-2xl p-4 mb-6">
-          <div class="flex items-center mb-4">
-            <a onclick = 'showOverlay()' href="/users/${challenge.sender.username}">
-              <img src="${challenge.sender.profile_picture}" alt="${challenge.sender.username} profile picture" class="w-16 h-16 rounded-full mr-4">
-            </a>  
-              <div>
-                  <a href="${challenge.sender.profile_picture}" class="font-semibold text-xl text-lg">${challenge.sender.username}</a>
-                  <p class="text-gray-400">Perso: <a href="#" class="font-semibold text-orange-500" >${challenge.sender_character}</a></p>
-              </div>
-          </div>
-          <p class="text-gray-300">${challenge.sender.player} t'as lancé un challenge</p>
-      </div>
-
-      <div class="mb-4">
-        <label for="character" class="block mb-2">Choisis ton perso:</label>
-        <select id="character" name="character" class="character-select w-full border border-orange-500 bg-gray-900 text-white p-2 rounded-2xl">
-            <option value="">Choisis ton perso</option>
-              ${characters.map((character)=>
-              `
-                <option value="${character.name}">
-                ${character.name}
-                </option>
-              `).join('')
-              }
-        </select>
-    </div>
-      <div class="flex flex-col space-y-3">
-        <button onclick="answerChallenge(this,'${challenge.id}', 'accept')" class="bg-green-600 mb-2 hover:bg-green-700 text-white py-3 px-4 rounded-full transition duration-300 pulse-animation">
-            <i class="fas fa-check mr-2"></i>Accepter le Challenge
-        </button>
-        <button onclick="answerChallenge(this,'${challenge.id}', 'decline')" class="bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-full transition duration-300">
-            <i class="fas fa-times mr-2"></i>Refuser le Challenge
-        </button>
-    </div>
-    `;
-    
-    return card;
-
-    }
-
-    function createRequestCard(notif){
-        
-        const card = document.createElement('div');
-        card.className = `request-card bg-gray-900 rounded-2xl p-4 mb-4 flex flex-col md:flex-row items-center justify-between`;
-        
-        card.innerHTML = `
-        <div class="text-center flex mb-6">
-            <h2 class="text-2xl font-semibold">Un joueur veut rejoindre ta famille !</h2>
-        </div>
-           <div class="flex items-center mb-4 md:mb-0">
-        <a href="/users/${notif.sender.username}"> 
-          <img src="${notif.sender.profile_picture.url}" alt="User Avatar" class="w-12 h-12 rounded-full mr-4">
-        </a>  
-       
-          <div>
-              <a href="/users/${notif.sender.username}" class="font-semibold">${notif.sender.player}</a>
-              <p class="text-gray-400 text-sm">Rank: ${notif.sender.rank} | Progress: ${notif.sender.progression}%</p>
-          </div>
-      </div>
-      <div class="flex space-x-2">
-          <button  onclick="handleRequest(this,'${notif.id}', 'accept')" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-full transition duration-300">
-              <i class="fas fa-check mr-2"></i>Accept
-          </button>
-          <button onclick="handleRequest(this,'${notif.id}', 'refuse')" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-full transition duration-300">
-              <i class="fas fa-times mr-2"></i>Refuse
-          </button>
-      </div>
-          
-        `;
-        
-        return card;
-    
-        }
-        function createInviteCard(notif){
-        
-        const card = document.createElement('div');
-        card.className = `invite-card bg-gray-900 rounded-lg shadow-2xl p-6 my-2 mx-auto max-w-md w-full mb-4`;
-        
-        card.innerHTML = `
-           <div class="text-center mb-6">
-          <i class="fas fa-users text-4xl text-blue-500 mb-4"></i>
-          <h2 class="text-2xl font-semibold">Tu as été invité!</h2>
-      </div>
-      
-      <div class="bg-gray-900 rounded-2xl p-4 mb-6">
-          <div class="flex items-center mb-4">
-            <a href="/users/family/65744${notif.family.id}">
-              <img src="${notif.family.profile_picture}" alt="Family Leader Avatar" class="w-16 h-16 rounded-full mr-4">
-            </a>  
-            
-              <div>
-                  <a href="/users/family/65744${notif.family.id}" class="font-semibold text-xl text-lg">${notif.family.name}</a>
-                  <p class="text-gray-400">Parrain: <a href="/users/${notif.family.god_father.username}" class="font-semibold" >${notif.family.god_father.username}</a></p>
-              </div>
-          </div>
-          <p class="text-gray-300">Tu as été invité a rejoindre la famille ${notif.family.name} . Vas tu accepter leurs invitations?</p>
-      </div>
-      
-      <div class="flex flex-col space-y-3">
-        <button onclick="handleInvite(this,'${notif.id}', 'accept')" class="bg-green-600 mb-2 hover:bg-green-700 text-white py-3 px-4 rounded-full transition duration-300 pulse-animation">
-            <i class="fas fa-check mr-2"></i>Accepter
-        </button>
-        <button onclick="handleInvite(this,'${notif.id}', 'decline')" class="bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-full transition duration-300">
-            <i class="fas fa-times mr-2"></i>Decliner
-        </button>
-    </div>
-        `;
-        
-        return card;
-    
-        }
 </script> -->
 
 <script type="text/javascript" src="{% static 'js/notifications_screen.js' %}"></script>
@@ -1387,6 +936,34 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
     </div>
   </div>
 
+  <!-- Popup for Available Players -->
+<div id="challengePlayersPopup" class="hidden  fixed inset-0  bg-black bg-opacity-70 flex items-center justify-center z-50">
+    <div class="bg-gray-900 max-h-[70vh] content border border-gray-700 text-white rounded-xl p-6 max-w-lg w-full mx-4 overflow-y-auto">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Défier un joueur</h2>
+            <button onclick="closeChallengePlayersPopup()" class="text-gray-500 hover:text-red-500 text-xl font-bold">&times;</button>
+        </div>
+        <!-- Players List -->
+        <div id="playersList" class="space-y-4 max-h-96 overflow-y-auto">
+            <!-- Example Player -->
+            <div class="flex items-center justify-between bg-gray-800 rounded-lg p-3">
+                <div class="flex items-center gap-3">
+                    <img src="https://via.placeholder.com/50" alt="Player Avatar" class="w-10 h-10 rounded-full">
+                    <div>
+                        <h3 class="font-semibold">Naruto Uzumaki</h3>
+                        <p class="text-xs text-gray-400">Rank: S</p>
+                    </div>
+                </div>
+                <button class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-bold">
+                    Défier
+                </button>
+            </div>
+            <!-- Add more players dynamically -->
+        </div>
+    </div>
+</div>
+
 
 
         <!--Bottom navigation bar-->
@@ -1518,6 +1095,102 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
 
             </script>
 
+
+<script>
+
+    function showChallengePlayersPopup(){
+        const popup = document.getElementById('challengePlayersPopup');
+        popup.classList.remove('hidden');
+        popup.classList.remove('fade-out-down');
+        popup.classList.add('fade-in-up');
+
+        getPlayersData()
+    }
+
+    function closeChallengePlayersPopup() {
+    const popup = document.getElementById('challengePlayersPopup');
+    popup.classList.remove('fade-in-up');
+    popup.classList.add('fade-out-down');
+    setTimeout(() => {
+      popup.classList.add('hidden');
+    }, 300);
+  }
+
+//   document.addEventListener('click', (e) => {
+//     const popup = document.getElementById('challengePlayersPopup');
+//     //const content = document.querySelector('#ContentPopupContent');
+//     const content = popup.querySelector('.content');
+    
+//     if (!popup.classList.contains('hidden') && !content.contains(e.target) && !e.target.closest('button[onclick^="showChallengePlayersPopup"]')) {
+//       closeChallengePlayersPopup();
+//     }
+//   });
+
+  function createPlayerElement(player){
+    const playerElement = document.createElement('div')
+    playerElement.className = 'flex items-center justify-between bg-gray-800 bg-opacity-50 rounded-lg p-3'
+    playerElement.innerHTML = `
+        <div class="flex items-center gap-3">
+                    <img src="${player.profile_picture}" alt="Player Avatar" class="w-10 h-10 border border-orange-500 rounded-full">
+                    <div>
+                        <h3 class="font-semibold">${player.nickname? player.nickname:player.name}</h3>
+                        <p class="text-xs text-gray-400">Rang: <span class='text-orange-500'>${player.rank}</span> 🔅 ${player.last_seen} 🏆 ${player.wins} victoires. </p> 
+                    </div>
+                </div>
+                <a  href = '/users/${player.user.username}' onclick = 'showOverlay()' class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-bold">
+                    <svg class='h-4 w-4' xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.477 10.826L3.275 6.288a2.154 2.154 0 0 1 2.771-3.016l13.959 6.663a2.155 2.155 0 0 1 0 3.906l-14.16 6.865a2.154 2.154 0 0 1-2.771-3.073l3.403-4.74a2.155 2.155 0 0 0 0-2.067"/></svg>
+                </a>
+    `
+
+    return playerElement;
+  }
+
+  function getPlayersData(){
+    const playersList = document.getElementById("playersList")
+    const loader = document.createElement("div")
+            loader.classname = 'text-center flex space-x-2 w-full justify-center items-center'
+            loader.innerHTML = `
+            <i class="fas fa-spinner fa-spin text-orange-500"></i> 
+            <span class="text-gray-400 text-sm "> Loading...</span>
+            `
+    $.ajax({
+        url: `/players?to=challenge`,
+        type: 'GET',
+        data: {
+            'Content-Type': 'application/json'
+        },
+        beforeSend: function(){
+            
+            playersList.innerHTML = ''
+            playersList.append(loader);
+        },
+        success: function(res){
+            
+            const players = res.players
+            if(players.length > 0){
+                players.forEach(player => {
+                playersList.append(createPlayerElement(player))
+            });
+            }else{
+                playersList.innerHTML = `
+                    <p class = 'text-gray-500 text-center px-4 py-8'>
+                        Aucun joueur dispo
+                    </p>
+                `
+            }
+        },
+        complete: function(){
+            loader.remove()
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            showMyToast('An Error occurred, please try again','error')
+        }
+    })
+  }
+
+
+
+</script>
 <!--Sending Comments-->            
 <script>
     function openContentCommentPopup(contentId) {

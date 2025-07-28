@@ -556,9 +556,14 @@ def fetch_players(request):
         return JsonResponse({'status': 'error'}, status = 401)
     to = request.GET.get('to','challenge')
     if to == 'challenge':
-        players = Player.objects.filter()
+        active_players = Player.objects.exclude(id = player.id).order_by('-last_seen')[:10]
+        active_players = [ users_views._player_data(player) for player in active_players ]
+        top_players = users_views._monthly_players_ranking()[:4]
 
-    return JsonResponse({'status': 'error'})
+        to_challenge = active_players + top_players
+        random.shuffle(to_challenge)
+
+    return JsonResponse({'status': 'error', 'players': to_challenge})
 
 def get_notifications(request):
     player = Player.objects.get(user = request.user)

@@ -1054,6 +1054,23 @@ def _most_reaction(textpad:TextPad):
     for reactor in reactors:
         print(reactor.type)
 
+def take_first_turn(request, battle_id):
+    battle = Battle.objects.get(id = battle_id)
+    player = get_player(request.user)
+    if not player:
+        return JsonResponse({'status': 'error'}, status = 401)
+    if battle.status == 'not_started' and battle.opponent == player and request.method == 'POST' :
+        battle.opponent = battle.initiator
+        battle.initiator = player
+        temp_character = battle.o_character 
+        battle.o_character = battle.i_character
+        battle.i_character = temp_character
+
+        battle.save()
+
+        return JsonResponse({'status' : 'success','message':'Tour Changé'})
+    return JsonResponse({'status' : 'error','message':"Tu ne peux pas changer l'ordre de passage"})
+
 
 def end_battle(request, battle_id):
     battle = Battle.objects.get(id = battle_id)
@@ -2091,6 +2108,8 @@ def answer_challenge(request, challenge_id):
             challenge.delete()
           
     return JsonResponse({'status':'success', 'message':message})
+
+
 
 
 @login_required

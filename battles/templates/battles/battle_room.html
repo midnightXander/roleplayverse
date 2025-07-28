@@ -352,6 +352,14 @@
         
             </ul>
         </div>
+        {% if battle.status == 'not_started' and player == battle.opponent %}
+        <div class=" my-4" >
+            <button onclick="takeFirstTurn('{{battle.id}}')"
+              class="border border-green-600 hover:text-green-600 flex items-center justify-center text-white py-2 px-4 rounded-xl font-semibold transition">
+              Prendre le premier tour <svg class="h-4 w-4 ml-4"  xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 21 21"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m9.5 9.5l-4 4l4 4m8-4h-12m6-10l4 4l-4 4m4-4h-12"/></svg>
+            </button>
+        </div>
+        {% endif %}
         {% if latency_passed and battle.status == 'ongoing' %}
         <div class=" my-4" >
             <button onclick="latencyPassed('{{battle.id}}')"
@@ -780,6 +788,31 @@
     function latencyPassed(battleId){
         $.ajax({
         url: `/battles/battle/${battleId}/end?motif=latency`,
+        type: 'POST',
+        data: {
+            csrfmiddlewaretoken: '{{csrf_token}}',
+        },
+        beforeSend: function(){
+            $('#loading-overlay').toggleClass('active')
+        },
+        success: function(res){
+            if(res.status == 'success'){
+                window.location.reload()
+            }else{
+                showMyToast(res.message, 'info')
+            }
+        },
+        complete: function(){
+            $('#loading-overlay').toggleClass('active')
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            showMyToast('An Error occurred, please try again','error')
+        }
+    })
+    }
+    function takeFirstTurn(battleId){
+        $.ajax({
+        url: `/battles/take_first_turn/${battleId}`,
         type: 'POST',
         data: {
             csrfmiddlewaretoken: '{{csrf_token}}',
