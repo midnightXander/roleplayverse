@@ -419,7 +419,11 @@
     </button>
    
 <div class="mobile-scroll-container">
-    
+    <div href="#" onclick="showPlayersPopup()" class="mobile-scroll-item flex justify-center border border-orange-500 items-center shine-effect rounded-2xl mb-4 " style="background-image: url('https://w0.peakpx.com/wallpaper/8/121/HD-wallpaper-valley-of-the-end-naruto-naruto-nature-naruto-shippuden-thumbnail.jpg');">    
+        <button class="bg-gray-900 hover:bg-gray-800 text-orange-500 px-2 py-2 rounded-xl">
+            <i class="fas fa-khanda mr-2"></i>Défier un joueur  
+        </button>
+    </div> 
     {% for event in events %}
     <a href="{% url 'events:tournament' event.id %}" onclick="showOverlay();" id="tournament-banner" class="mobile-scroll-item  relative bg-gradient-to-r from-orange-500 via-red-500 to-purple-500 text-white rounded-xl shadow-lg overflow-hidden ">
         <div class="p-6 space-y-4">
@@ -443,6 +447,7 @@
         <i class="fas fa-shield mr-2"></i> Voir</button>
     </a>  -->
     {% endfor %} 
+    
     <a href="/battles/solo" onclick="showOverlay()" class="mobile-scroll-item flex justify-center solo-battle-link items-center shine-effect bg-gray-500 rounded-2xl mb-4 covered">    
         <button class="bg-gray-900 hover:bg-gray-800 text-orange-500 px-2 py-2 rounded-xl">
             <i class="fas fa-rocket mr-2"></i>Combat Solo <span class="bg-black text-white rounded-lg py-1 px-2 mx-2">Beta</span></button>

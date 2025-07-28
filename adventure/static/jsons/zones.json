@@ -39,7 +39,7 @@
             "y" : 315
         },
         "missions": [
-            "Explorer le tem    ple abandonné",
+            "Explorer le temple abandonné",
             "Récupérer un parchemin volé",
             "Trouver un artefact perdu"
         ]
@@ -90,7 +90,7 @@
         ]
     },
 
-    
+
     {
         "name": "Marais des Soupirs Silencieux",
         "description": "Une zone marécageuse lugubre, réputée pour ses ninjas traîtres et ses techniques de camouflage.",
@@ -107,7 +107,7 @@
         ]
     },
     {
-        "name": "Quartier du Soleil Levant",
+        "name": "Quartier du Soleil",
         "description": " Un district animé de Konoha, où l'on trouve des boutiques d'armes, des restaurants de ramen et des centres de mission pour genin.",
         "difficulty": "Medium",
         "level_required" : 2,

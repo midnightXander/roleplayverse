@@ -6,7 +6,7 @@
     "min_level": 1,
     "max_level": 3,
     "mission_type": "dialogue",
-    "target": "irumi Kito: marchande",
+    "target": "Irumi la marchande",
     "quantity": 1,
     "reward_exp": 5,
     "reward_item": "",
@@ -84,66 +84,69 @@
         "zone": "Terrier"
     },
     {
-        "title": "Trouver le parchemin",
-        "description": "Affronte un ninja de l'ombre qui attaque les voyageurs.",
-        "long_tail_description": "",
+        "title": "Trouver le journal de Ynma",
+        "description": "Fouille le terrier pour retrouver le journal de Ynma.",
+        "long_tail_description": "Ynma aurait egaré son journal dans le terrier, il pourrait renfermer des secrets enfoui. Tu dois le retrouver et y jetter un coup d'oeil",
         "min_level": 1,
         "max_level": 5,
-        "mission_type": "defeat",
-        "target": "📜",
+        "mission_type": "collect",
+        "target": "journal d'Ynma",
         "quantity": 1,
-        "reward_exp": 10,
-        "reward_item": "Cape de l'ombre",
+        "reward_exp": 17,
+        "reward_item": "Journal d'Ynma",
         "rarity": "epic",
-        "zone": "Canyon des Vents"
+        "zone": "Terrier"
     },
+
+
+
     {
-        "title": "\u00c3\u2030liminer un voleur de parchemins",
-        "description": "Capture un voleur qui a vol\u00c3\u00a9 des parchemins interdits.",
-        "long_tail_description": "",
-        "min_level": 1,
+        "title": "Sortir d’une embuscade",
+        "description": "Tu a été attaqué, tu dois te sortir de la.",
+        "long_tail_description": "Le marais des soupirs est connu pour ses ninja renégat experts en technique de camouflage. Tu es pris en embuscade par un groupe, tu dois t'en sortir.",
+        "min_level": 2,
         "max_level": 3,
         "mission_type": "defeat",
-        "target": "Voleur de parchemins",
+        "target": "Renégats du marais",
         "quantity": 1,
-        "reward_exp": 60,
-        "reward_item": "Parchemin ancien",
-        "rarity": "common",
-        "zone": "Temple Abandonn\u00e9"
-    },
-    {
-        "title": "Vaincre un ninja tra\u00c3\u00aetre",
-        "description": "Affronte un ninja tra\u00c3\u00aetre qui a d\u00c3\u00a9sert\u00c3\u00a9 le village.",
-        "long_tail_description": "",
-        "min_level": 1,
-        "max_level": 4,
-        "mission_type": "defeat",
-        "target": "Ninja tra\u00c3\u00aetre",
-        "quantity": 1,
-        "reward_exp": 80,
+        "reward_exp": 25,
         "reward_item": "",
         "rarity": "common",
-        "zone": "Canyon des Vents"
+        "zone": "Marais des Soupirs Silencieux"
     },
     {
-        "title": "\u00c3\u2030liminer un chef de bandits",
-        "description": "Affronte le chef des bandits qui terrorise la r\u00c3\u00a9gion.",
-        "long_tail_description": "",
+        "title": "Eliminer la tortue démon du marais",
+        "description": "La tortue démon du marais est reveillé. Fuis...ou fait face",
+        "long_tail_description": "La tortue démon du marais des soupirs est considerée comme le gardien de la zone, son sommeil est précieux mais il s'emble s'etre reveillé par ton remue ménage. Défend toi",
+        "min_level": 2,
+        "max_level": 4,
+        "mission_type": "defeat",
+        "target": "Tortue du marais",
+        "quantity": 1,
+        "reward_exp": 20,
+        "reward_item": "",
+        "rarity": "common",
+        "zone": "Marais des Soupirs Silencieux"
+    },
+    {
+        "title": "Chercher un artefact",
+        "description": "Un outil ninja rare est ca",
+        "long_tail_description": "Au quartier du soleil, tu rencontre une jeune femme, Iris, qui te lance le défi de retrouver un artefact que l'avais offert son Oncle, elle promet une récompense...",
         "min_level": 2,
         "max_level": 5,
-        "mission_type": "defeat",
-        "target": "Chef des bandits",
+        "mission_type": "collect",
+        "target": "Artefact d'Iris",
         "quantity": 1,
         "reward_exp": 130,
-        "reward_item": "\u00c3\u2030p\u00c3\u00a9e maudite",
+        "reward_item": "Parchemin d'ombres",
         "rarity": "rare",
-        "zone": "Grotte Scintillante"
+        "zone": "Quartier du Soleil"
     },
     {
-        "title": "Vaincre un ninja masqu\u00c3\u00a9",
-        "description": "Affronte un ninja masqu\u00c3\u00a9 qui attaque les voyageurs.",
-        "long_tail_description": "",
-        "min_level": 4,
+        "title": "\u00c3\u2030liminer un chef de gang",
+        "description": "Le chef d'un groupe de bandit cherche la bagarre...montre qui est le boss",
+        "long_tail_description": "Au quartier du soleil, endroit où la débauche et les fêtes sont de mises, un chef de gang ivre mort après une soirée chaude avec les membres de son gang s’attaque à toi sans crier gare. L’occasion de faire taire ce groupe de malfrats qui térrorise les habitants ",
+        "min_level": 2,
         "max_level": 5,
         "mission_type": "defeat",
         "target": "Ninja masqu\u00c3\u00a9",
@@ -151,12 +154,12 @@
         "reward_exp": 150,
         "reward_item": "Masque myst\u00c3\u00a9rieux",
         "rarity": "epic",
-        "zone": "Default Zone"
+        "zone": "Quartier du Soleil"
     },
     {
-        "title": "\u00c3\u2030liminer un mercenaire dangereux",
-        "description": "Capture un mercenaire dangereux qui menace les habitants.",
-        "long_tail_description": "",
+        "title": "Explorer la zone",
+        "description": "Explore l'etendu recouvert par les racines du grand arbre.",
+        "long_tail_description": "Le journal de Ynma revele que ",
         "min_level": 2,
         "max_level": 4,
         "mission_type": "defeat",
@@ -165,7 +168,7 @@
         "reward_exp": 90,
         "reward_item": "",
         "rarity": "common",
-        "zone": "Default Zone"
+        "zone": "Les Racines du Grand Arbre Shinju"
     },
     {
         "title": "Trouver une plume rare",
@@ -179,7 +182,7 @@
         "reward_exp": 70,
         "reward_item": "Potion de vitesse",
         "rarity": "common",
-        "zone": "Ruines Anciennes"
+        "zone": "Les Racines du Grand Arbre Shinju"
     },
     {
         "title": "Explorer le temple abandonn\u00c3\u00a9",

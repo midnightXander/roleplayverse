@@ -550,6 +550,16 @@ def get_posts(request):
     return JsonResponse({'data':feed_data[:feed_limit], 'product':_product_data}, safe=False)
 
 
+def fetch_players(request):
+    player  = get_player(request.user)
+    if not player:
+        return JsonResponse({'status': 'error'}, status = 401)
+    to = request.GET.get('to','challenge')
+    if to == 'challenge':
+        players = Player.objects.filter()
+
+    return JsonResponse({'status': 'error'})
+
 def get_notifications(request):
     player = Player.objects.get(user = request.user)
     player_notifs = PlayerNotification.objects.filter(target= player).order_by('-date_sent')
