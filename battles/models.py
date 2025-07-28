@@ -120,12 +120,12 @@ class Battle(models.Model):
     def latency_passed(self):
         now = timezone.now()
         last_textpad = TextPad.objects.filter(battle = self).last()
-        date_sent = last_textpad.date_validated
-        difference = now - date_sent
-        days = difference.days
-        seconds = difference.seconds
-        print(difference.days, seconds)
-        hours = seconds // 3600
+        # date_sent = last_textpad.date_validated
+        # difference = now - date_sent
+        # days = difference.days
+        # seconds = difference.seconds
+        # print(difference.days, seconds)
+        # hours = seconds // 3600
         return False
         # print(hours)
         # if days < 1:
