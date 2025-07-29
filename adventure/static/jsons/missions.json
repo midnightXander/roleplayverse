@@ -157,12 +157,12 @@
         "zone": "Quartier du Soleil"
     },
     {
-        "title": "Explorer la zone",
+        "title": "Trouver des indices",
         "description": "Explore l'etendu recouvert par les racines du grand arbre.",
-        "long_tail_description": "Le journal de Ynma revele que ",
+        "long_tail_description": "Le journal de Ynma revele que les premieres marques ont ete retrouve pres du grand arbre Shinju. Arbre qui existe depuis plus de 500 ans. L'arbre pourrait avoir un lien avec l'origine des attaques",
         "min_level": 2,
         "max_level": 4,
-        "mission_type": "defeat",
+        "mission_type": "collect",
         "target": "Mercenaire dangereux",
         "quantity": 1,
         "reward_exp": 90,

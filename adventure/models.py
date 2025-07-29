@@ -50,6 +50,7 @@ MISSION_TYPES = [
     ('collect', 'Trouver un objet'),
     ('explore', 'Explorer une zone'),
     ('survive', 'Survivre X rounds'),
+    ('dialogue', 'Dialoguer avec un individu'),
 ]
 
 class MissionTemplate(models.Model):

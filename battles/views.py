@@ -1057,9 +1057,16 @@ def _most_reaction(textpad:TextPad):
 def take_first_turn(request, battle_id):
     battle = Battle.objects.get(id = battle_id)
     player = get_player(request.user)
+    
+    now = timezone.now()
+    date_started = battle.date_started
+    difference = now - date_started
+    days = difference.days
+    seconds = difference.seconds
+    hours = seconds // 3600
     if not player:
         return JsonResponse({'status': 'error'}, status = 401)
-    if battle.status == 'not_started' and battle.opponent == player and request.method == 'POST' :
+    if battle.status == 'not_started' and battle.opponent == player and request.method == 'POST' and ( days > 1 or hours >= 4 ) :
         battle.opponent = battle.initiator
         battle.initiator = player
         temp_character = battle.o_character 

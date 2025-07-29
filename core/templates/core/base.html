@@ -93,9 +93,9 @@
      word-wrap: break-word;
      overflow: break-word;
     }
-    /* *{
-        font: 'Cal Sans';
-    } */
+    .font-cal{
+        font-family: 'Cal Sans';
+    }
 </style>
 
 <style>
@@ -936,6 +936,102 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
     </div>
   </div>
 
+
+  <script>
+
+    function showChallengePlayersPopup(){
+        const popup = document.getElementById('challengePlayersPopup');
+        popup.classList.remove('hidden');
+        popup.classList.remove('fade-out-down');
+        popup.classList.add('fade-in-up');
+
+        getPlayersData()
+    }
+
+    function closeChallengePlayersPopup() {
+    const popup = document.getElementById('challengePlayersPopup');
+    popup.classList.remove('fade-in-up');
+    popup.classList.add('fade-out-down');
+    setTimeout(() => {
+      popup.classList.add('hidden');
+    }, 300);
+  }
+
+//   document.addEventListener('click', (e) => {
+//     const popup = document.getElementById('challengePlayersPopup');
+//     //const content = document.querySelector('#ContentPopupContent');
+//     const content = popup.querySelector('.content');
+    
+//     if (!popup.classList.contains('hidden') && !content.contains(e.target) && !e.target.closest('button[onclick^="showChallengePlayersPopup"]')) {
+//       closeChallengePlayersPopup();
+//     }
+//   });
+
+  function createPlayerElement(player){
+    const playerElement = document.createElement('div')
+    playerElement.className = 'flex items-center justify-between bg-gray-800 bg-opacity-50 rounded-lg p-3'
+    playerElement.innerHTML = `
+        <div class="flex items-center gap-3">
+                    <img src="${player.profile_picture}" alt="Player Avatar" class="w-10 h-10 border border-orange-500 rounded-full">
+                    <div>
+                        <h3 class="font-semibold">${player.nickname? player.nickname:player.name} 🔅 <span class='text-orange-500 font-cal inline-block'>${player.rank}</span></h3>
+                        <p class="text-xs text-gray-400"> ${player.last_seen} 🏆 ${player.wins} victoires </p> 
+                    </div>
+                </div>
+                <a  href = '/users/${player.user.username}' onclick = 'showOverlay()' class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-bold">
+                    <svg class='h-4 w-4' xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.477 10.826L3.275 6.288a2.154 2.154 0 0 1 2.771-3.016l13.959 6.663a2.155 2.155 0 0 1 0 3.906l-14.16 6.865a2.154 2.154 0 0 1-2.771-3.073l3.403-4.74a2.155 2.155 0 0 0 0-2.067"/></svg>
+                </a>
+    `
+
+    return playerElement;
+  }
+
+  function getPlayersData(){
+    const playersList = document.getElementById("playersList")
+    const loader = document.createElement("div")
+            loader.classname = 'text-center flex space-x-2 w-full justify-center items-center'
+            loader.innerHTML = `
+            <i class="fas fa-spinner fa-spin text-orange-500"></i> 
+            <span class="text-gray-400 text-sm "> Loading...</span>
+            `
+    $.ajax({
+        url: `/players?to=challenge`,
+        type: 'GET',
+        data: {
+            'Content-Type': 'application/json'
+        },
+        beforeSend: function(){
+            
+            playersList.innerHTML = ''
+            playersList.append(loader);
+        },
+        success: function(res){
+            
+            const players = res.players
+            if(players.length > 0){
+                players.forEach(player => {
+                playersList.append(createPlayerElement(player))
+            });
+            }else{
+                playersList.innerHTML = `
+                    <p class = 'text-gray-500 text-center px-4 py-8'>
+                        Aucun joueur dispo
+                    </p>
+                `
+            }
+        },
+        complete: function(){
+            loader.remove()
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            showMyToast('An Error occurred, please try again','error')
+        }
+    })
+  }
+
+
+
+</script>
   <!-- Popup for Available Players -->
 <div id="challengePlayersPopup" class="hidden  fixed inset-0  bg-black bg-opacity-70 flex items-center justify-center z-50">
     <div class="bg-gray-900 max-h-[70vh] content border border-gray-700 text-white rounded-xl p-6 max-w-lg w-full mx-4 overflow-y-auto">
@@ -1096,101 +1192,7 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
             </script>
 
 
-<script>
 
-    function showChallengePlayersPopup(){
-        const popup = document.getElementById('challengePlayersPopup');
-        popup.classList.remove('hidden');
-        popup.classList.remove('fade-out-down');
-        popup.classList.add('fade-in-up');
-
-        getPlayersData()
-    }
-
-    function closeChallengePlayersPopup() {
-    const popup = document.getElementById('challengePlayersPopup');
-    popup.classList.remove('fade-in-up');
-    popup.classList.add('fade-out-down');
-    setTimeout(() => {
-      popup.classList.add('hidden');
-    }, 300);
-  }
-
-//   document.addEventListener('click', (e) => {
-//     const popup = document.getElementById('challengePlayersPopup');
-//     //const content = document.querySelector('#ContentPopupContent');
-//     const content = popup.querySelector('.content');
-    
-//     if (!popup.classList.contains('hidden') && !content.contains(e.target) && !e.target.closest('button[onclick^="showChallengePlayersPopup"]')) {
-//       closeChallengePlayersPopup();
-//     }
-//   });
-
-  function createPlayerElement(player){
-    const playerElement = document.createElement('div')
-    playerElement.className = 'flex items-center justify-between bg-gray-800 bg-opacity-50 rounded-lg p-3'
-    playerElement.innerHTML = `
-        <div class="flex items-center gap-3">
-                    <img src="${player.profile_picture}" alt="Player Avatar" class="w-10 h-10 border border-orange-500 rounded-full">
-                    <div>
-                        <h3 class="font-semibold">${player.nickname? player.nickname:player.name}</h3>
-                        <p class="text-xs text-gray-400">Rang: <span class='text-orange-500'>${player.rank}</span> 🔅 ${player.last_seen} 🏆 ${player.wins} victoires. </p> 
-                    </div>
-                </div>
-                <a  href = '/users/${player.user.username}' onclick = 'showOverlay()' class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-bold">
-                    <svg class='h-4 w-4' xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.477 10.826L3.275 6.288a2.154 2.154 0 0 1 2.771-3.016l13.959 6.663a2.155 2.155 0 0 1 0 3.906l-14.16 6.865a2.154 2.154 0 0 1-2.771-3.073l3.403-4.74a2.155 2.155 0 0 0 0-2.067"/></svg>
-                </a>
-    `
-
-    return playerElement;
-  }
-
-  function getPlayersData(){
-    const playersList = document.getElementById("playersList")
-    const loader = document.createElement("div")
-            loader.classname = 'text-center flex space-x-2 w-full justify-center items-center'
-            loader.innerHTML = `
-            <i class="fas fa-spinner fa-spin text-orange-500"></i> 
-            <span class="text-gray-400 text-sm "> Loading...</span>
-            `
-    $.ajax({
-        url: `/players?to=challenge`,
-        type: 'GET',
-        data: {
-            'Content-Type': 'application/json'
-        },
-        beforeSend: function(){
-            
-            playersList.innerHTML = ''
-            playersList.append(loader);
-        },
-        success: function(res){
-            
-            const players = res.players
-            if(players.length > 0){
-                players.forEach(player => {
-                playersList.append(createPlayerElement(player))
-            });
-            }else{
-                playersList.innerHTML = `
-                    <p class = 'text-gray-500 text-center px-4 py-8'>
-                        Aucun joueur dispo
-                    </p>
-                `
-            }
-        },
-        complete: function(){
-            loader.remove()
-        },
-        error: function(jqXHR, textstatus, errorThrown){
-            showMyToast('An Error occurred, please try again','error')
-        }
-    })
-  }
-
-
-
-</script>
 <!--Sending Comments-->            
 <script>
     function openContentCommentPopup(contentId) {
