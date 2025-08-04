@@ -163,12 +163,13 @@ def generate_image(prompt, file_name= f"generated-image.png"):
         if part.text:
             print(part.text)
         elif part.inline_data:
-            file_path = f"media/generated_images/{file_name}-{random.randint(1000,99999)}.png"
+            # file_path = f"media/generated_images/{file_name}-{random.randint(1000,99999)}.png"
+            file_path = f"media/{file_name}-{random.randint(1000,99999)}.png"
             image = Image.open(BytesIO((part.inline_data.data)))
             image.save(file_path)
             images.append(
                 {
-                    #"image" : image,
+                    # "image" : image,
                     "path" : file_path
                 }
             )
