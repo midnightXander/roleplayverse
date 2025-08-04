@@ -66,7 +66,7 @@ def create_character(request):
 
         
 
-        if player.battle_points >= 2000:
+        if player.battle_points >= 1:
             prompt_data = {
                 'name' : name,
                 'gender' : gender,
@@ -115,7 +115,7 @@ def create_character(request):
                 character_data = character_data,
             )
             new_character.save()
-            player.battle_points -= 2000
+            player.battle_points -= 1
             player.save()
             return JsonResponse({'status':'success', 'character' : character_data})
         else:

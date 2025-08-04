@@ -45,10 +45,4 @@ urlpatterns = [
     path('solo/init',views.init_solo_battle, name='init_solo_battle'),
     path('solo/action',views.solo_battle_action, name='action_solo_battle'),
 
-
-    
-
-    
-
-    
 ]
