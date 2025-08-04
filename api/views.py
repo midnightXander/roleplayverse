@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from users.models import PlayerNotification
+from users.users_utility import get_player
+from users.views import _player_data
 from .models import PushSubscription
 from core.models import Comment, Post
 from pywebpush import webpush, WebPushException
@@ -280,6 +282,16 @@ class BattleRoom(APIView):
         battle_data = get_data._battle_room(request, battle_id, player)
 
         return JsonResponse({'battle_data': battle_data})
+
+class CurrentPlayer(APIView):
+    def get(self, request):
+        user = request.user
+        player = get_player(user)
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        player_data = _player_data(player)
+
+        return JsonResponse({'player': player_data}, status = 200)    
 
 
 

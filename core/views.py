@@ -7,6 +7,7 @@ from django.http import JsonResponse,HttpResponseRedirect
 from monetization.models import Payment
 from store.models import Product
 from users.models import Player,PlayerNotification,Family
+from story.models import StoryCharacter
 from django.contrib.auth.decorators import login_required
 from .models import *
 from events.models import Tournament
@@ -228,6 +229,10 @@ def home(request):
     player = get_player(request.user)
     if not player:
         return redirect('/users/signin')
+    
+    story_characters = StoryCharacter.objects.filter(player = player)
+    if not story_characters.exists():
+        return redirect('story:index')
     
     player.country = get_country(request)
     print(player.country)

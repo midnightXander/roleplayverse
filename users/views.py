@@ -838,7 +838,8 @@ def _player_data(player:Player):
         'ranking' : 10,
         'nickname' : player.nickname,
         'wins': _total_wins(player),
-        'last_seen' : _time_since_last_seen(player.last_seen)
+        'last_seen' : _time_since_last_seen(player.last_seen),
+        'unread_messages' : player.unread_messages()
     }
 
 def _sent_invite(sender, target):

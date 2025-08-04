@@ -111,13 +111,14 @@ def create_zones():
 
     print(f'created {count} zones')            
 
+#Useless, don't call this
 def assign_zones_to_missions():
     missions_file = os.path.join(BASE_DIR, 'static/jsons/missions.json')
     if not os.path.exists(missions_file):
         raise FileNotFoundError(f"missions file not found at {missions_file}")
     with open(missions_file, 'r', encoding='utf-8') as file:
         missions_data = json.load(file)
-        for mission in missions_data[:2]:
+        for mission in missions_data:
             min_level = mission.get('min_level',1)
             max_level = mission.get('max_level', 5)
 
@@ -138,12 +139,13 @@ def create_missions():
     with open(missions_file, 'r', encoding='utf-8') as file:
         missions_data = json.load(file)
         count = 0
-        for mission in missions_data[:2]: #create only the first two missions for testing
+        for mission in missions_data: #create only the first two missions for testing
             mission_data = mission.get('data', {})
             # obj,created = MissionTemplate.objects.get_or_create(
             #     title = mission['title'],
             #     defaults = mission,
             # )
+            
             MissionTemplate.objects.create(
                 title=mission['title'],
                 description=mission['description'],
@@ -162,6 +164,32 @@ def create_missions():
             count += 1
 
         print(f"Created {count} missions")    
+
+def assign_random_mission(player):
+    adventure_player = AdventurePlayer.objects.get(player = player)
+    current_level = adventure_player.level
+    
+    
+    eligible_missions = MissionTemplate.objects.filter(min_level__lte=current_level, max_level__gte=current_level)
+
+    # Exclure missions déjà reçues récemment
+    already_received = PlayerMission.objects.filter(player=player).values_list('template_id', flat=True)
+    filtered = eligible_missions.exclude(id__in=already_received)
+
+    if filtered.exists():
+        selected = random.choice(filtered)
+        return PlayerMission.objects.create(player=player, template=selected)
+
+def assign_missions(player):
+    adventure_player = AdventurePlayer.objects.get(player = player)
+    current_level = adventure_player.level
+    
+    eligible_missions = MissionTemplate.objects.filter(min_level__lte=current_level, max_level__gte=current_level)
+    already_received = PlayerMission.objects.filter(player=player).values_list('template_id', flat=True)
+    filtered = eligible_missions.exclude(id__in=already_received)
+    for mission in filtered:
+        PlayerMission.objects.create(player=player, template=mission).save()    
+        print(f"assigned mission to {player}")
 
 
 def _mission_data(mission:PlayerMission):
@@ -374,31 +402,7 @@ def training_battle_action(request):
 
         return JsonResponse({'battle_logs': logs, 'player_character' : player_character, 'bot_character' : bot_character, 'winner' : winner, 'rewards': rewards})    
 
-def assign_random_mission(player):
-    adventure_player = AdventurePlayer.objects.get(player = player)
-    current_level = adventure_player.level
-    
-    
-    eligible_missions = MissionTemplate.objects.filter(min_level__lte=current_level, max_level__gte=current_level)
 
-    # Exclure missions déjà reçues récemment
-    already_received = PlayerMission.objects.filter(player=player).values_list('template_id', flat=True)
-    filtered = eligible_missions.exclude(id__in=already_received)
-
-    if filtered.exists():
-        selected = random.choice(filtered)
-        return PlayerMission.objects.create(player=player, template=selected)
-
-def assign_missions(player):
-    adventure_player = AdventurePlayer.objects.get(player = player)
-    current_level = adventure_player.level
-    
-    eligible_missions = MissionTemplate.objects.filter(min_level__lte=current_level, max_level__gte=current_level)
-    already_received = PlayerMission.objects.filter(player=player).values_list('template_id', flat=True)
-    filtered = eligible_missions.exclude(id__in=already_received)
-    for mission in filtered[:1]:
-        PlayerMission.objects.create(player=player, template=mission).save()    
-        print(f"assigned mission to {player}")
 
 def check_mission_completion(player:AdventurePlayer, mission:PlayerMission):
     """    Vérifie si une mission est terminée et met à jour le statut du joueur en conséquence.

@@ -39,6 +39,7 @@ urlpatterns = [
     path('adventure/',include('adventure.urls',namespace='adventure')),
     path('ai/',include('ai.urls',namespace='ai')),
     path('store/',include('store.urls',namespace='store')),
+    path('story/',include('story.urls',namespace='story')),
     path('accounts/', include('allauth.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path("__reload__/", include("django_browser_reload.urls")),

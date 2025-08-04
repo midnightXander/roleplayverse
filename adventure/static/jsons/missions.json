@@ -158,8 +158,8 @@
     },
     {
         "title": "Trouver des indices",
-        "description": "Explore l'etendu recouvert par les racines du grand arbre.",
-        "long_tail_description": "Le journal de Ynma revele que les premieres marques ont ete retrouve pres du grand arbre Shinju. Arbre qui existe depuis plus de 500 ans. L'arbre pourrait avoir un lien avec l'origine des attaques",
+        "description": "Explore l'etendu recouvert par les racines de l'arbre.",
+        "long_tail_description": "Le journal de Yima révèle que les premières marques ont été retrouvées près du grand arbre Shinju. Arbre qui existe depuis plus de 500 ans. L'arbre pourrait avoir un lien avec l'origine des marques.",
         "min_level": 2,
         "max_level": 4,
         "mission_type": "collect",
@@ -171,35 +171,36 @@
         "zone": "Les Racines du Grand Arbre Shinju"
     },
     {
-        "title": "Trouver une plume rare",
-        "description": "Cherche une plume rare dans la for\u00c3\u00aat des oiseaux l\u00c3\u00a9gendaires.",
-        "long_tail_description": "",
+        "title": "Battre les ombres de chakra",
+        "description": "Des ombres étrange attaque, défends-toi.",
+        "long_tail_description": "En parcourant les racines du grand arbre, tu te fais attaquer par des ombres possédant du chakra, ils ne subissent pas les physiques.",
         "min_level": 2,
         "max_level": 4,
-        "mission_type": "collect",
-        "target": "Plume l\u00c3\u00a9gendaire",
+        "mission_type": "defeat",
+        "target": "Ombres de chakra(RGAS)",
         "quantity": 1,
-        "reward_exp": 70,
+        "reward_exp": 30,
         "reward_item": "Potion de vitesse",
         "rarity": "common",
         "zone": "Les Racines du Grand Arbre Shinju"
     },
     {
-        "title": "Explorer le temple abandonn\u00c3\u00a9",
-        "description": "D\u00c3\u00a9couvre les secrets cach\u00c3\u00a9s dans le temple abandonn\u00c3\u00a9.",
-        "long_tail_description": "",
-        "min_level": 3,
+        "title": "Parler a Ynma",
+        "description": "Ynma te rejoins sur les lieux.",
+        "long_tail_description": "Ynma parvient à te rejoindre dans le labyrinthe des racines du grand arbre, peut-être aura-t-il des explications sur les informations trouvées sur les lieux.",
+        "min_level": 2,
         "max_level": 5,
-        "mission_type": "explore",
+        "mission_type": "dialogue",
         "target": "Temple abandonn\u00c3\u00a9",
         "quantity": 1,
-        "reward_exp": 100,
-        "reward_item": "Relique ancienne",
+        "reward_exp": 10,
+        "reward_item": "",
         "rarity": "rare",
-        "zone": "Default Zone"
+        "zone": "Les Racines du Grand Arbre Shinju",
+        "locked" : true
     },
     {
-        "title": "Vaincre un ninja rebelle",
+        "title": "Une ombre se dechaine",
         "description": "Localise et \u00c3\u00a9limine un shinobi d\u00c3\u00a9serteur dans la zone actuelle.",
         "long_tail_description": "",
         "min_level": 2,
@@ -210,8 +211,11 @@
         "reward_exp": 100,
         "reward_item": "",
         "rarity": "common",
-        "zone": "Montagne Maudite"
+        "zone": "Les Racines du Grand Arbre Shinju",
+        "locked" : true
     },
+
+
     {
         "title": "Survivre \u00c3\u00a0 une embuscade",
         "description": "Tiens 2 rounds contre une embuscade ennemie sans tomber.",

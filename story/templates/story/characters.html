@@ -1,0 +1,123 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Mes Personnages{% endblock title %}
+{% block meta_description%}Crée ton personnage de story. {% endblock meta_description%}
+
+{% block content %}
+<style>
+  @media (max-width: 640px) {
+    .container {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+    .flex.items-center {
+      padding: 0.5rem 0.5rem;
+    }
+    .w-14, .h-14 {
+      width: 3.5rem !important;
+      height: 3.5rem !important;
+    }
+    .text-base {
+      font-size: 1rem !important;
+    }
+  }
+</style>
+<div class="container mx-auto max-w-2xl py-32 px-2">
+   
+  <h1 class="text-2xl font-bold text-orange-500 text-center mb-6">Mes Personnages</h1>
+  <div class="flex mb-2">
+  <a href="/story/character/create" onclick="showOverlay()" class="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-full shadow transition text-sm font-semibold">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+      <path stroke="currentColor" stroke-width="2" d="M12 16v-4m0-4h.01"/>
+    </svg>
+    Créer Personnage
+  </a>
+</div> 
+  <div id="charactersList" class="flex flex-col gap-3">
+    <!-- {% for character in characters %}
+    <a href="/" class="flex items-center bg-gray-900 rounded-xl shadow hover:shadow-lg transition hover:bg-gray-800 px-3 py-2 gap-3 w-full">
+      <div class="flex-shrink-0 w-14 h-14 rounded-full overflow-hidden border-2 border-orange-400">
+        <img src="{{ character.avatar}}" alt="{{ character.name }}" class="w-full h-full object-cover" />
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <span class="font-semibold text-orange-400 text-base truncate">{{ character.name }}</span>
+          <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded-full">{{ character.origin }} </span>
+          <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded-full">{{ character.rank }} </span>
+          <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded-full">{{ character.affinity }} </span>
+        </div>
+        <p class="text-xs text-gray-400 mt-1 truncate">{{ character.story|default:"Aucune description."|truncatechars:60 }}</p>
+      </div>
+      <svg class="w-5 h-5 text-orange-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+      </svg>
+    </a>
+    {% empty %} -->
+    <!-- <div class="text-center text-gray-400 py-12">
+      <i class="fas fa-user-ninja text-4xl mb-2"></i>
+      <p>Aucun personnage créé pour le moment.</p>
+    </div> -->
+    <!-- {% endfor %} -->
+  </div>
+</div>
+
+
+{{characters|json_script:"characters"}}
+<script>
+    const characters = JSON.parse(document.querySelector("#characters").textContent) 
+    
+    function getAffinityIcon(affinity) {
+        switch(affinity) {
+        case 'Water': return '💧';
+        case 'Fire': return '🔥';
+        case 'Lightning': return '⚡';
+        case 'Wind': return '🌪️';
+        case 'Earth': return '🪨';
+        default: return '';
+        }
+    }
+    
+    function createCharacterCard(character){
+        const characterElement = document.createElement('a')
+        characterElement.className = 'flex items-center bg-gray-900 rounded-xl shadow hover:shadow-lg transition hover:bg-gray-800 px-3 py-2 gap-3 w-full'
+        characterElement.innerHTML = `
+        <div class="flex-shrink-0 w-14 h-14 rounded-full overflow-hidden border-2 border-orange-400">
+        <img src="${character.avatar}" alt="${ character.name}" class="w-full h-full object-cover" />
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <span class="font-semibold text-orange-400 text-base truncate">${character.name}</span>
+          <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded-full">${character.origin} </span>
+          
+          <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded-full">${getAffinityIcon(character.affinity)} </span>
+        </div>
+        <p class="text-xs text-gray-400 mt-1 truncate">${character.last_textpad}</p>
+      </div>
+      <svg class="w-5 h-5 text-orange-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+      </svg>
+        `
+        characterElement.href = `/story/game/${character.id}`
+        characterElement.onclick = function(){
+            showOverlay()
+        }
+        return characterElement
+    }
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+        // const container = document.getElementById('charactersList')
+        // characters.forEach(character => {
+        //     container.appendChild(createCharacterCard(character))
+        // });
+    })
+    const container = document.getElementById('charactersList')
+        characters.forEach(character => {
+            container.appendChild(createCharacterCard(character))
+        });
+
+
+
+</script>
+
+{% endblock content %}

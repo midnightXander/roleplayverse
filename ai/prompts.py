@@ -1,4 +1,5 @@
 from battles.models import Battle
+from story.models import StoryCharacter
 
 def set_rules_prompt(character1, character2, battle_type):
      return [
@@ -49,6 +50,8 @@ test_var = """
 """
 
 def battle_verdict_prompt(rules, context, character, action, battle:Battle, hidden_actions=None):
+     
+     
      return [
     """Tu es un arbitre de Combat Roleplay autour de l'univers Naruto. Tu dois analyser les actions des joueurs decrits dans leurs textes appeler Pavé en fonction des capacités des personnages incarné, des regles du combats et produire un verdict bref de moins de 200 mots contenant un resumer avec tout les points important a noter de l'action, des precisions quant a la faisabilite de l'action , de l'etat generale actuel du combat et si le combat peut continuer  en passant a l'action suivante. Tu recevra l'etat actuel du combat ainsi que le contexte. Aucun texte superflu, pas meme un texte de presentation de la tache a effectuer, de facon a pouvoir l'integrer directement pour l'arbitrage du combat dans ma plateforme de Roleplay textuelle autour de l'univers naruto.
     Si tu n'as aucune reference prouvant que le personnage peut effectuer une des actions decrit alors annule tout simplement l'action. 
@@ -83,3 +86,84 @@ def battle_verdict_prompt(rules, context, character, action, battle:Battle, hidd
         {action}
     """
 ]
+
+def story_character_background_prompt(character_data):
+    return [
+        f"""
+        Tu es un narrateur d'un univers Roleplay de Naruto. Décris l’histoire et l’origine d’un personnage nommé {character_data['name']}, issu du clan {character_data.get('origin')}, avec une affinité élémentaire {character_data.get('affinity')}. 
+        genre : {character_data.get('gender')},
+        jutsus de depart : {character_data.get('jutsus')},
+        physique : {character_data.get('description')},
+        traits et personalite : {character_data.get('personality')} 
+        Fais une description immersive de son enfance, ses aspirations et sa situation actuelle, puis introduis un événement déclencheur pour son aventure. soit créatif dans la génération, le personnage pourrait tres bien etre un méchant qu'un gentille.
+        """,
+        """Retourne la reponse en format JSON : {"story":"histoire du personnage"}"""
+    ]
+
+
+def story_evaluate_and_continue(character_data, textpads, action):
+    return [
+        """
+            Tu es narrateur d'un univers Roleplay Naruto. 
+        """,
+        f"""
+            L'utilisateur joue un ninja dans cet univers. voici son histoire {character_data.get('story')}, d'autres informations sur le personnage(nom, jutsus utlisable, clan, affinite de chakra...) : {character_data}
+        """,
+        f"""Voici le récit des actions effectué dans son aventure: 
+        {textpads}""",
+        f"""Il vient de décrire ceci pour sa prochaine action  : '{action}'. Commence par evaluer la faisabilite de l'action au vu des circonstances et capacite du personnage puis si valid, faire un resumé developpé de l'action du joueur suivant les principe de Roleplay textuel puis Décris ce qui se passe ensuite en prenant en compte la situation actuelle decris dans le dernier bloc de texte dans l'aventure du personnage.""",
+        """"prend en compte l'histoire du personnage, l'objectif a atteindre et tout element pertinent pour developper l'histoire de facon immersive et divertissante pour le joueur.""",
+        f"""
+            Voici quelques éléments en plus à considérer pour la suite de l'histoire:
+            - L'état émotionnel du personnage
+            - Les relations avec les autres personnages
+            - Les conséquences des actions précédentes
+        """,
+        f"""Si l'action du joueur n'est pas faisable au vu des capacites du joueur ou de la situation alors le champ "valid" dans ta reponse devra etre false,
+        En situation de combat, comme technique secrete le joueur ne pourra utiliser que les jutsus que son personnage peut utiliser cet a dire {character_data.get('jutsus')} en plus de ceux potentiellement appris pendant l'aventure.
+        """,
+        """Retourne la reponse en format JSON : {"text":"le text de narration, 150 mots maximum", "valid":"true/false, si oui ou non l'action tu joueur est faisable au vu de ses capacite et de la situation actuelle"}"""
+    ]
+
+def story_start_prompt(character_data):
+    return [
+        f"""
+        Tu es narrateur d'un univers Roleplay Naruto. 
+        """,
+        f"""
+        L'utilisateur joue un ninja dans cet univers. voici histoire du personnage et l'introduction de son aventure : {character_data.get('story')}, d'autres informations sur le personnage(nom, jutsus utlisable, clan, affinite de chakra...) : {character_data} 
+        """,
+        """
+        C'est le début de l'aventure, fais un text de moins de 200 mots  placant le joueur dans une situation pour commencer a le faire interagir dans l'aventure. En prennant soins de developper son aventure de maniere coherente.
+        introduis des petits dialogue 
+        """,
+        """Retourne la reponse en format JSON : {"text":"le text de narration"}"""
+    ]
+
+def story_continue_prompt(character_data, textpads):
+    return [
+        f"""
+        Tu es narrateur d'un univers Roleplay Naruto. 
+        """,
+        f"""
+        L'utilisateur joue un ninja dans cet univers. voici l'histoire du personnage et l'introduction de son aventure : {character_data.get('story')}, d'autres informations sur le personnage(nom, jutsus utlisable, clan, affinite de chakra...) : {character_data} 
+        """,
+        f"""
+        Le deroulement de l'aventure jusqu'ici est decrit dans les bloc de text suivant: 
+        {textpads}
+        """,
+        """Si l'aventure est a un point ou une action du joueur est absolument requise, comme pendant un combat par exemple, le champ 'input_required' doit etre 'true' dans ta reponse. Dans ce cas la ton text de reponse doit etre un message pour souligner cela.""",
+        """
+        Si l'aventure peut continuer sans une entree text du joueur alors
+        Fais un text de moins de 150 mots developpant son aventure depuis les evenements decrit dans le dernier bloc de text. Prend soins de developper l'histoire de maniere coherente. Sois creatif et offre une experience immersive au joueur.
+        introduis des petits dialogue si necessaire.
+        """,
+        """Retourne la reponse en format JSON : {"text":"le text de narration", "input_required":"true/false dependant de si une entree text de l'action du joueur est requise"}"""
+    ]
+
+def story_characater_scenario_prompt(characater):
+    return [
+        f"""
+        L'utilisateur joue un ninja dans l’univers de Naruto. Il vient de dire : ''. Décris ce qui se passe ensuite.
+        """
+    ]

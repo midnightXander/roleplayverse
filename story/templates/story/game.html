@@ -1,0 +1,436 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Mes Personnages{% endblock title %}
+{% block meta_description%}Crée ton personnage de story. {% endblock meta_description%}
+
+{% block content %}
+<style>
+  @media (max-width: 640px) {
+    .container {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+    .flex.items-center {
+      padding: 0.5rem 0.5rem;
+    }
+    .w-14, .h-14 {
+      width: 3.5rem !important;
+      height: 3.5rem !important;
+    }
+    .text-base {
+      font-size: 1rem !important;
+    }
+  }
+  body{
+    background: radial-gradient(circle at top left, #1f2937, #0f172a);
+  }
+  .highlighted{
+    display: inline;
+    background-color: rgba(255, 165, 0, 0.1);
+    border: 1px solid rgba(255, 165, 0, 0.3);
+    /* border-radius: 8px;  */
+    padding: 2px 10px;
+    margin-bottom: 20px;
+    line-height: 1.8;
+  }
+
+  .collapsible-paragraph {
+    cursor: pointer;
+    transition: background 0.2s;
+    border-radius: 6px;
+    padding: 0.5em 0.75em;
+    margin-bottom: 0.5em;
+    position: relative;
+  }
+  .collapsible-paragraph .toggle-arrow {
+    position: absolute;
+    left: -1.5em;
+    top: 0.7em;
+    font-size: 1em;
+    color: #f59e42;
+    transition: transform 0.2s;
+  }
+
+  .show-scrollbar{
+        -ms-overflow-style: auto;  /* IE and Edge */
+        scrollbar-width: auto;  /* Firefox */
+    }
+  
+  /* .textpad.collapsed .collapsible-content {
+    display: none;
+  } */
+
+  .textpad.collapsed .toggle-arrow {
+    transform: rotate(90deg);
+  }
+
+  .textpad .toggle-arrow{
+    font-size: 1em;
+    color: #f59e42;
+    transition: transform 0.2s;
+  }
+  
+</style>
+<main class="container mx-auto min-h-screen max-w-2xl py-32 px-2">
+ <div class="flex items-center rounded-xl shadow transition px-3 py-2 gap-3 w-full mb-4">
+    <a onclick="showOverlay()" href="/story/characters" class="text-orange-500"><i class="fas fa-arrow-left"></i></a>    
+    <div class="flex-shrink-0 w-14 h-14 rounded-full overflow-hidden border-2 border-orange-400">
+        <img src="{{character.avatar}}" alt="{{ character.name }}" class="w-full h-full object-cover" />
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <span class="font-semibold text-orange-400 text-base truncate">{{character.name}}</span>
+          <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded-full">{{character.origin}} </span>
+          <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded-full">{{character.affinity_icon}}</span>
+        </div>
+      </div>
+      
+</div>
+    
+    <!-- Zone de narration -->
+    <div id="narration" class="space-y-1 text-sm text-gray-200  p-4 rounded-lg h-[60vh] show-scrollbar overflow-y-auto">
+        <h1 class="text-lg font-bold mb-4">Intro</h1>
+        <p class="textpad collapsed italic body" data-content = '{{character.story}}' data-collapsed-content = '{{character.story|truncatewords:50}}'><i onclick="toggleCollapseParagraph(this)" class="toggle-arrow text-xl fas fa-caret-right text-orange-500 cursor-pointer mr-2"></i><em>{{character.story}}</em></p>
+        {% for textpad in textpads %}
+        <p class="textpad italic body" data-content = '{{textpad}}' data-collapsed-content = '{{textpad|truncatewords:50}}'><i onclick="toggleCollapseParagraph(this)" class="toggle-arrow text-xl fas fa-caret-right text-orange-500 cursor-pointer mr-2"></i><em>{{textpad}}</em></p>
+        {% endfor %}
+    </div>
+     <form id="actionInputForm" class="mt-4 mb-8 hidden w-full relative" onsubmit="handleAction(event)">
+        <i onclick="hideTurnInput()" class="relative right-0 cursor-pointer fas fa-times text-orange-500 text-2xl"></i>
+        <textarea id="action-input" oninput="autoExpand(this)" rows="3" class="mb-4 w-full  bg-gray-800 text-white rounded-3xl border border-gray-700 p-4 focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Que fais-tu..."></textarea>
+        <div class="flex justify-between items-center">
+            <span id="wordCount" class="text-gray-400">Mots: 0</span>
+            <button id="actionSubmitBtn" type="submit" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="200" height="200" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.76 12H6.832m0 0c0-.275-.057-.55-.17-.808L4.285 5.814c-.76-1.72 1.058-3.442 2.734-2.591L20.8 10.217c1.46.74 1.46 2.826 0 3.566L7.02 20.777c-1.677.851-3.495-.872-2.735-2.591l2.375-5.378A2 2 0 0 0 6.83 12"/></svg>
+            </button>
+        </div>
+    </form>
+    <!-- Input utilisateur -->
+    <div id="actions" class="flex justify-center overflow-x-auto p-4 space-x-4 bg-opacity-90  w-full">
+      <!-- <input type="text" id="action-input" class="flex-1 px-4 py-2 rounded bg-gray-700 text-white focus:outline-none" placeholder="Que fais-tu ?" required />
+      <button type="submit" class="bg-orange-600 px-4 py-2 rounded hover:bg-orange-700">Envoyer</button> -->
+      {% if status == 'ongoing' %}  
+      <button onclick="showTurnInput()" type="button" class="action-btn  hover:bg-orange-700 truncate border text-white font-bold py-1 px-4 rounded-full transition duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="200" height="200" viewBox="0 0 21 21"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M17 4a2.121 2.121 0 0 1 0 3l-9.5 9.5l-4 1l1-3.944l9.504-9.552a2.116 2.116 0 0 1 2.864-.125zM9.5 17.5h8m-2-11l1 1"/></svg>
+        </button>
+
+        <button onclick="continueStory()" type="button" class="action-btn hover:bg-orange-700 truncate border text-white font-bold py-2 px-4 rounded-full transition duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="200" height="200" viewBox="0 0 24 24"><path fill="currentColor" d="M18.54 9L8.88 3.46a3.42 3.42 0 0 0-5.13 3v11.12A3.42 3.42 0 0 0 7.17 21a3.43 3.43 0 0 0 1.71-.46L18.54 15a3.42 3.42 0 0 0 0-5.92Zm-1 4.19l-9.66 5.62a1.44 1.44 0 0 1-1.42 0a1.42 1.42 0 0 1-.71-1.23V6.42a1.42 1.42 0 0 1 .71-1.23A1.51 1.51 0 0 1 7.17 5a1.54 1.54 0 0 1 .71.19l9.66 5.58a1.42 1.42 0 0 1 0 2.46Z"/></svg>
+        </button>
+
+        <button type="button" class="action-btn hover:bg-red-700 hover:text-white truncate border border-red-500 text-red-500 font-bold py-2 px-4 rounded-full transition duration-300">
+            <svg class="h-4 w-4 text-red-500" xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m13.5 10l4 4m0-4l-4 4m6.095 4.5H9.298a2 2 0 0 1-1.396-.568l-5.35-5.216a1 1 0 0 1 0-1.432l5.35-5.216A2 2 0 0 1 9.298 5.5h10.297c.95 0 2.223.541 2.223 1.625v9.75c0 1.084-1.273 1.625-2.223 1.625Z"/>
+            </svg>
+        </button>
+
+        <button onclick="showHowToPlayPopup()" type="button" class="action-btn hover:bg-orange-700 truncate border border-gray-400 text-gray-400 font-bold py-2 px-4 rounded-full transition duration-300">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 192 512">
+                <path fill="currentColor" d="M48 80a48 48 0 1 1 96 0a48 48 0 1 1-96 0zM0 224c0-17.7 14.3-32 32-32h64c17.7 0 32 14.3 32 32v224h32c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h32V256H32c-17.7 0-32-14.3-32-32z"/>
+            </svg>
+        </button>
+        {% endif %}
+        
+        {% if status == 'not_started' %}
+        <div class= "">
+            <button onclick="startStory()" type="button" class="action-btn hover:bg-green-700 truncate border border-green-700 text-green-500 font-bold py-2 px-4 rounded-full transition duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="200" height="200" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linejoin="round"><path d="M7 13.732c-1.333-.77-1.333-2.694 0-3.464l9-5.196c1.333-.77 3 .192 3 1.732v10.392c0 1.54-1.667 2.502-3 1.732l-9-5.196Z"/><path stroke-linecap="round" d="M4 19V5"/></g></svg>
+            </button>
+        </div>
+        {% endif %}
+
+        
+
+        <!-- <button type="button" class="hover:bg-orange-700 border text-white font-bold py-2 px-4 rounded-full transition duration-300">
+            Strategique
+        </button> -->
+    </div>
+</main>
+<!-- <div class="flex justify-end mb-2">
+  <button onclick="showHowToPlayPopup()" class="flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-full shadow transition text-sm font-semibold">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+      <path stroke="currentColor" stroke-width="2" d="M12 16v-4m0-4h.01"/>
+    </svg>
+    Comment jouer ?
+  </button>
+</div> -->
+
+<!-- Popup Modal -->
+<div id="howToPlayPopup" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+  <div class="bg-gray-900 rounded-2xl shadow-lg p-6 max-w-md w-full relative">
+    <button onclick="hideHowToPlayPopup()" class="absolute top-2 right-3 text-gray-400 hover:text-orange-500 text-2xl font-bold">&times;</button>
+    <h2 class="text-xl font-bold text-orange-400 mb-3">Comment jouer au mode Story ?</h2>
+    <ul class="list-disc list-inside text-gray-200 space-y-2 mb-4 text-sm">
+      <li><b>Déroulement :</b> Le mode Story te plonge dans une aventure interactive inspirée de l’univers Naruto. Tu incarnes ton personnage et fais des choix à chaque étape.</li>
+      <li><b>Continuer l’histoire :</b> <span class="inline-block bg-gray-800 text-orange-400 px-2 py-1 rounded"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="200" height="200" viewBox="0 0 24 24"><path fill="currentColor" d="M18.54 9L8.88 3.46a3.42 3.42 0 0 0-5.13 3v11.12A3.42 3.42 0 0 0 7.17 21a3.43 3.43 0 0 0 1.71-.46L18.54 15a3.42 3.42 0 0 0 0-5.92Zm-1 4.19l-9.66 5.62a1.44 1.44 0 0 1-1.42 0a1.42 1.42 0 0 1-.71-1.23V6.42a1.42 1.42 0 0 1 .71-1.23A1.51 1.51 0 0 1 7.17 5a1.54 1.54 0 0 1 .71.19l9.66 5.58a1.42 1.42 0 0 1 0 2.46Z"/></svg></span> Clique sur le bouton <b>Continuer</b> pour avancer dans le récit généré par l’IA.</li>
+      <li><b>Prendre une décision :</b> <span class="inline-block bg-gray-800 text-orange-400 px-2 py-1 rounded"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="200" height="200" viewBox="0 0 21 21"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M17 4a2.121 2.121 0 0 1 0 3l-9.5 9.5l-4 1l1-3.944l9.504-9.552a2.116 2.116 0 0 1 2.864-.125zM9.5 17.5h8m-2-11l1 1"/></svg></span> Clique sur <b>Tour</b> pour écrire ce que ton personnage fait, pense ou dit. L’IA réagit à tes choix !</li>
+      <li><b>Informations :</b> <span class="inline-block bg-gray-800 text-orange-400 px-2 py-1 rounded">ℹ️</span> Le bouton <b>Info</b> explique le contexte ou les règles à tout moment.</li>
+      <li><b>Navigation :</b> Les paragraphes de narration sont <b>repliables</b> : clique sur la flèche(<i  class="text-xl fas fa-caret-right text-orange-500"></i>) pour afficher ou masquer les détails.</li>
+    </ul>
+    <p class="text-gray-400 text-xs">Le mode Story est conçu pour être immersif, interactif et évolutif. Tes choix influencent le déroulement de l’aventure !</p>
+  </div>
+</div>
+
+
+<script>
+function showHowToPlayPopup() {
+  document.getElementById('howToPlayPopup').classList.remove('hidden');
+}
+function hideHowToPlayPopup() {
+  document.getElementById('howToPlayPopup').classList.add('hidden');
+}
+</script>
+    
+<script>
+    const narrationContainer = document.getElementById('narration')
+
+    function setupCollapsibleParagraphs() {
+    document.querySelectorAll('.textpad').forEach(function(paragraph) {
+        const em = paragraph.querySelector('em');
+        paragraph.classList.toggle('collapsed');
+        em.textContent = paragraph.classList.contains('collapsed') ? paragraph.dataset.collapsedContent : paragraph.dataset.content;
+    });
+  }
+
+  setupCollapsibleParagraphs()
+
+  function toggleCollapseParagraph(icon){
+    const paragraph = icon.closest('p')
+    const em = paragraph.querySelector('em');
+    paragraph.classList.toggle('collapsed');
+    em.textContent = paragraph.classList.contains('collapsed') ? paragraph.dataset.collapsedContent : paragraph.dataset.content;
+  }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        console.log('loaded')
+        // Récupérer les données du personnage
+        //const characterData = JSON.parse(document.querySelector("#characters").textContent)[0];
+        
+        // Mettre à jour le titre de la page
+        //document.title = `Story - ${characterData.name}`;
+        
+        // Mettre à jour la narration initiale
+        //document.querySelector("#narration .body").textContent = characterData.story || "Aucune histoire disponible.";
+    //     const narrationContainer = document.getElementById('narration')
+    //     $(narrationContainer).animate({
+    //         scrollTop: narrationContainer.scrollHeight,
+    //     },'smooth')
+    $('.bottom-nav').remove();
+    
+    //addText(narrationContainer, "RoleplayVerse est une nouvelle plateforme immersive pour les passionnés de Naruto et de roleplay. Les joueurs peuvent créer leur personnage, simuler des combats RP en texte comme dans les groupes Facebook, vivre des aventures dans un monde inspiré du manga, et même participer à des tournois supervisés par des IA ou des arbitres.")
+});
+    setupCollapsibleParagraphs();
+    
+    scrollToBottom(narrationContainer)
+
+
+    function scrollToBottom(element){
+        $(element).animate({
+            scrollTop: element.scrollHeight,
+        },'smooth')
+    }
+
+    function typeWriterEffect(element, text, speed = 50, scroll = true) {
+    let index = 0;
+
+    function type() {
+        if (index < text.length) {
+        element.textContent += text.charAt(index);
+        index++;
+        setTimeout(type, speed);
+        }else{
+            if(scroll==true){scrollToBottom(narrationContainer)}
+        }
+    }
+
+    type();
+    }
+    
+    function addText(container, text){
+
+        document.querySelectorAll('.highlighted').forEach(el => {
+            el.classList.remove('highlighted')
+        })
+        const p = document.createElement('p');
+        p.className = 'textpad body italic';
+        
+        p.innerHTML = `
+        <i onclick="toggleCollapseParagraph(this)" class="toggle-arrow text-xl fas fa-caret-right text-orange-500 cursor-pointer mr-2"></i><em class='highlighted' ></em>
+        `
+        p.dataset.collapsedContent = String(text).slice(0,150) + "..."
+        p.dataset.content = text
+        // p.textContent = text;
+        const em = p.querySelector('em')
+        container.appendChild(p);
+        typeWriterEffect(em, text, 50);
+    }
+
+
+    function DeleteLastTurn(){
+
+    }
+        
+    function continueStory(){
+        $.ajax({
+            url : "/story/game/{{character.id}}",
+            type : 'POST',
+            data : {
+                csrfmiddlewaretoken : '{{csrf_token}}',
+                action : 'continue',
+            },
+            beforeSend : function(){
+                console.log('loading...')
+                disableActionButtons()
+            },
+            success : function(res){
+                if(res.status == "success"){
+                    const text = res.text
+                    addText(narrationContainer, text)
+                }else{
+                    showMyToast("Une erreur s'est produite reessaie")
+                }
+            },
+            complete : function(){
+                console.log('finished')
+                enableActionButtons()
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                showMyToast(textstatus, "error")
+            }
+
+        })
+    }
+
+    function startStory(){
+        $.ajax({
+            url : "/story/game/{{character.id}}",
+            type : 'POST',
+            data : {
+                csrfmiddlewaretoken : '{{csrf_token}}',
+                action : 'start',
+
+            },
+            beforeSend : function(){
+                
+                disableActionButtons()
+            },
+            success : function(res){
+                if(res.status == "success"){
+                    const text = res.text
+                    addText(narrationContainer, text)
+                    window.location.reload()
+                }else{
+                    showMyToast(res.message)
+                }
+            },
+            complete : function(){
+                
+                enableActionButtons()
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                showMyToast(textstatus, "error")
+            }
+
+        })
+    }
+    
+    function disableActionButtons(){
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+        });
+        // document.querySelector("#actionSubmitbtn").disabled = true;
+        // document.querySelector("#actionSubmitBtn").classList.add('opacity-50', 'cursor-not-allowed');
+
+    }
+
+    function enableActionButtons(){
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        });
+
+        // document.querySelector("#actionSubmitbtn").disabled = false;
+        // document.querySelector("#actionSubmitbtn").classList.remove('opacity-50', 'cursor-not-allowed');
+
+    }
+    
+
+    function hideActionButtons(){
+        const actionButtons = document.querySelectorAll('.action-btn')
+        actionButtons.forEach(btn => {
+            btn.classList.add('hidden')
+        })
+    }
+
+    function showActionButtons(){
+        const actionButtons = document.querySelectorAll('.action-btn')
+        actionButtons.forEach(btn => {
+            btn.classList.remove('hidden')
+        })
+    }
+
+    function showTurnInput(){
+        hideActionButtons()
+        const actionInput = document.getElementById('actionInputForm')
+        actionInput.classList.remove('hidden')
+        actionInput.classList.add('animate-fade-in')
+        
+        actionInput.focus()
+    }
+    function hideTurnInput(){
+        const actionInput = document.getElementById('actionInputForm')
+        actionInput.classList.add('hidden')
+        actionInput.classList.remove('animate-fade-in')
+        showActionButtons()
+    }
+    function handleAction(event) {
+        event.preventDefault();
+        const textarea= document.getElementById('action-input');
+        const actionText = textarea.value.trim();
+        if (actionText) {
+            $.ajax({
+            url : "/story/game/{{character.id}}",
+            type : 'POST',
+            data : {
+                csrfmiddlewaretoken : '{{csrf_token}}',
+                action : 'turn',
+                text : actionText
+
+            },
+            beforeSend : function(){
+                console.log('loading...')
+                disableActionButtons()
+                $('#loading-overlay').toggleClass('active')
+            },
+            success : function(res){
+                if(res.status == "success"){
+                    const text = res.text
+                    textarea.value = '';
+                    scrollToBottom(narrationContainer)
+                    addText(narrationContainer, text)
+
+                }else{
+                    showMyToast(res.message)
+                }
+            },
+            complete : function(){
+                console.log('finished')
+                enableActionButtons()
+                $('#loading-overlay').toggleClass('active')
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                showMyToast(textstatus, "error")
+            }
+
+        })
+            
+        }
+    }
+   
+    
+
+</script>
+
+{% endblock content %}

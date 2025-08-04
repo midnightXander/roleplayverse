@@ -32,6 +32,10 @@ from google.oauth2 import service_account
 import vertexai
 import tempfile
 
+from google.genai.types import GenerateContentConfig, Modality
+from PIL import Image
+from io import BytesIO
+from django.utils import timezone
 load_dotenv()
 
 api_key = os.environ.get('GEMINI_API_KEY') 
@@ -145,6 +149,50 @@ def authenticate_genai_with_service_account():
 
 # client =  genai.Client(http_options= HttpOptions(api_version='v1'), credentials = credentials)
 client, temp_file = authenticate_genai_with_service_account()
+
+def generate_image(prompt, file_name= f"generated-image.png"):
+    response = client.models.generate_content(
+        model="gemini-2.0-flash-preview-image-generation",
+        contents=(
+            prompt
+        ),
+        config=GenerateContentConfig(response_modalities=[Modality.TEXT, Modality.IMAGE]),
+    )
+    images = []
+    for part in response.candidates[0].content.parts:
+        if part.text:
+            print(part.text)
+        elif part.inline_data:
+            file_path = f"media/generated_images/{file_name}-{random.randint(1000,99999)}.png"
+            image = Image.open(BytesIO((part.inline_data.data)))
+            image.save(file_path)
+            images.append(
+                {
+                    #"image" : image,
+                    "path" : file_path
+                }
+            )
+    return images        
+
+def generate_avatar_images(request):
+    player = get_object_or_404(Player, user = request.user) 
+    if request.method == "POST" and player:
+        gender = request.POST.get('gender')
+        description = request.POST.get('description')
+        prompt = f"""
+        generate three images of character avatar ideas for an adventure roleplaying game in the naruto verse.
+        gender is {gender}, basic description is {description}.
+        Each image should show atleast half of the body of the avatar, on every image, only one avatar should be represented so that 
+        the player will be able to chose the one that he/she prefers
+        """
+        try:
+            images = generate_image(prompt = prompt, file_name="story-avatar")
+        except Exception as e:
+            print(e)
+            return JsonResponse({'status':'error', 'message':f'{e}'})    
+        
+        return JsonResponse({'status':'success', 'images':images})
+    return JsonResponse({'status':'error'})  
 
 
 def enable_ai_refreeing(request, battle_id):
@@ -279,6 +327,26 @@ def _get_hidden_actions(battle:Battle):
                     """
                    )
         return "\n".join(actions) if actions else None
+
+def generate_json_content(prompt):
+    try:
+        response = client.models.generate_content(
+        model = "gemini-2.0-flash-001",
+        contents = prompt,
+        )
+        # print(response)
+        response_string = str(response.text).replace("```json", "").replace("```", "").strip()    
+        print(response_string)
+        ai_response = json.loads(response_string)
+        print(ai_response)
+        return ai_response
+    except Exception as e:
+        print(f"Error generating content: {e}")
+        return {'status':'error', 'message':'Erreur lors de la génération du text, réessayez plus tard.'}  
+    finally:
+        if temp_file and os.path.exists(temp_file):
+            os.remove(temp_file)
+            print(f"Cleaned up temporary service account file: {temp_file}")
 
 def make_verdict(request, battle_id):
     player = get_player(request.user)

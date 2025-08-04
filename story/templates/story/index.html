@@ -1,0 +1,42 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Mes Personnages{% endblock title %}
+{% block meta_description%}Crée ton personnage de story. {% endblock meta_description%}
+
+{% block content %}
+ <!-- <style>
+    body {
+      background: linear-gradient(135deg, #1f2937, #111827);
+    }
+  </style> -->
+<div class="min-h-[80vh] flex flex-col justify-center items-center px-4 py-12 bg-gradient-to-br from-gray-900 via-gray-950 to-gray-900">
+  <div class="max-w-md w-full text-center space-y-8">
+    <img src="{% static 'images/story_logo.png' %}" alt="Story Mode" class="mx-auto w-24 h-24 rounded-full shadow-lg mb-2 bg-gray-800 object-cover" onerror="this.style.display='none'">
+    <h1 class="text-3xl font-bold text-orange-500">Bienvenue dans le Mode Story</h1>
+    <p class="text-gray-300 text-base leading-relaxed">
+      Plonge dans une aventure interactive inspirée de l’univers Naruto.<br>
+      Crée ton propre ninja, fais des choix, et écris ta légende !
+    </p>
+     <!-- <p class="text-gray-300 text-base leading-relaxed">
+       Incarne ton propre ninja dans une aventure unique.  
+      Chaque décision, chaque action, chaque combat compte.<br>
+      Prépare-toi à écrire ton histoire dans l’univers de Naruto...
+    </p> -->
+    <div class="flex flex-col gap-3 mt-8">
+      <a onclick="showOverlay()" href="/story/character/create" class="w-full px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-full font-semibold shadow transition text-lg">Créer un personnage</a>
+      <a onclick="showOverlay()" href="/story/characters" class="w-full px-6 py-3 bg-gray-800 hover:bg-gray-700 text-orange-400 rounded-full font-semibold shadow transition text-lg">Mes personnages</a>
+    </div>
+    <!-- <div class="mt-8 text-xs text-gray-500">
+      <span>Mode Story &copy; {{ year|default:2025 }}</span>
+    </div> -->
+  </div>
+</div>
+<style>
+  @media (max-width: 640px) {
+    h1 { font-size: 2rem !important; }
+    .max-w-md { padding: 1.5rem 0.5rem; }
+  }
+</style>
+
+
+{% endblock content %}

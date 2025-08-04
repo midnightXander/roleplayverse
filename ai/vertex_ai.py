@@ -1,17 +1,96 @@
+import base64
+import json
+import tempfile
 from google import genai
 from google.genai.types import HttpOptions
 from dotenv import load_dotenv
 import os
+from google.genai.types import GenerateContentConfig, Modality
+from PIL import Image
+from io import BytesIO
+import vertexai
+import random
+from django.utils import timezone
+from datetime import datetime
 load_dotenv()
 
 api_key = os.environ.get('GEMINI_API_KEY') 
 
-#client =  genai.Client(http_options= HttpOptions(api_version='v1'), api_key=api_key)
+# client =  genai.Client(http_options= HttpOptions(api_version='v1'), api_key=api_key)
 # response = client.models.generate_content(
 #     model = "gemini-2.0-flash-001",
 #     contents = "Quels sont les points forts de Naruto dans l'anime naruto shippuden ",
 # )
+def authenticate_genai_with_service_account():
+    """
+    Authenticates genai for Vertex AI using a service account JSON 
+    stored in an environment variable.
+    """
+    if "GOOGLE_APPLICATION_CREDENTIALS_JSON" in os.environ:
+        credentials_json_base64 = os.environ["GOOGLE_APPLICATION_CREDENTIALS_JSON"]
+        try:
+            # Decode if it was Base64 encoded
+            credentials_json_bytes = base64.b64decode(credentials_json_base64)
+            credentials_info = json.loads(credentials_json_bytes)
+        except Exception:
+            # If not Base64 encoded, assume it's raw JSON
+            credentials_info = json.loads(credentials_json_base64)
 
+        # Create a temporary file for the service account key
+        # This is crucial because google.auth expects a file path
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as temp_key_file:
+            json.dump(credentials_info, temp_key_file)
+            temp_file_path = temp_key_file.name
+
+        # Set GOOGLE_APPLICATION_CREDENTIALS to the path of the temporary file
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = temp_file_path
+        print(f"Temporary service account file created at: {temp_file_path}")
+
+        # Important: Initialize Vertex AI. This will pick up GOOGLE_APPLICATION_CREDENTIALS
+        project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
+        location = os.getenv("GOOGLE_CLOUD_LOCATION")
+
+        if not project_id or not location:
+            raise ValueError("GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION must be set when using Vertex AI.")
+
+        vertexai.init(project=project_id, location=location)
+        print(f"Vertex AI initialized for project: {project_id}, location: {location}")
+
+        # Now, the genai client can be initialized for Vertex AI
+        # It will automatically use the credentials set via GOOGLE_APPLICATION_CREDENTIALS
+        # client = genai.GenerativeModel('gemini-pro', 
+        #                              # The vertexai=True parameter is often inferred if vertexai.init is called
+        #                              # but explicitly setting it can be good for clarity.
+        #                              # The client will also pick up project/location from vertexai.init()
+        #                              # You can also pass them explicitly here if not using vertexai.init()
+        #                              # vertexai=True, project=project_id, location=location
+        #                             )
+        client =  genai.Client(http_options= HttpOptions(api_version='v1'))
+
+        print("GenAI client initialized for Vertex AI.")
+        return client, temp_file_path # Return temp_file_path so it can be cleaned up
+    else:
+        print("GOOGLE_APPLICATION_CREDENTIALS_JSON not found. Falling back to default ADC or API key.")
+        # Fallback for local development or if using API key
+        # If GOOGLE_APPLICATION_CREDENTIALS is set locally, it will be used
+        # Otherwise, it might try to use GOOGLE_API_KEY or default ADC
+        try:
+            # # This will try to use GOOGLE_API_KEY if set, or ADC if available
+            # if os.getenv("GOOGLE_GENAI_USE_VERTEXAI") == "True":
+            #      project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
+            #      location = os.getenv("GOOGLE_CLOUD_LOCATION")
+            #      if not project_id or not location:
+            #          raise ValueError("GOOGLE_CLOUD_PROJECT and GOOGLE_CLOUD_LOCATION must be set when using Vertex AI.")
+            #      vertexai.init(project=project_id, location=location)
+            #      client = genai.GenerativeModel('gemini-pro')
+            # else:
+            #     client = genai.GenerativeModel('gemini-pro')
+            # return client, None
+            client =  genai.Client(http_options= HttpOptions(api_version='v1'))
+            return client,None
+        except Exception as e:
+            print(f"Could not initialize GenAI client without explicit credentials: {e}")
+            return None, None
 
 
 def ask_gemini(prompt, model = "gemini-2.0-flash-001"):
@@ -91,3 +170,30 @@ textpad_verdict_prompt = [
 # res  = str(res).replace("```json", "").replace("```", "").strip()
 # jsons_data = json.loads(res)
 # print(jsons_data)
+
+client, temp_file = authenticate_genai_with_service_account()
+prompt = "generate three images of female character avatar ideas for an adventure roleplaying game in the naruto verse."
+path = f"media/story/avatars/avatar-image-{random.randint(1000,99999)}.png"
+def generate_image(prompt, path= f"media/generated-image.png"):
+    response = client.models.generate_content(
+        model="gemini-2.0-flash-preview-image-generation",
+        contents=(
+            prompt
+        ),
+        config=GenerateContentConfig(response_modalities=[Modality.TEXT, Modality.IMAGE]),
+    )
+    images = []
+    for part in response.candidates[0].content.parts:
+        if part.text:
+            print(part.text)
+        elif part.inline_data:
+            image = Image.open(BytesIO((part.inline_data.data)))
+            image.save(f"media/{path}")
+            images.append(image)
+            
+    return images 
+
+# images = generate_image(prompt, path= f"story/avatars/avatar-image-{random.randint(1000,99999)}.png") 
+# print(images)   
+
+    

@@ -116,6 +116,256 @@
         "image": "https://i.pinimg.com/originals/61/15/46/611546408e024a83be698547e41a6bf8.gif"
     },
     {
+        "name": "Hashirama Senju",
+        "rank": "Kage",
+        "chakra_pool": 250,
+        "stamina_pool": 220,
+        "jutsus": [
+            {
+                "name": "Wood Release: Deep Forest Emergence",
+                "type": "Ninjutsu",
+                "rank": "S",
+                "chakra_cost": 90,
+                "stamina_cost": 40,
+                "description": "Creates a massive forest to overwhelm opponents."
+            },
+            {
+                "name": "Sage Art: Wood Release: True Several Thousand Hands",
+                "type": "Senjutsu",
+                "rank": "S",
+                "chakra_cost": 120,
+                "stamina_cost": 60,
+                "description": "Summons a gigantic wooden statue with thousands of hands."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/2c/7e/7e/2c7e7e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+    },
+    {
+        "name": "Madara Uchiha",
+        "rank": "Kage",
+        "chakra_pool": 240,
+        "stamina_pool": 210,
+        "jutsus": [
+            {
+                "name": "Susanoo",
+                "type": "Ninjutsu",
+                "rank": "S",
+                "chakra_cost": 100,
+                "stamina_cost": 50,
+                "description": "Manifests a gigantic, humanoid avatar for offense and defense."
+            },
+            {
+                "name": "Fire Release: Great Fire Annihilation",
+                "type": "Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 60,
+                "stamina_cost": 30,
+                "description": "Unleashes a massive wall of fire."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/8d/6b/7c/8d6b7c2e1e2b7e8e2c7e7e8e2e2b7e8e.gif"
+    },
+    {
+        "name": "Obito Uchiha",
+        "rank": "S-Class",
+        "chakra_pool": 200,
+        "stamina_pool": 180,
+        "jutsus": [
+            {
+                "name": "Kamui",
+                "type": "Ninjutsu",
+                "rank": "S",
+                "chakra_cost": 85,
+                "stamina_cost": 35,
+                "description": "Space-time jutsu that allows intangibility and teleportation."
+            },
+            {
+                "name": "Fire Release: Bomb Blast Dance",
+                "type": "Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 50,
+                "stamina_cost": 25,
+                "description": "A powerful fire technique causing massive explosions."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/6e/7e/8e/6e7e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+    },
+    {
+        "name": "Killer Bee",
+        "rank": "Jinchuriki",
+        "chakra_pool": 210,
+        "stamina_pool": 200,
+        "jutsus": [
+            {
+                "name": "Lariat",
+                "type": "Taijutsu",
+                "rank": "A",
+                "chakra_cost": 30,
+                "stamina_cost": 60,
+                "description": "A high-speed, high-power clothesline attack."
+            },
+            {
+                "name": "Tailed Beast Bomb",
+                "type": "Ninjutsu",
+                "rank": "S",
+                "chakra_cost": 100,
+                "stamina_cost": 50,
+                "description": "Concentrates chakra into a sphere and launches it as a devastating attack."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/7e/8e/2e/7e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+    },
+    {
+        "name": "A (Fourth Raikage)",
+        "rank": "Kage",
+        "chakra_pool": 180,
+        "stamina_pool": 230,
+        "jutsus": [
+            {
+                "name": "Lightning Release Chakra Mode",
+                "type": "Ninjutsu",
+                "rank": "S",
+                "chakra_cost": 60,
+                "stamina_cost": 80,
+                "description": "Envelops the body in lightning chakra to boost speed and power."
+            },
+            {
+                "name": "Liger Bomb",
+                "type": "Taijutsu",
+                "rank": "A",
+                "chakra_cost": 30,
+                "stamina_cost": 60,
+                "description": "A powerful wrestling move that slams the opponent into the ground."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/5e/8e/2e/5e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+    },
+    {
+        "name": "Nagato",
+        "rank": "S-Class",
+        "chakra_pool": 220,
+        "stamina_pool": 170,
+        "jutsus": [
+            {
+                "name": "Chibaku Tensei",
+                "type": "Ninjutsu",
+                "rank": "S",
+                "chakra_cost": 110,
+                "stamina_cost": 40,
+                "description": "Creates a massive sphere that attracts and traps everything nearby."
+            },
+            {
+                "name": "Shinra Tensei",
+                "type": "Ninjutsu",
+                "rank": "S",
+                "chakra_cost": 70,
+                "stamina_cost": 30,
+                "description": "Repels everything in the vicinity with a powerful force."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/3e/8e/2e/3e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+    },
+    {
+        "name": "Pain",
+        "rank": "S-Class",
+        "chakra_pool": 210,
+        "stamina_pool": 160,
+        "jutsus": [
+            {
+                "name": "Almighty Push",
+                "type": "Ninjutsu",
+                "rank": "S",
+                "chakra_cost": 70,
+                "stamina_cost": 30,
+                "description": "A forceful repulsion technique that pushes everything away."
+            },
+            {
+                "name": "Universal Pull",
+                "type": "Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 50,
+                "stamina_cost": 20,
+                "description": "Attracts objects or people towards the user."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/4e/8e/2e/4e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+    },
+    {
+        "name": "Shisui Uchiha",
+        "rank": "Jounin",
+        "chakra_pool": 170,
+        "stamina_pool": 150,
+        "jutsus": [
+            {
+                "name": "Kotoamatsukami",
+                "type": "Genjutsu",
+                "rank": "S",
+                "chakra_cost": 100,
+                "stamina_cost": 40,
+                "description": "A powerful genjutsu that manipulates the target's thoughts without them realizing."
+            },
+            {
+                "name": "Body Flicker Technique",
+                "type": "Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 30,
+                "stamina_cost": 20,
+                "description": "Allows the user to move at extreme speeds."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/6e/8e/2e/6e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+    },
+    {
+        "name": "Danzo Shimura",
+        "rank": "Elder",
+        "chakra_pool": 140,
+        "stamina_pool": 120,
+        "jutsus": [
+            {
+                "name": "Izanagi",
+                "type": "Genjutsu",
+                "rank": "S",
+                "chakra_cost": 80,
+                "stamina_cost": 30,
+                "description": "A forbidden technique that alters reality for a brief moment."
+            },
+            {
+                "name": "Wind Release: Vacuum Bullets",
+                "type": "Ninjutsu",
+                "rank": "B",
+                "chakra_cost": 30,
+                "stamina_cost": 15,
+                "description": "Fires a barrage of wind bullets at the enemy."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/7e/8e/2e/7e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+    },
+    {
+        "name": "Minato Namikaze",
+        "rank": "Kage",
+        "chakra_pool": 200,
+        "stamina_pool": 180,
+        "jutsus": [
+            {
+                "name": "Flying Thunder God Technique",
+                "type": "Ninjutsu",
+                "rank": "S",
+                "chakra_cost": 80,
+                "stamina_cost": 30,
+                "description": "Allows instantaneous teleportation to marked locations."
+            },
+            {
+                "name": "Rasengan",
+                "type": "Ninjutsu",
+                "rank": "A",
+                "chakra_cost": 40,
+                "stamina_cost": 20,
+                "description": "A spinning sphere of chakra that causes massive damage."
+            }
+        ],
+        "image": "https://i.pinimg.com/originals/8e/8e/2e/8e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+    },
+    {
         "name": "Gaara",
         "rank": "Kage",
         "chakra_pool": 190,

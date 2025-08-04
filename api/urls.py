@@ -24,5 +24,8 @@ urlpatterns = [
     path('battles/accept/<int:request_id>', views.BattleAccept.as_view()),
     path('battles/battle_room/<int:battle_id>',views.BattleRoom.as_view()),
 
+    path('player',views.CurrentPlayer.as_view()),
+    
+
     path('save-subscription/', views.save_subscription, name='save_subscriptions'),
 ]

@@ -12,6 +12,7 @@ class AdventurePlayer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     level = models.IntegerField(default=1)
     experience = models.IntegerField(default=0)
+    subscribed = models.BooleanField(default = False)
 
     def __str__(self):
         return f"{self.player}"
@@ -76,5 +77,6 @@ class PlayerMission(models.Model):
     status = models.CharField(max_length=20, choices=[('pending', 'En cours'), ('done', 'Terminée')], default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     tries = models.IntegerField(default=0)
+    locked = models.BooleanField(default=False)
     def __str__(self):
         return f"{self.player} - {self.template.title} ({self.status})"

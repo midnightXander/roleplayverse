@@ -1,0 +1,634 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Nouveau Personnage{% endblock title %}
+{% block meta_description%}Crée ton personnage de story. {% endblock meta_description%}
+{% block content %}
+<style>
+    main {
+      background: radial-gradient(circle at top left, #1f2937, #0f172a);
+    }
+  </style>
+  <style>
+  .trait-btn.selected, .jutsu-btn.selected {
+    border-color: #f97316 !important; /* orange-500 */
+    background: linear-gradient(90deg, #f59e42 0%, #f97316 100%);
+    color: #fff !important;
+    box-shadow: 0 2px 8px 0 #f9731633;
+  }
+</style>
+
+<main class="container text-white min-h-screen flex items-center justify-center">
+  <div class="w-full max-w-lg p-6 space-y-8">
+    <!-- Screen 1: Choix du nom -->
+    <div id="screen-1" class="screen space-y-6 animate-fade-in">
+      <h1 class="text-3xl font-bold text-center text-orange-500">Crée ton Héros Shinobi </h1>
+      <p class="text-center text-gray-300">Choisis un nom pour ton personnage</p>
+      <input type="text" id="name" placeholder="Ex: Kazen" class="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500" />
+      <div class="text-center">
+        <a href="/story/characters" onclick="showOverlay()" class="mt-4 px-6 py-3 bg-gray-400 hover:bg-gray-500 rounded-full text-white shadow transition">Quitter</a>
+        <button onclick="nextScreen(this, 'name')" class="mt-4 px-6 py-3 bg-orange-600 hover:bg-orange-700 rounded-full text-white shadow transition">Suivant →</button>
+      </div>
+    </div>
+
+    <div id="screen-2" class="hidden screen space-y-6 animate-fade-in">
+      <h1 class="text-2xl font-semibold text-center text-orange-500">Genre</h1>
+      <div class="flex justify-center gap-4">
+          <!-- Male Option -->
+          <div 
+            class="gender-option w-24 h-32 bg-center bg-cover flex flex-col items-center justify-center bg-gray-800 text-white rounded-lg border-4 border-transparent hover:border-orange-500 cursor-pointer transition duration-300"
+            onclick="selectGender('male')"
+            id="gender-male"
+            style="background-image: url(https://i.pinimg.com/736x/c8/2a/d9/c82ad9d7a09b1ee23120d72a96c61bda.jpg);"
+          >
+            <!-- <img src="https://i.pinimg.com/736x/c8/2a/d9/c82ad9d7a09b1ee23120d72a96c61bda.jpg" alt="Male" class="w-16 h-16 mb-2"> -->
+            <h1 class="font-semibold">Homme</h1>
+          </div>
+          <!-- Female Option -->
+          <div 
+            class="gender-option bg-center bg-cover w-24 h-32 flex flex-col items-center justify-center bg-gray-800 text-white rounded-lg border-4 border-transparent hover:border-orange-500 cursor-pointer transition duration-300"
+            onclick="selectGender('female')"
+            id="gender-female"
+            style="background-image: url(https://www.shutterstock.com/image-vector/anime-style-samurai-girl-standing-600nw-2343598653.jpg);"
+            >
+            <!-- <img src="https://www.shutterstock.com/image-vector/anime-style-samurai-girl-standing-600nw-2343598653.jpg" alt="Female" class="w-16 h-16 mb-2"> -->
+            <h3 class="font-semibold">Femme</h3>
+          </div>
+        </div>
+        <input type="hidden" id="genderInput" name="gender" value="">
+      <div class="text-center">
+        <button onclick="previousScreen(this)" class="mt-4 px-6 py-3 bg-gray-500 hover:bg-gray-600 rounded-full text-white shadow transition"><i class="fas fa-arrow-left mr-2"></i> Précédent </button>
+        <button onclick="nextScreen(this, 'gender')" class="mt-4 px-6 py-3 bg-orange-600 hover:bg-orange-700 rounded-full text-white shadow transition">Suivant →</button>
+      </div>
+    </div>
+
+    <!-- Screen 2: Choix du clan -->
+    <div id="screen-2" class="hidden screen space-y-6 animate-fade-in">
+      <h1 class="text-2xl font-semibold text-center text-orange-500">Origine du personnage</h1>
+      <select title="Clan" name="origin" id="origin" class="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg">
+        <option value="" disabled>Choisi un clan</option>
+        <option value="Uchiha">Uchiha</option>
+        <option value="Hyūga">Hyūga</option>
+        <option value="Nara" >Nara</option>
+        <option value="Senju">Senju</option>
+        <option value="Uzumaki">Uzumaki</option>
+        <option value="Sabaku" >Sabaku</option>
+        <option value="Otsutsuki">Otsutsuki</option>
+        <option value="Akimichi">Akimichi</option>
+        <option value="No Clan" >Sans clan</option>
+      </select>
+      <div class="text-center">
+        <button onclick="previousScreen(this)" class="mt-4 px-6 py-3 bg-gray-500 hover:bg-gray-600 rounded-full text-white shadow transition"><i class="fas fa-arrow-left mr-2"></i> Précédent </button>
+        <button onclick="nextScreen(this, 'origin')" class="mt-4 px-6 py-3 bg-orange-600 hover:bg-orange-700 rounded-full text-white shadow transition">Suivant →</button>
+      </div>
+    </div>
+
+    <div class="hidden screen space-y-6 animate-fade-in">
+      <h1 class="text-2xl font-semibold text-center text-orange-500">Affinité élémentaire</h1>
+      <div class="flex gap-4 flex-wrap justify-center items-center mt-2">
+        <button onclick="selectAffinity(this,'Water')" class="affinity-option bg-blue-600 hover:bg-blue-700 flex flex-col justify-center items-center rounded-full inline-block w-16 h-16 cursor-pointer hover:bg-gray-300 border-4 border-transparent hover:border-orange-500   transition-colors duration-300">💧</button>
+        <button onclick="selectAffinity(this,'Fire')" class="affinity-option bg-red-600 hover:bg-red-700 flex flex-col justify-center items-center rounded-full inline-block w-16 h-16 cursor-pointer hover:bg-gray-300 border-4 border-transparent hover:border-orange-500  transition-colors duration-300">🔥</button>
+        <button onclick="selectAffinity(this,'Lightning')" class="affinity-option bg-yellow-600 hover:bg-yellow-700 flex flex-col justify-center items-center rounded-full inline-block w-16 h-16 cursor-pointer hover:bg-gray-300 border-4 border-transparent hover:border-orange-500  transition-colors duration-300">⚡</button>
+        <button onclick="selectAffinity(this,'Wind')" class="affinity-option bg-green-600 hover:bg-green-700 flex flex-col justify-center items-center rounded-full inline-block w-16 h-16 cursor-pointer hover:bg-gray-300 border-4 border-transparent hover:border-orange-500  transition-colors duration-300">🌪️</button>
+        <button onclick="selectAffinity(this,'Earth')" class="affinity-option bg-stone-600 hover:bg-stone-700 flex flex-col justify-center items-center rounded-full inline-block w-16 h-16 cursor-pointer hover:bg-gray-300 border-4 border-transparent hover:border-orange-500  transition-colors duration-300">🪨</button>
+      </div>
+      <div class="text-center">
+        <button onclick="previousScreen(this)" class="mt-4 px-6 py-3 bg-gray-500 hover:bg-gray-600 rounded-full text-white shadow transition"><i class="fas fa-arrow-left mr-2"></i> Précédent </button>
+        <button onclick="nextScreen(this, 'affinity')" class="mt-4 px-6 py-3 bg-orange-600 hover:bg-orange-700 rounded-full text-white shadow transition">Suivant →</button>
+      </div>
+    </div>
+   
+<div class="hidden screen space-y-6 animate-fade-in">
+  <h1 class="text-2xl font-semibold text-center text-orange-500">Techniques</h1>
+  <div>
+    <label class="block text-sm text-gray-300 mb-2">Choisis <span class="font-bold text-orange-400">2</span> techniques de départs</label>
+    <div id="jutsus" class="grid grid-cols-2 gap-3 mt-2">
+      <!-- <button type="button" class="jutsu-btn flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-600 bg-gray-800 text-gray-200 hover:border-orange-500 hover:bg-gray-700 transition" data-value="Loyal">
+        <span>🤝</span> Loyal
+      </button>
+      <button type="button" class="jutsu-btn flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-600 bg-gray-800 text-gray-200 hover:border-orange-500 hover:bg-gray-700 transition" data-value="Rusé">
+        <span>🦊</span> Rusé
+      </button>
+      <button type="button" class="jutsu-btn flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-600 bg-gray-800 text-gray-200 hover:border-orange-500 hover:bg-gray-700 transition" data-value="Froid">
+        <span>❄️</span> Froid
+      </button>
+      <button type="button" class="jutsu-btn flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-600 bg-gray-800 text-gray-200 hover:border-orange-500 hover:bg-gray-700 transition" data-value="Impétueux">
+        <span>🔥</span> Impétueux
+      </button>
+      <button type="button" class="jutsu-btn flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-600 bg-gray-800 text-gray-200 hover:border-orange-500 hover:bg-gray-700 transition" data-value="Discipliné">
+        <span>🧘</span> Discipliné
+      </button>
+      <button type="button" class="jutsu-btn flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-600 bg-gray-800 text-gray-200 hover:border-orange-500 hover:bg-gray-700 transition" data-value="Mystérieux">
+        <span>🕵️</span> Mystérieux
+      </button> -->
+    </div>
+    <input type="hidden" id="jutsuInput" name="jutsu" value="">
+    <p id="jutsu-warning" class="text-xs text-red-400 mt-2 hidden">Sélectionne exactement 2 jutsus.</p>
+    <div class="text-center mt-4">
+      <button onclick="previousScreen(this)" class="px-6 py-3 bg-gray-500 hover:bg-gray-600 rounded-full text-white shadow transition"><i class="fas fa-arrow-left mr-2"></i> Précédent </button>
+      <button onclick="nextScreen(this, 'jutsu')" class="px-6 py-3 bg-orange-600 hover:bg-orange-700 rounded-full text-white shadow transition">Suivant →</button>
+    </div>
+  </div>
+</div>
+
+    <div class="hidden screen space-y-6 animate-fade-in">
+  <h1 class="text-2xl font-semibold text-center text-orange-500">Traits & Personnalité</h1>
+  <div>
+    <label class="block text-sm text-gray-300 mb-2">Choisis <span class="font-bold text-orange-400">2</span> traits de personnalité</label>
+    <div id="personality-traits" class="grid grid-cols-2 gap-3 mt-2">
+      <button type="button" class="trait-btn flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-600 bg-gray-800 text-gray-200 hover:border-orange-500 hover:bg-gray-700 transition" data-value="Loyal">
+        <span>🤝</span> Loyal
+      </button>
+      <button type="button" class="trait-btn flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-600 bg-gray-800 text-gray-200 hover:border-orange-500 hover:bg-gray-700 transition" data-value="Rusé">
+        <span>🦊</span> Rusé
+      </button>
+      <button type="button" class="trait-btn flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-600 bg-gray-800 text-gray-200 hover:border-orange-500 hover:bg-gray-700 transition" data-value="Froid">
+        <span>❄️</span> Froid
+      </button>
+      <button type="button" class="trait-btn flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-600 bg-gray-800 text-gray-200 hover:border-orange-500 hover:bg-gray-700 transition" data-value="Impétueux">
+        <span>🔥</span> Impétueux
+      </button>
+      <button type="button" class="trait-btn flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-600 bg-gray-800 text-gray-200 hover:border-orange-500 hover:bg-gray-700 transition" data-value="Discipliné">
+        <span>🧘</span> Discipliné
+      </button>
+      <button type="button" class="trait-btn flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-600 bg-gray-800 text-gray-200 hover:border-orange-500 hover:bg-gray-700 transition" data-value="Mystérieux">
+        <span>🕵️</span> Mystérieux
+      </button>
+    </div>
+    <input type="hidden" id="personalityInput" name="personality" value="">
+    <p id="personality-warning" class="text-xs text-red-400 mt-2 hidden">Sélectionne exactement 2 traits de personalité.</p>
+    <div class="text-center mt-4">
+      <button onclick="previousScreen(this)" class="px-6 py-3 bg-gray-500 hover:bg-gray-600 rounded-full text-white shadow transition"><i class="fas fa-arrow-left mr-2"></i> Précédent </button>
+      <button onclick="nextScreen(this, 'personality')" class="px-6 py-3 bg-orange-600 hover:bg-orange-700 rounded-full text-white shadow transition">Suivant →</button>
+    </div>
+  </div>
+</div>
+
+
+
+    <div id="description-screen" class="hidden screen space-y-6 animate-fade-in">
+      
+      <h1 class="text-3xl font-bold text-center text-orange-500">Déscription Physique</h1>
+      <p class="text-center text-gray-300">Décrit brievement le physique de ton personnage</p>
+      <textarea cols="3" id="description" type="text" placeholder="Ex: Yeux bleu, cape, cheveux noir..." class="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"></textarea>
+    <div>
+      
+      <div class="text-center">
+        <button onclick="previousScreen(this)" class="mt-4 px-6 py-3 bg-gray-500 hover:bg-gray-600 rounded-full text-white shadow transition"><i class="fas fa-arrow-left mr-2"></i> Précédent </button>
+        <button onclick="generateAvatars()" class="mt-4 px-6 py-3 bg-orange-600 hover:bg-orange-700 rounded-full text-white shadow transition">Suivant →</button>
+      </div>
+    </div>
+    </div>
+
+    <div id="avatars-screen" class="hidden screen space-y-6 animate-fade-in">
+      <h1 class="text-2xl font-semibold text-center text-orange-500">Choisi ton avatar</h1>
+      <div id="avatars" class="flex justify-center overflow-y-auto gap-4 pl-4">
+          <!-- Male Option -->
+          <img 
+            alt="avatar-image"
+            class="avatar-option  h-32 object-cover flex flex-col items-center justify-center bg-gray-800 text-white rounded-lg border-4 border-transparent hover:border-orange-500 cursor-pointer transition duration-300"
+            onclick="selectAvatar('/media/generated_images/story-avatar-70431.png')"
+            id=""
+            src="/media/generated_images/story-avatar-70431.png"
+            />
+          <!-- Female Option -->
+          <img 
+            alt="avatar-image"
+            class="avatar-option  h-32 object-cover flex flex-col items-center justify-center bg-gray-800 text-white rounded-lg border-4 border-transparent hover:border-orange-500 cursor-pointer transition duration-300"
+            onclick="selectAvatar('/media/generated_images/story-avatar-70431.png')"
+            id=""
+            src="/media/generated_images/story-avatar-70431.png"
+            />
+          <img
+            alt="avatar-image" 
+            class="avatar-option  h-32 object-cover flex flex-col items-center justify-center bg-gray-800 text-white rounded-lg border-4 border-transparent hover:border-orange-500 cursor-pointer transition duration-300"
+            onclick="selectAvatar('/media/generated_images/story-avatar-70431.png')"
+            id=""
+            src="/media/generated_images/story-avatar-70431.png"
+            />
+        </div>
+      <div class="text-center">
+        <button onclick="previousScreen(this)" class="mt-4 px-6 py-3 bg-gray-500 hover:bg-gray-600 rounded-full text-white shadow transition"><i class="fas fa-arrow-left mr-2"></i> Précédent </button>
+        <button onclick="submitCharacterInfo()" class="mt-4 px-6 py-3 bg-orange-600 hover:bg-orange-700 rounded-full text-white shadow transition">Terminer <span class="text-xs bg-gray-800 bg-opacity-50 text-gray-300 px-2 py-1 rounded-full">2000 JC</span></button>
+      </div>
+    </div>
+
+    <div id="loading-screen" class="hidden screen h-full w-full fade-enter-active animate-scaleIn">
+        <div class="flex flex-col items-center justify-center h-full space-y-6">
+        <h2 class="text-2xl font-semibold text-gray-200">Géneration de ton avatar...</h2>
+        <div class="flex items-center space-x-4">
+            <!-- Animated Character Cards -->
+            <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+            <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+            <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+        </div>
+        <!-- <p class="text-sm text-gray-400">Ton adversaire prepare le combat...</p>
+        <p class="text-sm text-gray-400">Ne pas quitter cette page</p> -->
+        </div>
+   </div>
+
+   <div id="character-info-screen" class="hidden screen space-y-4 animate-fade-in">
+  <h1 class="text-3xl font-bold text-center text-orange-500">Ton Nouveau Shinobi</h1>
+  <div class="bg-gray-900 rounded-2xl shadow-lg p-6 flex flex-col items-center gap-6">
+    <!-- Avatar -->
+    <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-orange-500 shadow-lg mb-2">
+      <img id="character-avatar-preview" src="" alt="Avatar" class="w-full h-full object-cover" />
+    </div>
+    <!-- Name & Clan -->
+    <div class="text-center">
+      <h2 id="character-name-preview" class="text-2xl font-bold text-orange-400">Tachi</h2>
+      <p id="character-origin-preview" class="text-sm text-gray-300 mt-1"></p>
+    </div>
+    <!-- Gender & Affinity -->
+    <div class="flex gap-6 justify-center items-center">
+      <span id="character-gender-preview" class="px-4 py-2 rounded-full bg-gray-800 text-orange-300 font-semibold flex items-center gap-2">
+        <i class="fas fa-user"></i> 
+      </span>
+      <span id="character-affinity-preview" class="px-4 py-2 rounded-full bg-gray-800 text-blue-300 font-semibold flex items-center gap-2">
+        <i class="fas fa-bolt"></i>
+      </span>
+    </div>
+    
+    <div class="w-full max-h-16 overflow-y-auto">
+      <h3 class="text-lg text-center font-semibold text-orange-400 mb-2">Histoire & Origin</h3>
+      <p id="character-story-preview" class="text-gray-300 text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit, quisquam quas. Labore iste mollitia maiores quas minima excepturi aut officiis suscipit ullam aperiam laudantium, id, deleniti voluptatibus soluta doloribus esse.</p>
+    </div>
+  </div>
+  <div class="text-center mt-6">
+    <a href="/story/characters" onclick="showOverlay()" class="px-8 py-3 bg-orange-600 hover:bg-orange-700 rounded-full text-white shadow transition text-lg font-bold">Commencer l'aventure →</a>
+  </div>
+</div>
+
+
+    <!-- Tu pourras ajouter d’autres écrans dynamiquement -->
+</main>
+
+  <style>
+    .animate-fade-in {
+      animation: fadeIn 0.6s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    
+  </style>
+
+  <script>
+    const jutsuList = {
+        Fire : [ 'Katon Boule de feu', 'Katon Dragon de feu', "Katon balsamine" ],
+        Wind : ["Fûuton, l'épée du Vent", "Fûuton Onde cinglante", "Lame du vide"],
+        Lightning : [ 'Eclair Pourfendeur', "Pluie d'eclair", "Raiton Chidori Senbon", "Armure d'eclair"],
+        Earth : ['Doton Mur de boue', 'Marrecage des limbes', "durcissement partiel", "Le souffle du Dragon de Terre"],
+        Water : ["Suiton Dragon Aqueux", "Suiton Vague d'eau", "Camouflage dans la brume", "Boule d'eau"]
+    }
+
+
+    let gender = ""
+    let name = ""
+    let description = ""
+    let origin = ""
+    let affinity = ""
+    let selectedJutsus = []
+    let selectedTraits = []
+    let avatar = ""
+
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(e => e.classList.add('hidden'));
+      document.getElementById(`${id}`).classList.remove('hidden');
+    }
+
+    function gotoPage(url){
+      showOverlay()  
+      window.location.href = url
+    }
+
+
+    // function validator(id){
+
+    // }
+
+    function nextScreen(element, validator){
+        if(validator){
+            if(validator == "name"){
+                name = document.getElementById('name').value
+                if(!name){
+                    showMyToast('Choisi un nom')
+                    return
+                }
+            }
+            if(validator == "gender"){
+                gender = document.getElementById('genderInput').value
+                if(!gender){
+                    showMyToast('Choisi un genre')
+                    return
+                }
+            }
+            if(validator == "origin"){
+                origin = document.getElementById('origin').value
+                if(!origin){
+                    showMyToast('Choisi une origine')
+                    return
+                }
+            }
+            if(validator == "affinity"){
+                if(!affinity){
+                    showMyToast('Choisi une affinité')
+                    return
+                }
+            }
+
+            if (validator === 'jutsu') {
+                if (selectedJutsus.length !== 2) {
+                    showJutsuWarning(true);
+                    showMyToast("Sélectionne exactement 2 jutsus")
+                    return;
+                }
+                showJutsuWarning(false);
+                
+                }
+
+        }
+        // console.log(name,gender, description, origin, affinity)
+        const parentDiv = element.closest('.screen')
+        document.querySelectorAll('.screen').forEach(e => e.classList.add('hidden'))
+        parentDiv.nextElementSibling.classList.remove('hidden')
+    }
+
+    function previousScreen(element){
+        const parentDiv = element.closest('.screen')
+        document.querySelectorAll('.screen').forEach(e => e.classList.add('hidden'))
+        parentDiv.previousElementSibling.classList.remove('hidden')
+    }
+
+    function createAvatarPreview(imgSrc){
+        const img = document.createElement('img')
+        img.className = 'avatar-option w-24 h-32 bg-center bg-cover flex flex-col items-center justify-center bg-gray-800 text-white rounded-lg border-4 border-transparent hover:border-orange-500 cursor-pointer transition duration-300'
+        img.src = imgSrc
+        img.onclick = function() {
+            selectAvatar(img);
+            document.getElementById('character-avatar-preview').src = imgSrc; // Update the preview
+        };
+
+        return img;
+    }
+
+    function generateAvatars(){
+        description =  document.getElementById('description').value;
+        console.log(description)
+        if(!description){
+            showMyToast("Décris ton perosnnage")
+            return
+        }
+        $.ajax({
+            url : "/ai/story/avatars/images/create",
+            type : "POST",
+            data : {
+                csrfmiddlewaretoken:"{{csrf_token}}",
+                gender : gender,
+                description : description,
+            },
+            beforeSend: function(){
+                showScreen('loading-screen')
+            },
+            success: function(res){
+                if(res.status == 'success'){
+                    showScreen('avatars-screen')
+                    images = res.images
+                    const container = document.getElementById('avatars')
+                    container.innerHTML = ''
+                    images.forEach((image)=>{
+                      avatar = "/"+image.path
+                      const avatarPreview = createAvatarPreview("/"+image.path) 
+                      container.appendChild(avatarPreview)
+                      //avatarPreview.addEventListener('click', selectAvatar(avatarPreview))
+                    })
+                    
+                }else{
+                    showMyToast(res.message, 'error')
+                    showScreen('description-screen')
+                }
+            },
+            complete: function(){
+              // document.querySelectorAll('.avatar-option').forEach(e =>{
+              //   e.addEventListener('click', selectAvatar(e))
+              // })
+            },
+            error : function(jqXHR, textstatus, errorThrown){
+                showScreen('description-screen')
+                showMyToast(textstatus, "error")
+            }
+        })
+    }
+
+    function selectGender(genderName) {
+  // Update the hidden input value
+    document.getElementById('genderInput').value = genderName;
+    gender  = genderName;
+    // Remove active styles from all gender options
+    document.querySelectorAll('.gender-option').forEach(option => {
+        option.classList.remove('border-orange-500');
+        option.classList.add('border-transparent');
+    });
+
+      const selectedOption = document.getElementById(`gender-${gender}`);
+    selectedOption.classList.remove('border-transparent');
+    selectedOption.classList.add('border-orange-500');
+}
+
+function selectAvatar(img){
+    avatar  = img.src;
+    // Remove active styles from all gender options
+    document.querySelectorAll('.avatar-option').forEach(option => {
+        option.classList.remove('border-orange-500');
+        option.classList.add('border-transparent');
+    });
+
+   img.classList.remove('border-transparent');
+   img.classList.add('border-orange-500');
+}
+
+function selectAffinity(button,affinityElement){
+    affinity = affinityElement;
+    console.log(affinity)
+    // Remove active styles from all gender options
+    document.querySelectorAll('.affinity-option').forEach(option => {
+        option.classList.remove('border-orange-500');
+        option.classList.add('border-transparent');
+    });
+
+    button.classList.remove('border-transparent');
+    button.classList.add('border-orange-500');
+
+    setJutsuList(affinity);
+}
+
+function createJutsuButton(jutsu){
+    const button = document.createElement('button')
+    button.className = 'jutsu-btn overflow-auto flex items-center gap-2 px-4 py-2 rounded-full border-2 border-gray-600 bg-gray-800 text-gray-200 hover:border-orange-500 hover:bg-gray-700 transition'
+    button.setAttribute("data-value", jutsu)
+    button.innerHTML = `
+    <span class='max-w-3/4' >🌀 ${jutsu}</span> 
+    `
+
+    button.addEventListener('click', function() {
+      const value = this.getAttribute('data-value');
+      if (this.classList.contains('selected')) {
+        this.classList.remove('selected');
+        selectedJutsus = selectedJutsus.filter(jutsu => jutsu !== value);
+      } else {
+        if (selectedJutsus.length < 2) {
+          this.classList.add('selected');
+          selectedJutsus.push(value);
+          
+        }
+      }
+      updatePersonalityInput();
+      showPersonalityWarning(selectedJutsus.length !== 2);
+    });
+
+    return button
+}
+
+function setJutsuList(affinity){
+    let jutsus = jutsuList[affinity]
+    const jutsusContainer = document.getElementById('jutsus')
+    jutsusContainer.innerHTML = ''
+    selectedJutsus = []
+    jutsus.forEach((jutsu) => jutsusContainer.appendChild(createJutsuButton(jutsu)))
+}
+
+//jutsu selection logic
+const jutsuButtons = document.querySelectorAll('.jutsu-btn');
+
+function updateJutsuInput() {
+document.getElementById('jutsuInput').value = selectedTraits.join(',');
+}
+
+function showJutsuWarning(show) {
+document.getElementById('jutsu-warning').classList.toggle('hidden', !show);
+}
+
+
+//Perosnality
+// Personality trait selection logic
+  const traitButtons = document.querySelectorAll('.trait-btn');
+
+  function updatePersonalityInput() {
+    document.getElementById('personalityInput').value = selectedTraits.join(',');
+  }
+
+  function showPersonalityWarning(show) {
+    document.getElementById('personality-warning').classList.toggle('hidden', !show);
+  }
+
+  traitButtons.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const value = this.getAttribute('data-value');
+      if (this.classList.contains('selected')) {
+        this.classList.remove('selected');
+        selectedTraits = selectedTraits.filter(trait => trait !== value);
+      } else {
+        if (selectedTraits.length < 2) {
+          this.classList.add('selected');
+          selectedTraits.push(value);
+        }
+      }
+      updatePersonalityInput();
+      showPersonalityWarning(selectedTraits.length !== 2);
+    });
+  });
+  // Validation on nextScreen for personality
+  const originalNextScreen = window.nextScreen;
+  window.nextScreen = function(element, validator) {
+    if (validator === 'personality') {
+      if (selectedTraits.length !== 2) {
+        showPersonalityWarning(true);
+        showMyToast("Sélectionne exactement 2 traits de personalité")
+        return;
+      }
+      showPersonalityWarning(false);
+      
+    }
+    originalNextScreen(element, validator);
+  };
+
+  function getAffinityIcon(affinity) {
+    switch(affinity) {
+      case 'Water': return '💧';
+      case 'Fire': return '🔥';
+      case 'Lightning': return '⚡';
+      case 'Wind': return '🌪️';
+      case 'Earth': return '🪨';
+      default: return '';
+    }
+  }
+
+  function showCharacterInfoScreen(character) {
+    // Fill in the preview fields
+    document.getElementById('character-avatar-preview').src = character.avatar;
+    document.getElementById('character-name-preview').textContent = character.name;
+    document.getElementById('character-origin-preview').textContent = character.origin ? `Clan : ${character.origin}` : '';
+    document.getElementById('character-gender-preview').innerHTML = (character.gender === 'male' ? '👦 Homme' : '👧 Femme');
+    document.getElementById('character-affinity-preview').innerHTML = getAffinityIcon(character.affinity) + ' ' + character.affinity;
+    document.getElementById('character-story-preview').textContent = character.story;
+
+
+    // Show the screen
+    document.querySelectorAll('.screen').forEach(e => e.classList.add('hidden'));
+    document.getElementById('character-info-screen').classList.remove('hidden');
+  }
+
+  
+
+
+  function submitCharacterInfo(){
+    
+    $.ajax({
+            url : "/story/character/create",
+            type : "POST",
+            data : {
+                csrfmiddlewaretoken:"{{csrf_token}}",
+                name : name,
+                gender : gender,
+                description : description,
+                affinity : affinity,
+                origin : origin,
+                traits : JSON.stringify(selectedTraits),
+                avatar : avatar,
+                jutsus : JSON.stringify(selectedJutsus),
+            },
+            beforeSend: function(){
+                showScreen('loading-screen')
+            },
+            success: function(res){
+              console.log(res)  
+              if(res.status == 'success'){
+                    
+                    // showCharacterInfoScreen({
+                    //   avatar : '/media/generated_images/story-avatar-42569.png',
+                    //   name : "Wesley",
+                    //   origin : 'Hyuga',
+                    //   gender : 'male',
+                    //   affinity : 'Fire',
+                    //   story : "lorem 12345"
+                    // })
+                    showCharacterInfoScreen(res.character)
+                }else{
+                    showMyToast(res.message)
+                    showScreen('avatars-screen')
+                }
+            },
+            complete: function(){
+
+            },
+            error : function(jqXHR, textstatus, errorThrown){
+                showScreen('avatars-screen')
+                showMyToast(textstatus, "error")
+            }
+        })
+  }
+  
+</script>
+
+{% endblock content %}

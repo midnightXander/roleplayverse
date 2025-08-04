@@ -70,6 +70,8 @@
         <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7259227698391457"
      crossorigin="anonymous"></script> -->
 
+        
+
         {% block styles %}
         {% endblock styles %}
         
@@ -515,7 +517,7 @@ function setupExpandableText() {
                         </div>
                     </div>
                     <div class="ml-4 flex items-center bg-gray-900 border border-gray-700 rounded-full px-2 py-1">
-                        <span class="text-orange-500 text-sm font-bold mr-2">{{player.battle_points}} JC</span>
+                        <span class="text-orange-500 text-sm font-bold truncate mr-2">{{player.battle_points}} JC</span>
                         <a href="{% url 'core:battle_points' %}">
                             <button class="bg-orange-500 text-white rounded-full px-2 py-1 text-xs hover:bg-orange-600 transition duration-300">
                             <i class="fas fa-plus text-xs"></i>
@@ -661,6 +663,46 @@ function setupExpandableText() {
     </div>
 </div>
 
+<script>
+    const toastContainer = document.getElementById('top-toastContainer');
+    
+    function showMyToast(message, type = 'info', duration = 3000) {
+        
+        document.querySelectorAll('.my-toast').forEach(el =>{
+            el.remove()
+        })
+        
+        const toast = document.createElement('div');
+        toast.className = `my-toast my-toast-${type} text-sm`;
+        
+        const messageSpan = document.createElement('span');
+        messageSpan.textContent = message;
+        
+        const closeButton = document.createElement('button');
+        closeButton.className = 'my-toast-close';
+        closeButton.innerHTML = '&times;';
+        closeButton.onclick = () => removeToast(toast);
+        
+        toast.appendChild(messageSpan);
+        toast.appendChild(closeButton);
+        
+        toastContainer.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.animation = 'fadeOut 0.3s ease-out forwards';
+            setTimeout(() => removeToast(toast), 300);
+        }, duration);
+    }
+    
+    function removeToast(toast) {
+        if(toast.parentNode == toastContainer){
+            toastContainer.removeChild(toast);
+        }
+        
+    }
+    
+   
+</script>
 
 <script>
 
@@ -977,7 +1019,7 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
                         <h3 class="font-semibold">${player.nickname? player.nickname:player.name} 🔅 <span class='text-orange-500 font-cal inline-block'>${player.rank}</span></h3>
                         <p class="text-xs text-gray-400"> ${player.last_seen} 🏆 ${player.wins} victoires </p> 
                     </div>
-                </div>
+        </div>
                 <a  href = '/users/${player.user.username}' onclick = 'showOverlay()' class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-bold">
                     <svg class='h-4 w-4' xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.477 10.826L3.275 6.288a2.154 2.154 0 0 1 2.771-3.016l13.959 6.663a2.155 2.155 0 0 1 0 3.906l-14.16 6.865a2.154 2.154 0 0 1-2.771-3.073l3.403-4.74a2.155 2.155 0 0 0 0-2.067"/></svg>
                 </a>
@@ -1951,49 +1993,8 @@ function deleteComment(element, id){
 }
 </script>
 
-<!-- toast management -->
-<script>
-    const toastContainer = document.getElementById('top-toastContainer');
-    
-    function showMyToast(message, type = 'info', duration = 3000) {
-        
-        document.querySelectorAll('.my-toast').forEach(el =>{
-            el.remove()
-        })
-        
-        const toast = document.createElement('div');
-        toast.className = `my-toast my-toast-${type} text-sm`;
-        
-        const messageSpan = document.createElement('span');
-        messageSpan.textContent = message;
-        
-        const closeButton = document.createElement('button');
-        closeButton.className = 'my-toast-close';
-        closeButton.innerHTML = '&times;';
-        closeButton.onclick = () => removeToast(toast);
-        
-        toast.appendChild(messageSpan);
-        toast.appendChild(closeButton);
-        
-        toastContainer.appendChild(toast);
-        
-        setTimeout(() => {
-            toast.style.animation = 'fadeOut 0.3s ease-out forwards';
-            setTimeout(() => removeToast(toast), 300);
-        }, duration);
-    }
-    
-    function removeToast(toast) {
-        if(toast.parentNode == toastContainer){
-            toastContainer.removeChild(toast);
-        }
-        
-    }
-    
-   
-    </script>
-        
 
+    
         <!--Navbar script-->
         <script>
         
@@ -2534,6 +2535,7 @@ function copyLink(link){
         showMyToast('Failed to copy','error')
     })
 }
+
         </script>
 
     
