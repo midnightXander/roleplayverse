@@ -91,6 +91,35 @@ function deleteNotification(id,type) {
           })
   }
 
+  function markAsRead(id) {
+
+      console.log(`Marking notification ${id} as read`);
+      $.ajax({
+            url: `/notifications/mark_as_read/${id}`,
+            type: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{csrf_token}}' // Include CSRF token in headers
+              },
+              data:{ 
+                csrfmiddlewaretoken : "{{ csrf_token }}",
+
+              },
+              success: function(res){
+                renderNotifications()
+              },
+              complete: function(){
+                
+              },
+              error: function(jqXHR, textstatus, errorThrown){
+                console.log('error', errorThrown)
+                showMyToast('An error occured please try again','error')
+              }
+          })
+
+      // Implement your logic here
+  }
+
 //   function answerChallenge(element, challengeId, answer){
 //   const card = document.getElementById(`challenge-card-${challengeId}`)
 //   const character = $(card).find("select").val()

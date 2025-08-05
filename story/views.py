@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from core.views import get_notifs
 from users.models import Player
 from users.users_utility import get_player
 from ai.views import generate_json_content
@@ -47,7 +48,8 @@ def _story_character(character:StoryCharacter):
 def index(request):
     player = get_player(request.user)
     return render(request, "story/index.html", {
-        "player" : player
+        "player" : player,
+        "n_notifs": get_notifs(player),
     })
 
 @login_required
@@ -105,7 +107,7 @@ def create_character(request):
                 'jutsus' : jutsus,
                 'description' : description,
                 'avatar' : avatar, 
-                'coins' : 1200,
+                #'coins' : 1200,
                 'story' : story
             }
 
@@ -123,6 +125,7 @@ def create_character(request):
 
     return render(request, "story/create_character.html", {
         "player" : player,
+        "n_notifs": get_notifs(player),
         
     })
 
@@ -148,6 +151,49 @@ def get_story_status(challenge):
     elif len(textpads) > 0 and textpads.last().text:
         return 'ongoing'
 
+def _can_play(player:Player,challenge:StoryChallenge):
+    character = challenge.character
+    n_texpads = StoryTextPad.objects.filter(challenge = challenge).count()
+    story_pass = StoryPass.objects.filter(player = player,challenge = challenge)
+    all_pass = StoryPass.objects.filter(player = player, all = True)
+
+    if all_pass.exists():
+        return True
+
+    if n_texpads >= 4 and not  story_pass.exists():
+        return False
+    else:
+        return True
+
+
+@csrf_exempt
+def subscribe_challenge(request, character_id):
+    player = get_player(request.user)
+    character = StoryCharacter.objects.get(id = character_id)
+    story_challenge,created = StoryChallenge.objects.get_or_create(
+        character = character,
+    )
+    story_challenge.save()  
+
+    if request.method == 'POST':
+        subscription = request.POST.get('subscription')
+        all = subscription == 'all'
+        points = 5500 if all else 2000 
+        if player.battle_points >= points:
+            story_pass = StoryPass.objects.create(
+                    challenge = story_challenge,
+                    player = player,
+                    all = all)
+             
+            player.battle_points -= points
+            story_pass.save() 
+            player.save()
+            return JsonResponse({'status':'success', 'message': 'Pass obtenu'}) 
+        else:
+            return JsonResponse({'status':'error', 'message': 'Pas assez de jetons(JC)'})    
+    return JsonResponse({'status':'error', 'message': 'bad request'})     
+
+
 @login_required
 def game(request,character_id):
     player = get_player(request.user)
@@ -164,25 +210,30 @@ def game(request,character_id):
         if character.player == player:
             action = request.POST.get('action')
 
+            if not _can_play(player,story_challenge):
+                return JsonResponse({ 'status' : 'error', 'message' : 'subscription' })
+
             if action == 'continue':
                 if story_status == "ongoing":
                     textpads = StoryTextPad.objects.filter(challenge = story_challenge)
                     textpads_data = [  textpad.text for textpad in textpads ]
                     prompt = story_continue_prompt(character.character_data, textpads_data)
-                    res = generate_json_content(prompt)
-                    input_required = res.get('input_required') == 'true'
-                    print(input_required)
-                    text = res.get('text')
-                    if not text:
-                        return JsonResponse({'status':'error', 'message':'Erreur de connection'})
-                    
-                    new_textpad = StoryTextPad.objects.create(
-                        challenge = story_challenge,
-                        text = text
-                    )
-                    new_textpad.save()
+                    try:
+                        res = generate_json_content(prompt)
+                        input_required = res.get('input_required') == 'true'
+                        text = res.get('text')
+                        if not text:
+                            return JsonResponse({'status':'error', 'message':'Erreur de connection'})
+                        
+                        new_textpad = StoryTextPad.objects.create(
+                            challenge = story_challenge,
+                            text = text
+                        )
+                        new_textpad.save()
 
-                    return JsonResponse({'status' : 'success', 'input_required':input_required, 'text' : text})
+                        return JsonResponse({'status' : 'success', 'input_required':input_required, 'text' : text})
+                    except Exception as e:
+                        return JsonResponse({'status':'error', 'message':f'Erreur de connection {e}'})
                 else:
                     return JsonResponse({'status':'error', 'message' : "L'aventure n'a pas encore commencé."})
 
@@ -193,25 +244,26 @@ def game(request,character_id):
                     textpads_data = [  textpad.text for textpad in textpads ]
                 
                     prompt = story_evaluate_and_continue(character.character_data, textpads_data, text)
-                    
-                    res = generate_json_content(prompt)
-                    res_text = res.get('text')
-                    valid = res.get('valid') == 'true'
-                    # print(res_text, valid)
-                    if not res_text:
-                        return JsonResponse({'status':'error', 'message':'Erreur de connection'})
-                    
-                    if valid:
-                        new_textpad = StoryTextPad.objects.create(
-                            challenge = story_challenge,
-                            text = res_text
-                        )
-                        new_textpad.save()
+                    try:
+                        res = generate_json_content(prompt)
+                        res_text = res.get('text')
+                        valid = res.get('valid') == 'true'
+                        # print(res_text, valid)
+                        if not res_text:
+                            return JsonResponse({'status':'error', 'message':'Erreur de connection'})
+                        
+                        if valid:
+                            new_textpad = StoryTextPad.objects.create(
+                                challenge = story_challenge,
+                                text = res_text
+                            )
+                            new_textpad.save()
 
-                        return JsonResponse({'status' : 'success', 'text' : res_text})
-                    else:
-                        return JsonResponse({'status' : 'success', 'text' : "Tes actions ne sont pas réalisable, tu dois reformuler ta réponse."})
-
+                            return JsonResponse({'status' : 'success', 'text' : res_text})
+                        else:
+                            return JsonResponse({'status' : 'success', 'text' : "Tes actions ne sont pas réalisable, tu dois reformuler ta réponse."})
+                    except Exception as e:
+                        return JsonResponse({'status':'error', 'message':f'Erreur de connection {e}'})
                 else:
                     return JsonResponse({'status':'error', 'message' : "L'aventure n'a pas encore commencé."})
 
@@ -245,7 +297,8 @@ def game(request,character_id):
         "player" : player,
         'character' : character_data,
         "textpads" : textpads_data,
-        'status' : story_status
+        'status' : story_status,
+        "n_notifs" : get_notifs(player),
     })
 
 @csrf_exempt

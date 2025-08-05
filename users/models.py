@@ -136,6 +136,7 @@ class Player(models.Model):
     rp_credits = models.DecimalField(default=0,  max_digits=10, decimal_places=2)
     ip_adress = models.CharField(max_length=50, blank=True, null=True)
     godfather = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE)
+    
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -179,7 +180,22 @@ class Player(models.Model):
 
     def award_credits(self, credits):
         self.rp_credits = self.rp_credits + credits
-        self.save()  
+        self.save() 
+
+    def notifs(self):
+        player_notifs = PlayerNotification.objects.filter(target= self, read = False)
+        from core.models import Notification
+        from battles.models import Challenge
+        notifs = Notification.objects.filter(target = self, read = False)
+        challenges = Challenge.objects.filter(target = self)
+        n_notifs = len(player_notifs) + len(notifs) + len(challenges)
+
+        if n_notifs == 0:
+            return ""
+        if n_notifs>9:
+            return "9+"
+        else:
+            return f"{n_notifs}"     
         
 
 

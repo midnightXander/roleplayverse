@@ -25,9 +25,18 @@ class StoryChallenge(models.Model):
 class StoryTextPad(models.Model):
     challenge = models.ForeignKey(StoryChallenge, on_delete=models.CASCADE)
     text = models.TextField()    
-    created_at = models.DateTimeField(auto_now_add=True, blank = True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.text[:50]}... by {self.challenge.character.character.get('name', 'Unknown')}"
     
     
+class StoryPass(models.Model):
+    player = player = models.ForeignKey(Player, on_delete = models.CASCADE)
+    challenge = models.ForeignKey(StoryChallenge, on_delete=models.CASCADE)
+    all = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.player}:{self.challenge}"
+
