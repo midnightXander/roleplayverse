@@ -413,7 +413,9 @@ function generateBracket(participants) {
                         const matchLink = document.createElement('a')
                     matchLink.setAttribute('href',`/battles/battle_room/${roundBattle.id}`)
                     //matchLink.addEventListener('click', showOverlay())
-
+                    matchLink.onclick = function(){
+                        showOverlay()
+                    }
                     const matchDiv = document.createElement('div');
                     matchDiv.className = 'match';
                     //matchDiv.textContent = round === 0 ? `Match ${match + 1} Player1 vs Player2 ` : (round === rounds - 1 ? 'Final' : `Round ${round + 1}`);

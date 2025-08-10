@@ -82,6 +82,8 @@ def create_post(request):
     
     if request.method == 'POST':
         title = request.POST['title']
+        keywords = request.POST.get('keywords', '')
+        meta_description = request.POST.get('description', '')
         content = request.POST['content']
         image = request.FILES['cover']
         leading = request.POST['leading']
@@ -93,7 +95,9 @@ def create_post(request):
             text = content,
             image = image,
             leading = leading,
-            owner = moderator.user
+            keywords = keywords,
+            owner = moderator.user,
+            meta_description = meta_description
         )
         new_post.save()
         return HttpResponseRedirect(reverse('moderator:index'))

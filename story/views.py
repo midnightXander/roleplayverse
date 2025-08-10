@@ -165,7 +165,7 @@ def _can_play(player:Player,challenge:StoryChallenge):
     else:
         return True
 
-
+ 
 @csrf_exempt
 def subscribe_challenge(request, character_id):
     player = get_player(request.user)
@@ -273,7 +273,6 @@ def game(request,character_id):
                     prompt = story_start_prompt(character.character_data)
                     # print(prompt)
                     res = generate_json_content(prompt)
-                    
                     text = res.get('text')
                     
                     if not text:

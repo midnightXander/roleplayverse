@@ -158,6 +158,7 @@ def story_continue_prompt(character_data, textpads):
         Fais un text de moins de 150 mots developpant son aventure depuis les evenements decrit dans le dernier bloc de text. Prend soins de developper l'histoire de maniere coherente. Sois creatif et offre une experience immersive au joueur.
         introduis des petits dialogue si necessaire.
         """,
+        """Evite les repetitions de scene et les phrases trop longues, sois concis et clair dans tes descriptions. l'histoire doit continuer pas revenir a un point deja vu.""",
         """Retourne la reponse en format JSON : {"text":"le text de narration", "input_required":"true/false dependant de si une entree text de l'action du joueur est requise"}"""
     ]
 

@@ -12,7 +12,7 @@ class StoryCharacter(models.Model):
     subscribed = models.BooleanField(default = False)
 
     def __str__(self):
-        return f"{self.player}"
+        return f"{self.player}: {self.character.get('name','character_name')}"
 
 class StoryChallenge(models.Model):
     character = models.ForeignKey(StoryCharacter, on_delete=models.CASCADE)
@@ -39,4 +39,3 @@ class StoryPass(models.Model):
 
     def __str__(self):
         return f"{self.player}:{self.challenge}"
-

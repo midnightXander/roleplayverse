@@ -12,6 +12,7 @@ class BlogPost(models.Model):
     title = models.CharField(max_length=150)
     leading = models.CharField(max_length=200)
     text = models.TextField()
+    keywords = models.TextField(blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User,models.CASCADE, null=True)
     image = models.ImageField(null=True,upload_to='blog_post_covers/')
@@ -21,7 +22,7 @@ class BlogPost(models.Model):
     language = models.CharField(max_length=100, null=True, blank=True, choices = [
         (i,i) for i in ['fr', 'en']
     ],  default= 'fr')
-    meta_description = models.CharField(max_length=300, null=True, blank=True)
+    meta_description = models.TextField(blank=True, null =True)
 
 
     def __str__(self):

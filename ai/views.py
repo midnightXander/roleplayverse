@@ -337,9 +337,9 @@ def generate_json_content(prompt):
         )
         # print(response)
         response_string = str(response.text).replace("```json", "").replace("```", "").strip()    
-        print(response_string)
+        # print(response_string)
         ai_response = json.loads(response_string)
-        print(ai_response)
+        # print(ai_response)
         return ai_response
     except Exception as e:
         print(f"Error generating content: {e}")

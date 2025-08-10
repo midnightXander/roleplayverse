@@ -1,7 +1,7 @@
 {% extends "blog/base.html" %}
 {% block title %} {{post.title}} {% endblock title %}
 {% block meta_description %} {{post.meta_description}} {% endblock meta_description %}
-{% block meta_keywords %} {{post.keyword1}}, {{post.keyword2}}, {{post.keyword3}} {% endblock meta_keywords %}
+{% block meta_keywords %} {{post.keywords}}, {{post.keyword1}}, {{post.keyword2}}, {{post.keyword3}} {% endblock meta_keywords %}
 {% block meta_author %} {{post.owner}} {% endblock meta_author %}
 {% block meta_image %} {{post.image.url}} {% endblock meta_image %}
 {% block canonical_url %} {{request.build_absolute_uri}} {% endblock canonical_url %}
