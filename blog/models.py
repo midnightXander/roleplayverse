@@ -22,7 +22,7 @@ class BlogPost(models.Model):
     language = models.CharField(max_length=100, null=True, blank=True, choices = [
         (i,i) for i in ['fr', 'en']
     ],  default= 'fr')
-    meta_description = models.TextField(blank=True)
+    meta_description = models.TextField(blank=True, null=True)
 
 
     def __str__(self):

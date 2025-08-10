@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render,get_object_or_404,redirect
 from api.models import PushSubscription
 from api.utility import send_push_notification
@@ -13,10 +14,13 @@ from events import models as events_models
 from users.models import Player
 from .moderator_utility import get_moderator
 from .models import *
+from battles.models import *
+import events.views as events_views
+import  core.models as core_models
 import os
 from dotenv import load_dotenv
 from django.views.decorators.csrf import csrf_exempt
-from battles.views import add_refree
+from battles.views import add_refree, player_progress, update_points, update_rank
 from events.views import _update_round,init_tournament
 load_dotenv()
 import json
@@ -216,3 +220,75 @@ def start_tournament(request, tournament_id):
     except Exception as e:
         print(f"Erreur lors de l'initialisation du tournoi: {e}")
         return JsonResponse({'status': 'error', 'message': f"Erreur lors de l'initialisation du tournoi: {e}"})    
+    
+@csrf_exempt
+def end_battle(request, battle_id):
+    battle = Battle.objects.get(id = battle_id)
+
+    winner_name = request.GET.get('winner', '')
+    winner = battle.initiator if str(winner_name).lower().strip() == str(battle.i_character).lower().strip() else battle.opponent
+
+    message = "Ce combat est deja terminé"
+    if not battle.winner and request.method == 'POST':
+        loser = battle.initiator if winner == battle.opponent else battle.opponent
+        message = "La latence n'est pas depassé" 
+            
+        #END BATTLE
+        battle.winner = winner 
+        battle.status = battle_status[3]
+        battle.date_ended = datetime.now()
+        battle.defeat_motif = "latency"
+
+        progress =  player_progress(battle=battle,loser_rank = loser.rank)
+        winner.progression +=  progress
+        
+        #update the player's rank if progression reached 100%
+        update_rank(winner)
+        update_points(family = winner.family, battle=battle, member_progress=progress)
+        winner.award_credits(20)
+
+        winner.save()
+        battle.save()
+            
+        if(battle.type == 'tournament'):
+            events_views._update_round(battle)
+        battle.can_send_textpad = False
+        
+        battle.save()    
+        win_notif = core_models.Notification.objects.create(
+                    target = winner,
+                    url = f'/battles/battle_room/{battle.id}',
+                    content = f"Tu as été declaré  vainqueur de ton combat contre {loser} par latence"
+                    )
+        send_push_notification(
+            PushSubscription.objects.filter(user=winner.user).last(),
+            {
+                "title": "Tu as remporte ton combat",
+                "body": f"Tu as été declaré  vainqueur de ton combat contre {loser} par latence",
+                "url": f"https://roleplayverse.live",
+                'icon' : '/static/images/logo/logo_1.png',
+            },
+            winner.user,
+            ) 
+        win_notif.save()
+
+        lose_notif = core_models.Notification.objects.create(
+                    target = loser,
+                    url = f'/battles/battle_room/{battle.id}',
+                    content = f"Tu as perdu ton combat contre {winner} par latence"
+                )
+        lose_notif.save()  
+        send_push_notification(
+            PushSubscription.objects.filter(user=loser.user).last(),
+            {
+                "title": "Tu as perdu ton combat",
+                "body": f"Tu as perdu ton combat contre {winner} par latence",
+                "url": f"/notifications",
+                'icon' : '/static/images/logo/logo_1.png',
+            },
+            loser.user,
+        )
+        
+            
+        return JsonResponse({'status':'success','message': 'combat terminé'})
+    return JsonResponse({'status':'error','message': message})

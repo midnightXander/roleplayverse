@@ -327,7 +327,6 @@ def _liked_post(player:Player, post:Post):
         liked = True
     return liked    
 
-    
 
 def _posts_data(player:Player,posts):
     return [
@@ -455,16 +454,16 @@ def get_posts(request):
         feed_data.append(announcement_data)
         feed.announcements.add(announcement)  
 
-    for feed_item in feed_items:
-        try: 
-            battle = Battle.objects.get(custom_id = feed_item['custom_id'])    
-            if battle not in feed.battles.all() and len(feed_data) <= feed_limit-2 and battle.status == 'ongoing':
-                battle_data = battle_views._battle_data(player, battle)    
-                feed_data.append(battle_data)
-                feed.battles.add(battle)     
+    # for feed_item in feed_items:
+    #     try: 
+    #         battle = Battle.objects.get(custom_id = feed_item['custom_id'])    
+    #         if battle not in feed.battles.all() and len(feed_data) <= feed_limit-2 and battle.status == 'ongoing':
+    #             battle_data = battle_views._battle_data(player, battle)    
+    #             feed_data.append(battle_data)
+    #             feed.battles.add(battle)     
 
-        except Battle.DoesNotExist:
-            pass        
+    #     except Battle.DoesNotExist:
+    #         pass        
     #take the two latest Memes and add to feed
     for content in ContentPost.objects.all().order_by('-date_added')[:2]:
         if content not in feed.daily_content.all():
