@@ -471,6 +471,8 @@ def get_posts(request):
             feed_data.append(content_data)
             feed.daily_content.add(content)
 
+    random.shuffle(feed_data)
+
     for feed_item in feed_items:
         try:
             post = Post.objects.get(custom_id = feed_item['custom_id'])
@@ -489,6 +491,7 @@ def get_posts(request):
                     elif battle.status == 'waiting_refree' and len(RefreeingProposal.objects.filter(battle = battle)) > feed_limit:
                         pass
                     else:    
+                        
                         feed_data.append(battle_data)
                         feed.battles.add(battle)
             
@@ -500,7 +503,7 @@ def get_posts(request):
                     feed_data.append(content_data)
                     feed.daily_content.add(content)
                     
-
+    random.shuffle(feed_data)
 
     #feed the object and created the boolean indicating if the object was created or not
     
