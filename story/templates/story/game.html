@@ -98,6 +98,11 @@
      <form id="actionInputForm" class="mt-4 mb-8 hidden w-full relative" onsubmit="handleAction(event)">
         <i onclick="hideTurnInput()" class="relative right-0 cursor-pointer fas fa-times text-orange-500 text-2xl"></i>
         <textarea id="action-input" oninput="autoExpand(this)" rows="3" class="mb-4 w-full  bg-gray-800 text-white rounded-3xl border border-gray-700 p-4 focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Que fais-tu..."></textarea>
+        <div class="">
+            <p class="text-gray-400 text-xs"><i class="fas fa-circle-notch text-blue-600 mr-2"></i> Plus tu donnes de details sur ton action et tes agissement, mieux c'est</p>
+            <p class="text-white text-xs"><i class="fas fa-exclamation-triangle text-yellow-500 mr-2"></i> Si tu encaisse une attaque mortel, ton personnage mourra et l'aventure s'arretera </p>
+        
+        </div>
         <div class="flex justify-between items-center">
             <span id="wordCount" class="text-gray-400">Mots: 0</span>
             <button id="actionSubmitBtn" type="submit" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded transition duration-300">
@@ -486,7 +491,7 @@ function hideStoryPassPopup() {
                 }else if(res.message == 'subscription'){
                     showStoryPassPopup();
                 }else{
-                    showMyToast(res.message)
+                    showMyToast(res.message, "info", 5000)
                 }
             },
             complete : function(){

@@ -18,6 +18,8 @@ class StoryChallenge(models.Model):
     character = models.ForeignKey(StoryCharacter, on_delete=models.CASCADE)
     scenario = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    ended = models.BooleanField(default=False)
+
 
     def __str__(self):
         return f"{self.character} : {self.scenario[:50]}"

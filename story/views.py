@@ -148,8 +148,11 @@ def get_story_status(challenge):
     textpads = StoryTextPad.objects.filter(challenge = challenge )
     if len(textpads) == 0:
         return 'not_started'
+    elif challenge.ended:
+        return 'ended'
     elif len(textpads) > 0 and textpads.last().text:
         return 'ongoing'
+    
 
 def _can_play(player:Player,challenge:StoryChallenge):
     character = challenge.character
@@ -206,6 +209,7 @@ def game(request,character_id):
     textpads = StoryTextPad.objects.filter(challenge = story_challenge)
     textpads_data = [  textpad.text for textpad in textpads ]
     story_status = get_story_status(story_challenge)
+    status_message = "L'aventure n'a pas encore commencé" if story_status == "not_started" else "L'aventure est  terminé, tu peux en commencer une autre"
     if request.method == "POST":
         if character.player == player:
             action = request.POST.get('action')
@@ -235,7 +239,7 @@ def game(request,character_id):
                     except Exception as e:
                         return JsonResponse({'status':'error', 'message':f'Erreur de connection {e}'})
                 else:
-                    return JsonResponse({'status':'error', 'message' : "L'aventure n'a pas encore commencé."})
+                    return JsonResponse({'status':'error', 'message' : status_message})
 
             elif action == 'turn':
                 if story_status == "ongoing":
@@ -248,6 +252,7 @@ def game(request,character_id):
                         res = generate_json_content(prompt)
                         res_text = res.get('text')
                         valid = res.get('valid') == 'true'
+                        ended = res.get('ended') == 'true'
                         # print(res_text, valid)
                         if not res_text:
                             return JsonResponse({'status':'error', 'message':'Erreur de connection'})
@@ -255,9 +260,12 @@ def game(request,character_id):
                         if valid:
                             new_textpad = StoryTextPad.objects.create(
                                 challenge = story_challenge,
-                                text = res_text
+                                text = res_text,
                             )
                             new_textpad.save()
+                            if ended:
+                                story_challenge.ended = True
+                                story_challenge.save()
 
                             return JsonResponse({'status' : 'success', 'text' : res_text})
                         else:
@@ -265,7 +273,7 @@ def game(request,character_id):
                     except Exception as e:
                         return JsonResponse({'status':'error', 'message':f'Erreur de connection {e}'})
                 else:
-                    return JsonResponse({'status':'error', 'message' : "L'aventure n'a pas encore commencé."})
+                    return JsonResponse({'status':'error', 'message' : status_message})
 
 
             elif action == 'start':
@@ -274,7 +282,7 @@ def game(request,character_id):
                     # print(prompt)
                     res = generate_json_content(prompt)
                     text = res.get('text')
-                    
+
                     if not text:
                         return JsonResponse({'status':'error', 'message':'Request Error'})
                     
