@@ -26,6 +26,7 @@ class StoryChallenge(models.Model):
 
 class StoryTextPad(models.Model):
     challenge = models.ForeignKey(StoryChallenge, on_delete=models.CASCADE)
+    entry = models.TextField(default = "", null =True, blank = True)  
     text = models.TextField()    
     created_at = models.DateTimeField(auto_now_add=True)
 

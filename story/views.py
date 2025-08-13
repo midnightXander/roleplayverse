@@ -207,7 +207,7 @@ def game(request,character_id):
     story_challenge.save() 
     character_data = _story_character(character)
     textpads = StoryTextPad.objects.filter(challenge = story_challenge)
-    textpads_data = [  textpad.text for textpad in textpads ]
+    textpads_data = [  { "text": textpad.text, "entry" : textpad.entry if textpad.entry else "" } for textpad in textpads ]
     story_status = get_story_status(story_challenge)
     status_message = "L'aventure n'a pas encore commencé" if story_status == "not_started" else "L'aventure est  terminé, tu peux en commencer une autre"
     if request.method == "POST":
@@ -220,7 +220,7 @@ def game(request,character_id):
             if action == 'continue':
                 if story_status == "ongoing":
                     textpads = StoryTextPad.objects.filter(challenge = story_challenge)
-                    textpads_data = [  textpad.text for textpad in textpads ]
+                    textpads_data = [  textpad.text  for textpad in textpads ]
                     prompt = story_continue_prompt(character.character_data, textpads_data)
                     try:
                         res = generate_json_content(prompt)
@@ -261,6 +261,7 @@ def game(request,character_id):
                             new_textpad = StoryTextPad.objects.create(
                                 challenge = story_challenge,
                                 text = res_text,
+                                entry = text,
                             )
                             new_textpad.save()
                             if ended:
@@ -291,7 +292,6 @@ def game(request,character_id):
                         text = text
                     )
                     new_textpad.save()
-
                     return JsonResponse({'status' : 'success', 'text' : text})
                 else:
                     return JsonResponse({'status' : 'error', 'message' : "L'aventure a déja debuté."})

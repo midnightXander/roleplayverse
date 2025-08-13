@@ -92,7 +92,10 @@
         <h1 class="text-lg font-bold mb-4">Intro</h1>
         <p class="textpad collapsed italic body" data-content = '{{character.story}}' data-collapsed-content = '{{character.story|truncatewords:50}}'><i onclick="toggleCollapseParagraph(this)" class="toggle-arrow text-xl fas fa-caret-right text-orange-500 cursor-pointer mr-2"></i><em>{{character.story}}</em></p>
         {% for textpad in textpads %}
-        <p class="textpad italic body" data-content = '{{textpad}}' data-collapsed-content = '{{textpad|truncatewords:50}}'><i onclick="toggleCollapseParagraph(this)" class="toggle-arrow text-xl fas fa-caret-right text-orange-500 cursor-pointer mr-2"></i><em>{{textpad}}</em></p>
+        {% if textpad.entry %}
+        <div class="pt-2 text-gray-400 italic body">{{textpad.entry}}</div>
+        {% endif %}
+        <p class="textpad italic body" data-content = '{{textpad.text}}' data-collapsed-content = '{{textpad.text|truncatewords:50}}'><i onclick="toggleCollapseParagraph(this)" class="toggle-arrow text-xl fas fa-caret-right text-orange-500 cursor-pointer mr-2"></i><em>{{textpad.text}}</em></p>
         {% endfor %}
     </div>
      <form id="actionInputForm" class="mt-4 mb-8 hidden w-full relative" onsubmit="handleAction(event)">
@@ -123,11 +126,13 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="200" height="200" viewBox="0 0 24 24"><path fill="currentColor" d="M18.54 9L8.88 3.46a3.42 3.42 0 0 0-5.13 3v11.12A3.42 3.42 0 0 0 7.17 21a3.43 3.43 0 0 0 1.71-.46L18.54 15a3.42 3.42 0 0 0 0-5.92Zm-1 4.19l-9.66 5.62a1.44 1.44 0 0 1-1.42 0a1.42 1.42 0 0 1-.71-1.23V6.42a1.42 1.42 0 0 1 .71-1.23A1.51 1.51 0 0 1 7.17 5a1.54 1.54 0 0 1 .71.19l9.66 5.58a1.42 1.42 0 0 1 0 2.46Z"/></svg>
         </button>
 
-        <button type="button" class="action-btn hover:bg-red-700 hover:text-white truncate border border-red-500 text-red-500 font-bold py-2 px-4 rounded-full transition duration-300">
+        <!-- <button type="button" class="action-btn hover:bg-red-700 hover:text-white truncate border border-red-500 text-red-500 font-bold py-2 px-4 rounded-full transition duration-300">
             <svg class="h-4 w-4 text-red-500" xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24">
                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m13.5 10l4 4m0-4l-4 4m6.095 4.5H9.298a2 2 0 0 1-1.396-.568l-5.35-5.216a1 1 0 0 1 0-1.432l5.35-5.216A2 2 0 0 1 9.298 5.5h10.297c.95 0 2.223.541 2.223 1.625v9.75c0 1.084-1.273 1.625-2.223 1.625Z"/>
             </svg>
-        </button>
+        </button> -->
+
+        
 
         <button onclick="showHowToPlayPopup()" type="button" class="action-btn hover:bg-orange-700 truncate border border-gray-400 text-gray-400 font-bold py-2 px-4 rounded-full transition duration-300">
             <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 192 512">
@@ -135,6 +140,7 @@
             </svg>
         </button>
         {% endif %}
+
         
         {% if status == 'not_started' %}
         <div class= "">
@@ -143,6 +149,10 @@
             </button>
         </div>
         {% endif %}
+
+        <button type="button" onclick="socialShare(this,'https:\/\/roleplayverse.live/story/game/{{character.id}}')" class="action-btn hover:bg-blue-700 hover:text-white truncate border border-blue-500 text-blue-500 font-bold py-2 px-4 rounded-full transition duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="200" height="200" viewBox="0 0 21 21"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m14.5 7.5l-3.978-4l-4.022 4m4.022-3.979V15.5m-3.022-5h-2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2"/></svg>
+        </button>
 
         
 

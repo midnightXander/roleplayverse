@@ -124,6 +124,7 @@ def story_evaluate_and_continue(character_data, textpads, action):
         """,
         """En situation de combat, si le personnage subit une attaque mortel alors il devra mourir, et l'aventure se termine. Dans ce cas le champ 'ended' dans ta reponse sera 'true'""",
         """Le personnage pourra encaisser une attaque en cas d'un mauvais contre decrit par le joueur, dans ce cas le champ 'valid' de ta reponse sera 'true' et le champ 'ended' sera 'false' si l'aventure continue ou 'true' si le personnage meurt et l'aventure se termine."""
+        """Ne force surtout pas la mort du personnage, mais si le joueur decrit une action qui n'est pas faisable au vu de ses capacites et de la situation actuelle alors il devra encaisser l'attaque et potentiellement mourir si et uniquement si l'attaque est mortel."""
         """Retourne la reponse en format JSON : {"text":"le text de narration, 200 mots maximum", "valid":"true/false, si oui ou non l'action tu joueur est faisable au vu de ses capacite et de la situation actuelle", "ended": "true/false, si l'aventure est terminée ou non"}""",
     ]
 

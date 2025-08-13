@@ -604,6 +604,11 @@ function setupExpandableText() {
         </div>
        
         <div class="mb-6 flex flex-col space-y-2">
+            <button id="shareCopyBtn" class="button flex justify-center social-btn border border-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
+                <svg class = "h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 432 384"><path fill="currentColor" d="M41 192q0 27 19 46.5t47 19.5h85v41h-85q-44 0-75.5-31.5T0 192t31.5-75.5T107 85h85v41h-85q-28 0-47 19.5T41 192zm87 21v-42h171v42H128zM320 85q44 0 75.5 31.5T427 192t-31.5 75.5T320 299h-85v-41h85q27 0 46.5-19.5T386 192t-19.5-46.5T320 126h-85V85h85z"/></svg>
+                Copier le lien
+            </button>
+
             <button class="button flex justify-center social-btn bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300" data-sharer="facebook" data-hashtag="hashtag" data-url="">
                 <svg class="w-6 h-6 mr-2 " fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
@@ -2474,6 +2479,9 @@ const socialButtons = sharePopup.find('.social-btn').toArray()
 socialButtons.forEach(button => {
     // button.setAttribute('data-url',url)
     button.dataset.url = url
+    button.onclick = function(){
+        copyLink(url)
+    }
 })
 cancelshareBtn.on('click',()=>{
     sharePopup.addClass('hidden')
