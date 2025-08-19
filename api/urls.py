@@ -25,6 +25,9 @@ urlpatterns = [
     path('battles/battle_room/<int:battle_id>',views.BattleRoom.as_view()),
 
     path('player',views.CurrentPlayer.as_view()),
+
+    path('families',views.Families.as_view()),
+    path('top',views.TopPlayersFamilies.as_view()),
     
 
     path('save-subscription/', views.save_subscription, name='save_subscriptions'),

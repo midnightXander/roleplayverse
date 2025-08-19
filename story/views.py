@@ -163,7 +163,7 @@ def _can_play(player:Player,challenge:StoryChallenge):
     if all_pass.exists():
         return True
 
-    if n_texpads >= 4 and not  story_pass.exists():
+    if n_texpads >= 10 and not  story_pass.exists():
         return False
     else:
         return True

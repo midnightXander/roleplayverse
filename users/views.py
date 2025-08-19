@@ -1497,6 +1497,21 @@ def _families_data(families: QuerySet[Family]):
 
     return data
 
+def _family_data(family: Family):
+
+    data = {
+        'id':family.id,
+        "name": family.name,
+        "god_father": str(family.god_father),
+        'points': family.points,
+        'ranking':get_ranking(family.name),
+        'n_members': len(Player.objects.filter(family = family))
+
+    } 
+    
+
+    return data
+
 def get_families_rankings(request):
     families = Family.objects.all()
     sorted_families = sorted(families, key = lambda family : family.points ,reverse=True)

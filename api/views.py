@@ -3,11 +3,11 @@ import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from users.models import PlayerNotification
+from users.models import Badge, PlayerNotification
 from users.users_utility import get_player
 from users.views import _player_data
 from .models import PushSubscription
-from core.models import Comment, Post
+from core.models import Comment, Notification, Post
 from pywebpush import webpush, WebPushException
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -19,6 +19,7 @@ from battles.models import *
 from dotenv import load_dotenv
 import os
 import core.views as core_views 
+import users.views as user_views 
 from . import get_data
 from . import post_data as post_functions
 
@@ -293,24 +294,73 @@ class CurrentPlayer(APIView):
 
         return JsonResponse({'player': player_data}, status = 200)    
 
+class TopPlayersFamilies(APIView):
+    def get(self, request):
+        entity = request.GET.get('e')
+        players = user_views._monthly_players_ranking()
+        families  = Family.objects.all()
+        top_families = sorted(families, key = lambda family : family.points ,reverse=True)
+        top_families_data = user_views._families_data(top_families)
+        if entity == 'players':
+            return JsonResponse({'players': players}, status = 200) 
+        if entity == 'families':
+            return JsonResponse({'families':top_families_data}, status = 200)     
+        return JsonResponse({'players': players, 'families':top_families_data}, status = 200)   
 
+class Families(APIView):
+    def get(self, request):
+        families  = Family.objects.all()
+        families_data = user_views._families_data(families)
+        return JsonResponse({'families':families_data}, status = 200)
+    
+    def post(self, request):
+        user = request.user
+        player = get_player(user)
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        name = request.data["familyName"]
+        description = request.data.get("family-bio")
+        profile_pic = request.data.get("family-picture")
+        #all_families = list(Family.objects.all())
+        if player.family:
+            return JsonResponse({'message': 'Tu es deja dans une famille, quitte ta famille actuel pour en créer une'}, status=400)
 
+        elif Family.objects.filter(name=name).exists():
+            return JsonResponse({'message': 'Une famille avec ce nom existe deja'}, status=400)
+        elif not profile_pic:
+            return JsonResponse({'message': 'Tu dois ajouter une photo de profile'}, status=400)
+        else:
+            new_position = len(Family.objects.all()) + 1
+            new_family = Family.objects.create(
+                name=name,
+                god_father = request.user,
+                position = new_position,
+                description = description,
+                )
+            if profile_pic:
+                new_family.profile_picture = profile_pic
+                
+            #user = User.objects.get(username=request.user.username)
+            player = Player.objects.get(user=request.user)
+            player.family = new_family   
 
+            #ADD The GodFather badge to the player
+            godfather_badge = Badge.objects.get(title = "GodFather")
+            player.badges.add(godfather_badge)
 
+            new_family.save()
+            player.save()
+            
+            new_notif = Notification.objects.create(
+                target = player,
+                content = "Felicitation, tu es desormais un parrain de famille! et si tu commencais a recruter quelques membres ?",
+                url = f"/users/family/{new_family.id}",
+            )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+            new_notif.save()
+            family_data = user_views._family_data(new_family)
+            return JsonResponse({'message': 'Famille crée avec succés', 'family':family_data}, status=200)
+        #return JsonResponse({'message': 'Request error'}, status=400)
 
 
 def export_battle_data():

@@ -18,6 +18,7 @@ from battles.models import *
 import events.views as events_views
 import  core.models as core_models
 import os
+from django.db.models import Q,QuerySet
 from dotenv import load_dotenv
 from django.views.decorators.csrf import csrf_exempt
 from battles.views import add_refree, player_progress, update_points, update_rank
@@ -72,9 +73,13 @@ def index(request):
     if not moderator:
         raise Http404
     player_emails = [ user.email for user in User.objects.all() ]
+    players = Player.objects.all()
+    
     return render(request, "moderator/index.html",{
         'moderator': moderator,
-        'player_emails': player_emails
+        'player_emails': player_emails,
+        'countries' : player_countries(players),
+        'active_players' : active_players(players)
     })
     
         
@@ -292,3 +297,41 @@ def end_battle(request, battle_id):
             
         return JsonResponse({'status':'success','message': 'combat terminé'})
     return JsonResponse({'status':'error','message': message})
+
+
+def player_countries(players: QuerySet[Player]):
+    countries = {}
+    for player in players:
+        country = player.country
+        country_data = countries.get(country)
+        if country_data:
+            count = country_data.get('count', 1) 
+            countries[country]['count'] = count + 1
+        else:
+            countries[country] = {
+                'name' : country,
+                'count' : 1,
+            }
+    countries_list = []
+    for country,data in countries.items():
+        countries_list.append(data)
+        
+
+    return countries_list    
+
+def active_players(players:QuerySet[Player]):
+    active_count = 0
+    for player in players:
+        last_seen = player.last_seen
+        now  = timezone.now()
+        difference = now - last_seen
+        if difference.days <= 3:
+            active_count += 1
+
+    active_players = {
+        'count': active_count,
+        'percentage' : int(active_count/players.count() * 100)
+    }        
+
+    return active_players       
+

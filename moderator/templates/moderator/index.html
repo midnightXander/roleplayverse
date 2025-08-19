@@ -41,10 +41,10 @@
                 <div class="mt-4">
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-sm font-medium text-gray-600">Active Players</span>
-                        <span class="text-sm font-semibold text-gray-800">1,234</span>
+                        <span class="text-sm font-semibold text-gray-800">{{active_players.count}}</span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-2.5">
-                        <div class="bg-blue-600 h-2.5 rounded-full animate-pulse" style="width: 85%"></div>
+                        <div class="bg-blue-600 h-2.5 rounded-full animate-pulse" style="width: {{active_players.percentage}}%"></div>
                     </div>
                 </div>
             </div>
@@ -90,6 +90,12 @@
 
             <div class="dashboard-card bg-white p-6 rounded-lg shadow-md">
                 <h2 class="text-xl font-semibold mb-4">Players</h2>
+                <div>
+                    
+                    {% for country in countries %}
+                    {{country.name}} : {{country.count}}
+                    {% endfor %}
+                </div>
                 <div class="">
                     {% for email in player_emails %}
                     {{email}},
