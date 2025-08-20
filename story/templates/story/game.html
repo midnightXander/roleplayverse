@@ -90,7 +90,7 @@
     <!-- Zone de narration -->
     <div id="narration" class="space-y-1 text-sm text-gray-200  p-4 rounded-lg h-[60vh] show-scrollbar overflow-y-auto">
         <h1 class="text-lg font-bold mb-4">Intro</h1>
-        <p class="textpad collapsed italic body" data-content = 'c' data-collapsed-content = '{{character.story|truncatewords:50}}'><i onclick="toggleCollapseParagraph(this)" class="toggle-arrow text-xl fas fa-caret-right text-orange-500 cursor-pointer mr-2"></i><em>{{character.story}}</em></p>
+        <p class="textpad collapsed italic body" data-content = '{{character.story}}' data-collapsed-content = '{{character.story|truncatewords:50}}'><i onclick="toggleCollapseParagraph(this)" class="toggle-arrow text-xl fas fa-caret-right text-orange-500 cursor-pointer mr-2"></i><em>{{character.story}}</em></p>
         {% for textpad in textpads %}
         {% if textpad.entry %}
         <div class="pt-2 text-gray-400 italic body">{{textpad.entry}}</div>
