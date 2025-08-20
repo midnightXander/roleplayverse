@@ -1,7 +1,7 @@
 {% extends "core/base.html" %}
 {% load static %}
-{% block title %}Mes Personnages{% endblock title %}
-{% block meta_description%}Crée ton personnage de story. {% endblock meta_description%}
+{% block title %}Story | {{character.name}}{% endblock title %}
+{% block meta_description%}Histoire du personnage {{character.name}}. {{character.story}} {% endblock meta_description%}
 
 {% block content %}
 <style>
@@ -90,7 +90,7 @@
     <!-- Zone de narration -->
     <div id="narration" class="space-y-1 text-sm text-gray-200  p-4 rounded-lg h-[60vh] show-scrollbar overflow-y-auto">
         <h1 class="text-lg font-bold mb-4">Intro</h1>
-        <p class="textpad collapsed italic body" data-content = '{{character.story}}' data-collapsed-content = '{{character.story|truncatewords:50}}'><i onclick="toggleCollapseParagraph(this)" class="toggle-arrow text-xl fas fa-caret-right text-orange-500 cursor-pointer mr-2"></i><em>{{character.story}}</em></p>
+        <p class="textpad collapsed italic body" data-content = 'c' data-collapsed-content = '{{character.story|truncatewords:50}}'><i onclick="toggleCollapseParagraph(this)" class="toggle-arrow text-xl fas fa-caret-right text-orange-500 cursor-pointer mr-2"></i><em>{{character.story}}</em></p>
         {% for textpad in textpads %}
         {% if textpad.entry %}
         <div class="pt-2 text-gray-400 italic body">{{textpad.entry}}</div>
@@ -192,12 +192,14 @@
     <button onclick="hideStoryPassPopup()" class="absolute top-2 right-3 text-gray-400 hover:text-orange-500 text-2xl font-bold">&times;</button>
     <h2 class="text-xl font-bold text-orange-500 mb-3">Obtenir un story pass</h2>
     <p class="text-gray-300 text-center mb-6 text-sm">Il te faut le story pass pour continuer l'aventure</p>
+
     <div class= "space-y-4">
             <div class="rounded-xl bg-gradient-to-br from-orange-500 via-orange-600 to-yellow-400 p-1 shadow-lg">
         <div class="bg-gray-900 rounded-lg p-4 flex flex-col items-center">
           <span class="text-lg font-bold text-orange-200 mb-1">Pass One</span>
           <span class="text-xs text-gray-300 mb-2 text-center">Débloque cette histoire uniquement</span>
-          <span class="text-2xl font-bold text-yellow-300 mb-2">2000 <span class="text-xs font-normal">JC</span></span>
+          <span class="text-xs text-green-400 mb-2 text-center">Pas de pub dans cette histoire</span>
+          <span class="text-2xl font-bold text-yellow-300 mb-2">{{ basic_pass }} <span class="text-xs font-normal">JC</span></span>
           <button onclick="getStoryPass('normal')" type="button"
             class="w-full bg-gradient-to-r from-orange-600 to-yellow-500 hover:from-orange-700 hover:to-yellow-500 text-white font-bold py-2 rounded-full shadow transition duration-200">
            Obtenir ce pass
@@ -208,7 +210,8 @@
         <div class="bg-gray-900 rounded-lg p-4 flex flex-col items-center">
           <span class="text-lg font-bold text-orange-200 mb-1">Pass All in One</span>
           <span class="text-xs text-gray-300 mb-2 text-center">Débloque toutes les histoires(story et perso illimité)</span>
-          <span class="text-2xl font-bold text-yellow-500 mb-2">5500 <span class="text-xs font-normal">JC</span></span>
+          <span class="text-xs text-pink-300 mb-2 text-center">Pas de pub dans toutes les histoires</span>
+          <span class="text-2xl font-bold text-yellow-500 mb-2">{{ all_pass }} <span class="text-xs font-normal">JC</span></span>
           <button onclick="getStoryPass('all')" type="button"
             class="w-full bg-gradient-to-r from-orange-500 via-red-500 to-purple-500 hover:from-orange-700 hover:to-yellow-500 text-white font-bold py-2 rounded-full shadow transition duration-200">
             Obtenir ce pass
@@ -525,4 +528,17 @@ function hideStoryPassPopup() {
 
 {% block adscripts %}
 <script type='text/javascript' src='//pl27450764.profitableratecpm.com/a5/d3/33/a5d333e3435d3881d0a296dda32f0d1a.js'></script>
+
+<!-- <script>
+(function(rm){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = rm || {};
+s.src = "\/\/pleasant-gear.com\/b-XFVBsCd.Gml\/0yYpWaci\/JeOmq9\/utZBUtlOksP\/TjYRz-OQDCc\/ybOETZEHtFNMjVM\/4QNvzrII5sM\/gt";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})
+</script> -->
 {% endblock adscripts  %}

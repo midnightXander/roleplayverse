@@ -2,6 +2,9 @@ from django.db import models
 from django.utils import timezone
 from users.models import Player
 
+BASIC_PASS = 2000
+ALL_PASS = 5500
+FREE_TEXTPAD_LIMIT = 13
 
 class StoryCharacter(models.Model):
     player = models.ForeignKey(Player, on_delete = models.CASCADE)

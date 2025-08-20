@@ -317,7 +317,7 @@ def password_reset(request):
         raise Http404
 
 def _name_suggestion():
-    return 'KraKen_30'
+    return 'Kregs_45'
 
 def register(request):
     
@@ -360,7 +360,8 @@ def register(request):
                 
                 new_player.save()
 
-                core_views.add_points(new_player, ENTRY_POINTS)
+                #core_views.add_points(new_player, ENTRY_POINTS)
+                new_player.add_points(ENTRY_POINTS)
                 
                 new_user.save()
                 new_player.save()
@@ -368,8 +369,8 @@ def register(request):
 
                 new_notif = core_views.Notification.objects.create(
                     target = new_player,
-                    url = '#',
-                    content = f'Bienvenue sur RolePlay Verse {new_player} pourquoi pas commencé un combat amicale pour voir comment ça se passe ici?'
+                    url = '/story/characters',
+                    content = f'Bienvenue sur RolePlay Verse {new_player} pourquoi pas commencé par créer ton personnage?'
                 )
                 new_notif.save()
 

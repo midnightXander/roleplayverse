@@ -163,7 +163,7 @@ def _can_play(player:Player,challenge:StoryChallenge):
     if all_pass.exists():
         return True
 
-    if n_texpads >= 10 and not  story_pass.exists():
+    if n_texpads >= FREE_TEXTPAD_LIMIT and not  story_pass.exists():
         return False
     else:
         return True
@@ -181,7 +181,7 @@ def subscribe_challenge(request, character_id):
     if request.method == 'POST':
         subscription = request.POST.get('subscription')
         all = subscription == 'all'
-        points = 5500 if all else 2000 
+        points = ALL_PASS if all else BASIC_PASS
         if player.battle_points >= points:
             story_pass = StoryPass.objects.create(
                     challenge = story_challenge,
@@ -306,6 +306,8 @@ def game(request,character_id):
         "textpads" : textpads_data,
         'status' : story_status,
         "n_notifs" : get_notifs(player),
+        'basic_pass' : BASIC_PASS,
+        'all_pass' : ALL_PASS,
     })
 
 @csrf_exempt

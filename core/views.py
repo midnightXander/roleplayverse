@@ -191,13 +191,13 @@ def home(request):
     battles = Battle.objects.filter(status = "finished")
    
     g = GeoIP2()
-    ip = "134.201.250.155"
-    try:
-        country = g.country(ip)
-    except Exception as e:
-        print(f"Country error: {e}")
-        country = 'unknown'    
-    print("Country: ", country)
+    # ip = "134.201.250.155"
+    # try:
+    #     country = g.country(ip)
+    # except Exception as e:
+    #     print(f"Country error: {e}")
+    #     country = 'unknown'    
+    # print("Country: ", country)
 
     characters = get_characters()  
 
@@ -491,7 +491,7 @@ def get_posts(request):
                     elif battle.status == 'waiting_refree' and len(RefreeingProposal.objects.filter(battle = battle)) > feed_limit:
                         pass
                     else:    
-                        
+
                         feed_data.append(battle_data)
                         feed.battles.add(battle)
             
