@@ -199,7 +199,7 @@
         "zone": "Les Racines du Grand Arbre Shinju",
         "locked" : true
     },
-    {
+    { 
         "title": "Une ombre se dechaine",
         "description": "Localise et \u00c3\u00a9limine un shinobi d\u00c3\u00a9serteur dans la zone actuelle.",
         "long_tail_description": "",

@@ -266,3 +266,21 @@ def fetch_daily_content():
 @shared_task
 def newsletter():
     print("Send email to user")
+
+@shared_task
+def send_bulk_notification(subscriptions_id, payload):
+    from api.models import PushSubscription
+    for subscription in subscriptions_id:
+
+        send_push_notification(
+            PushSubscription.objects.get(id = subscription),
+            payload
+        )
+
+@shared_task
+def send_bulk_notification_all(users, payload):
+    for user in users:
+        send_push_notification(
+            PushSubscription.objects.filter(user = user).last(),
+            payload)
+        

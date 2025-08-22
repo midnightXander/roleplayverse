@@ -752,15 +752,31 @@ def create_post(request):
             if body and len(body) > 30:
                 users = User.objects.exclude(username = player.user.username)
                 users = users.order_by('?')[:50] #get 15 random users
-                for user in users:
-                    send_push_notification(
-                        PushSubscription.objects.filter(user = user).last(),
-                        {
+                subscriptions_id =[ sub.id for sub in PushSubscription.objects.all() ] 
+                from .tasks import send_bulk_notification
+                payload = {
                             'title': f'{player}',
                             'body': f'{new_post.body[:30]}...',
                             'icon': f'{player.profile_picture.url}',
                             'url': f'/posts/{new_post.id}'
                         },
+                print(subscriptions_id)
+                #send_bulk_notification.delay(subscriptions_id, payload)
+
+                # for subscription in subscriptions:
+                #     send_push_notification(
+                #         subscription,
+                #         {
+                #             'title': f'{player}',
+                #             'body': f'{new_post.body[:30]}...',
+                #             'icon': f'{player.profile_picture.url}',
+                #             'url': f'/posts/{new_post.id}'
+                #         },
+                #     )
+                for user in users:
+                    send_push_notification(
+                        PushSubscription.objects.filter(user = user).last(),
+                        payload
                     )
 
             return JsonResponse({'status':'success', 'post':new_post_data})

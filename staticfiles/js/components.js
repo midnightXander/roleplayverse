@@ -228,57 +228,6 @@ function createComment(comment){
     
     `;
     return commentElement;
-
-return `
-
-                    <div class="flex comment rounded-xl items-start space-x-3" data-toggle="tooltip" data-placement='top' title = '${comment.body}'>
-                        <a class = "font-semibold inline-block  hover:text-orange-500" href='/users/${comment.author.username}'>
-                                 <img src="${comment.author.profile_picture}"  alt="${comment.author.username}" class="w-8 h-8 rounded-full"> 
-                        </a>
-                        <div class="flex-1  rounded-lg p-1">
-                            <div class="flex items-center justify-between mb-1 relative">
-                                <div class="flex items-center space-x-2">
-                                    <a href='/users/${comment.author.username}' class="text-orange-500 text-sm font-semibold inline-block hover:text-orange-600 ">${comment.author.player}</a>
-                                    <!--
-                                    <span class="text-xs text-gray-400">${comment.timestamp}</span>
-                                    -->
-                                </div>
-                                <div class="absolute top-0 right-2">
-                                    <button onclick = 'toggleDropdown(this)' class="text-gray-400 hover:text-white post-dropdown-toggle">
-                                        <i class="fas fa-ellipsis-h"></i>
-                                    </button>
-
-                                    <div class="post-dropdown-menu rounded-xl border border-gray-700 bg-gray-800 w-48 py-2">
-                                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('${comment.body}')"><i class = 'fas fa-copy mr-2'></i>copier</div>
-                                        <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick=""><i class = 'fas fa-flag mr-2'></i> signaler</div>
-                                        
-                                        ${comment.author.username == currentPlayerData.username ?  `
-                                        
-                                        <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deleteComment(this,'${comment.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
-                                        `:``}
-                                    </div>
-                                </div>    
-                        </div>
-                        
-                        <p onclick = 'toggleExpand(this)' class="body text-sm text-gray-300" data-expandable data-full='${comment.body_full}'>${comment.body}</p>
-                        
-                        
-                        <div class="flex items-center space-x-4 mt-2 text-sm">
-                                
-                                <span class="text-xs text-gray-400">${comment.timestamp}</span>
-                                <button data-comment-id="${comment.id}" class='text-xs comment-like-button  rounded-full ${comment.liked ? 'liked' : ''}'>
-                                    <i class="far fa-heart  mr-1"></i>
-                                    <span class='comment-likes-count'>${comment.likes}</span>
-                                </button>
-                                <button data-comment-id="${comment.id}" class="reply-button text-gray-400 text-xs hover:text-orange-500">Reply</button>
-                                <!--
-                                <span class="text-gray-400">5 likes</span>
-                                -->
-                            </div>
-                        </div>
-                    </div>
-`
-
 }
 
 // Function to create a post element
@@ -333,7 +282,7 @@ function createPostElement(post) {
                 </div>
               </div>
               
-              <p onclick = 'toggleExpand(this)' class="body text-base text-gray-100 mt-1" data-expandable>
+              <p onclick = 'toggleExpand(this)' class="body text-base truncate text-gray-100 mt-1" data-expandable>
                 
               </p>
              
@@ -383,7 +332,7 @@ function createPostElement(post) {
 
     // Escape the post body and set it as text content
     const postBodyElement = postElement2.querySelector('p[data-expandable]');
-    postBodyElement.textContent = post.body;
+    //postBodyElement.textContent = post.body;
     postBodyElement.setAttribute('data-full', post.body_full);
     return postElement2
     }
@@ -451,7 +400,7 @@ function  createBattleElement(battle){
                                   <div class="flex items-start">
                                       <img src="${battle.initiator.profile_picture}" alt="${battle.initiator.player}" class="w-12 h-12 rounded-full mr-4">
                                       <div>
-                                          <a href="/users/${battle.initiator.username}" class="font-bold hover:text-orange-500 ">
+                                          <a href="/users/${battle.initiator.username}" class="font-bold truncate hover:text-orange-500 ">
                                               ${battle.initiator.player}<span class ='text-sm text-semibold text-gray-600'>@${battle.initiator.nickname}</span> ${ battle.winner ? (battle.winner.id == battle.initiator.id ? "<span class='text-green-500'>W</span>": ''):''}
                                           </a>
                                           <p class="text-sm text-gray-400">Rang: <span class='text-orange-500' >${battle.initiator.rank}</span></p>
@@ -460,7 +409,7 @@ function  createBattleElement(battle){
                                   <i class="fas fa-bolt text-yellow-500 text-2xl"></i>
                                   <div class="flex items-end">
                                       <div class="text-right mr-4">
-                                          <a href="/users/${battle.opponent.username}" class="font-bold hover:text-orange-500 ">
+                                          <a href="/users/${battle.opponent.username}" class="font-bold truncate hover:text-orange-500 ">
                                               ${battle.opponent.player}<span class ='text-sm text-semibold text-gray-600'>@${battle.opponent.nickname}</span> ${ battle.winner ? (battle.winner.id == battle.opponent.id ? "<span class='text-green-500'>W</span>": ''):''}
                                           </a>
                                           <p class="text-sm text-gray-400">Rang: <span class='text-orange-500' >${battle.opponent.rank}</span></p>
@@ -540,37 +489,6 @@ function createCollapsedRequests(requestData){
 
     return requestElement
     
-
-    // return `
-    
-    // <div class="border border-gray-700 mb-4 rounded-2xl bg-opacity-90 bg-gray-900" id="{{data.sender}}-requests">
-    //           <div 
-    //             class="flex justify-between items-center p-4 cursor-pointer hover:bg-gray-700 rounded-xl transition" 
-    //             onclick="toggleSection('{{data.sender}}-requests')"
-    //           >
-    //             <div class="text-lg flex font-semibold"><img src="{{data.sender.profile_picture.url}}" class="w-8 h-8 border border-orange-500 rounded-full mr-2"> {{data.sender}} - <span class="text-orange-500" >{{data.sender.rank}} </span> ({{data.length}} Requêtes)</div>
-    //             <svg 
-    //               class="w-4 h-4 transition-transform transform arrow" 
-    //               fill="none" stroke="currentColor" stroke-width="2" 
-    //               viewBox="0 0 24 24"
-    //             >
-    //               <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-    //             </svg>
-    //           </div>
-    
-    //           <div class="request-list hidden divide-y divide-gray-700">
-    //             {% for request in  data.requests %}
-    //             <div class="battle-card p-4 flex justify-between items-center">
-    //               <span>avec <span class="text-yellow-500">{{request.character}}</span> — {{request.type}}</span>
-    //               <button data-url="{% url 'battles:accept' request.id %}" data-requesttype="{{request.type}}" data-character="{{request.character}}" data-requestsender="{{request.sender}}" 
-    //                class="accept-button bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded">Accepter</button>
-    //             </div>
-    //             {% endfor %}
-        
-    //           </div>
-    //         </div>
-    
-    // `
 }
 
 function createRequest(request){
