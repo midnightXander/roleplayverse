@@ -512,7 +512,7 @@ def get_posts(request):
                     #     character.custom_id = generate_custom_id()
                     #     character.save()
                     story_character = StoryCharacter.objects.get(custom_id = feed_item['custom_id'])
-                    print(story_character)
+                    
                     if story_character not in feed.story_characters.all() and len(feed_data) <= feed_limit:
                         story_character_data = _story_character(story_character)
                         last_textpad = story_character_data['last_textpad']
@@ -521,6 +521,7 @@ def get_posts(request):
                         
                         feed_data.append(story_character_data)
                         feed.story_characters.add(story_character)
+                        print(story_character_data['name'])
 
                     
     random.shuffle(feed_data)

@@ -1283,7 +1283,7 @@ if (window.scrollY + window.innerHeight >= document.body.offsetHeight - 100) {
                     postsFeed.appendChild(memeElement)
                 }
                 else if(post.feed_item == 'story'){
-                    const storyElement = createAdventureStoryElement({});
+                    const storyElement = createAdventureStoryElement(post);
                     postsFeed.appendChild(storyElement);
                 }
                 
