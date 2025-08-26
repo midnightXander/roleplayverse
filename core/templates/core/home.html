@@ -1084,7 +1084,7 @@ function createAnnouncementElement(announcement) {
 function createAdventureStoryElement(character) {
     const element = document.createElement('div');
     element.className = 'adventure-character-card rounded-xl border-t border-gray-700 py-5 flex items-center gap-4 mb-6 animate__animated animate__fadeInUp';
-
+    console.log(character)
     element.innerHTML = `
         <img src="${character.avatar}" alt="${character.name}" class="w-16 h-16 rounded-full border-4 border-orange-500 object-cover shadow" />
         <div class="flex-1">

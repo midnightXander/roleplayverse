@@ -511,7 +511,8 @@ def get_posts(request):
                     # for character in StoryCharacter.objects.all():
                     #     character.custom_id = generate_custom_id()
                     #     character.save()
-                    story_character = StoryCharacter.objects.filter(custom_id = feed_item['custom_id']).first()
+                    story_character = StoryCharacter.objects.get(custom_id = feed_item['custom_id'])
+                    print(story_character)
                     if story_character not in feed.story_characters.all() and len(feed_data) <= feed_limit:
                         story_character_data = _story_character(story_character)
                         last_textpad = story_character_data['last_textpad']
