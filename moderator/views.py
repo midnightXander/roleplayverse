@@ -166,7 +166,7 @@ def notify_all_players(request):
         return JsonResponse({'status': 'success', 'message': 'Notification envoyée à tous les joueurs.'})
     
 @csrf_exempt
-def notify_player(request, email):
+def notify_player(request, identifier):
     if request.method == 'POST':
         title = request.POST.get('title')
         body = request.POST.get('body')
@@ -181,7 +181,9 @@ def notify_player(request, email):
         }
 
     
-        user = get_object_or_404(User, email=email)
+        user = User.ojects.filter(email = identifier).first() or User.objects.filter(username = identifier).first()
+        if not user:
+            return JsonResponse({'status': 'error', 'message': 'Utilisateur non trouvé.'})
         player = Player.objects.filter(user=user).first()
         if not player:
             return JsonResponse({'status': 'error', 'message': 'Joueur non trouvé.'}) 
