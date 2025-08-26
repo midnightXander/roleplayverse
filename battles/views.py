@@ -1067,7 +1067,7 @@ def take_first_turn(request, battle_id):
     hours = seconds // 3600
     if not player:
         return JsonResponse({'status': 'error'}, status = 401)
-    if battle.status == 'not_started' and battle.opponent == player and request.method == 'POST' and ( days > 1 or hours >= 4 ) :
+    if battle.status in ['not_started', 'waiting_refree'] and battle.opponent == player and request.method == 'POST' and ( days > 1 or hours >= 4 ) :
         battle.opponent = battle.initiator
         battle.initiator = player
         temp_character = battle.o_character 

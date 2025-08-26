@@ -181,7 +181,7 @@ def notify_player(request, identifier):
         }
 
     
-        user = User.ojects.filter(email = identifier).first() or User.objects.filter(username = identifier).first()
+        user = User.objects.filter(email = identifier).first() or User.objects.filter(username = identifier).first()
         if not user:
             return JsonResponse({'status': 'error', 'message': 'Utilisateur non trouvé.'})
         player = Player.objects.filter(user=user).first()

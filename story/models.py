@@ -1,3 +1,4 @@
+import random
 from django.db import models
 from django.utils import timezone
 from users.models import Player
@@ -5,6 +6,9 @@ from users.models import Player
 BASIC_PASS = 2000
 ALL_PASS = 5500
 FREE_TEXTPAD_LIMIT = 13
+def generate_custom_id():
+    return str(random.randint(10000000, 99999999))
+
 
 class StoryCharacter(models.Model):
     player = models.ForeignKey(Player, on_delete = models.CASCADE)
@@ -13,6 +17,7 @@ class StoryCharacter(models.Model):
     inventory = models.JSONField(default=list, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     subscribed = models.BooleanField(default = False)
+    custom_id = models.CharField(max_length=100, blank=True, default = generate_custom_id)
 
     def __str__(self):
         return f"{self.player}: {self.character.get('name','character_name')}"

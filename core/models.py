@@ -1,4 +1,5 @@
 from django.db import models
+from story.models import StoryCharacter
 from users.models import Player
 from battles.models import Battle
 from moderator.models import Announcement
@@ -157,6 +158,7 @@ class Feed(models.Model):
     battles = models.ManyToManyField(Battle, through='BattleFeed')
     daily_content = models.ManyToManyField(ContentPost, through='ContentFeed')
     announcements = models.ManyToManyField(Announcement, through='AnnouncementFeed')
+    story_characters = models.ManyToManyField(StoryCharacter, through='StoryCharacterFeed')
 
     def __str__(self):
         return f"{self.player}"
@@ -188,7 +190,14 @@ class AnnouncementFeed(models.Model):
     feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ('announcement','feed')         
+        unique_together = ('announcement','feed')  
+
+class StoryCharacterFeed(models.Model):
+    story_character = models.ForeignKey(StoryCharacter, on_delete=models.CASCADE)
+    feed = models.ForeignKey(Feed, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('story_character','feed')  
 
 class Image(models.Model):
     image = models.ImageField()

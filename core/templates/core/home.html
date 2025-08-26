@@ -1081,6 +1081,31 @@ function createAnnouncementElement(announcement) {
     return announcementElement;
 }
 
+function createAdventureStoryElement(character) {
+    const element = document.createElement('div');
+    element.className = 'adventure-character-card rounded-xl border-t border-gray-700 py-5 flex items-center gap-4 mb-6 animate__animated animate__fadeInUp';
+
+    element.innerHTML = `
+        <img src="${character.avatar}" alt="${character.name}" class="w-16 h-16 rounded-full border-4 border-orange-500 object-cover shadow" />
+        <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="font-bold text-orange-400 text-lg">${character.name}</span>
+                <span class="bg-gradient-to-r from-orange-900 via-gray-900 to-purple-900 rounded-xl text-gray-300 text-xs px-2 py-1 rounded-full">Story Aventure</span>
+            </div>
+            <p class="text-sm text-gray-400 italic">${character.last_entry}</p>
+            <p class="text-sm text-gray-200 italic" onclick = 'toggleExpand(this)' data-expandable></p>
+            <p class="text-xs text-gray-200 truncate">Par <a onclick = "showOverlay()" href = "/users/${character.player.user.username}" class="italic text-orange-500">${character.player.nickname ? character.player.nickname : character.player.user.username}</a></p>
+            <p class="mt-8" ><a href="/story/game/${character.id}" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-full font-semibold shadow transition">lire cette histoire</a></p>
+            
+        </div>
+        
+    `;
+    const storyBodyElement = element.querySelector('p[data-expandable]');
+    storyBodyElement.textContent = character.body;
+    storyBodyElement.setAttribute('data-full', character.body_full);
+    return element;
+}
+
 
 
 // Function to render posts
@@ -1108,7 +1133,11 @@ function renderPosts() {
             const adElement = createProductSocialAdElement(res.product)
 
             postsFeed.appendChild(adElement)
+            
+            
             posts.forEach(post =>{
+                
+                
                 if(post.feed_item == "post"){
                     const postElement = createPostElement(post);
                     postsFeed.appendChild(postElement);
@@ -1124,6 +1153,10 @@ function renderPosts() {
                 }else if(post.feed_item == 'announcement'){
                     const announcementElement = createAnnouncementElement(post)
                     postsFeed.appendChild(announcementElement)
+                }
+                else if(post.feed_item == 'story'){
+                    const storyElement = createAdventureStoryElement(post);
+                    postsFeed.appendChild(storyElement);
                 }
 
                 
@@ -1248,6 +1281,10 @@ if (window.scrollY + window.innerHeight >= document.body.offsetHeight - 100) {
                 }else if(post.feed_item == 'meme'){
                     const memeElement = createMemeElement(post)
                     postsFeed.appendChild(memeElement)
+                }
+                else if(post.feed_item == 'story'){
+                    const storyElement = createAdventureStoryElement({});
+                    postsFeed.appendChild(storyElement);
                 }
                 
             })

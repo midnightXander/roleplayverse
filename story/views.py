@@ -1,5 +1,4 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from core.views import get_notifs
 from users.models import Player
 from users.users_utility import get_player
 from ai.views import generate_json_content
@@ -14,6 +13,7 @@ from pathlib import Path
 import os
 import json
 from django.views.decorators.csrf import csrf_exempt
+from users.views import _player_data 
 
 def getAffinityIcon(affinity):
     affinities = {
@@ -31,13 +31,18 @@ def _story_character(character:StoryCharacter):
     data = character.character_data
     #data['rank'] = ch.get('rank', 'Genin')
     data['id'] = character.id
+    data['feed_item'] = 'story'
     data['story'] = ch.get('story')
     data['affinity_icon'] = getAffinityIcon(data.get('affinity'))
+    data['player'] = _player_data(character.player)
+    data['last_entry'] = ""
     challenge = StoryChallenge.objects.filter(character = character).first()
     last_textpad = StoryTextPad.objects.filter(challenge = challenge).last()
 
+
     if last_textpad:
         data['last_textpad'] = last_textpad.text
+        data['last_entry'] = last_textpad.entry if last_textpad.entry else ""
     else:
         data['last_textpad'] = ch.get('story')    
 
@@ -49,7 +54,6 @@ def index(request):
     player = get_player(request.user)
     return render(request, "story/index.html", {
         "player" : player,
-        "n_notifs": get_notifs(player),
     })
 
 @login_required
@@ -125,7 +129,6 @@ def create_character(request):
 
     return render(request, "story/create_character.html", {
         "player" : player,
-        "n_notifs": get_notifs(player),
         
     })
 
@@ -305,7 +308,6 @@ def game(request,character_id):
         'character' : character_data,
         "textpads" : textpads_data,
         'status' : story_status,
-        "n_notifs" : get_notifs(player),
         'basic_pass' : BASIC_PASS,
         'all_pass' : ALL_PASS,
     })

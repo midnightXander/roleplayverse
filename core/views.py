@@ -8,6 +8,7 @@ from monetization.models import Payment
 from store.models import Product
 from users.models import Player,PlayerNotification,Family
 from story.models import StoryCharacter
+from story.views import _story_character
 from django.contrib.auth.decorators import login_required
 from .models import *
 from events.models import Tournament
@@ -248,6 +249,7 @@ def home(request):
     feed.posts.clear()
     feed.battles.clear()
     feed.daily_content.clear()
+    feed.story_characters.clear()
     
     feed.save()
     players = Player.objects.exclude( user = request.user)
@@ -437,8 +439,10 @@ def get_posts(request):
                     .values('custom_id','date_ended')
                     .annotate(date = F('date_ended')), all=True)
                     .union(ContentPost.objects.values('custom_id', 'date_added')
-                    .annotate(date = F('date_added')),
-                    all=True)      
+                    .annotate(date = F('date_added')),all=True)
+                    .union(StoryCharacter.objects.values('custom_id', 'created_at')
+                    .annotate(date = F('created_at')),all=True)
+
                     .order_by('-date'))
     
 
@@ -496,12 +500,27 @@ def get_posts(request):
                         feed.battles.add(battle)
             
             except Battle.DoesNotExist:
+                try:
+                    content = ContentPost.objects.get(custom_id = feed_item['custom_id'])
+                    if content not in feed.daily_content.all() and len(feed_data) <= feed_limit:
+                        content_data = _daily_content_data(player,content)
+                        feed_data.append(content_data)
+                        feed.daily_content.add(content)
                 
-                content = ContentPost.objects.get(custom_id = feed_item['custom_id'])
-                if content not in feed.daily_content.all() and len(feed_data) <= feed_limit:
-                    content_data = _daily_content_data(player,content)
-                    feed_data.append(content_data)
-                    feed.daily_content.add(content)
+                except ContentPost.DoesNotExist:
+                    for character in StoryCharacter.objects.all():
+                        character.custom_id = generate_custom_id()
+                        character.save()
+                    # story_character = StoryCharacter.objects.filter(custom_id = feed_item['custom_id']).first()
+                    # if story_character not in feed.story_characters.all() and len(feed_data) <= feed_limit:
+                    #     story_character_data = _story_character(story_character)
+                    #     last_textpad = story_character_data['last_textpad']
+                    #     story_character_data['body_full'] = last_textpad
+                    #     story_character_data['body'] = last_textpad[:200]+'...' if last_textpad and len(last_textpad) > 200 else (last_textpad if last_textpad else '' ),
+                        
+                    #     feed_data.append(story_character_data)
+                    #     feed.story_characters.add(story_character)
+
                     
     random.shuffle(feed_data)
 
