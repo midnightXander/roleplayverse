@@ -920,7 +920,8 @@ def battle_room(request,battle_id):
                 'referee_rated': referee_rated(battle),
                 "n_notifs":core_views.get_notifs(player=player),
                 'product': _product_data,
-                'latency_passed' : battle.latency_passed()
+                'latency_passed' : battle.latency_passed(),
+                'can_change_turn' : True if battle.status in ['not_started', 'waiting_refree'] and player == battle.opponent else False
 
                  }
     
