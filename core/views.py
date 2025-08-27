@@ -475,6 +475,16 @@ def get_posts(request):
             feed_data.append(content_data)
             feed.daily_content.add(content)
 
+    story_character = StoryCharacter.objects.all().order_by('?')[0]
+    if story_character not in feed.story_characters.all():
+        story_character_data = _story_character(story_character)
+        last_textpad = story_character_data['last_textpad']
+        story_character_data['body_full'] = last_textpad
+        story_character_data['body'] = last_textpad[:200]+'...' if last_textpad and len(last_textpad) > 200 else (last_textpad if last_textpad else '' ),
+        
+        feed_data.append(story_character_data)
+        feed.story_characters.add(story_character)        
+
     random.shuffle(feed_data)
 
     for feed_item in feed_items:
@@ -522,6 +532,7 @@ def get_posts(request):
                         feed_data.append(story_character_data)
                         feed.story_characters.add(story_character)
                         print(story_character_data['name'])
+                        print(len(feed_data))
 
                     
     random.shuffle(feed_data)
