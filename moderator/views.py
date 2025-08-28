@@ -337,3 +337,6 @@ def active_players(players:QuerySet[Player]):
 
     return active_players       
 
+
+def creator_login(request):
+    pass

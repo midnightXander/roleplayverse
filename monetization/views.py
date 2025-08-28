@@ -25,7 +25,47 @@ from api.utility import send_push_notification
 from battles.models import *
 
 
+def _creator_link_data(link: CreatorLink):
+    data = link.data
+    signups = int(data.get('signups', 0))
+    active_users = int(data.get('active_users', 0))
+    return {
+        'id': link.id,
+        'url': link.link,
+        'platform': link.platform,
+        'date_created': link.date_created.strftime("%Y-%m-%d %H:%M:%S"),
+        'creator': link.creator.player.user.username,
+        'clicks' : data.get('clicks', 0),
+        'signups' : signups,
+        'active_users' : active_users,
+        'earnings' : round(signups * 0.05 + active_users * 0.01,2)
+    }
 
+def _creator_top_link(creator: Creator):
+    links = CreatorLink.objects.filter(creator = creator).order_by('-data__clicks')
+    if links.exists():
+        return _creator_link_data(links.first())
+    return None
+
+
+def _creator_data(creator: Creator):
+    links = CreatorLink.objects.filter(creator = creator)
+    total_clicks = sum([ int(_creator_link_data(link)['clicks']) for link in links  ], 0)
+    total_signups = sum([ int(_creator_link_data(link)['signups']) for link in links  ], 0)
+
+    return {
+        'id': creator.id,
+        'player': creator.player.user.username,
+        'login_code': creator.login_code,
+        'date_created': creator.date_created.strftime("%Y-%m-%d %H:%M:%S"),
+        'links': [_creator_link_data(link) for link in links],
+        'top_link' : _creator_top_link(creator),
+        'total_clicks' : total_clicks,
+        'total_earnings' : round(sum([ _creator_link_data(link)['earnings'] for link in links  ], 0),2),
+        'total_signups' :  total_signups,
+        'total_active_users' : sum([ _creator_link_data(link)['active_users'] for link in links  ], 0),
+        'conversion_rate' : round((total_signups / total_clicks * 100),2) if total_clicks > 0 else 0
+    }
 
 def eligible_to_monetization(player:Player):
     rank = player.rank
@@ -122,5 +162,70 @@ def requirements(request):
         
     })
 
+@csrf_exempt
+def add_creator(request, identifier):
+    user = User.objects.filter(username = identifier).first()
+    if not user:
+        user = User.objects.filter(email = identifier).first()
+        if not user:
+            raise Http404("User does not exist.") 
+
+    player = get_player(user)
+    if Creator.objects.filter(player = player).exists():
+        return JsonResponse({'message': 'User is already a creator'})
+    
+    
+    new_creator = Creator.objects.create(player = player)
+    new_creator.save()
+
+    return JsonResponse({'message': 'Creator added succesfully'})
+ 
+@csrf_exempt
+def creator_link(request, identifier):
+    user = User.objects.filter(username = identifier).first()
+    if not user:
+        user = User.objects.filter(email = identifier).first()
+        if not user:
+            raise Http404("User does not exist.") 
+
+    player = get_player(user)
+    creator = Creator.objects.filter(player = player).first() 
+    if not creator:
+        return JsonResponse({'message': 'User is not a creator'})
+    
+    if request.method == 'POST': 
+        url = request.POST.get("url")
+        clicks = request.POST.get('clicks',0)
+        active_users = request.POST.get('active_users',0)
+        signups = request.POST.get('signups',0)
+
+        link,created = CreatorLink.objects.get_or_create(link = url, creator = creator)
+        data = {
+            'clicks' : int(clicks),
+            'signups' : int(signups),
+            'active_users' : int(active_users)
+        }
+        link.data = data
+        link.save()
+
+    
+        return JsonResponse({'message': f'Link {url} added to {creator} succesfully'})
+    return JsonResponse({'message': f'Bad request'},  status = 403)
 
 
+def creator_dashboard(request):
+    player = get_player(request.user)
+    if not player:
+        return redirect('/users/signin')
+    
+    creator = Creator.objects.filter(player = player).first()
+    if not creator:
+        raise Http404("You are not registered as a creator.")
+    
+    creator_data = _creator_data(creator)
+    
+    return render(request,"monetization/creators/dashboard.html", {
+        'player' : player,
+        'creator' : creator_data
+        
+    })    

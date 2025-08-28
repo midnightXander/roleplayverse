@@ -56,6 +56,7 @@ def send_push_notification(subscription :PushSubscription, message, user:User = 
             print(f"Failed to send notification: {ex}")
             if user is not None:    
                 try:
+                    print(user.email)
                     emails.send_email(
                     recipient_email = user.email,
                     title = message['title'],
