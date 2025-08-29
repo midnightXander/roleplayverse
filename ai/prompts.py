@@ -49,7 +49,7 @@ test_var = """
     Quand un personnage lance une attaque, laisse toujours la possibilite a l'adversaire de faire un contre, puis termine le combat si le contre en question n'est pas valide ou ne respect pas les capacites de son personnage.
 """
 
-def battle_verdict_prompt(rules, context, character, action, battle:Battle, hidden_actions=None):
+def battle_verdict_prompt(rules, context, character, action, battle:Battle,actions, hidden_actions=None, ):
      
      
      return [
@@ -77,11 +77,16 @@ def battle_verdict_prompt(rules, context, character, action, battle:Battle, hidd
     f"""Contexte, Etat et resumer: 
     {context} 
     """,
+    f""""
+    Prend en compte également Les actions effectué jusqu'ici afin de pouvoir connaitre le tour actuel et l'etat global des personnages:
+    {actions}
+    """,
     f"""
-    Actions cachées: 
+    Les Actions cachées repertorié sont: 
     {hidden_actions if hidden_actions else "Aucune action cachée"}
     """,
     f"""
+
         Action: {character}
         {action}
     """

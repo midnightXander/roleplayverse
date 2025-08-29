@@ -354,7 +354,7 @@ def make_verdict(request, battle_id):
     if request.method == "POST":
         battle = get_object_or_404(Battle, id = battle_id)
         if battle.ai_refereeing and not battle.can_send_textpad and battle.status == 'ongoing' and player in [battle.initiator, battle.opponent]:
-            textpads = TextPad.objects.filter(battle = battle)
+            textpads = TextPad.objects.filter(battle = battle).order_by('date_sent')
             last_textpad = textpads.last()
             if last_textpad.refree_comment:
                 return JsonResponse({'status':'error', 'message':'Déja Evalué'})
@@ -362,8 +362,16 @@ def make_verdict(request, battle_id):
             context = _battle_context(battle)
             print(context)
             hidden_actions = _get_hidden_actions(battle)
-            
-            prompt = battle_verdict_prompt(battle.ai_rules, context, character, last_textpad.text, battle, hidden_actions=hidden_actions)
+            textpads_data = " \n".join([
+                f"""
+                personnage : {battle.i_character if textpad.owner == battle.initiator else battle.o_character},
+                déscription de l'action : {textpad.text},
+                Action cachée : {textpad.hidden_action if textpad.hidden_action else "Aucune action cachée dans cette action"},
+                evaluation de l'action  : {textpad.refree_comment if textpad.refree_comment else "Le pavé n'a pas encore été evalué"}
+                """   
+                for  textpad in textpads
+            ])
+            prompt = battle_verdict_prompt(battle.ai_rules, context, character, last_textpad.text, battle, hidden_actions=hidden_actions, actions = textpads_data)
             try:
                 response = client.models.generate_content(
                 model = "gemini-2.0-flash-001",

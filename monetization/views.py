@@ -213,6 +213,7 @@ def creator_link(request, identifier):
     return JsonResponse({'message': f'Bad request'},  status = 403)
 
 
+
 def creator_dashboard(request):
     player = get_player(request.user)
     if not player:
