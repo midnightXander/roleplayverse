@@ -1155,8 +1155,10 @@ function renderPosts() {
                     postsFeed.appendChild(announcementElement)
                 }
                 else if(post.feed_item == 'story'){
+                    console.log('story item')
                     const storyElement = createAdventureStoryElement(post);
                     postsFeed.appendChild(storyElement);
+                    console.log(storyElement)
                 }
 
                 
