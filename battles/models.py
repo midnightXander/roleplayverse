@@ -129,7 +129,7 @@ class Battle(models.Model):
         seconds = difference.seconds
         hours = seconds // 3600
         
-        if days < 1:
+        if days < 4:
             return hours >= BATTLE_LATENCY and last_textpad.valid
         else:
             return last_textpad.valid

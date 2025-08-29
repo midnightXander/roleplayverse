@@ -476,6 +476,7 @@ def get_posts(request):
             feed.daily_content.add(content)
 
     story_character = StoryCharacter.objects.all().order_by('?')[0]
+    print("Random character: ", story_character)
     if story_character not in feed.story_characters.all():
         story_character_data = _story_character(story_character)
         last_textpad = story_character_data['last_textpad']
