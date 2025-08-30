@@ -15,6 +15,22 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from users.views import _player_data 
 
+LANGUAGES = {
+        'fr' : 'Francais',
+        'en' : 'Anglais',
+    }
+
+def get_bowser_language(request):
+    player = get_player(request.user)
+    language = request.META.get('HTTP_ACCEPT_LANGUAGE','fr')[:2].lower()
+    print(language,request.META.get('HTTP_ACCEPT_LANGUAGE'))
+    
+    if player:
+        player.language = language
+        player.save()
+    return language
+    
+
 def getAffinityIcon(affinity):
     affinities = {
         'Fire' : '🔥',
@@ -69,7 +85,7 @@ def create_character(request):
         jutsus = json.loads(request.POST.get('jutsus'))
         description = request.POST.get('description')
         avatar = request.POST.get('avatar')
-
+        language = LANGUAGES.get(get_bowser_language(request), 'Francais')
         
 
         if player.battle_points >= 1:
@@ -84,7 +100,7 @@ def create_character(request):
                 'avatar' : avatar, 
             }
 
-            prompt = story_character_background_prompt(prompt_data)
+            prompt = story_character_background_prompt(prompt_data, language)
             res = generate_json_content(prompt)
 
             story = res.get('story')
@@ -216,6 +232,7 @@ def game(request,character_id):
     if request.method == "POST":
         if character.player == player:
             action = request.POST.get('action')
+            language = LANGUAGES.get(get_bowser_language(request), 'Francais')
 
             if not _can_play(player,story_challenge):
                 return JsonResponse({ 'status' : 'error', 'message' : 'subscription' })
@@ -224,7 +241,7 @@ def game(request,character_id):
                 if story_status == "ongoing":
                     textpads = StoryTextPad.objects.filter(challenge = story_challenge)
                     textpads_data = [  textpad.text  for textpad in textpads ]
-                    prompt = story_continue_prompt(character.character_data, textpads_data)
+                    prompt = story_continue_prompt(character.character_data, textpads_data, language)
                     try:
                         res = generate_json_content(prompt)
                         input_required = res.get('input_required') == 'true'
@@ -250,7 +267,7 @@ def game(request,character_id):
                     textpads = StoryTextPad.objects.filter(challenge = story_challenge)
                     textpads_data = [  textpad.text for textpad in textpads ]
                 
-                    prompt = story_evaluate_and_continue(character.character_data, textpads_data, text)
+                    prompt = story_evaluate_and_continue(character.character_data, textpads_data, text, 'Anglais')
                     try:
                         res = generate_json_content(prompt)
                         res_text = res.get('text')

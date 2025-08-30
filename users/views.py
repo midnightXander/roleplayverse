@@ -361,7 +361,7 @@ def register(request):
                 new_player.save()
 
                 #core_views.add_points(new_player, ENTRY_POINTS)
-                new_player.add_points(ENTRY_POINTS)
+                # new_player.add_points(ENTRY_POINTS)
                 
                 new_user.save()
                 new_player.save()

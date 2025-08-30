@@ -62,6 +62,8 @@ def battle_verdict_prompt(rules, context, character, action, battle:Battle,actio
     sachant que 'end_fight' sera 'true' si le contre/action n'est pas valid et le personnage encaisse une attaque mortel."""+f"""
     Tandis que winner sera le nom du personnage( soit {battle.i_character} soit {battle.o_character} épellé exactement de la meme facon) qui remporte le combat dans le cas ou end_fight est "true" et que le combat est terminé.
     "valid" sera true si l'action ou le contre decrit est  valid.
+
+    Ne prends pas en compte les affirmation du genre "Mon attaque le touche violamment, L'adversaire meurt apres l'attaque... C'est a toi de determiner si l'attaque atteint l'adversaire ou pas."
     
     Un contre non valid est un contre qui n'est pas possible au vu de la situation, distance entre les personnages, de la puissance et la vitesse apprixamtive du personnage et de la technique utilisée par l'adversaire.
     Si un contre est non-valid mais ne cause pas la mort du personnage alors tu peux marquer l'action comme valid tout en decrivant dans ton verdict ce qui ne va pas dans l'action et comment le combat evolue
@@ -92,7 +94,7 @@ def battle_verdict_prompt(rules, context, character, action, battle:Battle,actio
     """
 ]
 
-def story_character_background_prompt(character_data):
+def story_character_background_prompt(character_data, language = "Francais"):
     return [
         f"""
         Tu es un narrateur d'un univers Roleplay de Naruto. Décris l’histoire et l’origine d’un personnage nommé {character_data['name']}, issu du clan {character_data.get('origin')}, avec une affinité élémentaire {character_data.get('affinity')}. 
@@ -102,11 +104,12 @@ def story_character_background_prompt(character_data):
         traits et personalite : {character_data.get('personality')} 
         Fais une description immersive de son enfance, ses aspirations et sa situation actuelle, puis introduis un événement déclencheur pour son aventure. soit créatif dans la génération, le personnage pourrait tres bien etre un méchant qu'un gentille.
         """,
+        f""" Retourne le texte en  {language}""",
         """Retourne la reponse en format JSON : {"story":"histoire du personnage"}"""
     ]
 
 
-def story_evaluate_and_continue(character_data, textpads, action):
+def story_evaluate_and_continue(character_data, textpads, action, language = "Francais"):
     return [
         """
             Tu es narrateur d'un univers Roleplay Naruto. 
@@ -130,10 +133,11 @@ def story_evaluate_and_continue(character_data, textpads, action):
         """En situation de combat, si le personnage subit une attaque mortel alors il devra mourir, et l'aventure se termine. Dans ce cas le champ 'ended' dans ta reponse sera 'true'""",
         """Le personnage pourra encaisser une attaque en cas d'un mauvais contre decrit par le joueur, dans ce cas le champ 'valid' de ta reponse sera 'true' et le champ 'ended' sera 'false' si l'aventure continue ou 'true' si le personnage meurt et l'aventure se termine."""
         """Ne force surtout pas la mort du personnage, mais si le joueur decrit une action qui n'est pas faisable au vu de ses capacites et de la situation actuelle alors il devra encaisser l'attaque et potentiellement mourir si et uniquement si l'attaque est mortel."""
+        f""" Retourne le texte de narration en  : {language}""",
         """Retourne la reponse en format JSON : {"text":"le text de narration, 200 mots maximum", "valid":"true/false, si oui ou non l'action tu joueur est faisable au vu de ses capacite et de la situation actuelle", "ended": "true/false, si l'aventure est terminée ou non"}""",
     ]
 
-def story_start_prompt(character_data):
+def story_start_prompt(character_data, language = 'Francais'):
     return [
         f"""
         Tu es narrateur d'un univers Roleplay Naruto. 
@@ -145,10 +149,11 @@ def story_start_prompt(character_data):
         C'est le début de l'aventure, fais un text de moins de 200 mots  placant le joueur dans une situation pour commencer a le faire interagir dans l'aventure. En prennant soins de developper son aventure de maniere coherente.
         introduis des petits dialogue 
         """,
+        f""" Retourne le texte de narration en : {language}""",
         """Retourne la reponse en format JSON : {"text":"le text de narration"}"""
     ]
 
-def story_continue_prompt(character_data, textpads):
+def story_continue_prompt(character_data, textpads, language= "Francais"):
     return [
         f"""
         Tu es narrateur d'un univers Roleplay Naruto. 
@@ -167,6 +172,7 @@ def story_continue_prompt(character_data, textpads):
         introduis des petits dialogue si necessaire.
         """,
         """Evite les repetitions de scene et les phrases trop longues, sois concis et clair dans tes descriptions. l'histoire doit continuer pas revenir a un point deja vu.""",
+        f""" Retourne le texte de narration en langage : {language}""",
         """Retourne la reponse en format JSON : {"text":"le text de narration", "input_required":"true/false dependant de si une entree text de l'action du joueur est requise"}"""
     ]
 
