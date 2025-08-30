@@ -65,9 +65,9 @@ def battle_verdict_prompt(rules, context, character, action, battle:Battle,actio
     
     Un contre non valid est un contre qui n'est pas possible au vu de la situation, distance entre les personnages, de la puissance et la vitesse apprixamtive du personnage et de la technique utilisée par l'adversaire.
     Si un contre est non-valid mais ne cause pas la mort du personnage alors tu peux marquer l'action comme valid tout en decrivant dans ton verdict ce qui ne va pas dans l'action et comment le combat evolue
-    Un combat se termine si un personnage effectue un contre non-valid qui cause l'encaissement d'une attaque mortel.
+    Un combat se termine dans l'action actuel le personnage effectue un mauavis contre(n'a pas correctement contré une attaque mortelle )  qui cause l'encaissement d'une attaque mortel.
     si le contre décrit n'est pas acceptée au vu de la situation et de la difference en puissance et en pertinence de la technique utilisée, il devra causé l'encaissement de l'attaque, et si l'attaque est mortel alors le combat devra prendre fin.
-    Quand un personnage lance une attaque, laisse toujours la possibilite a l'adversaire de faire un contre, puis declare la fin du combat si le contre en question n'est pas valide ou ne respect pas les capacites de son personnage.
+    Quand un personnage lance une attaque, laisse toujours la possibilite a l'adversaire de faire un contre, 
     Ne tolere pas les contres qui ne sont pas en accord avec les regles du combat, les actions cachées et le contexte du combat.
     """,
     f""" REGLES: 
