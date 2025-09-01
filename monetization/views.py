@@ -4,6 +4,8 @@ from django.shortcuts import redirect,render
 from django.http import HttpResponseRedirect,JsonResponse,Http404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+
+from moderator.models import Moderator
 from .models import *
 from django.db.models import Q
 from users.models import Player,Family,PlayerStat,PlayerNotification,notification_types,rankings,Badge,PlayerBadge
@@ -72,9 +74,10 @@ def eligible_to_monetization(player:Player):
     battles_finished = Battle.objects.filter(status = 'finished').filter(
         Q(initiator = player) | Q(opponent = player)
     )
+    return True
     battles_refereed = Battle.objects.filter(refree = player, status = 'finished')
 
-    if rank != 'E' and (len(battles_finished) + len(battles_refereed)) >= 7:
+    if rank != 'E' and (len(battles_finished) + len(battles_refereed)) >= 10:
         return True
     for tournament in events_models.Tournament.objects.all():
         if player == tournament.winner:
@@ -230,3 +233,44 @@ def creator_dashboard(request):
         'creator' : creator_data
         
     })    
+
+
+def payment_request(request):
+    player = get_player(request.user)
+    available = available_gains(player.rp_credits)
+
+    if request.method == 'POST' and eligible_to_monetization(player): 
+        amount = round(float(request.POST.get("amount")),2)
+        method = request.POST.get("method",'paypal')
+        details = request.POST.get("details", "")
+        adress = request.POST.get('adress')
+
+        if amount < 10 or amount > available:
+            return JsonResponse({'message': 'Invalid amount', 'status':'error'})
+        
+        if PaymentRequest.objects.filter(player=player, status='pending').exists():
+            return JsonResponse({'message': 'You already have a pending payment request', 'status':'error'})
+
+        payment_request = PaymentRequest.objects.create(
+            player=player,
+            amount=amount,
+            adress = adress,
+            method=method,
+            details=details
+        )
+
+        moderators = Moderator.objects.all()
+        for moderator in moderators:
+            send_push_notification(PushSubscription.objects.filter(user = moderator.user).last(),
+            {
+            'title' : f"Nouvel requete de paiement",
+            'body' : f"{player} a Fait une requete de paiement de {amount}$",
+            'url' : f'/moderator',
+            'icon' : '/static/images/logo/logo_1.png',
+            },
+            moderator.user
+            )
+
+        return JsonResponse({'message': 'Payment request created successfully', 'status':'success', 'id': payment_request.id})
+
+    return JsonResponse({'message': 'Bad request'}, status=400)

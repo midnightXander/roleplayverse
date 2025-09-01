@@ -59,6 +59,20 @@
 
 {% block messages %}
 
+        <!-- <div class="bg-gradient-to-r from-orange-900 via-gray-900 to-purple-900 rounded-xl shadow-lg p-4 mb-4 flex items-center gap-4">
+            <img src="{{receiver.profile_picture.url}}" alt="{{receiver}} profile picture" class="w-16 h-16 rounded-full border-4 border-orange-500 object-cover shadow">
+            <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="font-bold text-orange-400 text-lg">{{receiver.nickname|default:receiver}}</span>
+                    <span class="bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded-full">Rang: {{receiver.rank|default:"-"}}</span>
+                </div>
+                <div class="flex gap-4 text-sm text-gray-300">
+                    <span>🏆 Victoires: <span class="font-bold text-green-400">{{receiver.wins|default:"0"}}</span></span>
+                    <span>💔 Défaites: <span class="font-bold text-red-400">{{receiver.loses|default:"0"}}</span></span>
+                    <span>📈 Position: <span class="font-bold text-orange-300">{{receiver.position|default:"-"}}</span></span>
+                </div>
+            </div>
+        </div> -->
          <!--Chat header --> 
         <div id="chatHeader" class=" p-3 bg-transperent border-b border-gray-700 flex items-center">
             <a onclick="showOverlay()" href="{% url 'chat:all' %}">
@@ -79,9 +93,27 @@
         </a>
         </div>
 
+        <div class="p-4 mb-4 flex flex-col justify-center items-center gap-4">
+            <img src="{{receiver.profile_picture.url}}" alt="{{receiver}} profile picture" class="w-16 h-16 rounded-full border-4 border-orange-500 object-cover shadow">
+            <div class="flex-1">
+                <div class="flex justify-center items-center gap-2 mb-1">
+                    <span class="font-bold text-orange-400 text-lg">{{receiver.nickname|default:receiver}}</span>
+                    <span class="bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded-full">Rang: {{receiver.rank|default:"-"}}</span>
+                </div>
+                <div class="flex gap-4 text-sm text-gray-300">
+                    <span>🏆 Victoires: <span class="font-bold text-green-400">{{receiver.wins|default:"0"}}</span></span>
+                    <span>💀 Défaites: <span class="font-bold text-red-400">{{receiver.loses|default:"0"}}</span></span>
+                    <span>✳️ Clan : <span class="font-bold truncate text-orange-300">{{receiver.family|default:"-"}}</span></span>
+                
+                </div>
+            </div>
+        </div> 
+
+
          <!-- Messages --> 
-        <div id="messagesContainer"  class="relative flex-grow px-2 py-4  overflow-y-auto bg-gradient-to-t from-black to-gray-800">
-             <!-- Messages will be added here dynamically --> 
+        <div id="messagesContainer"  class="relative flex-grow px-2 py-4  overflow-y-auto">
+            
+            <!-- Messages will be added here dynamically --> 
              <div class="flex flex-col h-full items-center justify-center">
                 <img src="{% static 'svg/empty-message.svg'  %}" alt="empty-messages" class="h-32 w-32" >
                 

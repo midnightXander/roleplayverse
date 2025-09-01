@@ -5,6 +5,7 @@ import uuid
 from utility import get_characters
 from django.utils import timezone
 import random
+from django.db.models import Q,QuerySet
 
 rankings = ['E','D','C','B','B+','A','A+','S','SS','SSS']
 FAMILYROLES = ['challenge_head','recruiter', 'casual','fighter']
@@ -183,6 +184,7 @@ class Player(models.Model):
         self.save() 
 
     def notifs(self):
+
         player_notifs = PlayerNotification.objects.filter(target= self, read = False)
         from core.models import Notification
         from battles.models import Challenge
@@ -196,8 +198,58 @@ class Player(models.Model):
             return "9+"
         else:
             return f"{n_notifs}"     
-        
 
+    def total_battles(self,status=None):
+        from battles.models import Battle
+        battles =  Battle.objects.filter(
+            Q(initiator = self) | Q(opponent = self)
+        ) 
+        if status:
+            battles = battles.filter(status = status)
+        return len(battles)
+
+    def wins(self):
+        from battles.models import Battle
+        battles =  Battle.objects.filter(
+            winner = self
+        )
+        return len(battles)   
+
+    def losses(self):
+        total_battles = self.total_battles(self,'finished')
+        wins = self.wins()
+
+        return total_battles - wins 
+
+    def favorite_character(self):
+        from battles.models import Battle
+
+        characters = []
+        favorite_character = 'Aucun'
+        battles = Battle.objects.filter(
+            initiator = self
+        )
+        for battle in Battle.objects.filter(initiator = self):
+            #get the characters of battles where selfwas initiator 
+            characters.append(battle.i_character)
+        for battle in Battle.objects.filter(opponent = self):
+            #get the characters of battles where player was opponent 
+            characters.append(battle.o_character)
+
+        character_count = {}
+        for character in characters:
+            if not character in character_count:
+                #set the number of occurences of each character in the list
+                character_count[character] =  characters.count(character)
+
+        biggest_count = 0
+        #get the character with the highest ocurrence
+        for character, count in character_count.items():
+            if count > biggest_count: 
+                biggest_count = count
+                favorite_character = character
+
+        return favorite_character
 
     def __str__(self):
         # referee_badge = Badge.objects.filter(title = 'Referee')

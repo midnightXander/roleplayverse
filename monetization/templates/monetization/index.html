@@ -32,11 +32,11 @@
       <div class="bg-gray-900 p-4 rounded-xl shadow text-center">
         <h2 class="text-sm text-gray-500">Crédits RP</h2>
         <p class="text-3xl font-bold text-blue-500">{{player.rp_credits}}</p>
-        <p class="text-xs text-gray-400">200 crédits = 1€</p>
+        <p class="text-xs text-gray-400">200 crédits = 1$</p>
       </div>
       <div class="bg-gray-900 p-4 rounded-xl shadow text-center">
         <h2 class="text-sm text-gray-500">Gains Disponibles</h2>
-        <p class="text-3xl font-bold text-green-500">{{gains}}€</p>
+        <p class="text-3xl font-bold text-green-500">{{gains}}$</p>
       </div>
     </div>
 
@@ -54,10 +54,92 @@
     <!-- Withdraw Section -->
     <div class="bg-gray-900 p-4 rounded-xl shadow">
       <h2 class="text-lg font-semibold mb-3">📤 Paiement</h2>
-      <p class="text-sm text-gray-400 mb-4">Une fois atteint le seuil de 10€, vous pouvez demander un retrait via Mobile Money ou PayPal.</p>
-      <button class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg disabled:opacity-50" disabled>Demander un Paiement</button>
-      <p class="text-xs text-gray-500 mt-2">Minimum requis : 10€ • Dernier paiement : </p>
+      <p class="text-sm text-gray-400 mb-4">Une fois atteint le seuil de 10$, vous pouvez demander un retrait via PayPal.</p>
+      <button class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg disabled:opacity-50">Demander un Paiement</button>
+      <p class="text-xs text-gray-500 mt-2">Minimum requis : 10$ • Dernier paiement : </p>
     </div>
   </div>
 
+  <!-- Payment Request Popup -->
+<div id="paymentRequestPopup" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+  <div class="bg-gray-900 rounded-2xl shadow-2xl p-6 max-w-md w-full relative">
+    <button onclick="hidePaymentRequestPopup()" class="absolute top-2 right-3 text-gray-400 hover:text-orange-500 text-2xl font-bold">&times;</button>
+    <h2 class="text-xl font-bold text-green-400 mb-4 text-center">Demander un Paiement</h2>
+    <form id="paymentRequestForm" class="space-y-4">
+      <div>
+        <label for="paypalEmail" class="block text-sm text-gray-300 mb-1">Adresse PayPal</label>
+        <input type="email" id="paypalEmail" name="paypalEmail" required class="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-green-500" placeholder="ex: monemail@paypal.com">
+      </div>
+      <div>
+        <label for="amount" class="block text-sm text-gray-300 mb-1">Montant à retirer ($)</label>
+        <input type="number" id="amount" name="amount" min="10" max="{{gains}}" required class="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-green-500" placeholder="10">
+        <p class="text-xs text-gray-500 mt-1">Minimum : 10$ • Maximum : {{gains}}$</p>
+      </div>
+      <div>
+        <label for="notes" class="block text-sm text-gray-300 mb-1">Notes (optionnel)</label>
+        <textarea id="notes" name="notes" rows="2" class="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-green-500" placeholder="Message ou instructions..."></textarea>
+      </div>
+      <button type="submit" id="submitRequest" class="w-full bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white font-bold py-2 rounded-full shadow transition">Envoyer la demande</button>
+    </form>
+  </div>
+</div>
+
+<script>
+function showPaymentRequestPopup() {
+  document.getElementById('paymentRequestPopup').classList.remove('hidden');
+}
+function hidePaymentRequestPopup() {
+  document.getElementById('paymentRequestPopup').classList.add('hidden');
+}
+
+// Example: open popup when button is clicked
+document.querySelectorAll('.bg-green-600:not([disabled])').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+    showPaymentRequestPopup();
+  });
+});
+
+function toggleDisableButton(btn){
+  btn.disabled = btn.disabled? false:true; 
+}
+
+// Handle form submission (AJAX or normal POST)
+document.getElementById('paymentRequestForm').onsubmit = function(e) {
+  e.preventDefault();
+  const adress = document.getElementById('paypalEmail').value 
+  const amount = document.getElementById('amount').value
+  const notes = document.getElementById('notes').value  
+  // Add your AJAX logic here, or submit via Django form
+  if(amount && adress){
+    $.ajax({
+    url : '/monetization/payment_request',
+    type: 'POST',
+    data : {
+      csrfmiddlewaretoken: '{{csrf_token}}',
+      amount : amount,
+      adress : adress,
+      details : notes ? notes : "",
+    },
+    beforeSend : function(){
+      $('#loading-overlay').toggleClass('active')
+      // toggleDisableButton(document.getElementById('submitRequest'))
+    },
+    success : function(res){
+      showMyToast(res.message, res.status)
+    },
+    complete : function(){
+      hidePaymentRequestPopup();
+      // toggleDisableButton(document.getElementById('submitRequest'))
+      $('#loading-overlay').toggleClass('active')
+    },
+    error : function(jqXHR, textstatus){
+      showMyToast(textstatus, 'error')
+    }
+
+  })
+  }
+  
+};
+</script>
 {% endblock content %}

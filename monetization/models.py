@@ -38,6 +38,26 @@ class Payment(models.Model):
     def __str__(self):
         return f"{self.player.user}"
 
+class PaymentRequest(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    amount = models.DecimalField(default=0, max_digits=10, decimal_places=2)
+    adress = models.CharField(max_length=100)
+    method = models.CharField(max_length=20, choices=[
+        ('paypal', 'PayPal'),
+        ('stripe', 'Stripe'),
+        ('crypto', 'Crypto')
+    ], default = 'paypal')
+    details = models.TextField(help_text="Provide necessary details like email for PayPal, wallet address for crypto, etc.")
+    status = models.CharField(max_length=20, choices=[
+        ('pending', 'Pending'),
+        ('processed', 'Processed'),
+        ('rejected', 'Rejected')
+    ], default='pending')
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.player.user} - {self.amount} via {self.method} - {self.status}"    
+
 
 class Creator(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='creators')
