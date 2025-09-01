@@ -267,7 +267,7 @@ def game(request,character_id):
                     textpads = StoryTextPad.objects.filter(challenge = story_challenge)
                     textpads_data = [  textpad.text for textpad in textpads ]
                 
-                    prompt = story_evaluate_and_continue(character.character_data, textpads_data, text, 'Anglais')
+                    prompt = story_evaluate_and_continue(character.character_data, textpads_data, text, language)
                     try:
                         res = generate_json_content(prompt)
                         res_text = res.get('text')
