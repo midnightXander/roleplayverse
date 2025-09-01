@@ -195,7 +195,6 @@ def generate_avatar_images(request):
         return JsonResponse({'status':'success', 'images':images})
     return JsonResponse({'status':'error'})  
 
-
 def enable_ai_refreeing(request, battle_id):
     player = get_object_or_404(Player, user = request.user) 
     if request.method == "POST":
@@ -251,7 +250,7 @@ def enable_ai_refreeing(request, battle_id):
 
 def create_rules(request, battle_id):
     player = get_player(request.user)
-    if request.method == "POST":
+    if request.method == "POST" and player:
         battle = get_object_or_404(Battle, id = battle_id)
         prompt = set_rules_prompt(battle.i_character, battle.o_character, battle.type)
 
@@ -261,7 +260,7 @@ def create_rules(request, battle_id):
 
         #credentials = load_credentials_from_file("E:\work\\alex\google\secure_keys\\roleplay-verse-5163419666ba.json")
         #client = genai.Client(http_options=HttpOptions(api_version='v1'), credentials=credentials)
-        if battle.ai_refereeing and not battle.ai_rules and player in [battle.initiator, battle.opponent]:
+        if battle.ai_refereeing and not battle.ai_rules and player in [battle.initiator, battle.opponent, battle.refree]:
             try:
                 response = client.models.generate_content(
                 model = "gemini-2.0-flash-001",
