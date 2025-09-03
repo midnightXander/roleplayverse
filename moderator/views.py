@@ -155,7 +155,7 @@ def notify_all_players(request):
             'icon': '/static/images/logo/logo_1.png'
         }
 
-        players = User.objects.all()
+        players = User.objects.all().order_by('?')
         for player in players:
             send_push_notification(
                 subscription = PushSubscription.objects.filter(user=player).last(),
