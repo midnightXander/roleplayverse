@@ -150,9 +150,15 @@
         </div>
         {% endif %}
 
-        <button type="button" onclick="socialShare(this,'https:\/\/roleplayverse.live/story/game/{{character.id}}')" class="action-btn hover:bg-blue-700 hover:text-white truncate border border-blue-500 text-blue-500 font-bold py-2 px-4 rounded-full transition duration-300">
+        <button type="button" onclick="socialShare(this,'https:\/\/roleplayverse.live/story/game/{{character.id}}?utm_source=share&utm_medium=roleplayverse&utm_campaign=storymode_referal')" class="action-btn hover:bg-blue-700 hover:text-white truncate border border-blue-500 text-blue-500 font-bold py-2 px-4 rounded-full transition duration-300">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="200" height="200" viewBox="0 0 21 21"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m14.5 7.5l-3.978-4l-4.022 4m4.022-3.979V15.5m-3.022-5h-2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2"/></svg>
         </button>
+        {% if show_ads %}
+        <button type="button" onclick = "showRemoveAdsPopup()" class="hover:text-white truncate bg-white font-bold py-2 px-4 rounded-full transition duration-300">
+            <img src="https://static.vecteezy.com/system/resources/thumbnails/014/635/130/small_2x/ad-block-icon-in-red-colors-no-ads-signs-button-png.png" alt="remove ads" class="h-4 w-4"/>
+        </button>
+        {% endif %}
+
 
         
 
@@ -198,7 +204,7 @@
         <div class="bg-gray-900 rounded-lg p-4 flex flex-col items-center">
           <span class="text-lg font-bold text-orange-200 mb-1">Pass One</span>
           <span class="text-xs text-gray-300 mb-2 text-center">Débloque cette histoire uniquement</span>
-          <span class="text-xs text-green-400 mb-2 text-center">Pas de pub dans cette histoire</span>
+          <!-- <span class="text-xs text-green-400 mb-2 text-center">Pas de pub dans cette histoire</span> -->
           <span class="text-2xl font-bold text-yellow-300 mb-2">{{ basic_pass }} <span class="text-xs font-normal">JC</span></span>
           <button onclick="getStoryPass('normal')" type="button"
             class="w-full bg-gradient-to-r from-orange-600 to-yellow-500 hover:from-orange-700 hover:to-yellow-500 text-white font-bold py-2 rounded-full shadow transition duration-200">
@@ -222,6 +228,30 @@
 </div>
 </div>
 
+<div id="removeAdsPopup" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+  <div class="bg-gray-900 rounded-2xl shadow-lg p-6 max-w-md w-full relative">
+    <button onclick="hideRemoveAdsPopup()" class="absolute top-2 right-3 text-gray-400 hover:text-orange-500 text-2xl font-bold">&times;</button>
+    <h2 class="text-xl font-bold text-orange-500 mb-3">Retirer les pub</h2>
+
+    <div class= "space-y-4">
+        <div class="rounded-xl bg-gradient-to-br from-white via-orange-600 to-yellow-400 p-1 shadow-lg">
+        <div class="bg-gradient-to-tr from-white  to-gray-400 text-black rounded-lg p-4 flex flex-col items-center">
+          
+            <img src="https://static.vecteezy.com/system/resources/thumbnails/014/635/130/small_2x/ad-block-icon-in-red-colors-no-ads-signs-button-png.png" alt="remove ads" class="h-8 w-8"/>
+          <span class="text-xs text-gray-900 mb-2 text-center">Retire les pubs pour toutes les story</span>
+          <!-- <span class="text-xs text-green-400 mb-2 text-center">Pas de pub dans cette histoire</span> -->
+          <span class="text-2xl font-bold text-yellow-600 mb-2">{{ no_ads_pass }} <span class="text-xs font-normal">JC</span></span>
+          <button onclick="removeAds()" type="button"
+            class="w-full bg-gradient-to-r from-orange-600 to-yellow-500 hover:from-orange-700 hover:to-yellow-500 text-white font-bold py-2 rounded-full shadow transition duration-200">
+           Retirer
+          </button>
+        </div>
+      </div>
+           
+    </div>
+</div>
+</div>
+
 
 <script>
 function showHowToPlayPopup() {
@@ -237,6 +267,17 @@ function showStoryPassPopup() {
 function hideStoryPassPopup() {
   document.getElementById('storyPassPopup').classList.add('hidden');
 }
+
+function showRemoveAdsPopup() {
+  document.getElementById('removeAdsPopup').classList.remove('hidden');
+}
+function hideRemoveAdsPopup() {
+  document.getElementById('removeAdsPopup').classList.add('hidden');
+}
+
+
+
+
 </script>
     
 <script>
@@ -343,6 +384,36 @@ function hideStoryPassPopup() {
                 if(res.status == "success"){
                     hideStoryPassPopup();
                     showMyToast(res.message, 'success')
+                }
+                else{
+                    showMyToast(res.message)
+                }
+            },
+            complete : function(){
+                $('#loading-overlay').toggleClass('active')
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                showMyToast(textstatus, "error")
+            }
+
+        })
+    }
+
+    function removeAds(){
+        $.ajax({
+            url : "/story/remove_ads",
+            type : 'POST',
+            data : {
+                csrfmiddlewaretoken : '{{csrf_token}}',
+            },
+            beforeSend : function(){
+                $('#loading-overlay').toggleClass('active')
+            },
+            success : function(res){
+                if(res.status == "success"){
+                    hideRemoveAdsPopup();
+                    showMyToast(res.message, 'success')
+                    window.location.reload()
                 }
                 else{
                     showMyToast(res.message)
@@ -528,6 +599,7 @@ function hideStoryPassPopup() {
 
 {% block adscripts %}
 
+{% if show_ads %}
 <!-- adsterra popup -->
 <script type='text/javascript' src='//pl27450764.profitableratecpm.com/a5/d3/33/a5d333e3435d3881d0a296dda32f0d1a.js'></script>
 
@@ -574,4 +646,6 @@ s.referrerPolicy = 'no-referrer-when-downgrade';
 l.parentNode.insertBefore(s, l);
 })({})
 </script> -->
+
+{% endif %}
 {% endblock adscripts  %}

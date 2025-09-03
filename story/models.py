@@ -6,6 +6,7 @@ from users.models import Player
 BASIC_PASS = 2000
 ALL_PASS = 5500
 FREE_TEXTPAD_LIMIT = 13
+NO_ADS_PASS = 8500
 def generate_custom_id():
     return str(random.randint(10000000, 99999999))
 
@@ -43,10 +44,19 @@ class StoryTextPad(models.Model):
     
     
 class StoryPass(models.Model):
-    player = player = models.ForeignKey(Player, on_delete = models.CASCADE)
+    player = models.ForeignKey(Player, on_delete = models.CASCADE)
     challenge = models.ForeignKey(StoryChallenge, on_delete=models.CASCADE)
     all = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.player}:{self.challenge}"
+    
+
+class NoAdsPass(models.Model):
+    player = models.ForeignKey(Player, on_delete = models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.player} - No Ads Pass"
+

@@ -215,6 +215,21 @@ def subscribe_challenge(request, character_id):
             return JsonResponse({'status':'error', 'message': 'Pas assez de jetons(JC)'})    
     return JsonResponse({'status':'error', 'message': 'bad request'})     
 
+def remove_ads(request):
+    player = get_player(request.user)
+
+    if request.method == "POST":
+        if player.battle_points >= NO_ADS_PASS:
+            NoAdsPass.objects.create(player = player)
+            player.battle_points -= NO_ADS_PASS 
+            player.save()
+            return JsonResponse({'status':'success', 'message': 'Publicité supprimée'}) 
+        else:
+            return JsonResponse({'status':'error', 'message': 'Pas assez de jetons(JC)'})
+
+    return JsonResponse({'status':'error', 'message': 'bad request'})
+
+
 
 @login_required
 def game(request,character_id):
@@ -229,6 +244,8 @@ def game(request,character_id):
     textpads_data = [  { "text": textpad.text, "entry" : textpad.entry if textpad.entry else "" } for textpad in textpads ]
     story_status = get_story_status(story_challenge)
     status_message = "L'aventure n'a pas encore commencé" if story_status == "not_started" else "L'aventure est  terminé, tu peux en commencer une autre"
+    show_ads = not(NoAdsPass.objects.filter(player = player).exists() or StoryPass.objects.filter(player = player, all = True).exists())
+    print(show_ads)
     if request.method == "POST":
         if character.player == player:
             action = request.POST.get('action')
@@ -327,6 +344,8 @@ def game(request,character_id):
         'status' : story_status,
         'basic_pass' : BASIC_PASS,
         'all_pass' : ALL_PASS,
+        'no_ads_pass' : NO_ADS_PASS,
+        'show_ads' : show_ads
     })
 
 @csrf_exempt

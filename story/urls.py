@@ -9,6 +9,8 @@ urlpatterns = [
     path('characters',views.characters,name='characters'),
     path('game/<int:character_id>',views.game,name='game'),
     path('pass/<int:character_id>',views.subscribe_challenge,name='story_pass'),
+    path('remove_ads',views.remove_ads,name='remove_ads'),
+
 
     path('array_test', views.array_test),
 ]
