@@ -282,7 +282,7 @@ function createPostElement(post) {
                 </div>
               </div>
               
-              <p onclick = 'toggleExpand(this)' class="body text-base truncate text-gray-100 mt-1" data-expandable>
+              <p onclick = 'toggleExpand(this)' class="body  text-gray-100 mt-1" data-expandable>
                 
               </p>
              
@@ -332,7 +332,7 @@ function createPostElement(post) {
 
     // Escape the post body and set it as text content
     const postBodyElement = postElement2.querySelector('p[data-expandable]');
-    //postBodyElement.textContent = post.body;
+    postBodyElement.textContent = post.body;
     postBodyElement.setAttribute('data-full', post.body_full);
     return postElement2
     }

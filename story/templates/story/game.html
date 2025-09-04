@@ -118,11 +118,11 @@
       <!-- <input type="text" id="action-input" class="flex-1 px-4 py-2 rounded bg-gray-700 text-white focus:outline-none" placeholder="Que fais-tu ?" required />
       <button type="submit" class="bg-orange-600 px-4 py-2 rounded hover:bg-orange-700">Envoyer</button> -->
       {% if status == 'ongoing' %}  
-      <button onclick="showTurnInput()" type="button" class="action-btn  hover:bg-orange-700 truncate border text-white font-bold py-1 px-4 rounded-full transition duration-300">
+      <button onclick="performAction(showTurnInput)" type="button" class="action-btn  hover:bg-orange-700 truncate border text-white font-bold py-1 px-4 rounded-full transition duration-300">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="200" height="200" viewBox="0 0 21 21"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M17 4a2.121 2.121 0 0 1 0 3l-9.5 9.5l-4 1l1-3.944l9.504-9.552a2.116 2.116 0 0 1 2.864-.125zM9.5 17.5h8m-2-11l1 1"/></svg>
         </button>
 
-        <button onclick="continueStory()" type="button" class="action-btn hover:bg-orange-700 truncate border text-white font-bold py-2 px-4 rounded-full transition duration-300">
+        <button onclick="performAction(continueStory)" type="button" class="action-btn hover:bg-orange-700 truncate border text-white font-bold py-2 px-4 rounded-full transition duration-300">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="200" height="200" viewBox="0 0 24 24"><path fill="currentColor" d="M18.54 9L8.88 3.46a3.42 3.42 0 0 0-5.13 3v11.12A3.42 3.42 0 0 0 7.17 21a3.43 3.43 0 0 0 1.71-.46L18.54 15a3.42 3.42 0 0 0 0-5.92Zm-1 4.19l-9.66 5.62a1.44 1.44 0 0 1-1.42 0a1.42 1.42 0 0 1-.71-1.23V6.42a1.42 1.42 0 0 1 .71-1.23A1.51 1.51 0 0 1 7.17 5a1.54 1.54 0 0 1 .71.19l9.66 5.58a1.42 1.42 0 0 1 0 2.46Z"/></svg>
         </button>
 
@@ -161,7 +161,6 @@
 
 
         
-
         <!-- <button type="button" class="hover:bg-orange-700 border text-white font-bold py-2 px-4 rounded-full transition duration-300">
             Strategique
         </button> -->
@@ -235,12 +234,12 @@
 
     <div class= "space-y-4">
         <div class="rounded-xl bg-gradient-to-br from-white via-orange-600 to-yellow-400 p-1 shadow-lg">
-        <div class="bg-gradient-to-tr from-white  to-gray-400 text-black rounded-lg p-4 flex flex-col items-center">
+        <div class="bg-gradient-to-tr from-white  to-gray-100 text-black rounded-lg p-4 flex flex-col items-center">
           
             <img src="https://static.vecteezy.com/system/resources/thumbnails/014/635/130/small_2x/ad-block-icon-in-red-colors-no-ads-signs-button-png.png" alt="remove ads" class="h-8 w-8"/>
           <span class="text-xs text-gray-900 mb-2 text-center">Retire les pubs pour toutes les story</span>
           <!-- <span class="text-xs text-green-400 mb-2 text-center">Pas de pub dans cette histoire</span> -->
-          <span class="text-2xl font-bold text-yellow-600 mb-2">{{ no_ads_pass }} <span class="text-xs font-normal">JC</span></span>
+          <span class="text-2xl font-bold font-cal text-yellow-400 mb-2">{{ no_ads_pass }} <span class="text-xs font-normal">JC</span></span>
           <button onclick="removeAds()" type="button"
             class="w-full bg-gradient-to-r from-orange-600 to-yellow-500 hover:from-orange-700 hover:to-yellow-500 text-white font-bold py-2 rounded-full shadow transition duration-200">
            Retirer
@@ -252,13 +251,71 @@
 </div>
 </div>
 
+<div id="adPopup" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+    <a  href="https://www.revenuecpmgate.com/s6t3d5eucq?key=d5677720e4cfda9268ce625d0b793dc3" target='_blank' onclick = 'hideAdPopup()' class="ad-close absolute top-2 right-3">&times;</a>
+    
+    <div class="rounded-2xl shadow-lg  max-w-md w-full relative">
+    <a href="https://www.revenuecpmgate.com/s6t3d5eucq?key=d5677720e4cfda9268ce625d0b793dc3" target='_blank' onclick="hideAdPopup()" class="absolute top-0 right-3 text-gray-400 hover:text-orange-500 text-2xl font-bold">&times;</a>
+            
+            
+            
+            <a href='https://smoggyfeed.com/6trvWC' onclick = "hideAdPopup()" target='_blank' class="relative rounded-2xl">
+                <span class="bg-orange-500 text-xs rounded-lg px-4 py-2 absolute left-2 top-2 z-[404] ">Ad</span>
+                <img class ='absolute w-full rounded-2xl object-cover z-50' src='/static/images/loaders/img-loader.gif'   alt = "ad image"/>
+                <p class="text-center">Your ad content here (300x90)</p>
+            </a>
+            <h2 class="text-xl font-bold text-orange-400 mb-3">Ad</h2>
+  </div>
+</div>
 
+{{show_ads|json_script:"show_ads" }}
 <script>
-function showHowToPlayPopup() {
-  document.getElementById('howToPlayPopup').classList.remove('hidden');
+
+// localStorage.setItem('currentCharacterId', '{{character.id}}');
+// localStorage.getItem('')
+
+function showAd(){
+    const allowedToShow = JSON.parse(document.querySelector("#show_ads").textContent)
+    if(allowedToShow == false){
+        console.log('ads disabled')
+        return;
+    }
+
+    const lastAdTime = localStorage.getItem('lastAdTime');
+    if (lastAdTime) {
+        const timeSinceLastAd = Date.now() - lastAdTime;
+        if (timeSinceLastAd < 60000) { // 60 seconds
+            console.log('Ad shown too recently');
+            return;
+        }
+    }
+    localStorage.setItem('lastAdTime', Date.now());
+    showAdPopup();
 }
-function hideHowToPlayPopup() {
-  document.getElementById('howToPlayPopup').classList.add('hidden');
+
+
+function showAdPopup() {
+  const hiltopLink = "https://smoggyfeed.com/6trvWC"
+  const adsterraLink = "https://www.revenuecpmgate.com/s6t3d5eucq?key=d5677720e4cfda9268ce625d0b793dc3"
+  const adsterra = {
+    link : "https://www.revenuecpmgate.com/s6t3d5eucq?key=d5677720e4cfda9268ce625d0b793dc3",
+    images : ['/static/images/ads/eat_cells_1.png','/static/images/ads/eat_cells_2.png','/static/images/ads/1xFreeBet.jpg', '/static/images/ads/blog-anime-Winter2022.webp', '/static/images/ads/bookmaker-bonus-1xbet.webp','/static/images/ads/write-anime-and-manga-blogs.webp', '/static/images/ads/home-1200x630.jpg']
+  }
+
+  const linkElements = document.getElementById('adPopup').querySelectorAll('a')
+  linkElements.forEach((a)=>{
+    a.href = adsterra.link
+  })
+  const imgElement = document.getElementById('adPopup').querySelector('img')
+  //select random image from image list
+  imgElement.src = adsterra.images[Math.floor(Math.random() * adsterra.images.length)]
+  
+  document.getElementById('adPopup').classList.remove('hidden');
+}
+
+function hideAdPopup() {
+  document.getElementById('adPopup').classList.add('hidden');
+  adClick('https://www.revenuecpmgate.com/s6t3d5eucq?key=d5677720e4cfda9268ce625d0b793dc3')
 }
 
 function showStoryPassPopup() {
@@ -275,8 +332,12 @@ function hideRemoveAdsPopup() {
   document.getElementById('removeAdsPopup').classList.add('hidden');
 }
 
-
-
+function showHowToPlayPopup(){
+    document.getElementById('howToPlayPopup').classList.remove('hidden');
+}
+function hideHowToPlayPopup(){
+    document.getElementById('howToPlayPopup').classList.add('hidden');
+}
 
 </script>
     
@@ -591,6 +652,12 @@ function hideRemoveAdsPopup() {
         }
     }
    
+    function performAction(action){
+        showAd()
+        action()
+    }
+
+    //performAction(showAdPopup)
     
 
 </script>
@@ -601,9 +668,13 @@ function hideRemoveAdsPopup() {
 
 {% if show_ads %}
 <!-- adsterra popup -->
-<script type='text/javascript' src='//pl27450764.profitableratecpm.com/a5/d3/33/a5d333e3435d3881d0a296dda32f0d1a.js'></script>
+<!-- <script type='text/javascript' src='//pl27450764.profitableratecpm.com/a5/d3/33/a5d333e3435d3881d0a296dda32f0d1a.js'></script>
 
-<script type='text/javascript' src='//pl27450852.revenuecpmgate.com/df/fb/0c/dffb0cf7a8b166c29012efd4b8a81530.js'></script>
+<script type='text/javascript' src='//pl27450852.revenuecpmgate.com/df/fb/0c/dffb0cf7a8b166c29012efd4b8a81530.js'></script> -->
+
+
+
+
 <!-- <script>
 (function(rm){
 var d = document,

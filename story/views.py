@@ -245,7 +245,7 @@ def game(request,character_id):
     story_status = get_story_status(story_challenge)
     status_message = "L'aventure n'a pas encore commencé" if story_status == "not_started" else "L'aventure est  terminé, tu peux en commencer une autre"
     show_ads = not(NoAdsPass.objects.filter(player = player).exists() or StoryPass.objects.filter(player = player, all = True).exists())
-    print(show_ads)
+    
     if request.method == "POST":
         if character.player == player:
             action = request.POST.get('action')
