@@ -5,7 +5,7 @@ from users.models import Player
 
 BASIC_PASS = 2000
 ALL_PASS = 5500
-FREE_TEXTPAD_LIMIT = 13
+FREE_TEXTPAD_LIMIT = 15
 NO_ADS_PASS = 8500
 def generate_custom_id():
     return str(random.randint(10000000, 99999999))
