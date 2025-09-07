@@ -42,7 +42,6 @@ class StoryTextPad(models.Model):
     def __str__(self):
         return f"{self.text[:50]}... by {self.challenge.character.character.get('name', 'Unknown')}"
     
-    
 class StoryPass(models.Model):
     player = models.ForeignKey(Player, on_delete = models.CASCADE)
     challenge = models.ForeignKey(StoryChallenge, on_delete=models.CASCADE)
@@ -52,7 +51,6 @@ class StoryPass(models.Model):
     def __str__(self):
         return f"{self.player}:{self.challenge}"
     
-
 class NoAdsPass(models.Model):
     player = models.ForeignKey(Player, on_delete = models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
