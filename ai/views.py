@@ -151,6 +151,7 @@ def authenticate_genai_with_service_account():
 client, temp_file = authenticate_genai_with_service_account()
 
 def generate_image(prompt, file_name= f"generated-image", reference_img=None):
+    print(prompt)
     response = client.models.generate_content(
         model="gemini-2.0-flash-preview-image-generation",
         contents=(
@@ -158,7 +159,7 @@ def generate_image(prompt, file_name= f"generated-image", reference_img=None):
             Part.from_uri(
                 file_uri=reference_img,
                 mime_type='image/png' if reference_img else None
-            ) if reference_img else None
+            ) if reference_img else " "
         ),
         config=GenerateContentConfig(response_modalities=[Modality.TEXT, Modality.IMAGE]),
     )
