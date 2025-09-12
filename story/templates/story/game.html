@@ -95,7 +95,13 @@
         {% if textpad.entry %}
         <div class="pt-2 text-gray-400 italic body">{{textpad.entry}}</div>
         {% endif %}
-        <p class="textpad italic body" data-content = '{{textpad.text}}' data-collapsed-content = '{{textpad.text|truncatewords:50}}'><i onclick="toggleCollapseParagraph(this)" class="toggle-arrow text-xl fas fa-caret-right text-orange-500 cursor-pointer mr-2"></i><em>{{textpad.text}}</em></p>
+        <p class="textpad italic body mb-2" data-content = '{{textpad.text}}' data-collapsed-content = '{{textpad.text|truncatewords:50}}'><i onclick="toggleCollapseParagraph(this)" class="toggle-arrow text-xl fas fa-caret-right text-orange-500 cursor-pointer mr-2"></i><em>{{textpad.text}}</em></p>
+        <div class="flex gap-x-4 overflow-x-auto mb-4 py-2">
+            {% for image in textpad.images %}
+            <img onclick="showImg(`/{{image.path}}`)" src='/static/images/loaders/img-loader.gif'  onload="replacePlaceholder(this,'/{{image.path}}');" alt="{{textpad.text}}" class="cursor-pointer border border-orange-500 w-32 h-32 object-cover rounded-3xl  transition-opacity duration-300" />
+            {% endfor %}
+        </div>
+        
         {% endfor %}
     </div>
      <form id="actionInputForm" class="mt-4 mb-8 hidden w-full relative" onsubmit="handleAction(event)">
@@ -405,7 +411,27 @@ function hideHowToPlayPopup(){
 
     type();
     }
-    
+
+    function addImages(container, imagesPath){
+        //<img onclick="showImg('https:/\/i.pinimg.com/736x/14/04/58/14045851afc0564fa87bab033c0d636c.jpg')" src='/static/images/loaders/img-loader.gif'  onload="replacePlaceholder(this,'https:/\/i.pinimg.com/736x/14/04/58/14045851afc0564fa87bab033c0d636c.jpg');" alt="{{textpad.text}}" class="cursor-pointer border border-orange-500 w-32 h-32 object-cover rounded-3xl  transition-opacity duration-300" />
+        const div = document.createElement('div')
+        div.className = "flex gap-x-4 overflow-x-auto mb-4 py-2"
+        imagesPath.forEach(src => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.className = 'border border-orange-500 cursor-pointer w-32 h-32 object-cover rounded-3xl transition-opacity duration-300';
+            img.onload = function() {
+                replacePlaceholder(this, src);
+            };
+            img.onclick = function(){
+                showImg(src)
+            }
+            div.appendChild(img);
+        });
+        container.appendChild(div);
+        scrollToBottom(container)
+    }
+
     function addText(container, text){
 
         document.querySelectorAll('.highlighted').forEach(el => {
@@ -489,6 +515,8 @@ function hideHowToPlayPopup(){
 
         })
     }
+
+    
         
     function continueStory(){
         $.ajax({
@@ -506,6 +534,9 @@ function hideHowToPlayPopup(){
                 if(res.status == "success"){
                     const text = res.text
                     addText(narrationContainer, text)
+                    if(res.images){
+                        addImages(narrationContainer, res.images.map((image)=> "/" + image.path ))
+                    }
                 }else if(res.message == 'subscription'){
                     showStoryPassPopup();
                 }
@@ -632,6 +663,9 @@ function hideHowToPlayPopup(){
                     textarea.value = '';
                     scrollToBottom(narrationContainer)
                     addText(narrationContainer, text)
+                    if(res.images){
+                        addImages(narrationContainer, res.images.map((image)=> "/" + image.path ))
+                    }
 
                 }else if(res.message == 'subscription'){
                     showStoryPassPopup();

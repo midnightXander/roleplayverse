@@ -5,7 +5,7 @@ from google import genai
 from google.genai.types import HttpOptions
 from dotenv import load_dotenv
 import os
-from google.genai.types import GenerateContentConfig, Modality
+from google.genai.types import GenerateContentConfig, Modality,Part
 from PIL import Image
 from io import BytesIO
 import vertexai
@@ -174,11 +174,17 @@ textpad_verdict_prompt = [
 client, temp_file = authenticate_genai_with_service_account()
 prompt = "generate three images of female character avatar ideas for an adventure roleplaying game in the naruto verse."
 path = f"media/story/avatars/avatar-image-{random.randint(1000,99999)}.png"
-def generate_image(prompt, path= f"media/generated-image.png"):
+def generate_image(prompt, file_name= f"generated-image.png", reference_img=None):
     response = client.models.generate_content(
         model="gemini-2.0-flash-preview-image-generation",
         contents=(
-            prompt
+            prompt,
+            Part.from_uri(
+                file_uri=reference_img,
+                mime_type='image/png' if reference_img else None
+                #data = open(reference_img, 'rb').read() if reference_img else None
+            )
+
         ),
         config=GenerateContentConfig(response_modalities=[Modality.TEXT, Modality.IMAGE]),
     )
@@ -188,12 +194,10 @@ def generate_image(prompt, path= f"media/generated-image.png"):
             print(part.text)
         elif part.inline_data:
             image = Image.open(BytesIO((part.inline_data.data)))
-            image.save(f"media/{path}")
+            image.save(f"media/{file_name}")
             images.append(image)
             
     return images 
 
-# images = generate_image(prompt, path= f"story/avatars/avatar-image-{random.randint(1000,99999)}.png") 
-# print(images)   
-
-    
+# images = generate_image("Change the hair color to blue", file_name="test-image.png", reference_img = "gs://rpv-story-avatars/alpha.png")
+# print(images)

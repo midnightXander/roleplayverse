@@ -30,4 +30,5 @@ function replacePlaceholder(imgElement, src) {
     imgElement.src = src;
     imgElement.onerror = null; // Remove the error handler to prevent infinite loop
     imgElement.classList.remove('placeholder');
+    imgElement.classList.remove('opacity-0');
 }

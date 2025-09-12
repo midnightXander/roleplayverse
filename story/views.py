@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from users.models import Player
 from users.users_utility import get_player
-from ai.views import generate_json_content
-from ai.prompts import story_characater_scenario_prompt, story_character_background_prompt, story_continue_prompt, story_evaluate_and_continue, story_start_prompt
+from ai.views import generate_image, generate_json_content
+from ai.prompts import story_character_background_prompt, story_continue_prompt, story_evaluate_and_continue, story_image_generation_prompt, story_start_prompt
 from .models import *
 import json, random
 from django.http import HttpResponseRedirect, JsonResponse
@@ -54,7 +54,6 @@ def _story_character(character:StoryCharacter):
     data['last_entry'] = ""
     challenge = StoryChallenge.objects.filter(character = character).first()
     last_textpad = StoryTextPad.objects.filter(challenge = challenge).last()
-
 
     if last_textpad:
         data['last_textpad'] = last_textpad.text
@@ -187,7 +186,6 @@ def _can_play(player:Player,challenge:StoryChallenge):
     else:
         return True
 
- 
 @csrf_exempt
 def subscribe_challenge(request, character_id):
     player = get_player(request.user)
@@ -229,6 +227,18 @@ def remove_ads(request):
 
     return JsonResponse({'status':'error', 'message': 'bad request'})
 
+def generate_scene_images(character:StoryCharacter,  textpads):
+    scene_description_prompt = story_image_generation_prompt(character.character_data, textpads[-1])
+    scene_description = generate_json_content(scene_description_prompt).get('description')
+    print(scene_description)
+    illustration_generation_prompt = f"""
+                        Ca c'est le personnage principale {character.character_data.get('name')}. pas de modification bizarre de ses cheveux ou autres aspects physique.
+                        Genere deux Illustrations de style concept art d'anime Naruto de haute qualité, avec des contours nets et un ombrage lisse suivant la description donné ci-dessous. chaque image doit etre une vu de la scene sous un angle different:
+                        {scene_description}
+                        """
+    images = generate_image(illustration_generation_prompt, reference_img="gs://rpv-story-avatars/alpha.png") if scene_description else []
+    print(images)
+    return images
 
 
 @login_required
@@ -241,7 +251,7 @@ def game(request,character_id):
     story_challenge.save() 
     character_data = _story_character(character)
     textpads = StoryTextPad.objects.filter(challenge = story_challenge)
-    textpads_data = [  { "text": textpad.text, "entry" : textpad.entry if textpad.entry else "" } for textpad in textpads ]
+    textpads_data = [  { "text": textpad.text, "entry" : textpad.entry if textpad.entry else "", "images": textpad.data.get('images',[]) if textpad.data else [] } for textpad in textpads ]
     story_status = get_story_status(story_challenge)
     status_message = "L'aventure n'a pas encore commencé" if story_status == "not_started" else "L'aventure est  terminé, tu peux en commencer une autre"
     show_ads = not(NoAdsPass.objects.filter(player = player).exists() or StoryPass.objects.filter(player = player, all = True).exists())
@@ -259,20 +269,29 @@ def game(request,character_id):
                     textpads = StoryTextPad.objects.filter(challenge = story_challenge)
                     textpads_data = [  textpad.text  for textpad in textpads ]
                     prompt = story_continue_prompt(character.character_data, textpads_data, language)
+            
                     try:
                         res = generate_json_content(prompt)
+                        scene_illustrations =  [] #generate_scene_images(character, textpads_data)
+                        data = {
+                            'images' : scene_illustrations
+                        }  
                         input_required = res.get('input_required') == 'true'
                         text = res.get('text')
                         if not text:
                             return JsonResponse({'status':'error', 'message':'Erreur de connection'})
-                        
+
+                        data = {
+                            'images' : scene_illustrations
+                        }
                         new_textpad = StoryTextPad.objects.create(
                             challenge = story_challenge,
-                            text = text
+                            text = text,
+                            data = data
                         )
                         new_textpad.save()
 
-                        return JsonResponse({'status' : 'success', 'input_required':input_required, 'text' : text})
+                        return JsonResponse({'status' : 'success', 'input_required':input_required, 'text' : text, 'images': scene_illustrations})
                     except Exception as e:
                         return JsonResponse({'status':'error', 'message':f'Erreur de connection {e}'})
                 else:
@@ -293,12 +312,18 @@ def game(request,character_id):
                         # print(res_text, valid)
                         if not res_text:
                             return JsonResponse({'status':'error', 'message':'Erreur de connection'})
+
+                        scene_illustrations = [] #generate_scene_images(character, textpads_data)
+                        data = {
+                            'images' : scene_illustrations
+                        }    
                         
                         if valid:
                             new_textpad = StoryTextPad.objects.create(
                                 challenge = story_challenge,
                                 text = res_text,
                                 entry = text,
+                                data = data
                             )
                             new_textpad.save()
                             if ended:
@@ -307,7 +332,7 @@ def game(request,character_id):
 
                             return JsonResponse({'status' : 'success', 'text' : res_text})
                         else:
-                            return JsonResponse({'status' : 'success', 'text' : "Tes actions ne sont pas réalisable, tu dois reformuler ta réponse."})
+                            return JsonResponse({'status' : 'success', 'text' : "Tes actions ne sont pas réalisable, tu dois reformuler ta réponse.",'images' : scene_illustrations})
                     except Exception as e:
                         return JsonResponse({'status':'error', 'message':f'Erreur de connection {e}'})
                 else:

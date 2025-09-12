@@ -20,7 +20,7 @@ close.onclick = function() {
 }
 
 }
-function showImg(src){
+function (src){
     var modal = document.getElementById('imgModal');
     var modalImg = document.getElementById("img01");
     modal.style.display = "block";

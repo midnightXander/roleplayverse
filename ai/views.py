@@ -32,7 +32,7 @@ from google.oauth2 import service_account
 import vertexai
 import tempfile
 
-from google.genai.types import GenerateContentConfig, Modality
+from google.genai.types import GenerateContentConfig, Modality,Part
 from PIL import Image
 from io import BytesIO
 from django.utils import timezone
@@ -150,11 +150,15 @@ def authenticate_genai_with_service_account():
 # client =  genai.Client(http_options= HttpOptions(api_version='v1'), credentials = credentials)
 client, temp_file = authenticate_genai_with_service_account()
 
-def generate_image(prompt, file_name= f"generated-image.png"):
+def generate_image(prompt, file_name= f"generated-image", reference_img=None):
     response = client.models.generate_content(
         model="gemini-2.0-flash-preview-image-generation",
         contents=(
-            prompt
+            prompt,
+            Part.from_uri(
+                file_uri=reference_img,
+                mime_type='image/png' if reference_img else None
+            ) if reference_img else None
         ),
         config=GenerateContentConfig(response_modalities=[Modality.TEXT, Modality.IMAGE]),
     )
@@ -173,7 +177,10 @@ def generate_image(prompt, file_name= f"generated-image.png"):
                     "path" : file_path
                 }
             )
-    return images        
+    return images  
+
+
+    
 
 def generate_avatar_images(request):
     player = get_object_or_404(Player, user = request.user) 

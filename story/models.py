@@ -5,7 +5,7 @@ from users.models import Player
 
 BASIC_PASS = 2000
 ALL_PASS = 5500
-FREE_TEXTPAD_LIMIT = 15
+FREE_TEXTPAD_LIMIT = 20
 NO_ADS_PASS = 8500
 def generate_custom_id():
     return str(random.randint(10000000, 99999999))
@@ -37,6 +37,7 @@ class StoryTextPad(models.Model):
     challenge = models.ForeignKey(StoryChallenge, on_delete=models.CASCADE)
     entry = models.TextField(default = "", null =True, blank = True)  
     text = models.TextField()    
+    data = models.JSONField(blank=True, null=True)  # Store additional data as JSON, e.g., images
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

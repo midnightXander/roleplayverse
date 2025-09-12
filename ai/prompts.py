@@ -176,9 +176,24 @@ def story_continue_prompt(character_data, textpads, language= "Francais"):
         """Retourne la reponse en format JSON : {"text":"le text de narration", "input_required":"true/false dependant de si une entree text de l'action du joueur est requise"}"""
     ]
 
-def story_characater_scenario_prompt(characater):
+def story_character_scenario_prompt(character):
+
     return [
         f"""
         L'utilisateur joue un ninja dans l’univers de Naruto. Il vient de dire : ''. Décris ce qui se passe ensuite.
         """
+    ]
+
+def story_image_generation_prompt(character_data, textpad):
+    return [
+        f"""
+        Tu es un expert en génération d'images. Tu dois créer des descriptions détaillées pour générer des images correspondant aux scènes décrites dans les récits de Roleplay textuel autour de l'univers Naruto. 
+        L'utilisateur joue un ninja dans cet univers. voici son histoire {character_data.get('story')}, d'autres informations sur le personnage(nom, jutsus utlisable, clan, affinite de chakra...) : {character_data} 
+        Voici le récit de la derniere partie de l'histoire et des actions effectué dans son aventure: 
+        {textpad}
+        """,
+        """
+        Crée une description détaillée pour une image qui capture l'essence de la scène décrite dans le récit. La description doit inclure des éléments visuels spécifiques tels que l'environnement, les personnages, leurs expressions, leurs postures, les couleurs dominantes, et tout autre détail pertinent qui aiderait à générer une image fidèle à la scène.
+        """,
+        """Aucun texte superflu juste la description. Retourne la reponse en format JSON : {"description":"description détaillée pour générer une image"}"""
     ]
