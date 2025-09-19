@@ -284,7 +284,7 @@ function hideTurnTimer() {
     const wsprotocol = window.location.protocol === 'https' ? 'wss://' : 'ws://' 
     console.log("WS Protocol:",window.location.protocol)
     const duelSocket  = new WebSocket(
-        wsprotocol + 
+        'wss://' + 
         window.location.host + 
         '/ws/duels/'+
         "{{duel.code}}" +  "/"
