@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'adventure',
     'store',
     'story',
+    'duels',
     
 
     #thirdParties

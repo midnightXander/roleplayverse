@@ -1,0 +1,681 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Combat solo - Roleplay Verse{% endblock title %}
+{% block meta_description%}Une experience de combat unique face a un opponent{% endblock meta_description%}
+
+{% block content %}
+
+<style>
+    .fade-enter {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    .fade-enter-active {
+      opacity: 1;
+      transform: scale(1);
+      transition: all 3s ease-in-out;
+    }
+    .fade-exit {
+      opacity: 1;
+    }
+    .fade-exit-active {
+      opacity: 0;
+      transition: opacity 3s ease-in-out;
+    }
+
+    #player-hp-bar,
+    #player-chakra-bar,
+    #player-stamina-bar,
+    #opponent-hp-bar,
+    #opponent-chakra-bar,
+    #opponent-stamina-bar {
+    transition: width 0.5s ease-in-out;
+}
+  </style>
+
+  <div class="mt-20 mb-8 h-screen p-4">
+    <div id="duelBattleApp" class="flex">
+
+    <div id="loading-screen" class="hidden h-full  w-full fade-enter-active animate-scaleIn">
+    <div class="flex flex-col items-center mt-8 justify-center h-full space-y-6">
+      <h2 class="text-2xl font-semibold text-gray-200">⚔️ Connexion au Duel...</h2>
+      <div class="flex items-center space-x-4">
+        <!-- Animated Character Cards -->
+        <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+        <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+        <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+      </div>
+      <p class="text-sm text-gray-400">Connexion a la salle de combat...</p>
+      <p class="text-sm text-gray-400">Ne pas quitter cette page</p>
+    </div>
+   </div>
+
+   <div id="fallback-screen" class="hidden h-full  w-full fade-enter-active animate-scaleIn">
+    <div class="flex flex-col items-center mt-8 justify-center h-full space-y-6">
+      <h2 class="text-2xl font-semibold text-gray-200">⚔️ Connecté au Duel...</h2>
+      <div class="flex items-center space-x-4">
+        <!-- Animated Character Cards -->
+        <!-- <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div> -->
+        
+        <svg class="h-16 w-16 my-4" xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 1024 1024"><path fill="#31a639" d="M512 0C229.232 0 0 229.232 0 512c0 282.784 229.232 512 512 512c282.784 0 512-229.216 512-512C1024 229.232 794.784 0 512 0zm0 961.008c-247.024 0-448-201.984-448-449.01c0-247.024 200.976-448 448-448s448 200.977 448 448s-200.976 449.01-448 449.01zm204.336-636.352L415.935 626.944l-135.28-135.28c-12.496-12.496-32.752-12.496-45.264 0c-12.496 12.496-12.496 32.752 0 45.248l158.384 158.4c12.496 12.48 32.752 12.48 45.264 0c1.44-1.44 2.673-3.009 3.793-4.64l318.784-320.753c12.48-12.496 12.48-32.752 0-45.263c-12.512-12.496-32.768-12.496-45.28 0z"/></svg>
+      </div>
+      <p class="text-sm text-gray-400">Connecté a la salle de combat.</p>
+      <p class="text-sm text-gray-400">En attente de connexion d'un adversaire...</p>
+      <div class="flex items-center space-x-4">
+        <!-- Animated Character Cards -->
+        <div class="w-4 h-4 bg-gray-700 rounded-full animate-pulse"></div>
+        <div class="w-4 h-4 bg-gray-700 rounded-full animate-pulse"></div>
+        <div class="w-4 h-4 bg-gray-700 rounded-full animate-pulse"></div>
+      </div>
+
+      
+    </div>
+   </div>
+
+
+      <!-- Battle Screen -->
+      <div id="battle-screen" class="mx-auto md:max-w-2xl h-full w-full hidden fade-enter-active animate__fadeInLeftBig ">
+        <div id="turn-timer-container" class="flex justify-center items-center mb-4 animate-scaleIn hidden">
+          <div class="flex items-center gap-2 bg-gray-800 px-4 py-2 rounded-full shadow border border-orange-500">
+            <svg class="w-5 h-5 text-orange-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+              <path stroke="currentColor" stroke-width="2" d="M12 6v6l4 2"/>
+            </svg>
+            <span class="text-orange-300 font-semibold text-sm">Temps restant :</span>
+            <span id="turn-timer" class="text-orange-400 font-bold text-lg">--</span>
+            <span class="text-orange-300 font-semibold text-sm">sec</span>
+          </div>
+        </div>
+
+        <div class="bg-gray-900 rounded-xl p-4 shadow-xl space-y-4">
+          <div class="flex justify-between overflow-y-auto ">
+            <div class="text-center">
+              <img id="player-character-img" src="{% static 'images/loaders/img-loader.gif' %}" class="w-16 h-16 mx-auto rounded-full border-2 object-cover border-orange-500" />
+              <p id = "player-character" class="text-sm font-semibold mt-1">Naruto</p>
+              <div class="flex justify-between text-gray-500 text-xs">
+                <span>HP</span>
+                <span id="player-hp-count" class="transition ease-in-out" ><span>100</span>/100</span>
+              </div>
+              <div class="flex items-center bg-gray-700 h-2 w-32 md:w-44 rounded-full mt-1 space-x-2 " >
+                <div id="player-hp-bar" class="bg-green-500 h-full w-24 rounded-full"></div>
+              </div>
+              
+              <div class="flex justify-between text-gray-500 mt-1 text-xs">
+                <span>Chakra</span>
+                <span id="player-chakra-count" class="transition ease-in-out" ><span>100</span>/100</span>
+              </div>
+              <div class="flex space-x-2  bg-gray-700 rounded-full h-2 w-32 md:w-44 mt-1" >
+                <div id="player-chakra-bar" class="bg-red-500 text-center flex justify-center items-center text-xs h-full rounded-full transition ease-in-out"></div>
+              </div>
+              
+             <div class="flex items-center gap-2 mt-4 bg-gray-800 px-4 py-2 rounded-full shadow border border-orange-500">
+              <img src="{{initiator_data.profile_picture}}" class="w-5 h-5 rounded-full border-2 object-cover border-orange-500" />  
+                <span class="text-orange-300 font-semibold truncate text-sm">{{initiator_data.name}}</span>
+                <!-- <span id="turn-timer" class="text-orange-400 font-bold text-lg">--</span>
+                <span class="text-orange-300 font-semibold text-sm">sec</span> -->
+            </div>
+              
+            </div>
+            
+            
+
+            
+
+            <div class="text-center">
+              <img id="opponent-character-img" src="{% static 'images/loaders/img-loader.gif' %}" class="w-16 h-16 mx-auto rounded-full object-cover border-2 border-gray-500" />
+              <p id="opponent-character" class="text-sm font-semibold mt-1">Kakashi</p>
+              <div class="flex justify-between text-gray-500 text-xs">
+                <span>HP</span>
+                <span id="opponent-hp-count"><span>100</span>/100</span>
+              </div>
+              <div class="flex  bg-gray-700 rounded-full h-2 w-32 md:w-44 items-center items-end mt-1 space-x-2 ">
+                <div id="opponent-hp-bar" class="bg-green-500 h-full rounded-full"></div>
+              </div>
+
+
+              <div class="flex justify-between mt-1 text-gray-500 text-xs">
+                <span>Chakra</span>
+                <span id="opponent-chakra-count"><span>100</span>/100</span>
+              </div>
+              <div class="flex space-x-2 items-end rounded-full bg-gray-700 h-2 w-32 md:w-44 mt-1">
+                <div id="opponent-chakra-bar" class="bg-red-500 h-2 rounded-full"></div>
+              </div>
+              <div class="flex items-center mt-4 gap-2 bg-gray-800 px-4 py-2 rounded-full shadow border border-orange-500">
+              <img src="{{opponent_data.profile_picture}}" class="w-5 h-5 rounded-full border-2 object-cover border-orange-500" />  
+                <span class="text-orange-300 font-semibold truncate text-sm">{{opponent_data.name}}</span>
+            </div>
+              
+              
+            </div>
+          </div>
+
+          <div class="bg-gray-800 p-3 rounded-lg text-sm h-64 overflow-y-auto" id="battle-log">
+          </div>
+
+          <div id="action-buttons" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+           
+          </div>
+
+          <div class="text-center mt-4">
+            <button class="text-sm text-orange-600 hover:underline">Quitter le combat</button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
+    <div class="mx-auto ml-8 mt-8" >
+      <!--Hiltop ads 
+      <script>
+        (function(llhxsw){
+        var d = document,
+            s = d.createElement('script'),
+            l = d.scripts[d.scripts.length - 1];
+        s.settings = llhxsw || {};
+        s.src = "\/\/complete-drink.com\/b\/X\/VVs.dHGllA0qYgW-cy\/nesm\/9\/u\/ZEUBl\/kkPMTzYSznOMD\/gX1QNKzAgHtmNZjgMA4COcDCU\/3YOKQu";
+        s.async = true;
+        s.referrerPolicy = 'no-referrer-when-downgrade';
+        l.parentNode.insertBefore(s, l);
+        })({})
+    </script> -->
+    </div>
+  </div>
+
+  <!-- Battle End Popup -->
+<div id="battle-end-popup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate__slideInUp">
+  <div class="bg-gray-900 rounded-lg p-6 max-w-md w-full text-center space-y-6 shadow-xl">
+    <h2 id="battle-end-title" class="text-2xl font-semibold text-gray-200">Battle Ended</h2>
+    <p id="battle-end-message" class="text-sm text-gray-400">Congratulations! You won the battle.</p>
+    <div id="battle-reward" class="text-sm text-gray-300">
+      <p>Rewards:</p>
+      <ul class="list-disc list-inside">
+        <li id="reward-xp">XP: 2</li>
+        <li id="reward-items">Items: </li>
+      </ul>
+    </div>
+    <div class="flex justify-center space-x-4">
+      <button onclick="restartBattle()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold">
+        Restart
+      </button>
+      <button onclick="quitBattle()" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-semibold">
+        Quit
+      </button>
+    </div>
+  </div>
+</div>
+
+{{ request.user.username|json_script:"username" }}
+  <script>
+    const username = JSON.parse(document.getElementById('username').textContent);
+
+    let playerCharacter = '';
+    let currentChakra = 100;
+
+    // Add these functions to your script section
+let timerInterval = null;
+
+function showTurnTimer(seconds) {
+  const timerContainer = document.getElementById('turn-timer-container');
+  const timerDisplay = document.getElementById('turn-timer');
+  timerContainer.classList.remove('hidden');
+  timerDisplay.textContent = seconds;
+  let timeLeft = seconds;
+
+  if (timerInterval) clearInterval(timerInterval);
+
+  timerInterval = setInterval(() => {
+    timeLeft -= 1;
+    timerDisplay.textContent = timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      timerDisplay.textContent = "0";
+      timerContainer.classList.add('hidden');
+      duelSocket.send(JSON.stringify({
+        type : 'duel_action',
+        action: "Defend"
+      }))   
+      // Optionally: auto-end turn or show timeout message
+    }
+  }, 1000);
+}
+
+function hideTurnTimer() {
+  const timerContainer = document.getElementById('turn-timer-container');
+  timerContainer.classList.add('hidden');
+  if (timerInterval) clearInterval(timerInterval);
+}
+
+
+
+    function selectCharacter(div, characterName){
+        // Reset all character overlays and borders
+    const overlays = document.getElementsByClassName('character-overlay');
+    const images = document.querySelectorAll('#characters img');
+
+    for (let i = 0; i < overlays.length; i++) {
+        overlays[i].style.opacity = 0; // Reset overlay opacity
+    }
+
+    for (let i = 0; i < images.length; i++) {
+        images[i].classList.remove('border-orange-500'); // Remove selected border
+        images[i].classList.add('border-gray-900'); // Reset to default border
+    }
+
+    // Highlight the selected character
+    div.querySelector('.character-overlay').style.opacity = 1; // Show overlay for the selected character
+    const characterImage = div.querySelector('img'); // Get the image element
+    characterImage.classList.add('border-orange-500'); // Add selected border
+    characterImage.classList.remove('border-gray-900'); // Remove default border
+
+    // Store the selected character name
+    playerCharacter = characterName;
+    }
+
+    const showScreen = (id) => {
+      document.querySelectorAll('#duelBattleApp > div').forEach(div => div.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+      //document.getElementById(id).classList.add('animate-scaleIn');
+    };
+
+    const goToCharacterSelect = () => showScreen('character-select-screen');
+    const showLoadingScreen = () => showScreen('loading-screen');
+    const goToBattleScreen = () => {showScreen('battle-screen'); $('.top-nav').toggle() };
+
+    const wsprotocol = window.location.protocol === 'https' ? 'wss://' : 'ws://' 
+    console.log("WS Protocol:",window.location.protocol)
+    const duelSocket  = new WebSocket(
+        wsprotocol + 
+        window.location.host + 
+        '/ws/duels/'+
+        "{{duel.code}}" +  "/"
+    )
+
+    showLoadingScreen()
+
+    duelSocket.onmessage = function(e){
+            const data = JSON.parse(e.data)
+
+            console.log(data.message)
+
+            if(data.type == "joined" && data.user != username ){
+                initBattle()  
+            }
+        
+            else if(data.type == "duel_action"){
+              if(data.status == "waiting" && data.user == username){
+                showMyToast(data.message)
+                return
+              }
+              if(data.status == "waiting" && data.user != username){
+                //show timer
+                showTurnTimer(10); // Show 10s timer for opponent's turn
+              }
+
+            if(data.status == "continue"){
+              
+              enableActionButtons()
+              const battleLog = document.getElementById('battle-log');
+              battleLog.innerHTML = ''; // Clear existing log entries
+              const battleLogs = data.battle_logs
+              battleLogs.forEach(log => {
+                  updateBattleLog(log.text, log.type, log.timestamp);
+              });
+
+              //const player_character = 
+
+              const playerStats = {
+                  current_hp: data.player_character.hp,
+                  current_chakra: data.player_character.chakra,
+                  hp:  data.player_character.hp/200 * 100,      // Player HP as a percentage
+                  chakra: (data.player_character.chakra/data.player_character.chakra_pool) * 100,  // Player Chakra as a percentage
+                  chakra_pool: data.player_character.chakra_pool,
+                  stamina: data.player_character.stamina, // Player Stamina as a percentage
+              };
+
+              const opponentStats = {
+                  current_hp: data.opponent_character.hp,
+                  current_chakra: data.opponent_character.chakra,
+                  hp: data.opponent_character.hp / 200 * 100,      // opponent HP as a percentage
+                  chakra: (data.opponent_character.chakra/data.opponent_character.chakra_pool) * 100,  // opponent Chakra as a percentage
+                  chakra_pool : data.opponent_character.chakra_pool,
+                  stamina: data.opponent_character.stamina, // opponent Stamina as a percentage
+              };
+
+              updateStatBars(playerStats, opponentStats);
+              if( data.winner == 'player'){
+                showBattleEndPopup('win', data.rewards);
+                disableActionButtons()
+                }
+                else if(data.winner == 'opponent'){
+                showBattleEndPopup('lose', data.rewards);
+                }
+            }
+            else if(data.status == "error" && data.user == username){
+              showMyToast(data.message, 'error')
+              enableActionButtons()
+            }
+          }
+        }
+
+      duelSocket.onclose = function(e){
+        showMyToast("Connection Lost. Please reload page",'error')
+        //window.location.reload()
+      }
+    
+      duelSocket.onerror = function(e){
+      showMyToast('An error occured please reload page','error')
+      }
+
+    
+
+    duelSocket.onopen = function(){
+      initBattle()
+      duelSocket.send(JSON.stringify({
+        type : 'joined',
+      }))    
+    }
+
+    function disableActionButtons(){
+    const actionButtonsContainer = document.getElementById('action-buttons');
+    const buttons =  actionButtonsContainer.querySelectorAll('button');
+    
+    buttons.forEach(btn => {
+      btn.setAttribute('disabled', true);
+      btn.classList.add('opacity-50', 'cursor-not-allowed');
+    })
+}
+
+function enableActionButtons(){
+  const actionButtonsContainer = document.getElementById('action-buttons');
+  const buttons =  actionButtonsContainer.querySelectorAll('button');
+
+  buttons.forEach(btn => {
+    btn.removeAttribute('disabled');
+    btn.classList.remove('opacity-50', 'cursor-not-allowed');
+  })
+}
+    function checkChakra(action){
+      if(currentChakra < action.chakraCost){
+          showMyToast('Not enough chakra for this action you need to focus to gain chakra', 'error') 
+        }
+        else{
+          performAction(action)
+        }
+
+    }
+
+    function performAction(action){
+      hideTurnTimer()
+      disableActionButtons();
+      duelSocket.send(JSON.stringify({
+        type : 'duel_action',
+        action: action.name
+      }))    
+    }
+
+    function updateCharacterImages(playerCharacterImgSrc, opponentCharacterImgSrc){
+        const playerCharacterImage = document.getElementById('player-character-img').setAttribute('src', playerCharacterImgSrc)
+        const opponentCharacterImage = document.getElementById('opponent-character-img').setAttribute('src', opponentCharacterImgSrc)
+    }
+
+    function updateStatBars(playerStats, opponentStats) {
+    // Update Player Stats
+    const playerHpBar = document.getElementById('player-hp-bar');
+    const playerChakraBar = document.getElementById('player-chakra-bar');
+    const playerStaminaBar = document.getElementById('player-stamina-bar');
+
+    const playerHpCountText = document.getElementById('player-hp-count');
+    const playerChakraCountText = document.getElementById('player-chakra-count');
+
+    playerHpBar.style.width = `${playerStats.hp}%`;
+    playerChakraBar.style.width = `${playerStats.chakra}%`;
+    playerHpCountText.innerHTML = `${playerStats.current_hp}/200`;
+    playerChakraCountText.innerHTML = `${playerStats.current_chakra}/${playerStats.chakra_pool}`;
+    // playerStaminaBar.style.width = `${playerStats.stamina}%`;
+
+    // Update opponent Stats
+    const opponentHpBar = document.getElementById('opponent-hp-bar');
+    const opponentChakraBar = document.getElementById('opponent-chakra-bar');
+    const opponentStaminaBar = document.getElementById('opponent-stamina-bar');
+    
+    const opponentHpCountText = document.getElementById('opponent-hp-count');
+    const opponentChakraCountText = document.getElementById('opponent-chakra-count');
+    opponentHpCountText.innerHTML = `${opponentStats.current_hp}/200`;
+    opponentChakraCountText.innerHTML = `${opponentStats.current_chakra}/${opponentStats.chakra_pool}`;
+
+    opponentHpBar.style.width = `${opponentStats.hp}%`;
+    opponentChakraBar.style.width = `${opponentStats.chakra}%`;
+    // opponentStaminaBar.style.width = `${opponentStats.stamina}%`;
+
+    currentChakra = playerStats.current_chakra;
+    // Update the chakra bar color based on the current chakra level
+    if (currentChakra < 50) {
+        playerChakraBar.classList.remove('bg-red-500', 'bg-yellow-500', 'bg-blue-500');
+        playerChakraBar.classList.add('bg-red-500');
+    } else if (currentChakra < 80) {
+        playerChakraBar.classList.remove('bg-red-500', 'bg-yellow-500', 'bg-blue-500');
+        playerChakraBar.classList.add('bg-yellow-500');
+    } else {
+        playerChakraBar.classList.remove('bg-red-500', 'bg-yellow-500', 'bg-blue-500');
+        playerChakraBar.classList.add('bg-blue-500');
+    }
+} 
+    
+
+    function createActionbutton(action){
+        
+        const button = document.createElement('button');
+        bgColor =  action.name == 'Attack' ? 'orange' : action.name == 'Defend' ? 'gray' : action.name == 'Focus' ? 'blue' : action.name == 'Heal' ? 'green' : action.name == 'Special' ? 'purple' : action.name == 'Clone' ? 'yellow' : action.name == 'Flee' ? 'indigo' : 'orange'; 
+        button.className = `bg-gray-800 hover:bg-gray-900 flex items-center space-x-2 justify-center hover:scale-105 transition duration-300 border border-orange-500 text-white py-2 rounded-xl`;
+        button.innerHTML = `
+            ${action.icon}
+            ${String(action.name).charAt(0).toUpperCase() + action.name.slice(1,10)}... 
+            <span class="rounded-full text-sm bg-orange-500 bg-opacity-50 px-2 py-1">${action.chakraCost}</span>
+        `;
+        
+        button.onclick = () => checkChakra(action);
+        return button;
+
+    }
+
+    function fillActionButtons(actions){
+        const actionButtonsContainer = document.getElementById('action-buttons');
+        actionButtonsContainer.innerHTML = ''; // Clear existing buttons
+        
+        actions.forEach(action => {
+            
+            const button = createActionbutton(action);
+            actionButtonsContainer.appendChild(button);
+        });
+    }
+
+    function updateBattleLog(message, type = 'info', timestamp="") {
+        const battleLog = document.getElementById('battle-log');
+
+        // Create a new log entry
+        const logEntry = document.createElement('p');
+        logEntry.className = type === 'info' ? 'text-gray-300' : type === 'success' ? 'text-green-500' : type === 'player' ? 'text-blue-500' : type === 'opponent' ? 'text-orange-500' : type === 'danger' ? 'text-red-500' : 'text-yellow-500';
+        logEntry.innerHTML = `[${timestamp}] ${message}`;
+
+        // Append the new log entry to the battle log
+        battleLog.appendChild(logEntry);
+
+        // Scroll to the opponenttom of the log
+        battleLog.scrollTop = battleLog.scrollHeight;
+    }
+
+    function init(){
+
+    }
+
+    function initBattle(){
+            $.ajax({
+            url : '/duels/{{duel.code}}/init',
+            type : 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: {
+                'action': 'init_battle',
+            },
+            beforeSend: function() {
+                // Show loading spinner or overlay
+                // document.getElementById('battle-log').innerHTML = '<p class="text-gray-600 dark:text-gray-300">Loading...</p>';
+                showLoadingScreen()
+            },
+            success: function(data) {
+                // Hide loading spinner or overlay
+                // document.getElementById('battle-log').innerHTML = data.battle_log;
+                // console.log(data)
+
+                if (data.status == 'fallback'){
+                  showScreen('fallback-screen');
+                  return
+                }
+                
+                const basicActions = [
+                    { name: 'Attack', chakraCost: 10, bgColor: 'orange', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-3.197m1.414-1.414a2.828 2.828 0 114 4L12 21l-4-4 7.97-7.97z" />
+                    </svg>
+                    ` },
+                    { name: 'Defend', chakraCost: 0, bgColor: 'gray', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 2l9 4.5v5c0 5.25-3.75 9.75-9 11-5.25-1.25-9-5.75-9-11v-5L12 2z" />
+                    </svg>
+                    ` },
+                    { name: 'Focus', chakraCost: 0, bgColor: 'blue', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    ` },
+                    { name: 'Heal', chakraCost: 20, bgColor: 'green', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                  </svg>
+                    ` },
+                    { name: 'Substitution', chakraCost: 5, bgColor: 'red', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l-6.5 6.5m0 0L3 21l4.75-.25m-4.5-4.5l6.5-6.5m6.5 6.5l6.5-6.5m0 0L21 3l-4.75.25m4.5 4.5l-6.5 6.5" />
+                    </svg>          
+                    ` },
+                ]
+
+                const specialActions = data.current_character.jutsus.map(action => {
+                    return { name: action.name, chakraCost: action.chakra_cost, bgColor: 'purple', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-3.197m1.414-1.414a2.828 2.828 0 114 4L12 21l-4-4 7.97-7.97z" />
+                    </svg>
+                    ` };
+                });
+
+                CharacterActions = basicActions.concat(specialActions);
+                fillActionButtons(CharacterActions);
+
+                // Update character names and health bars
+                document.getElementById('player-character').innerHTML = data.player_character.name;
+                document.getElementById('opponent-character').innerHTML = data.opponent_character.name;
+                
+                const playerStats = {
+                    current_hp: data.player_character.hp,
+                    current_chakra: data.player_character.chakra,
+                    hp:  100,      // Player HP as a percentage
+                    chakra: (data.player_character.chakra/data.player_character.chakra_pool) * 100,  // Player Chakra as a percentage
+                    chakra_pool: data.player_character.chakra_pool,
+                    stamina: 100, // Player Stamina as a percentage
+                };
+
+                const opponentStats = {
+                    current_hp: data.opponent_character.hp,
+                    current_chakra: data.opponent_character.chakra,
+                    hp: 100,      // opponent HP as a percentage
+                    chakra: (data.opponent_character.chakra/data.opponent_character.chakra_pool) * 100,  // opponent Chakra as a percentage
+                    chakra_pool : data.opponent_character.chakra_pool,
+                    stamina: 100, // opponent Stamina as a percentage
+                };
+
+                updateCharacterImages(data.player_character.image, data.opponent_character.image)
+                updateStatBars(playerStats, opponentStats);
+
+                const battleLogs = data.logs ? data.logs : [
+                  {
+                    text: 'battle started',
+                    type: 'info',
+                    timestamp : new Date().toLocaleTimeString()
+                  }
+                ]
+                
+                battleLogs.forEach(log => {
+                    updateBattleLog(log.text, log.type);
+                });
+                
+                // Update the battle log with the initial message
+                setTimeout(() => {
+                    // document.getElementById('battle-log').innerHTML = data.battle_log;
+                    goToBattleScreen()
+
+                }, 2000);
+                //goToBattleScreen() // 2 seconds delay for the opponent selection screen
+                
+
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error('Error:', error);
+                showMyToast('An error occurred while initializing the battle. Please try again.', 'error');
+                //goToCharacterSelect()
+            }   
+        })
+
+        
+    }
+
+
+    function showBattleEndPopup(result, rewards) {
+    const popup = document.getElementById('battle-end-popup');
+    const title = document.getElementById('battle-end-title');
+    const message = document.getElementById('battle-end-message');
+    const rewardXp = document.getElementById('reward-xp');
+    const rewardItems = document.getElementById('reward-items');
+
+    // Update the popup content based on the result
+    if (result === 'win') {
+        title.textContent = 'Victory!';
+        message.textContent = 'Congratulations! You won the battle.';
+    } else if (result === 'lose') {
+        title.textContent = 'Defeat';
+        message.textContent = 'You lost the battle. Better luck next time!';
+    } else {
+        title.textContent = 'Draw';
+        message.textContent = 'The battle ended in a draw.';
+    }
+
+    // Update rewards
+    rewardXp.textContent = `XP: ${rewards.xp}`;
+    // rewardItems.textContent = `Items: ${rewards.items.join(', ')}`;
+
+    // Show the popup
+    popup.classList.remove('hidden');
+}
+
+function hideBattleEndPopup() {
+    const popup = document.getElementById('battle-end-popup');
+    popup.classList.add('hidden');
+}
+
+function restartBattle() {
+    hideBattleEndPopup();
+    const battleLog = document.getElementById('battle-log').innerHTML = ''; // Clear existing log entries
+    updateBattleLog('Battle restarted. Choose your actions wisely!', 'info', new Date().toLocaleTimeString());
+    goToCharacterSelect(); // Redirect to character selection screen
+}
+
+function quitBattle() {
+    hideBattleEndPopup();
+    window.location.href = '/battles'; // Redirect to battles page or home
+}
+
+  </script>
+
+
+{% endblock content %}

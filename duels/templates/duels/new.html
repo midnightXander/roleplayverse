@@ -1,0 +1,261 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Combat solo - Roleplay Verse{% endblock title %}
+{% block meta_description%}Une experience de combat unique face a un bot{% endblock meta_description%}
+{% block hiltop-popupads %}
+
+{% endblock hiltop-popupads %}
+<!-- <script>
+  (function(pgzyz){
+  var d = document,
+      s = d.createElement('script'),
+      l = d.scripts[d.scripts.length - 1];
+  s.settings = pgzyz || {};
+  s.src = "\/\/frequent-doubt.com\/ciD\/9\/6hb.2\/5RlQS-WCQQ9ONSjnMDzWMnzGI\/0KNVyd0v2dMezmMDzGMDjnQX4r";
+  s.async = true;
+  s.referrerPolicy = 'no-referrer-when-downgrade';
+  l.parentNode.insertBefore(s, l);
+  })({})
+</script> -->
+{% block content %}
+
+<style>
+    .fade-enter {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    .fade-enter-active {
+      opacity: 1;
+      transform: scale(1);
+      transition: all 3s ease-in-out;
+    }
+    .fade-exit {
+      opacity: 1;
+    }
+    .fade-exit-active {
+      opacity: 0;
+      transition: opacity 3s ease-in-out;
+    }
+
+  </style>
+
+  <div class="mt-20 mb-8 h-screen p-4">
+    <div id="newDuelApp" class="flex">
+      <!-- Introduction Screen -->
+      <div id="intro-screen" class="fade-enter-active mx-auto w-full max-w-md animate__slideInUp">
+        <a class="text-orange-500 cursor-pointer mb-4" href="/duels" onclick="showOverlay()">
+            <i onclick="showScreen('intro-screen')" class="fas fa-arrow-left mr-2" ></i>
+        </a>
+        
+        <div class="bg-gray-900 rounded-xl p-6 shadow-xl space-y-4 animate-scaleIn">
+          <h1 class="text-2xl font-bold flex items-center gap-2">
+            <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2v6m8 4H6a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
+            </svg>
+            Creer un Lien de duel pour affronter un autre joueur dans un combat en temps Reelle.
+          </h1>
+          <p class="text-sm text-gray-400">
+
+          </p>
+          
+          <button onclick="goToCharacterSelect()" class="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-xl font-semibold transition">Suivant</button>
+        </div>
+      </div>
+
+      <!-- Character Select Screen -->
+      <div id="character-select-screen" class="hidden mx-auto mb-16 fade-enter-active animate-scaleIn">
+        <div class="bg-gray-900 rounded-xl p-6 shadow-xl space-y-6">
+            <div class="flex items-center" >
+                <i onclick="showScreen('intro-screen')" class="fas fa-arrow-left text-orange-500 cursor-pointer mr-2" ></i>
+                <h2 class="text-2xl font-semibold text-center text-gray-200">🧙 Choisis ton personnage</h2>
+            </div>
+          
+          <p class="text-sm text-gray-400 text-center">
+            Sélectionne un personnage pour commencer le combat. Chaque personnage a des compétences uniques !
+          </p>
+
+          <div class="text-center">
+            <button onclick="createDuel()"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition">
+              Démarrer le combat
+            </button>
+          </div>
+      
+          <!-- Character Grid -->
+          <div id="characters" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 cursor-pointer gap-6">
+            {% for character in characters %}
+            <div onclick="selectCharacter(this,'{{ character.name }}')"
+              class="group relative bg-gray-800 border border-gray-700 rounded-lg p-4 shadow-md hover:shadow-lg transition duration-300">
+              <img onerror="this.style.opacity='0'"  onload="replacePlaceholder(this, `{{character.image}}`);" src="{% static 'images/loaders/img-loader.gif' %}" alt="{{ character.name }}"
+                class="w-24 h-24 object-cover mx-auto rounded-full border-4 border-gray-900 group-hover:scale-105 transition duration-300">
+              <p class="mt-3 text-center text-sm font-semibold text-gray-200">{{ character.name }}</p>
+              <div
+                class="character-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 rounded-lg">
+                <button
+                  class="bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded-lg font-semibold">
+                  Sélectionner
+                </button>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+      
+          
+        </div>
+      </div>
+
+      <div id="success-screen" class="hidden mx-auto w-full max-w-md fade-enter-active animate-scaleIn">
+            <div class="bg-gray-900 rounded-xl p-6 shadow-xl space-y-6 flex flex-col items-center">
+                <div class="flex flex-col items-center">
+                <svg class="w-16 h-16 text-green-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                    <path stroke="currentColor" stroke-width="2" d="M9 12l2 2l4-4"/>
+                </svg>
+                <h2 class="text-2xl font-bold text-green-400 mb-2">Duel créé avec succès !</h2>
+                <p class="text-gray-300 text-center">Partage ce lien avec ton adversaire ou attends qu'un joueur te rejoigne.</p>
+                </div>
+                <div class="w-full bg-gray-800 rounded-lg p-4 flex flex-col items-center gap-2">
+                <img id="success-character-img" src="" alt="Personnage" class="w-20 h-20 rounded-full border-4 border-orange-500 object-cover shadow mb-2" style="display:none;">
+                <div class="text-lg font-semibold text-orange-300" id="success-character-name"></div>
+                <div class="text-sm text-gray-400">Créé le <span id="success-date"></span></div>
+                <div class="w-full mt-2">
+                    <label class="text-xs text-gray-400">Lien du duel :</label>
+                    <div class="flex items-center gap-2 mt-1">
+                        <input id="success-duel-link" onfocus="copyLink('https:\/\/roleplayverse.live/duels/4r4r4')" type="text" readonly value="https://roleplayverse.live/duels/{{ duel.code }}" class="w-full mt-1 px-3 py-2 rounded-lg border border-gray-700 bg-gray-800 text-sm" />
+                    
+                    <!-- <input id="success-duel-link" type="text" readonly class="w-full bg-gray-900 text-gray-200 px-2 py-1 rounded border border-gray-700 text-xs" value="">
+                    <button onclick="copyDuelLink()" class="bg-orange-600 hover:bg-orange-700 text-white px-3 py-1 rounded text-xs font-semibold">Copier</button>
+                     -->
+                    
+                </div>
+                    <p class="text-xs text-gray-300 mt-2">Clique pour copier et partage ce lien avec un adversaire que tu veux affronter.</p>
+                </div>
+                </div>
+                <a id="success-go-btn" href="#" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-xl font-semibold transition text-center block mt-4">Aller au duel</a>
+            </div>
+        </div>
+
+    <!-- Bot Selection Screen -->
+    <div id="loading-screen" class="hidden h-full w-full fade-enter-active animate-scaleIn">
+    <div class="flex flex-col items-center justify-center h-full space-y-6">
+      <h2 class="text-2xl font-semibold text-gray-200">Chargement...</h2>
+      <div class="flex items-center space-x-4">
+        <!-- Animated Character Cards -->
+        <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+        <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+        <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+      </div>
+      <!-- <p class="text-sm text-gray-400">Ton adversaire prepare le combat...</p> -->
+      <p class="text-sm text-gray-400">Ne pas quitter cette page</p>
+    </div>
+   </div>
+
+     
+    
+  </div>
+
+
+  <script>
+    function selectCharacter(div, characterName){
+        // Reset all character overlays and borders
+    const overlays = document.getElementsByClassName('character-overlay');
+    const images = document.querySelectorAll('#characters img');
+
+    for (let i = 0; i < overlays.length; i++) {
+        overlays[i].style.opacity = 0; // Reset overlay opacity
+    }
+
+    for (let i = 0; i < images.length; i++) {
+        images[i].classList.remove('border-orange-500'); // Remove selected border
+        images[i].classList.add('border-gray-900'); // Reset to default border
+    }
+
+    // Highlight the selected character
+    div.querySelector('.character-overlay').style.opacity = 1; // Show overlay for the selected character
+    const characterImage = div.querySelector('img'); // Get the image element
+    characterImage.classList.add('border-orange-500'); // Add selected border
+    characterImage.classList.remove('border-gray-900'); // Remove default border
+
+    // Store the selected character name
+    playerCharacter = characterName;
+    }
+
+    const showScreen = (id) => {
+      document.querySelectorAll('#newDuelApp > div').forEach(div => div.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+      //document.getElementById(id).classList.add('animate-scaleIn');
+    };
+
+    const goToCharacterSelect = () => showScreen('character-select-screen');
+    const goToLoadingScreen = () => showScreen('loading-screen');
+    const goToBattleScreen = () => {showScreen('battle-screen'); $('.top-nav').toggle() };
+
+    function showSuccessScreen({character_name, character_image, duel_link, date_created}) {
+        // Fill in the info
+        document.getElementById('success-character-name').textContent = character_name;
+        const img = document.getElementById('success-character-img');
+        if (character_image) {
+            img.src = character_image;
+            img.style.display = '';
+        } else {
+            img.style.display = 'none';
+        }
+        document.getElementById('success-duel-link').value = duel_link;
+        document.getElementById('success-date').textContent = date_created;
+        document.getElementById('success-go-btn').href = duel_link;
+
+        // Show the screen
+        showScreen('success-screen');
+    }
+
+
+    function createDuel(){
+        if(playerCharacter != ""){
+            $.ajax({
+            url : '/duels/new',
+            type : 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: {
+                'action': 'init_battle',
+                'character': playerCharacter,
+            },
+            beforeSend: function() {
+                // Show loading spinner or overlay
+                // document.getElementById('battle-log').innerHTML = '<p class="text-gray-600 dark:text-gray-300">Loading...</p>';
+                goToLoadingScreen()
+            },
+            success: function(data) {
+                if(data.status === 'success'){
+                    showSuccessScreen({
+                        character_name: data.character.name,
+                        character_image: data.character.image,
+                        duel_link: `${window.location.origin}/duels/${data.duel_code}`,
+                        date_created: data.date_created // format as you wish
+                    });
+                }else{
+                    showMyToast(data.message, 'error');
+                    goToCharacterSelect()
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error('Error:', error);
+                showMyToast('An error occurred while initializing the battle. Please try again.', 'error');
+                goToCharacterSelect()
+            }   
+        })
+        }else{
+            showMyToast('Please select a character before starting the battle.');
+        }
+        
+    }
+    
+
+
+  
+  </script>
+
+
+{% endblock content %}

@@ -423,3 +423,10 @@ import requests
 
 test_var = " \n".join([str({'name':'alex'}),str({'age':30})])
 print(test_var)
+
+
+def test_func():
+    return 1,2,3
+
+a = test_func()
+print(a,a[1])

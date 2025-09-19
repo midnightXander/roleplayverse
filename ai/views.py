@@ -443,6 +443,7 @@ def make_verdict(request, battle_id):
                 
                 #update the player's rank if progression reached 100%
                 update_rank(winner)
+                print("updating player's family points...")
                 update_points(family = winner.family, battle=battle, member_progress=progress)
                 winner.award_credits(40)
 

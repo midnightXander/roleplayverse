@@ -5,6 +5,7 @@ from django.urls import re_path,path
 from chat import consumers
 from battles import consumers as battle_consumers
 from core.consumers import NotificationConsumer
+from duels.consumers import DuelConsumer
 from django.core.asgi import get_asgi_application
 
 #URLS that handle WebSocket connection are placed here.
@@ -18,6 +19,7 @@ websocket_urlpatterns = [
     re_path(r"ws/chat/private/(?P<room_name>\w+)/$", consumers.PrivateChatConsumer.as_asgi()),
     re_path(r"ws/chat/group/(?P<family_name>\w+)/$", consumers.GroupChatConsumer.as_asgi()),
     re_path(r"ws/notifications/$", NotificationConsumer.as_asgi()),
+    re_path(r"ws/duels/(?P<duel_code>\w+)/$", DuelConsumer.as_asgi()),
     re_path(r"ws/battle/one_v_one/(?P<battle_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/$",battle_consumers.BattleTextConsumer.as_asgi())
 
     

@@ -1,0 +1,113 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Duels | RPV{% endblock title %}
+{% block meta_description%} Affronte d'autres joueurs en mode combat solo {% endblock meta_description%}
+
+{% block content %}
+<div class="max-w-5xl mt-16 mx-auto px-4 py-10">
+  <!-- Hero & Actions -->
+  <div class="flex flex-col md:flex-row items-center justify-between gap-8 mb-10">
+    <div class="flex-1">
+      <h1 class="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-orange-500 to-yellow-400 text-transparent bg-clip-text mb-4">
+        Mode Duel <span class="text-white">RPV</span>
+      </h1>
+      <p class="text-lg text-gray-300 mb-6">
+        Affronte d'autres joueurs dans des combats stratégiques en temps réel.<br>
+        Choisis ton personnage, utilise tes techniques, et prouve ta valeur !
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a onclick="showOverlay()" href="/duels/new" class="bg-gradient-to-r from-orange-500 to-yellow-400 hover:from-orange-600 hover:to-yellow-500 text-white font-bold px-6 py-3 rounded-full shadow transition text-lg">
+          <i class="fas fa-plus mr-2"></i> Nouveau Duel
+        </a>
+        <a  onclick="showOverlay()" href="/" class="bg-gray-800 hover:bg-gray-700 text-orange-300 font-bold px-6 py-3 rounded-full shadow transition text-lg">
+          <i class="fas fa-random mr-2"></i> Rejoindre un Duel Aléatoire
+        </a>
+      </div>
+    </div>
+    <div class="flex-1 flex justify-center">
+      <img src="https://img.freepik.com/free-photo/dark-style-ninja-naruto_23-2151278772.jpg" alt="Duel Hero" class="w-full max-h-64 object-cover rounded-2xl shadow-lg bg-gray-900 border-4 border-orange-500" onerror="this.style.display='none'">
+    </div>
+  </div>
+
+  <!-- Info Section -->
+  <div class="bg-gray-900 rounded-xl shadow-lg p-6 mb-10">
+    <h2 class="text-2xl font-bold text-orange-400 mb-2">Comment jouer au Mode Duel ?</h2>
+    <ul class="list-disc list-inside text-gray-300 space-y-2 text-base">
+      <li>Choisis ou crée un duel pour affronter un autre joueur en temps réel.</li>
+      <li>Sélectionne ton personnage et prépare ta stratégie.</li>
+      <li>Chaque joueur joue à tour de rôle : attaque, défends-toi ou utilise des techniques spéciales.</li>
+      <li>Le vainqueur remporte des récompenses et grimpe dans le classement !</li>
+      <li>Plus tu joues, plus tu améliores tes compétences et débloques de nouveaux personnages.</li>
+    </ul>
+    <div class="mt-4 text-sm text-gray-400">
+      <span class="font-bold text-orange-300">Astuce :</span> Reste attentif au timer de chaque tour et adapte ta stratégie selon l'adversaire !
+    </div>
+  </div>
+
+  <!-- Recent Fights -->
+  <div class="mb-10">
+    <h2 class="text-xl font-semibold text-orange-400 mb-4">Duels Récents</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {% for duel in recent_duels %}
+      <div class="bg-gradient-to-br from-gray-900 via-gray-800 to-orange-900 rounded-xl shadow p-5 flex flex-col sm:flex-row items-center gap-4">
+        <img src="{{ duel.player1.profile_picture }}" alt="{{ duel.player1.name }}" class="w-14 h-14 rounded-full border-2 border-orange-400 object-cover shadow" onerror="this.style.display='none'">
+        <div class="flex-1">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="font-bold truncate text-orange-300">{{ duel.player1.name }}</span>
+            <span class="text-gray-400 text-xs">vs</span>
+            <span class="font-bold truncate text-orange-300">{{ duel.player2.name }}</span>
+          </div>
+          <div class="text-gray-400 text-xs mb-1">
+            {{ duel.started_at|date:"d M Y H:i" }} • {{ duel.status|capfirst }}
+          </div>
+          <div class="text-sm">
+            {% if duel.winner %}
+              <span class="text-green-400 font-semibold">Vainqueur : {{ duel.winner.name }}</span>
+            {% else %}
+              <span class="text-yellow-400">Pas Terminé</span>
+            {% endif %}
+          </div>
+        </div>
+        <a onclick="showOverlay()" href="/duels/{{duel.code}}" class="ml-2 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-full font-semibold shadow transition text-sm">Entrer</a>
+      </div>
+      {% empty %}
+      <div class="col-span-2 text-center text-gray-500 py-8">Aucun duel récent pour le moment.</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Leaderboard (optional, for engagement) -->
+  <div class="bg-gray-900 rounded-xl shadow-lg p-6 mb-10">
+    <h2 class="text-xl font-semibold text-orange-400 mb-4">Top Joueurs Duels</h2>
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead>
+          <tr class="bg-gray-800 text-gray-300">
+            <th class="py-2 px-3 text-left">Joueur</th>
+            <th class="py-2 px-3 text-left">Victoires</th>
+            <th class="py-2 px-3 text-left">Défaites</th>
+            <th class="py-2 px-3 text-left">Rang</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for player in top_players %}
+          <tr class="border-b border-gray-800 hover:bg-gray-800 transition">
+            <td class="py-2 px-3 flex items-center gap-2">
+              <img src="{{ player.avatar_url }}" alt="{{ player.username }}" class="w-8 h-8 rounded-full border border-orange-400 object-cover shadow" onerror="this.style.display='none'">
+              <span class="font-bold text-orange-300">{{ player.username }}</span>
+            </td>
+            <td class="py-2 px-3">{{ player.wins }}</td>
+            <td class="py-2 px-3">{{ player.loses }}</td>
+            <td class="py-2 px-3">{{ player.rank|default:"-" }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="4" class="py-4 text-center text-gray-500">Aucun joueur dans le classement.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock content %}

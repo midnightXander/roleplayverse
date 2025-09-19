@@ -65,6 +65,7 @@ def add_points(player:Player, points:int):
 
 
 
+
 def index(request):
     player = get_player(request.user)
     if player:
@@ -483,7 +484,6 @@ def get_posts(request):
         story_character_data['body_full'] = last_textpad
         story_character_data['body'] = last_textpad[:200]+'...' if last_textpad and len(last_textpad) > 200 else (last_textpad if last_textpad else '' ),
         feed_data.append(story_character_data)
-        print(feed_data)
         feed.story_characters.add(story_character)        
 
     random.shuffle(feed_data)

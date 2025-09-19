@@ -35,6 +35,7 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
             new_msg.image.save(image_name, ContentFile(image_data))
             new_msg.save()
 
+
         if parent_id:
             try:
                 parent = Message.objects.get(id = parent_id)
@@ -208,12 +209,6 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
         )
         print("message sent")
     
-
-    
-
-
-
-
 
 class ChatRoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):

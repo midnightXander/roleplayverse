@@ -251,6 +251,154 @@ def _evaluate_actions(player_character:dict, bot_character:dict, player_action:d
 
 
 
+def _evaluate_duel_actions(player_character:dict, opponent_character:dict, player_action:dict, opponent_action:dict):
+    
+    new_log = []
+
+    non_offensive_actions = ['Defend', 'Focus', 'Heal', 'Substitution']
+    type = 'info'
+    current_hp = player_character.get('hp')
+    current_chakra = player_character.get('chakra')
+    damage = 0
+    text = f"{player_character['name']} used {player_action.get('name')}"
+    if player_action.get('name') == 'Focus':
+        
+        chakra_pool = player_character.get('chakra_pool')
+        current_chakra =  player_character.get('chakra') + 40
+        player_character['chakra'] = min(current_chakra, chakra_pool)
+        
+    elif player_action.get('name') == 'Heal':
+        
+        current_hp = player_character.get('hp') + 30
+        player_character['hp'] = min(current_hp, player_character.get('health', 200))
+        print(f'player heal: ', player_character['hp'])
+        #_update_chakra(player_character, player_action.get('chakra_cost'))
+
+    elif player_action.get('name') == 'Defend':
+        text = f"{player_character.get('name')} defended against {opponent_character['name']}'s attack"
+        if opponent_action.get('name') not in non_offensive_actions:
+            damage = _damage(opponent_action.get('chakra_cost'))
+            damage = damage // 2
+            text = f" {player_character.get('name')} defense reduced damage, he takes {damage} damage"
+            type = 'warning'
+        elif opponent_action.get('name') == 'Substitution':
+            damage = 0
+            text = f" {opponent_character['name']} dodged with substitution"
+            type = 'info'
+        current_hp = player_character.get('hp') - damage
+        player_character['hp'] = max(current_hp, 0)
+
+    elif player_action.get('name') not in non_offensive_actions:
+        damage = _damage(player_action.get('chakra_cost'))
+        text = f" you dealt {damage} damage"
+        type = 'success'
+        if opponent_action.get('name') == 'Defend':
+            damage = damage // 2
+            text = f" {opponent_character['name']} defended against {player_character.get('name')} attack, dealt {damage} damage"
+            type = 'warning'
+            current_opponent_hp = opponent_character.get('hp') - damage
+            opponent_character['hp'] = max(current_opponent_hp, 0)
+        elif opponent_action.get('name') == 'Substitution':
+            damage = 0
+            text = f" {opponent_character['name']} dodged {player_character.get('name')}'s attack with substitution"
+            type = 'warning'
+        else:
+            current_opponent_hp = opponent_character.get('hp') - damage
+            opponent_character['hp'] = max(current_opponent_hp, 0) 
+            text = f"{player_character.get('name')} dealt {damage} damage" 
+            type = 'success'
+    elif player_action.get('name') == 'Substitution':
+        damage = 0
+        text = f"{player_character.get('name')} dodged with substitution"
+        type = 'success' 
+        print(f'player substituted: ', player_character['hp'])
+
+    else:
+        text = f"{player_character['name']} used {player_action.get('name')} on {opponent_character['name']}"
+        type = 'info'
+
+    _update_chakra(player_character, player_action.get('chakra_cost'))
+
+        
+
+    new_log.append({
+        'text': text,
+        'type': type,
+        'result': "sucess",
+        'timestamp': datetime.now().strftime("%H:%M"),
+    })    
+
+    #Evaluate actions by opponent
+    type = 'danger'
+    if opponent_action.get('name') == 'Focus':
+        chakra_pool = opponent_character.get('chakra_pool')
+        current_chakra =  opponent_character.get('chakra') + 40
+        opponent_character['chakra'] = min(current_chakra, chakra_pool)
+    elif opponent_action.get('name') == 'Heal':
+        current_hp = opponent_character.get('hp') + 30
+        opponent_character['hp'] = min(current_hp, opponent_character.get('health', 200))
+
+    # elif opponent_action.get('name') == 'Defend':
+    #     text = f" {opponent_character['name']} took a defensive  stance"
+        # if player_action.get('name') not in non_offensive_actions:
+        #     damage = _damage(player_action.get('chakra_cost'))
+        #     damage = damage // 2
+        #     text = f" {opponent_character['name']} defended against your attack, you dealt {damage} damage"
+        #     type = 'warning'
+        # elif player_action.get('name') == 'Substitution':
+        #     damage = 0
+        #     type = 'info'
+        # current_hp = opponent_character.get('hp') - damage
+        # opponent_character['hp'] = max(current_hp, 0)
+    elif opponent_action.get('name') not in non_offensive_actions and player_action.get('name') not in ['Defend', 'Substitution']:
+        damage = _damage(opponent_action.get('chakra_cost'))
+        text = f"{player_character.get('name')} took {damage} damage"
+        type = 'danger'
+        # if player_action.get('name') == 'Defend':
+        #     damage = damage // 2
+        #     text = f" you defended against {opponent_character['name']}'s attack, you dealt {damage} damage"
+        #     type = 'warning'
+        # if player_action.get('name') == 'Substitution':
+        #     damage = 0
+        #     text = f" you dodged with substitution"
+        #     type = 'info'
+        current_hp = player_character.get('hp') - damage
+        player_character['hp'] = max(current_hp, 0) 
+
+    _update_chakra(opponent_character, opponent_action.get('chakra_cost'))
+    new_log.append({
+        'text': text,
+        'type': type,
+        'result': "sucess",
+        'timestamp': datetime.now().strftime("%H:%M"),
+    })
+
+    winner = _check_winner(player_character, opponent_character)
+    if winner == 'player':
+        new_log.append({
+            'text': f"{player_character['name']} won the battle",
+            'type': 'success',
+            'result': 'success',
+            'timestamp': datetime.now().strftime("%H:%M"),
+        })
+    elif winner == 'opponent':
+        new_log.append({
+            'text': f"{opponent_character['name']} won the battle",
+            'type': 'danger',
+            'result': 'failed',
+            'timestamp': datetime.now().strftime("%H:%M"),
+        })
+    # else:
+    #     new_log.append({
+    #         'text': "The battle ended in a draw",
+    #         'type': 'info',
+    #         'result': 'draw',
+    #         'timestamp': datetime.now().strftime("%H:%M"),
+    #     })
+
+    return player_character, opponent_character, new_log , winner
+
+
 def evaluate_state(player_character, bot_character):
     #Example evaluation function
     # print("State: ",(bot_character['hp'] - player_character['hp']) + (bot_character['chakra'] - player_character['chakra']) )

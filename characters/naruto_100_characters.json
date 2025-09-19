@@ -138,7 +138,7 @@
                 "description": "Summons a gigantic wooden statue with thousands of hands."
             }
         ],
-        "image": "https://i.pinimg.com/originals/2c/7e/7e/2c7e7e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+        "image": "https://i.pinimg.com/originals/61/55/9e/61559ed6509e63a53851a6cb77950160.gif"
     },
     {
         "name": "Madara Uchiha",
@@ -163,7 +163,7 @@
                 "description": "Unleashes a massive wall of fire."
             }
         ],
-        "image": "https://i.pinimg.com/originals/8d/6b/7c/8d6b7c2e1e2b7e8e2c7e7e8e2e2b7e8e.gif"
+        "image": "https://i.pinimg.com/originals/e7/12/98/e71298e1df5c56894dc6a61784fb743c.gif"
     },
     {
         "name": "Obito Uchiha",
@@ -188,7 +188,7 @@
                 "description": "A powerful fire technique causing massive explosions."
             }
         ],
-        "image": "https://i.pinimg.com/originals/6e/7e/8e/6e7e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+        "image": "https://i.pinimg.com/originals/4e/12/2e/4e122e6655f0c1be17789e1fb69a1f7d.gif"
     },
     {
         "name": "Killer Bee",
@@ -213,7 +213,7 @@
                 "description": "Concentrates chakra into a sphere and launches it as a devastating attack."
             }
         ],
-        "image": "https://i.pinimg.com/originals/7e/8e/2e/7e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+        "image": "https://i.pinimg.com/originals/80/4a/4f/804a4ffb462d40de7521226cf0711dea.gif"
     },
     {
         "name": "A (Fourth Raikage)",
@@ -238,7 +238,7 @@
                 "description": "A powerful wrestling move that slams the opponent into the ground."
             }
         ],
-        "image": "https://i.pinimg.com/originals/5e/8e/2e/5e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+        "image": "https://static.wikia.nocookie.net/1cf30574-6e6f-453e-be21-2ba55c9d1abe/scale-to-width/370"
     },
     {
         "name": "Nagato",
@@ -263,7 +263,7 @@
                 "description": "Repels everything in the vicinity with a powerful force."
             }
         ],
-        "image": "https://i.pinimg.com/originals/3e/8e/2e/3e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+        "image": "https://images.steamusercontent.com/ugc/827950803859532781/FC6C5D188317D09B94D9F0F762926699AF083BB5/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
     },
     {
         "name": "Pain",
@@ -288,7 +288,7 @@
                 "description": "Attracts objects or people towards the user."
             }
         ],
-        "image": "https://i.pinimg.com/originals/4e/8e/2e/4e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+        "image": "https://media.tenor.com/tAYGIaNtjl0AAAAM/pain-nagato-naruto.gif"
     },
     {
         "name": "Shisui Uchiha",
@@ -313,7 +313,7 @@
                 "description": "Allows the user to move at extreme speeds."
             }
         ],
-        "image": "https://i.pinimg.com/originals/6e/8e/2e/6e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+        "image": "https://64.media.tumblr.com/88865abbc3caef54daa98c30e5fc1276/05ff4daad0913a70-60/s540x810/8b1dfeda975418dda02fec74991ddae61af2383f.gif"
     },
     {
         "name": "Danzo Shimura",
@@ -338,7 +338,7 @@
                 "description": "Fires a barrage of wind bullets at the enemy."
             }
         ],
-        "image": "https://i.pinimg.com/originals/7e/8e/2e/7e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+        "image": "https://i.redd.it/qi88botv0p4d1.gif"
     },
     {
         "name": "Minato Namikaze",
@@ -361,9 +361,17 @@
                 "chakra_cost": 40,
                 "stamina_cost": 20,
                 "description": "A spinning sphere of chakra that causes massive damage."
+            },
+            {
+                "name": "KCM Punch",
+                "type": "Taijutsu",
+                "rank": "S",
+                "chakra_cost": 95,
+                "stamina_cost": 20,
+                "description": "A super fast punch boosted by kurama's chakra."
             }
         ],
-        "image": "https://i.pinimg.com/originals/8e/8e/2e/8e8e2e2b7e8e2c7e7e8e2e2b7e8e.gif"
+        "image": "https://media2.giphy.com/media/v1.Y2lkPTZjMDliOTUyYW9odHc0d3JwcGMyZHF3b2R4dXV5ajlmZm11cmFneG04amxlNG5mayZlcD12MV9naWZzX3NlYXJjaCZjdD1n/A8UFISckEbokw/giphy.gif"
     },
     {
         "name": "Gaara",

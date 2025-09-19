@@ -1358,7 +1358,6 @@ def update_rank(player:Player):
     #send a notif on the platform or via email to the player to inform him if 
     # he grew up
 
-
 def update_points(family:Family, battle:Battle,member_progress):
     #Add points based on the 
     if family:
@@ -1373,6 +1372,7 @@ def update_points(family:Family, battle:Battle,member_progress):
             if member_progress >= 5:
                 family.points += 3
             family.save()
+            print(f"added points to family {family}")
     
         if godfather and godfather != winner:
             new_notif = core_models.Notification.objects.create(
@@ -1382,10 +1382,7 @@ def update_points(family:Family, battle:Battle,member_progress):
 
             )
             new_notif.save()    
-
         
-
-
 def player_progress(battle:Battle,loser_rank):
     #points to consider:
     #-Type of the battle
@@ -1444,9 +1441,7 @@ def player_progress(battle:Battle,loser_rank):
 
     #reduce according to the current ranking
     return progress                            
-
-               
-
+            
 def evaluate_textpad(request, battle_id):
     #Fighters will be able to rate the refree for that battle
     player = Player.objects.get(user = request.user) 
@@ -1530,7 +1525,7 @@ def evaluate_textpad(request, battle_id):
                     #update the player's rank if progression reached 100%
                     update_rank(winner)
                     update_points(family = winner.family, battle=battle, member_progress=progress)
-                    winner.award_credits(40)
+                    winner.award_credits(15)
 
                     winner.save()
                     battle.save()
@@ -1599,7 +1594,6 @@ def evaluate_textpad(request, battle_id):
                 return JsonResponse({'status':'success', 'message': message})
         
     return JsonResponse({'status':'error', 'message': message})
-
 
 def declare_winner(request, battle_id):
     if request.method == "POST":
@@ -1780,9 +1774,6 @@ def get_referee_rating(player:Player):
 
     return ratings        
 
-
-
-
 def referees(request):
     player = get_player(request.user)
     if not player:
@@ -1811,8 +1802,6 @@ def referees(request):
         "referees": referees,
     })
         
-
-
 def get_number_of_battles(player:Player):
     #get the number of battles that the player did
     n_battles = len(Battle.objects.filter(
@@ -1837,8 +1826,6 @@ def add_refree(player:Player):
         
         player.save()
         
-        
-    
 
 @login_required
 def new_refree(request):

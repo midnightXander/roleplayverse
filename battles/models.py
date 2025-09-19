@@ -82,6 +82,7 @@ class SoloBattle(models.Model):
     def __str__(self):
         return f"{self.player} at {self.date_started}"
 
+
 class JsonTestModel(models.Model):
     text_data = models.TextField(default="[]")
     json_data = models.JSONField() 
