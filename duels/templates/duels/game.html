@@ -110,7 +110,7 @@
               
              <div class="flex items-center gap-2 mt-4 bg-gray-800 px-4 py-2 rounded-full shadow border border-orange-500">
               <img src="{{initiator_data.profile_picture}}" class="w-5 h-5 rounded-full border-2 object-cover border-orange-500" />  
-                <span class="text-orange-300 font-semibold truncate text-sm">{{initiator_data.name}}</span>
+                <span class="block max-w-32 text-orange-300 font-semibold truncate text-sm">{{initiator_data.display_name}}</span>
                 <!-- <span id="turn-timer" class="text-orange-400 font-bold text-lg">--</span>
                 <span class="text-orange-300 font-semibold text-sm">sec</span> -->
             </div>
@@ -142,7 +142,7 @@
               </div>
               <div class="flex items-center mt-4 gap-2 bg-gray-800 px-4 py-2 rounded-full shadow border border-orange-500">
               <img src="{{opponent_data.profile_picture}}" class="w-5 h-5 rounded-full border-2 object-cover border-orange-500" />  
-                <span class="text-orange-300 font-semibold truncate text-sm">{{opponent_data.name}}</span>
+                <span class="block max-w-32  text-orange-300 font-semibold truncate text-sm">{{opponent_data.display_name}}</span>
             </div>
               
               
@@ -182,23 +182,32 @@
   </div>
 
   <!-- Battle End Popup -->
-<div id="battle-end-popup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate__slideInUp">
-  <div class="bg-gray-900 rounded-lg p-6 max-w-md w-full text-center space-y-6 shadow-xl">
-    <h2 id="battle-end-title" class="text-2xl font-semibold text-gray-200">Battle Ended</h2>
-    <p id="battle-end-message" class="text-sm text-gray-400">Congratulations! You won the battle.</p>
-    <div id="battle-reward" class="text-sm text-gray-300">
-      <p>Rewards:</p>
-      <ul class="list-disc list-inside">
-        <li id="reward-xp">XP: 2</li>
-        <li id="reward-items">Items: </li>
+<div id="battle-end-popup" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+  <div class="bg-gray-900 rounded-2xl p-8 max-w-md w-full text-center space-y-6 shadow-2xl animate__slideInUp">
+    <h2 id="battle-end-title" class="text-3xl font-bold text-orange-400">Fin du Duel</h2>
+    <div id="winner-section" class="flex flex-col items-center space-y-2">
+      <span id="winner-label" class="text-lg font-semibold text-green-400">Vainqueur</span>
+      <img id="winner-character-img" src="" alt="Gagnant" class="w-20 h-20 rounded-full border-4 border-orange-500 object-cover shadow mb-2" style="display:none;">
+      <div id="winner-character-name" class="text-lg font-bold text-orange-300"></div>
+    
+      <div class="flex items-center mt-4 gap-2 bg-gray-800 px-4 py-2 rounded-full shadow border border-orange-500">
+          <img id="winner-profilepicture" src="" class="w-5 h-5 rounded-full border-2 object-cover border-orange-500" />  
+          <span id="winner-player-name" class="block max-w-32  text-orange-300 font-semibold truncate text-sm"></span>
+      </div>
+    </div>
+    <div id="battle-reward" class="text-base text-gray-300">
+      <p class="font-semibold text-orange-300 mb-1">Récompenses :</p>
+      <ul class="list-disc list-inside text-left mx-auto w-fit space-y-1">
+        <li id="reward-xp">XP: 5</li>
+        <!-- <li id="reward-items">Items: --</li> -->
       </ul>
     </div>
-    <div class="flex justify-center space-x-4">
+    <div class="flex justify-center space-x-4 pt-2">
       <button onclick="restartBattle()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold">
-        Restart
+        Rejouer
       </button>
       <button onclick="quitBattle()" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-semibold">
-        Quit
+        Quitter
       </button>
     </div>
   </div>
@@ -281,10 +290,39 @@ function hideTurnTimer() {
     const showLoadingScreen = () => showScreen('loading-screen');
     const goToBattleScreen = () => {showScreen('battle-screen'); $('.top-nav').toggle() };
 
+    
+    function showBattleEndPopup(winnerInfo = null) {
+    const popup = document.getElementById('battle-end-popup');
+    const title = document.getElementById('battle-end-title');
+    const winnerLabel = document.getElementById('winner-label');
+    const winnerImg = document.getElementById('winner-character-img');
+    const winnerCharName = document.getElementById('winner-character-name');
+    const winnerPlayerName = document.getElementById('winner-player-name');
+    const winnerProfilepicture = document.getElementById('winner-profilepicture');
+    const rewardXp = document.getElementById('reward-xp');
+    const rewardItems = document.getElementById('reward-items');
+    
+
+    winnerImg.src = winnerInfo.character.image || '';
+    winnerImg.style.display = winnerInfo.character.image ? '' : 'none';
+    winnerCharName.textContent = winnerInfo.character.name || '';
+    winnerPlayerName.textContent = winnerInfo.player.name ? `${winnerInfo.player.name}` : '';  
+    winnerProfilepicture.src = winnerInfo.player.profile_picture    
+    
+    // Set rewards
+    // rewardXp.textContent = `XP: ${rewards.xp ?? '--'}`;
+    // rewardItems.textContent = `Items: ${rewards.items && rewards.items.length ? rewards.items.join(', ') : '--'}`;
+
+    // Show the popup
+    popup.classList.remove('hidden');
+}
+
+
+
     const wsprotocol = window.location.protocol === 'https' ? 'wss://' : 'ws://' 
     console.log("WS Protocol:",window.location.protocol)
     const duelSocket  = new WebSocket(
-        'wss://' + 
+        'ws://' + 
         window.location.host + 
         '/ws/duels/'+
         "{{duel.code}}" +  "/"
@@ -342,13 +380,11 @@ function hideTurnTimer() {
               };
 
               updateStatBars(playerStats, opponentStats);
-              if( data.winner == 'player'){
-                showBattleEndPopup('win', data.rewards);
+              if(data.winner){
+                showBattleEndPopup(data.winner);
                 disableActionButtons()
                 }
-                else if(data.winner == 'opponent'){
-                showBattleEndPopup('lose', data.rewards);
-                }
+                
             }
             else if(data.status == "error" && data.user == username){
               showMyToast(data.message, 'error')
@@ -631,32 +667,7 @@ function enableActionButtons(){
     }
 
 
-    function showBattleEndPopup(result, rewards) {
-    const popup = document.getElementById('battle-end-popup');
-    const title = document.getElementById('battle-end-title');
-    const message = document.getElementById('battle-end-message');
-    const rewardXp = document.getElementById('reward-xp');
-    const rewardItems = document.getElementById('reward-items');
-
-    // Update the popup content based on the result
-    if (result === 'win') {
-        title.textContent = 'Victory!';
-        message.textContent = 'Congratulations! You won the battle.';
-    } else if (result === 'lose') {
-        title.textContent = 'Defeat';
-        message.textContent = 'You lost the battle. Better luck next time!';
-    } else {
-        title.textContent = 'Draw';
-        message.textContent = 'The battle ended in a draw.';
-    }
-
-    // Update rewards
-    rewardXp.textContent = `XP: ${rewards.xp}`;
-    // rewardItems.textContent = `Items: ${rewards.items.join(', ')}`;
-
-    // Show the popup
-    popup.classList.remove('hidden');
-}
+//     
 
 function hideBattleEndPopup() {
     const popup = document.getElementById('battle-end-popup');

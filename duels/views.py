@@ -157,14 +157,19 @@ def duel(request, duel_code):
             #return redirect("/duels/fallback")
             print("Duel full")
             pass
-  
+        
+        initiator_data = users_views._player_data(initatiator)
+        initiator_data['display_name'] = "Toi" if player == initatiator else str(initatiator.user)
+        
+        opponent_data = users_views._player_data(opponent)
+        opponent_data['display_name'] = "Toi" if player == opponent else str(opponent.user)
         
         if player in fighters:
             return render(request,"duels/game.html", {
                 'player' : player,
                 'duel' : duel,
-                'initiator_data' : users_views._player_data(initatiator),
-                'opponent_data' : users_views._player_data(opponent)
+                'initiator_data' : initiator_data,
+                'opponent_data' : opponent_data
             })
         else:
             print("redirect to fallback page")

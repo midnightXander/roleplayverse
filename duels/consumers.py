@@ -1,7 +1,11 @@
+from datetime import datetime
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 
 from django.shortcuts import get_object_or_404
+
+from battles.views import _reward_player
+from users.views import _player_data
 from .utility import seconds_difference
 from battles.models import BASIC_ACTIONS
 from battles.solo_battle import _evaluate_duel_actions, _log_actions
@@ -31,8 +35,12 @@ class DuelConsumer(AsyncWebsocketConsumer):
         seconds_diff =   seconds_difference(last_current_fighter_action.created_at) if last_current_fighter_action else 0
         
         print(seconds_diff, last_current_fighter_action)
+        if duel.winner:
+            return {'message': 'This duel is already terminated.', 'status':'error'}
+        
         if last_current_fighter_action : #and seconds_diff < 500
             return {'message': 'You already performed an action, wait for your opponent.', 'status':'error'}
+
 
 
         player_character = current_fighter.character if current_fighter else None
@@ -78,16 +86,17 @@ class DuelConsumer(AsyncWebsocketConsumer):
             logs = logs + new_logs
             
 
+            if winner:
+                winner_fighter = fighter1 if fighter1.character.get('name') == winner else fighter2
+                duel.winner = winner_fighter.player
+                duel.status = "finished"
+                duel.ended_at = datetime.now()
+                rewards = _reward_player(winner_fighter.player)
+
             # rewards = {'xp' : 0, }
-            # if winner == 'player':
-            #     rewards = battle_views._reward_player(player)
-            #     battle.result = 'win'
-            #     battle.finished = True
-            #     battle.date_ended = datetime.now()
-            # elif winner == 'opponent':
-            #     battle.result = 'lose'
-            #     battle.finished = True
-            #     battle.date_ended = datetime.now()
+            winner_data = { 'player' : _player_data(winner_fighter.player) }  if winner else None
+            if winner_data:
+                winner_data['character'] = winner_fighter.character 
             
         else:
             return {'status':'waiting','message': 'waiting for opponent...'}        
@@ -95,7 +104,7 @@ class DuelConsumer(AsyncWebsocketConsumer):
         duel.log = json.dumps(logs)
         duel.save()  
 
-        return {'status': 'continue', 'battle_logs': logs, 'player_character': fighter1_character, 'opponent_character': fighter2_character, 'winner': winner, 'rewards': []}
+        return {'status': 'continue', 'battle_logs': logs, 'player_character': fighter1_character, 'opponent_character': fighter2_character, 'winner': winner_data, 'rewards': []}
 
     @database_sync_to_async
     def duel_data(self, duel_code):

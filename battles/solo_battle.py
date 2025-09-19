@@ -101,6 +101,13 @@ def _check_winner(player_character:dict, bot_character:dict):
         return 'player'
     return None
 
+def _check_duel_winner(player1_character:dict, player2_character:dict):
+    if player1_character.get('hp') <= 0:
+        return player2_character.get('name')
+    elif player2_character.get('hp') <= 0:
+        return player1_character.get('name')
+    return None
+
 def _evaluate_actions(player_character:dict, bot_character:dict, player_action:dict, bot_action:dict):
     player_success = random.choice([1,2])
     result = 'succeded' if player_success == 1 else 'failed'
@@ -373,28 +380,15 @@ def _evaluate_duel_actions(player_character:dict, opponent_character:dict, playe
         'timestamp': datetime.now().strftime("%H:%M"),
     })
 
-    winner = _check_winner(player_character, opponent_character)
-    if winner == 'player':
+    winner = _check_duel_winner(player_character, opponent_character)
+    if winner:
         new_log.append({
-            'text': f"{player_character['name']} won the battle",
+            'text': f"{winner} won the battle",
             'type': 'success',
             'result': 'success',
             'timestamp': datetime.now().strftime("%H:%M"),
         })
-    elif winner == 'opponent':
-        new_log.append({
-            'text': f"{opponent_character['name']} won the battle",
-            'type': 'danger',
-            'result': 'failed',
-            'timestamp': datetime.now().strftime("%H:%M"),
-        })
-    # else:
-    #     new_log.append({
-    #         'text': "The battle ended in a draw",
-    #         'type': 'info',
-    #         'result': 'draw',
-    #         'timestamp': datetime.now().strftime("%H:%M"),
-    #     })
+    
 
     return player_character, opponent_character, new_log , winner
 
