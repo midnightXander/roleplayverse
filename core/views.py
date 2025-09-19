@@ -4,6 +4,7 @@ from django.db.models import Case, When,F
 from django.urls import reverse
 from django.contrib.auth.models import User,auth
 from django.http import JsonResponse,HttpResponseRedirect
+from duels.models import Duel
 from monetization.models import Payment
 from store.models import Product
 from users.models import Player,PlayerNotification,Family
@@ -235,6 +236,9 @@ def home(request):
     story_characters = StoryCharacter.objects.filter(player = player)
     if not story_characters.exists():
         return redirect('story:index')
+    
+    if not Duel.objects.filter(Q(duelfighter__player = player)).exists():
+        return redirect('duels:index')
     
     player.country = get_country(request)
     print(player.country)

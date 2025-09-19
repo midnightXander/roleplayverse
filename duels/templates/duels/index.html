@@ -67,6 +67,9 @@
               <span class="text-yellow-400">Pas Terminé</span>
             {% endif %}
           </div>
+          <div>
+            <input id="success-duel-link" onfocus="copyLink('https:\/\/roleplayverse.live/duels/{{ duel.code }}')" type="text" readonly value="https://roleplayverse.live/duels/{{ duel.code }}" class="w-full mt-1 px-3 py-2 rounded-lg border border-gray-700 bg-gray-800 text-sm" />
+          </div>
         </div>
         <a onclick="showOverlay()" href="/duels/{{duel.code}}" class="ml-2 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-full font-semibold shadow transition text-sm">Entrer</a>
       </div>

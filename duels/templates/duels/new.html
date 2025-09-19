@@ -201,6 +201,9 @@
             img.style.display = 'none';
         }
         document.getElementById('success-duel-link').value = duel_link;
+        document.getElementById('success-duel-link').onfocus = function(){
+            copyLink(duel_link)
+        } 
         document.getElementById('success-date').textContent = date_created;
         document.getElementById('success-go-btn').href = duel_link;
 
