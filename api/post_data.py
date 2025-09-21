@@ -13,7 +13,7 @@ from users.users_utility import get_player
 from utility import _parse_number
 from .models import *
 from core.models import *
-from battles.models import Battle, BattleAcceptor, BattleRequest,Challenge, RefreeingProposal, TextPad, TextPadComment, TextpadReactor,request_cost,battle_status, battle_types,accept_cost
+from battles.models import CHALLENGE_COST, Battle, BattleAcceptor, BattleRequest,Challenge, RefreeingProposal, TextPad, TextPadComment, TextpadReactor,request_cost,battle_status, battle_types,accept_cost
 import battles.views as battle_views
 import events.models as events_models
 
@@ -625,6 +625,118 @@ def delete_private_message(request, message_id):
     return {'status':'failed', 'respond':respond}        
 
 
+def send_challenge(request, target_id):
+    player = Player.objects.get(user = request.user)
+    target = get_object_or_404(Player, id = target_id)
+    if request.method == 'POST':
+        message = ''
+        character = request.data.get('character')
+        if not character:
+            message = 'choisie un perso'
+        elif player.battle_points < CHALLENGE_COST:
+            message = 'pas assez de Jetons de Combat'
+        elif player == target:
+            message = "Tu ne peux pas te challenger toi meme"    
+        else:
+            player.battle_points = player.battle_points - CHALLENGE_COST
+            player.save()
+
+            new_challenge = Challenge.objects.create(
+                sender = player,
+                target = target,
+                sender_character = character,
+            )
+            # new_notif = core_models.Notification.objects.create(
+            #     target = target,
+            #     content = f'{player} challenged you to a battle',
+            #     url = f'/users/{player.user.username}'
+            # )
+
+            #send push notification to the target
+            send_push_notification(
+                PushSubscription.objects.filter(user = target.user).last(),
+                {
+                'title' : f"Tu as été défié",
+                'body' : f"{player} t'as défié pour un combat, tu peux l'accepter ou le refuser",
+                'url' : f'/users/challenges/{player.user.username}',
+                'icon' : '/static/images/logo/logo_1.png',
+                },
+                target.user
+                
+            )
+            
+            new_challenge.save()
+            #new_notif.save()
+
+            message = f'Tu as defié {target}, en attente de sa réponse'
+            return {'status':'success','message':message}
+        
+    return {'status':'failed', 'message':message}
+
+def answer_challenge(request, challenge_id):
+    player = get_object_or_404(Player, user = request.user)
+    challenge = get_object_or_404(Challenge, id = challenge_id)
+
+    if request.method == "POST":
+        response = request.data['response']
+        character = request.data.get('character')
+        challenge.answered = True 
+        challenge.save() 
+
+        if response == "accept":
+
+            if challenge.target != player:
+                message = "Vous n'etes pas la cible de ce challenge"
+            elif challenge.accepted:
+                message = 'Vous avez deja accepté ce challenge'
+                 
+            else:    
+                message = "Challenge accepté,  en attente d'un arbitre pour le combat, tu peux aussi choisir l'arbitre IA."
+
+                new_battle = Battle.objects.create(
+                        initiator = challenge.sender,
+                        i_character = challenge.sender_character,
+                        opponent = player,
+                        o_character = character,
+                        type = 'challenge',
+                        status = 'waiting_refree'
+
+                    )
+                new_notif = Notification.objects.create(
+                    target  = challenge.sender,
+                    content = f"{player} a accepté le défi, un arbitre doit etre choisi pour debuter le combat, tu peux aussi activé l'arbitrage IA pour commencer immediatement.",
+                    url = f'/users/challenges/{challenge.sender.user}',
+                )
+                #send push notification to the sender of the challenge
+                send_push_notification(
+                    PushSubscription.objects.filter(user = challenge.sender.user).last(),
+                    {
+                    'title' : f"Ton défi a été accepté",
+                    'body' : f"{player} a accepté le défi, un arbitre doit etre choisi pour debuter le combat, tu peux aussi activé l'arbitrage IA pour commencer immediatement.",
+                    'url' : f'/users/challenges/{challenge.sender.user}',
+                    'icon' : '/static/images/logo/logo_1.png',
+                    },
+                    challenge.sender.user
+                    
+                    
+                )
+
+                #challenge.delete()
+                battle_views.__notify_referees()
+                new_battle.save()
+                new_notif.save()
+        else:
+            
+            message = "Challenge refusé"
+            notif2 = Notification.objects.create(
+                target  = challenge.sender,
+                content = f'{player} a refusé ton défi',
+                url = '#',
+            )
+            notif2.save()
+            challenge.delete()
+          
+    return {'status':'success', 'message':message}
 
 
 

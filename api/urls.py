@@ -12,6 +12,7 @@ urlpatterns = [
     
     path('feed', views.Feed.as_view(), name= 'feed' ),
     path('posts', views.PostListCreate.as_view()),
+    path('posts/favorites', views.FavoritePostsList.as_view()),
     path('posts/<int:pk>', views.PostApi.as_view()),
     path('post/reactions/<int:post_id>', views.PostReactionListCreate.as_view()),
     path('post/<int:post_id>/comments', views.CommentListCreate.as_view()),
@@ -27,9 +28,12 @@ urlpatterns = [
     path('battles/accept/<int:request_id>', views.BattleAccept.as_view()),
     path('battles/battle_room/<int:battle_id>',views.BattleRoom.as_view()),
 
+    path('challenge/<int:id>',views.Challenge.as_view()),
+    path('challenges/<str:name>',views.ChallengeList.as_view()),
+
     path('chats/all',views.Chats.as_view()),
     path('chats/private/<str:receiver_name>',views.PrivateChat.as_view()),
-    path('chats/private/<int:receiver_id>',views.PrivateMessages.as_view()),
+    path('chats/private/messages/<int:receiver_id>',views.PrivateMessages.as_view()),
 
     path('chats/family/<str:family_name>',views.FamilyChat.as_view()),
     path('chats/family/messages/<str:family_name>',views.FamilyMessages.as_view()),

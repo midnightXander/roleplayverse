@@ -12,7 +12,7 @@ from users.models import Player,PlayerNotification,Family
 from django.contrib.auth.decorators import login_required
 
 from users.users_utility import get_player
-from users.views import _family_data, _player_data
+from users.views import _family_data, _player_data, _total_losses, _total_wins
 from utility import _date_time, _parse_number, _time_since, decrypt_message, get_characters
 from .models import *
 from core.models import *
@@ -605,7 +605,38 @@ def search(request, query):
 
     return {"status" : "success", "search_list":search_list}
 
+def challenges(request, name):
+    user = User.objects.filter(username = name).first()
+    c_player = get_player(request.user)
 
+    player = Player.objects.filter(user = user).first()
+    challenge_battles = Battle.objects.filter(initiator = c_player, type='challenge').order_by('-date_started')
+    battles_data = battle_views._battles_data(c_player, challenge_battles)
+    proposals = RefreeingProposal.objects.filter(battle__type = 'challenge',battle__initiator = c_player)
+
+    stats = {
+        "wins": _total_wins(player),
+        "losses": _total_losses(player),
+        "draws": 0
+    }
+    
+    context = {
+        "req_player": _player_data(player),
+        "player": _player_data(c_player),
+        "battles": battles_data,
+        "stats": stats,
+        "proposals": battle_views._referee_proposals_data(proposals),
+        }
+    return context
+
+def favorite_posts(request):
+    player = get_player(request.user)
+    posts = []
+    saved_posts = SavedPost.objects.filter(player = player).order_by('-date_added')
+    for saved_post in saved_posts:
+        posts.append(core_views._post_data(player, saved_post.post))
+
+    return {"posts":posts}
 
 
 

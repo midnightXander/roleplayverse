@@ -3,6 +3,7 @@ import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+from battles.views import _battle_data
 from users.models import Badge, PlayerNotification
 from users.users_utility import get_player
 from users.views import _player_data
@@ -102,6 +103,17 @@ class PostListCreate(APIView):
         else:
             post = post_functions.create_post(request)
             return JsonResponse({'post': post}, status=200)
+
+class FavoritePostsList(APIView):
+    def get(self, request):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+
+        data = get_data.favorite_posts(request)
+    
+        return JsonResponse({ 'status':'success', 'posts' : data }, safe=False)
 
 class PostReactionListCreate(APIView):
     # def get(self, request, post_id):
@@ -283,6 +295,46 @@ class BattleRoom(APIView):
         battle_data = get_data._battle_room(request, battle_id, player)
 
         return JsonResponse({'battle_data': battle_data})
+
+
+class ChallengeList(APIView):
+    def get(self, request, name):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        data = get_data.challenges(request, name)
+        return JsonResponse(data)
+    
+
+class Challenge(APIView):
+    def get(self, request, id):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        
+        data = _battle_data(player, Battle.objects.filter(id = id).first())
+        return JsonResponse(data) 
+
+
+    def post(self, request, id):
+        user = request.user
+        player = Player.objects.filter(user=user).first()
+        action = request.GET.get('action')
+        if not player:
+            return JsonResponse({'status': 'error', 'message': 'Player not found'}, status=404)
+        
+        if action == "send":
+            data = post_functions.send_challenge(request, id)
+        elif action == "answer":
+            data = post_functions.answer_challenge(request, id)
+        else: data = {}    
+        return JsonResponse(data)
+
+
+
 
 class CurrentPlayer(APIView):
     def get(self, request):
