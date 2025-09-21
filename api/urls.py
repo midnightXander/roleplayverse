@@ -7,6 +7,9 @@ urlpatterns = [
     path('user/register/', views.CreateUserView.as_view(), name='register' ),
     path('token/', TokenObtainPairView.as_view(), name ='get_token'),
     path('token/refresh', TokenRefreshView.as_view(), name = 'refresh'),
+    
+    path('search/<str:query>', views.Search.as_view() ),
+    
     path('feed', views.Feed.as_view(), name= 'feed' ),
     path('posts', views.PostListCreate.as_view()),
     path('posts/<int:pk>', views.PostApi.as_view()),
@@ -23,6 +26,14 @@ urlpatterns = [
     path('battles/requests', views.BattleRequestsListCreate.as_view()),
     path('battles/accept/<int:request_id>', views.BattleAccept.as_view()),
     path('battles/battle_room/<int:battle_id>',views.BattleRoom.as_view()),
+
+    path('chats/all',views.Chats.as_view()),
+    path('chats/private/<str:receiver_name>',views.PrivateChat.as_view()),
+    path('chats/private/<int:receiver_id>',views.PrivateMessages.as_view()),
+
+    path('chats/family/<str:family_name>',views.FamilyChat.as_view()),
+    path('chats/family/messages/<str:family_name>',views.FamilyMessages.as_view()),
+
 
     path('player',views.CurrentPlayer.as_view()),
 

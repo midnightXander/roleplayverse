@@ -241,7 +241,6 @@ def private_chat(request,receiver_name):
         {
             "chat": chat,
             "last_message": get_last_message(chat)
-
         }
         for chat in chats
     ]
@@ -306,7 +305,6 @@ def delete_family_message(request, message_id):
             message.delete()
             return JsonResponse({'status':'success', 'message':'message deleted'})
     return JsonResponse({'status':'failed', 'respond':respond})        
-
 
 
 def send_message(request,receiver_id):

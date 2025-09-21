@@ -363,6 +363,51 @@ class Families(APIView):
         #return JsonResponse({'message': 'Request error'}, status=400)
 
 
+class Chats(APIView):
+    def get(self, request):
+        chats_data = get_data.chats(request)
+        print(chats_data)
+        return JsonResponse(chats_data, status = 200)
+
+class PrivateChat(APIView):
+    def get(self, request, receiver_name):
+        chat_data = get_data.private_chat(request, receiver_name)
+        
+        return JsonResponse(chat_data, status = 200)
+
+class FamilyChat(APIView):
+    def get(self, request, family_name):
+        chat_data = get_data.family_chat(request, family_name)
+        return JsonResponse(chat_data, status = 200)
+
+class FamilyMessages(APIView):
+    def get(self, request, family_name):
+        messages_data = get_data.get_family_messages(request, family_name)
+        return JsonResponse(messages_data, status = 200)
+    
+class FamilyMessage(APIView):    
+    def delete(self, request, message_id):
+        response = post_functions.delete_family_message(request, message_id)
+        return JsonResponse(response, status = 200)  
+
+class PrivateMessages(APIView):
+    # wss://' + https://roleplayverse.live + /ws/chat/private/'+ room +  "/
+    def get(self, request, receiver_id):
+        messages_data = get_data.get_private_messages(request, receiver_id)
+        return JsonResponse(messages_data, status = 200)
+
+class PrivateMessage(APIView):
+    def delete(self, request, message_id):
+        response = post_functions.delete_private_message(request, message_id)
+        return JsonResponse(response, status = 200)    
+
+class Search(APIView):
+    def get(self, request, query):
+        search_data = get_data.search(request, query)
+        return JsonResponse(search_data, status = 200)
+
+
+
 def export_battle_data():
     # This function is a placeholder for exporting battle data.
     # You can implement the logic to export battle data as needed.

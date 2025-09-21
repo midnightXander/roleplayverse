@@ -23,8 +23,13 @@ class Duel(models.Model):
     winner = models.ForeignKey(Player, on_delete=models.SET_NULL,blank=True, null=True)
 
     def __str__(self):
-        fighters = self.fighters.all()
-        return f"{fighters[0]} vs {fighters[1]}  {self.started_at}"
+        fighters = list(self.fighters.all())
+        if len(fighters) == 2:
+            return f"{fighters[0]} vs {fighters[1]}  {self.started_at}"
+        elif len(fighters) == 1:
+            return f"{fighters[0]} vs ???  {self.started_at}"
+        else:
+            return f"Duel (incomplet) {self.started_at}"
     
 
 class DuelFighter(models.Model):

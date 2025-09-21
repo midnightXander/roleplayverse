@@ -3,6 +3,8 @@ from django.db.models import Case, When,F
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from api.utility import send_push_notification
+from chat.models import Chat, FamilyMessage, Message
+from chat.views import _family_message_data, _get_family_unreads, _message_data, check_family_membership, get_last_message, get_player_last_seen, getchats
 import core.views as core_views
 from store.models import Product
 from store.views import product_data
@@ -10,8 +12,8 @@ from users.models import Player,PlayerNotification,Family
 from django.contrib.auth.decorators import login_required
 
 from users.users_utility import get_player
-from users.views import _player_data
-from utility import _parse_number, _time_since, get_characters
+from users.views import _family_data, _player_data
+from utility import _date_time, _parse_number, _time_since, decrypt_message, get_characters
 from .models import *
 from core.models import *
 from battles.models import Battle, BattleRequest,Challenge, RefereeRating, RefreeingProposal, Rule, TextPad, TextPadComment,battle_status
@@ -250,7 +252,6 @@ def filter_battle(request, filter_num):
         return {"message":message ,"battles":battles_data}
 
 
-@login_required
 def _battle_room(request,battle_id, player:Player):
     
     battle = Battle.objects.get(id=battle_id)
@@ -368,3 +369,251 @@ def _battle_room(request,battle_id, player:Player):
 
     return context
     
+def _chat_data(chat: Chat, player:Player):
+    return {
+        'name' : str(chat),
+        'initiator' : _player_data(chat.initiator),
+        'recipient' : _player_data(chat.recipient),
+        "last_message": get_last_message(chat,"private"),
+        'unreads': {
+            'number':_parse_number(chat.unreads(player)),
+            'label':'unread' if _parse_number(chat.unreads(player)) != '' else ''
+        }
+    }
+
+
+def chats(request):
+
+    current_player = get_player(request.user)
+    #current_player = Player.objects.filter().order_by('?').first()
+    print(current_player)
+    if not current_player:
+        return { 'message' : 'Login required'}
+
+    chats = Chat.objects.filter(
+        Q(initiator = current_player) | Q(recipient = current_player)
+    ).order_by("-last_message_time_sent")
+    
+    #delete chats with no messages
+    for chat in chats:
+        chat_messages = Message.objects.filter(chat = chat)
+        if not chat_messages.exists():
+            chat.delete()
+
+    chats_data = [
+        _chat_data(chat, current_player) for chat in chats
+    ]
+
+    family_last_message = FamilyMessage.objects.filter(family = current_player.family).order_by('-date_sent').first()
+        
+    if family_last_message:
+        content =  decrypt_message(family_last_message.content)[:7]+'...'
+        if family_last_message.image:
+            content = f'sent an image'
+        fl_message_data = {
+            "sender":family_last_message.sender.user.username,
+            'content': content,
+            'image': family_last_message.image.url if family_last_message.image else None, 
+            'date_sent': _date_time(family_last_message.date_sent),
+            'unreads': {
+               'number': _parse_number(_get_family_unreads(current_player)),
+               'label': 'unread' if _parse_number(_get_family_unreads(current_player)) != '' else ''
+            }
+            
+        }
+    else:
+        fl_message_data = ''    
+
+    context = {"chats" : chats_data,
+               "family_last_message":fl_message_data,
+               }
+    return context
+
+def private_chat(request, receiver_name):
+    player = get_player(request.user)
+    # if not player:
+    #     return redirect('/users/signin')
+    
+    chats = getchats(player)
+    try:
+        receiver_user = User.objects.get(username = receiver_name)
+        receiver = Player.objects.get(user=receiver_user)
+        sender = Player.objects.get(user=request.user)
+    except:
+        return {"status":"error"} 
+       
+    sent_messages = Message.objects.filter(sender = sender,receiver=receiver)
+    sent_by_user = [x for x in sent_messages if x.sender==request.user]
+    sent_by_receiver = [x for x in sent_messages if x.sender != request.user]
+
+    chats_data = [
+            _chat_data(chat) for chat in chats
+    ]
+    family_last_message = FamilyMessage.objects.filter(family = player.family).order_by('-date_sent').first()
+    if family_last_message:
+        content =  decrypt_message(family_last_message.content)[:7]+'...'
+        if family_last_message.image:
+            content = f'sent an image'
+        fl_message_data = {
+            "sender":family_last_message.sender.user.username,
+            'content': content,
+            'image': family_last_message.image.url if family_last_message.image else None, 
+            'date_sent': _date_time(family_last_message.date_sent),
+             
+            # 'unreads': {
+            #    'number': _parse_number(_get_family_unreads(player)),
+            #    'label': 'unread' if _parse_number(_get_family_unreads(player)) != '' else ''
+            # }
+        }
+    else:
+        fl_message_data = ''    
+        
+
+    context = {"receiver":_player_data(receiver),
+               'last_seen': get_player_last_seen(receiver),
+               "sent_messages":sent_messages,               
+                "sent":sent_by_user,
+                "received":sent_by_receiver,
+                "chats":chats_data,
+                "family_last_message":fl_message_data}
+    return context
+
+######
+def family_chat(request,family_name):
+
+    player = get_player(request.user)
+    if not player:
+        return { 'status' : 'error' }
+  
+    family = Family.objects.get(name = family_name)
+    if player.family != family:
+        return { 'status' : 'error' }
+
+    #Add players found in the family to family members
+    members = family.members.all()
+    
+    if player.family == family and not player in members:
+        family.members.add(player)
+
+
+    chats = Chat.objects.filter(
+        Q(initiator = player) | Q(recipient = player)
+    ).order_by("-last_message_time_sent")
+
+
+
+    chats_data = [
+         _chat_data(chat) for chat in chats
+    ]
+
+    
+
+    family_last_message = FamilyMessage.objects.filter(family = player.family).order_by('-date_sent').first()
+    if family_last_message:
+        content =  decrypt_message(family_last_message.content)[:7]+'...'
+        if family_last_message.image:
+            content = f'sent an image'
+        fl_message_data = {
+            "sender":family_last_message.sender.user.username,
+            'content': content,
+            'image': family_last_message.image.url if family_last_message.image else None, 
+            'date_sent': _date_time(family_last_message.date_sent)
+        }
+    else:
+        fl_message_data = ''
+
+    members = Player.objects.filter(family = family)        
+
+    if check_family_membership(player, family):
+        context = {
+            "family":_family_data(family),
+            "chats":chats_data,
+            "family_last_message":fl_message_data,
+            "members":  [  _player_data(member) for member in members ]
+            }   
+        return context
+    else:
+        return { 'status' : 'error', 'message' : 'player is not part of this family' }
+
+def get_family_messages(request, family_name):
+    family = Family.objects.get(name = family_name)
+    sender = Player.objects.get(user=request.user)
+
+    messages = FamilyMessage.objects.filter(
+        family = family
+    ).order_by('date_sent')
+    #Mark All family messages as read
+    for msg in FamilyMessage.objects.filter(family = family):
+        if sender not in msg.readers.all():
+            msg.readers.add(sender)
+
+    messages_data = [ _family_message_data(message)
+        for message in messages
+    ]
+    return {"message":"success","messages":messages_data}
+
+def get_private_messages(request,receiver_id):    
+    receiver = Player.objects.get(id=receiver_id)
+    sender = Player.objects.get(user=request.user)
+    
+    messages = Message.objects.filter(
+        Q(sender = sender) |  Q(sender=receiver), 
+        Q(receiver = receiver) | Q(receiver = sender)).order_by("date_sent")
+    
+    for msg in messages:
+        if msg.receiver == Player.objects.get(user = request.user):
+            msg.mark_as_read()
+            #mark_as_read(msg)
+
+    messages_data = [ _message_data(message)
+        for message in messages]
+    return {"message":"success","messages":messages_data}
+
+def search(request, query):
+    search_list = []
+    
+    searched_users = User.objects.filter(username__icontains = query) 
+    searched_families = Family.objects.filter(name__icontains =  query)
+    battles = Battle.objects.all().order_by('-date_started')
+    searched_battles = []
+    searched_players = []
+    #if not searched_users:
+    for user in searched_users:
+        if user.username != "xander_randomo":
+            player = Player.objects.get(user=user)
+            searched_players.append({"id":player.id,
+                                        "etype":"player",
+                                        "username":player.user.username,
+                                        "profile_picture":player.profile_picture.url,
+                                        })
+    player = Player.objects.get(user = request.user)
+    for battle in battles:
+        
+        if core_views._string_found(query, str(battle)):
+            battle_data = battle_views._battle_data(player,battle)
+            battle_data['etype'] = 'battle'
+            searched_battles.append(battle_data)
+
+    families = [{"name":family.name,
+                    "etype":"family",
+                    "id":family.id,
+                    "profile_picture":family.profile_picture.url,
+                    } for family in searched_families]
+    
+    
+    search_list = searched_players + families + searched_battles[:3]
+
+    return {"status" : "success", "search_list":search_list}
+
+
+
+
+
+
+
+
+
+
+
+
+

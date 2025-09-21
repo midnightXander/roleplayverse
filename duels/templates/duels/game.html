@@ -203,10 +203,10 @@
       </ul>
     </div>
     <div class="flex justify-center space-x-4 pt-2">
-      <button onclick="restartBattle()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold">
+      <button onclick="gotoPage('/duels')" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold">
         Rejouer
       </button>
-      <button onclick="quitBattle()" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-semibold">
+      <button onclick="gotoPage('/duels')" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-semibold">
         Quitter
       </button>
     </div>
@@ -254,7 +254,10 @@ function hideTurnTimer() {
   if (timerInterval) clearInterval(timerInterval);
 }
 
-
+    function gotoPage(url){
+      showOverlay()
+      window.location.href = url
+    }
 
     function selectCharacter(div, characterName){
         // Reset all character overlays and borders
@@ -530,7 +533,8 @@ function enableActionButtons(){
 
         // Create a new log entry
         const logEntry = document.createElement('p');
-        logEntry.className = type === 'info' ? 'text-gray-300' : type === 'success' ? 'text-green-500' : type === 'player' ? 'text-blue-500' : type === 'opponent' ? 'text-orange-500' : type === 'danger' ? 'text-red-500' : 'text-yellow-500';
+        const typeClass = type === 'info' ? 'text-gray-300' : type === 'success' ? 'text-green-500' : type === 'player' ? 'text-blue-500' : type === 'opponent' ? 'text-orange-500' : type === 'danger' ? 'text-red-500' : 'text-yellow-500';
+        logEntry.className =  typeClass  + " py-2 border-t border-gray-400"
         logEntry.innerHTML = `[${timestamp}] ${message}`;
 
         // Append the new log entry to the battle log
@@ -563,6 +567,7 @@ function enableActionButtons(){
                 // Hide loading spinner or overlay
                 // document.getElementById('battle-log').innerHTML = data.battle_log;
                 // console.log(data)
+
 
                 if (data.status == 'fallback'){
                   showScreen('fallback-screen');
@@ -641,9 +646,14 @@ function enableActionButtons(){
                   }
                 ]
                 
+                const battleLogContainer = document.getElementById('battle-log');
+                
                 battleLogs.forEach(log => {
-                    updateBattleLog(log.text, log.type);
+                    updateBattleLog(log.text, log.type, log.timestamp);
                 });
+                //addDivider(battleLogContainer)
+                
+                battleLogContainer.scrollTop = battleLogContainer.scrollHeight;
                 
                 // Update the battle log with the initial message
                 setTimeout(() => {
@@ -667,7 +677,13 @@ function enableActionButtons(){
     }
 
 
-//     
+function addDivider(container){
+  const div = document.createElement('div');
+  div.className =  "w-full h-[1px] bg-white my-2"
+
+  // Append the new log entry to the battle log
+  container.appendChild(div);
+}  
 
 function hideBattleEndPopup() {
     const popup = document.getElementById('battle-end-popup');

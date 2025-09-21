@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from api.utility import send_push_notification
+from chat.models import FamilyMessage, Message
 import core.views as core_views
 from users.models import Player,PlayerNotification,Family
 from django.contrib.auth.decorators import login_required
@@ -486,6 +487,7 @@ def request_battle(request):
         return {'message':message} 
 
 def accept_battle(request,request_id):
+
     if request.method == "POST":
         player = Player.objects.get(user = request.user)
         character = request.data['character']
@@ -554,3 +556,76 @@ def accept_battle(request,request_id):
             new_notif.save()
             return {"message":"Combat accepté, en attente d'arbitrage"}
         return {"message":message}  
+    
+###    
+def search(request, scope="global"):
+    search_list = []
+    if request.method == "POST":
+        query = request.data["query"] 
+        searched_users = User.objects.filter(username__icontains = query) 
+        searched_families = Family.objects.filter(name__icontains =  query)
+        battles = Battle.objects.all().order_by('-date_started')
+        searched_battles = []
+        searched_players = []
+        #if not searched_users:
+        for user in searched_users:
+            if user.username != "xander_randomo":
+                player = Player.objects.get(user=user)
+                searched_players.append({"id":player.id,
+                                         "etype":"player",
+                                         "username":player.user.username,
+                                         "profile_picture":player.profile_picture.url,
+                                         })
+        player = Player.objects.get(user = request.user)
+        for battle in battles:
+            
+            if core_views._string_found(query, str(battle)):
+                battle_data = battle_views._battle_data(player,battle)
+                battle_data['etype'] = 'battle'
+                searched_battles.append(battle_data)
+
+        families = [{"name":family.name,
+                     "etype":"family",
+                     "id":family.id,
+                     "profile_picture":family.profile_picture.url,
+                     } for family in searched_families]
+        
+        
+        search_list = searched_players + families + searched_battles[:3]
+
+        return {"status" : "success", "search_list":search_list}
+
+def delete_family_message(request, message_id):
+    if request.method == "DELETE":
+        player = get_object_or_404(Player, user=request.user)
+        respond = ''
+        
+        message = get_object_or_404(FamilyMessage, id = message_id)
+        if player != message.sender and player.user != message.family.god_father:
+            respond = "Can't delete a message you did not sent"
+        elif player.family != message.family:
+            respond = "Message was sent in a family you do not belong to"
+        else:    
+            message.delete()
+            return {'status':'success', 'message':'message deleted'}
+    return {'status':'failed', 'respond':respond}
+
+def delete_private_message(request, message_id):
+    if request.method == "DELETE":
+        player = get_object_or_404(Player, user=request.user)
+        respond = ''
+        
+        message = get_object_or_404(Message, id = message_id)
+        if player != message.sender:
+            respond = "Can't delete a message you did not sent"
+        else:
+            message.delete()
+            return {'status':'success', 'message':'message deleted'}
+       
+    return {'status':'failed', 'respond':respond}        
+
+
+
+
+
+
