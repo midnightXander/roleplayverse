@@ -130,7 +130,6 @@
                 $('#loading-overlay').toggleClass('active')
             },
             success: function(data) {
-              console.log(data)
                 if(data.status == "success" && data.duel){
                   showOverlay()
                   window.location.href = `/duels/${data.duel.code}`
