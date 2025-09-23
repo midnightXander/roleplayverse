@@ -3,6 +3,7 @@
 {% block title %}Duels | RPV{% endblock title %}
 {% block meta_description%} Affronte d'autres joueurs en mode combat solo {% endblock meta_description%}
 
+
 {% block content %}
 <div class="max-w-5xl mt-16 mx-auto px-4 py-10">
   <!-- Hero & Actions -->
@@ -19,7 +20,7 @@
         <a onclick="showOverlay()" href="/duels/new" class="bg-gradient-to-r from-orange-500 to-yellow-400 hover:from-orange-600 hover:to-yellow-500 text-white font-bold px-6 py-3 rounded-full shadow transition text-lg">
           <i class="fas fa-plus mr-2"></i> Nouveau Duel
         </a>
-        <a  onclick="showOverlay()" href="/" class="bg-gray-800 hover:bg-gray-700 text-orange-300 font-bold px-6 py-3 rounded-full shadow transition text-lg">
+        <a  onclick="join_random_duel()" href="#" class="bg-gray-800 hover:bg-gray-700 text-orange-300 font-bold px-6 py-3 rounded-full shadow transition text-lg">
           <i class="fas fa-random mr-2"></i> Rejoindre un Duel Aléatoire
         </a>
       </div>
@@ -113,4 +114,44 @@
     </div>
   </div>
 </div>
+
+<script>
+  function join_random_duel(){
+    $.ajax({
+            url : '/duels/join_random',
+            type : 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: {
+                'action': 'join_random',
+            },
+            beforeSend: function() {
+                $('#loading-overlay').toggleClass('active')
+            },
+            success: function(data) {
+              console.log(data)
+                if(data.status == "success" && data.duel){
+                  showOverlay()
+                  window.location.href = `/duels/${data.duel.code}`
+                }else{
+                  showMyToast("Aucun Duel trouvé actuellement, crée un nouveau duel.")
+                }
+            },
+            complete: function(){
+              $('#loading-overlay').toggleClass('active')
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error('Error:', error);
+                showMyToast('An error occurred while initializing the battle. Please try again.', 'error');
+                //goToCharacterSelect()
+            }   
+        })
+  }
+  
+
+</script>
+
+
 {% endblock content %}

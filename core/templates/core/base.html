@@ -413,6 +413,7 @@ function setupExpandableText() {
     <body class="bg-gray-950 h-screen flex flex-col">
         
         <div id="top-toastContainer" class="flex justify-center w-full fixed top-4 right-4"></div>
+        
 
         <div class="scroll-indicator"></div>
         
@@ -671,18 +672,20 @@ function setupExpandableText() {
     </div>
 </div>
 
+{% block toast %}
 <script>
     const toastContainer = document.getElementById('top-toastContainer');
     
     function showMyToast(message, type = 'info', duration = 3000) {
-        
+        console.log(message)
         document.querySelectorAll('.my-toast').forEach(el =>{
             el.remove()
         })
         
         const toast = document.createElement('div');
         toast.className = `my-toast my-toast-${type} text-sm`;
-        
+        console.log(message)
+
         const messageSpan = document.createElement('span');
         messageSpan.textContent = message;
         
@@ -695,7 +698,7 @@ function setupExpandableText() {
         toast.appendChild(closeButton);
         
         toastContainer.appendChild(toast);
-        
+        console.log(message)
         setTimeout(() => {
             toast.style.animation = 'fadeOut 0.3s ease-out forwards';
             setTimeout(() => removeToast(toast), 300);
@@ -705,13 +708,14 @@ function setupExpandableText() {
     function removeToast(toast) {
         if(toast.parentNode == toastContainer){
             toastContainer.removeChild(toast);
+            console.log("removing toast...")
         }
         
     }
     
    
 </script>
-
+{% endblock toast %}
 <script>
 
     
@@ -2555,5 +2559,6 @@ function copyLink(link){
 </script> 
 {% block adscripts %}
 {% endblock adscripts %}
-    </body>
+<!-- <div id="toast-container" class="fixed top-6 right-4 z-50 flex flex-col gap-3 items-end"></div> -->
+</body>
 </html>

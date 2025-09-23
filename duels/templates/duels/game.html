@@ -3,6 +3,119 @@
 {% block title %}Combat solo - Roleplay Verse{% endblock title %}
 {% block meta_description%}Une experience de combat unique face a un opponent{% endblock meta_description%}
 
+{% block toast %}
+
+<div id="toast-container" class="items-center  w-full fixed top-6 right-4 z-50 flex flex-col gap-3 items-end"></div>
+<style>
+  .toast {
+    min-width: 220px;
+    max-width: 320px;
+    padding: 1rem 1.25rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.25);
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+    transform: translateY(-20px) scale(0.98);
+    pointer-events: auto;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .toast.toast-show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .toast-info    { background: linear-gradient(90deg,#2563eb,#38bdf8); color: #fff; }
+  .toast-success { background: linear-gradient(90deg,#22c55e,#16a34a); color: #fff; }
+  .toast-error   { background: linear-gradient(90deg,#ef4444,#b91c1c); color: #fff; }
+  .toast-warning { background: linear-gradient(90deg,#f59e42,#fbbf24); color: #fff; }
+  .toast-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.25rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .toast-close:hover { opacity: 1; }
+</style>
+</div>
+<script>
+/**
+ * Show a toast notification.
+ * @param {string} message - The message to display.
+ * @param {'info'|'success'|'error'|'warning'} [type='info'] - The type of toast.
+ * @param {number} [duration=3500] - Duration in ms before auto-dismiss.
+ */
+function showToast(message, type = 'info', duration) {
+  const container = document.getElementById('toast-container');
+  let timeout;
+  if (!container) return;
+
+  document.querySelectorAll('.toast').forEach(el =>{
+            el.remove()
+        })
+
+  // Icons for each type
+  const icons = {
+    info:    '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>',
+    success: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-width="2" d="M9 12l2 2l4-4"/></svg>',
+    error:   '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-width="2" d="M15 9l-6 6m0-6l6 6"/></svg>',
+    warning: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-width="2" d="M12 8v4m0 4h.01"/></svg>',
+  };
+
+  // Create toast element
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.innerHTML = `
+    ${icons[type] || icons.info}
+    <span style="flex:1">${message}</span>
+    <button class="toast-close" aria-label="Fermer">&times;</button>
+  `;
+
+  // Close button handler
+  toast.querySelector('.toast-close').onclick = () => {
+    hideToast(toast);
+  };
+
+  // Add to DOM
+  container.appendChild(toast);
+  // Animate in
+  setTimeout(() => toast.classList.add('toast-show'), 10);
+
+  // Auto-remove after duration
+  if (duration){
+    timeout = setTimeout(() => hideToast(toast), duration);
+    // Remove on click
+    toast.onclick = (e) => {
+      if (e.target !== toast.querySelector('.toast-close')) hideToast(toast);
+      // Hide function
+    };
+    }
+  
+  function hideToast(toastEl) {
+      toastEl.classList.remove('toast-show');
+      setTimeout(() => {
+        if (toastEl.parentNode) toastEl.parentNode.removeChild(toastEl);
+      }, 300);
+      if(timeout){clearTimeout(timeout);}
+      
+    }
+}
+
+function hideToasts(){
+  document.querySelectorAll('.toast').forEach(el =>{
+            el.remove()
+        })
+}
+</script>
+{% endblock toast %}
+
+
 {% block content %}
 
 <style>
@@ -344,7 +457,7 @@ function hideTurnTimer() {
         
             else if(data.type == "duel_action"){
               if(data.status == "waiting" && data.user == username){
-                showMyToast(data.message)
+                showToast(data.message)
                 return
               }
               if(data.status == "waiting" && data.user != username){
@@ -353,7 +466,7 @@ function hideTurnTimer() {
               }
 
             if(data.status == "continue"){
-              
+              hideToasts()
               enableActionButtons()
               const battleLog = document.getElementById('battle-log');
               battleLog.innerHTML = ''; // Clear existing log entries
@@ -390,19 +503,19 @@ function hideTurnTimer() {
                 
             }
             else if(data.status == "error" && data.user == username){
-              showMyToast(data.message, 'error')
+              showToast(data.message, 'error')
               enableActionButtons()
             }
           }
         }
 
       duelSocket.onclose = function(e){
-        showMyToast("Connection Lost. Please reload page",'error')
+        showToast("Connection Lost. Please reload page",'error')
         //window.location.reload()
       }
     
       duelSocket.onerror = function(e){
-      showMyToast('An error occured please reload page','error')
+      showToast('An error occured please reload page','error')
       }
 
     
@@ -435,7 +548,7 @@ function enableActionButtons(){
 }
     function checkChakra(action){
       if(currentChakra < action.chakraCost){
-          showMyToast('Not enough chakra for this action you need to focus to gain chakra', 'error') 
+          showToast('Not enough chakra for this action you need to focus to gain chakra', 'warning') 
         }
         else{
           performAction(action)
@@ -668,7 +781,7 @@ function enableActionButtons(){
             error: function(xhr, status, error) {
                 // Handle error
                 console.error('Error:', error);
-                showMyToast('An error occurred while initializing the battle. Please try again.', 'error');
+                showToast('An error occurred while initializing the battle. Please try again.', 'error');
                 //goToCharacterSelect()
             }   
         })

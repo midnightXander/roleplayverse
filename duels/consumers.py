@@ -4,6 +4,7 @@ import json
 
 from django.shortcuts import get_object_or_404
 
+from api.models import PushSubscription
 from battles.views import _reward_player
 from users.views import _player_data
 from .utility import seconds_difference
@@ -12,7 +13,7 @@ from battles.solo_battle import _evaluate_duel_actions, _log_actions
 from duels.models import Duel, DuelAction, DuelFighter
 from duels.views import _duel_data, last_fighter_action
 from users.models import Player
-
+from api.utility import send_push_notification
 
 
 
@@ -111,6 +112,21 @@ class DuelConsumer(AsyncWebsocketConsumer):
         duel = Duel.objects.filter(code=duel_code).first()
         return _duel_data(duel)
 
+    @database_sync_to_async
+    def alert_opponent(self, duel_code):    
+        player = get_object_or_404(Player, user=self.scope["user"])
+        duel = Duel.objects.filter(code=duel_code).first()
+        current_fighter = DuelFighter.objects.filter(duel=duel, player=player).first() if duel else None
+        opponent_fighter = DuelFighter.objects.filter(duel=duel).exclude(player=player).first() if duel else None
+        if opponent_fighter:
+            payload = {
+                            'title': f'Ton duel peut commencer !',
+                            'body': f'{current_fighter.player} a rejoint ton duel. Que le meilleur gagne',
+                            #'icon': f'{player.profile_picture.url}',
+                            'url': f'/duels/{duel_code}'
+                        }
+            send_push_notification(PushSubscription.objects.filter(user = opponent_fighter.player.user).last(), payload, opponent_fighter.player.user)
+
     
     async def connect(self):
         self.user = self.scope["user"]
@@ -135,6 +151,7 @@ class DuelConsumer(AsyncWebsocketConsumer):
             #dispatch joined
             duel = await self.duel_data(self.duel_code)
             if duel.get('status') == 'pending':
+                await self.alert_opponent(self.duel_code)
                 await self.channel_layer.group_send(
                     self.group_name,{
                         "type": "joined",

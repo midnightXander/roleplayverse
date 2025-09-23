@@ -39,6 +39,7 @@ import praw,time
 from api.views import export_battle_data
 from store.views import product_data
 import requests
+from django.db.models import Count,Max
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 def _duel_data(duel:Duel):
@@ -136,6 +137,22 @@ def join_duel(request, duel_code):
             'duel' : _duel_data(duel)
         })    
 
+
+def join_random_duel(request):
+    player = get_player(request.user)
+    #single_fighter_duels = Duel.objects.annotate(num_fighters=Count('fighters')).filter(num_fighters__lt=2)  
+    if request.method == "POST":
+        single_fighter_duels = (
+        Duel.objects
+        .annotate(num_fighters=Count('fighters'))
+        .filter(num_fighters=1)
+        .annotate(last_seen=Max('duelfighter__player__last_seen'))
+        .order_by('-last_seen')
+        )
+        found_duels = [ _duel_data(duel) for duel in single_fighter_duels]   
+
+        return JsonResponse({"status":'success', 'duel' : found_duels[0]})
+    return JsonResponse({"status":'error'})    
 
 def duel(request, duel_code):
     player = get_player(request.user)
