@@ -59,6 +59,38 @@ def _duel_data(duel:Duel):
         'code' : duel.code,
     }
 
+def _duel_ranking():
+    
+    def _winner_data(duel:Duel):
+        data = users_views._player_data(duel.winner)
+        data['wins'] = 0
+        data['losses'] = 0
+        data['player'] = {
+                    'player': str(duel.winner),
+                    'username':duel.winner.user.username,
+                }
+    
+        return data
+
+    
+    duels = Duel.objects.exclude(winner=None)
+    winners = []
+
+    for duel in duels:
+        if _winner_data(duel) not in winners:
+            winners.append(_winner_data(duel))
+            
+
+    # print("TW:",winners)
+    for winner in winners:
+        for duel in duels:
+            #update number of wins for each  winner
+            if winner['id'] == duel.winner.id:
+                winner['wins'] += 1 
+
+    sorted_winners = sorted(winners, key = lambda winner: winner['wins'], reverse=True)
+
+    return sorted_winners
 
 @login_required
 def index(request):
@@ -73,7 +105,8 @@ def index(request):
 
         return render(request,"duels/index.html", {
             'player' : player,
-            'recent_duels': duels[:10]
+            'recent_duels': duels[:10],
+            'top_players' : _duel_ranking()
         })
 
 @login_required
@@ -114,6 +147,9 @@ def join_duel(request, duel_code):
         return redirect('/home')
     else:
         characters = get_solo_battle_characters()
+
+        if player in duel.fighters.all():
+             return redirect(f'/duels/{duel.code}')
 
         if request.method == "POST":
             player_character = request.POST.get('character')
@@ -226,13 +262,17 @@ def init_duel(request, duel_code):
 
         fighter1.character = fighter1_character
         fighter2.character = fighter2_character
-        duel.status = "ongoing"
+        
         duel.save()
         fighter1.save()
         fighter2.save()
         logs = json.loads(duel.log)
+        player1_data = users_views._player_data(fighter1.player)
+        player1_data['display_name'] = "Toi" if fighter1.player == player else player1_data.get('name')
+        player2_data = users_views._player_data(fighter2.player) 
+        player2_data['display_name'] = "Toi" if fighter2.player == player else player2_data.get('name')
 
-        return JsonResponse({'message': 'battle initialized', 'logs' : logs, 'opponent_character': fighter2_character, 'player_character': fighter1_character, 'current_character': player_character})
+        return JsonResponse({'message': 'battle initialized', 'logs' : logs, 'player1' : player1_data, 'player2' : player2_data, 'opponent_character': fighter2_character, 'player_character': fighter1_character, 'current_character': player_character})
 
     return JsonResponse({'message':'bad request'})     
 

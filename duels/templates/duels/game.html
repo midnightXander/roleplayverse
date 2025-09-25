@@ -221,9 +221,9 @@ function hideToasts(){
                 <div id="player-chakra-bar" class="bg-red-500 text-center flex justify-center items-center text-xs h-full rounded-full transition ease-in-out"></div>
               </div>
               
-             <div class="flex items-center gap-2 mt-4 bg-gray-800 px-4 py-2 rounded-full shadow border border-orange-500">
-              <img src="{{initiator_data.profile_picture}}" class="w-5 h-5 rounded-full border-2 object-cover border-orange-500" />  
-                <span class="block max-w-32 text-orange-300 font-semibold truncate text-sm">{{initiator_data.display_name}}</span>
+             <div id="player1-data" class="flex items-center gap-2 mt-4 bg-gray-800 px-4 py-2 rounded-full shadow border border-orange-500">
+              <img id="player1-img" src="{{initiator_data.profile_picture}}" class="w-5 h-5 rounded-full border-2 object-cover border-orange-500" />  
+                <span id="player1-name" class="block max-w-32 text-orange-300 font-semibold truncate text-sm">{{initiator_data.display_name}}</span>
                 <!-- <span id="turn-timer" class="text-orange-400 font-bold text-lg">--</span>
                 <span class="text-orange-300 font-semibold text-sm">sec</span> -->
             </div>
@@ -253,9 +253,9 @@ function hideToasts(){
               <div class="flex space-x-2 items-end rounded-full bg-gray-700 h-2 w-32 md:w-44 mt-1">
                 <div id="opponent-chakra-bar" class="bg-red-500 h-2 rounded-full"></div>
               </div>
-              <div class="flex items-center mt-4 gap-2 bg-gray-800 px-4 py-2 rounded-full shadow border border-orange-500">
-              <img src="{{opponent_data.profile_picture}}" class="w-5 h-5 rounded-full border-2 object-cover border-orange-500" />  
-                <span class="block max-w-32  text-orange-300 font-semibold truncate text-sm">{{opponent_data.display_name}}</span>
+              <div id="player2-data" class="flex items-center mt-4 gap-2 bg-gray-800 px-4 py-2 rounded-full shadow border border-orange-500">
+              <img id="player2-img" src="{{opponent_data.profile_picture}}" class="w-5 h-5 rounded-full border-2 object-cover border-orange-500" />  
+                <span id="player2-name" class="block max-w-32  text-orange-300 font-semibold truncate text-sm">{{opponent_data.display_name}}</span>
             </div>
               
               
@@ -316,7 +316,7 @@ function hideToasts(){
       </ul>
     </div>
     <div class="flex justify-center space-x-4 pt-2">
-      <button onclick="gotoPage('/duels')" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold">
+      <button onclick="gotoPage('/duels/new')" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold">
         Rejouer
       </button>
       <button onclick="gotoPage('/duels')" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-semibold">
@@ -331,7 +331,8 @@ function hideToasts(){
     const username = JSON.parse(document.getElementById('username').textContent);
 
     let playerCharacter = '';
-    let currentChakra = 100;
+    let currentChakra;
+    
 
     // Add these functions to your script section
 let timerInterval = null;
@@ -360,6 +361,7 @@ function showTurnTimer(seconds) {
     }
   }, 1000);
 }
+
 
 function hideTurnTimer() {
   const timerContainer = document.getElementById('turn-timer-container');
@@ -449,8 +451,6 @@ function hideTurnTimer() {
     duelSocket.onmessage = function(e){
             const data = JSON.parse(e.data)
 
-            console.log(data.message)
-
             if(data.type == "joined" && data.user != username ){
                 initBattle()  
             }
@@ -494,7 +494,8 @@ function hideTurnTimer() {
                   chakra_pool : data.opponent_character.chakra_pool,
                   stamina: data.opponent_character.stamina, // opponent Stamina as a percentage
               };
-
+              currentChakra = username ==  data.player1.user.username ? data.player1.character.chakra : data.player2.character.chakra 
+              console.log("updated chakra: ",currentChakra)
               updateStatBars(playerStats, opponentStats);
               if(data.winner){
                 showBattleEndPopup(data.winner);
@@ -510,7 +511,7 @@ function hideTurnTimer() {
         }
 
       duelSocket.onclose = function(e){
-        showToast("Connection Lost. Please reload page",'error')
+        showToast("Connection perdu. recharge la page",'error')
         //window.location.reload()
       }
     
@@ -537,7 +538,7 @@ function hideTurnTimer() {
     })
 }
 
-function enableActionButtons(){
+    function enableActionButtons(){
   const actionButtonsContainer = document.getElementById('action-buttons');
   const buttons =  actionButtonsContainer.querySelectorAll('button');
 
@@ -547,8 +548,9 @@ function enableActionButtons(){
   })
 }
     function checkChakra(action){
+      console.log(currentChakra)
       if(currentChakra < action.chakraCost){
-          showToast('Not enough chakra for this action you need to focus to gain chakra', 'warning') 
+          showToast('Pas assez de  chakra pour cette action, utilise Focus pour recharger du chakra', 'warning') 
         }
         else{
           performAction(action)
@@ -570,7 +572,7 @@ function enableActionButtons(){
         const opponentCharacterImage = document.getElementById('opponent-character-img').setAttribute('src', opponentCharacterImgSrc)
     }
 
-    function updateStatBars(playerStats, opponentStats) {
+    function updateStatBars(playerStats, opponentStats, current_chakra=0) {
     // Update Player Stats
     const playerHpBar = document.getElementById('player-hp-bar');
     const playerChakraBar = document.getElementById('player-chakra-bar');
@@ -599,8 +601,9 @@ function enableActionButtons(){
     opponentChakraBar.style.width = `${opponentStats.chakra}%`;
     // opponentStaminaBar.style.width = `${opponentStats.stamina}%`;
 
-    currentChakra = playerStats.current_chakra;
+    // currentChakra = current_chakra;
     // Update the chakra bar color based on the current chakra level
+
     if (currentChakra < 50) {
         playerChakraBar.classList.remove('bg-red-500', 'bg-yellow-500', 'bg-blue-500');
         playerChakraBar.classList.add('bg-red-500');
@@ -657,8 +660,9 @@ function enableActionButtons(){
         battleLog.scrollTop = battleLog.scrollHeight;
     }
 
-    function init(){
-
+    function displayPlayerData(container, player){
+      container.querySelector('span').textContent = player.display_name
+      container.querySelector('img').src = player.profile_picture
     }
 
     function initBattle(){
@@ -686,6 +690,8 @@ function enableActionButtons(){
                   showScreen('fallback-screen');
                   return
                 }
+                displayPlayerData(document.getElementById('player1-data'), data.player1)
+                displayPlayerData(document.getElementById('player2-data'), data.player2)
                 
                 const basicActions = [
                     { name: 'Attack', chakraCost: 10, bgColor: 'orange', icon: `
@@ -748,6 +754,9 @@ function enableActionButtons(){
                     stamina: 100, // opponent Stamina as a percentage
                 };
 
+                currentChakra = data.current_character.chakra
+                // console.log("loaded chakra:",currentChakra)
+                
                 updateCharacterImages(data.player_character.image, data.opponent_character.image)
                 updateStatBars(playerStats, opponentStats);
 
@@ -788,7 +797,6 @@ function enableActionButtons(){
 
         
     }
-
 
 function addDivider(container){
   const div = document.createElement('div');

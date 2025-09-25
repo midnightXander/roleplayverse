@@ -2155,8 +2155,7 @@ def init_solo_battle(request):
 
     return JsonResponse({'message':'bad request'})     
 
-def _reward_player(player:Player):
-    progression_boost = 2
+def _reward_player(player:Player, progression_boost=2):
     player.progression = player.progression + progression_boost
     player.save()
     update_rank(player)

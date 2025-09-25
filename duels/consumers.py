@@ -59,6 +59,7 @@ class DuelConsumer(AsyncWebsocketConsumer):
         player_action = get_action(action, possible_actions)         
         new_duel_action = DuelAction.objects.create(fighter = current_fighter, action = player_action)
         new_duel_action.save()
+        duel.status = "ongoing"
 
         #if last_fighter_action(opponent_fighter) and seconds_diff >= 15 else get_action('Defend', BASIC_ACTIONS)
         opponent_action = last_fighter_action(opponent_fighter) 
@@ -92,7 +93,7 @@ class DuelConsumer(AsyncWebsocketConsumer):
                 duel.winner = winner_fighter.player
                 duel.status = "finished"
                 duel.ended_at = datetime.now()
-                rewards = _reward_player(winner_fighter.player)
+                rewards = _reward_player(winner_fighter.player, 5)
 
             # rewards = {'xp' : 0, }
             winner_data = { 'player' : _player_data(winner_fighter.player) }  if winner else None
@@ -100,12 +101,18 @@ class DuelConsumer(AsyncWebsocketConsumer):
                 winner_data['character'] = winner_fighter.character 
             
         else:
-            return {'status':'waiting','message': 'waiting for opponent...'}        
+            return {'status':'waiting','message': "En attente de l'adversaire..."}        
             
         duel.log = json.dumps(logs)
         duel.save()  
+        player1 = _player_data(fighter1.player) 
+        player1['character'] = fighter1.character
 
-        return {'status': 'continue', 'battle_logs': logs, 'player_character': fighter1_character, 'opponent_character': fighter2_character, 'winner': winner_data, 'rewards': []}
+        player2 = _player_data(fighter2.player) 
+        player2['character'] = fighter2.character
+
+        
+        return {'status': 'continue', 'battle_logs': logs, 'player1': player1, 'player2':player2, 'player_character': fighter1_character, 'opponent_character': fighter2_character, 'winner': winner_data, 'rewards': []}
 
     @database_sync_to_async
     def duel_data(self, duel_code):
@@ -184,6 +191,8 @@ class DuelConsumer(AsyncWebsocketConsumer):
                     "battle_logs": result.get('battle_logs', []),
                     "player_character": result.get('player_character', {}),
                     "opponent_character": result.get('opponent_character', {}),
+                    "player1": result.get('player1', {}),
+                    "player2": result.get('player2', {}),
                     "winner": result.get('winner'),
                     "rewards": result.get('rewards', []),
 
@@ -204,6 +213,8 @@ class DuelConsumer(AsyncWebsocketConsumer):
             "battle_logs": event.get('battle_logs', []),
             "player_character": event.get('player_character', {}),
             "opponent_character": event.get('opponent_character', {}),
+            "player1": event.get('player1', {}),
+            "player2": event.get('player2', {}),
             "winner": event.get('winner'),
             "rewards": event.get('rewards', []),
 

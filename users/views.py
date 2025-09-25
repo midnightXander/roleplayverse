@@ -1542,15 +1542,15 @@ def _winner_data(battle:Battle):
     return data
 
 def _monthly_players_ranking():
-    stats = []
-    for player in Player.objects.all():
-        stat = {
-            "wins": _total_wins(player),
-            "losses": _total_losses(player),
-        }
-        stats.append(stat)
+    # stats = []
+    # for player in Player.objects.all():
+    #     stat = {
+    #         "wins": _total_wins(player),
+    #         "losses": _total_losses(player),
+    #     }
+    #     stats.append(stat)
 
-    sorted_stats = sorted(stats, key = lambda stat: stat['wins'], reverse=True)
+    # sorted_stats = sorted(stats, key = lambda stat: stat['wins'], reverse=True)
     now = datetime.datetime.now()
     
     #get the first of the month for later filtering

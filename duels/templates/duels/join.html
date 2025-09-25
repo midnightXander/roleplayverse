@@ -203,6 +203,7 @@
                 goToLoadingScreen()
             },
             success: function(data) {
+              console.log("done")
                 if(data.status === 'success'){
                     showMyToast(data.message, 'success')
                     showOverlay()

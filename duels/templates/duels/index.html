@@ -26,8 +26,17 @@
       </div>
     </div>
     <div class="flex-1 flex justify-center">
-      <img src="https://img.freepik.com/free-photo/dark-style-ninja-naruto_23-2151278772.jpg" alt="Duel Hero" class="w-full max-h-64 object-cover rounded-2xl shadow-lg bg-gray-900 border-4 border-orange-500" onerror="this.style.display='none'">
-    </div>
+  <video 
+    src="{% static 'videos/duel_mode_demo_2.mp4' %}" 
+    class="w-full max-h-64 object-cover rounded-2xl shadow-lg bg-gray-900 border-4 border-orange-500"
+    
+    autoplay
+    muted
+    loop
+    poster="{% static 'images/duel_video_poster.jpg' %}">
+    Votre navigateur ne supporte pas la vidéo.
+  </video>
+</div>
   </div>
 
   <!-- Info Section -->
@@ -90,19 +99,22 @@
             <th class="py-2 px-3 text-left">Joueur</th>
             <th class="py-2 px-3 text-left">Victoires</th>
             <th class="py-2 px-3 text-left">Défaites</th>
-            <th class="py-2 px-3 text-left">Rang</th>
+            <th class="py-2 px-3 text-left">Class</th>
           </tr>
         </thead>
         <tbody>
           {% for player in top_players %}
           <tr class="border-b border-gray-800 hover:bg-gray-800 transition">
             <td class="py-2 px-3 flex items-center gap-2">
-              <img src="{{ player.avatar_url }}" alt="{{ player.username }}" class="w-8 h-8 rounded-full border border-orange-400 object-cover shadow" onerror="this.style.display='none'">
-              <span class="font-bold text-orange-300">{{ player.username }}</span>
+              <img src="{{ player.profile_picture }}" alt="{{ player.username }}" class="w-8 h-8 rounded-full border border-orange-400 object-cover shadow" onerror="this.style.display='none'">
+              <span class="font-bold text-orange-300">{{ player.name }}</span>
             </td>
             <td class="py-2 px-3">{{ player.wins }}</td>
-            <td class="py-2 px-3">{{ player.loses }}</td>
-            <td class="py-2 px-3">{{ player.rank|default:"-" }}</td>
+            <td class="py-2 px-3">--</td>
+            <td class="py-2 px-3">
+              <!-- {{forloop.counter}}  -->
+              {{ player.rank|default:"-" }}
+            </td>
           </tr>
           {% empty %}
           <tr>
