@@ -35,6 +35,24 @@ class Product(models.Model):
     views = models.PositiveIntegerField(default=0)
 
     def __str__(self):
+        return self.title     
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:  # Only generate slug if it doesn't already exist
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+class AffiliateProduct(models.Model):
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True, blank=True)
+    description = models.TextField()
+    image = models.ImageField(upload_to='affiliate_product_images/')
+    link = models.URLField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    views = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
         return self.title
     
     def save(self, *args, **kwargs):

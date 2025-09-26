@@ -1760,6 +1760,27 @@ function createProductSocialAdElement(product){
         return adElement
     }
 
+    function createAffiliateProductAdElement(product){
+        const adElement = document.createElement('div')
+        adElement.className = "rounded-lg py-3 px-1  border-t border-b border-orange-500 mb-6";
+        adElement.innerHTML = `
+            <div class="flex items-center mb-2">
+                <img src="{% static 'images/logo/logo_1_nobg.png' %}" class="h-6 w-6 mr-2">
+                <span class="text-sm text-gray-600">Sponsorisé</span>
+                </div>
+                <div class="flex gap-4">
+                <img src="/static/images/loaders/img-loader.gif" onload = "replacePlaceholder(this, '${product.image}')" class="h-24 w-24 object-cover rounded" />
+                <div>
+                    <h4 class="font-bold text-sm">${product.title}</h4>
+                    <p class="text-xs text-gray-500">${product.description}</p>
+                    <a onclick="adClick('${product.link}')" target="_blank" href="${product.link}" class="text-sm text-orange-600 hover:underline">Voir</a>
+                </div>
+            </div>
+        `
+
+        return adElement
+    }
+
 
 
         function toggleDropdown(toggle){  

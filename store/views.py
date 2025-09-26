@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -15,6 +15,20 @@ from core.emails import send_email
 import random
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+def affiliate_product_data(product:AffiliateProduct):
+    product.views += 1
+    product.save()
+    return {
+        'id': product.id,
+        'title': product.title,
+        'slug': product.slug,
+        'description': product.description,
+        'link' : product.link,
+        'is_active': product.is_active,
+        'created_at': product.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+        'image': product.image.url,
+    }
 
 def product_data(product:Product):
     return {
@@ -150,3 +164,12 @@ def checkout_success(request):
     if player:
         context['player'] = player
     return render(request, 'store/checkout_success.html', context)
+
+
+def ads(request, type):
+    if type == "affiliate":
+        products = [ affiliate_product_data(product) for product in AffiliateProduct.objects.order_by("?") ]
+        limit = int(request.GET.get('limit'))
+        if limit:
+            return JsonResponse({'status':'success', 'products': products[:limit]})
+        return JsonResponse({'status':'success', 'products': products})

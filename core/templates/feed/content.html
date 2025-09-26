@@ -72,7 +72,7 @@
             success: function(res){
                 if(res.status == 'success'){
                     content = res.content
-                    const adElement = createProductSocialAdElement(res.product)
+                    const adElement = createAffiliateProductAdElement(res.product)
                     const contentElement = createMemeElement(content);
                     contentContainer.appendChild(contentElement);
                     contentContainer.appendChild(adElement);

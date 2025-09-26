@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from battles.models import Battle
 import uuid, random
 from django.utils import timezone
-
+import json
 
 class AdClick(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -13,4 +13,9 @@ class AdClick(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.user} at {self.date}'
+        if self.data:
+            link = self.data
+            return f'{self.user} : {link}'
+        else:
+            return f'{self.user} at {self.date}'
+

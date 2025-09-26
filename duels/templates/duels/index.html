@@ -54,6 +54,21 @@
     </div>
   </div>
 
+  <div id="affiliate-ad-container" class="rounded-lg border-t border-orange-500 mb-6">
+            <div class="flex items-center mb-2">
+                <img alt="Logo de Roleplayverse" src="{% static 'images/logo/logo_1_nobg.png' %}" class="h-8 w-8 mr-2">
+                <span class="text-sm text-gray-600">Sponsorisé </span>
+            </div>
+            <div class="flex gap-4">
+                <img id="product-image" alt="{{affiliate_products.0.title}} Couverture" src="{{affiliate_products.0.image}}" class="h-24 w-24 object-cover rounded" />
+                <div>
+                    <h4 id="product-title" class="font-bold text-sm">{{affiliate_products.0.title}}</h4>
+                    <p id="product-description" class="text-xs text-gray-500">{{affiliate_products.0.description}}</p>
+                    <a id="product-link" onclick="adClick('{{affiliate_products.0.link}}')" target="_blank" href="{{affiliate_products.0.link}}" class="text-sm text-orange-600 hover:underline">Voir</a>
+                </div>
+            </div>
+        </div>
+
   <!-- Recent Fights -->
   <div class="mb-10">
     <h2 class="text-xl font-semibold text-orange-400 mb-4">Duels Récents</h2>

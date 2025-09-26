@@ -1,4 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from store.models import AffiliateProduct
+from store.views import affiliate_product_data
 from users.models import Player
 from users.users_utility import get_player
 from ai.views import generate_image, generate_json_content
@@ -255,7 +257,8 @@ def game(request,character_id):
     story_status = get_story_status(story_challenge)
     status_message = "L'aventure n'a pas encore commencé" if story_status == "not_started" else "L'aventure est  terminé, tu peux en commencer une autre"
     show_ads = not(NoAdsPass.objects.filter(player = player).exists() or StoryPass.objects.filter(player = player, all = True).exists())
-    
+    affiliate_products = [  affiliate_product_data(product) for product in AffiliateProduct.objects.order_by("?") ] 
+
     if request.method == "POST":
         if character.player == player:
             action = request.POST.get('action')
@@ -370,7 +373,8 @@ def game(request,character_id):
         'basic_pass' : BASIC_PASS,
         'all_pass' : ALL_PASS,
         'no_ads_pass' : NO_ADS_PASS,
-        'show_ads' : show_ads
+        'show_ads' : show_ads,
+        'affiliate_products' : affiliate_products
     })
 
 @csrf_exempt

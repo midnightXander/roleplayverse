@@ -103,6 +103,22 @@
         </div>
         
         {% endfor %}
+        {% if show_ads %}
+        <div id="affiliate-ad-container" class="rounded-lg border-t border-orange-500 mb-2">
+            <div class="flex items-center mb-2">
+                <img alt="Logo de Roleplayverse" src="{% static 'images/logo/logo_1_nobg.png' %}" class="h-8 w-8 mr-2">
+                <span class="text-sm text-gray-600">Sponsorisé </span>
+            </div>
+            <div class="flex gap-4">
+                <img id="product-image" alt="{{affiliate_products.0.title}} Couverture" src="{{affiliate_products.0.image}}" class="h-24 w-24 object-cover rounded" />
+                <div>
+                    <h4 id="product-title" class="font-bold text-sm">{{affiliate_products.0.title}}</h4>
+                    <p id="product-description" class="text-xs text-gray-500">{{affiliate_products.0.description}}</p>
+                    <a id="product-link" onclick="adClick('{{affiliate_products.0.link}}')" target="_blank" href="{{affiliate_products.0.link}}" class="text-sm text-orange-600 hover:underline">Voir</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </div>
      <form id="actionInputForm" class="mt-4 mb-8 hidden w-full relative" onsubmit="handleAction(event)">
         <i onclick="hideTurnInput()" class="relative right-0 cursor-pointer fas fa-times text-orange-500 text-2xl"></i>
@@ -235,7 +251,7 @@
 
 <div id="removeAdsPopup" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
   <div class="bg-gray-900 rounded-2xl shadow-lg p-6 max-w-md w-full relative">
-    <button onclick="hideRemoveAdsPopup()" class="absolute top-2 right-3 text-gray-400 hover:text-orange-500 text-2xl font-bold">&times;</button>
+    <button onclick="hideRemoveAdsPopup()" class="text-gray-400 hover:text-orange-500 text-2xl font-bold">&times;</button>
     <h2 class="text-xl font-bold text-orange-500 mb-3">Retirer les pub</h2>
 
     <div class= "space-y-4">
@@ -258,27 +274,65 @@
 </div>
 
 <div id="adPopup" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
-    <a  href="https://www.revenuecpmgate.com/s6t3d5eucq?key=d5677720e4cfda9268ce625d0b793dc3" target='_blank' onclick = 'hideAdPopup()' class="ad-close absolute top-2 right-3">&times;</a>
+    <button   onclick = 'hideAdPopup()' class="ad-close absolute top-2 right-3">&times;</button>
     
     <div class="rounded-2xl shadow-lg  max-w-md w-full relative">
-    <a href="https://www.revenuecpmgate.com/s6t3d5eucq?key=d5677720e4cfda9268ce625d0b793dc3" target='_blank' onclick="hideAdPopup()" class="absolute top-0 right-3 text-gray-400 hover:text-orange-500 text-2xl font-bold">&times;</a>
-            
-            
-            
+    <button  onclick="hideAdPopup()" class="text-gray-400 hover:text-orange-500 text-2xl font-bold">&times;</button>
             <a href='https://smoggyfeed.com/6trvWC' onclick = "hideAdPopup()" target='_blank' class="relative rounded-2xl">
                 <span class="bg-orange-500 text-xs rounded-lg px-4 py-2 absolute left-2 top-2 z-[404] ">Ad</span>
                 <img class ='absolute w-full rounded-2xl object-cover z-50' src='/static/images/loaders/img-loader.gif'   alt = "ad image"/>
                 <p class="text-center">Your ad content here (300x90)</p>
             </a>
-            <h2 class="text-xl font-bold text-orange-400 mb-3">Ad</h2>
+            <!-- <h2 class="text-xl font-bold text-orange-400 mb-3">Ad</h2> -->
   </div>
 </div>
 
 {{show_ads|json_script:"show_ads" }}
+{{affiliate_products|json_script:"affiliate_products" }}
 <script>
-
+const affiliateProducts = JSON.parse(document.querySelector("#affiliate_products").textContent)
 // localStorage.setItem('currentCharacterId', '{{character.id}}');
 // localStorage.getItem('')
+function updateAdBanner(product){
+    const container = document.getElementById('affiliate-ad-container')
+    container.querySelector("#product-image").src = product.image
+    container.querySelector("#product-title").textContent = product.title
+    container.querySelector("#product-description").textContent = product.description
+    const a = container.querySelector("#product-link")
+    a.href = product.link
+    a.onclick = function(){
+        adClick(product.link)
+    }   
+}
+
+function rotateAd(){
+    $.ajax({
+         url : "/store/ads/affiliate",
+            type : 'GET',
+            data : {
+                limit : 1,
+            },
+            beforeSend : function(){
+                //$('#loading-overlay').toggleClass('active')
+            },
+            success : function(res){
+                if(res.status == "success"){
+                    updateAdBanner(res.products[0])
+                }
+                else{
+                    console.log(res.message)
+                }
+            },
+            complete : function(){
+                //$('#loading-overlay').toggleClass('active')
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                console.log(textstatus, "error")
+            }
+
+    })
+
+}
 
 function showAd(){
     const allowedToShow = JSON.parse(document.querySelector("#show_ads").textContent)
@@ -288,9 +342,11 @@ function showAd(){
     }
 
     const lastAdTime = localStorage.getItem('lastAdTime');
+     console.log(lastAdTime)
     if (lastAdTime) {
         const timeSinceLastAd = Date.now() - lastAdTime;
-        if (timeSinceLastAd < 120000) { // 120 seconds
+        console.log(timeSinceLastAd)
+        if (timeSinceLastAd < 90000) { // 90 seconds
             console.log('Ad shown too recently');
             return;
         }
@@ -299,27 +355,35 @@ function showAd(){
     showAdPopup();
 }
 
-
 function showAdPopup() {
-  const hiltopLink = "https://smoggyfeed.com/6trvWC"
-  const adsterraLink = "https://www.revenuecpmgate.com/s6t3d5eucq?key=d5677720e4cfda9268ce625d0b793dc3"
-  const adsterra = {
+    const hiltopLink = "https://smoggyfeed.com/6trvWC"
+    const adsterraLink = "https://www.revenuecpmgate.com/s6t3d5eucq?key=d5677720e4cfda9268ce625d0b793dc3"
+    const adsterra = {
     link : "https://www.revenuecpmgate.com/s6t3d5eucq?key=d5677720e4cfda9268ce625d0b793dc3",
     images : ['/static/images/ads/eat_cells_1.png','/static/images/ads/eat_cells_2.png','/static/images/ads/1xFreeBet.jpg', '/static/images/ads/blog-anime-Winter2022.webp', '/static/images/ads/bookmaker-bonus-1xbet.webp','/static/images/ads/write-anime-and-manga-blogs.webp', '/static/images/ads/home-1200x630.jpg']
-  }
+    }
 
-  const linkElements = document.getElementById('adPopup').querySelectorAll('a')
-  linkElements.forEach((a)=>{
-    a.href = adsterra.link
-  })
-  const imgElement = document.getElementById('adPopup').querySelector('img')
-  //select random image from image list
-  imgElement.src = adsterra.images[Math.floor(Math.random() * adsterra.images.length)]
+    const product = affiliateProducts[Math.floor(Math.random() * affiliateProducts.length)]
+    const linkElements = document.getElementById('adPopup').querySelectorAll('a')
+    linkElements.forEach((a)=>{
+    // a.href = adsterra.link
+    a.href = product.link
+    a.onclick = function(){
+        adClick(product.link)
+    }
+    })
+    const imgElement = document.getElementById('adPopup').querySelector('img')
+    //select random image from image list
+    //   imgElement.src = adsterra.images[Math.floor(Math.random() * adsterra.images.length)]
+    imgElement.src = product.image
   
-  document.getElementById('adPopup').classList.remove('hidden');
+    document.getElementById('adPopup').classList.remove('hidden');
 }
 
+showAdPopup()
+
 function hideAdPopup() {
+   
   document.getElementById('adPopup').classList.add('hidden');
   adClick('https://www.revenuecpmgate.com/s6t3d5eucq?key=d5677720e4cfda9268ce625d0b793dc3')
 }
@@ -344,6 +408,21 @@ function showHowToPlayPopup(){
 function hideHowToPlayPopup(){
     document.getElementById('howToPlayPopup').classList.add('hidden');
 }
+
+function startAdRotation() {
+    // rotateAd(); // Call once immediately
+    setInterval(rotateAd, 25000); // Then every 60 seconds
+}
+
+// Call this function once after DOM is ready
+document.addEventListener("DOMContentLoaded", function() {
+    const allowedToShow = JSON.parse(document.querySelector("#show_ads").textContent)
+    if(allowedToShow == false){
+        console.log('ads disabled')
+        return;
+    }
+    startAdRotation();
+});
 
 </script>
     

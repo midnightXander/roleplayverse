@@ -6,7 +6,7 @@ from django.contrib.auth.models import User,auth
 from django.http import JsonResponse,HttpResponseRedirect
 from duels.models import Duel
 from monetization.models import Payment
-from store.models import Product
+from store.models import AffiliateProduct, Product
 from users.models import Player,PlayerNotification,Family
 from story.models import StoryCharacter
 from story.views import _story_character
@@ -38,7 +38,7 @@ import re
 from . import emails
 import praw,time
 from api.views import export_battle_data
-from store.views import product_data
+from store.views import affiliate_product_data, product_data
 import requests
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -581,8 +581,8 @@ def get_posts(request):
     feed.save()
     # posts_data = _posts_data(player,posts)
     # battles_data = battle_views._battles_data(player,battles)
-    product = random.choice(Product.objects.all())
-    _product_data = product_data(product)
+    product = random.choice(AffiliateProduct.objects.all())
+    _product_data = affiliate_product_data(product)
     
     # print("FEED",feed_data,len(feed_data))
     #feed_data = feed_data[:feed_limit]
@@ -810,11 +810,12 @@ def create_post(request):
                 #             'url': f'/posts/{new_post.id}'
                 #         },
                 #     )
-                for user in users:
-                    send_push_notification(
-                        PushSubscription.objects.filter(user = user).last(),
-                        payload
-                    )
+                
+                # for user in users:
+                #     send_push_notification(
+                #         PushSubscription.objects.filter(user = user).last(),
+                #         payload
+                #     )
 
             return JsonResponse({'status':'success', 'post':new_post_data})
 
@@ -1214,11 +1215,11 @@ def content_post_page(request, id):
         return redirect('/users/signin')
     
     content = get_object_or_404(ContentPost,id= id)
-    product_ad  = random.choice(Product.objects.all()) 
+    product_ad  = random.choice(AffiliateProduct.objects.all()) 
     n_notifs = get_notifs(player)
 
     content_data =  _daily_content_data(player, content)
-    _product = product_data(product_ad) if product_ad else None
+    _product = affiliate_product_data(product_ad) if product_ad else None
 
     if request.method == "POST":
         data = content_data

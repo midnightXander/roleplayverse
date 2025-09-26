@@ -6,5 +6,6 @@ admin.site.register([
     ProductImage,
     Order,
     OrderItem,
-    OrderAdress
+    OrderAdress,
+    AffiliateProduct
 ])

@@ -1136,7 +1136,7 @@ function renderPosts() {
             // const memeElement = createMemeElement()
             // postsFeed.appendChild(memeElement)
 
-            const adElement = createProductSocialAdElement(res.product)
+            const adElement = createAffiliateProductAdElement(res.product)
 
             postsFeed.appendChild(adElement)
             
@@ -1273,7 +1273,7 @@ if (window.scrollY + window.innerHeight >= document.body.offsetHeight - 100) {
             // const memeElement = createMemeElement('https://preview.redd.it/son-im-proud-of-you-s-v0-fjola4lkoyqd1.jpeg?width=640&crop=smart&auto=webp&s=85eeee3624f8d331e864f68337cb9e6cb1ee42b3')
             // postsFeed.appendChild(memeElement)
 
-            const adElement = createProductSocialAdElement(res.product)
+            const adElement = createAffiliateProductAdElement(res.product)
             if(posts.length>0){
             postsFeed.appendChild(adElement)
             posts.forEach(post =>{
@@ -1618,21 +1618,6 @@ if (e.target.closest('.comment-like-button')) {
     
 }
 });
-
-// Event delegation for comment buttons
-// document.getElementById('postsFeed').addEventListener('click', (e) => {
-// if (e.target.closest('.comment-button') || e.target.closest('.reply-button')) {
-//     const commentForm = e.target.closest('.post').querySelector('.comment-form');
-//     commentForm.classList.toggle('active');
-//     if (commentForm.classList.contains('active')) {
-//         commentForm.querySelector('input').focus();
-//     }
-// }
-// });
-
-
-
-
 
 
 function commentListener(){

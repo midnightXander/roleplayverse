@@ -6,7 +6,7 @@ from django.contrib.auth.models import User,auth
 from django.http import JsonResponse,HttpResponseRedirect
 from battles.solo_battle import _evaluate_actions, _log_actions
 from monetization.models import Payment
-from store.models import Product
+from store.models import AffiliateProduct, Product
 from users.models import Player,PlayerNotification,Family
 from story.models import StoryCharacter
 from story.views import _story_character
@@ -37,7 +37,7 @@ from django.contrib.gis.geoip2 import GeoIP2
 import re
 import praw,time
 from api.views import export_battle_data
-from store.views import product_data
+from store.views import affiliate_product_data, product_data
 import requests
 from django.db.models import Count,Max
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -101,12 +101,14 @@ def index(request):
     else:
 
         duels =  [ _duel_data(duel) for duel in  Duel.objects.filter(Q(duelfighter__player = player)).order_by('-started_at') ] if player else []
+        affiliate_products = [  affiliate_product_data(product) for product in AffiliateProduct.objects.order_by("?") ] 
 
 
         return render(request,"duels/index.html", {
             'player' : player,
             'recent_duels': duels[:10],
-            'top_players' : _duel_ranking()
+            'top_players' : _duel_ranking(),
+            'affiliate_products' : affiliate_products
         })
 
 @login_required
