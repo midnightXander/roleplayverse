@@ -470,10 +470,14 @@ function hideTurnTimer() {
               enableActionButtons()
               const battleLog = document.getElementById('battle-log');
               battleLog.innerHTML = ''; // Clear existing log entries
+              // addDivider(battleLog)
               const battleLogs = data.battle_logs
-              battleLogs.forEach(log => {
-                  updateBattleLog(log.text, log.type, log.timestamp);
+              battleLogs.forEach((log, index) => {
+                  divide = index == battleLogs.length-1
+                  updateBattleLog(log.text, log.type, log.timestamp,divide);
               });
+              // addDivider(battleLog)
+              
 
               //const player_character = 
 
@@ -644,7 +648,7 @@ function hideTurnTimer() {
         });
     }
 
-    function updateBattleLog(message, type = 'info', timestamp="") {
+    function updateBattleLog(message, type = 'info', timestamp="", divide=false) {
         const battleLog = document.getElementById('battle-log');
 
         // Create a new log entry
@@ -655,6 +659,9 @@ function hideTurnTimer() {
 
         // Append the new log entry to the battle log
         battleLog.appendChild(logEntry);
+        // if(divide){
+        //   addDivider(battleLog)
+        // }
 
         // Scroll to the opponenttom of the log
         battleLog.scrollTop = battleLog.scrollHeight;

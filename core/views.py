@@ -505,14 +505,15 @@ def get_posts(request):
                 battle = Battle.objects.get(custom_id = feed_item['custom_id'])    
                 if battle not in feed.battles.all() and len(feed_data) <= feed_limit:
                     battle_data = battle_views._battle_data(player, battle)
-                    if battle.status == 'waiting_refree' and RefreeingProposal.objects.filter(player = player, battle = battle).exists():
-                        pass
-                    elif battle.status == 'waiting_refree' and len(RefreeingProposal.objects.filter(battle = battle)) > feed_limit:
-                        pass
-                    else:    
-
-                        feed_data.append(battle_data)
-                        feed.battles.add(battle)
+                    feed_data.append(battle_data)
+                    feed.battles.add(battle)
+                    # if battle.status == 'waiting_refree' and RefreeingProposal.objects.filter(player = player, battle = battle).exists():
+                    #     pass
+                    # elif battle.status == 'waiting_refree' and len(RefreeingProposal.objects.filter(battle = battle)) > feed_limit:
+                    #     pass
+                    # else:    
+                    #     feed_data.append(battle_data)
+                    #     feed.battles.add(battle)
             
             except Battle.DoesNotExist:
                 try:
