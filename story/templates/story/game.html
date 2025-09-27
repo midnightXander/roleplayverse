@@ -110,7 +110,10 @@
                 <span class="text-sm text-gray-600">Sponsorisé </span>
             </div>
             <div class="flex gap-4">
-                <img id="product-image" alt="{{affiliate_products.0.title}} Couverture" src="{{affiliate_products.0.image}}" class="h-24 min-w-32 object-cover rounded" />
+                <a onclick="adClick('{{affiliate_products.0.link}}')" target="_blank" href="{{affiliate_products.0.link}}">
+                    <img id="product-image" alt="{{affiliate_products.0.title}} Couverture" src="{{affiliate_products.0.image}}" class="h-24 min-w-32 object-cover rounded" />
+                </a>
+                
                 <div>
                     <h4 id="product-title" class="font-bold text-sm">{{affiliate_products.0.title}}</h4>
                     <p id="product-description" class="text-xs text-gray-500">{{affiliate_products.0.description}}</p>
@@ -298,11 +301,19 @@ function updateAdBanner(product){
     container.querySelector("#product-image").src = product.image
     container.querySelector("#product-title").textContent = product.title
     container.querySelector("#product-description").textContent = product.description
-    const a = container.querySelector("#product-link")
+    // const a = container.querySelector("#product-link")
+    // a.href = product.link
+    // a.onclick = function(){
+    //     adClick(product.link)
+    // }   
+    const linkElements = container.querySelectorAll('a')
+    linkElements.forEach((a)=>{
+    // a.href = adsterra.link
     a.href = product.link
     a.onclick = function(){
         adClick(product.link)
-    }   
+    }
+    })
 }
 
 function rotateAd(){

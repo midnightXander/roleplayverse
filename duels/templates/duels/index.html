@@ -60,7 +60,9 @@
                 <span class="text-sm text-gray-600">Sponsorisé </span>
             </div>
             <div class="flex gap-4">
+              <a onclick="adClick('{{affiliate_products.0.link}}')" target="_blank" href="{{affiliate_products.0.link}}">
                 <img id="product-image" alt="{{affiliate_products.0.title}} Couverture" src="{{affiliate_products.0.image}}" class="h-24 w-24 object-cover rounded" />
+              </a>
                 <div>
                     <h4 id="product-title" class="font-bold text-sm">{{affiliate_products.0.title}}</h4>
                     <p id="product-description" class="text-xs text-gray-500">{{affiliate_products.0.description}}</p>
