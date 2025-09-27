@@ -110,7 +110,7 @@
                 <span class="text-sm text-gray-600">Sponsorisé </span>
             </div>
             <div class="flex gap-4">
-                <img id="product-image" alt="{{affiliate_products.0.title}} Couverture" src="{{affiliate_products.0.image}}" class="h-24 w-24 object-cover rounded" />
+                <img id="product-image" alt="{{affiliate_products.0.title}} Couverture" src="{{affiliate_products.0.image}}" class="h-24 min-w-32 object-cover rounded" />
                 <div>
                     <h4 id="product-title" class="font-bold text-sm">{{affiliate_products.0.title}}</h4>
                     <p id="product-description" class="text-xs text-gray-500">{{affiliate_products.0.description}}</p>
@@ -306,31 +306,33 @@ function updateAdBanner(product){
 }
 
 function rotateAd(){
-    $.ajax({
-         url : "/store/ads/affiliate",
-            type : 'GET',
-            data : {
-                limit : 1,
-            },
-            beforeSend : function(){
-                //$('#loading-overlay').toggleClass('active')
-            },
-            success : function(res){
-                if(res.status == "success"){
-                    updateAdBanner(res.products[0])
-                }
-                else{
-                    console.log(res.message)
-                }
-            },
-            complete : function(){
-                //$('#loading-overlay').toggleClass('active')
-            },
-            error: function(jqXHR, textstatus, errorThrown){
-                console.log(textstatus, "error")
-            }
+    // $.ajax({
+    //      url : "/store/ads/affiliate",
+    //         type : 'GET',
+    //         data : {
+    //             limit : 1,
+    //         },
+    //         beforeSend : function(){
+    //             //$('#loading-overlay').toggleClass('active')
+    //         },
+    //         success : function(res){
+    //             if(res.status == "success"){
+    //                 updateAdBanner(res.products[0])
+    //             }
+    //             else{
+    //                 console.log(res.message)
+    //             }
+    //         },
+    //         complete : function(){
+    //             //$('#loading-overlay').toggleClass('active')
+    //         },
+    //         error: function(jqXHR, textstatus, errorThrown){
+    //             console.log(textstatus, "error")
+    //         }
 
-    })
+    // })
+    const product = affiliateProducts[Math.floor(Math.random() * affiliateProducts.length)]
+    updateAdBanner(product)
 
 }
 
@@ -380,7 +382,7 @@ function showAdPopup() {
     document.getElementById('adPopup').classList.remove('hidden');
 }
 
-showAdPopup()
+
 
 function hideAdPopup() {
    
@@ -411,7 +413,7 @@ function hideHowToPlayPopup(){
 
 function startAdRotation() {
     // rotateAd(); // Call once immediately
-    setInterval(rotateAd, 25000); // Then every 60 seconds
+    setInterval(rotateAd, 30000); // Then every 30 seconds
 }
 
 // Call this function once after DOM is ready
@@ -422,6 +424,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
     }
     startAdRotation();
+    showAdPopup()
 });
 
 </script>

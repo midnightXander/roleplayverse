@@ -5,6 +5,7 @@ from django.db.models import Case, When,F
 from django.urls import reverse
 from django.contrib.auth.models import User,auth
 from django.http import JsonResponse,HttpResponseRedirect
+from store.models import AffiliateProduct
 from users.models import Player,PlayerNotification,Family
 from django.contrib.auth.decorators import login_required
 from .models import *
@@ -46,6 +47,11 @@ def ad_click(request):
             'url' : f'{url}',
             'image' : f'{image}'
         }
+
+        product = AffiliateProduct.objects.filter(link = url).first()
+        if product:
+            product.clicks += 1
+            product.save()
 
         try:
             new_adclick = AdClick.objects.create(

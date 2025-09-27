@@ -48,12 +48,13 @@ class AffiliateProduct(models.Model):
     description = models.TextField()
     image = models.ImageField(upload_to='affiliate_product_images/')
     link = models.URLField()
+    clicks = models.PositiveIntegerField(default=0) 
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     views = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return self.title
+        return f"{self.title} : {self.clicks}"
     
     def save(self, *args, **kwargs):
         if not self.slug:  # Only generate slug if it doesn't already exist
