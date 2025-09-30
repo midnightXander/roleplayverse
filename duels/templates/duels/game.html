@@ -632,6 +632,7 @@ function hideTurnTimer() {
     )
 
     showLoadingScreen()
+    
 
     duelSocket.onmessage = function(e){
             const data = JSON.parse(e.data)
