@@ -94,16 +94,27 @@ def battle_verdict_prompt(rules, context, character, action, battle:Battle,actio
     """
 ]
 
-def story_character_background_prompt(character_data, language = "Francais"):
-    return [
-        f"""
+def story_character_background_prompt(character_data, isshinobi = True, language = "Francais"):
+
+    prompt = f"""
         Tu es un narrateur d'un univers Roleplay de Naruto. Décris l’histoire et l’origine d’un personnage nommé {character_data['name']}, issu du clan {character_data.get('origin')}, avec une affinité élémentaire {character_data.get('affinity')}. 
         genre : {character_data.get('gender')},
         jutsus de depart : {character_data.get('jutsus')},
-        physique : {character_data.get('description')},
+        description globale du personnage : {character_data.get('description')},
         traits et personalite : {character_data.get('personality')} 
         Fais une description immersive de son enfance, ses aspirations et sa situation actuelle, puis introduis un événement déclencheur pour son aventure. soit créatif dans la génération, le personnage pourrait tres bien etre un méchant qu'un gentille.
-        """,
+        """
+    if not isshinobi:
+        prompt = f"""
+            Tu es un narrateur d'un univers Roleplay de Naruto. Décris l’histoire et l’origine d’un personnage nommé {character_data['name']},
+            genre : {character_data.get('gender')},
+            description globale du personnage : {character_data.get('description')},
+            Le personnage n'est pas un shinobi, décris une histoire de civile suivant la description mais toute fois interessante, avec possibilité d'avoir des évenements aléatoire de vie réelle. Puis introduis une situation qui va le faire démarrer son histoire. Soit créatif et varié
+
+            """
+
+    return [
+        prompt,
         f""" Retourne le texte en  {language}""",
         """Retourne la reponse en format JSON : {"story":"histoire du personnage"}"""
     ]

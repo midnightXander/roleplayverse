@@ -61,6 +61,47 @@
       </div>
     </div>
 
+    <div id="storyType-screen" class="hidden screen space-y-6 animate-fade-in">
+      <h1 class="text-2xl font-semibold text-center text-orange-500">Type d'histoire</h1>
+      <div class="flex justify-center gap-8">
+          <!-- Male Option -->
+           <div>
+            <div 
+            class="storyType-option rounded-full w-32 h-32 bg-center bg-cover flex flex-col items-center justify-center bg-gray-800 text-white rounded-lg border-4 border-transparent hover:border-orange-500 cursor-pointer transition duration-300"
+            onclick="selectStoryType('shinobi')"
+            id="storyType-shinobi"
+            style="background-image: url(https://static0.thegamerimages.com/wordpress/wp-content/uploads/wm/2025/08/shinobiartofvengeancereviewcard.jpg?w=1600&h=900&fit=crop);"
+          >
+            <!-- <img src="https://i.pinimg.com/736x/c8/2a/d9/c82ad9d7a09b1ee23120d72a96c61bda.jpg" alt="Male" class="w-16 h-16 mb-2"> -->
+            <h1 class="font-semibold">Shinobi</h1>
+          </div>
+          <p class="text-sm text-gray-400">Pour une histoire avec des combats.</p>
+           </div>
+          
+          
+          <!-- Female Option -->
+          <div>
+            <div 
+            class="storyType-option bg-center rounded-full bg-cover w-32 h-32 flex flex-col items-center justify-center bg-gray-800 text-white rounded-lg border-4 border-transparent hover:border-orange-500 cursor-pointer transition duration-300"
+            onclick="selectStoryType('civilian')"
+            id="storyType-civilian"
+            style="background-image: url(https://lh4.googleusercontent.com/OUbaZpYBpP4OrsvbSlWWFHps51oXndpU08Qkd3I7rPoOXeVIevD8aP-FyAqGN63jo1PfScqufqX9hArS6CDPsKxwFyfLNQHlZTebBVKAaZU1IY7w1e7pGtY5_PiPpiT3cDZ6WdTXFxtsksnS74Agdw);"
+            >
+            <!-- <img src="https://www.shutterstock.com/image-vector/anime-style-samurai-girl-standing-600nw-2343598653.jpg" alt="Female" class="w-16 h-16 mb-2"> -->
+            <h3 class="font-semibold">Civile</h3>
+          </div>
+          <p class="text-sm text-gray-400">Pour une histoire de civile sans combats.</p>
+          </div>
+          
+          
+        </div>
+        <input type="hidden" id="storyTypeInput" name="story-type" value="">
+      <div class="text-center">
+        <button onclick="previousScreen(this)" class="mt-4 px-6 py-3 bg-gray-500 hover:bg-gray-600 rounded-full text-white shadow transition"><i class="fas fa-arrow-left mr-2"></i> Précédent </button>
+        <button onclick="nextScreen(this, 'storyType')" class="mt-4 px-6 py-3 bg-orange-600 hover:bg-orange-700 rounded-full text-white shadow transition">Suivant →</button>
+      </div>
+    </div>
+
     <!-- Screen 2: Choix du clan -->
     <div id="screen-2" class="hidden screen space-y-6 animate-fade-in">
       <h1 class="text-2xl font-semibold text-center text-orange-500">Origine du personnage</h1>
@@ -294,6 +335,7 @@
     let selectedJutsus = []
     let selectedTraits = []
     let avatar = ""
+    let isShinobi = true
 
     function showScreen(id) {
       document.querySelectorAll(".screen").forEach(e => e.classList.add('hidden'));
@@ -349,6 +391,13 @@
                 showJutsuWarning(false);
                 
                 }
+            if (validator === 'storyType') {
+                if (!isShinobi) {
+                    showScreen("description-screen")
+                    return;
+                }
+                
+                }    
 
         }
         // console.log(name,gender, description, origin, affinity)
@@ -377,7 +426,6 @@
 
     function generateAvatars(){
         description =  document.getElementById('description').value;
-        console.log(description)
         if(!description){
             showMyToast("Décris ton perosnnage")
             return
@@ -434,6 +482,21 @@
     });
 
       const selectedOption = document.getElementById(`gender-${gender}`);
+    selectedOption.classList.remove('border-transparent');
+    selectedOption.classList.add('border-orange-500');
+}
+
+function selectStoryType(type) {
+  // Update the hidden input value
+    document.getElementById('storyTypeInput').value = type;
+    isShinobi  = type == "shinobi";
+    // Remove active styles from all storyType options
+    document.querySelectorAll('.storyType-option').forEach(option => {
+        option.classList.remove('border-orange-500');
+        option.classList.add('border-transparent');
+    });
+
+    const selectedOption = document.getElementById(`storyType-${type}`);
     selectedOption.classList.remove('border-transparent');
     selectedOption.classList.add('border-orange-500');
 }
@@ -562,7 +625,7 @@ document.getElementById('jutsu-warning').classList.toggle('hidden', !show);
       case 'Lightning': return '⚡';
       case 'Wind': return '🌪️';
       case 'Earth': return '🪨';
-      default: return '';
+      default: return '🌀';
     }
   }
 
@@ -586,6 +649,7 @@ document.getElementById('jutsu-warning').classList.toggle('hidden', !show);
 
   function submitCharacterInfo(){
     
+    
     $.ajax({
             url : "/story/character/create",
             type : "POST",
@@ -599,12 +663,12 @@ document.getElementById('jutsu-warning').classList.toggle('hidden', !show);
                 traits : JSON.stringify(selectedTraits),
                 avatar : avatar,
                 jutsus : JSON.stringify(selectedJutsus),
+                isShinobi : isShinobi,
             },
             beforeSend: function(){
                 showScreen('loading-screen')
             },
-            success: function(res){
-              console.log(res)  
+            success: function(res){ 
               if(res.status == 'success'){
                     
                     // showCharacterInfoScreen({

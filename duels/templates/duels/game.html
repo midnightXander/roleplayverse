@@ -117,7 +117,16 @@ function hideToasts(){
 
 
 {% block content %}
+<style>
+    /* body {
+      /* background: radial-gradient(circle at top left, #1f2937, #0f172a); 
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1461%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='url(%26quot%3b%23SvgjsLinearGradient1462%26quot%3b)'%3e%3c/rect%3e%3cpath d='M76.77 0C118.41 27.76 108.03 93.33 140 93.33C172.31 93.33 163.05 28.19 205.33 0C233.05 -18.48 242.66 0 280 0C350 0 350 0 420 0C490 0 490 0 560 0C594.06 0 596.78 -9.76 628.11 0C666.78 12.05 665.16 43.61 700 43.61C730.02 43.61 725.03 10.22 757.83 0C795.03 -11.59 798.91 0 840 0C910 0 910 0 980 0C1050 0 1050 0 1120 0C1190 0 1190 0 1260 0C1330 0 1330 0 1400 0C1470 0 1505 -35 1540 0C1575 35 1540 70 1540 140C1540 210 1574.47 254.15 1540 280C1504.47 306.65 1462.96 277 1400 245C1325.22 207 1331.87 192.92 1264.52 140C1261.87 137.92 1261.84 135 1260 135C1258.52 135 1259.94 138.25 1257.88 140C1189.94 197.62 1192.92 203.59 1120 253.75C1091.17 273.59 1054.38 259.87 1054.38 280C1054.38 306.86 1079.64 326.37 1120 347.74C1182.45 380.81 1191.15 365.2 1260 388.89C1296.15 401.33 1294.85 404.79 1330 420C1364.85 435.08 1363.08 443.79 1400 449.47C1468.08 459.94 1500.43 421.07 1540 452.31C1570.43 476.34 1570.43 536.59 1540 560C1500.43 590.43 1470 560 1400 560C1330 560 1330 560 1260 560C1207.69 560 1193.04 582.21 1155.38 560C1123.04 540.93 1152.27 480.72 1120 477.44C1064.58 471.81 1047.22 506.24 980 542.18C970.01 547.52 976.39 558.63 965.59 560C906.39 567.54 902.8 560 840 560C770 560 770 560 700 560C630 560 630 560 560 560C533.24 560 506.47 572.08 506.47 560C506.47 541.74 537.27 532.47 560 499.33C585.28 462.47 602.5 456.43 602.5 420C602.5 395.89 584.47 378.25 560 378.25C522.18 378.25 516.02 394.79 477.93 420C446.02 441.12 455.15 461.59 420 470.91C356.19 487.84 336.63 447.06 280 472.5C237.47 491.61 261.07 535.37 221.67 560C191.07 579.12 180.83 560 140 560C101.57 560 96 574 63.14 560C26 544.18 16.4 536.73 0 500.37C-15.17 466.73 0 460.18 0 420C0 350 0 350 0 280C0 210 0 210 0 140C0 70 -24.79 45.21 0 0C13.59 -24.79 48.41 -18.9 76.77 0' stroke='rgba(78%2c 71%2c 66%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M560 114.55C554.89 114.55 551.25 127.87 551.25 140C551.25 146.96 555.11 152.73 560 152.73C565.57 152.73 572.17 147.34 572.17 140C572.17 128.25 565.35 114.55 560 114.55' stroke='rgba(189%2c 184%2c 180%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M420 263.53C400.93 263.53 380 266.01 380 280C380 302.25 403.17 336 420 336C434.84 336 443.33 304.64 443.33 280C443.33 268.4 432.59 263.53 420 263.53' stroke='rgba(189%2c 184%2c 180%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M0 31.11C23.84 31.11 42.61 85.55 85.22 140C112.61 175 108.89 210 140 210C178.28 210 187.02 179.62 224 140C257.02 104.62 245.97 94.03 280 60C315.97 24.03 318.62 19.45 364 0C388.62 -10.55 392 0 420 0C452.31 0 472.56 -22.05 484.62 0C510.84 47.95 515.04 79.35 496.56 140C482.73 185.38 465.97 191.09 420 212.06C357.69 240.5 342.69 213.83 280 238.82C257.48 247.8 266.66 260.99 249.57 280C196.66 338.85 199.64 344.12 140 394.55C116.86 414.12 113.3 411.42 84 420C43.3 431.92 35.53 435.56 0 435.56C-6.47 435.56 0 427.78 0 420C0 350 0 350 0 280C0 210 0 210 0 140C0 85.56 -18.77 31.11 0 31.11' stroke='rgba(78%2c 71%2c 66%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M648.26 140C671.83 117.9 674.13 120.49 700 100.98C766.95 50.49 766.36 48.72 833.91 0C836.36 -1.77 836.95 0 840 0C847 0 850.31 -5.63 854 0C896.21 64.37 911.77 65.3 931.8 140C949.31 205.3 912.42 219.09 929.09 280C936.52 307.16 957.15 295.02 980 316.13C1032.92 365.02 1080.63 375.01 1080.63 420C1080.63 456.22 1023.82 441.7 980 478.55C940.57 511.7 955.11 536.15 914.12 560C885.11 576.87 877.06 560 840 560C791.54 560 780.13 579.76 743.08 560C710.13 542.42 720.99 522.97 700 485.33C681.95 452.97 688.44 448.21 665 420C618.44 363.97 613.56 367.25 560 316.84C539.19 297.25 516.25 299.83 516.25 280C516.25 257.55 537.79 255.82 560 232.27C603.8 185.82 601.83 183.54 648.26 140' stroke='rgba(78%2c 71%2c 66%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M1028.2 140C1028.2 96.6 1075.02 46.67 1120 46.67C1163.34 46.67 1204.85 96.38 1204.85 140C1204.85 178.04 1163.1 210 1120 210C1074.77 210 1028.2 178.27 1028.2 140' stroke='rgba(189%2c 184%2c 180%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M1260 10C1254.5 4.08 1247.27 2.8 1247.27 0C1247.27 -2.2 1253.64 0 1260 0C1330 0 1330 0 1400 0C1470 0 1505 -35 1540 0C1575 35 1540 70 1540 140C1540 171.11 1560.82 199.62 1540 202.22C1490.82 208.37 1468.06 183.55 1400 157.5C1386.77 152.44 1387.23 150.34 1377.42 140C1317.23 76.59 1319.57 74.08 1260 10' stroke='rgba(189%2c 184%2c 180%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M131.76 560C131.76 533.59 135.76 500 140 500C144.25 500 148.75 533.78 148.75 560C148.75 563.78 144.38 560 140 560C135.88 560 131.76 563.59 131.76 560' stroke='rgba(78%2c 71%2c 66%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M1193.85 560C1193.85 530.14 1220.63 465.94 1260 465.94C1310.49 465.94 1373.58 533.43 1373.58 560C1373.58 580.46 1316.79 560 1260 560C1226.93 560 1193.85 577.17 1193.85 560' stroke='rgba(189%2c 184%2c 180%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M1425.45 560C1425.45 541.35 1502.25 490.77 1540 490.77C1559.53 490.77 1561.58 546.96 1540 560C1504.3 581.58 1425.45 575.96 1425.45 560' stroke='rgba(78%2c 71%2c 66%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M0 128.33C2.55 128.33 5.4 133.61 9.13 140C49.61 209.44 91.2 220.96 88.42 280C86.63 318.05 29.04 334.19 0 334.19C-15.17 334.19 0 307.1 0 280C0 210 0 210 0 140C0 134.17 -2.01 128.33 0 128.33' stroke='rgba(78%2c 71%2c 66%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M359.13 140C359.13 121.15 395.41 91.72 420 91.72C436.78 91.72 441.88 118.02 441.88 140C441.88 152.46 433.18 160.59 420 160.59C391.81 160.59 359.13 155.59 359.13 140' stroke='rgba(78%2c 71%2c 66%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M748.7 140C788.92 106.25 800.96 84.74 840 84.74C863.82 84.74 874.43 111.04 874.43 140C874.43 179.05 865.98 187.01 840 220.77C812.1 257.01 801.67 248.53 766.67 280C731.67 311.48 733.74 346.67 700 346.67C665.41 346.67 630 314.68 630 280C630 242.46 666.18 242.1 700 202.22C725.53 172.1 718.92 164.99 748.7 140' stroke='rgba(189%2c 184%2c 180%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M1085.57 140C1085.57 123.73 1103.13 105 1120 105C1136.25 105 1151.82 123.64 1151.82 140C1151.82 154.27 1136.16 166.25 1120 166.25C1103.04 166.25 1085.57 154.35 1085.57 140' stroke='rgba(189%2c 184%2c 180%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M1400 68.21C1361.97 68.21 1336.67 20.3 1336.67 0C1336.67 -13.81 1368.34 0 1400 0C1470 0 1540 -16.15 1540 0C1540 17.96 1463.63 68.21 1400 68.21' stroke='rgba(189%2c 184%2c 180%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M770 420C775.99 377.52 800.57 350 840 350C894.8 350 953.39 372.98 958.46 420C964.71 477.98 914.9 498.25 862.65 560C855.67 568.25 851.33 560 840 560C825.19 560 816.29 571.83 810.38 560C781.29 501.83 761.18 482.52 770 420' stroke='rgba(78%2c 71%2c 66%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M1232.31 560C1232.31 547.5 1243.52 520.63 1260 520.63C1281.14 520.63 1307.55 548.88 1307.55 560C1307.55 568.57 1283.78 560 1260 560C1246.15 560 1232.31 567.19 1232.31 560' stroke='rgba(78%2c 71%2c 66%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M1489.09 560C1489.09 551.71 1523.22 529.23 1540 529.23C1548.68 529.23 1549.59 554.2 1540 560C1524.13 569.59 1489.09 567.09 1489.09 560' stroke='rgba(189%2c 184%2c 180%2c 1)' stroke-width='2'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1461'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3clinearGradient x1='15.28%25' y1='-39.29%25' x2='84.72%25' y2='139.29%25' gradientUnits='userSpaceOnUse' id='SvgjsLinearGradient1462'%3e%3cstop stop-color='%230e2a47' offset='0'%3e%3c/stop%3e%3cstop stop-color='rgba(0%2c 0%2c 0%2c 1)' offset='1'%3e%3c/stop%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e");
 
+    /* background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1451%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='url(%26quot%3b%23SvgjsLinearGradient1452%26quot%3b)'%3e%3c/rect%3e%3cpath d='M1400 81.29C1350.99 55.3 1318.71 23.81 1318.71 0C1318.71 -16.84 1359.36 0 1400 0C1470 0 1501.92 -31.92 1540 0C1571.92 26.76 1571.36 99.14 1540 117.35C1501.36 139.78 1461.63 113.97 1400 81.29' stroke='rgba(255%2c 108%2c 0%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M140 76.71C104.85 108.78 101.34 105.39 68.92 140C31.34 180.11 19.35 226.15 0 226.15C-15.11 226.15 0 183.07 0 140C0 70 -35 35 0 0C35 -35 70 0 140 0C181.18 0 222.35 -16.21 222.35 0C222.35 22.15 181.57 38.78 140 76.71' stroke='rgba(255%2c 108%2c 0%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M252.68 140C254.13 120.55 261.35 116.26 280 108.89C345.01 83.2 349.56 76 420 73.89C489.56 71.81 504.57 120.66 560 100.51C606.19 83.72 580.72 30.52 623.23 0C650.72 -19.73 661.62 0 700 0C748.57 0 778.32 -28.66 797.14 0C824.29 41.34 796.22 70.1 791.94 140C787.65 210.1 805.89 219.74 780 280C759.92 326.72 740.36 317.38 700 353.96C663.13 387.38 642.34 377.22 625.53 420C601.86 480.24 642.09 510.75 619.04 560C609.33 580.75 589.52 560 560 560C490 560 490 560 420 560C388.89 560 379.29 577.93 357.78 560C309.29 519.59 330.21 485.86 280 443.33C247.57 415.86 194.81 449.67 192.5 420C188.45 368 251.32 354.2 267.27 280C281.41 214.2 247.76 206.11 252.68 140' stroke='rgba(255%2c 108%2c 0%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M932 140C932.45 70.1 883.02 44.67 898.33 0C907.02 -25.33 939.16 0 980 0C1036.54 0 1086.81 -28.72 1093.08 0C1102.09 41.28 1003.4 78.21 1010.55 140C1016.86 194.52 1061.17 192.58 1120 232.62C1164.02 262.58 1169 254.74 1216.25 280C1239 292.16 1238.13 307.45 1260 307.45C1281.88 307.45 1281.26 292.66 1303.75 280C1351.26 253.27 1348.87 245.99 1400 228.67C1466.99 205.99 1495.12 183.55 1540 200C1565.12 209.21 1540 240 1540 280C1540 333.34 1560.72 346.61 1540 386.67C1524.52 416.61 1467.59 402.36 1467.59 420C1467.59 438.12 1523.86 426.98 1540 458.18C1560.07 496.98 1568 537.09 1540 560C1505.78 588 1468.54 573.94 1415.56 560C1398.54 555.52 1416.94 530.69 1400 523.16C1339.16 496.12 1330.39 505.06 1260 490.86C1190.39 476.82 1190.51 472.58 1120 466.67C1050.51 460.84 1042.85 483.38 980 467.38C951.16 460.04 949.39 448.68 936.62 420C907.66 354.99 897.7 350.29 896.54 280C895.39 210.29 931.55 210.1 932 140' stroke='rgba(255%2c 108%2c 0%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M1540 65.88C1501.65 65.88 1425.13 17.64 1425.13 0C1425.13 -15.3 1503.5 -20.93 1540 0C1560.93 12.01 1559.08 65.88 1540 65.88' stroke='rgba(255%2c 108%2c 0%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M93.33 560C93.33 516.41 114.56 441 140 441C166.23 441 196.67 518.39 196.67 560C196.67 577.89 168.33 560 140 560C116.66 560 93.33 575.91 93.33 560' stroke='rgba(255%2c 108%2c 0%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M0 85.56C3.84 85.56 15.08 114.33 15.08 140C15.08 150.97 4.23 158.85 0 158.85C-3.31 158.85 0 149.43 0 140C0 112.78 -3.7 85.56 0 85.56' stroke='rgba(255%2c 108%2c 0%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M140 28.77C102.59 28.77 59.23 7.41 59.23 0C59.23 -6.98 99.62 0 140 0C155.44 0 170.88 -6.08 170.88 0C170.88 8.31 158.41 28.77 140 28.77' stroke='rgba(255%2c 108%2c 0%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M619.39 140C657.53 75.24 644.12 61.77 679.68 0C684.42 -8.23 689.84 0 700 0C712.86 0 722.64 -10.82 725.71 0C742.49 59.18 743.94 70.67 739.7 140C735.37 210.67 726.93 211.6 708.57 280C707.08 285.56 704.55 284.27 700 287.92C630.27 343.77 637.32 378.64 560 399C497.32 415.51 474.24 398.55 420 361.67C386.74 339.05 385 320.07 385 280C385 246.57 389.78 227.93 420 214.67C477.28 189.54 498.37 226.31 560 203.23C598.06 188.98 597.69 176.85 619.39 140' stroke='rgba(255%2c 108%2c 0%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M1540 14.41C1531.61 14.41 1514.87 3.86 1514.87 0C1514.87 -3.35 1532.01 -4.58 1540 0C1544.58 2.63 1544.17 14.41 1540 14.41' stroke='rgba(255%2c 108%2c 0%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M963.85 280C963.85 257.17 962.86 235.79 980 235.79C1017.6 235.79 1073.33 249.81 1073.33 280C1073.33 318.58 1011.87 373.33 980 373.33C957.13 373.33 963.85 325.94 963.85 280' stroke='rgba(255%2c 108%2c 0%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M1416.15 280C1416.15 258.01 1492.21 241.67 1540 241.67C1554.13 241.67 1540 260.84 1540 280C1540 305.56 1557.1 331.11 1540 331.11C1495.17 331.11 1416.15 302.73 1416.15 280' stroke='rgba(255%2c 108%2c 0%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M1187.74 420C1187.74 401.31 1223.22 376.08 1260 376.08C1300.83 376.08 1342.96 401.47 1342.96 420C1342.96 437.26 1301.18 447.65 1260 447.65C1223.57 447.65 1187.74 437.1 1187.74 420' stroke='rgba(255%2c 108%2c 0%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M466.67 560C466.67 527.46 528.78 452.31 560 452.31C583.88 452.31 576.87 513.37 576.87 560C576.87 567.22 568.43 560 560 560C513.34 560 466.67 581.31 466.67 560' stroke='rgba(255%2c 108%2c 0%2c 1)' stroke-width='2'%3e%3c/path%3e%3cpath d='M1493.33 560C1493.33 549.24 1525.71 521.82 1540 521.82C1549.05 521.82 1550.5 551.41 1540 560C1527.17 570.5 1493.33 568.33 1493.33 560' stroke='rgba(255%2c 108%2c 0%2c 1)' stroke-width='2'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1451'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3clinearGradient x1='15.28%25' y1='-39.29%25' x2='84.72%25' y2='139.29%25' gradientUnits='userSpaceOnUse' id='SvgjsLinearGradient1452'%3e%3cstop stop-color='%230e2a47' offset='0'%3e%3c/stop%3e%3cstop stop-color='rgba(0%2c 0%2c 0%2c 1)' offset='1'%3e%3c/stop%3e%3c/linearGradient%3e%3c/defs%3e%3c/svg%3e");
+     
+    background-size: cover;
+    } */
+  </style>
 <style>
     .fade-enter {
       opacity: 0;
@@ -145,9 +154,49 @@ function hideToasts(){
     transition: width 0.5s ease-in-out;
 }
   </style>
+<style>
+  .action-btn {
+    @apply flex flex-col items-center justify-center px-3 py-2 rounded-xl shadow-lg border-2 border-transparent transition-all duration-200 cursor-pointer relative;
+    min-width: 110px;
+    min-height: 80px;
+    background: linear-gradient(135deg, #23272f 60%, #1e293b 100%);
+    box-shadow: 0 4px 24px 0 rgba(255,140,0,0.10);
+    position: relative;
+    overflow: hidden;
+  }
+  .action-btn .chakra-cost {
+    @apply absolute top-2 right-2 text-xs font-bold px-2 py-0.5 rounded-full;
+    background: linear-gradient(90deg,#f59e42,#fbbf24);
+    color: #fff;
+    box-shadow: 0 2px 8px 0 rgba(255,140,0,0.15);
+  }
+  .action-btn .action-icon {
+    @apply mb-1;
+    font-size: 2rem;
+    filter: drop-shadow(0 2px 8px #fbbf24aa);
+    transition: transform 0.2s;
+  }
+  .action-btn .action-label {
+    @apply font-bold text-base tracking-wide;
+    color: #fff;
+    text-shadow: 0 2px 8px #0008;
+  }
+  .action-btn:hover, .action-btn:focus {
+    border-color: #f59e42;
+    background: linear-gradient(135deg, #2d3748 60%, #f59e42 100%);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 8px 32px 0 rgba(255,140,0,0.18);
+    z-index: 2;
+  }
+  .action-btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 8px 0 rgba(255,140,0,0.10);
+  }
+</style>
+
 
   <div class="mt-20 mb-8 h-screen p-4">
-    <div id="duelBattleApp" class="flex">
+    <div id="duelBattleApp" class="flex select-none">
 
     <div id="loading-screen" class="hidden h-full  w-full fade-enter-active animate-scaleIn">
     <div class="flex flex-col items-center mt-8 justify-center h-full space-y-6">
@@ -200,6 +249,7 @@ function hideToasts(){
           </div>
         </div>
 
+
         <div class="bg-gray-900 rounded-xl p-4 shadow-xl space-y-4">
           <div class="flex justify-between overflow-y-auto ">
             <div class="text-center">
@@ -224,8 +274,6 @@ function hideToasts(){
              <div id="player1-data" class="flex items-center gap-2 mt-4 bg-gray-800 px-4 py-2 rounded-full shadow border border-orange-500">
               <img id="player1-img" src="{{initiator_data.profile_picture}}" class="w-5 h-5 rounded-full border-2 object-cover border-orange-500" />  
                 <span id="player1-name" class="block max-w-32 text-orange-300 font-semibold truncate text-sm">{{initiator_data.display_name}}</span>
-                <!-- <span id="turn-timer" class="text-orange-400 font-bold text-lg">--</span>
-                <span class="text-orange-300 font-semibold text-sm">sec</span> -->
             </div>
               
             </div>
@@ -270,11 +318,132 @@ function hideToasts(){
           </div>
 
           <div class="text-center mt-4">
-            <button class="text-sm text-orange-600 hover:underline">Quitter le combat</button>
+            <button class="text-sm text-orange-600 hover:underline">Abandonner</button>
           </div>
         </div>
         
       </div>
+
+      <!-- REVAMPED BATTLE SCREEN -->
+       <!-- <div id="battle-screen" class="relative mx-auto md:max-w-3xl h-full w-full hidden fade-enter-active animate__fadeInLeftBig">
+  <!-- Animated/gradient/parallax background 
+  <div class="absolute inset-0 z-0 pointer-events-none p-4 rounded-2xl bg-gradient-to-br from-[#1e293b] via-[#0f172a] to-[#1e293b] animate-bgMove"></div>
+  
+  <!-- Arena Zone 
+  <div class="relative z-10 flex flex-col items-center justify-center h-full py-8">
+    <div class="flex justify-between w-full mb-6">
+      <!-- Player Panel 
+      <div class="player-panel bg-gradient-to-br from-blue-900/80 to-blue-700/60 rounded-2xl shadow-2xl p-4 flex flex-col items-center w-1/3 border-2 border-blue-400/50">
+        <img id="player-character-img" src="{% static 'images/loaders/img-loader.gif' %}" class="w-20 h-20 rounded-full border-4 border-blue-400 shadow-lg mb-2 animate__pulse" />
+        <div class="text-lg font-bold text-blue-200 mb-1" id="player-character">Naruto</div>
+        <div class="w-full mb-1">
+          <div class="flex justify-between text-xs text-blue-300">
+            <span>HP</span>
+            <span id="player-hp-count"><span>100</span>/200</span>
+          </div>
+          <div class="h-3 bg-blue-900 rounded-full overflow-hidden mt-1">
+            <div id="player-hp-bar" class="bg-green-400 h-full transition-all duration-500"></div>
+          </div>
+        </div>
+        <div class="w-full">
+          <div class="flex justify-between text-xs text-blue-300">
+            <span>Chakra</span>
+            <span id="player-chakra-count"><span>100</span>/100</span>
+          </div>
+          <div class="h-3 bg-blue-900 rounded-full overflow-hidden mt-1">
+            <div id="player-chakra-bar" class="bg-cyan-400 h-full transition-all duration-500"></div>
+          </div>
+        </div>
+        <div id="player1-data" class="flex items-center gap-2 mt-2">
+          <img id="player1-img" src="{{initiator_data.profile_picture}}" class="w-6 h-6 rounded-full border-2 object-cover border-blue-400" />
+          <span id="player1-name" class="text-blue-200 font-semibold truncate text-xs">{{initiator_data.display_name}}</span>
+        </div>
+      </div>
+
+      <!-- Arena Center (for future 3D/animation) 
+      <div class="arena-center flex flex-col items-center justify-center w-1/3">
+        <div class="arena-circle bg-gradient-to-br from-orange-400/30 to-yellow-200/10 rounded-full shadow-2xl w-8 h-8 flex items-center justify-center relative">
+          <!-- Placeholder for 3D/animated characters 
+          <span class="text-3xl text-orange-300 opacity-40">VS</span>
+        </div>
+        <div id="turn-timer-container" class="mt-4 flex justify-center items-center animate-scaleIn hidden">
+          <div class="flex items-center gap-2 bg-gray-800/80 px-4 py-2 rounded-full shadow border border-orange-500">
+            <svg class="w-5 h-5 text-orange-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+              <path stroke="currentColor" stroke-width="2" d="M12 6v6l4 2"/>
+            </svg>
+            <span class="text-orange-300 font-semibold text-sm">Temps restant :</span>
+            <span id="turn-timer" class="text-orange-400 font-bold text-lg">--</span>
+            <span class="text-orange-300 font-semibold text-sm">sec</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opponent Panel 
+      <div class="player-panel bg-gradient-to-br from-gray-800/80 to-gray-700/60 rounded-2xl shadow-2xl p-4 flex flex-col items-center w-1/3 border-2 border-orange-400/50">
+        <img id="opponent-character-img" src="{% static 'images/loaders/img-loader.gif' %}" class="w-20 h-20 rounded-full border-4 border-orange-400 shadow-lg mb-2 animate__pulse" />
+        <div class="text-lg font-bold text-orange-200 mb-1" id="opponent-character">Kakashi</div>
+        <div class="w-full mb-1">
+          <div class="flex justify-between text-xs text-orange-300">
+            <span>HP</span>
+            <span id="opponent-hp-count"><span>100</span>/200</span>
+          </div>
+          <div class="h-3 bg-gray-900 rounded-full overflow-hidden mt-1">
+            <div id="opponent-hp-bar" class="bg-green-400 h-full transition-all duration-500"></div>
+          </div>
+        </div>
+        <div class="w-full">
+          <div class="flex justify-between text-xs text-orange-300">
+            <span>Chakra</span>
+            <span id="opponent-chakra-count"><span>100</span>/100</span>
+          </div>
+          <div class="h-3 bg-gray-900 rounded-full overflow-hidden mt-1">
+            <div id="opponent-chakra-bar" class="bg-cyan-400 h-full transition-all duration-500"></div>
+          </div>
+        </div>
+        <div id="player2-data" class="flex items-center gap-2 mt-2">
+          <img id="player2-img" src="{{opponent_data.profile_picture}}" class="w-6 h-6 rounded-full border-2 object-cover border-orange-400" />
+          <span id="player2-name" class="text-orange-200 font-semibold truncate text-xs">{{opponent_data.display_name}}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Battle Log 
+    <div class="absolute left-1/2 -translate-x-1/2 bottom-4 w-[90%] md:w-2/3 z-20">
+      <div class="bg-black/60 rounded-xl p-3 text-sm h-48 overflow-y-auto shadow-lg border border-orange-400" id="battle-log"></div>
+    </div>
+
+    <!-- Action Buttons 
+    <div id="action-buttons" class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-10 w-full max-w-xl mx-auto z-30">
+      <!-- Buttons will be filled dynamically 
+    </div>
+
+    <div class="text-center mt-6">
+      <button class="text-sm text-orange-600 hover:underline">Abandonner</button>
+    </div>
+  </div>
+</div> -->
+
+<style>
+  @keyframes bgMove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
+  .animate-bgMove {
+    background-size: 200% 200%;
+    animation: bgMove 20s linear infinite;
+  }
+  .arena-circle {
+    box-shadow: 0 0 60px 10px rgba(255,140,0,0.15), 0 0 0 4px rgba(255,255,255,0.05) inset;
+  }
+  .player-panel {
+    min-width: 180px;
+    max-width: 220px;
+    min-height: 270px;
+  }
+</style>
+
+
     </div>
     
     <div class="mx-auto ml-8 mt-8" >
@@ -327,6 +496,22 @@ function hideToasts(){
 </div>
 
 {{ request.user.username|json_script:"username" }}
+<!-- <script src="https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded',()=>{
+    function playSound() {
+      // Play sound
+      const sound = new Howl({
+        src: ['https://archive.org/download/jamendo-097169/07-55.mp3'], // Example attack sound
+        volume: 0.5
+      });
+      sound.play();
+      console.log("Playing sound...")
+    }
+    playSound()
+  })
+</script> -->
   <script>
     const username = JSON.parse(document.getElementById('username').textContent);
 
@@ -621,9 +806,8 @@ function hideTurnTimer() {
 } 
     
 
-    function createActionbutton(action){
-        
-        const button = document.createElement('button');
+    function createActionbutton(action) {
+     const button = document.createElement('button');
         bgColor =  action.name == 'Attack' ? 'orange' : action.name == 'Defend' ? 'gray' : action.name == 'Focus' ? 'blue' : action.name == 'Heal' ? 'green' : action.name == 'Special' ? 'purple' : action.name == 'Clone' ? 'yellow' : action.name == 'Flee' ? 'indigo' : 'orange'; 
         button.className = `bg-gray-800 hover:bg-gray-900 flex items-center space-x-2 justify-center hover:scale-105 transition duration-300 border border-orange-500 text-white py-2 rounded-xl`;
         button.innerHTML = `
@@ -634,8 +818,41 @@ function hideTurnTimer() {
         
         button.onclick = () => checkChakra(action);
         return button;
+    
+    
+    //   const button = document.createElement('button');
+    // button.type = "button";
+    // button.className = "action-btn group";
+    // button.tabIndex = 0;
 
-    }
+    // // Chakra cost badge
+    // const chakraCost = document.createElement('span');
+    // chakraCost.className = "chakra-cost";
+    // chakraCost.textContent = action.chakraCost;
+
+    // // Icon
+    // const iconWrapper = document.createElement('span');
+    // iconWrapper.className = "action-icon";
+    // iconWrapper.innerHTML = action.icon;
+
+    // // Label
+    // const label = document.createElement('span');
+    // label.className = "action-label";
+    // label.textContent = String(action.name).charAt(0).toUpperCase() + action.name.slice(1, 12);
+
+    // // Append
+    // button.appendChild(chakraCost);
+    // button.appendChild(iconWrapper);
+    // button.appendChild(label);
+
+    // // Tooltip (optional)
+    // button.title = action.description || action.name;
+
+    // // Click handler
+    // button.onclick = () => checkChakra(action);
+
+    return button;
+}
 
     function fillActionButtons(actions){
         const actionButtonsContainer = document.getElementById('action-buttons');
@@ -834,3 +1051,7 @@ function quitBattle() {
 
 
 {% endblock content %}
+
+{% block adscripts %}
+
+{% endblock adscripts %}

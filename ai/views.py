@@ -189,7 +189,7 @@ def generate_avatar_images(request):
         gender = request.POST.get('gender')
         description = request.POST.get('description')
         prompt = f"""
-        generate three images of character avatar ideas for an adventure roleplaying game in the naruto verse.
+        generate two images of character avatar ideas for an adventure roleplaying game in the naruto verse.
         gender is {gender}, basic description is {description}.
         Each image should show atleast half of the body of the avatar, on every image, only one avatar should be represented so that 
         the player will be able to chose the one that he/she prefers

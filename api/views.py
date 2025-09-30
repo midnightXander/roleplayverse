@@ -333,9 +333,6 @@ class Challenge(APIView):
         else: data = {}    
         return JsonResponse(data)
 
-
-
-
 class CurrentPlayer(APIView):
     def get(self, request):
         user = request.user

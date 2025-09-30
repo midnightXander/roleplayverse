@@ -99,7 +99,6 @@ def index(request):
         #return redirect('/home')
         pass
     else:
-
         duels =  [ _duel_data(duel) for duel in  Duel.objects.filter(Q(duelfighter__player = player)).order_by('-started_at') ] if player else []
         affiliate_products = [  affiliate_product_data(product) for product in AffiliateProduct.objects.order_by("?") ] 
 

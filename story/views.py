@@ -86,9 +86,9 @@ def create_character(request):
         jutsus = json.loads(request.POST.get('jutsus'))
         description = request.POST.get('description')
         avatar = request.POST.get('avatar')
+        isShinobi = request.POST.get('isShinobi') == 'true'
         language = LANGUAGES.get(get_bowser_language(request), 'Francais')
         
-
         if player.battle_points >= 1:
             prompt_data = {
                 'name' : name,
@@ -101,7 +101,7 @@ def create_character(request):
                 'avatar' : avatar, 
             }
 
-            prompt = story_character_background_prompt(prompt_data, language)
+            prompt = story_character_background_prompt(prompt_data, isShinobi,language)
             res = generate_json_content(prompt)
 
             story = res.get('story')
