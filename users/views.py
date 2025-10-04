@@ -26,7 +26,10 @@ import string,random,secrets
 
 
 def test_template(request):
-    return render(request, "users/test_template.html")
+    player = get_player(request.user)
+    return render(request, "users/test_template.html", {
+        'player' : player
+    })
 
  
 

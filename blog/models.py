@@ -24,6 +24,8 @@ class BlogPost(models.Model):
     ],  default= 'fr')
     meta_description = models.TextField(blank=True, null=True, default = "")
 
+    views = models.IntegerField(default=0)
+
 
     def __str__(self):
         """string representation of the blog's post"""

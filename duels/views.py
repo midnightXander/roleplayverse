@@ -188,7 +188,7 @@ def join_random_duel(request):
         )
         found_duels = [ _duel_data(duel) for duel in single_fighter_duels]   
 
-        return JsonResponse({"status":'success', 'duel' : found_duels[0]})
+        return JsonResponse({"status":'success', 'duel' : found_duels[0] if len(found_duels) > 0 else ""})
     return JsonResponse({"status":'error'})    
 
 def duel(request, duel_code):

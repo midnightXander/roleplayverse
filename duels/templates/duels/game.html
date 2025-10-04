@@ -194,6 +194,57 @@ function hideToasts(){
   }
 </style>
 
+<style>
+  #action-slide .slide-message {
+    min-width: 260px;
+    max-width: 420px;
+    padding: 1.2rem 2.2rem;
+    font-size: 1.35rem;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(90deg, rgba(30,41,59,0.85) 0%, rgba(255,140,0,0.15) 50%, rgba(30,41,59,0.85) 100%);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(255,140,0,0.18);
+    border: 2px solid #f59e42;
+    text-align: center;
+    letter-spacing: 0.03em;
+    opacity: 0;
+    transform: translateY(-40px) scale(0.98);
+    transition: all 0.7s cubic-bezier(.4,0,.2,1);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    position: relative;
+  }
+  #action-slide .slide-message.slide-in {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  #action-slide .slide-message.slide-out {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+    transition: all 0.5s cubic-bezier(.4,0,.2,1);
+  }
+  /* Optional: glowing edge effect */
+  #action-slide .slide-message::before, #action-slide .slide-message::after {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 32px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  #action-slide .slide-message::before {
+    left: 0;
+    background: linear-gradient(90deg, rgba(255,140,0,0.18) 0%, transparent 100%);
+    border-radius: 1.5rem 0 0 1.5rem;
+  }
+  #action-slide .slide-message::after {
+    right: 0;
+    background: linear-gradient(270deg, rgba(255,140,0,0.18) 0%, transparent 100%);
+    border-radius: 0 1.5rem 1.5rem 0;
+  }
+</style>
+
 
   <div class="mt-20 mb-8 h-screen p-4">
     <div id="duelBattleApp" class="flex select-none">
@@ -424,6 +475,48 @@ function hideToasts(){
   </div>
 </div> -->
 
+<!-- Add this near your battle screen, e.g. just inside #duelBattleApp -->
+<div id="action-slide" class="fixed left-1/2 top-24 z-40 pointer-events-none" style="transform: translateX(-50%);">
+  <!-- Content will be injected by JS -->
+</div>
+
+
+
+<script>
+
+
+/**
+ * Slides in a battle action message, then fades out.
+ * @param {string} message - The action text to display.
+ * @param {number} [duration=1800] - How long to show before fading out (ms).
+ */
+function showActionSlide(message, duration = 1800) {
+  const container = document.getElementById('action-slide');
+  // Remove any previous message
+  container.innerHTML = '';
+  // Create message element
+  const msg = document.createElement('div');
+  msg.className = 'slide-message';
+  msg.textContent = message;
+  container.appendChild(msg);
+  console.log(message)
+  // Animate in
+  setTimeout(() => msg.classList.add('slide-in'), 10);
+  // Animate out after duration
+  setTimeout(() => {
+    msg.classList.remove('slide-in');
+    msg.classList.add('slide-out');
+    setTimeout(() => {
+      if (msg.parentNode) msg.parentNode.removeChild(msg);
+    }, 600);
+  }, duration);
+}
+
+// Example usage:
+// showActionSlide("Naruto utilise Rasengan !");
+// showActionSlide("Sasuke se défend !");
+</script>
+
 <style>
   @keyframes bgMove {
     0% { background-position: 0% 50%; }
@@ -632,7 +725,7 @@ function hideTurnTimer() {
     )
 
     showLoadingScreen()
-    
+
 
     duelSocket.onmessage = function(e){
             const data = JSON.parse(e.data)
@@ -909,6 +1002,7 @@ function hideTurnTimer() {
                 // Hide loading spinner or overlay
                 // document.getElementById('battle-log').innerHTML = data.battle_log;
                 // console.log(data)
+                
 
 
                 if (data.status == 'fallback'){
@@ -1008,8 +1102,8 @@ function hideTurnTimer() {
                     goToBattleScreen()
 
                 }, 2000);
-                //goToBattleScreen() // 2 seconds delay for the opponent selection screen
                 
+                showActionSlide("Naruto utilise Rasengan !");
 
             },
             error: function(xhr, status, error) {

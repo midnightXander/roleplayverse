@@ -31,6 +31,12 @@
                     <span class="text-sm text-[#5A0B29] font-medium">{{post.category}}</span>
                     <span class="text-sm text-gray-500">{{post.date_added |date:'M d, Y'}}</span>
                 </div>
+                {% if is_moderator %}
+                <div class="mt-2">
+                    <span class="text-sm text-gray-500">Views: {{ post.views }}</span>
+                </div>
+                {% endif %}
+                
                 </div>
              {% empty %}
                 <div>No posts</div>

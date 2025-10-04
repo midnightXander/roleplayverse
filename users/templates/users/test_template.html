@@ -1,724 +1,312 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shinobi Chronicles - Home</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        body {
-            background-color: #1a202c;
-            color: #e2e8f0;
-            font-family: 'Nunito';
-        }
-        .post {
-            transition: transform 0.3s ease-in-out;
-        }
-        .post:hover {
-            transform: translateY(-5px);
-        }
-        .like-button.liked {
-            color: #ed8936;
-        }
-        .comment-form {
-            display: none;
-        }
-        .comment-form.active {
-            display: block;
-        }
-        .sidebar {
-            height: calc(100vh - 4rem);
-            overflow-y: auto;
-        }
-        .sidebar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .sidebar::-webkit-scrollbar-thumb {
-            background-color: #4a5568;
-            border-radius: 3px;
-        }
-        .sidebar-right::-webkit-scrollbar {
-            width: 6px;
-        }
-        .sidebar-right::-webkit-scrollbar-thumb {
-            background-color: #4a5568;
-            border-radius: 3px;
-        }
-        .sidebar-left::-webkit-scrollbar {
-            width: 6px;
-        }
-        .sidebar-left::-webkit-scrollbar-thumb {
-            background-color: #4a5568;
-            border-radius: 3px;
-        }
-        .post-image {
-            max-height: 300px;
-            object-fit: cover;
-        }
-        
-        @media (min-width: 768px) {
-            .sidebar-left {
-                position: fixed;
-                top: 7rem;
-                left: 1rem;
-                width: 25%;
-                max-width: 300px;
-            }
-            .sidebar-right {
-                position: fixed;
-                top: 7rem;
-                right: 1rem;
-                width: 25%;
-                max-width: 300px;
-            }
-            .main-content {
-                margin-left: calc(25% + 1rem);
-                margin-right: calc(25% + 1rem);
-            }
-        }
-        
-        @media (max-width: 767px) {
-            .sidebar-left {
-                position: fixed;
-                top: 4rem;
-                left: -100%;
-                width: 80%;
-                max-width: 300px;
-                z-index: 40;
-                transition: left 0.3s ease-in-out;
-            }
-            .sidebar-left.active {
-                left: 0;
-            }
-            .sidebar-right{
-                position: static;
-                width: 100%;
-                /* max-height: 300px; */
-                /* margin-bottom: 1rem; */
-                display: flex;
-                flex-direction: row;
-                overflow-x: auto;
-                
-            }
-            .sidebar-left.active {
-                left: 0;
-            }
-            .sidebar-right {
-                position: static;
-                width: 100%;
-                margin-bottom: 1rem;
-            }
-            .main-content {
-                margin-left: 0;
-                margin-right: 0;
-            }
-            
-            .mobile-scroll-container {
-                display: flex;
-                overflow-x: auto;
-                padding-bottom: 1rem;
-            }
-            .mobile-scroll-item {
-                flex: 0 0 auto;
-                width: 280px;
-                margin-right: 1rem;
-            }
-            .mobile-scroll-container::-webkit-scrollbar {
-                height: 6px;
-            }
-            .mobile-scroll-container::-webkit-scrollbar-thumb {
-                background-color: #4a5568;
-                border-radius: 3px;
-            }
-            .sidebar-desktop{
-                display: none;
-            }
-        
-            .main-content {
-                margin-left: 0;
-                margin-right: 0;
-            }
-        }
-        
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 30;
-            display: none;
-        }
-        
-        .overlay.active {
-            display: block;
-        }
+{% extends "core/base.html" %}
 
 
-        /* bg-gray-700 rgba(55,65,81,var(--tw-bg-opacity)) */
-    </style>
-</head>
-<body>
-    <!-- Profile Picture Upload Modal -->
-<div id="uploadModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-    <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
-        <h2 class="text-2xl font-bold mb-4">Upload Profile Picture</h2>
-        <form id="uploadForm" class="space-y-4">
-            <div class="flex items-center justify-center w-full">
-                <label for="pictureUpload" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-600 border-dashed rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-600 transition duration-300">
-                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                        <i class="fas fa-cloud-upload-alt text-4xl mb-3"></i>
-                        <p class="mb-2 text-sm"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                        <p class="text-xs text-gray-400">PNG, JPG or GIF (MAX. 800x800px)</p>
-                    </div>
-                    <input id="pictureUpload" type="file" class="hidden" accept="image/*" />
-                </label>
-            </div>
-            <div id="imagePreview" class="hidden">
-                <img id="previewImage" src="" alt="Preview" class="max-w-full h-auto rounded-lg">
-            </div>
-            <div class="flex justify-between">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
-                    <i class="fas fa-upload mr-2"></i>Upload
-                </button>
-                <button id="cancelUpload" type="button" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">
-                    <i class="fas fa-times mr-2"></i>Cancel
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-    <button id="menuToggle" class="md:hidden text-white">
-                <i class="fas fa-bars"></i>
-    </button>
-    
+{% block content %}
+<style>
+  
+</style>
+<main    class="container text-white min-h-screen flex items-center justify-center">
+<button onclick="queueActionSlide('Naruto utilise Rasengan !')">
+  click me  
+</button>
+  <!-- <div class="arena-circle bg-gradient-to-br from-orange-400/30 to-yellow-200/10 rounded-full shadow-2xl w-32 h-32 flex items-center justify-center relative">
+  <canvas id="battle-3d-canvas" width="200" height="200" class="absolute inset-0 w-full h-full"></canvas>
+  
+</div> -->
 
-    <!-- Overlay -->
-    <div id="overlay" class="overlay"></div>
+<!-- Add this near your battle screen, e.g. just inside #duelBattleApp -->
+ <div id="action-slide-overlay" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+    <div id="action-slide" class="fixed left-1/2 top-1/2 z-40 pointer-events-none" style="transform: translateX(-50%);">
+  <!-- Content will be injected by JS -->
+  </div>
+ </div>
 
-    <!-- Main content -->
-    <div class="container mx-auto mt-24 px-4 flex flex-col md:flex-row">
-        <!-- Left Sidebar -->
-        <aside class="sidebar-left rounded-lg p-4">
-            <div class="mb-4">
-                <img src="https://placekitten.com/100/100" alt="Current Player" class="w-20 h-20 rounded-full mx-auto">
-                <h3 class="text-center font-bold mt-2">Naruto Uzumaki</h3>
-                <p class="text-center text-sm">Level: 30 | Rank: Jounin</p>
-            </div>
-            <ul class="space-y-2">
-                <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-600 rounded"><i class="fas fa-users mr-2"></i>Families</a></li>
-                <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-600 rounded"><i class="fas fa-star mr-2"></i>Favorites</a></li>
-                <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-600 rounded"><i class="fas fa-calendar-alt mr-2"></i>Events</a></li>
-                <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-600 rounded"><i class="fas fa-fist-raised mr-2"></i>Battle Points</a></li>
-                <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-600 rounded"><i class="fas fa-trophy mr-2"></i>Rankings</a></li>
-                <li><a href="#" class="flex items-center py-2 px-4 hover:bg-gray-600 rounded"><i class="fas fa-book mr-2"></i>Tutorials</a></li>
-            </ul>
-        </aside>
 
-        <!-- Right Sidebar (for mobile) -->
-        <aside class="md:hidden sidebar-right  rounded-lg p-4 mb-4">
-            <div class="mobile-scroll-container">
-                <!-- <div class="mobile-scroll-item bg-gray-600 rounded p-4 mb-4">
-                    <h3 class="font-bold mb-2">Family Group Chat</h3>
-                    <div class="bg-gray-500 rounded p-2 flex items-center">
-                        <img src="https://placekitten.com/50/50" alt="Family Avatar" class="w-10 h-10 rounded-full mr-2">
-                        <div>
-                            <h4 class="font-bold">Uzumaki Clan</h4>
-                            <p class="text-sm text-gray-300 truncate">Kushina: Don't forget the clan meeting tonight!</p>
-                        </div>
-                    </div>
-                </div> -->
-                <div class="mobile-scroll-item bg-gray-600 rounded p-4 mb-4">
-                    <h3 class="font-bold mb-2">Top Ranked Players</h3>
-                    <ul class="space-y-2">
-                        <li class="flex items-center">
-                            <img src="https://placekitten.com/40/40" alt="Sasuke" class="w-10 h-10 rounded-full mr-2">
-                            <div class="flex-grow">
-                                <span class="font-bold">1. Sasuke Uchiha</span>
-                                <p class="text-sm text-gray-300">Rank: S</p>
-                            </div>
-                            <button class="bg-orange-500 text-xs px-2 py-1 rounded">Challenge</button>
-                        </li>
-                        <li class="flex items-center">
-                            <img src="https://placekitten.com/41/41" alt="Sakura" class="w-10 h-10 rounded-full mr-2">
-                            <div class="flex-grow">
-                                <span class="font-bold">2. Sakura Haruno</span>
-                                <p class="text-sm text-gray-300">Rank: A</p>
-                            </div>
-                            <button class="bg-orange-500 text-xs px-2 py-1 rounded">Challenge</button>
-                        </li>
-                    </ul>
-                </div>
-                <div class="mobile-scroll-item bg-gray-600 rounded p-4 mb-4">
-                    <h3 class="font-bold mb-2">Recent Challenges</h3>
-                    <ul class="space-y-2">
-                        <li class="flex justify-between items-center">
-                            <span>Rock Lee</span>
-                            <div>
-                                <button class="bg-green-500 text-xs px-2 py-1 rounded mr-1">Accept</button>
-                                <button class="bg-red-500 text-xs px-2 py-1 rounded">Refuse</button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="mobile-scroll-item bg-gray-600 rounded p-4">
-                    <h3 class="font-bold mb-2">Recent Events</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="block py-1 px-2 hover:bg-gray-500 rounded">Chunin Exams</a></li>
-                        <li><a href="#" class="block py-1 px-2 hover:bg-gray-500 rounded">Village Festival</a></li>
-                    </ul>
-                </div>
-            </div>
+<audio
+id="background-sound"
+ loop  
+>
+<source src="/static/audio/duels/16.ogg" type="audio/ogg">
+Your browser does not support adio
+</audio>
 
-        </aside>
+<audio id="sword-sound">
+<source src="/static/audio/duels/sword.mp3" type="audio/mp3">
+Your browser does not support adio
+</audio>
 
-        <!-- Main Feed -->
-        <main class="w-full md:w-1/2 px-4 main-content">
-            <!-- <div id="refereeTestPart2" class=" bg-gray-700 rounded-lg p-6">
-                <h2 class="text-2xl font-bold mb-4 text-indigo-300">Referee Test - Part 2</h2>
-                
-                <div class="mb-6">
-                    <p class="text-gray-300 mb-4">Analyze the battle screenshot below and provide your verdict:</p>
-                    <img id="battleScreenshot" src="https://wallpaperaccess.com/full/477723.jpg" alt="Battle Screenshot" class="w-full max-w-2xl mx-auto rounded-lg shadow-lg mb-4">
-                </div>
-                
-                <div class="mb-6">
-                    <label for="verdictInput" class="block text-indigo-200 text-lg font-semibold mb-2">Your Verdict:</label>
-                    <textarea id="verdictInput" rows="6" class="w-full bg-gray-800 text-white rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Enter your verdict here..."></textarea>
-                </div>
-                
-                <div class="flex justify-between items-center">
-                    <button id="prevQuestionBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition duration-300">
-                        Previous Question
-                    </button>
-                    <button id="submitVerdictBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-300">
-                        Submit Verdict
-                    </button>
-                </div>
-            </div> -->
 
-            <!-- Create post section -->
-            <div class="bg-gray-700 rounded-lg p-4 mb-8">
-                <form id="createPostForm" class="flex flex-col">
-                    <textarea id="postContent" class="bg-gray-600 text-white p-2 rounded-lg mb-2" rows="3" placeholder="Share your ninja way..."></textarea>
-                    <div class="flex justify-between items-center">
-                        <label for="imageUpload" class="cursor-pointer bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-300">
-                            <i class="fas fa-image mr-2"></i>Add Image
-                        </label>
-                        <input type="file" id="imageUpload" accept="image/*" class="hidden">
-                        <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition duration-300">Post</button>
-                    </div>
-                </form>
-            </div>
+<style>
+  #action-slide .slide-message {
+    min-width: 260px;
+    max-width: 420px;
+    padding: 1.2rem 2.2rem;
+    font-size: 1.35rem;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(90deg, rgba(30,41,59,0.85) 0%, rgba(255,140,0,0.15) 50%, rgba(30,41,59,0.85) 100%);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(255,140,0,0.18);
+    border: 2px solid #f59e42;
+    text-align: center;
+    letter-spacing: 0.03em;
+    opacity: 0;
+    transform: translateY(-40px) scale(0.98);
+    transition: all 0.7s cubic-bezier(.4,0,.2,1);
+    backdrop-filter: blur(4px);
+    position: relative;
+  }
+  #action-slide .slide-message.slide-in {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  #action-slide .slide-message.slide-out {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+    transition: all 0.5s cubic-bezier(.4,0,.2,1);
+  }
+  /* Optional: glowing edge effect */
+  #action-slide .slide-message::before, #action-slide .slide-message::after {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 32px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  #action-slide .slide-message::before {
+    left: 0;
+    background: linear-gradient(90deg, rgba(255,140,0,0.18) 0%, transparent 100%);
+    border-radius: 1.5rem 0 0 1.5rem;
+  }
+  #action-slide .slide-message::after {
+    right: 0;
+    background: linear-gradient(270deg, rgba(255,140,0,0.18) 0%, transparent 100%);
+    border-radius: 0 1.5rem 1.5rem 0;
+  }
+</style>
 
-            <!-- Posts feed -->
-            <div id="postsFeed" class="space-y-8">
-                <!-- Posts will be dynamically added here -->
-            </div>
+<script>
+/**
+ * Slides in a battle action message, then fades out.
+ * @param {string} message - The action text to display.
+ * @param {number} [duration=1800] - How long to show before fading out (ms).
+ */
+function showActionSlide(message, duration = 1800) {
+  const overlay = document.getElementById('action-slide-overlay');
+  overlay.classList.remove('hidden')
+  const container = document.getElementById('action-slide');
+  // Remove any previous message
+  container.innerHTML = '';
+  // Create message element
+  const msg = document.createElement('div');
+  msg.className = 'slide-message';
+  msg.textContent = message;
+  container.appendChild(msg);
 
-            <!-- Loading indicator -->
-            <div id="loadingIndicator" class="text-center py-4 hidden">
-                <i class="fas fa-spinner fa-spin"></i> Loading more posts...
-            </div>
-        </main>
+  const sound = document.getElementById("sword-sound")
+  console.log(sound)
+  sound.play();
+  console.log("swording...")
+  // Animate in
+  setTimeout(() => msg.classList.add('slide-in'), 10);
+  // Animate out after duration
+  setTimeout(() => {
+    msg.classList.remove('slide-in');
+    msg.classList.add('slide-out');
+    //overlay.classList.add('hidden')
+    setTimeout(() => {
+      if (msg.parentNode) msg.parentNode.removeChild(msg);
+      overlay.classList.add('hidden')
+    }, 600);
+  }, duration);
+}
 
-        <!-- Right Sidebar (for desktop) -->
-        <aside class="hidden md:block  sidebar-right rounded-lg p-4 sidebar-desktop">
-            <!-- ... (content same as mobile right sidebar) ... -->
-            <div class="mb-4">
-                <h3 class="font-bold mb-2">Family Group Chat</h3>
-                <div class=" rounded p-2 flex items-center">
-                    <img src="https://placekitten.com/50/50" alt="Family Avatar" class="w-10 h-10 rounded-full mr-2">
-                    <div>
-                        <h4 class="font-bold">Uzumaki Clan</h4>
-                        <p class="text-sm text-gray-300 truncate">Kushina: Don't forget the clan meeting tonight!</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mb-4">
-                <h3 class="font-bold mb-2">Top Ranked Players</h3>
-                <ul class="space-y-2">
-                    <li class="flex justify-between items-center">
-                        <span>1. Sasuke Uchiha</span>
-                        <button class="bg-orange-500 text-xs px-2 py-1 rounded">Challenge</button>
-                    </li>
-                    <li class="flex justify-between items-center">
-                        <span>2. Sakura Haruno</span>
-                        <button class="bg-orange-500 text-xs px-2 py-1 rounded">Challenge</button>
-                    </li>
-                </ul>
-            </div>
-            <div class="mb-4">
-                <h3 class="font-bold mb-2">Recent Challenges</h3>
-                <ul class="space-y-2">
-                    <li class="flex justify-between items-center">
-                        <span>Rock Lee</span>
-                        <div>
-                            <button class="bg-green-500 text-xs px-2 py-1 rounded mr-1">Accept</button>
-                            <button class="bg-red-500 text-xs px-2 py-1 rounded">Refuse</button>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <h3 class="font-bold mb-2">Recent Events</h3>
-                <ul class="space-y-2">
-                    <li><a href="#" class="block py-1 px-2 hover:bg-gray-600 rounded">Chunin Exams</a></li>
-                    <li><a href="#" class="block py-1 px-2 hover:bg-gray-600 rounded">Village Festival</a></li>
-                </ul>
-            </div>
-        </aside>
-    </div>
+// Example usage:
+//showActionSlide("Naruto utilise Rasengan !");
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-    <script>
-        // ... (previous JavaScript code) ...
 
-        // Menu toggle functionality
-        const menuToggle = document.getElementById('menuToggle');
-        const sidebarLeft = document.querySelector('.sidebar-left');
-        const overlay = document.getElementById('overlay');
+// showActionSlide("Sasuke se défend !");
+// ...existing code...
 
-        menuToggle.addEventListener('click', () => {
-            sidebarLeft.classList.add('bg-gray-600');
-            sidebarLeft.classList.toggle('active');
-            
-        });
+// Action Slide Queue System
+const actionSlideQueue = [];
+let actionSlideActive = false;
 
-        overlay.addEventListener('click', () => {
-            sidebarLeft.classList.remove('active');
-            overlay.classList.remove('active');
-        });
+/**
+ * Queue a message to be shown in the action slide.
+ * @param {string} message
+ * @param {number} [duration=1800]
+ */
+function queueActionSlide(message, duration = 1800) {
+  actionSlideQueue.push({ message, duration });
+  processActionSlideQueue();
+}
 
-        // Close sidebar when window is resized to desktop view
-        window.addEventListener('resize', () => {
-            if (window.innerWidth >= 768) {
-                sidebarLeft.classList.remove('active');
-                overlay.classList.remove('active');
-            }
-        });
-    </script>
-    <script>
-        // Sample posts data
-        let posts = [
-            {
-                id: 1,
-                author: "Naruto Uzumaki",
-                avatar: "https://placekitten.com/100/100",
-                content: "Just mastered a new jutsu! Can't wait to show it off in the next battle. Believe it! 🍥🍜",
-                image: "https://wallpaperaccess.com/full/477723.jpg",
-                likes: 42,
-                comments: [
-                    { author: "Sasuke Uchiha", content: "Hn. Don't get too confident, loser." },
-                    { author: "Sakura Haruno", content: "That's amazing, Naruto! 🌸" }
-                ]
-            },
-            {
-                id: 2,
-                author: "Kakashi Hatake",
-                avatar: "https://placekitten.com/101/101",
-                content: "Remember, teamwork is essential for any successful mission. Also, has anyone seen my latest Icha Icha book? 📚🥷",
-                likes: 78,
-                comments: [
-                    { author: "Might Guy", content: "Ah, my eternal rival! Always with your nose in those books!" },
-                    { author: "Iruka Umino", content: "Kakashi-sensei, please set a better example for the students... 😓" }
-                ]
-            },
-            {
-                id: 2,
-                author: "Kakashi Hatake",
-                avatar: "https://placekitten.com/101/101",
-                content: "Remember, teamwork is essential for any successful mission. Also, has anyone seen my latest Icha Icha book? 📚🥷",
-                likes: 78,
-                comments: [
-                    { author: "Might Guy", content: "Ah, my eternal rival! Always with your nose in those books!" },
-                    { author: "Iruka Umino", content: "Kakashi-sensei, please set a better example for the students... 😓" }
-                ]
-            },
-            {
-                id: 2,
-                author: "Kakashi Hatake",
-                avatar: "https://placekitten.com/101/101",
-                content: "Remember, teamwork is essential for any successful mission. Also, has anyone seen my latest Icha Icha book? 📚🥷",
-                likes: 78,
-                comments: [
-                    { author: "Might Guy", content: "Ah, my eternal rival! Always with your nose in those books!" },
-                    { author: "Iruka Umino", content: "Kakashi-sensei, please set a better example for the students... 😓" }
-                ]
-            },
-            {
-                id: 2,
-                author: "Kakashi Hatake",
-                avatar: "https://placekitten.com/101/101",
-                content: "Remember, teamwork is essential for any successful mission. Also, has anyone seen my latest Icha Icha book? 📚🥷",
-                likes: 78,
-                comments: [
-                    { author: "Might Guy", content: "Ah, my eternal rival! Always with your nose in those books!" },
-                    { author: "Iruka Umino", content: "Kakashi-sensei, please set a better example for the students... 😓" }
-                ]
-            },
-            {
-                id: 2,
-                author: "Kakashi Hatake",
-                avatar: "https://placekitten.com/101/101",
-                content: "Remember, teamwork is essential for any successful mission. Also, has anyone seen my latest Icha Icha book? 📚🥷",
-                likes: 78,
-                comments: [
-                    { author: "Might Guy", content: "Ah, my eternal rival! Always with your nose in those books!" },
-                    { author: "Iruka Umino", content: "Kakashi-sensei, please set a better example for the students... 😓" }
-                ]
-            },
-            {
-                id: 2,
-                author: "Kakashi Hatake",
-                avatar: "https://placekitten.com/101/101",
-                content: "Remember, teamwork is essential for any successful mission. Also, has anyone seen my latest Icha Icha book? 📚🥷",
-                likes: 78,
-                comments: [
-                    { author: "Might Guy", content: "Ah, my eternal rival! Always with your nose in those books!" },
-                    { author: "Iruka Umino", content: "Kakashi-sensei, please set a better example for the students... 😓" }
-                ]
-            },
-            {
-                id: 2,
-                author: "Kakashi Hatake",
-                avatar: "https://placekitten.com/101/101",
-                content: "Remember, teamwork is essential for any successful mission. Also, has anyone seen my latest Icha Icha book? 📚🥷",
-                likes: 78,
-                comments: [
-                    { author: "Might Guy", content: "Ah, my eternal rival! Always with your nose in those books!" },
-                    { author: "Iruka Umino", content: "Kakashi-sensei, please set a better example for the students... 😓" }
-                ]
-            },
-            {
-                id: 2,
-                author: "Kakashi Hatake",
-                avatar: "https://placekitten.com/101/101",
-                content: "Remember, teamwork is essential for any successful mission. Also, has anyone seen my latest Icha Icha book? 📚🥷",
-                likes: 78,
-                comments: [
-                    { author: "Might Guy", content: "Ah, my eternal rival! Always with your nose in those books!" },
-                    { author: "Iruka Umino", content: "Kakashi-sensei, please set a better example for the students... 😓" }
-                ]
-            },
-        ];
+/**
+ * Internal function to process the queue.
+ */
+function processActionSlideQueue() {
+  if (actionSlideActive || actionSlideQueue.length === 0) return;
+  actionSlideActive = true;
+  const { message, duration } = actionSlideQueue.shift();
+  showActionSlide(message, duration);
+  setTimeout(() => {
+    actionSlideActive = false;
+    processActionSlideQueue();
+  }, duration + 700); // Wait for fade out transition
+}
 
-        // Function to create a post element
-        function createPostElement(post) {
-            const postElement = document.createElement('div');
-            postElement.className = 'post bg-gray-700 rounded-lg p-4';
-            postElement.innerHTML = `
-                <div class="flex items-center mb-4">
-                    <img src="${post.avatar}" alt="${post.author}" class="w-10 h-10 rounded-full mr-4">
-                    <h3 class="font-bold">${post.author}</h3>
-                </div>
-                <p class="mb-4">${post.content}</p>
-                ${post.image ? `<img src="${post.image}" alt="Post image" class="w-full rounded-lg mb-4 post-image">` : ''}
-                <div class="flex items-center justify-between">
-                    <button class="like-button flex items-center" data-post-id="${post.id}">
-                        <i class="far fa-heart mr-2"></i>
-                        <span class="like-count">${post.likes}</span>
-                    </button>
-                    <button class="comment-button flex items-center">
-                        <i class="far fa-comment mr-2"></i>
-                        <span>${post.comments.length}</span>
-                    </button>
-                </div>
-                <div class="comments mt-4">
-                    ${post.comments.map(comment => `
-                        <div class="comment bg-gray-600 rounded p-2 mb-2">
-                            <strong>${comment.author}:</strong> ${comment.content}
-                        </div>
-                    `).join('')}
-                </div>
-                <form class="comment-form mt-4">
-                    <input type="text" class="bg-gray-600 text-white p-2 rounded w-full" placeholder="Add a comment...">
-                </form>
-            `;
-            return postElement;
-        }
 
-        // Function to render posts
-        function renderPosts() {
-            const postsFeed = document.getElementById('postsFeed');
-            posts.forEach(post => {
-                const postElement = createPostElement(post);
-                postsFeed.appendChild(postElement);
-            });
 
-            // Animate posts appearance
-            gsap.from('.post', {
-                y: 50,
-                opacity: 0,
-                duration: 0.5,
-                stagger: 0.2,
-                ease: 'power2.out'
-            });
-        }
+// ...existing code...
 
-        // Render initial posts
-        renderPosts();
+document.addEventListener('DOMContentLoaded',()=>{
+    // Usage example:
+    queueActionSlide("Naruto utilise Rasengan !");
+    queueActionSlide("Sasuke se défend !");
+    queueActionSlide("Le combat continue...");
+    function playSound() {
+      // Play sound
+      // const sound = new Howl({
+      //   src: ['https://archive.org/download/jamendo-097169/07-55.mp3'], // Example attack sound
+      //   volume: 0.5
+      // });
+      // sound.play();
+      // console.log("Playing sound...")
+      const sound = document.getElementById("background-sound")
+      console.log(sound)
+      sound.play();
+      console.log("playing...")
+    }
+    // playSound()
+  })
 
-        // Infinite scrolling
-        let isLoading = false;
-        let page = 1;
 
-        window.addEventListener('scroll', () => {
-            if (isLoading) return;
+</script>
 
-            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
-                loadMorePosts();
-            }
-        });
 
-        function loadMorePosts() {
-            isLoading = true;
-            document.getElementById('loadingIndicator').classList.remove('hidden');
+</main>
+<script src="https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.min.js"></script>
 
-            // Simulate loading more posts (replace with actual API call)
-            setTimeout(() => {
-                // Generate new posts (replace with actual data fetching)
-                const newPosts = [
-                    {
-                        id: posts.length + 1,
-                        author: "Shikamaru Nara",
-                        avatar: "https://placekitten.com/102/102",
-                        content: "Cloud watching is the best way to spend a lazy afternoon. What a drag...",
-                        likes: 35,
-                        comments: []
-                    },
-                    {
-                        id: posts.length + 2,
-                        author: "Hinata Hyuga",
-                        avatar: "https://placekitten.com/103/103",
-                        content: "Just completed a successful mission with my team. Feeling proud! 💜",
-                        image: "https://placekitten.com/500/301",
-                        likes: 56,
-                        comments: []
-                    }
-                ];
+<script>
+const sound2 = new Howl({
+    src: ['/static/audio/duels/16.ogg'], // Example attack sound2
+    volume: 0.5
+  });
+  //sound2.play();
 
-                posts = [...posts, ...newPosts];
-                const postsFeed = document.getElementById('postsFeed');
-                newPosts.forEach(post => {
-                    const postElement = createPostElement(post);
-                    postsFeed.appendChild(postElement);
-                });
+    // Simple 3D attack animation using Three.js
+// let scene, camera, renderer, attackMesh, animationFrame;
+// function init3DBattle() {
+//   const canvas = document.getElementById('battle-3d-canvas');
+//   scene = new THREE.Scene();
+//   camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+//   renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+//   renderer.setClearColor(0x000000, 0); // transparent
 
-                isLoading = false;
-                document.getElementById('loadingIndicator').classList.add('hidden');
-                page++;
+//   // Example: glowing sphere as attack
+//   const geometry = new THREE.SphereGeometry(0.3, 32, 32);
+//   const material = new THREE.MeshBasicMaterial({ color: 0xff6600 });
+//   attackMesh = new THREE.Mesh(geometry, material);
+//   scene.add(attackMesh);
 
-                // Animate new posts
-                gsap.from(postsFeed.children.slice(-newPosts.length), {
-                    y: 50,
-                    opacity: 0,
-                    duration: 0.5,
-                    stagger: 0.2,
-                    ease: 'power2.out'
-                });
-            }, 1000);
-        }
+//   camera.position.z = 2;
+//   animateAttack();
+// }
 
-        // Event delegation for like buttons
-        document.getElementById('postsFeed').addEventListener('click', (e) => {
-            if (e.target.closest('.like-button')) {
-                const likeButton = e.target.closest('.like-button');
-                const postId = parseInt(likeButton.dataset.postId);
-                const post = posts.find(p => p.id === postId);
-                if (post) {
-                    post.likes += likeButton.classList.contains('liked') ? -1 : 1;
-                    likeButton.classList.toggle('liked');
-                    likeButton.querySelector('.like-count').textContent = post.likes;
-                }
-            }
-        });
+// function animateAttack() {
+//   let t = 0;
+//   function animate() {
+//     t += 0.04;
+//     attackMesh.position.x = Math.sin(t) * 0.8;
+//     attackMesh.material.color.setHSL((t/2)%1, 1, 0.5);
+//     renderer.render(scene, camera);
+//     animationFrame = requestAnimationFrame(animate);
+//   }
+//   animate();
+// }
 
-        // Event delegation for comment buttons
-        document.getElementById('postsFeed').addEventListener('click', (e) => {
-            if (e.target.closest('.comment-button')) {
-                const commentForm = e.target.closest('.post').querySelector('.comment-form');
-                commentForm.classList.toggle('active');
-                if (commentForm.classList.contains('active')) {
-                    commentForm.querySelector('input').focus();
-                }
-            }
-        });
+// // Call this to trigger an attack animation and sound
+// function playAttackAnimationAndSound() {
+//   if (!scene) init3DBattle();
+//   // Play sound
+//   const sound = new Howl({
+//     src: ['https://archive.org/download/jamendo-097169/07.mp3'], // Example attack sound
+//     volume: 0.5
+//   });
+//   sound.play();
 
-        // Create post form submission
-        document.getElementById('createPostForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const content = document.getElementById('postContent').value.trim();
-            const imageInput = document.getElementById('imageUpload');
-            const file = imageInput.files[0];
+//   // Flash effect or more advanced animation can be added here
+//   // Optionally, stop animation after a while:
+//   setTimeout(() => {
+//     cancelAnimationFrame(animationFrame);
+//     renderer.clear();
+//   }, 10200);
+// }
 
-            if (content || file) {
-                const newPost = {
-                    id: posts.length + 1,
-                    author: "Current User",
-                    avatar: "https://placekitten.com/104/104",
-                    content: content,
-                    likes: 0,
-                    comments: []
-                };
+// // Example: Call playAttackAnimationAndSound() when an attack action is performed
+// // Replace your performAction or attack handler:
+// function performAction(action){
+//   playAttackAnimationAndSound();
+// }
 
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        newPost.image = event.target.result;
-                        addNewPost(newPost);
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    addNewPost(newPost);
-                }
+// performAction("attack")
 
-                document.getElementById('postContent').value = '';
-                imageInput.value = '';
-            }
-        });
+const scene = new THREE.Scene()
 
-        function addNewPost(newPost) {
-            posts.unshift(newPost);
-            const postsFeed = document.getElementById('postsFeed');
-            const postElement = createPostElement(newPost);
-            postsFeed.insertBefore(postElement, postsFeed.firstChild);
+//CUBE ANIMATION
+// const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000 ) 
+// canvas = document.getElementById('battle-3d-canvas')
+// const renderer = new THREE.WebGLRenderer({ canvas , alpha: true })
+// renderer.setSize( window.innerWidth, window.innerHeight);
 
-            gsap.from(postElement, {
-                y: -50,
-                opacity: 0,
-                duration: 0.5,
-                ease: 'power2.out'
-            });
-        }
+// document.body.appendChild(renderer.domElement)
 
-        // Image upload preview
-        document.getElementById('imageUpload').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const img = document.createElement('img');
-                    img.src = event.target.result;
-                    img.className = 'w-full rounded-lg mb-4 post-image';
-                    const previewContainer = document.createElement('div');
-                    previewContainer.id = 'imagePreview';
-                    previewContainer.className = 'mt-2';
-                    previewContainer.appendChild(img);
-                    const existingPreview = document.getElementById('imagePreview');
-                    if (existingPreview) {
-                        existingPreview.replaceWith(previewContainer);
-                    } else {
-                        document.getElementById('createPostForm').insertBefore(previewContainer, document.querySelector('button[type="submit"]'));
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    </script>
-</body>
-</html>
+// const geometry = new THREE.BoxGeometry(1, 1, 1);
+// const material = new THREE.MeshBasicMaterial({ color : 0x00ff00  });
+// const cube = new THREE.Mesh( geometry, material);
+// scene.add( cube )
+
+// camera.position.z = 5;
+
+// function animateCube(){
+//   renderer.render( scene, camera );
+//   cube.rotation.x += 0.01;
+//   cube.rotation.y += 0.01;
+// }
+
+// renderer.setAnimationLoop( animateCube );
+
+
+//DRAWING LINES
+canvas = document.getElementById('battle-3d-canvas')
+const renderer = new THREE.WebGLRenderer({canvas, alpha : true})
+renderer.setSize( window.innerWidth, window.innerHeight  );
+document.body.appendChild( renderer.domElement );
+
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500   );
+camera.position.set(0, 0, 100);
+camera.lookAt(0, 0, 0);
+
+const material = new THREE.LineBasicMaterial( { color: 0x0000ff });
+
+const points = [];
+points.push( new THREE.Vector3( -10, 0, 0 ) );
+points.push( new THREE.Vector3( 0, 10, 0) );
+points.push( new THREE.Vector3( 10, 0, 0) )
+
+const geometry = new THREE.BufferGeometry().setFromPoints( points );
+
+const line = new THREE.Line(geometry, material);
+
+scene.add( line );
+renderer.render( scene, camera )
+
+
+</script>
+{% endblock content %}
+
+{% block ad_scripts %}
+
+{% endblock ad_scripts %}
