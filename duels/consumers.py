@@ -64,18 +64,21 @@ class DuelConsumer(AsyncWebsocketConsumer):
         #if last_fighter_action(opponent_fighter) and seconds_diff >= 15 else get_action('Defend', BASIC_ACTIONS)
         opponent_action = last_fighter_action(opponent_fighter) 
         
-        # if not opponent_action and seconds_diff >= 500:
-        #     opponent_action =  DuelAction.objects.create(fighter = opponent_fighter, evaluated = True, action = get_action('Defend', BASIC_ACTIONS))
-        #     opponent_action.save()
+        if not opponent_action and seconds_diff >= 500:
+            opponent_action =  DuelAction.objects.create(fighter = opponent_fighter, evaluated = True, action = get_action('Defend', BASIC_ACTIONS))
+            opponent_action.save()
 
         logs = json.loads(duel.log)
+        turn_logs = []
         if opponent_action:
-            print("evaluating :", player_action.get('name') , " against " ,opponent_action.action.get('name'))
             new_logs = _log_actions(player_action, opponent_action.action, player_character, opponent_character)
+            #print("New logs: ", new_logs)
             for log in new_logs:
                 logs.append(log)
+                turn_logs.append(log)
             
             fighter1_character, fighter2_character, new_logs, winner =  _evaluate_duel_actions(fighter1.character, fighter2.character, last_fighter_action(fighter1).action, last_fighter_action(fighter2).action)
+            #print("new_logs after evaluation, ", new_logs)
             fighter1.character = fighter1_character
             fighter2.character = fighter2_character
             fighter1.save()
@@ -86,6 +89,7 @@ class DuelConsumer(AsyncWebsocketConsumer):
             opponent_action.save()
             new_duel_action.save()
             logs = logs + new_logs
+            turn_logs += new_logs
             
 
             if winner:
@@ -112,7 +116,7 @@ class DuelConsumer(AsyncWebsocketConsumer):
         player2['character'] = fighter2.character
 
         
-        return {'status': 'continue', 'battle_logs': logs, 'player1': player1, 'player2':player2, 'player_character': fighter1_character, 'opponent_character': fighter2_character, 'winner': winner_data, 'rewards': []}
+        return {'status': 'continue', 'battle_logs': turn_logs, 'player1': player1, 'player2':player2, 'player_character': fighter1_character, 'opponent_character': fighter2_character, 'winner': winner_data, 'rewards': []}
 
     @database_sync_to_async
     def duel_data(self, duel_code):
