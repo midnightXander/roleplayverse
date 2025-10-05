@@ -233,9 +233,9 @@ def home(request):
     if not player:
         return redirect('/users/signin')
     
-    story_characters = StoryCharacter.objects.filter(player = player)
-    if not story_characters.exists():
-        return redirect('story:index')
+    # story_characters = StoryCharacter.objects.filter(player = player)
+    # if not story_characters.exists():
+    #     return redirect('story:index')
     
     if not Duel.objects.filter(Q(duelfighter__player = player)).exists():
         return redirect('duels:index')
