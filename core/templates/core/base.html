@@ -419,6 +419,16 @@ function setupExpandableText() {
     {% endblock hiltop-popupads %}
     </head>
     <body class="bg-gray-950 h-screen flex flex-col">
+        <!-- Banner prompting users to join our discord -->
+        <!-- <div class = "absolute p-4 w-full z-50">
+            <div class="bg-blue-600 text-white text-center rounded-lg p-3 flex items-center justify-center space-x-2">
+                <span class="font-medium">Rejoignez notre communauté sur Discord!</span>
+                <a href="https://discord.gg/roleplayverse" target="_blank" class="bg-white text-blue-600 px-3 py-1 rounded-full hover:bg-gray-200 transition duration-300">Rejoindre</a>
+                <button id="closeBanner" class="text-white hover:text-gray-200 focus:outline-none">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div> -->
         
         <div id="top-toastContainer" class="flex justify-center w-full fixed top-4 right-4"></div>
         
@@ -436,8 +446,10 @@ function setupExpandableText() {
             <div id="google_translate_element" class="select-wrapper" ></div>
        </div>
 
+
     <!-- Navigation style ='background: transparent;'  -->
     <nav class="top-nav bg-gray-950 fixed bg-opacity-50 w-full z-10 py-2" style="margin-bottom: 1rem;">
+        
         <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Left side: Logo and Search -->
@@ -557,6 +569,8 @@ function setupExpandableText() {
                 <a href="/duels" class="text-gray-300 text-xl hover:text-white block px-3 py-2"><i class="fas fa-khanda mr-2"></i>Battles</a>
             </div>
         </div>
+
+        
     </nav>
         
         <!--Search result area-->

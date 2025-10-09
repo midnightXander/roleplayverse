@@ -29,7 +29,6 @@
   <video 
     src="{% static 'videos/duel_mode_demo_2.mp4' %}" 
     class="w-full max-h-64 object-cover rounded-2xl shadow-lg bg-gray-900 border-4 border-orange-500"
-    
     autoplay
     muted
     loop
@@ -38,6 +37,16 @@
   </video>
 </div>
   </div>
+
+  <div class="discord-banner bg-gradient-to-r from-indigo-700 via-purple-700 to-blue-500 rounded-xl flex items-center gap-4 p-4 my-6">
+  <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Discord" class="w-12 h-12 rounded-full">
+  
+  <div class="flex-1">
+    <span class="font-bold text-white text-lg">Rejoins la communauté sur Discord !</span>
+    <p class="text-gray-200 text-sm">Duels, récompenses, Échange, entraide, partenaires,paris, tournois et annonces exclusives.</p>
+  </div>
+  <a href="https://discord.gg/a2wmy5jn" target="_blank" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-full shadow transition">Rejoindre</a>
+</div>
 
   <!-- Info Section -->
   <div class="bg-gray-900 rounded-xl shadow-lg p-6 mb-10">
@@ -53,6 +62,7 @@
       <span class="font-bold text-orange-300">Astuce :</span> Reste attentif au timer de chaque tour et adapte ta stratégie selon l'adversaire !
     </div>
   </div>
+  
 
   <div id="affiliate-ad-container" class="rounded-lg border-t border-orange-500 mb-6">
             <div class="flex items-center mb-2">
@@ -69,7 +79,7 @@
                     <a id="product-link" onclick="adClick('{{affiliate_products.0.link}}')" target="_blank" href="{{affiliate_products.0.link}}" class="text-sm text-orange-600 hover:underline">Voir</a>
                 </div>
             </div>
-        </div>
+  </div>
 
   <!-- Recent Fights -->
   <div class="mb-10">
@@ -120,19 +130,34 @@
           </tr>
         </thead>
         <tbody>
-          {% for player in top_players %}
-          <tr class="border-b border-gray-800 hover:bg-gray-800 transition">
+          {% for d_player in top_players %}
+          {% if player.id == d_player.id %}
+          <tr class="border border-orange-500 hover:bg-gray-800 transition">
             <td class="py-2 px-3 flex items-center gap-2">
-              <img src="{{ player.profile_picture }}" alt="{{ player.username }}" class="w-8 h-8 rounded-full border border-orange-400 object-cover shadow" onerror="this.style.display='none'">
-              <span class="font-bold text-orange-300">{{ player.name }}</span>
+              <img src="{{ d_player.profile_picture }}" alt="{{ d_player.username }}" class="w-8 h-8 rounded-full border border-orange-400 object-cover shadow" onerror="this.style.display='none'">
+              <span class="font-bold text-orange-300">{{ d_player.name }}</span>
             </td>
-            <td class="py-2 px-3">{{ player.wins }}</td>
+            <td class="py-2 px-3">{{ d_player.wins }}</td>
             <td class="py-2 px-3">--</td>
             <td class="py-2 px-3">
               <!-- {{forloop.counter}}  -->
-              {{ player.rank|default:"-" }}
+              {{ d_player.rank|default:"-" }}
             </td>
           </tr>
+          {% else %}
+          <tr class="border-b border-gray-800 hover:bg-gray-800 transition">
+            <td class="py-2 px-3 flex items-center gap-2">
+              <img src="{{ d_player.profile_picture }}" alt="{{ d_player.username }}" class="w-8 h-8 rounded-full border border-orange-400 object-cover shadow" onerror="this.style.display='none'">
+              <span class="font-bold text-orange-300">{{ d_player.name }}</span>
+            </td>
+            <td class="py-2 px-3">{{ d_player.wins }}</td>
+            <td class="py-2 px-3">--</td>
+            <td class="py-2 px-3">
+              <!-- {{forloop.counter}}  -->
+              {{ d_player.rank|default:"-" }}
+            </td>
+          </tr>
+          {% endif %}
           {% empty %}
           <tr>
             <td colspan="4" class="py-4 text-center text-gray-500">Aucun joueur dans le classement.</td>
