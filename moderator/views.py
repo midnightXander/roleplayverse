@@ -67,6 +67,49 @@ def signin(request):
         
     return render(request, "moderator/signin.html")    
 
+def get_monthly_signups():
+    players = Player.objects.all()
+    monthly_signups = {}
+    for player in players:
+        month = player.user.date_joined.strftime("%B %Y")
+        if month in monthly_signups:
+            monthly_signups[month] += 1
+        else:
+            monthly_signups[month] = 1
+
+    #reverse order to show latest months first
+    monthly_signups = dict(sorted(monthly_signups.items(), key=lambda x: datetime.strptime(x[0], "%B %Y"), reverse=True))
+
+    return monthly_signups       
+
+def get_monthly_signups_2():
+    players = Player.objects.all()
+    monthly_signups = {}
+    # get monthly signups as list of { month: "Jan", count: N }
+    for player in players:
+        month = player.user.date_joined.strftime("%B %Y")
+        if month in monthly_signups:
+            monthly_signups[month] += 1
+        else:
+            monthly_signups[month] = 1
+
+    monthly_signups = dict(sorted(monthly_signups.items(), key=lambda x: datetime.strptime(x[0], "%B %Y"), reverse=True))        
+
+    # Convert the dictionary to a list of { month: "Jan", count: N }
+    monthly_signups_list = [{"month": month, "count": count} for month, count in monthly_signups.items()]
+
+    return monthly_signups_list
+
+def get_signups_current_month(players:QuerySet[Player]):
+    current_month = datetime.now().strftime("%B %Y")
+    count = 0
+    for player in players:
+        month = player.user.date_joined.strftime("%B %Y")
+        if month == current_month:
+            count += 1
+    return count
+
+
 # @login_required('/moderator/signinxyz')
 def index(request):
     moderator = get_moderator(request.user)
@@ -74,12 +117,17 @@ def index(request):
         raise Http404
     player_emails = [ user.email for user in User.objects.all() ]
     players = Player.objects.all()
-    
+    monthly_signups = get_monthly_signups_2()
+    signups_current_month = get_signups_current_month(players)
+
+
     return render(request, "moderator/index.html",{
         'moderator': moderator,
         'player_emails': player_emails,
         'countries' : player_countries(players),
-        'active_players' : active_players(players)
+        'active_players' : active_players(players),
+        'monthly_signups' : monthly_signups,
+        'signups_current_month' : signups_current_month,
     })
     
         

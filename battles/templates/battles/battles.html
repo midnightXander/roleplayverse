@@ -105,6 +105,7 @@
         </select>
         <p class="mt-2 text-gray-400 text-sm"><i class="fas fa-exclamation-triangle text-xl text-yellow-500 mr-2"></i>  400 jetons de combat(JC) seront deduit en créant des RDC de type <span class="font-bold text-orange-500">stake</span>.<br><a href="#" class="text-orange-500">comment ça marçhe</a></p>
       </div>
+
       {% for message in messages %}
                 <div class="text-sm mb-4">
                     {% if message.tags == 'error' %}
@@ -356,8 +357,8 @@
 <script>
     $(()=>{
         
-        $('.bottom-nav-link').removeClass('bg-gray-700')
-        $('.bottom-nav-link')[2].classList.add('bg-gray-700')
+       $('.bottom-nav-link').removeClass('bg-gray-700')
+        $('.bottom-nav-link').eq(2).addClass('border-b-2 border-orange-500')
     })
 </script>
 {% endblock main_active  %}

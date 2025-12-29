@@ -5,10 +5,11 @@ from django.urls import reverse
 from django.contrib.auth.models import User,auth
 from django.http import JsonResponse,HttpResponseRedirect
 from duels.models import Duel
+from duels.views import _duel_ranking
 from monetization.models import Payment
 from store.models import AffiliateProduct, Product
 from users.models import Player,PlayerNotification,Family
-from story.models import StoryCharacter
+from story.models import StoryCharacter, StoryTextPad
 from story.views import _story_character
 from django.contrib.auth.decorators import login_required
 from .models import *
@@ -68,11 +69,13 @@ def add_points(player:Player, points:int):
 
 
 def index(request):
-    player = get_player(request.user)
-    if player:
-        return redirect('/home')
-    else:
-        return render(request,"core/index.html")
+    print("rc: ",users_views.set_session_rc(request))
+    return redirect('/')
+    # player = get_player(request.user)
+    # if player:
+    #     return redirect('/home')
+    # else:
+    #     return render(request,"core/index.html")
 
 def get_comments(post):
     comments = Comment.objects.filter(post = post)
@@ -157,6 +160,9 @@ def get_time_posted(post):
     current_time = datetime.datetime.hour
 
 def get_notifs(player):
+    if not player:
+        return 0
+    
     player_notifs = PlayerNotification.objects.filter(target= player, read = False)
     notifs = Notification.objects.filter(target = player, read = False)
     challenges = Challenge.objects.filter(target = player)
@@ -184,15 +190,14 @@ def onboarding(request):
     return render(request,"core/onboarding.html",context)
 
 
-@login_required
 def home(request):
 
     # emails.send_emails(["ralldidierselemani@gmail.com","franckbodo81@gmail.com"], "Le Shinobi Mayhem t'attends!!","Le Shinobi Mayhem t'attends!!",
     #                    "Le tirage au sort du tournoi Shinobi Mayhem a été effectué, les regles ont ete fixé, ton adversaire t'attends pour entamer les hostilités !!" )
-
+    print("rc: ",users_views.set_session_rc(request))
     posts = Post.objects.all()
     battles = Battle.objects.filter(status = "finished")
-   
+    
     g = GeoIP2()
     # ip = "134.201.250.155"
     # try:
@@ -227,94 +232,188 @@ def home(request):
 
     #sort the list of characters
     sorted_characters = sorted(characters["playable_characters"], key = lambda item: item["name"]) 
+    POST_CATEGORIES = [
+        'discussion',
+        'others',
+        'meme',
+        'question',
+    ]
+
+    # for r in Reaction.objects.all():
+    #     r.type = "🔥"
+    #     r.save()
     
+    
+
     # player = get_object_or_404(Player, user = request.user )
     player = get_player(request.user)
+    
     if not player:
-        return redirect('/users/signin')
+        # return redirect('/users/signin')
+        feed,created = Feed.objects.get_or_create(player = Player.objects.order_by('?').first())
     
-    # story_characters = StoryCharacter.objects.filter(player = player)
-    # if not story_characters.exists():
-    #     return redirect('story:index')
-    
-    if not Duel.objects.filter(Q(duelfighter__player = player)).exists():
-        return redirect('duels:index')
-    
-    player.country = get_country(request)
-    print(player.country)
-    print(f"{player} IP: ",request.META.get('REMOTE_ADDR'))
-    player.ip_adress = request.META.get('REMOTE_ADDR')
-    player.save()
+        feed.announcements.clear()
+        feed.posts.clear()
+        feed.battles.clear()
+        feed.daily_content.clear()
+        feed.story_characters.clear()
 
-    #export_battle_data()  
-
-    feed,created = Feed.objects.get_or_create(player = player)
-    
-    feed.announcements.clear()
-    feed.posts.clear()
-    feed.battles.clear()
-    feed.daily_content.clear()
-    feed.story_characters.clear()
-    
-    feed.save()
-    players = Player.objects.exclude( user = request.user)
-    player_notifs = PlayerNotification.objects.filter(target= player, read = False)
-    n_notifs = len(player_notifs)
-    can_invite = False
-
-    fl_message_data = None
-
-    #check if player is in a family 
-    if player.family:
-        player_family = player.family 
-        #check if player is the head of a family to determine if he  can send invites to other players
-        if player == player_family.god_father :
-            can_invite = True
-
-        family_last_message = FamilyMessage.objects.filter(family = player_family).order_by('-date_sent').first()
+        random_posts = Post.objects.order_by('?')[:3]
+        random_posts_data = []
+        for post in random_posts:
+            random_posts_data.append(_post_data(Player.objects.order_by('?').first(),post))
+            feed.posts.add(post)
         
-        if family_last_message:
-            content =  decrypt_message(family_last_message.content)[:7]+'...'
-            if family_last_message.image:
-                content = f'a envoyé une image'
-            fl_message_data = {
-                "sender":family_last_message.sender.user.username,
-                'content': content,
-            }
-        else:
-            fl_message_data = {
-                "sender":"sender",
-                'content': "Le dernier messaage seras affiché ici",
-            }          
-    now = datetime.datetime.now()          
-    
-    challenges = Challenge.objects.filter(target = player).order_by('-date_sent')[:2]
-    
+        feed.save()
 
-    families  = Family.objects.all()
-    top_families = sorted(families, key = lambda family : family.points ,reverse=True)[:2]
-    events = Tournament.objects.filter(status__in = ['registering', 'ongoing', 'not_started']).order_by('-date_created')[:2]
-    to_translate = _("Chats")
+        players = Player.objects.all()
+        can_invite = False
 
-    context = {
-        "posts":posts,
+        families  = Family.objects.all()
+        top_families = sorted(families, key = lambda family : family.points ,reverse=True)[:2]
+        events = Tournament.objects.filter(status__in = ['registering', 'ongoing', 'not_started']).order_by('-date_created')[:2]
+        to_translate = _("Chats")
+
+        
+        active_players = Player.objects.order_by('-last_seen')[:10]
+        active_players = [ users_views._player_data(player) for player in active_players ]
+        top_players = users_views._monthly_players_ranking()[:4]
+
+        opponent_suggestions = active_players + top_players
+        random.shuffle(opponent_suggestions)
+
+        
+
+        context = {
+        "opponent_suggestions" : opponent_suggestions,
         "players":players,
-        'playerName': str(player),
-        "player_notifs":player_notifs,
         "player":player,
         "can_invite":can_invite,
         "characters": sorted_characters ,
         "feed":feed,
-        "n_notifs":get_notifs(player),
-        'fl_message':fl_message_data,
         'top_families': top_families,
         'top_players': users_views._monthly_players_ranking()[:2],
         'battle_cover': random.randint(1,1),
         'events': events,
         "to_translate": to_translate,
-        'challenges': challenges
-        
+        'challenges': [],
+        'post_categories' : POST_CATEGORIES,
+        'random_posts' : random_posts_data,
         }
+    
+    else:
+    
+        # story_characters = StoryCharacter.objects.filter(player = player)
+        # if not story_characters.exists():
+        #     return redirect('story:index')
+        feed,created = Feed.objects.get_or_create(player = player)
+    
+        feed.announcements.clear()
+        feed.posts.clear()
+        feed.battles.clear()
+        feed.daily_content.clear()
+        feed.story_characters.clear()
+
+        random_posts = Post.objects.order_by('?')[:3]
+        random_posts_data = []
+        for post in random_posts:
+            random_posts_data.append(_post_data(player,post))
+            # feed.posts.add(post)
+        
+        feed.save()
+        
+        # if not Duel.objects.filter(Q(duelfighter__player = player)).exists():
+        #     return redirect('duels:index')
+        
+        player.country = get_country(request)
+        print(player.country)
+        print(f"{player} IP: ",request.META.get('REMOTE_ADDR'))
+        player.ip_adress = request.META.get('REMOTE_ADDR')
+        player.save()
+
+        #export_battle_data()  
+
+        
+        players = Player.objects.exclude( user = request.user)
+        player_notifs = PlayerNotification.objects.filter(target= player, read = False)
+        n_notifs = len(player_notifs)
+        can_invite = False
+
+        fl_message_data = None
+
+        #check if player is in a family 
+        if player.family:
+            player_family = player.family 
+            #check if player is the head of a family to determine if he  can send invites to other players
+            if player == player_family.god_father :
+                can_invite = True
+
+            family_last_message = FamilyMessage.objects.filter(family = player_family).order_by('-date_sent').first()
+            
+            if family_last_message:
+                content =  decrypt_message(family_last_message.content)[:7]+'...'
+                if family_last_message.image:
+                    content = f'a envoyé une image'
+                fl_message_data = {
+                    "sender":family_last_message.sender.user.username,
+                    'content': content,
+                }
+            else:
+                fl_message_data = {
+                    "sender":"sender",
+                    'content': "Le dernier messaage seras affiché ici",
+                }          
+        now = datetime.datetime.now()          
+        
+        challenges = Challenge.objects.filter(target = player).order_by('-date_sent')[:2]
+        
+
+        families  = Family.objects.all()
+        top_families = sorted(families, key = lambda family : family.points ,reverse=True)[:2]
+        events = Tournament.objects.filter(status__in = ['registering', 'ongoing', 'not_started']).order_by('-date_created')[:2]
+        to_translate = _("Chats")
+
+        active_players = Player.objects.exclude(id = player.id).order_by('-last_seen')[:10]
+        active_players = [ users_views._player_data(player) for player in active_players ]
+        top_players = users_views._monthly_players_ranking()[:4]
+
+        opponent_suggestions = active_players + top_players
+        random.shuffle(opponent_suggestions)
+
+        #Run before going live
+        # for t in StoryTextPad.objects.all():
+        #     t.player = t.challenge.character.player
+        #     t.save()
+
+        last_story_textpad = StoryTextPad.objects.filter(player = player).order_by('-created_at').first()
+        last_story = ""
+        if last_story_textpad: last_story = _story_character(last_story_textpad.challenge.character)
+          
+
+        context = {
+            "last_story_character" : last_story,
+            "opponent_suggestions" : opponent_suggestions,
+            "posts":posts,
+            "players":players,
+            'playerName': str(player),
+            "player_notifs":player_notifs,
+            "player":player,
+            "can_invite":can_invite,
+            "characters": sorted_characters ,
+            "feed":feed,
+            "n_notifs":get_notifs(player),
+            'fl_message':fl_message_data,
+            'top_families': top_families,
+            # 'top_players': users_views._monthly_players_ranking()[:2],
+            'top_players': _duel_ranking()[:2],
+            'battle_cover': random.randint(1,1),
+            'events': events,
+            "to_translate": to_translate,
+            'challenges': challenges,
+            'random_posts' : random_posts_data,
+            'post_categories' : POST_CATEGORIES,
+
+            }
     
     
     return render(request,"core/home.html",context)
@@ -359,6 +458,10 @@ def _posts_data(player:Player,posts):
     ]
 
 def _post_data(player:Player, post:Post):
+    post.views += 1
+    post.viewers.add(player)
+    print(post.viewers.all())
+    post.save()
     return {
             "feed_item": "post",
             "id": post.id,
@@ -369,16 +472,18 @@ def _post_data(player:Player, post:Post):
                         'profile_picture':post.author.profile_picture.url,
                         'nickname': post.author.nickname if post.author.nickname else post.author.user.username,
                         },
-            
+
+            'category' : post.category,
             'body_full': post.body,
             'body': post.body[:200]+'...' if post.body and len(post.body) > 200 else (post.body if post.body else '' ),
             'liked': _liked_post(player, post),
-            'likes':_parse_number(post.likes,True),
+            'likes':_parse_number(Reaction.objects.filter(post=post).count(),True),
             'is_favorite': SavedPost.objects.filter(player = player, post = post).exists(),
             'image':post.image.url if post.image else None,
             "comments": get_comments_dict(player,post),
             "n_comments": _parse_number(len(get_comments(post)),True),
             "time_posted": _time_since(post.date_added),
+            'most_reaction' : post.most_made_reaction()['type'] if post.most_made_reaction() else '🔥'
         }
 
 def _daily_content_data(player:Player, content:ContentPost):
@@ -428,23 +533,26 @@ def _annoucement_data(announcement:Announcement):
 
 def get_posts(request):
     
-    player = Player.objects.get(user = request.user)
-    feed = Feed.objects.get(player = player)
+    player = get_player(request.user)
+    if not player:
+        player = Player.objects.order_by('?').first()
+    feed, created = Feed.objects.get_or_create(player = player)
     #posts criterias:
     #1. family members posts
     #2. Recent posts
     feed_data = []
-
+    
 
     #sort both posts and battles
     feed_items = (Post.objects.values('custom_id','date_added')
                   .annotate(date=F('date_added'))
-                  .union(Battle.objects.filter(status__in = ['finished', 'ongoing', 'waiting_refree'])
-                         
+                  .union(Battle.objects.filter(status__in = ['finished', 'ongoing', 'waiting_refree'])     
                     .values('custom_id','date_ended')
                     .annotate(date = F('date_ended')), all=True)
+                    
                     .union(ContentPost.objects.values('custom_id', 'date_added')
                     .annotate(date = F('date_added')),all=True)
+                    
                     .union(StoryCharacter.objects.values('custom_id', 'created_at')
                     .annotate(date = F('created_at')),all=True)
 
@@ -481,7 +589,7 @@ def get_posts(request):
             feed.daily_content.add(content)
 
     story_character = StoryCharacter.objects.all().order_by('?')[0]
-    print("Random character: ", story_character)
+    
     if story_character not in feed.story_characters.all():
         story_character_data = _story_character(story_character)
         last_textpad = story_character_data['last_textpad']
@@ -492,52 +600,61 @@ def get_posts(request):
 
     random.shuffle(feed_data)
 
-    for feed_item in feed_items:
-        try:
-            post = Post.objects.get(custom_id = feed_item['custom_id'])
-            
+    flair = request.GET.get('flair')
+    if  flair:
+        for post in Post.objects.filter(category = flair):
             if (post not in feed.posts.all()) and len(feed_data) <=feed_limit:
-                post_data = _post_data(player,post)
-                feed_data.append(post_data)
-                feed.posts.add(post)
-        except Post.DoesNotExist:
+                    post_data = _post_data(player,post)
+                    feed_data.append(post_data)
+                    feed.posts.add(post)
+
+    else:
+        for feed_item in feed_items:
             try:
-                battle = Battle.objects.get(custom_id = feed_item['custom_id'])    
-                if battle not in feed.battles.all() and len(feed_data) <= feed_limit:
-                    battle_data = battle_views._battle_data(player, battle)
-                    feed_data.append(battle_data)
-                    feed.battles.add(battle)
-                    # if battle.status == 'waiting_refree' and RefreeingProposal.objects.filter(player = player, battle = battle).exists():
-                    #     pass
-                    # elif battle.status == 'waiting_refree' and len(RefreeingProposal.objects.filter(battle = battle)) > feed_limit:
-                    #     pass
-                    # else:    
-                    #     feed_data.append(battle_data)
-                    #     feed.battles.add(battle)
-            
-            except Battle.DoesNotExist:
-                try:
-                    content = ContentPost.objects.get(custom_id = feed_item['custom_id'])
-                    if content not in feed.daily_content.all() and len(feed_data) <= feed_limit:
-                        content_data = _daily_content_data(player,content)
-                        feed_data.append(content_data)
-                        feed.daily_content.add(content)
+                post = Post.objects.get(custom_id = feed_item['custom_id'])
                 
-                except ContentPost.DoesNotExist:
-                    # for character in StoryCharacter.objects.all():
-                    #     character.custom_id = generate_custom_id()
-                    #     character.save()
-                    story_character = StoryCharacter.objects.get(custom_id = feed_item['custom_id'])
+                if (post not in feed.posts.all()) and len(feed_data) <=feed_limit:
+                    post_data = _post_data(player,post)
+                    feed_data.append(post_data)
+                    feed.posts.add(post)
+            except Post.DoesNotExist:
+                try:
+                    battle = Battle.objects.get(custom_id = feed_item['custom_id'])    
+                    if battle not in feed.battles.all() and len(feed_data) <= feed_limit:
+                        battle_data = battle_views._battle_data(player, battle)
+                        feed_data.append(battle_data)
+                        feed.battles.add(battle)
+                        # if battle.status == 'waiting_refree' and RefreeingProposal.objects.filter(player = player, battle = battle).exists():
+                        #     pass
+                        # elif battle.status == 'waiting_refree' and len(RefreeingProposal.objects.filter(battle = battle)) > feed_limit:
+                        #     pass
+                        # else:    
+                        #     feed_data.append(battle_data)
+                        #     feed.battles.add(battle)
+                
+                except Battle.DoesNotExist:
+                    try:
+                        content = ContentPost.objects.get(custom_id = feed_item['custom_id'])
+                        if content not in feed.daily_content.all() and len(feed_data) <= feed_limit:
+                            content_data = _daily_content_data(player,content)
+                            feed_data.append(content_data)
+                            feed.daily_content.add(content)
                     
-                    if story_character not in feed.story_characters.all() and len(feed_data) <= feed_limit:
-                        story_character_data = _story_character(story_character)
-                        last_textpad = story_character_data['last_textpad']
-                        story_character_data['body_full'] = last_textpad
-                        story_character_data['body'] = last_textpad[:200]+'...' if last_textpad and len(last_textpad) > 200 else (last_textpad if last_textpad else '' ),
+                    except ContentPost.DoesNotExist:
+                        # for character in StoryCharacter.objects.all():
+                        #     character.custom_id = generate_custom_id()
+                        #     character.save()
+                        story_character = StoryCharacter.objects.get(custom_id = feed_item['custom_id'])
                         
-                        feed_data.append(story_character_data)
-                        feed.story_characters.add(story_character)
-                        # print(story_character_data['name'])
+                        if story_character not in feed.story_characters.all() and len(feed_data) <= feed_limit:
+                            story_character_data = _story_character(story_character)
+                            last_textpad = story_character_data['last_textpad']
+                            story_character_data['body_full'] = last_textpad
+                            story_character_data['body'] = last_textpad[:200]+'...' if last_textpad and len(last_textpad) > 200 else (last_textpad if last_textpad else '' ),
+                            
+                            feed_data.append(story_character_data)
+                            feed.story_characters.add(story_character)
+                            # print(story_character_data['name'])
                         # print(len(feed_data))
 
                     
@@ -736,54 +853,43 @@ def feed(request):
 
     return render(request,"feed/index.html",context)
 
-@login_required
 def post_page(request, id):
     player = get_player(request.user)
     if not player:
-        return redirect('/users/signin')
+        player = Player.objects.order_by('?').first() 
     
     post = get_object_or_404(Post,id= id)
     n_notifs = get_notifs(player)
+    
 
     comments = Comment.objects.filter(post = post)
 
-    post_data =  {
-            "feed_item": "post",
-            "id": post.id,
-            "author":{  
-                        'id':post.author.id,
-                        "name":post.author.user.username,
-                        'player': str(post.author),
-                        'profile_picture':post.author.profile_picture.url
-                        },
-            'body':post.body,
-            'liked': _liked_post(player, post),
-            'likes':_parse_number(post.likes),
-            'image':post.image.url if post.image else None,
-            "comments": get_comments_dict(player,post),
-            "n_comments": _parse_number(len(get_comments(post))),
-            "time_posted": _time_since(post.date_added),
-    }
+    post_data =  _post_data(player, post)
 
     if request.method == "POST":
         data = post_data
-        return JsonResponse({'status':'success', 'post':data})
+        product_ad  = random.choice(AffiliateProduct.objects.all()) 
+        _product = affiliate_product_data(product_ad) if product_ad else None
+        return JsonResponse({'status':'success', 'post':data, "product":_product})
 
+    
+    context = {"player":player if request.user.is_authenticated else None, "post":post_data, "n_notifs":n_notifs}
 
-    context = {"player":player, "post":post_data, "n_notifs":n_notifs}
+    
     return render(request, "feed/post.html", context)
 
 def create_post(request):
     if request.method == "POST":
         player = Player.objects.get(user = request.user)
         body = request.POST.get("body")
+        category = request.POST.get("category","divers")
         image = request.FILES.get('image')
         
         if body or image:
-            postid = len(Post.objects.all()) + 1
+            
             new_post = Post.objects.create(
                 #id = postid,
-                author=player,body=body,image = image)
+                author=player,body=body,image = image, category = category)
             
             new_post_data = _post_data(player,new_post)
             new_post.save()
@@ -853,8 +959,10 @@ def post(request,id):
             return JsonResponse({'status':'success','message':'Publication Supprimé'})
         return JsonResponse({'status':'error','message':"l'utlisateur n'est pas l'auteur de cette publication"})
     elif request.method == 'GET':
+        product_ad  = random.choice(AffiliateProduct.objects.all()) 
+        _product = affiliate_product_data(product_ad) if product_ad else None
         post_data = _post_data(player, post)
-        return JsonResponse({"status":"success","post":post_data})
+        return JsonResponse({"status":"success","post":post_data, "product":_product})
     
     else:
         return JsonResponse({'status':'error', 'message':'Bad request'})
@@ -903,6 +1011,7 @@ def react_post(request,post_id):
         player = Player.objects.get(user = request.user) 
         post  = get_object_or_404(Post, id = post_id)
         reactions = Reaction.objects.filter(post = post, player = player)
+        reaction_type = request.POST.get('reaction','🔥')
         # try:
         #     emails.send_email(
         #         subject = "Test email",
@@ -919,51 +1028,52 @@ def react_post(request,post_id):
         # except Exception as e:
         #     print("Error sending email:", e)    
 
-        reactions_data = [
-            {"type":reaction.type,
-             "player": str(reaction.player),
-             "post": reaction.post.id,
-             } for reaction in reactions
-        ]
+
+
         for reaction in reactions:
-            if reaction.player == player:
+            if reaction.player == player and reaction.type  == reaction_type:
                 print('already liked:',reaction)
                 reaction.delete()
-                post.likes = post.likes - 1
-                
-                post.save()
-                return JsonResponse({"status":'success','message':'unliked','likes':post.likes})
-        # if reactions.exists():
-        #     print('already liked:',reactions)
-        #     reactions[0].delete()
-        #     post.likes = post.likes - 1
+                return JsonResponse({"status":'success','message':'unliked','likes' : Reaction.objects.filter(post = post).count()})
 
-        #     reactions[0].save()
-        #     post.save()
-        #     return JsonResponse({"status":'success','message':'unliked'})
-            
-        reaction = Reaction.objects.create(
+
+        reaction, created = Reaction.objects.get_or_create(
             player = player,
             post = post,
-            type = 'like',
         )
-        print('new like',reaction)
-        post.likes = post.likes + 1
+        reaction.type = reaction_type
         reaction.save()
         post.save()
 
+        print(reaction)
+
         #Send Push Notification if likes exceeds 10
-        if post.likes == 5:
+        reactions_count = Reaction.objects.filter(post = post).count()
+        if reactions_count == 5:
             send_push_notification(PushSubscription.objects.filter(user = post.author.user).last(), {
-                'title': 'Votre publication a été aimé par 5 personnes',
-                'body': f'Votre publication a été aimé par 5 personnes',
+                'title': '5 personnes ont réagit a ton post',
+                'body': f'5 personnes ont réagit a ton post',
                 'icon': '/static/images/logo/logo_1.png'
             },  )
         
         
-        return JsonResponse({"status":'success',"message":"liked",'likes':post.likes})
+        return JsonResponse({"status":'success',"message":"liked",'likes': reactions_count})
     
     return JsonResponse({"status":"error"}) 
+
+def post_reactors(request, post_id):
+    post  = get_object_or_404(Post, id = post_id)
+    reactions = Reaction.objects.filter(post = post)
+    
+    from users.views import _player_data
+    reactors = []   
+    for reaction in reactions:
+        data = _player_data(reaction.player)
+        data['reaction'] = reaction.type
+        reactors.append(data)
+
+    return JsonResponse({"status":'success',"reactors":reactors})     
+
 
 @csrf_exempt
 def react_comment(request, comment_id):
@@ -1121,6 +1231,19 @@ def react_to_content(request, content_id):
         reactions = [ _content_reactions_data(reactor) for reactor in ContentReactor.objects.filter(content = content)]
 
         return JsonResponse({'status':'success', 'reactions': reactions})
+
+def content_reactors(request, content_id):
+    from users.views import _player_data
+    content = get_object_or_404(ContentPost, id = content_id)
+    player = get_player(request.user)
+    reactors = ContentReactor.objects.filter(content = content)
+    players = [] 
+    for reactor in reactors :
+        data = _player_data(reactor.player) 
+        data['reaction'] = reactor.type
+        players.append(data)
+
+    return JsonResponse({'status':'success', 'reactors': players}) 
 
 def _content_comment_data(comment:ContentComment):
     data:dict = {    
@@ -1286,9 +1409,6 @@ def mark_all_notifs_as_read(request):
 
     return JsonResponse({'status':'success'})
 
-
-
-
 ####might be on another app########
 @login_required
 def battle_points(request):
@@ -1384,8 +1504,6 @@ def favorite(request, id):
 
     return JsonResponse({"status":'error',
                                  'message':'Une erreur est survenu'})
-
-
 
 def tutorials(request):
     return render(request, "core/tutorials.html")

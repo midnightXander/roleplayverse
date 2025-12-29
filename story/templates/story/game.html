@@ -21,9 +21,10 @@
       font-size: 1rem !important;
     }
   }
-  body{
-    background: radial-gradient(circle at top left, #1f2937, #0f172a);
+  main{
+    background: radial-gradient(circle at top left, #000000, #0f172a);
   }
+  
   .highlighted{
     display: inline;
     background-color: rgba(255, 165, 0, 0.1);
@@ -71,21 +72,29 @@
   }
   
 </style>
-<main class="container mx-auto min-h-screen max-w-2xl py-32 px-2">
- <div class="flex items-center rounded-xl shadow transition px-3 py-2 gap-3 w-full mb-4">
+
+<main id="main" class="container relative mx-auto min-h-screen max-w-2xl py-32 px-2">
+ 
+<div class="flex items-center animate-scaleIn rounded-xl shadow border border-gray-700 transition px-3 py-2 gap-3 w-full mb-4">
     <a onclick="showOverlay()" href="/story/characters" class="text-orange-500"><i class="fas fa-arrow-left"></i></a>    
     <div class="flex-shrink-0 w-14 h-14 rounded-full overflow-hidden border-2 border-orange-400">
         <img src="{{character.avatar}}" alt="{{ character.name }}" class="w-full h-full object-cover" />
-      </div>
-      <div class="flex-1 min-w-0">
+    </div>
+    <div class="flex-1 min-w-0">
         <div class="flex items-center gap-2">
           <span class="font-semibold text-orange-400 text-base truncate">{{character.name}}</span>
           <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded-full">{{character.origin}} </span>
           <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded-full">{{character.affinity_icon}}</span>
         </div>
-      </div>
+    </div>
+    <div class="flex space-x-4 justify-between min-w-0">
+        <div>{{character.reads}} <span class="text-xs">lectures</span></div>
+        <!-- <button onclick="gotoBottom()">B</button> -->
+    </div>
       
 </div>
+
+    
     
     <!-- Zone de narration -->
     <div id="narration" class="space-y-1 text-sm text-gray-200  p-4 rounded-lg h-[60vh] show-scrollbar overflow-y-auto">
@@ -100,6 +109,24 @@
             {% for image in textpad.images %}
             <img onclick="showImg(`/{{image.path}}`)" src='/static/images/loaders/img-loader.gif'  onload="replacePlaceholder(this,'/{{image.path}}');" alt="{{textpad.text}}" class="cursor-pointer border border-orange-500 w-32 h-32 object-cover rounded-3xl  transition-opacity duration-300" />
             {% endfor %}
+        </div>
+        <div class='flex justify-between p-3' >
+            <div class = 'flex space-x-2' >
+            <button onclick="openReactorsPopup('/story/textpads/{{textpad.id}}/reactors')" id='storyTextpadReactions-{{textpad.id}}' class="text-orange-500 text-xl hover:text-orange-600 focus:outline-none">
+                {{textpad.most_reaction}} {{textpad.reactions}}
+            </button>
+            <button onclick = "loginDecorator(openStoryTextpadCommentPopup,null,'{{textpad.id}}')" class="text-xl text-green-500 hover:text-green-600 focus:outline-none">
+                <i class="fa-regular fa-comment mr-2"></i> {{textpad.comments}}
+            </button>
+            </div>
+
+            <div class="reactions flex space-x-2  mx-2 right-0  border border-gray-700 text-gray-300 text-sm p-2 rounded-3xl shadow-lg">
+                <button class='reaction-button' onclick = "loginDecorator(reactToStoryTextpad,null,'{{textpad.id}}', '😂', this)" >😂</button>
+                <button class='reaction-button' onclick = "loginDecorator(reactToStoryTextpad,null,'{{textpad.id}}', '👍', this)">👍</button>
+                <button class='reaction-button' onclick = "loginDecorator(reactToStoryTextpad,null,'{{textpad.id}}', '👎', this)" >👎</button>
+                <button class='reaction-button' onclick = "loginDecorator(reactToStoryTextpad,null,'{{textpad.id}}', '😲', this)" >😲</button>
+                <button class='reaction-button' onclick = "loginDecorator(reactToStoryTextpad,null,'{{textpad.id}}', '☹️', this)" >☹️</button>
+            </div>                      
         </div>
         
         {% endfor %}
@@ -129,7 +156,6 @@
         <div class="">
             <p class="text-gray-400 text-xs"><i class="fas fa-circle-notch text-blue-600 mr-2"></i> Plus tu donnes de details sur ton action et tes agissement, mieux c'est</p>
             <p class="text-white text-xs"><i class="fas fa-exclamation-triangle text-yellow-500 mr-2"></i> Si tu encaisse une attaque mortel, ton personnage mourra et l'aventure s'arretera </p>
-        
         </div>
         <div class="flex justify-between items-center">
             <span id="wordCount" class="text-gray-400">Mots: 0</span>
@@ -139,12 +165,12 @@
         </div>
     </form>
     <!-- Input utilisateur -->
-    <div id="actions" class="flex justify-center overflow-x-auto p-4 space-x-4 bg-opacity-90  w-full">
+    <div id="actions" class="flex  justify-center overflow-x-auto p-4 space-x-4 bg-opacity-90  w-full">
       <!-- <input type="text" id="action-input" class="flex-1 px-4 py-2 rounded bg-gray-700 text-white focus:outline-none" placeholder="Que fais-tu ?" required />
       <button type="submit" class="bg-orange-600 px-4 py-2 rounded hover:bg-orange-700">Envoyer</button> -->
-      {% if status == 'ongoing' %}  
-      <button onclick="performAction(showTurnInput)" type="button" class="action-btn  hover:bg-orange-700 truncate border text-white font-bold py-1 px-4 rounded-full transition duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="200" height="200" viewBox="0 0 21 21"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M17 4a2.121 2.121 0 0 1 0 3l-9.5 9.5l-4 1l1-3.944l9.504-9.552a2.116 2.116 0 0 1 2.864-.125zM9.5 17.5h8m-2-11l1 1"/></svg>
+      {% if status == 'ongoing' and can_play %}  
+      <button onclick="performAction(showTurnInput)" type="button" class="action-btn  hover:bg-orange-700 truncate border text-white font-bold py-1 px-4 rounded-full transition duration-300">    
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="200" height="200" viewBox="0 0 21 21"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M17 4a2.121 2.121 0 0 1 0 3l-9.5 9.5l-4 1l1-3.944l9.504-9.552a2.116 2.116 0 0 1 2.864-.125zM9.5 17.5h8m-2-11l1 1"/></svg>
         </button>
 
         <button onclick="performAction(continueStory)" type="button" class="action-btn hover:bg-orange-700 truncate border text-white font-bold py-2 px-4 rounded-full transition duration-300">
@@ -288,7 +314,36 @@
             </a>
             <!-- <h2 class="text-xl font-bold text-orange-400 mb-3">Ad</h2> -->
   </div>
+
+
 </div>
+
+<div id="storyTextpadCommentPopup" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-end  sm:items-center animate__animated  justify-center z-50">
+    <div id="storyTextpadPopupContent" class="relative w-full sm:w-3/5 h-[70vh] md:h-[30vh] bg-gray-900 rounded-t-3xl sm:rounded-xl p-4">
+      <!-- Header -->
+      <div class="flex justify-between items-center border-b pb-3 border-gray-800">
+        <h2 class="text-lg font-semibold">💬 Commentaires sur ce pave</h2>
+        <button onclick="closeStoryTextpadCommentPopup();" class="text-gray-500 hover:text-red-500 text-xl font-bold">&times;</button>
+      </div>
+      <!-- Comments list -->
+    <div>
+      <div id="storyTextpadCommentSpace" class="space-y-4 relative overflow-y-auto max-h-96 my-4 pb-4">
+      </div>
+      <div class="mt-6 fixed md:relative w-full bottom-0 left-0 border-t bg-gray-900 py-4 px-2 border-gray-800">
+        <form onsubmit='sendStoryTextpadComment(this, event);' id="sendstoryTextpadCommentForm" data-storyTextpad-id = "" parent-id = '' class="flex gap-2">
+          <textarea oninput="autoExpand(this)" type="text" placeholder="Écris ton commentaire..." rows="1"  class="w-full bg-transparent px-4 py-2 text-white rounded-3xl border border-gray-700 focus:outline-none resize-none" ></textarea>
+          <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-full"><i class="fa-regular fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
+    </div>
+
+</div>
+
+<div id="gotoBottom-btn" class="flex hidden animate-scaleIn justify-center  space-x-6  fixed bottom-0 w-full z-10 py-2">
+<button onclick="scrollToBottomNarration()" class="animate-scaleIn px-4 py-2 rounded-lg button-smooth bg-gray-700 text-orange-500">Bottom</button>
+</div>
+
 
 {{show_ads|json_script:"show_ads" }}
 {{affiliate_products|json_script:"affiliate_products" }}
@@ -488,6 +543,23 @@ document.addEventListener("DOMContentLoaded", function() {
             scrollTop: element.scrollHeight,
         },'smooth')
     }
+    function scrollToBottomNarration(){
+        console.log('main')
+        const c = document.getElementById('narration')
+        $(c).animate({
+            scrollTop: c.scrollHeight,
+        },'smooth')
+    }
+    // window.addEventListener('scroll',()=>{
+    //     const button = document.getElementById('gotoBottom-btn')
+    //     const container = document.getElementById('narration')
+        
+    //     if (window.scrollY + window.innerHeight >= container.scrollHeight - 500) {
+    //           button.classList.add('hidden')
+    //     }else{
+    //         button.classList.remove('hidden')
+    //     }
+    // })
 
     function typeWriterEffect(element, text, speed = 50, scroll = true) {
     let index = 0;
@@ -525,7 +597,7 @@ document.addEventListener("DOMContentLoaded", function() {
         scrollToBottom(container)
     }
 
-    function addText(container, text){
+    function addText(container, textpad){
 
         document.querySelectorAll('.highlighted').forEach(el => {
             el.classList.remove('highlighted')
@@ -536,12 +608,33 @@ document.addEventListener("DOMContentLoaded", function() {
         p.innerHTML = `
         <i onclick="toggleCollapseParagraph(this)" class="toggle-arrow text-xl fas fa-caret-right text-orange-500 cursor-pointer mr-2"></i><em class='highlighted' ></em>
         `
-        p.dataset.collapsedContent = String(text).slice(0,150) + "..."
-        p.dataset.content = text
+        p.dataset.collapsedContent = String(textpad.text).slice(0,150) + "..."
+        p.dataset.content = textpad.text
         // p.textContent = text;
         const em = p.querySelector('em')
+        const reactionsContainer = document.createElement('div')
+        reactionsContainer.className = 'flex justify-between p-3'
+        reactionsContainer.innerHTML = `
+            <div class = 'flex space-x-2' >
+            <button id='storyTextpadReactions-${textpad.id}' class="text-orange-500 text-xl hover:text-orange-600 focus:outline-none">
+                ${textpad.most_reaction} ${textpad.reactions}
+            </button>
+            <button onclick = "loginDecorator(openStoryTextpadCommentPopup,null,3)" class="text-xl text-green-500 hover:text-green-600 focus:outline-none">
+                <i class="fa-regular fa-comment mr-2"></i> ${textpad.comments}
+            </button>
+            </div>
+
+            <div class="reactions flex space-x-2  mx-2 right-0  border border-gray-700 text-gray-300 text-sm p-2 rounded-3xl shadow-lg">
+                <button class='hover:scale-105  reaction-button' onclick = "loginDecorator(reactToStoryTextpad,null,3, '😂', this)" >😂</button>
+                <button class='hover:scale-105  reaction-button' onclick = "loginDecorator(reactToStoryTextpad,null,'3', '👍', this)">👍</button>
+                <button class='hover:scale-105  reaction-button' onclick = "loginDecorator(reactToStoryTextpad,null,3, '👎', this)" >👎</button>
+                <button class='hover:scale-105  reaction-button' onclick = "loginDecorator(reactToStoryTextpad,null,3, '😲', this)" >😲</button>
+                <button class='hover:scale-105  reaction-button' onclick = "loginDecorator(reactToStoryTextpad,null,3, '☹️', this)" >☹️</button>
+            </div>                      
+        `
         container.appendChild(p);
-        typeWriterEffect(em, text, 50);
+        typeWriterEffect(em, textpad.text, 50);
+        container.appendChild(reactionsContainer);
     }
 
 
@@ -625,8 +718,8 @@ document.addEventListener("DOMContentLoaded", function() {
             },
             success : function(res){
                 if(res.status == "success"){
-                    const text = res.text
-                    addText(narrationContainer, text)
+                    const textpad = res.textpad
+                    addText(narrationContainer, textpad)
                     if(res.images){
                         addImages(narrationContainer, res.images.map((image)=> "/" + image.path ))
                     }
@@ -663,8 +756,8 @@ document.addEventListener("DOMContentLoaded", function() {
             },
             success : function(res){
                 if(res.status == "success"){
-                    const text = res.text
-                    addText(narrationContainer, text)
+                    const textpad = res.textpad
+                    addText(narrationContainer, textpad)
                     window.location.reload()
                 }else{
                     showMyToast(res.message)
@@ -752,10 +845,11 @@ document.addEventListener("DOMContentLoaded", function() {
             },
             success : function(res){
                 if(res.status == "success"){
-                    const text = res.text
+                    const textpad = res.textpad
+                    
                     textarea.value = '';
                     scrollToBottom(narrationContainer)
-                    addText(narrationContainer, text)
+                    addText(narrationContainer, textpad)
                     if(res.images){
                         addImages(narrationContainer, res.images.map((image)=> "/" + image.path ))
                     }
@@ -786,6 +880,329 @@ document.addEventListener("DOMContentLoaded", function() {
 
     //performAction(showAdPopup)
     
+
+</script>
+
+<!--Story textpad comment-->
+<script>
+function openStoryTextpadCommentPopup(storyTextpadId) {
+    const popup = document.getElementById('storyTextpadCommentPopup');
+    popup.classList.remove('hidden');
+    popup.classList.remove('fade-out-down');
+    popup.classList.add('fade-in-up');
+    
+    getStoryTextpadData(storyTextpadId)
+  }
+  function closeStoryTextpadCommentPopup() {
+    const popup = document.getElementById('storyTextpadCommentPopup');
+    popup.classList.remove('fade-in-up');
+    popup.classList.add('fade-out-down');
+    setTimeout(() => {
+      popup.classList.add('hidden');
+    }, 300);
+  }
+
+  
+    document.addEventListener('click', (e) => {
+    const popup = document.getElementById('storyTextpadCommentPopup');
+    const content = popup.querySelector('#storyTextpadPopupContent');
+    
+    if (!popup.classList.contains('hidden') && !content.contains(e.target) && !e.target.closest('button[onclick^="loginDecorator"]') && !e.target.closest('button[onclick^="openStoryTextpadCommentPopup"]')) {
+      closeStoryTextpadCommentPopup();
+    }
+  });
+
+
+function getStoryTextpadData(storyTextpadId){
+    
+    const popupContent = document.getElementById('storyTextpadPopupContent');
+    const commentForm = document.getElementById('sendstoryTextpadCommentForm');
+    commentForm.setAttribute('data-storyTextpadId', storyTextpadId)
+
+    const commentsContainer = popupContent.querySelector('#storyTextpadCommentSpace')
+    const loader = document.createElement("div")
+            loader.classname = 'text-center flex space-x-2 w-full justify-center items-center'
+            loader.innerHTML = `
+            <i class="fas fa-spinner fa-spin text-orange-500"></i> 
+            <span class="text-gray-400 text-sm "> Loading...</span>
+            `
+    $.ajax({
+        url: `/story/textpads/${storyTextpadId}/comments`,
+        type: 'GET',
+        data: {
+            'Content-Type': 'application/json'
+        },
+        beforeSend: function(){
+            
+            commentsContainer.innerHTML = ''
+            commentsContainer.append(loader);
+        },
+        success: function(res){
+            
+            const comments = res.comments
+            if(comments.length > 0){
+                comments.forEach(comment => {
+                    
+                commentsContainer.append(createStoryTextpadComment(comment[0]))
+            });
+            }else{
+                commentsContainer.innerHTML = `
+                    <p class = 'text-gray-500 text-center px-4 py-8'>
+                        Soit le premier a commenter
+                    </p>
+                `
+            }
+        },
+        complete: function(){
+            loader.remove()
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            showMyToast('An Error occurred, please try again','error')
+        }
+    })
+
+    }
+
+function sendStoryTextpadComment(element, e){
+    e.preventDefault()
+    console.log(e.target.dataset)
+    const storyTextpadId = e.target.dataset.storytextpadid
+    const commentSection = $('#storyTextpadCommentSpace')
+
+    const body = $(e.target).find('textarea').val().trim()
+    // const body = $(e.target).find('textarea').val().trim()
+    if(body){
+    $.ajax({
+            url: `/story/textpads/${storyTextpadId}/comments/add`,
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: '{{csrf_token}}',
+                body: body,
+            },
+            beforeSend: function(){
+                $('#loading-overlay').toggleClass('active')
+            },
+            success: function(res){
+                $(e.target).find('textarea').val('')
+                $(commentSection).prepend(createStoryTextpadComment(res.comment[0]))
+                commentSection.animate({
+                    scrollTop: 0
+                },'smooth')
+            },
+            complete: function(){
+                $('#loading-overlay').toggleClass('active')
+                document.querySelectorAll('.body').forEach((element)=>{
+                element.innerHTML = linkifyHtml(element.textContent, {
+                target:"_blank",
+                className: 'link'
+                })
+                })
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                showMyToast('An Error occurred, please try again','error')
+            }
+        })
+       
+    }else{
+        showMyToast('Ajoute du contenu', 'info')
+    }
+
+}
+
+function showStoryTextpadCommentReplyForm(commentId) {
+    $(`#storyTextpadComment-replies-${commentId}`).siblings('.reply-form').toggleClass('hidden')
+    //document.getElementById(`replies-${commentId}`).nextSibling('.reply-form').classList.toggle('hidden');
+}
+
+function addStoryTextpadCommentReply(parentId, storyTextpadId) {
+    
+    const text = document.getElementById(`storyTextpadComment-reply-${parentId}`).value;
+    const commentSection = $('#storyTextpadCommentSpace');
+    const replySection = document.getElementById(`storyTextpadComment-replies-${parentId}`);
+    
+    const topParentCommentElement = $(replySection).closest('.parent-comment')[0]
+    const topParentId = topParentCommentElement.getAttribute('data-id')
+    const topParentReplySection = topParentCommentElement.querySelector(`#storyTextpadComment-replies-${topParentId}`)
+
+
+    
+    if(text){
+        $.ajax({
+            url: `/story/textpads/${storyTextpadId}/comments/add`,
+            type: 'POST',
+            data: {
+                csrfmiddlewaretoken: '{{csrf_token}}',
+                body: text,
+                parent_id : parentId,
+            },
+            beforeSend: function(){
+                $('#loading-overlay').toggleClass('active')
+            },
+            success: function(res){
+                
+                //replySection.querySelector('textarea').value = ''
+                $(`#contentComment-reply-${parentId}`).val('')
+
+                // $(replySection).prepend(`
+                // <div class='text-sm flex space-x-2'>
+                //                     <img src = '${res.comment[0].author.profile_picture}' class='w-8 h-8 rounded-full inline-block' />
+                //                     <div>
+                //                     <p><a href='/users/${res.comment[0].author.username}' onclick='showOverlay()' >${res.comment[0].author.username}</a> ${res.comment[0].parent ? ` <i class='fas fa-caret-right text-orange-500' ></i> <span class = 'text-gray-400'>${res.comment[0].parent.author.player}</span>`: ''} </p>
+                //                     <p>${res.comment[0].body_full}</p>
+                //                     <small class='text-sm text-gray-400'>${res.comment[0].timestamp}</small>
+                //                     </div>   
+                //             </div>
+                // `)
+                topParentReplySection.appendChild(createContentComment(res.comment[0]));
+                
+                $(topParentReplySection).animate({
+                scrollTop: topParentReplySection.scrollHeight,
+                },'smooth')
+                showMyToast('reponse ajouté','success')
+            },
+            complete: function(){
+                $('#loading-overlay').toggleClass('active')
+                document.querySelectorAll('.body').forEach((element)=>{
+                element.innerHTML = linkifyHtml(element.textContent, {
+                target:"_blank",
+                className: 'link'
+                })
+                })
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                showMyToast('An Error occurred, please try again','error')
+            }
+        })
+    }else{
+        showMyToast('Ajoute du contenu a ta reponse')
+    }
+        
+}
+
+function createStoryTextpadComment(comment){
+    
+var c_player = {
+    'username': '{{player.user.username}}',
+    'player':'{{player}}',
+}
+// console.log("comment:",comment)
+const commentElement = document.createElement('div');
+commentElement.className = `comment ${comment.parent ? '' : `parent-comment`}  flex items-start gap-3 mb-4`;
+commentElement.id = `${comment.parent ? '' : `parent-storyTextpadComment-${comment.id}`}`
+commentElement.setAttribute('data-id', comment.id)
+commentElement.innerHTML = `
+            <a class = "inline-block" href='/users/${comment.author.username}'>
+            <img src="${comment.author.profile_picture}" alt="avatar" class="rounded-full border border-orange-500 w-10 h-10" />
+            </a>
+            
+            <div class="flex-1">
+                    <a href='/users/${comment.author.username}' onclick = 'showOverlay();' class="text-sm font-semibold hover:text-orange-500 ">${comment.author.player} ${comment.parent ? ` <i class='fas fa-caret-right text-orange-500' ></i> <span class = 'text-gray-400'>${comment.parent.author.player}</span>`: ''} </a>
+                    <p onclick = 'toggleExpand(this)' class="body text-sm text-gray-300" data-expandable data-full='${comment.body_full}'>${comment.body}</p>
+                        <div class="absolute top-0 right-2">
+                            <button onclick = 'toggleDropdown(this);' class="text-gray-400 hover:text-white post-dropdown-toggle">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+
+                            <div class="post-dropdown-menu hidden rounded-xl border border-gray-700 bg-gray-800 w-48 py-2">
+                                <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="copyLink('${comment.body}')"><i class = 'fas fa-copy mr-2'></i>copier</div>
+                                <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick=""><i class = 'fas fa-flag mr-2'></i> signaler</div>
+                                
+                                ${comment.author.username == currentPlayerData.username ?  `
+                                
+                                <div class="block px-4 py-2 cursor-pointer text-red-500 text-sm text-gray-300 hover:bg-gray-600"  onclick="deleteComment(this,'${comment.id}')"><i class = 'fas fa-trash  mr-2'></i> Supprimer</div>
+                                `:``}
+                        </div>
+                        </div>    
+                    <div class="flex items-center gap-4 mt-1 text-xs text-gray-500">
+                    <span>${comment.timestamp}</span>
+                    <button data-comment-id="${comment.id}" class='text-xs comment-like-button  rounded-full ' class="comment-like-button hover:text-orange-500 ${comment.liked ? 'liked' : ''}">
+                        <i class="fa-regular fa-thumbs-up mr-1"></i> 
+                        <span class='comment-likes-count'>${comment.likes}</span>
+                    </button>
+                    <button onclick = "showStoryTextpadCommentReplyForm('${comment.id}')" class="hover:underline">Répondre</button>
+                </div>
+                    
+                    ${comment.parent  ? '' : ''}
+                    ${comment.replies.length > 0 && comment.parent == null  ? `
+                    <button onclick="showStoryTextpadCommentReplies('${comment.id}')" class="ml-4 mt-2 text-sm text-gray-600 hover:text-orange-500 dark:text-gray-400">voir les reponses</button>
+                    ` : ''}
+                    
+                    <div class='reply-form flex flex-col space-y-2 my-4 hidden'>
+                        <textarea id="storyTextpadComment-reply-${comment.id}" class='w-full bg-transparent text-white placeholder-gray-400 border-b border-gray-700 focus:outline-none resize-none' placeholder="repondre a ${comment.author.username}..."></textarea>
+                        <button onclick="addStoryTextpadCommentReply('${comment.id}', '${comment.textpad_id}')">Soumettre</button>
+                    </div>
+                    <div class='mb-2 max-h-96 overflow-y-auto hidden' id="storyTextpadComment-replies-${comment.id}">
+                        
+                        ${comment.replies
+                        .map(
+                            (reply) => `
+                    `
+                        )
+                        .join("")}
+                    </div>
+              <div></div>
+            </div>
+           
+
+
+`;
+
+
+comment.replies.forEach(reply => 
+commentElement.querySelector(`#storyTextpadComment-replies-${comment.id}`).appendChild(createStoryTextpadComment(reply[0])) )
+
+
+return commentElement;
+}
+
+const showStoryTextpadCommentReplies = (commentId, parentId) => {
+    const parentCommentElement = document.querySelector(`#parent-storyTextpadComment-${parentId}`) 
+    const repliesSection = document.getElementById(`storyTextpadComment-replies-${commentId}`) 
+    repliesSection.classList.toggle('hidden')
+    const replies = repliesSection.querySelectorAll('.comment')
+    //repliesSection.innerHTML = ''
+    replies.forEach(commentElement => {
+        repliesSection.appendChild(commentElement)
+    });
+}
+
+function reactToStoryTextpad(storyTextpadId, reaction,button){
+            const container = button.parentElement
+            $.ajax({
+                type: "POST",
+                url: `/story/textpads/react/${storyTextpadId}`,
+                data: {
+                    reaction : reaction,
+                    csrfmiddlewaretoken: "{{csrf_token}}",
+                },   
+                
+                //dataType: "json",
+                beforeSend: function(){
+                    //$('#loading-overlay').toggleClass('active')
+                    container.classList.add('bg-opacity-50')
+                    //button.classList.contains('liked') ? button.classList.remove('liked') : button.classList.add('liked')
+                    button.classList.contains('blink-1') ? button.classList.remove('blink-1') : button.classList.add('blink-1')
+                },
+                success: function(res){
+                    if(res.status == "success"){
+                        const reactionsButton = document.getElementById(`storyTextpadReactions-${storyTextpadId}`)
+                        console.log(reactionsButton)
+                        reactionsButton.textContent = `${reaction} ${res.reactions.length}`
+                        
+                    }
+                        
+                },
+                complete: function(){
+                    //$('#loading-overlay').toggleClass('active')
+                    container.classList.remove('bg-opacity-50')
+                },
+                error: function(jqXHR, textstatus, errorThrown){
+                    showMyToast("Une erreur s'est produite", 'error')
+                }
+            })
+        }
+
+
 
 </script>
 

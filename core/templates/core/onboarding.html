@@ -70,289 +70,256 @@
             </div>
               <p class="text-sm text-gray-400">Et si on faisait un tour sur comment debuter sur la plateforme ?</p>
               
-          <button onclick="showScreen('screen-storymode')" class="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-xl font-semibold transition">Suivant</button>
-            
+          <button onclick="showScreen('screen-onb-story')" class="button-smooth w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-xl font-semibold transition">Suivant</button>
         </div>
       </div>
 
-      <!-- Story Mode Onboarding Screen -->
-<div id="screen-storymode" class="fade-enter-active mx-auto w-full max-w-md hidden">
-  <div class="bg-gradient-to-br from-orange-900 via-gray-900 to-purple-900 rounded-xl p-6 shadow-xl space-y-6 animate-scaleIn">
-    <h1 class="text-2xl font-bold flex items-center gap-2 text-orange-300">
-      <svg class="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-        <path stroke="currentColor" stroke-width="2" d="M12 16v-4m0-4h.01"/>
-      </svg>
-      Mode Story : Deviens le héros de ton aventure
-    </h1>
-    <div class="flex justify-center items-center mb-2">
-      <img src="{% static 'images/onboarding/13.png' %}" alt="Story Mode" class="w-32 h-32 rounded-2xl shadow-lg object-cover bg-gray-800" onerror="this.style.display='none'">
+      <!-- Story Mode Onboarding Screen -->    
+    <div id="screen-onb-story" class="fade-enter-active mx-auto w-full max-w-md hidden">
+      <div class="bg-gradient-to-br from-orange-900 via-gray-900 to-purple-900 rounded-xl p-6 shadow-xl space-y-4 animate-scaleIn">
+        <h1 class="text-2xl font-bold text-orange-300">Mode Story — Ta légende</h1>
+        <!-- <img src="{% static 'images/onboarding/6.png' %}" alt="Family Image" class="myImg w-full max-h-32 object-cover rounded-2xl shadow-lg"> -->
+        <div class="flex  items-center fade-in-up bg-gray-900 rounded-xl shadow hover:shadow-lg transition hover:bg-gray-800 px-3 py-2 gap-3 w-full">
+          <div class="flex-shrink-0 w-14 h-14 rounded-full overflow-hidden border-2 border-orange-400">
+            <img src="https://media.room8studio.com/wp-content/uploads/2022/09/04201315/game_characters_article_2-1024x640.jpg" alt="Image de viking" class="w-full h-full object-cover" />
+          </div>
+        <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+            <span class="font-semibold text-orange-400 text-base truncate">Pepperoni</span>
+            <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded-full">Konoha</span>
+
+            <span class="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded-full">fire </span>
+            </div>
+            <p class="text-xs text-gray-400 mt-1 truncate">D'un coup sec il libère une boule de feu....</p>
+        </div>
+        <svg class="w-5 h-5 text-orange-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
+        </div>  
+
+        
+        <p class="text-sm text-gray-300">
+          Crée ton ninja, fais des choix décisifs et avance dans une aventure interactive.
+          Chaque décision influence ton destin — quêtes, rencontres et récompenses.
+        </p>
+        <ul class="text-sm text-gray-300 space-y-2">
+          <li>✔ Personnalisation du personnage</li>
+          <li>✔ Scénarios à embranchements</li>
+          <li>✔ Récompenses d’expérience et objets</li>
+        </ul>
+        <div class="flex justify-between mt-4">
+          <button onclick="showScreen('screen-1')" class="button-smooth px-4 py-2 bg-gray-800 text-orange-300 rounded-lg">Retour</button>
+          <button onclick="showScreen('screen-onb-duels')" class="button-smooth px-4 py-2 bg-orange-600 text-white rounded-lg">Suivant</button>
+        </div>
+      </div>
     </div>
-    <p class="text-base text-gray-200 text-center">
-      Le mode story RPV te plonge dans une histoire interactive inspirée de l’univers Naruto.<br>
-      Crée ton ninja, fais des choix, et laisse l’IA écrire ta légende !
-    </p>
-    <ul class="space-y-2 text-sm text-gray-300 mt-2">
-      <li class="flex items-center gap-2">
-        <span class="inline-block w-7 h-7 rounded-full bg-gradient-to-br from-orange-400 to-yellow-400 flex items-center justify-center text-white font-bold shadow"><i class="fas fa-user-ninja"></i></span>
-        Personnalise ton personnage et choisis ses techniques.
-      </li>
-      <li class="flex items-center gap-2">
-        <span class="inline-block w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-pink-400 flex items-center justify-center text-white font-bold shadow"><i class="fas fa-book-open"></i></span>
-        Prends des décisions qui influencent le déroulement de l’histoire.
-      </li>
-      <li class="flex items-center gap-2">
-        <span class="inline-block w-7 h-7 rounded-full bg-gradient-to-br from-orange-400 to-pink-400 flex items-center justify-center text-white font-bold shadow"><i class="fas fa-magic"></i></span>
-        Découvre des scénarios, combats et secrets exclusifs.
-      </li>
-    </ul>
-    <div class="flex justify-between mt-6">
-      <button onclick="showScreen('screen-1')" class="px-4 py-2 text-sm bg-gray-800 text-orange-300 rounded-lg font-semibold shadow hover:bg-orange-700 transition">
-        <i class="fa-solid fa-arrow-left"></i> 
-      </button>
-      <button  onclick="showScreen('screen-2')" class="px-4 py-2 text-sm bg-gray-800 text-orange-300 rounded-lg font-semibold shadow hover:bg-orange-700 transition">
-          <i class="fa-solid fa-arrow-right"></i>
-      </button>
+
+    <div id="screen-onb-duels" class="fade-enter-active mx-auto w-full max-w-md hidden">
+      <div class="bg-gray-900 rounded-xl p-6 shadow-xl space-y-4 animate-scaleIn">
+        <h1 class="text-2xl font-bold text-orange-300">Duels — PvP tactique</h1>
+        <div class="bg-gradient-to-br from-gray-900 fade-in-up via-white to-gray-800  rounded-xl shadow p-5 flex flex-col sm:flex-row items-center gap-4" >
+          <div class = "flex items-center justify-between gap-2">
+        <img src="https://storage.googleapis.com/pod_public/1300/256546.jpg" alt="sasuke susano" class="w-14 h-14 rounded-full border-2 border-orange-400 object-cover shadow" onerror="this.style.display='none'">
+        <span class='font-semibold'>VS</span>
+        <img src="https://storage.googleapis.com/pod_public/1300/239997.jpg" alt="sasuke susano" class="w-14 h-14 rounded-full border-2 border-orange-400 object-cover shadow" onerror="this.style.display='none'">
+
+    </div>    
+        <div class="flex-1">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="font-bold truncate text-orange-300">Arkham90</span>
+            <span class="text-gray-400 text-xs">vs</span>
+            <span class="font-bold truncate text-orange-300">KaiserGray</span>
+          </div>
+          <div class="text-gray-400 text-xs mb-1">
+            09/25 • En cours
+          </div>
+        </div>
+        </div>
+        <p class="text-sm text-gray-300">
+          Affronte d'autres joueurs en temps réel : stratégie, timing et compétences comptent.
+          Améliore ton personnage, maîtrise les parries et grimpe au classement.
+        </p>
+        <ul class="text-sm text-gray-300 space-y-2">
+          <li>🎯 Parry timing — active une défense parfaite</li>
+          <li>🔥 Combos & jauges (chakra/stamina)</li>
+          <li>🏆 Classements et récompenses saisonnières</li>
+        </ul>
+        <div class="flex justify-between mt-4">
+          <button onclick="showScreen('screen-onb-story')" class="button-smooth px-4 py-2 bg-gray-800 text-orange-300 rounded-lg">Retour</button>
+          <button onclick="showScreen('screen-onb-social')" class="button-smooth px-4 py-2 bg-orange-600 text-white rounded-lg">Suivant</button>
+        </div>
+      </div>
+  </div>
+
+      <!-- Social (posts, comments, chat) -->
+  <div id="screen-onb-social" class="fade-enter-active mx-auto w-full max-w-md hidden">
+    <div class="bg-gradient-to-br from-indigo-900 via-gray-900 to-pink-900 rounded-xl p-6 shadow-xl space-y-4 animate-scaleIn">
+      <h1 class="text-2xl font-bold text-orange-300">Social — partage & communauté</h1>
+      <div class="post bg-gray-900 rounded-2xl shadow-sm p-4 border border-gray-800">
+        <div class="flex items-start  gap-4">
+            <img src="https://lumiere-a.akamaihd.net/v1/images/a_avatarpandorapedia_jakesully_16x9_1098_02_b13c4171.jpeg?region=340%2C0%2C1081%2C1081" alt="photo de profile" class="myImg w-10 h-10 rounded-full" />
+            <div class="flex-1">
+              <div class="flex justify-between relative text-sm text-gray-400">
+                <div class="sm:truncate inline-block">
+                  <a  class="inline-block  font-semibold hover:text-orange-600 text-white">Lavender13</a> @theRealKing
+                </div>
+                
+    
+                 <div class="relative flex space-x-2 ">
+                 <span class="text-xs">1m</span>   
+                 <span class="px-2 py-1 bg-gray-800 text-gray-200 text-xs rounded-full border border-gray-700 font-semibold shadow">Discussion</span>
+                  
+                  <button class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle">
+                      <i class="fas fa-ellipsis-v"></i>
+                  </button>
+                 
+                </div>
+              </div>
+              
+              <p class="text-gray-100 mt-1">
+                Je vais surerment debloquer une nouvelle competence dans les prochains jours 🔥
+              </p>
+                <!-- <div class="mt-3">
+                <img  src='/static/images/loaders/img-loader.gif' onload = "replacePlaceholder(this, 'https:/\/wallpapercave.com/wp/wp7314599.jpg')" alt="onboarding image de publication" class="w-full myImg rounded-xl border-1 border-gray-700 object-cover h-auto max-h-[300px]" />
+              </div> -->
+               
+              
+              <div class="flex relative justify-between mt-4 text-gray-400 text-sm">
+                <div id = "${post.id}-post-reactions" class="reactions bg-gray-800 fade-in-up absolute left-0 top-0 hidden flex space-x-2  mx-2 right-0  border border-gray-700 text-gray-300 text-sm p-2 rounded-3xl shadow-lg">
+                    <button class='hover:scale-105 text-xl reaction-button'>🔥</button>
+                    <button class='hover:scale-105 text-xl reaction-button' >😂</button>
+                    <button class='hover:scale-105 text-xl reaction-button' >😲</button>
+                    <button class='hover:scale-105 text-xl reaction-button' >☹️</button>
+                </div>
+                <div  class="flex items-center space-x-1 hover:text-orange-500 ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
+                <button  class = "">😂</button>
+                <button>120</button>
+                </div>
+                <button class="comment-button flex items-center space-x-1 hover:text-blue-500">
+                <i class="far fa-comment"></i>
+                <span class = 'comment-count'>34</span>
+                </button>
+
+                
+                <button class="flex items-center space-x-1 hover:text-orange-500">
+                  <i class = 'far fa-bookmark'></i>
+                </button>
+                
+                <button class="flex items-center space-x-1 hover:text-green-500">
+                  <i class = 'fas fa-share-alt'></i><span>partager</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+      </div>
+      <p class="text-sm text-gray-300">
+        Publie des posts, commente et discute en direct. Trouve des amis, recrute dans des familles et rejoins notre Discord.
+      </p>
+      <ul class="text-sm text-gray-300 space-y-2">
+        <li>✍️ Posts & commentaires — montre tes scènes</li>
+        <li>💬 Chat de bataille — parle à ton adversaire</li>
+        <li>🤝 Familles & événements communautaires</li>
+      </ul>
+      <div class="flex justify-between mt-4">
+        <button onclick="showScreen('screen-onb-duels')" class="button-smooth px-4 py-2 bg-gray-800 text-orange-300 rounded-lg">Retour</button>
+        <button onclick="showScreen('screen-onb-special')" class="button-smooth px-4 py-2 bg-orange-600 text-white rounded-lg">Suivant</button>
+      </div>
     </div>
   </div>
-</div>
-
-      <div id="screen-2" class="fade-enter-active mx-auto w-full max-w-md hidden">
-        <div class="bg-gray-900 rounded-xl p-6 shadow-xl space-y-4 animate-scaleIn">
-          <h1 class="text-2xl font-bold flex items-center gap-2">
-            <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2v6m8 4H6a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
-            </svg>
-           Mode Classique:  Les Clans/Familles
-          </h1>
-          <p class="text-sm text-gray-400">Un clan/famille est un groupe de joueur partageant les meme ideaux et objectifs.</p>
-          
-          <div class="flex gap-3 justify-center items-center">
-            <img src="{% static 'images/onboarding/1.png' %}" alt="Clan Image" class="myImg w-1/2 h-auto rounded-2xl shadow-lg">
-            <img src="{% static 'images/onboarding/2.png' %}" alt="Family Image" class="myImg w-1/2 h-auto rounded-2xl shadow-lg">
-          </div>
 
 
-          <div class="flex flex-col gap-3">
-            <div class="flex-1 bg-gray-800 p-4 rounded-lg shadow">
-              <h2 class="text-sm font-semibold text-purple-500">Rejoindre</h2>
-              <p class="text-sm text-gray-300">Rejoins un clan/famille en envoyant une demande d'adhesion pour bénéficier de bonus exclusifs pour tes combats, faire des combats a eneju et participer à des événements communautaires.</p>
+      <!-- Special Character Management -->
+  <div id="screen-onb-special" class="fade-enter-active mx-auto w-full max-w-md hidden">
+    <div class="bg-gray-900 rounded-xl p-6 shadow-xl space-y-4 animate-scaleIn">
+      <h1 class="text-2xl font-bold text-orange-300">Personnage spécial — Gestion & compétences</h1>
+      <div class="fade-in-up group block bg-gray-950 border border-gray-700 rounded-xl shadow hover:shadow-lg transition-transform transform hover:-translate-y-1 px-4 py-3 w-full" >
+          <div class="flex items-center gap-3">
+        <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-orange-400 flex-shrink-0">
+          <img src="https://images.pexels.com/photos/264905/pexels-photo-264905.jpeg?cs=srgb&dl=pexels-pixabay-264905.jpg&fm=jpg" alt="Perso speciale" class="w-full h-full object-cover" onerror="this.src='/static/images/avatar_default.png'">
+        </div>
+
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between gap-2">
+            <div class="truncate">
+              <div class="text-base font-semibold text-orange-300 truncate">Lebabon</div>
+              <div class="text-xs shadow text-gray-300 truncate">CH : 105</div>
+              <div class="text-xs shadow text-gray-300 truncate">PV : 100</div>
             </div>
-            <div class="flex-1 bg-gray-800 p-4 rounded-lg shadow">
-              <h2 class="text-sm font-semibold text-orange-500">Creer</h2>
-              <p class="text-sm text-gray-300">Tu peux également crée une famille et t'etablir en tant que parrain sur la plateforme, le badge parrain te sera attribuer et seras visible sur ton profile. Tu pourras ensuite commencé a recruiter des membres qui partagent tes ideaux.</p>
+            <div class="text-right">
+              <div class="text-sm text-gray-300">Niveau</div>
+              <div class="text-lg font-bold text-white">1</div>
             </div>
-
           </div>
 
-          <div class="flex  justify-between">
-            <button  onclick="showScreen('screen-storymode')" class="px-4 py-2 text-sm bg-gray-800 text-orange-300 rounded-lg font-semibold shadow hover:bg-orange-700 transition">
-                <i class="fa-solid fa-arrow-left"></i>
-            </button>
-            <button  onclick="showScreen('screen-3')" class="px-4 py-2 text-sm bg-gray-800 text-orange-300 rounded-lg font-semibold shadow hover:bg-orange-700 transition">
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
+          <div class="mt-3">
+            <div class="w-full bg-gray-800 rounded-full h-2.5 overflow-hidden border border-gray-700">
+              <div class="bg-orange-500 h-2.5" style="width: 20%; transition: width 0.5s ease"></div>
+            </div>
+            <div class="mt-1 flex items-center justify-between text-xs text-gray-400">
+              <div>XP: 20 / 100</div>
+              <div>20%</div>
+            </div>
           </div>
-          
+
+          <div class="mt-3 flex items-center gap-2 flex-wrap">
+            <span class="px-2 py-1 bg-gray-800 text-gray-200 text-xs rounded-full border border-gray-700">Dechirure de l'espace temps</span>
+            <span class="px-2 py-1 bg-gray-800 text-gray-200 text-xs rounded-full border border-gray-700">Avalanche d'insectes</span>
+            <span class="px-2 py-1 bg-gray-800 text-gray-200 text-xs rounded-full border border-gray-700">Brise garde</span>
+            <span class="px-2 py-1 bg-gray-700 text-gray-300 text-xs rounded-full border border-gray-600">+3 skills</span>
+          </div>
+
+          <p class="mt-3 text-xs text-gray-400 truncate">Arborant une tunique mystérieuse, une chevelure flamboyante et un regard percant, il possede une epee enflammée.</p>
         </div>
       </div>
-
-      <div id="screen-3" class="fade-enter-active mx-auto w-full max-w-md hidden animate__slideInLeft">
-        <div class="bg-gray-900 rounded-xl p-6 shadow-xl space-y-4 animate-scaleIn">
-          <h1 class="text-2xl font-bold flex items-center gap-2">
-            <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2v6m8 4H6a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
-            </svg>
-            Les Combats
-          </h1>
-          
-          <p class="text-sm text-gray-400">Pour faire un combat, vas sur la page des combats et cree une <span>Requete de combat</span>. D'autres joueurs verront ta requete et pourront l'accepter. </p>
-          
-          <div class="flex gap-3 justify-center items-center">
-            <img src="{% static 'images/onboarding/3.png' %}" alt="Clan Image" class="myImg w-1/2 h-auto rounded-2xl shadow-lg">
-          </div>
-
-          <div>
-            <p class="text-sm text-gray-400 mb-2" ><i class="fas fa-caret-right text-orange-500 mr-2" ></i>  Une fois qu'un joueur accepte ta requête, un arbitre doit être désigné, un troisième joueur qui devra s'occuper de valider les actions écrites pendant le combat.</p>
-            <p class="text-sm text-gray-400"> Des joueurs enverront des propositions pour arbitrer ton combat et, une fois une proposition validée, le joueur désigné pour arbitrer mettra en place les règles et ensuite les combattants pourront envoyer leurs pavés de texte. </p>
-          
-          </div>
-          
-          <div class="flex justify-between">
-            <button  onclick="showScreen('screen-2')" class="px-4 py-2 text-sm bg-gray-800 text-orange-300 rounded-lg font-semibold shadow hover:bg-orange-700 transition">
-                <i class="fa-solid fa-arrow-left"></i>
-            </button>
-            <button  onclick="showScreen('screen-4')" class="px-4 py-2 text-sm bg-gray-800 text-orange-300 rounded-lg font-semibold shadow hover:bg-orange-700 transition">
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-          </div>
-          
-        </div>
+      <div class="mt-3 flex justify-end">
+        <button class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-3 py-1 rounded-full text-sm shadow">
+          <i class="fas fa-cog"></i><span>Gérer</span>
+        </button>
       </div>
-
-      <div id="screen-4" class="fade-enter-active mx-auto w-full max-w-md hidden animate__slideInLeft">
-        <div class="bg-gray-900 rounded-xl p-6 shadow-xl space-y-4 animate-scaleIn">
-          <h1 class="text-2xl font-bold flex items-center gap-2">
-            <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2v6m8 4H6a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
-            </svg>
-            Les Combats 
-          </h1>
-          
-          <p class="text-sm text-gray-400">Tu peux également choisir de faire arbitrer ton combat avec une IA pour des verdicts rapides et sans possibilité de revendications.</p>
-          <p class="text-sm text-gray-400">Tu peux également accepter des requêtes de combats venant d'autres joueurs ; dans ce cas, c'est le joueur auteur de la requête qui recevra les propositions d'arbitrage.</p>
-          <p class="text-sm text-gray-400">Les combats amicaux ne rapportent pas de points de progression, tandis que les combats à enjeu ne sont faisables que par des membres d'une famille/clan, car ils impactent le classement des clans.</p>
-          
-          <div class="flex gap-3 justify-center items-center">
-           <img src="{% static 'images/onboarding/4.png' %}" alt="Family Image" class="myImg w-1/2 h-auto rounded-2xl shadow-lg">
-          </div>
-          
-          <div class="flex justify-between">
-            <button  onclick="showScreen('screen-3')" class="px-4 py-2 text-sm bg-gray-800 text-orange-300 rounded-lg font-semibold shadow hover:bg-orange-700 transition">
-                <i class="fa-solid fa-arrow-left"></i>
-            </button>
-            <button  onclick="showScreen('screen-5')" class="px-4 py-2 text-sm bg-gray-800 text-orange-300 rounded-lg font-semibold shadow hover:bg-orange-700 transition">
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-          </div>
-          
-        </div>
       </div>
-
-      <div id="screen-5" class="fade-enter-active mx-auto w-full max-w-md hidden animate__slideInLeft">
-        <div class="bg-gray-900 rounded-xl p-6 shadow-xl space-y-4 animate-scaleIn">
-            <h1 class="text-2xl font-bold flex items-center gap-2">
-              <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2v6m8 4H6a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
-              </svg>
-              Les Duel/Challenge
-            </h1>
-            <p class="text-sm text-gray-400">Les défis sont des moyens d'affronter un joueur en particulier. Ils consomment entre 400 et 600 JC en fonction du rang et du statut de l'adversaire et peuvent rapporter jusqu'à 20 XP en cas de victoires.Les défis sont des moyens d'affronter un joueur en particulier. Ils consomment entre 400 et 600 JC en fonction du rang et du statut de l'adversaire et peuvent rapporter jusqu'à 20 XP en cas de victoires.</p>
-            <!-- <ul class="text-sm text-gray-500 list-disc pl-5">
-              <li>Choisis ton personnage pour le combat</li>
-              <li>Le bot utilisera des jutsus stratégiquement</li>
-              <li>Ton adversaire sera selectionné de facon aléatoire</li>
-              <li>Récompenses : XP(points de progression) + objets bonus</li>
-            </ul> -->
-              <div class="flex gap-3 justify-center items-center">
-                  <img src="{% static 'images/onboarding/5.png' %}" alt="Clan Image" class="myImg w-1/2 h-auto rounded-2xl shadow-lg">
-              </div>    
-            <div class="flex justify-between">
-              <button  onclick="showScreen('screen-4')" class="px-4 py-2 text-sm bg-gray-800 text-orange-300 rounded-lg font-semibold shadow hover:bg-orange-700 transition">
-                  <i class="fa-solid fa-arrow-left"></i>
-              </button>
-              <button  onclick="showScreen('screen-6')" class="px-4 py-2 text-sm bg-gray-800 text-orange-300 rounded-lg font-semibold shadow hover:bg-orange-700 transition">
-                  <i class="fa-solid fa-arrow-right"></i>
-              </button>
-            </div>
-            
-          </div>
+      <p class="text-sm text-gray-300">
+        Gérez un personnage unique : débloque des compétences avec l'XP, équipe jusqu'à 3 techniques et optimises tes builds.
+      </p>
+      <ul class="text-sm text-gray-300 space-y-2">
+        <li>🔓 Débloque des jutsus avec ton XP</li>
+        <li>⚔️ Équipe jusqu'à 3 compétences actives</li>
+        <li>🔁 Actions optimistes : changements immédiats, confirmation serveur</li>
+      </ul>
+      <div class="flex justify-between mt-4">
+        <button onclick="showScreen('screen-onb-social')" class="button-smooth px-4 py-2 bg-gray-800 text-orange-300 rounded-lg">Retour</button>
+        
+          <button onclick="showScreen('screen-8')" class="button-smooth px-4 py-2 bg-orange-600 text-white rounded-lg">Terminer</button>
       </div>
+    </div>
+  </div>
 
-      <div id="screen-6" class="fade-enter-active mx-auto w-full max-w-md hidden">
-        <div class="bg-gray-900 rounded-xl p-6 shadow-xl space-y-4 animate-scaleIn">
-            <h1 class="text-2xl font-bold flex items-center gap-2">
-              <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2v6m8 4H6a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
-              </svg>
-              Les Classements
-            </h1>
-            <p class="text-sm text-gray-400">Il ya deux classements sur RPV, des familles et celui des joueurs du mois.</p>
-            <div class="flex gap-3 justify-center items-center">
-              <img src="{% static 'images/onboarding/6.png' %}" alt="Family Image" class="myImg w-1/2 h-auto rounded-2xl shadow-lg">
-              <img src="{% static 'images/onboarding/8.png' %}" alt="Family Image" class="myImg w-1/2 h-auto rounded-2xl shadow-lg">
-            </div>
-  
-            <div class="flex flex-col gap-3">
-              <div class="flex-1 bg-gray-800 p-4 rounded-lg shadow">
-                <h2 class="text-sm font-semibold text-purple-500">Familles</h2>
-                <p class="text-sm text-gray-300">Le classement des familles comporte toutes les familles enregistrées et est classé en fonction du nombre de points total remporté par chaque membre de famille.</p>
-              </div>
-              <div class="flex-1 bg-gray-800 p-4 rounded-lg shadow">
-                <h2 class="text-sm font-semibold text-orange-500">Joueurs du mois</h2>
-                <p class="text-sm text-gray-300">Chaque mois, les joueurs sont classés en fonction du nombre de victoires obtenu durant le mois. Les deux premiers à la fin de chaque mois obtiennent des crédits RP bonus.</p>
-              </div>
-  
-            </div>
-  
-            <div class="flex justify-between">
-              <button  onclick="showScreen('screen-5')" class="px-4 py-2 text-sm bg-gray-800 text-orange-300 rounded-lg font-semibold shadow hover:bg-orange-700 transition">
-                  <i class="fa-solid fa-arrow-left"></i>
-              </button>
-              <button  onclick="showScreen('screen-7')" class="px-4 py-2 text-sm bg-gray-800 text-orange-300 rounded-lg font-semibold shadow hover:bg-orange-700 transition">
-                  <i class="fa-solid fa-arrow-right"></i>
-              </button>
-            </div>
-            
-          </div>
-      </div>
-
-
-      <div id="screen-7" class="fade-enter-active mx-auto w-full max-w-md hidden">
-        <div class="bg-gray-900 rounded-xl p-6 shadow-xl space-y-4 animate-scaleIn">
-          <h1 class="text-2xl font-bold flex items-center gap-2">
-            <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2v6m8 4H6a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
-            </svg>
-            Les Jetons de combats
-          </h1>
-          <p class="text-sm text-gray-400">Les jetons de combat servent à effectuer des combats. Chaque mois, tu reçois 1000 JC, tu peux également en obtenir en cliquant sur le plus.</p>
-          <!-- <ul class="text-sm text-gray-500 list-disc pl-5">
-            <li>Choisis ton personnage pour le combat</li>
-            <li>Le bot utilisera des jutsus stratégiquement</li>
-            <li>Ton adversaire sera selectionné de facon aléatoire</li>
-            <li>Récompenses : XP(points de progression) + objets bonus</li>
-          </ul> -->
-            <div class="flex gap-3 justify-center items-center">
-                <img src="{% static 'images/onboarding/5.png' %}" alt="Clan Image" class="myImg w-1/2 h-auto rounded-2xl shadow-lg">
-            </div>    
-          <div class="flex justify-between">
-            <button  onclick="showScreen('screen-6')" class="px-4 py-2 text-sm bg-gray-800 text-orange-300 rounded-lg font-semibold shadow hover:bg-orange-700 transition">
-                <i class="fa-solid fa-arrow-left"></i>
-            </button>
-            <button  onclick="showScreen('screen-8')" class="px-4 py-2 text-sm bg-gray-800 text-orange-300 rounded-lg font-semibold shadow hover:bg-orange-700 transition">
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-          </div>
-          
-        </div>
-      </div>
-
-      <div id="screen-8" class="fade-enter-active mx-auto w-full max-w-md hidden">
+  <div id="screen-8" class="fade-enter-active mx-auto w-full max-w-md hidden">
         <div class="bg-gray-900 rounded-xl p-6 shadow-xl space-y-4 animate-scaleIn">
             <h1 class="text-2xl font-bold flex items-center gap-2">
                 <!-- <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2v6m8 4H6a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
                 </svg> -->
                 👻
-                Voila,  Tu es pret a commencer ton aventure Roleplay !!
+                Voila,  Tu es pret a commencer ton aventure RPV !!
               </h1>
               <div class="flex flex-col justify-center items-center">
-                <svg class="w-32 h-32" xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 100 100"><path id="gisFlagStartBO0" fill="currentColor" fill-opacity="1" fill-rule="nonzero" stroke="none" stroke-dasharray="none" stroke-dashoffset="0" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="4" stroke-opacity="1" stroke-width="7" d="M50 0a3.5 3.5 0 0 0-3.5 3.5v80A3.5 3.5 0 0 0 50 87a3.5 3.5 0 0 0 3.5-3.5V47h43a3.5 3.5 0 0 0 3.5-3.5v-40A3.5 3.5 0 0 0 96.5 0h-46a3.5 3.5 0 0 0-.254.01A3.5 3.5 0 0 0 50 0zm4 7h39v33H54V7z" color="currentColor" color-interpolation="sRGB" color-rendering="auto" display="inline" opacity="1" vector-effect="none" visibility="visible"/><path id="gisFlagStartBO1" fill="currentColor" fill-opacity="1" stroke="none" stroke-dasharray="none" stroke-dashoffset="20" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="4" stroke-opacity="1" stroke-width="24.74" d="M38.004 76.792C27.41 78.29 20 81.872 20 87.143C20 94.243 32.381 100 50 100s30-5.756 30-12.857c0-5.272-7.41-8.853-18.003-10.35l-1.468 2.499C68.514 80.399 74 82.728 74 85.429c0 3.787-10.745 6.857-24 6.857s-24-3.07-24-6.857c-.001-2.692 5.45-5.018 13.459-6.13c-.484-.836-.97-1.67-1.455-2.507z" color="currentColor"/></svg>
+                <svg class="w-32 h-32" xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24"><g fill="none"><path fill="#ffffff" fill-opacity=".25" fill-rule="evenodd" d="M7.714 10.048A.496.496 0 0 0 7.49 10H5.679c-.542 0-.98 0-1.333.029c-.365.03-.685.093-.981.244a2.5 2.5 0 0 0-1.093 1.092c-.15.296-.213.616-.243.98C2 12.7 2 13.138 2 13.68v3.642c0 .542 0 .98.029 1.333c.03.365.093.685.243.981a2.5 2.5 0 0 0 1.093 1.092c.296.151.616.214.98.244A15.043 15.043 0 0 0 5.513 21h12.976a15.043 15.043 0 0 0 1.166-.029c.365-.03.685-.093.981-.244a2.5 2.5 0 0 0 1.092-1.092c.151-.296.214-.616.244-.98C22 18.3 22 17.862 22 17.32v-3.64c0-.542 0-.98-.029-1.333c-.03-.365-.093-.685-.244-.981a2.5 2.5 0 0 0-1.092-1.092c-.296-.151-.616-.214-.98-.244C19.3 10 18.862 10 18.32 10h-1.81a.498.498 0 0 0-.495.378a.495.495 0 0 0-.003.23L17.89 20H6.11l1.878-9.392a.5.5 0 0 0-.274-.56M5.7 11h1.19l-1.8 8.998a9.541 9.541 0 0 1-.663-.024c-.302-.024-.476-.07-.608-.137a1.5 1.5 0 0 1-.656-.656c-.067-.132-.113-.306-.137-.608C3 18.265 3 17.868 3 17.3v-3.6c0-.568 0-.964.026-1.273c.024-.303.07-.476.137-.608a1.5 1.5 0 0 1 .656-.655c.132-.068.306-.114.608-.138C4.736 11 5.132 11 5.7 11m13.873 8.974c-.184.015-.4.022-.663.024L17.11 11h1.19c.568 0 .965 0 1.273.026c.302.024.476.07.608.138a1.5 1.5 0 0 1 .656.655c.067.132.113.305.137.608c.026.309.026.705.026 1.273v3.6c0 .568 0 .965-.026 1.273c-.024.302-.07.476-.137.608a1.5 1.5 0 0 1-.656.656c-.132.067-.306.113-.608.137M12.5 15.5a.5.5 0 0 0-1 0v2a.5.5 0 0 0 1 0z" clip-rule="evenodd"/><path stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" d="M12 7.5V4c0-.236 0-.354.073-.427c.073-.073.191-.073.427-.073h6l-2 2l2 2zm0 0V12"/></g></svg>
+              </div>
+              <p class="text-sm text-gray-400">Que va tu faire en premier ?</p>
+            
+              <div class="grid grid-cols-2 gap-4 justify-center items-center" > 
+                <a href="/story/characters" onclick="showOverlay()" class="button-smooth block px-4 py-2 bg-gradient-to-r from-orange-500 to-yellow-400 text-white rounded-2xl">🥷 Créer un perso</a>
+                <a href="/duels" onclick="showOverlay()" class="button-smooth block px-4 py-2 bg-blue-500 text-white rounded-2xl">⚔️ Faire un duel</a>
+                <a href="/" onclick="showOverlay()" class="button-smooth inline-flex items-center gap-2 px-4 py-2 bg-gray-800 border border-gray-700 text-sm rounded-2xl hover:bg-gray-700">🍁 Aller à l'accueil</a>
+                <a href="/users/{{player.user.username}}" onclick="showOverlay()" class="button-smooth flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-2xl"><img src="{{player.profile_picture.url}}" alt="{{player}}" class="w-8 h-8 rounded-full border border-orange-500 object-cover" onerror="this.src='/static/images/avatar_default.png'">Voir Profil</a>
             </div>
-              <p class="text-sm text-gray-400"></p>
-            
-              <div class="flex flex-col gap-2 justify-center items-center" > 
 
-              <a href="/story/characters" onclick="showOverlay()" class="w-full inline-block mb-2">
-                <button class="w-full px-4 py-2 text-sm bg-gradient-to-r from-orange-500 to-yellow-400 text-white rounded-lg font-semibold shadow hover:from-orange-600 hover:to-yellow-500 transition">
-                🥷 Créer mon personnage
-              </button>
-              </a>  
-              <a href="/home" class="w-full inline-block mb-2" onclick="showOverlay()">
-                <button   class="w-full px-4 py-2 text-sm bg-gradient-to-br from-gray-900 to-purple-900 text-white rounded-lg font-semibold shadow hover:from-gray-600 hover:to-yellow-500 transition">⚔️ Faire un challenge</button>
-              </a>
-              <a href="/battles/solo" class="w-full inline-block mb-2" onclick="showOverlay()">
-                <button onclick="showOverlay()"  class="w-full px-4 py-2 text-sm bg-gradient-to-br from-blue-900 to-orange-500 text-white rounded-lg font-semibold shadow hover:from-blue-600 hover:to-yellow-500 transition">💥 Faire un combat solo</button>
-              </a>
-              <!-- <a href="/home" class="w-full inline-block mb-2" onclick="showOverlay()">
-                <button onclick="showOverlay()"  class="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-xl font-semibold transition">👈 Aller à l'accueil</button>
-              </a> -->
-            
-            </div>  
-            
         </div>
       </div>
+</div>
+
+      
 
 
     

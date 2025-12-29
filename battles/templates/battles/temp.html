@@ -1,0 +1,668 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Combat solo - Roleplay Verse{% endblock title %}
+{% block meta_description%}Une experience de combat unique face a un bot{% endblock meta_description%}
+{% block hiltop-popupads %}
+
+{% endblock hiltop-popupads %}
+<!-- <script>
+  (function(pgzyz){
+  var d = document,
+      s = d.createElement('script'),
+      l = d.scripts[d.scripts.length - 1];
+  s.settings = pgzyz || {};
+  s.src = "\/\/frequent-doubt.com\/ciD\/9\/6hb.2\/5RlQS-WCQQ9ONSjnMDzWMnzGI\/0KNVyd0v2dMezmMDzGMDjnQX4r";
+  s.async = true;
+  s.referrerPolicy = 'no-referrer-when-downgrade';
+  l.parentNode.insertBefore(s, l);
+  })({})
+</script> -->
+{% block content %}
+
+<style>
+    .fade-enter {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    .fade-enter-active {
+      opacity: 1;
+      transform: scale(1);
+      transition: all 3s ease-in-out;
+    }
+    .fade-exit {
+      opacity: 1;
+    }
+    .fade-exit-active {
+      opacity: 0;
+      transition: opacity 3s ease-in-out;
+    }
+
+    #player-hp-bar,
+    #player-chakra-bar,
+    #player-stamina-bar,
+    #bot-hp-bar,
+    #bot-chakra-bar,
+    #bot-stamina-bar {
+    transition: width 0.5s ease-in-out;
+}
+  </style>
+
+  <div class="mt-20 mb-8 h-screen p-4">
+    <div id="soloBattleApp" class="flex">
+      <!-- Introduction Screen -->
+      <div id="intro-screen" class="fade-enter-active mx-auto w-full max-w-md animate__slideInUp">
+        <a class="text-orange-500 cursor-pointer mb-4" href="/battles" onclick="showOverlay()">
+            <i onclick="showScreen('intro-screen')" class="fas fa-arrow-left mr-2" ></i>
+        </a>
+        
+        <div class="bg-gray-900 rounded-xl p-6 shadow-xl space-y-4 animate-scaleIn">
+          <h1 class="text-2xl font-bold flex items-center gap-2">
+            <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2v6m8 4H6a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
+            </svg>
+            Combat Solo contre COMP
+          </h1>
+          <p class="text-sm text-gray-400">Affronte un adversaire aléatoire dans un combat en temps réel. Gagne des récompenses, Augmente ta progression, améliore ton personnage et entraîne-toi en attendant tes duels classiques.</p>
+          <ul class="text-sm text-gray-500 list-disc pl-5">
+            <li>Choisis ton personnage pour le combat</li>
+            <li>Le bot utilisera des jutsus stratégiquement</li>
+            <li>Ton adversaire sera selectionné de facon aléatoire</li>
+            <li>Récompenses : XP(points de progression) + objets bonus</li>
+          </ul>
+          <button onclick="goToCharacterSelect()" class="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-xl font-semibold transition">Suivant</button>
+        </div>
+      </div>
+
+      <!-- Character Select Screen -->
+      <div id="character-select-screen" class="hidden mx-auto mb-16 fade-enter-active animate-scaleIn">
+        <div class="bg-gray-900 rounded-xl p-6 shadow-xl space-y-6">
+            <div class="flex items-center" >
+                <i onclick="showScreen('intro-screen')" class="fas fa-arrow-left text-orange-500 cursor-pointer mr-2" ></i>
+                <h2 class="text-2xl font-semibold text-center text-gray-200">🧙 Choisis ton personnage</h2>
+            </div>
+          
+          <p class="text-sm text-gray-400 text-center">
+            Sélectionne un personnage pour commencer le combat. Chaque personnage a des compétences uniques !
+          </p>
+
+          <div class="text-center">
+            <button onclick="initBattle()"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition">
+              Démarrer le combat
+            </button>
+          </div>
+      
+          <!-- Character Grid -->
+          <div id="characters" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 cursor-pointer gap-6">
+            {% for character in characters %}
+            <div onclick="selectCharacter(this,'{{ character.name }}')"
+              class="group relative bg-gray-800 border border-gray-700 rounded-lg p-4 shadow-md hover:shadow-lg transition duration-300">
+              <img  onload="replacePlaceholder(this, `{{character.image}}`);" src="{% static 'images/loaders/img-loader.gif' %}" alt="{{ character.name }}"
+                class="w-24 h-24 object-cover mx-auto rounded-full border-4 border-gray-900 group-hover:scale-105 transition duration-300">
+              <p class="mt-3 text-center text-sm font-semibold text-gray-200">{{ character.name }}</p>
+              <div
+                class="character-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 rounded-lg">
+                <button
+                  class="bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded-lg font-semibold">
+                  Sélectionner
+                </button>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+      
+          
+        </div>
+      </div>
+
+    <!-- Bot Selection Screen -->
+    <div id="bot-selection-screen" class="hidden h-full w-full fade-enter-active animate-scaleIn">
+    <div class="flex flex-col items-center justify-center h-full space-y-6">
+      <h2 class="text-2xl font-semibold text-gray-200">🤖 Ton adversaire selectionne son personnage...</h2>
+      <div class="flex items-center space-x-4">
+        <!-- Animated Character Cards -->
+        <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+        <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+        <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+      </div>
+      <p class="text-sm text-gray-400">Ton adversaire prepare le combat...</p>
+      <p class="text-sm text-gray-400">Ne pas quitter cette page</p>
+    </div>
+   </div>
+
+      <!-- Battle Screen -->
+      <div id="battle-screen" class="hidden mx-auto md:max-w-2xl h-full w-full fade-enter-active animate__fadeInLeftBig ">
+        <div class="bg-gray-900 rounded-xl p-4 shadow-xl space-y-4">
+          <div class="flex justify-between overflow-y-auto ">
+            <div class="text-center">
+              <img id="player-character-img" src="{% static 'images/loaders/img-loader.gif' %}" class="w-16 h-16 mx-auto rounded-full border-2 object-cover border-orange-500" />
+              <p id = "player-character" class="text-sm font-semibold mt-1">Naruto</p>
+              <div class="flex justify-between text-gray-500 text-xs">
+                <span>HP</span>
+                <span id="player-hp-count" class="transition ease-in-out" ><span>100</span>/100</span>
+              </div>
+              <div class="flex items-center bg-gray-700 h-2 w-32 md:w-44 rounded-full mt-1 space-x-2 " >
+                <div id="player-hp-bar" class="bg-green-500 h-full w-24 rounded-full"></div>
+              </div>
+              
+              <div class="flex justify-between text-gray-500 mt-1 text-xs">
+                <span>Chakra</span>
+                <span id="player-chakra-count" class="transition ease-in-out" ><span>100</span>/100</span>
+              </div>
+              <div class="flex space-x-2  bg-gray-700 rounded-full h-2 w-32 md:w-44 mt-1" >
+                <div id="player-chakra-bar" class="bg-red-500 text-center flex justify-center items-center text-xs h-full rounded-full transition ease-in-out"></div>
+              </div>
+              
+              <!-- <div class="flex space-x-2  bg-gray-700 h-2 mt-1 rounded-full" >
+                <div id="player-stamina-bar" class="bg-blue-500 h-full rounded-full"></div>
+              </div> -->
+              
+            </div>
+
+            
+
+            <div class="text-center">
+              <img id="bot-character-img" src="{% static 'images/loaders/img-loader.gif' %}" class="w-16 h-16 mx-auto rounded-full object-cover border-2 border-gray-500" />
+              <p id="bot-character" class="text-sm font-semibold mt-1">Kakashi</p>
+              <div class="flex justify-between text-gray-500 text-xs">
+                <span>HP</span>
+                <span id="bot-hp-count"><span>100</span>/100</span>
+              </div>
+              <div class="flex  bg-gray-700 rounded-full h-2 w-32 md:w-44 items-center items-end mt-1 space-x-2 ">
+                <div id="bot-hp-bar" class="bg-green-500 h-full rounded-full"></div>
+              </div>
+
+
+              <div class="flex justify-between mt-1 text-gray-500 text-xs">
+                <span>Chakra</span>
+                <span id="bot-chakra-count"><span>100</span>/100</span>
+              </div>
+              <div class="flex space-x-2 items-end rounded-full bg-gray-700 h-2 w-32 md:w-44 mt-1">
+                <div id="bot-chakra-bar" class="bg-red-500 h-2 rounded-full"></div>
+              </div>
+              <!-- <div class="flex space-x-2 bg-gray-700 rounded-full h-2 w-44 mt-1">
+                <div id="bot-stamina-bar" class="bg-blue-500 h-full rounded-full"></div>
+              </div> -->
+              
+              
+            </div>
+          </div>
+
+          <div class="bg-gray-800 p-3 rounded-lg text-sm h-64 overflow-y-auto" id="battle-log">
+          </div>
+
+          <div id="action-buttons" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <!-- <button class="bg-orange-600 hover:bg-orange-700 text-white py-2 rounded">
+                <i class="fas fa-gear mr-2"></i>
+                Attaquer
+                <span class="rounded-full text-sm bg-orange-500 bg-opacity-50 px-2 py-1">50</span>
+            </button>
+            <button class="bg-gray-600 hover:bg-gray-700 text-white py-2 rounded">
+                <i class="fas fa-gear mr-2"></i>
+                Défendre
+                <span class="rounded-full text-sm bg-gray-500 bg-opacity-50 px-2 py-1">30</span>
+            </button>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">Focus</button>
+            <button class="bg-green-600 hover:bg-green-700 text-white py-2 rounded">Heal</button>
+            <button class="bg-purple-600 hover:bg-purple-700 text-white py-2 rounded">Jutsu spécial</button>
+            <button class="bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded">Clone d’ombre</button>
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded">Fuite</button> -->
+          </div>
+
+          <div class="text-center mt-4">
+            <button class="text-sm text-orange-600 hover:underline">Quitter le combat</button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    
+    <div class="mx-auto ml-8 mt-8" >
+      <!--Hiltop ads 
+      <script>
+        (function(llhxsw){
+        var d = document,
+            s = d.createElement('script'),
+            l = d.scripts[d.scripts.length - 1];
+        s.settings = llhxsw || {};
+        s.src = "\/\/complete-drink.com\/b\/X\/VVs.dHGllA0qYgW-cy\/nesm\/9\/u\/ZEUBl\/kkPMTzYSznOMD\/gX1QNKzAgHtmNZjgMA4COcDCU\/3YOKQu";
+        s.async = true;
+        s.referrerPolicy = 'no-referrer-when-downgrade';
+        l.parentNode.insertBefore(s, l);
+        })({})
+    </script> -->
+    </div>
+  </div>
+
+  <!-- Battle End Popup -->
+<div id="battle-end-popup" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate__slideInUp">
+  <div class="bg-gray-900 rounded-lg p-6 max-w-md w-full text-center space-y-6 shadow-xl">
+    <h2 id="battle-end-title" class="text-2xl font-semibold text-gray-200">Battle Ended</h2>
+    <p id="battle-end-message" class="text-sm text-gray-400">Congratulations! You won the battle.</p>
+    <div id="battle-reward" class="text-sm text-gray-300">
+      <p>Rewards:</p>
+      <ul class="list-disc list-inside">
+        <li id="reward-xp">XP: 2</li>
+        <li id="reward-items">Items: </li>
+      </ul>
+    </div>
+    <div class="flex justify-center space-x-4">
+      <button onclick="restartBattle()" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold">
+        Restart
+      </button>
+      <button onclick="quitBattle()" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-semibold">
+        Quit
+      </button>
+    </div>
+  </div>
+</div>
+
+  <script>
+    let playerCharacter = '';
+    let currentChakra = 100;
+
+    function selectCharacter(div, characterName){
+        // Reset all character overlays and borders
+    const overlays = document.getElementsByClassName('character-overlay');
+    const images = document.querySelectorAll('#characters img');
+
+    for (let i = 0; i < overlays.length; i++) {
+        overlays[i].style.opacity = 0; // Reset overlay opacity
+    }
+
+    for (let i = 0; i < images.length; i++) {
+        images[i].classList.remove('border-orange-500'); // Remove selected border
+        images[i].classList.add('border-gray-900'); // Reset to default border
+    }
+
+    // Highlight the selected character
+    div.querySelector('.character-overlay').style.opacity = 1; // Show overlay for the selected character
+    const characterImage = div.querySelector('img'); // Get the image element
+    characterImage.classList.add('border-orange-500'); // Add selected border
+    characterImage.classList.remove('border-gray-900'); // Remove default border
+
+    // Store the selected character name
+    playerCharacter = characterName;
+    }
+
+    const showScreen = (id) => {
+      document.querySelectorAll('#soloBattleApp > div').forEach(div => div.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+      //document.getElementById(id).classList.add('animate-scaleIn');
+    };
+
+    const goToCharacterSelect = () => showScreen('character-select-screen');
+    const goToBotCharacterSelectionScreen = () => showScreen('bot-selection-screen');
+    const goToBattleScreen = () => {showScreen('battle-screen'); $('.top-nav').toggle() };
+
+    function disableActionButtons(){
+    const actionButtonsContainer = document.getElementById('action-buttons');
+    const buttons =  actionButtonsContainer.querySelectorAll('button');
+    
+    buttons.forEach(btn => {
+      btn.setAttribute('disabled', true);
+      btn.classList.add('opacity-50', 'cursor-not-allowed');
+    })
+}
+
+function enableActionButtons(){
+  const actionButtonsContainer = document.getElementById('action-buttons');
+  const buttons =  actionButtonsContainer.querySelectorAll('button');
+
+  buttons.forEach(btn => {
+    btn.removeAttribute('disabled');
+    btn.classList.remove('opacity-50', 'cursor-not-allowed');
+  })
+}
+    function checkChakra(action){
+      if(currentChakra < action.chakraCost){
+          showMyToast('Not enough chakra for this action you need to focus to gain chakra', 'error') 
+        }
+        else{
+          performAction(action)
+        }
+
+    }
+
+    function performAction(action){
+        $.ajax({
+            url : '/battles/solo/action',
+            type : 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: {
+                'action': action.name,
+                'character': playerCharacter,
+                'chakra_cost': action.chakraCost,
+                // 'new_log' : {
+                //     'text': `Vous utilisez ${action.name}...`,
+                //     'type' : 'info',
+                // }
+            },
+            beforeSend: function() {
+                disableActionButtons();
+                // Show loading spinner or overlay
+                // document.getElementById('battle-log').innerHTML = '<p class="text-gray-600 dark:text-gray-300">Loading...</p>';
+                // updateBattleLog(`Vous utilisez ${action.name}...`)
+            },
+            success: function(data) {
+
+              
+                // Hide loading spinner or overlay
+                // document.getElementById('battle-log').innerHTML = data.battle_log;
+                console.log(data)
+                const battleLog = document.getElementById('battle-log');
+                battleLog.innerHTML = ''; // Clear existing log entries
+                const battleLogs = data.battle_logs
+                battleLogs.forEach(log => {
+                    updateBattleLog(log.text, log.type, log.timestamp);
+                });
+
+                const playerStats = {
+                    current_hp: data.player_character.hp,
+                    current_chakra: data.player_character.chakra,
+                    hp:  data.player_character.hp/200 * 100,      // Player HP as a percentage
+                    chakra: (data.player_character.chakra/data.player_character.chakra_pool) * 100,  // Player Chakra as a percentage
+                    chakra_pool: data.player_character.chakra_pool,
+                    stamina: data.player_character.stamina, // Player Stamina as a percentage
+                };
+
+                const botStats = {
+                    current_hp: data.bot_character.hp,
+                    current_chakra: data.bot_character.chakra,
+                    hp: data.bot_character.hp / 200 * 100,      // Bot HP as a percentage
+                    chakra: (data.bot_character.chakra/data.bot_character.chakra_pool) * 100,  // Bot Chakra as a percentage
+                    chakra_pool : data.bot_character.chakra_pool,
+                    stamina: data.bot_character.stamina, // Bot Stamina as a percentage
+                };
+
+                updateStatBars(playerStats, botStats);
+                
+
+                if( data.winner == 'player'){
+                showBattleEndPopup('win', data.rewards);
+                disableActionButtons()
+                }
+                else if(data.winner == 'bot'){
+                showBattleEndPopup('lose', data.rewards);
+                }
+
+                enableActionButtons()
+              
+                
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error('Error:', error);
+                showMyToast('An error occurred while performing the action. Please try again.', 'error');
+            }
+        })  
+
+        // updateStatBars({hp: 90, chakra: 50, stamina: 30}, {hp: 80, chakra: 50, stamina: 10});
+    }
+
+    function updateCharacterImages(playerCharacterImgSrc, botCharacterImgSrc){
+        const playerCharacterImage = document.getElementById('player-character-img').setAttribute('src', playerCharacterImgSrc)
+        const botCharacterImage = document.getElementById('bot-character-img').setAttribute('src', botCharacterImgSrc)
+    }
+
+    function updateStatBars(playerStats, botStats) {
+      console.log(playerStats, botStats)
+    // Update Player Stats
+    const playerHpBar = document.getElementById('player-hp-bar');
+    const playerChakraBar = document.getElementById('player-chakra-bar');
+    const playerStaminaBar = document.getElementById('player-stamina-bar');
+
+    const playerHpCountText = document.getElementById('player-hp-count');
+    const playerChakraCountText = document.getElementById('player-chakra-count');
+
+    playerHpBar.style.width = `${playerStats.hp}%`;
+    playerChakraBar.style.width = `${playerStats.chakra}%`;
+    playerHpCountText.innerHTML = `${playerStats.current_hp}/200`;
+    playerChakraCountText.innerHTML = `${playerStats.current_chakra}/${playerStats.chakra_pool}`;
+    // playerStaminaBar.style.width = `${playerStats.stamina}%`;
+
+    // Update Bot Stats
+    const botHpBar = document.getElementById('bot-hp-bar');
+    const botChakraBar = document.getElementById('bot-chakra-bar');
+    const botStaminaBar = document.getElementById('bot-stamina-bar');
+    
+    const botHpCountText = document.getElementById('bot-hp-count');
+    const botChakraCountText = document.getElementById('bot-chakra-count');
+    botHpCountText.innerHTML = `${botStats.current_hp}/200`;
+    botChakraCountText.innerHTML = `${botStats.current_chakra}/${botStats.chakra_pool}`;
+
+    botHpBar.style.width = `${botStats.hp}%`;
+    botChakraBar.style.width = `${botStats.chakra}%`;
+    // botStaminaBar.style.width = `${botStats.stamina}%`;
+
+    currentChakra = playerStats.current_chakra;
+    // Update the chakra bar color based on the current chakra level
+    if (currentChakra < 50) {
+        playerChakraBar.classList.remove('bg-red-500', 'bg-yellow-500', 'bg-blue-500');
+        playerChakraBar.classList.add('bg-red-500');
+    } else if (currentChakra < 80) {
+        playerChakraBar.classList.remove('bg-red-500', 'bg-yellow-500', 'bg-blue-500');
+        playerChakraBar.classList.add('bg-yellow-500');
+    } else {
+        playerChakraBar.classList.remove('bg-red-500', 'bg-yellow-500', 'bg-blue-500');
+        playerChakraBar.classList.add('bg-blue-500');
+    }
+} 
+    
+
+
+
+
+    function createActionbutton(action){
+        
+        const button = document.createElement('button');
+        bgColor =  action.name == 'Attack' ? 'orange' : action.name == 'Defend' ? 'gray' : action.name == 'Focus' ? 'blue' : action.name == 'Heal' ? 'green' : action.name == 'Special' ? 'purple' : action.name == 'Clone' ? 'yellow' : action.name == 'Flee' ? 'indigo' : 'orange'; 
+        button.className = `bg-gray-800 hover:bg-gray-900 flex items-center space-x-2 justify-center hover:scale-105 transition duration-300 border border-orange-500 text-white py-2 rounded-xl`;
+        button.innerHTML = `
+            ${action.icon}
+            ${String(action.name).charAt(0).toUpperCase() + action.name.slice(1,10)}... 
+            <span class="rounded-full text-sm bg-orange-500 bg-opacity-50 px-2 py-1">${action.chakraCost}</span>
+        `;
+        
+        button.onclick = () => checkChakra(action);
+        return button;
+
+    }
+
+    function fillActionButtons(actions){
+        const actionButtonsContainer = document.getElementById('action-buttons');
+        actionButtonsContainer.innerHTML = ''; // Clear existing buttons
+        
+        actions.forEach(action => {
+            
+            const button = createActionbutton(action);
+            actionButtonsContainer.appendChild(button);
+        });
+    }
+
+    function updateBattleLog(message, type = 'info', timestamp) {
+        const battleLog = document.getElementById('battle-log');
+
+        // Create a new log entry
+        const logEntry = document.createElement('p');
+        logEntry.className = type === 'info' ? 'text-gray-300' : type === 'success' ? 'text-green-500' : type === 'player' ? 'text-blue-500' : type === 'bot' ? 'text-orange-500' : type === 'danger' ? 'text-red-500' : 'text-yellow-500';
+        logEntry.innerHTML = `[${timestamp}] ${message}`;
+
+        // Append the new log entry to the battle log
+        battleLog.appendChild(logEntry);
+
+        // Scroll to the bottom of the log
+        battleLog.scrollTop = battleLog.scrollHeight;
+    }
+
+    function init(){
+
+    }
+
+    function initBattle(){
+        if(playerCharacter != ""){
+            $.ajax({
+            url : '/battles/solo/init',
+            type : 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: {
+                'action': 'init_battle',
+                'character': playerCharacter,
+            },
+            beforeSend: function() {
+                // Show loading spinner or overlay
+                // document.getElementById('battle-log').innerHTML = '<p class="text-gray-600 dark:text-gray-300">Loading...</p>';
+                goToBotCharacterSelectionScreen()
+            },
+            success: function(data) {
+                // Hide loading spinner or overlay
+                // document.getElementById('battle-log').innerHTML = data.battle_log;
+                // console.log(data)
+                
+                const basicActions = [
+                    { name: 'Attack', chakraCost: 10, bgColor: 'orange', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-3.197m1.414-1.414a2.828 2.828 0 114 4L12 21l-4-4 7.97-7.97z" />
+                    </svg>
+                    ` },
+                    { name: 'Defend', chakraCost: 0, bgColor: 'gray', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 2l9 4.5v5c0 5.25-3.75 9.75-9 11-5.25-1.25-9-5.75-9-11v-5L12 2z" />
+                    </svg>
+                    ` },
+                    { name: 'Focus', chakraCost: 0, bgColor: 'blue', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    ` },
+                    { name: 'Heal', chakraCost: 20, bgColor: 'green', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                  </svg>
+                    ` },
+                    { name: 'Substitution', chakraCost: 5, bgColor: 'red', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l-6.5 6.5m0 0L3 21l4.75-.25m-4.5-4.5l6.5-6.5m6.5 6.5l6.5-6.5m0 0L21 3l-4.75.25m4.5 4.5l-6.5 6.5" />
+                    </svg>          
+                    ` },
+                ]
+
+                const specialActions = data.player_character.jutsus.map(action => {
+                    return { name: action.name, chakraCost: action.chakra_cost, bgColor: 'purple', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-3.197m1.414-1.414a2.828 2.828 0 114 4L12 21l-4-4 7.97-7.97z" />
+                    </svg>
+                    ` };
+                });
+
+                CharacterActions = basicActions.concat(specialActions);
+                fillActionButtons(CharacterActions);
+
+                // Update character names and health bars
+                document.getElementById('player-character').innerHTML = data.player_character.name;
+                document.getElementById('bot-character').innerHTML = data.bot_character.name;
+                
+                const playerStats = {
+                    current_hp: data.player_character.hp,
+                    current_chakra: data.player_character.chakra,
+                    hp:  100,      // Player HP as a percentage
+                    chakra: (data.player_character.chakra/data.player_character.chakra_pool) * 100,  // Player Chakra as a percentage
+                    chakra_pool: data.player_character.chakra_pool,
+                    stamina: 100, // Player Stamina as a percentage
+                };
+
+                const botStats = {
+                    current_hp: data.bot_character.hp,
+                    current_chakra: data.bot_character.chakra,
+                    hp: 100,      // Bot HP as a percentage
+                    chakra: (data.bot_character.chakra/data.bot_character.chakra_pool) * 100,  // Bot Chakra as a percentage
+                    chakra_pool : data.bot_character.chakra_pool,
+                    stamina: 100, // Bot Stamina as a percentage
+                };
+
+                updateCharacterImages(data.player_character.image, data.bot_character.image)
+                updateStatBars(playerStats, botStats);
+
+                const battleLogs = [
+                ]
+                
+                battleLogs.forEach(log => {
+                    updateBattleLog(log.text, log.type);
+                });
+                
+                // Update the battle log with the initial message
+                setTimeout(() => {
+                    // document.getElementById('battle-log').innerHTML = data.battle_log;
+                    goToBattleScreen()
+
+                }, 2000);
+                //goToBattleScreen() // 2 seconds delay for the bot selection screen
+                
+
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error('Error:', error);
+                showMyToast('An error occurred while initializing the battle. Please try again.', 'error');
+                goToCharacterSelect()
+            }   
+        })
+        }else{
+            showMyToast('Please select a character before starting the battle.');
+        }
+        
+    }
+
+
+    function showBattleEndPopup(result, rewards) {
+    const popup = document.getElementById('battle-end-popup');
+    const title = document.getElementById('battle-end-title');
+    const message = document.getElementById('battle-end-message');
+    const rewardXp = document.getElementById('reward-xp');
+    const rewardItems = document.getElementById('reward-items');
+
+    // Update the popup content based on the result
+    if (result === 'win') {
+        title.textContent = 'Victory!';
+        message.textContent = 'Congratulations! You won the battle.';
+    } else if (result === 'lose') {
+        title.textContent = 'Defeat';
+        message.textContent = 'You lost the battle. Better luck next time!';
+    } else {
+        title.textContent = 'Draw';
+        message.textContent = 'The battle ended in a draw.';
+    }
+
+    // Update rewards
+    rewardXp.textContent = `XP: ${rewards.xp}`;
+    // rewardItems.textContent = `Items: ${rewards.items.join(', ')}`;
+
+    // Show the popup
+    popup.classList.remove('hidden');
+}
+
+function hideBattleEndPopup() {
+    const popup = document.getElementById('battle-end-popup');
+    popup.classList.add('hidden');
+}
+
+function restartBattle() {
+    hideBattleEndPopup();
+    const battleLog = document.getElementById('battle-log').innerHTML = ''; // Clear existing log entries
+    updateBattleLog('Battle restarted. Choose your actions wisely!', 'info', new Date().toLocaleTimeString());
+    goToCharacterSelect(); // Redirect to character selection screen
+}
+
+function quitBattle() {
+    hideBattleEndPopup();
+    window.location.href = '/battles'; // Redirect to battles page or home
+}
+
+  </script>
+
+
+{% endblock content %}

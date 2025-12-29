@@ -141,3 +141,147 @@ to { opacity: 1; transform: translateY(0); }
 from { opacity: 1; transform: translateY(0); }
 to { opacity: 0; transform: translateY(20px); }
 }
+
+
+
+
+/*  additions */
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Usage */
+.fade-slide-up {
+  animation: fadeSlideUp 0.5s ease-out forwards;
+}
+
+.button-smooth {
+  /* padding: 12px 24px; */
+  border: none;
+  /* border-radius: 8px; */
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.button-smooth:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.slide-in-left {
+  animation: slideInLeft 0.6s ease-out forwards;
+}
+
+@keyframes glow-2 {
+  0% { box-shadow: 0 0 5px rgba(255, 0, 150, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(255, 0, 150, 1); }
+  100% { box-shadow: 0 0 5px rgba(255, 0, 150, 0.5); }
+}
+
+.glow-2 {
+  border-radius: 12px;
+  animation: glow-2 1.2s infinite;
+}
+
+
+@keyframes popUp {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.pop-up {
+  animation: popUp 0.4s ease-out forwards;
+}
+
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-transition {
+  animation: slideDown 0.35s ease-out forwards;
+}
+
+
+@keyframes fadeOverlay {
+  0% {
+    opacity: 0;
+    -webkit-backdrop-filter: blur(0px);
+    backdrop-filter: blur(0px);
+  }
+  100% {
+    opacity: 0.6;
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+  }
+}
+
+.overlay-fade {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  animation: fadeOverlay 0.3s ease forwards;
+  z-index: 100;
+}
+
+
+
+@keyframes slideUpFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bottom-pop-up {
+  animation: slideUpFromBottom 0.5s ease-out forwards;
+}
+
+
+@keyframes shake-2 {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+  100% { transform: translateX(0); }
+}
+
+.shake-2 {
+  animation: shake-2 0.4s ease;
+}

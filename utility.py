@@ -205,6 +205,35 @@ def _time_since(time):
     else:
         return "1s"
 
+def _chat_date_time(time):
+    #formatted_datetime = datetime_value.strftime('%Y-%m-%d %H:%M:%S')
+    now = timezone.now()
+
+    difference = now - time
+
+    days = difference.days
+
+    years = days // 365
+
+    months = days // 30
+    
+    seconds = difference.seconds
+    
+    hours = seconds // 3600
+    
+    minutes = (seconds % 3600) // 60
+    
+    if years>0:
+        return time.strftime('%d/%m/%y')
+    elif days>0 and years <= 0:
+        # return time.strftime('%H:%M, %d-%m')
+        return time.strftime('%d/%m/%y')
+    elif days == 0 and time.strftime('%a') != now.strftime('%a'):
+        return "hier"
+    else:
+        # return time.strftime('%H:%M, %a')
+        return time.strftime('%H:%M')
+
 def _date_time(time):
     #formatted_datetime = datetime_value.strftime('%Y-%m-%d %H:%M:%S')
     now = timezone.now()
@@ -222,7 +251,7 @@ def _date_time(time):
     
     minutes = (seconds % 3600) // 60
     if years>0:
-        return time.strftime('%d-%m-%y, %H:%M')
+        return time.strftime('%d-%m-%y')
     elif days>1 and years <= 0:
         # return time.strftime('%H:%M, %d-%m')
         return time.strftime('%H:%M')
@@ -230,7 +259,6 @@ def _date_time(time):
         # return time.strftime('%H:%M, %a')
         return time.strftime('%H:%M')
     
-
 
 def _parse_number(number:int, show_zero=False ):
     

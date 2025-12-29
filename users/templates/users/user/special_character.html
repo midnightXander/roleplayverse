@@ -1,0 +1,956 @@
+{% extends "core/base.html" %}
+
+{% block title %}Gestion personnage — {{ player }}{% endblock title %}
+{% block meta_description %}Modification du Personnage special de {{player}} {% endblock meta_description %}
+
+
+{% block content %}
+<style>
+    .fade-enter {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    .fade-enter-active {
+      opacity: 1;
+      transform: scale(1);
+      transition: all 3s ease-in-out;
+    }
+    .fade-exit {
+      opacity: 1;
+    }
+    .fade-exit-active {
+      opacity: 0;
+      transition: opacity 3s ease-in-out;
+    }
+
+    .plain-bg{
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1000%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='%230e2a47'%3e%3c/rect%3e%3cpath d='M490.45 580.07 L549.34 572.1800000000001L561.2035958530762 617.4335958530762z' stroke='%23e73635' stroke-width='1' stroke-dasharray='2%2c 2'%3e%3c/path%3e%3cpath d='M568.0699999999999 154.74 L593.67 304.21000000000004L501.6768726390486 308.6681273609513z' fill='%23037b0b'%3e%3c/path%3e%3ccircle r='46.666666666666664' cx='1171.09' cy='160.07' fill='%23d3b714'%3e%3c/circle%3e%3crect width='360' height='360' clip-path='url(%26quot%3b%23SvgjsClipPath1001%26quot%3b)' x='67.02' y='-85.57' fill='url(%26quot%3b%23SvgjsPattern1002%26quot%3b)' transform='rotate(128.02%2c 247.02%2c 94.43)'%3e%3c/rect%3e%3ccircle r='46.666666666666664' cx='880.87' cy='238.19' fill='%23e73635'%3e%3c/circle%3e%3cpath d='M865.65 523.98L872.2 512.97 884.37 516.94 890.92 505.93 903.1 509.9 909.64 498.9 921.82 502.87' stroke='%23d3b714' stroke-width='1.45' stroke-dasharray='2%2c 2'%3e%3c/path%3e%3crect width='127.8' height='127.8' clip-path='url(%26quot%3b%23SvgjsClipPath1003%26quot%3b)' x='78.3' y='292.35' fill='url(%26quot%3b%23SvgjsPattern1004%26quot%3b)' transform='rotate(191.89%2c 142.2%2c 356.25)'%3e%3c/rect%3e%3crect width='108' height='108' clip-path='url(%26quot%3b%23SvgjsClipPath1005%26quot%3b)' x='310.31' y='380.59' fill='url(%26quot%3b%23SvgjsPattern1006%26quot%3b)' transform='rotate(8.95%2c 364.31%2c 434.59)'%3e%3c/rect%3e%3cpath d='M1142.23 407.52L1142.51 420.32 1130.08 423.41 1130.36 436.21 1117.94 439.3 1118.22 452.1 1105.79 455.19' stroke='%23d3b714' stroke-width='2.84' stroke-dasharray='2%2c 2'%3e%3c/path%3e%3cpath d='M240.67 582.8100000000001 L290.1 599.53L229.0538714426656 627.5011285573345z' stroke='%23037b0b' stroke-width='1' stroke-dasharray='3%2c 2'%3e%3c/path%3e%3crect width='132' height='132' clip-path='url(%26quot%3b%23SvgjsClipPath1007%26quot%3b)' x='1350.94' y='40.86' fill='url(%26quot%3b%23SvgjsPattern1008%26quot%3b)' transform='rotate(211.22%2c 1416.94%2c 106.86)'%3e%3c/rect%3e%3crect width='60' height='60' clip-path='url(%26quot%3b%23SvgjsClipPath1009%26quot%3b)' x='339.33' y='212.4' fill='url(%26quot%3b%23SvgjsPattern1010%26quot%3b)' transform='rotate(40.72%2c 369.33%2c 242.4)'%3e%3c/rect%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1000'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3cpattern x='0' y='0' width='9' height='9' patternUnits='userSpaceOnUse' id='SvgjsPattern1002'%3e%3cpath d='M0 9L4.5 0L9 9' stroke='%23d3b714' fill='none'%3e%3c/path%3e%3c/pattern%3e%3cclipPath id='SvgjsClipPath1001'%3e%3ccircle r='90' cx='247.02' cy='94.43'%3e%3c/circle%3e%3c/clipPath%3e%3cpattern x='0' y='0' width='127.8' height='12.78' patternUnits='userSpaceOnUse' id='SvgjsPattern1004'%3e%3crect width='127.8' height='6.39' x='0' y='0' fill='%23d3b714'%3e%3c/rect%3e%3crect width='127.8' height='6.39' x='0' y='6.39' fill='rgba(0%2c 0%2c 0%2c 0)'%3e%3c/rect%3e%3c/pattern%3e%3cclipPath id='SvgjsClipPath1003'%3e%3ccircle r='31.95' cx='142.2' cy='356.25'%3e%3c/circle%3e%3c/clipPath%3e%3cpattern x='0' y='0' width='6' height='6' patternUnits='userSpaceOnUse' id='SvgjsPattern1006'%3e%3cpath d='M0 6L3 0L6 6' stroke='%23037b0b' fill='none'%3e%3c/path%3e%3c/pattern%3e%3cclipPath id='SvgjsClipPath1005'%3e%3ccircle r='27' cx='364.31' cy='434.59'%3e%3c/circle%3e%3c/clipPath%3e%3cpattern x='0' y='0' width='6' height='6' patternUnits='userSpaceOnUse' id='SvgjsPattern1008'%3e%3cpath d='M3 1L3 5M1 3L5 3' stroke='%23e73635' fill='none' stroke-width='1'%3e%3c/path%3e%3c/pattern%3e%3cclipPath id='SvgjsClipPath1007'%3e%3ccircle r='33' cx='1416.94' cy='106.86'%3e%3c/circle%3e%3c/clipPath%3e%3cpattern x='0' y='0' width='6' height='6' patternUnits='userSpaceOnUse' id='SvgjsPattern1010'%3e%3cpath d='M0 6L3 0L6 6' stroke='%23037b0b' fill='none'%3e%3c/path%3e%3c/pattern%3e%3cclipPath id='SvgjsClipPath1009'%3e%3ccircle r='15' cx='369.33' cy='242.4'%3e%3c/circle%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e");
+    }
+    
+  .grass-item{
+    z-index: 2;
+  }
+  .target-item{
+    z-index: 1;
+  }
+
+  .grass-item, .target-item {
+  position: absolute;
+  font-size: 24px; /* Adjust size of the grass emoji */
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.grass-item:hover,.target-item:hover {
+  transform: scale(1.2); /* Slightly enlarge on hover */
+  opacity: 0.8;
+}
+
+
+
+*{
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+   
+  </style>
+
+
+<div class="max-w-7xl mx-auto py-4 mt-16 px-4 sm:px-6 lg:px-8 space-y-6">
+  <div id="special-character-management" class="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-8 shadow-lg">
+    <div class="flex items-center gap-4">
+      <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-orange-400 flex-shrink-0">
+        <img src="{{ character.image }}" alt="{{ character.name }}" class="w-full h-full object-cover" onerror="this.src='/static/images/avatar_default.png'">
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <h1 class="text-xl font-bold text-orange-300 truncate">{{ character.name }}</h1>
+            <p class="text-xs text-gray-400 mt-1">{{ character.origin }}</p>
+          </div>
+          <div class="text-right">
+            <div class="text-xs text-gray-400">Niveau</div>
+            <div class="text-lg font-bold text-white">{{ character.level }}</div>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <div class="text-xs text-gray-400 mb-1">XP disponible</div>
+          <div class="w-full bg-gray-800 rounded-full h-3 border border-gray-700 overflow-hidden">
+            <div id="special-xp-bar" class="bg-orange-500 h-3" style="width: {{ character.xp|default:0 }}%; transition: width .45s ease;"></div>
+          </div>
+          <div class="mt-2 flex items-center justify-between text-xs text-gray-400">
+            <div id="special-xp-text">{{ character.xp|default:0 }} XP</div>
+            <div id="special-xp-next">XP pour prochain: {{ character.xp_to_next_level|default:100 }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<style>
+    .mini-game-bg-fig{
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background : url('https://wallpapercave.com/wp/wp7314599.jpg');
+    }
+    
+</style>
+
+    <div class="mt-6">
+        <p class="text-center">Tu peux egalement jouer a un mini jeu pour gagner des XP rapidement</p>
+        <!-- <button onclick="startGame('findItemGame')" class="mt-2 button-smooth w-1/2 mx-auto bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-xl font-semibold transition">Jouer</button> -->
+        <div onclick="startGame('findItemGame')"  class="cursor-pointer w-32 h-48 flex flex-col items-center justify-center mini-game-bg-fig border border-blue-500 items-center rounded-xl mb-4 ">    
+        <button class="bg-gray-900 hover:bg-gray-800 text-orange-500 px-2 py-2 rounded-xl">
+            <svg class="w-8 h-8" width="200" height="200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><g fill="none" fill-rule="evenodd" clip-rule="evenodd"><path fill="#8fbffa" d="M1.74.147C2.199.096 2.686.05 3.189.05c.502 0 .99.046 1.446.097a1.826 1.826 0 0 1 1.607 1.612c.049.455.092.938.092 1.436q-.001.354-.025.695a4.8 4.8 0 0 0-1.44.988a4.8 4.8 0 0 0-.987 1.437a10 10 0 0 1-.693.026c-.503 0-.99-.046-1.447-.097A1.826 1.826 0 0 1 .134 4.632a14 14 0 0 1-.092-1.437c0-.498.043-.981.092-1.436A1.826 1.826 0 0 1 1.74.147m1.735 7.512a9 9 0 0 0-.288-.005c-.502 0-.99.046-1.446.097A1.826 1.826 0 0 0 .134 9.363A14 14 0 0 0 .042 10.8c0 .498.043.982.092 1.437c.09.844.765 1.518 1.607 1.612a13 13 0 0 0 1.446.096a13 13 0 0 0 1.447-.096c.35-.04.67-.178.932-.387a4.7 4.7 0 0 1-.698-.576c-1.072-1.071-1.496-2.517-1.496-4.004a7 7 0 0 1 .103-1.223m9.987-2.069a1.8 1.8 0 0 0 .404-.958c.049-.455.092-.938.092-1.437c0-.498-.043-.981-.092-1.436A1.825 1.825 0 0 0 12.26.147A13 13 0 0 0 10.812.05c-.502 0-.99.046-1.446.097a1.826 1.826 0 0 0-1.607 1.612a14 14 0 0 0-.092 1.436q0 .145.004.286a7 7 0 0 1 1.201-.099c1.487 0 2.933.424 4.004 1.496q.333.333.586.712"/><path fill="#2859c5" d="M6.122 8.882c0-.982.274-1.643.69-2.06c.417-.416 1.078-.69 2.06-.69s1.643.274 2.06.69c.416.417.69 1.078.69 2.06s-.274 1.643-.69 2.06c-.417.416-1.078.69-2.06.69s-1.643-.274-2.06-.69c-.416-.417-.69-1.078-.69-2.06m2.75-4.25c-1.258 0-2.347.356-3.12 1.13s-1.13 1.862-1.13 3.12s.356 2.347 1.13 3.12s1.862 1.13 3.12 1.13c.965 0 1.83-.21 2.53-.656l1.254 1.254a.75.75 0 0 0 1.06-1.06l-1.253-1.254c.449-.7.66-1.567.66-2.534c0-1.258-.357-2.347-1.13-3.12c-.774-.774-1.863-1.13-3.12-1.13Z"/></g></svg> 
+        </button>
+        <h2>FIG</h2>
+    </div> 
+    </div>
+
+    <!-- Equipped slots -->
+    <div class="mt-6">
+      <h3 class="text-sm font-semibold text-gray-200">Compétences équipées (max 3)</h3>
+      <div id="equipped-list" class="mt-3 flex gap-3 flex-wrap">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- Skills grid -->
+    <div class="mt-6">
+      <h3 class="text-sm font-semibold text-gray-200">Compétences</h3>
+      <div id="skills-grid" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <div class="mt-6 text-right">
+      <a href="/story/character/manage/{{ character.id }}" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-800 border border-gray-700 text-sm rounded-full hover:bg-gray-700">
+        <i class="fas fa-arrow-left"></i> Retour gestion
+      </a>
+    </div>
+  </div>
+
+  
+
+</div>
+
+<div id="findItemGame" class="flex p-4 hidden items-center">
+      <!-- Introduction Screen -->
+      <div id="intro-screen" class="fade-enter-active mx-auto w-full max-w-md animate__slideInUp">
+        <button onclick="quitGame('findItemGame')" class="text-orange-500 cursor-pointer mb-4">
+            <i class="fas fa-arrow-left mr-2" ></i>
+        </button>
+        
+        <div class="bg-gray-900 rounded-xl p-6 shadow-xl space-y-4 animate-scaleIn">
+          <h1 class="text-2xl font-bold flex items-center gap-2">
+            <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2v6m8 4H6a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
+            </svg>
+            Retrouve l'objet cacher
+          </h1>
+          <p class="text-sm text-gray-400">Gagne des xp en jouant a retrouve l'objet.</p>
+          <ul class="text-sm text-gray-500 list-disc pl-5">
+            <li>Tu dois terminer avant le temps impartie</li>
+            <!-- <li>Le bot utilisera des jutsus stratégiquement</li>
+            <li>Ton adversaire sera selectionné de facon aléatoire</li> -->
+            <li>Récompenses : XP(points de progression) + objets bonus</li>
+          </ul>
+          <button onclick ="loadGame('findItemGame')" class="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-xl font-semibold transition">Suivant</button>
+        </div>
+      </div>
+
+      
+
+    <!-- Bot Selection Screen -->
+    <div id="loadingScreen" class="hidden h-full w-full fade-enter-active animate-scaleIn">
+      <div class="flex flex-col items-center justify-center h-full space-y-6">
+        <h2 class="text-2xl font-semibold text-gray-200">Chargement de la zone d'exploration...</h2>
+        <div class="flex items-center space-x-4">
+          <!-- Animated Character Cards -->
+          <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+          <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+          <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+        </div>
+        <p class="text-sm text-gray-400">Ne pas quitter cette page</p>
+      </div>
+   </div>
+
+      <!-- Battle Screen -->
+      <div id="collectScreen" class="h-full w-full mx-auto md:max-w-2xl   hidden fade-enter-active hide-scrollbar animate-scaleIn">
+        <button onclick="quitGame('findItemGame')" class="text-orange-500 cursor-pointer mb-2">
+            <i class="fas fa-arrow-left mr-2" ></i>
+        </button>
+        <div class="text-center text-lg font-bold text-orange-500 mb-4">
+          Temps Restants: <span id="timer">0:00</span>
+        </div>
+        <!-- <div class="mb-2">Objectif: 📜</div> -->
+        <div class="mb-2">Retrouve le parchemin (📜). Touche les objets pour les retirer de la carte</div>
+        <div class="mb-4">
+          <p class="font-semibold" >Legendes</p>
+          <div>📜 : Cible a retrouver</div>
+          <div>🔎 : Indice</div>
+          <div>🍁🍀🍂 : Objet de la zone a retirer</div>
+
+        </div>
+        <div class="mt-2 font-semibold">Indice: <span id="hintText" class="text-green-400" ></span></div>
+        <div id="zoneContainer" class="relative w-full h-[60vh] mb-8 bg-gray-800 map-container hide-scrollbar plain-bg rounded-xl overflow-auto shadow-inner">
+        </div>
+        
+      </div>
+    </div>
+
+ <div id="game-start-popup" class="hidden fade-in-up fixed inset-0 background-overlay-70 flex items-center justify-center z-50 animate__slideInUp">
+  <div class="bg-gray-900 rounded-lg p-6 max-w-md w-full text-center space-y-6 shadow-xl">
+    <h2 id="game-start-title" class="text-2xl font-semibold text-gray-200">Pret ?</h2>
+    <!-- <p id="game-start-message" class="text-sm text-gray-400">Pret ?.</p> -->
+    <div class="flex justify-center space-x-4">
+      <button onclick ="launchGame('findItemGame')" class="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded-xl font-semibold transition">Commencer</button>
+    </div>
+  </div>
+</div>
+
+<div id="game-end-popup" class="hidden fixed inset-0 background-overlay-70 flex items-center justify-center z-50 animate__slideInUp">
+  <div class="bg-gray-900 rounded-lg p-6 max-w-md w-full text-center space-y-6 shadow-xl">
+    <h2 id="game-end-title" class="text-2xl font-semibold text-gray-200">Mission Terminée</h2>
+    <p id="game-end-message" class="text-sm text-gray-400">Félicitations! Tu as réussi la mission.</p>
+    <div id="mission-reward" class="text-sm text-gray-300">
+      <p>Récompenses:</p>
+      <ul class="list-disc list-inside">
+        <li id="reward-xp">XP: 2</li>
+        <li id="reward-items">Compétences: </li>
+      </ul>
+    </div>
+    <div class="flex justify-center space-x-4" id="endActions">
+      
+    </div>
+  </div>
+</div>
+
+<!-- Data scripts (expect `skills` and `character` in view context) -->
+{{ skills|json_script:"skills_data" }}
+{{ character|json_script:"character_data" }}
+
+<script>
+/* Minimal client logic for unlock/equip/unequip with optimistic UI.
+   Endpoints used (POST) - adjust server paths if different:
+   - /users/{{ player }}/special-character/{{ character.id }}/skill/<id>/unlock/
+   - /users/{{ player }}/special-character/{{ character.id }}/skill/<id>/equip/
+   - /users/{{ player }}/special-character/{{ character.id }}/skill/<id>/unequip/
+*/
+
+function getCookie(name) {
+  const v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+  return v ? v.pop() : '';
+}
+
+function showToast(msg, type='info') {
+  let t = document.getElementById('rpv-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'rpv-toast';
+    t.className = 'fixed right-4 top-4 z-50';
+    document.body.appendChild(t);
+  }
+  const el = document.createElement('div');
+  el.className = 'mb-2 px-4 py-2 rounded-lg shadow text-sm text-white';
+  el.style.opacity = '0';
+  if (type === 'success') el.style.background = 'linear-gradient(90deg,#16a34a,#059669)';
+  else if (type === 'error') el.style.background = 'linear-gradient(90deg,#ef4444,#dc2626)';
+  else el.style.background = '#111827';
+  el.textContent = msg;
+  t.appendChild(el);
+  requestAnimationFrame(()=> el.style.opacity = '1');
+  setTimeout(()=> {
+    el.style.opacity = '0';
+    setTimeout(()=> el.remove(), 300);
+  }, 2500);
+}
+
+// const skills = JSON.parse(document.getElementById('skills_data').textContent || '[]');
+const skills = [
+    { name: "Katon : Boule de feu", xp_cost: 50, description: "Projette une boule de feu concentrée sur l'adversaire.", type: "ninjutsu" },
+  { name: "Raiton : Éclair perforant", xp_cost: 60, description: "Envoie un éclair rapide qui traverse les défenses.", type: "ninjutsu" },
+  { name: "Fuuton : Tornade", xp_cost: 55, description: "Crée une rafale de vent pour déséquilibrer l'ennemi.", type: "ninjutsu" },
+  { name: "Suiton : Jet d'eau", xp_cost: 45, description: "Projette un puissant jet d'eau pour repousser ou submerger.", type: "ninjutsu" },
+  { name: "Taijutsu : Coup du tigre", xp_cost: 30, description: "Attaque au corps à corps rapide et puissante.", type: "taijutsu" },
+  { name: "Genjutsu : Illusion mineure", xp_cost: 40, description: "Perturbe brièvement les sens de l'adversaire.", type: "genjutsu" },
+  { name: "Bouclier de chakra", xp_cost: 35, description: "Génère une barrière protectrice temporaire.", type: "support" },
+  { name: "Pas du vent furtif", xp_cost: 25, description: "Augmente la vitesse et la furtivité pendant quelques secondes.", type: "passive" },
+  { name: "Invocation : Animal", xp_cost: 80, description: "Invoque une créature pour soutenir le combat.", type: "ninjutsu" },
+  { name: "Sceau explosif", xp_cost: 70, description: "Pose un sceau qui explose quand l'ennemi s'approche.", type: "ninjutsu" },
+  { name: "Kekkei Genkai : Cristal", xp_cost: 120, description: "Pouvoir héréditaire : créé des fragments tranchants de cristal.", type: "kekkei_genkai" },
+  { name: "Technique de substitution", xp_cost: 20, description: "Échange de place rapide pour éviter une attaque.", type: "ninjutsu" },
+  { name: "Concentration mentale", xp_cost: 15, description: "Récupération accélérée de chakra pendant un court instant.", type: "support" },
+];
+const character = JSON.parse(document.getElementById('character_data').textContent || '{}');
+
+let xpAvailable = Number(character.xp || 0);
+let equipped = Array.isArray(character.equipped_skills) ? character.equipped_skills.slice(0) :  [];
+const MAX_EQUIP = 3;
+
+function renderXP() {
+  const pct = Math.min(100, Math.round((xpAvailable / Math.max(1, character.xp_to_next_level || 100)) * 100));
+  const bar = document.getElementById('special-xp-bar');
+  const txt = document.getElementById('special-xp-text');
+  if (bar) bar.style.width = pct + '%';
+  if (txt) txt.textContent = xpAvailable + ' XP';
+}
+
+function renderEquipped() {
+  const cont = document.getElementById('equipped-list');
+  cont.innerHTML = '';
+  if (!equipped.length) {
+    const p = document.createElement('div');
+    p.className = 'text-sm text-gray-400 px-3 py-2 bg-gray-800 rounded-full';
+    p.textContent = 'Aucune compétence équipée';
+    cont.appendChild(p);
+    return;
+  }
+  equipped.forEach((sId) => {
+    const s = skills.find(x => x.id == sId);
+    const el = document.createElement('div');
+    el.className = 'flex items-center gap-3 bg-gray-800 px-3 py-2 rounded-lg border border-gray-700';
+    el.innerHTML = `
+      <div class="text-orange-300 font-semibold">${s ? s.name : 'Inconnu'}</div>
+      <div class="text-xs text-gray-400">${s ? s.xp_cost + ' XP' : ''}</div>
+      <button class="ml-3 text-xs px-2 py-1 rounded-full bg-red-600 hover:bg-red-700 text-white unequip-btn" data-skill="${sId}">Retirer</button>
+    `;
+    cont.appendChild(el);
+  });
+}
+
+function renderSkills() {
+  const grid = document.getElementById('skills-grid');
+  grid.innerHTML = '';
+  skills.forEach(s => {
+    const unlocked = !!s.unlocked;
+    const isEquipped = equipped.includes(s.id);
+    const card = document.createElement('div');
+    card.className = 'bg-gray-800 border border-gray-700 rounded-xl p-4 flex flex-col gap-2';
+    card.innerHTML = `
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <div class="font-semibold text-white truncate">${s.name}</div>
+            <div class="text-xs text-gray-400 px-2 py-0.5 rounded-full bg-gray-700">${s.type || ''}</div>
+          </div>
+          <div class="text-xs text-gray-400 mt-1 line-clamp-2">${s.description || ''}</div>
+        </div>
+        <div class="text-right">
+          <div class="text-sm font-bold text-orange-400">${s.xp_cost} XP</div>
+          <div class="text-xs mt-1 ${unlocked ? 'text-green-400' : 'text-yellow-400'}">${unlocked ? 'Débloqué' : (xpAvailable >= s.xp_cost ? 'Disponible' : 'Verrouillé')}</div>
+        </div>
+      </div>
+      <div class="mt-3 flex items-center gap-2">
+        <button class="px-3 py-1 rounded-full text-sm btn-unlock ${unlocked ? 'hidden' : ''}" data-id="${s.id}">Débloquer</button>
+        <button class="px-3 py-1 rounded-full text-sm btn-equip ${!unlocked ? 'hidden' : ''}" data-id="${s.id}">${isEquipped ? 'Équipé' : 'Équiper'}</button>
+        <div class="ml-auto text-xs text-gray-400">${s.cooldown ? s.cooldown + 'ms' : ''}</div>
+      </div>
+    `;
+    // style buttons depending on state
+    const unlockBtn = card.querySelector('.btn-unlock');
+    const equipBtn = card.querySelector('.btn-equip');
+    if (unlockBtn) {
+      unlockBtn.classList.add('bg-orange-600', 'hover:bg-orange-700', 'text-white');
+      if (xpAvailable < s.xp_cost) unlockBtn.classList.add('opacity-60', 'cursor-not-allowed');
+    }
+    if (equipBtn) {
+      equipBtn.classList.add('bg-gray-700', 'hover:bg-gray-600', 'text-white');
+      if (isEquipped) {
+        equipBtn.classList.add('bg-green-600', 'cursor-default');
+        equipBtn.disabled = true;
+      }
+      if (!unlocked) equipBtn.disabled = true;
+    }
+
+    grid.appendChild(card);
+  });
+}
+
+function setButtonLoading(btn, on=true) {
+  if (!btn) return;
+  if (on) {
+    btn.dataset._txt = btn.textContent;
+    btn.textContent = '...';
+    btn.disabled = true;
+    btn.classList.add('opacity-70');
+  } else {
+    if (btn.dataset._txt) btn.textContent = btn.dataset._txt;
+    btn.disabled = false;
+    btn.classList.remove('opacity-70');
+  }
+}
+
+async function postAction(url, body) {
+  const csrftoken = getCookie('csrftoken');
+  const resp = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': csrftoken,
+    },
+    body: JSON.stringify(body || {})
+  });
+  if (!resp.ok) {
+    const txt = await resp.text();
+    throw new Error(txt || 'Server error');
+  }
+  return resp.json().catch(()=> ({}));
+}
+
+/* Event handlers: unlock / equip / unequip (optimistic UI) */
+document.addEventListener('click', async (e) => {
+  const unlock = e.target.closest('.btn-unlock');
+  const equip = e.target.closest('.btn-equip');
+  const unequip = e.target.closest('.unequip-btn');
+  if (unlock) {
+    const id = unlock.dataset.id;
+    const skill = skills.find(s => String(s.id) === String(id));
+    if (!skill) return;
+    if (xpAvailable < skill.xp_cost) { showToast("Pas assez d'XP", 'error'); return; }
+
+    // optimistic: deduct xp and mark unlocked
+    xpAvailable -= Number(skill.xp_cost || 0);
+    skill.unlocked = true;
+    renderXP();
+    renderSkills();
+    showToast('Compétence débloquée', 'success');
+
+    // server call
+    try {
+      setButtonLoading(unlock, true);
+      await postAction(`/users/{{ player }}/special-character/{{ character.id }}/skill/${id}/unlock/`, {});
+    } catch (err) {
+      // rollback
+      xpAvailable += Number(skill.xp_cost || 0);
+      skill.unlocked = false;
+      renderXP();
+      renderSkills();
+      showToast('Échec déblocage: ' + (err.message||''), 'error');
+    } finally {
+      setButtonLoading(unlock, false);
+    }
+    return;
+  }
+
+  if (equip) {
+    const id = equip.dataset.id;
+    const skill = skills.find(s => String(s.id) === String(id));
+    if (!skill) return;
+    if (!skill.unlocked) { showToast("Débloque d'abord la compétence", 'error'); return; }
+    if (equipped.includes(skill.id)) { showToast("Déjà équipé", 'info'); return; }
+    if (equipped.length >= MAX_EQUIP) { showToast("Maximum d'équipements atteint", 'error'); return; }
+
+    // optimistic: add to equipped
+    equipped.push(skill.id);
+    renderEquipped();
+    renderSkills();
+    showToast('Compétence équipée', 'success');
+
+    // server call
+    try {
+      setButtonLoading(equip, true);
+      await postAction(`/users/{{ player }}/special-character/{{ character.id }}/skill/${id}/equip/`, {});
+    } catch (err) {
+      // rollback
+      equipped = equipped.filter(x => x != skill.id);
+      renderEquipped();
+      renderSkills();
+      showToast('Échec equip: ' + (err.message||''), 'error');
+    } finally {
+      setButtonLoading(equip, false);
+    }
+    return;
+  }
+
+  if (unequip) {
+    const id = unequip.dataset.skill;
+    if (!id) return;
+    // optimistic
+    equipped = equipped.filter(x => String(x) !== String(id));
+    renderEquipped();
+    renderSkills();
+    showToast('Compétence retirée', 'info');
+
+    try {
+      await postAction(`/users/{{ player }}/special-character/{{ character.id }}/skill/${id}/unequip/`, {});
+    } catch (err) {
+      // rollback
+      equipped.push(id);
+      renderEquipped();
+      renderSkills();
+      showToast('Échec retrait: ' + (err.message||''), 'error');
+    }
+    return;
+  }
+});
+
+/* initial render */
+renderXP();
+renderEquipped();
+renderSkills();
+</script>
+
+<style>
+/* Small helper to limit text lines */
+.line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+</style>
+
+<!-- Find item Game -->
+<script>
+
+    function startGame(id){
+        screen = document.getElementById("special-character-management");
+        screen.classList.add('fade-out-down');
+        setTimeout(() => {
+          screen.classList.add('hidden');
+          document.getElementById("findItemGame").classList.remove('fade-out-down');
+          document.getElementById("findItemGame").classList.remove('hidden');
+        }, 100);
+        
+    }
+
+    function quitGame(id){
+        const gameScreen = document.getElementById(id);
+        const managementScreen = document.getElementById("special-character-management");
+
+        gameScreen.classList.add('fade-out-down');
+        managementScreen.classList.remove('fade-out-down');
+        setTimeout(() => {
+          gameScreen.classList.add('hidden');
+          managementScreen.classList.remove('hidden');
+        }, 100);
+        gameScreen.classList.add('hidden');
+        managementScreen.classList.remove('hidden');
+        
+    }
+    
+    const items = {
+      "🗺️" :"Map",
+      "🧭" :"Compass",
+      "🪙" :"Coin",
+      "💎" :"Gem",
+      "🗝️" :"Key",
+      "📜" :"Scroll",
+      "🪓" :"Axe",
+      "🏺" :"Artifact",
+      "🏕️" :"Camp",
+      "🔦" :"Flashlight",
+      "🛡️" :"Shield",
+      "⚔️" :"Sword",
+      "🐾" :"Footprints",
+      "🌟" :"Star",
+      "🏔️" :"Mountain",
+      "🌳" :"Tree",
+      "🏞️" :"Valley",
+      "🕳️" :"Hole",
+      "🐚" :"Shell",
+      "🎒" :"Backpack",
+  }
+
+    const switchGameScreen = (id) => {
+      document.querySelectorAll('#findItemGame > div').forEach(div => div.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+      //document.getElementById(id).classList.add('animate-scaleIn');
+
+      if (id === 'collectScreen') {
+        showGameStartPopup()
+  }
+
+    };
+
+    // const goToCharacterSelect = () => switchGameScreen('character-select-screen');
+    // const goToBotCharacterSelectionScreen = () => switchGameScreen('bot-selection-screen');
+    // const goToBattleScreen = () => {switchGameScreen('battle-screen'); $('.top-nav').toggle() };
+    const mapItems = [
+
+    ]
+    let time_allowed = 30;
+    function launchGame(){
+        const timerElement = document.getElementById("timer");
+        startTimer(time_allowed, timerElement); // Start a 30-second timer
+        hideGameStartPopup()
+    }
+
+    
+    function showGameStartPopup(){
+        const popup = document.getElementById('game-start-popup');
+        popup.classList.remove('hidden');
+    }
+    function hideGameStartPopup(){
+        const popup = document.getElementById('game-start-popup');
+        popup.classList.add('hidden');
+    }
+
+    function showGameEndPopup(result, rewards) {
+    const popup = document.getElementById('game-end-popup');
+    const title = document.getElementById('game-end-title');
+    const message = document.getElementById('game-end-message');
+    const rewardXp = document.getElementById('reward-xp');
+    const rewardItems = document.getElementById('reward-items');
+    const endActionsContainer = popup.querySelector('#endActions');
+
+    // Update the popup content based on the result
+    if (result === 'win') {
+        title.textContent = 'Victoire!';
+        message.textContent = 'Felicitations! Tu as reussi la mission.';
+        endActionsContainer.innerHTML = `
+            <button onclick="quitFromPopup('findItemGame')" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-800 border border-gray-700 text-sm rounded-full hover:bg-gray-700">Retour</button>
+        `;
+        
+    } else if (result === 'lose') {
+        title.textContent = 'Pas de chance!';
+        message.textContent = "Tu n'as pas réussi la mission. Réessaie!";
+        endActionsContainer.innerHTML = `
+            <button onclick="startFromPopup('findItemGame')" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-3xl">Reessayer</button>
+            <button onclick="quitFromPopup('findItemGame')" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-3xl">Quitter</button>
+        `;
+    } 
+
+    // Update rewards
+    rewardXp.textContent = `XP: ${rewards.xp}`;
+    // rewardItems.textContent = `Items: ${rewards.items.map(item => item.icon).join(', ')}`;
+    // Show the popup
+    popup.classList.remove('hidden');
+
+}
+
+    function startFromPopup(game_id){
+        const popup = document.getElementById('game-end-popup');
+        popup.classList.add('hidden');
+        startGame(game_id)
+    }
+
+    function quitFromPopup(game_id){
+        const popup = document.getElementById('game-end-popup');
+        popup.classList.add('hidden');
+        quitGame(game_id)
+    }
+
+    function placeRandomGrass(element, container) {
+    var containerRect = container.getBoundingClientRect();
+    var elementWidth = element.offsetWidth;
+    var elementHeight = element.offsetHeight;
+    var maxX = containerRect.width - elementWidth;
+    var maxY = containerRect.height - elementHeight;
+
+    var x = Math.floor(Math.random() * maxX);
+    var y = Math.floor(Math.random() * maxY);
+
+    element.style.left = 100 + x + 'px';
+    element.style.top =  y + 200 + 'px';
+}
+
+
+let timerInterval;
+
+
+function startTimer(duration, displayElement) {
+  let timeRemaining = duration;
+
+  // Clear any existing timer interval
+  clearInterval(timerInterval);
+
+  // Update the timer every second
+  timerInterval = setInterval(() => {
+    const minutes = Math.floor(timeRemaining / 60);
+    const seconds = timeRemaining % 60;
+
+    // Update the timer text
+    displayElement.textContent = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    displayElement.setAttribute("data-time", timeRemaining);
+
+    // Stop the timer when it reaches zero
+    if (timeRemaining <= 0) {
+      clearInterval(timerInterval);
+      endGame('lose', 0) // Call a function when the timer ends
+    }
+
+    timeRemaining--;
+  }, 1000);
+}
+
+function handleTimerEnd() {
+  alert("Time's up!"); // Replace with your desired logic when the timer ends
+}
+
+function endTImer(){
+  clearInterval(timerInterval);
+}
+
+
+
+function placeTarget(container) {
+  const mapItems = container.querySelectorAll(".grass-item");
+  const randomIndex = Math.floor(Math.random() * mapItems.length);
+  const mapItem = mapItems[randomIndex];
+
+  const targetItem = document.createElement("div");
+  targetItem.className = "target-item absolute cursor-pointer";
+  // Mark this grass as the target
+  targetItem.innerHTML = "📜"
+  targetItem.dataset.isTarget = "true";
+  targetItem.style.left = mapItem.style.left;
+  targetItem.style.top = mapItem.style.top; 
+
+  container.appendChild(targetItem);
+  generateHint(container, targetItem);
+  targetItem.addEventListener("click", () => {
+        
+    targetItem.remove();
+    const timerElement = document.getElementById("timer")
+    console.log(timerElement.dataset.time)
+    endTImer()
+    endGame('win', timerElement.dataset.time) // Call a function when the timer ends
+        //checkForTarget(mapItem); // Check if the clicked mapItem hides the target
+
+    });
+
+    return targetItem;
+}
+
+function placeHint(container, target) {
+  const mapItems = container.querySelectorAll(".grass-item");
+  const randomIndex = Math.floor(Math.random() * mapItems.length);
+  const mapItem = mapItems[randomIndex];
+
+  const hintItem = document.createElement("div");
+  hintItem.className = "grass-item absolute cursor-pointer";
+  // Mark this grass as the target
+  hintItem.innerHTML = "🔎"
+  hintItem.style.left = mapItem.style.left;
+  hintItem.style.top = mapItem.style.top; 
+  container.appendChild(hintItem);
+  hintItem.dataset.hint= generateHint2(hintItem,container, target);
+  // generateHint(container, hintItem);
+  hintItem.addEventListener("click", () => {
+    // console.log(hintItem.dataset.hint)
+    document.getElementById('hintText').textContent = hintItem.dataset.hint    
+    hintItem.remove();
+        //checkForTarget(mapItem); // Check if the clicked mapItem hides the target
+    });
+
+    return hintItem;
+}
+
+function generateHint(container, target) {
+  // Get the container's dimensions and current scroll position
+  const containerRect = container.getBoundingClientRect();
+  const scrollLeft = container.scrollLeft;
+  const scrollTop = container.scrollTop;
+
+  // Calculate the center of the visible area
+  const visibleCenterX = scrollLeft + containerRect.width / 2;
+  const visibleCenterY = scrollTop + containerRect.height / 2;
+
+  // Get the target's position
+  const targetX = parseInt(target.style.left, 10);
+  const targetY = parseInt(target.style.top, 10);
+
+  // Determine the direction of the target relative to the visible center
+  let hint = "";
+
+  if (targetY < visibleCenterY) {
+    hint += "Le Nord";
+  } else if (targetY > visibleCenterY) {
+    hint += "Le Sud";
+  }
+
+  if (targetX < visibleCenterX) {
+    hint += hint ? " Ouest" : "Ouest";
+  } else if (targetX > visibleCenterX) {
+    hint += hint ? " East" : "East";
+  }
+
+  // Display the hint
+  console.log(`Hint: The target is to the ${hint}`);
+  // const hintElement = document.getElementById("hint");
+  // if (hintElement) {
+  //   hintElement.textContent = `Hint: The target is to the ${hint}`;
+  // }
+  return `la cible est vers ${hint}`
+}
+
+function generateHint2(hintElement, container, target) {
+  // Get the container's dimensions and current scroll position
+  const containerRect = container.getBoundingClientRect();
+  const scrollLeft = container.scrollLeft;
+  const scrollTop = container.scrollTop;
+
+  // Calculate the center of the visible area
+  const visibleCenterX = scrollLeft + containerRect.width / 2;
+  const visibleCenterY = scrollTop + containerRect.height / 2;
+
+  // Get the target's position
+  const targetX = parseInt(target.style.left, 10);
+  const targetY = parseInt(target.style.top, 10);
+
+  const hintElementX = parseInt(hintElement.style.left, 10);
+  const hintElementY = parseInt(hintElement.style.top, 10);
+
+  // Determine the direction of the target relative to the visible center
+  let hint = "";
+
+  if (targetY < hintElementY) {
+    hint += "au Nord";
+  } else if (targetY > hintElementY) {
+    hint += "au Sud";
+  }
+
+  if (targetX < hintElementX) {
+    hint += hint ? " Ouest" : "a l'Ouest";
+  } else if (targetX > hintElementX) {
+    hint += hint ? " Est" : "a l'Est";
+  }
+
+  // Display the hint
+  //console.log(`Hint: The target is to the ${hint}`);
+  // const hintElement = document.getElementById("hint");
+  // if (hintElement) {
+  //   hintElement.textContent = `Hint: The target is to the ${hint}`;
+  // }
+  return `La cible est  ${hint}`
+}
+
+function populateMapItems(container, grassCount, items = ["🍁","🍀","🍂"]) {
+  // Get the container's dimensions
+  const containerRect = container.getBoundingClientRect();
+
+  // Randomly position the grass within the container
+  // const x = Math.floor(Math.random() * (containerRect.width + 850)); // Subtract 50 to prevent overflow
+  // const y = Math.floor(Math.random() * (containerRect.height + 1550));
+
+  for (let i = 0; i < grassCount; i++) {
+    // Create a grass element
+    
+
+    // // Randomly position the grass within the container
+    const x = Math.floor(Math.random() * (containerRect.width + 850)); // Subtract 50 to prevent overflow
+    const y = Math.floor(Math.random() * (containerRect.height + 1550));
+
+    
+
+    for(let j = 0; j < grassCount/2; j++){
+        const grass = document.createElement("div");
+        grass.className = "grass-item absolute cursor-pointer";
+        grass.innerHTML = items[Math.floor(Math.random() * items.length)];
+        grass.style.left = `${x + j * 10}px`;
+        grass.style.top = `${ y + i * 5 }px`;
+        container.appendChild(grass);
+
+        grass.addEventListener("click", () => {
+        grass.remove();
+        //checkForTarget(grass); // Check if the clicked grass hides the target
+    });
+    }
+
+    // Add click event to remove grass and reveal what's behind it
+    
+
+    // Append the grass to the container
+    
+  }
+}
+
+
+    function calculateScore(timeRemaining){
+        let score = 0;
+        if (timeRemaining <= 0) {
+            return 0;
+        }
+        if (timeRemaining > (time_allowed/100 * 75)){
+            score = 3;
+        } else if (timeRemaining > (time_allowed/100 * 50)){
+            score = 2;
+        } else {
+            score = 1;
+        }
+        return score;
+
+    }
+
+    function endGame(result, timeRemaining){
+      $.ajax({
+            url : ``,
+            type : 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: {  
+              action: "end",
+              result: result,
+              score : calculateScore(timeRemaining),
+            },
+            beforeSend: function() {
+                // Show loading spinner or overlay
+                // document.getElementById('battle-log').innerHTML = '<p class="text-gray-600 dark:text-gray-300">Loading...</p>';
+                
+            },
+            success: function(res) {
+              console.log(res)
+              showGameEndPopup(result || 'lose', {
+              xp: res.rewards.xp || 0,
+              items: []
+            });
+            },
+            error: function(xhr, status, error) {
+                showMyToast("Une erreur s'est produite.", 'error');
+            }   
+        })
+      
+      
+    }
+
+
+
+
+function loadGame(game){
+    if (game == 'findItemGame'){
+        // Initialize the find item game
+        initFindItemGame();
+    }
+}
+
+var initFindItemGame = () => {
+    $.ajax({
+            url : ``,
+            type : 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: {
+                action: 'start',
+            },
+            beforeSend: function() {
+                 switchGameScreen('loadingScreen')
+            },
+            success: function(data) {
+                const mapContainer = document.getElementById("zoneContainer");
+                // Populate the map with 50 grass emojis
+                for(let i = 0 ; i<5; i++){
+                    populateMapItems(mapContainer, 20);
+                }  
+                // Randomly place the target item under one of the grass elements
+                const target = placeTarget(mapContainer);
+                for(let i = 0 ; i<10; i++){
+                    placeHint(mapContainer, target);
+                }
+
+                switchGameScreen('collectScreen')
+                // mapContainer.addEventListener('scroll', () => {
+                //     //generateHint(mapContainer, target )
+                // })
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error('Error:', error);
+                showMyToast('An error occurred while initializing the battle. Please try again.', 'error');
+            }   
+        })
+}
+  </script>
+
+{% endblock content %}

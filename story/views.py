@@ -1,10 +1,14 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from api.models import PushSubscription
+from api.utility import send_push_notification
+from core.models import Notification
 from store.models import AffiliateProduct
 from store.views import affiliate_product_data
 from users.models import Player
 from users.users_utility import get_player
 from ai.views import generate_image, generate_json_content
 from ai.prompts import story_character_background_prompt, story_continue_prompt, story_evaluate_and_continue, story_image_generation_prompt, story_start_prompt
+from utility import _time_since
 from .models import *
 import json, random
 from django.http import HttpResponseRedirect, JsonResponse
@@ -54,9 +58,10 @@ def _story_character(character:StoryCharacter):
     data['affinity_icon'] = getAffinityIcon(data.get('affinity'))
     data['player'] = _player_data(character.player)
     data['last_entry'] = ""
+    
     challenge = StoryChallenge.objects.filter(character = character).first()
     last_textpad = StoryTextPad.objects.filter(challenge = challenge).last()
-
+    data['reads'] = challenge.reads + challenge.readers.count() + 10
     if last_textpad:
         data['last_textpad'] = last_textpad.text
         data['last_entry'] = last_textpad.entry if last_textpad.entry else ""
@@ -65,12 +70,27 @@ def _story_character(character:StoryCharacter):
 
     return data
 
+def _story_data(story:StoryChallenge):
+    character = _story_character(story.character)
+    data = {
+        'character_id' : story.character.id,
+        'character' : character,
+        'title' : character['name'],
+        'cover' : character['avatar'],
+        'author' : character['player'],
+        'summary' : StoryTextPad.objects.filter(challenge = story).first().text if StoryTextPad.objects.filter(challenge = story).first() else character['description'],
+        'readers_count' : story.readers.all().count(),
 
-@login_required
+    }
+
+    return data
+
 def index(request):
     player = get_player(request.user)
+    top_stories= [ _story_data(story) for story in StoryChallenge.objects.order_by('?')[:5]]
     return render(request, "story/index.html", {
         "player" : player,
+        "best_stories" : top_stories
     })
 
 @login_required
@@ -180,6 +200,9 @@ def _can_play(player:Player,challenge:StoryChallenge):
     story_pass = StoryPass.objects.filter(player = player,challenge = challenge)
     all_pass = StoryPass.objects.filter(player = player, all = True)
 
+    if player != character.player:
+        return False
+
     if all_pass.exists():
         return True
 
@@ -242,18 +265,30 @@ def generate_scene_images(character:StoryCharacter,  textpads):
     print(images)
     return images
 
+def _story_textpad_data(textpad:StoryTextPad):
+    data = { 
+        "id": textpad.id, 
+        "text": textpad.text,
+        "entry" : textpad.entry if textpad.entry else "",
+        'reactions' : textpad.reactors.all().count(),
+        'comments' : StoryTextPadComment.objects.filter(textpad = textpad).count(),
+        'most_reaction' : textpad.most_made_reaction()['type'] if textpad.most_made_reaction() else '👍',
+        "images": textpad.data.get('images',[]) if textpad.data else [] }
+    
+    return data
 
-@login_required
 def game(request,character_id):
     player = get_player(request.user)
     character = StoryCharacter.objects.get(id = character_id)
     story_challenge,created = StoryChallenge.objects.get_or_create(
         character = character,
     )
+    story_challenge.reads += 1
     story_challenge.save() 
+    
     character_data = _story_character(character)
     textpads = StoryTextPad.objects.filter(challenge = story_challenge)
-    textpads_data = [  { "text": textpad.text, "entry" : textpad.entry if textpad.entry else "", "images": textpad.data.get('images',[]) if textpad.data else [] } for textpad in textpads ]
+    textpads_data = [  _story_textpad_data(textpad) for textpad in textpads ]
     story_status = get_story_status(story_challenge)
     status_message = "L'aventure n'a pas encore commencé" if story_status == "not_started" else "L'aventure est  terminé, tu peux en commencer une autre"
     show_ads = not(NoAdsPass.objects.filter(player = player).exists() or StoryPass.objects.filter(player = player, all = True).exists())
@@ -294,7 +329,7 @@ def game(request,character_id):
                         )
                         new_textpad.save()
 
-                        return JsonResponse({'status' : 'success', 'input_required':input_required, 'text' : text, 'images': scene_illustrations})
+                        return JsonResponse({'status' : 'success', 'input_required':input_required, 'textpad' : _story_textpad_data(new_textpad), 'images': scene_illustrations})
                     except Exception as e:
                         return JsonResponse({'status':'error', 'message':f'Erreur de connection {e}'})
                 else:
@@ -333,7 +368,7 @@ def game(request,character_id):
                                 story_challenge.ended = True
                                 story_challenge.save()
 
-                            return JsonResponse({'status' : 'success', 'text' : res_text})
+                            return JsonResponse({'status' : 'success', 'textpad' : _story_textpad_data(new_textpad)})
                         else:
                             return JsonResponse({'status' : 'success', 'text' : "Tes actions ne sont pas réalisable, tu dois reformuler ta réponse.",'images' : scene_illustrations})
                     except Exception as e:
@@ -357,7 +392,7 @@ def game(request,character_id):
                         text = text
                     )
                     new_textpad.save()
-                    return JsonResponse({'status' : 'success', 'text' : text})
+                    return JsonResponse({'status' : 'success', 'textpad' : _story_textpad_data(new_textpad)})
                 else:
                     return JsonResponse({'status' : 'error', 'message' : "L'aventure a déja debuté."})
         else:
@@ -367,6 +402,7 @@ def game(request,character_id):
 
     return render(request, "story/game.html", {
         "player" : player,
+        'can_play' : _can_play(player,story_challenge),
         'character' : character_data,
         "textpads" : textpads_data,
         'status' : story_status,
@@ -374,8 +410,176 @@ def game(request,character_id):
         'all_pass' : ALL_PASS,
         'no_ads_pass' : NO_ADS_PASS,
         'show_ads' : show_ads,
-        'affiliate_products' : affiliate_products
+        'affiliate_products' : affiliate_products,
     })
+
+def _story_textpad_reactions_data(textpad_reactor:StoryTextpadReactor):
+    return {
+        'date_added' : _time_since(textpad_reactor.date_added),
+        'reaction' : textpad_reactor.type,
+        'player' : textpad_reactor.player.user.username,
+    }
+
+def _story_textpad_comment_data(comment:StoryTextPadComment):
+    data:dict = {    
+                "textpad_id" : comment.textpad.id,
+                "id": comment.id,
+                "text": comment.text,
+                'body_full': comment.text,
+                'body': comment.text[:197]+'...' if len(comment.text) > 200 else comment.text,
+                "author": {
+                    'id' : comment.author.id,
+                    "player": str(comment.author),
+                    "username": comment.author.user.username,
+                    'profile_picture' : comment.author.profile_picture.url,
+                },
+                'parent' : {
+                    "id": comment.parent.id,
+                    "author": {
+                        "id": comment.parent.author.id,
+                        "username": comment.parent.author.user.username,
+                        "player": str(comment.parent.author),
+                        "profile_picture": comment.parent.author.profile_picture.url,
+                    },
+                    # "body_full" : comment.text,
+                    # "body": comment.parent.text[:50] + '...' if len(comment.parent.text) > 50 else comment.parent.text,
+                } if comment.parent else None,
+                "timestamp":  _time_since(comment.date_added),
+                'likes' : 0,
+                'replies' : [ _story_textpad_comment_data(reply) for reply in StoryTextPadComment.objects.filter(parent = comment).order_by("date_added") ],
+                #'is_reply' : TextPadComment.objects.filter(parent = ).exists()
+            },
+    
+    
+    return data 
+
+def react_to_story_textpad(request, textpad_id):
+    textpad = get_object_or_404(StoryTextPad, id = textpad_id)
+    player = get_player(request.user)
+
+    if request.method == 'POST':
+        
+        reaction = request.POST.get('reaction','😂')
+        
+        reactors = textpad.reactors.all()
+
+        if player in reactors:
+            player_reaction = StoryTextpadReactor.objects.get(player = player, textpad = textpad)
+            if reaction == player_reaction.type:
+                textpad.reactors.remove(player)
+            else:
+                player_reaction.type = reaction  
+                player_reaction.save()      
+        else:
+            textpad.reactors.add(player, through_defaults={'type': reaction})
+            if player == textpad.challenge.character.player:
+                new_notif = Notification.objects.create(
+                        target = textpad.challenge.character.player,
+                        url = f'/story/game/{textpad.challenge.id}',
+                        content = f"{player} a reagi a un pavé dans ta story",
+                        img_url = player.profile_picture.url
+                    )
+                new_notif.save()
+                #send push notification to the opponent and the referee
+                send_push_notification(
+                    PushSubscription.objects.filter(user = textpad.challenge.character.player.user).last(),
+                    {
+                    'title' : f"Nouvelle reaction sur ton pavé",
+                    'body' : f"{player} a reagi par '{reaction}' a un pavé dans ta story",
+                    'url' : f'/story/game/{textpad.challenge.id}',
+                    'icon' : player.profile_picture.url,
+                    },
+                    
+                )
+
+        textpad.save()
+        reactions = [ _story_textpad_reactions_data(reactor) for reactor in StoryTextpadReactor.objects.filter(textpad = textpad)]
+
+        return JsonResponse({'status':'success', 'reactions': reactions})
+
+def story_textpad_reactors(request, textpad_id):
+    textpad = get_object_or_404(StoryTextPad, id = textpad_id)
+    reactors = StoryTextpadReactor.objects.filter(textpad = textpad)
+    players = [] 
+    for reactor in reactors :
+        data = _player_data(reactor.player) 
+        data['reaction'] = reactor.type
+        players.append(data)
+
+    return JsonResponse({'status':'success', 'reactors': players})    
+
+
+def add_story_textpad_comment(request, textpad_id):
+    if request.method == 'POST':
+        textpad = get_object_or_404(StoryTextPad, id=textpad_id)
+        author = get_player(request.user)  # Assuming Player is linked to User
+        text = request.POST.get("body")
+        parent_id = request.POST.get("parent_id")
+
+        parent = None
+        if parent_id:
+            parent = get_object_or_404(StoryTextPadComment, id=parent_id)
+
+        comment = StoryTextPadComment.objects.create(
+            textpad=textpad, author=author, text=text, parent=parent
+        )
+        comment.save()
+
+        if comment.author != textpad.challenge.character.player:
+            if comment.parent:
+                if comment.parent.author != comment.author:
+                    new_notif = Notification.objects.create(
+                        target = comment.parent.author,
+                        url = f'/story/game/{textpad.challenge.id}',
+                        content = f"{comment.author} a repondu a ton commentaire sur un pavé",
+                        img_url = comment.author.profile_picture.url
+                    )
+                    new_notif.save()
+                    #send push notification to the opponent and the referee
+                    send_push_notification(
+                        PushSubscription.objects.filter(user = comment.parent.author.user).last(),
+                        {
+                        'title' : f"Nouvelle reaction sur ton pavé",
+                        'body' : f"{comment.author} a repondu a ton commentaire sur un pavé",
+                        'url' : f'/story/game/{textpad.challenge.id}',
+                        'icon' : '/static/images/logo/logo_1.png',
+                        },
+                        
+                    )
+            else:
+                new_notif = Notification.objects.create(
+                    target = textpad.challenge.character.player,
+                    url = f'/story/game/{textpad.challenge.id}',
+                    content = f"{comment.author} a commenté ton pavé dans un combat",
+                    img_url = comment.author.profile_picture.url
+                )
+                new_notif.save()
+                #send push notification to the opponent and the referee
+                send_push_notification(
+                    PushSubscription.objects.filter(user = textpad.challenge.character.player.user).last(),
+                    {
+                    'title' : f"Nouvelle reaction sur ton pavé",
+                    'body' : f"{comment.author} a repondu a ton commentaire sur un pavé",
+                    'url' : f'/story/game/{textpad.challenge.id}',
+                    'icon' : comment.author.profile_picture.url,
+                    },
+                    
+                )
+
+                
+                
+        return JsonResponse({
+            "status": "success",
+            "comment": _story_textpad_comment_data(comment)
+        })
+
+
+def get_story_textpad_comments(request, textpad_id):
+    textpad = get_object_or_404(StoryTextPad, id=textpad_id)
+    comments = StoryTextPadComment.objects.filter(parent=None, textpad = textpad).order_by("-date_added")
+    data = [_story_textpad_comment_data(comment) for comment in comments]
+    
+    return JsonResponse({ 'status': 'success', 'comments' : data}, safe=False)  
 
 @csrf_exempt
 def array_test(request):

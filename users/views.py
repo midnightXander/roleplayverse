@@ -5,6 +5,8 @@ from django.http import HttpResponseRedirect,JsonResponse,Http404
 from django.contrib.auth import logout,login,authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+
+from duels.models import Duel
 from .models import *
 from core.models import Post,Notification,SavedPost
 from battles.models import BattleAcceptor,BattleRequest,Battle,RefreeingProposal,battle_status,Challenge
@@ -31,7 +33,15 @@ def test_template(request):
         'player' : player
     })
 
- 
+def set_session_rc(request):
+    session = request.session
+    session_rc = session.get('rc')
+
+    referal_code = request.GET.get('rc', session_rc)
+    session['rc'] = referal_code
+    
+    return referal_code
+            
 
 def contains_special_chars(text):
     # Define the regex pattern for special characters
@@ -324,7 +334,7 @@ def _name_suggestion():
 
 def register(request):
     
-    
+    print(set_session_rc(request))
     if request.method == "POST":
         username:str = request.POST["username"]
         username = username.strip()
@@ -378,7 +388,7 @@ def register(request):
                 new_notif.save()
 
                 #Reward the referer if there is one
-                referall_code = request.GET.get('rc', None)
+                referall_code = set_session_rc(request)
                 if referall_code:
                     refer_player(referall_code, new_player)
 
@@ -396,6 +406,7 @@ def register(request):
 
 
 def login(request):
+    print("rcs: ",set_session_rc(request))
     player = get_player(request.user)
     if player:
         return redirect('/home')
@@ -842,6 +853,7 @@ def _player_data(player:Player):
         'ranking' : 10,
         'nickname' : player.nickname,
         'wins': _total_wins(player),
+        'losses': player.losses(),
         'last_seen' : _time_since_last_seen(player.last_seen),
         'unread_messages' : player.unread_messages(),
         'notifications' : player.notifs()
@@ -874,6 +886,8 @@ def player(request,name):
     
     user = get_object_or_404(User, username = name)
     player = Player.objects.get(user = user)
+    tab = request.GET.get('tab',"posts")
+    if tab not in ['posts', 'characters', 'duels', 'special_characters'] : tab = 'posts'
 
     c_player = get_player(request.user)
     if not c_player:
@@ -900,10 +914,17 @@ def player(request,name):
         "losses": _total_losses(player)
     }
     posts = Post.objects.filter(author = player).order_by('-date_added')
-
-    player_notifs = PlayerNotification.objects.filter(target= c_player, read = False)
-    n_notifs = len(player_notifs)
-
+    
+    from story.models import StoryCharacter
+    from story.views import _story_character
+    characters_data = [ _story_character(ch) for ch in StoryCharacter.objects.filter(player = player) ]
+    
+    from duels.views import _duel_data,duel_character,_reward_player
+    from duels.models import Duel
+    
+    duels =  [ _duel_data(duel) for duel in  Duel.objects.filter(Q(duelfighter__player = player)).order_by('-started_at') ] if player else []
+    special_character = duel_character(player)
+    
 
     if request.method == "POST":
         posts_data = [ core_views._post_data(player,post) for post in posts ]
@@ -914,14 +935,17 @@ def player(request,name):
     context = {"req_player":player,
                "player":c_player,
                "requests":player_requests,
-               "n_notifs":core_views.get_notifs(c_player),
-               "posts":posts, 
+               "posts" : [ core_views._post_data(player,post) for post in posts ], 
+                "story_characters" : characters_data,
+                "duels" : duels,
+                "special_characters" : [special_character],
+
                "stats":stats,
                "badges": badges,
                "can_edit":can_edit,
                'can_invite': _can_invite(c_player, player),
                "characters":ch_names,
-               
+               "tab" : tab,               
                }
     return render(request,"users/user/user_page.html",context)
 
@@ -1307,7 +1331,7 @@ def _total_battles(player:Player,status=None):
     return len(battles)
 
 def _total_wins(player:Player):
-    battles =  Battle.objects.filter(
+    battles =  Duel.objects.filter(
         winner = player
     )
     return len(battles)
@@ -1638,3 +1662,37 @@ def favorites(request):
         
     context = {"posts":posts, "player":player}
     return render(request, "users/user/favorites.html",context)
+
+@login_required
+def special_character(request, username):
+    player = get_player(request.user)
+    if player.user.username != username:
+        return redirect('/')
+
+    if request.method == "POST":
+        game = request.POST.get('game','findItemGame')
+        score = request.POST.get('score',0)
+        result = request.POST.get('result','lose')
+        action = request.POST.get('action','start')
+
+        if action == 'start':
+            game = MiniGame.objects.create(player = player, name = game)
+            game.save()
+            return JsonResponse({"status":"success","message":"game started","game_id":game.id})
+        elif action == 'end':
+            game = MiniGame.objects.filter(player = player, name = game).order_by('-date_started').first()
+            if game:
+                game.score = score
+                game.result = result
+                game.status = 'finished'
+                game.save()
+                from duels.views import _duel_data,duel_character,_reward_player
+                xp = random.choice([2,3,4]) * int(score)
+                rewards = _reward_player(player, player.duel_character, xp)
+
+                return JsonResponse({"status":"success","message":"game ended","game_id":game.id, "rewards":rewards})
+            return JsonResponse({"status":"error","message":"game not found"})
+
+    character = player.duel_character
+    context = {"character":character, "player":player}
+    return render(request, "users/user/special_character.html",context)

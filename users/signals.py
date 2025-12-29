@@ -8,7 +8,25 @@ from django.contrib.gis.geoip2 import GeoIP2
 import random
 import core.views as core_views
 
-from .models import ENTRY_POINTS
+from .models import ENTRY_POINTS,Player
+
+def init_duel_character(player:Player):
+    character = player.duel_character if player.duel_character else {}
+    data = {
+        "name": str(player),
+        'rank': 'Genin',  # Default rank, can be changed later
+        'chakra_pool': character.get('chakra_pool', 50),  # Default chakra pool 
+        'stamina_pool': character.get('stamina_pool', 100),  # Default stamina pool
+        'health': character.get('health', 100),  # Default health
+        'xp' : character.get('xp', 0),
+        # 'jutsus': request.POST.getlist('skills'),
+        'jutsus' : character.get('jutsus',[]),
+        "image": player.profile_picture.url
+    }
+    player.duel_character = data
+    player.save()
+    return data
+
 @receiver(post_save, sender = User)
 def create_player(sender, instance, created, **kwargs):
     if created:
@@ -20,6 +38,7 @@ def create_player(sender, instance, created, **kwargs):
             gender = 'male',
             referall_code = generate_referall_code(instance.username),
         ) 
+        init_duel_character(new_player)
         profile_pics = PlayerDefaultImage.objects.all()
         random_pic = random.choice(profile_pics)
         new_player.profile_picture = random_pic.image

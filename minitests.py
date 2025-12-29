@@ -3,6 +3,7 @@ from datetime import datetime
 import json
 from utility import get_characters
 import random
+from django.utils import timezone
 #with open ("playable_characters.json","r") as f:
 #    data = json.load(f)
 #    print(len(data["playable_characters"]))
@@ -430,3 +431,14 @@ def test_func():
 
 a = test_func()
 print(a,a[1])
+print(5 in [1,2,8])
+
+test_string = "{\"peaks\":[0,0,19,41,43,74,59,50,50,55,55,74,48,51,50,49,62,63,68,73,36,41,34,53,54,58,61,66,50,56,50,51,46,44,48,48,38,51,56,51,62,48,35,61,74,58,67,60,58,51,60,51,47,27,62,40,66,74,66,53,64,66,59,52,46,58,51,54,53,41,42,67,49,74,51,61,71,65,58,48,49,73,41,64,70,46,35,50,44,57,52,59,60,66,52,59,55,45,66,59,57,59,53,50,52,61,75,41,50,57,62,56,38,54,67,67,42,50]}"
+
+json_string = json.loads(test_string)
+print(json_string["peaks"][5])
+
+# r = requests.get("https://api.jamendo.com/v3.0/tracks/?client_id=5ff3890d&format=jsonpretty&limit=10&include=musicinfo&offset=0")
+# print(r) 
+
+# midnight = timezone.()

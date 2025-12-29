@@ -137,12 +137,14 @@ class Player(models.Model):
     rp_credits = models.DecimalField(default=0,  max_digits=10, decimal_places=2)
     ip_adress = models.CharField(max_length=50, blank=True, null=True)
     godfather = models.ForeignKey('self', blank=True, null=True, on_delete=models.CASCADE)
+    duel_character = models.JSONField(blank=True, default = "")
     
 
     def __init__(self, *args, **kwargs):
+
         super().__init__(*args, **kwargs)
 
-        # self.update_rank()
+        # self.init_duel_character()
 
     def update_rank(self, rankings = rankings, force = False):
         """Updates the rank of the player based on the progression and current rank"""
@@ -168,7 +170,23 @@ class Player(models.Model):
         family_messages = _get_family_unreads(self)
             
         return  private_messages + family_messages
-        
+
+    def init_duel_character(self):
+        character = self.duel_character if self.duel_character else {}
+        data = {
+            "name": str(self),
+            'rank': 'Genin',  # Default rank, can be changed later
+            'chakra_pool': character.get('chakra_pool', 50),  # Default chakra pool 
+            'stamina_pool': character.get('stamina_pool', 100),  # Default stamina pool
+            'health': character.get('health', 100),  # Default health
+            'xp' : character.get('xp', 0),
+            # 'jutsus': request.POST.getlist('skills'),
+            'jutsus' : character.get('jutsus',[]),
+            "image": self.profile_picture.url
+        }
+        self.duel_character = data
+        self.save()
+        return data   
         
 
     def add_points(self, points:int, monthly_points:bool = False):
@@ -200,23 +218,33 @@ class Player(models.Model):
             return f"{n_notifs}"     
 
     def total_battles(self,status=None):
-        from battles.models import Battle
-        battles =  Battle.objects.filter(
-            Q(initiator = self) | Q(opponent = self)
-        ) 
-        if status:
-            battles = battles.filter(status = status)
-        return len(battles)
+        # from battles.models import Battle
+        # battles =  Battle.objects.filter(
+        #     Q(initiator = self) | Q(opponent = self)
+        # ) 
+        # if status:
+        #     battles = battles.filter(status = status)
+        from duels.models import Duel
+        duels = Duel.objects.filter(Q(duelfighter__player = self))
+        if status == 'finished':
+            duels = duels.exclude(winner = None)
+        
+        return len(duels)
 
     def wins(self):
-        from battles.models import Battle
-        battles =  Battle.objects.filter(
+        # from battles.models import Battle
+        # battles =  Battle.objects.filter(
+        #     winner = self
+        # )
+        from duels.models import Duel
+        wins =  Duel.objects.filter(
             winner = self
         )
-        return len(battles)   
+        return len(wins)
+
 
     def losses(self):
-        total_battles = self.total_battles(self,'finished')
+        total_battles = self.total_battles('finished')
         wins = self.wins()
 
         return total_battles - wins 
@@ -362,3 +390,13 @@ class FamilyMember(models.Model):
         unique_together = ('player', 'family')
 
 
+class MiniGame(models.Model):
+    name = models.CharField(max_length=100)
+    status = models.CharField(max_length=100, default = "not finished")
+    result = models.CharField(max_length=100, default = "not finished")
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    date_started = models.DateTimeField(auto_now_add=True)
+    score = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.name} - {self.player} - {self.score}"

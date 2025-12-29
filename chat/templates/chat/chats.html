@@ -44,6 +44,11 @@
 
 {% endblock style %}
 <style>
+
+    .disabled{
+        opacity: 50%;
+        cursor: not-allowed;
+    }
     .emoji-picker {
         display: none;
         position: absolute;
@@ -95,9 +100,33 @@
 <main class="chats-main  bg-gray-950 rounded-lg p-6 md:mt-16 text-gray-300 flex-grow flex flex-col md:flex-row overflow-hidden" >
     <!-- Sidebar -->
     <aside class="chats-container w-full md:w-1/4 bg-gray-950 md:bg-gray-900 rounded-lg  border-gray-200 overflow-y-auto">
-        <div class="p-4 mt-4">
+        <div class="my-4 px-4" >
+            <p class="text-xl font-bold mb-2">En ligne/Amies</p>    
+            <div class="flex overflow-hidden">
+                {% for player in active_players %}
+                <div class="flex items-center justify-between bg-opacity-50 rounded-lg px-3">
+                    <a href = '/chats/dm/{{player.user.username}}' onclick = 'showOverlay()' class="relative flex flex-col justify-center items-center gap-3">
+                                <div class="relative">
+                                    <img src="{{player.profile_picture}}" alt="Player Avatar" class="w-10 h-10 border border-orange-500 rounded-full">
+                                    <!-- <span id="" class="notifier absolute bottom-0 right-0 rounded-full translate-middle bg-green-500 text-gray-200 w-2 h-2 flex items-center justify-center" ><span class="opacity-0">x</span></span> -->
+                                     <div class="bg-green-500 h-3 w-3 rounded-full absolute bottom-0 right-0 animate-pulse shadow shadow-green-500"></div>
+                                </div>
+                                
+                                <div class="truncate">
+                                    <span>{{player.user.username}}</span>
+                                    <!-- <h3 class="font-semibold">{{player.nickname}} 🔅 <span class='text-orange-500 font-cal inline-block'>{{player.rank}}</span></h3>
+                                    <p class="text-xs text-gray-400"> {{player.last_seen}} 🏆 {{player.wins}} victoires </p>  -->
+                                </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div> 
+        </div> 
+        
+        <div class="px-4 my-2">
             <input id="searchChats" type="text" placeholder="Rechercher une conversation..." oninput="searchChats()" class="w-full p-2  rounded-full bg-gray-900 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500">
         </div>
+              
 
         <ul id="chatList" class="">
             <!-- Chats will be added here -->
@@ -120,15 +149,12 @@
                 </a>
             </li>
             {% endif %}
-
+        <div id="private-chats" >
             {% for chat in chats %}
-            <!-- border-b border-gray-700 -->
         <li class='chat  p-2  hover:bg-gray-800 cursor-pointer transition duration-300'>
-            
-            
             {% if chat.chat.recipient == player %}
             <a onclick="showOverlay()" href="{%  url 'chat:private_chat' chat.chat.initiator.user.username %}">
-                <div class="flex items-center ">
+                <div class="flex fade-in-up items-center ">
                 <img src="{{chat.chat.initiator.profile_picture.url}}" alt="{{chat.chat.initiator}} profile picture" class="w-12 h-12 rounded-full mr-4">
                 <div class="flex-grow">
                     <h3 class="font-semibold">{{chat.chat.initiator}} <span class="text-sm text-red-500 ml-2 ">{{chat.unreads.number}}</span></h3>
@@ -154,9 +180,9 @@
 
             {% else %}
             <a onclick="showOverlay()" href="{%  url 'chat:private_chat' chat.chat.recipient.user.username %}">
-                <div class="flex items-center">
+                <div class="flex  items-center">
                     <img src="{{chat.chat.recipient.profile_picture.url}}" alt="{{chat.chat.recipient}} profile picture" class="w-12 h-12 rounded-full mr-4">
-                    <div class="flex-grow">
+                    <div class="flex-grow fade-in-up">
                         <h3 class="font-semibold">{{chat.chat.recipient}} <span class="text-red-500 text-sm ml-2 ">{{chat.unreads.number}}</span></h3>
                         <!-- inline-flex text-sm justify-center items-center w-5 h-5 bg-red-500 rounded-full -->
                         <p class="relative text-gray-500 {{chat.unreads.label}} ellipsed max-w-64 text-sm truncate">
@@ -181,6 +207,7 @@
             Aucune conversation pour le moment 
         </div>
         {% endfor %}
+        </div>
 
              
 
@@ -214,11 +241,120 @@
 <script>
     $(()=>{
         
-        $('.bottom-nav-link').removeClass('bg-gray-800')
-        $('.bottom-nav-link')[1].classList.add('bg-gray-800')
+        $('.bottom-nav-link').removeClass('bg-gray-700')
+        $('.bottom-nav-link').eq(1).addClass('border-b-2 border-orange-500')
     })
 </script>
 {% endblock main_active  %}
+
+
+<script>
+    const allChatSocket =  new WebSocket(
+            'ws://' + 
+            window.location.host + 
+            '/ws/chats/{{request.user.username}}/'
+        )
+    allChatSocket.onopen = function(e){
+        // console.log("connected to all chats web socket")
+    }
+
+    allChatSocket.onmessage = function(e){
+        const data = JSON.parse(e.data)
+        // console.log(data)
+        getchats();
+    }
+
+    allChatSocket.onclose = function(e){
+        // showMyToast("Connection perdu. recharge la page",'error')
+    }
+    allChatSocket.onerror = function(e){
+        // showMyToast('An error occured during sending, please try again','error')
+    }
+
+    function createChat(chat){
+        const friend = chat.recipient.user.username == "{{request.user.username}}" ? chat.initiator : chat.recipient
+        const li = document.createElement("li")
+        li.classList = "chat p-2  hover:bg-gray-800 cursor-pointer transition duration-300";
+        li.innerHTML = `
+        <a onclick="showOverlay()" href="/chats/dm/${friend.user.username}">
+                <div class="flex fade-in-up items-center ">
+                <img src="${friend.profile_picture}" alt="${friend.user.username} profile picture" class="w-12 h-12 rounded-full mr-4">
+                <div class="flex-grow">
+                    <h3 class="font-semibold">${friend.name} <span class="text-sm text-red-500 mx-2">${chat.unreads.number}</span> ${friend.last_seen == "en ligne" ? '<span id="" class="text-green-500">en ligne</span>':""} </h3>
+                    
+                    <p class="relative text-gray-500 ${chat.unreads.label} text-sm ellipsed max-w-64 truncate">
+                        ${chat.last_message.image? '<i class="fas fa-camera mr-2"></i> sent an image':`${chat.last_message.content}`}
+                    </p>
+                </div>
+                <span class="text-xs font-bold text-gray-200">${chat.last_message.date_sent}</span>
+            </div>
+        </a>
+        `
+        return li;
+    }
+
+    function getchats(chats_data = null){
+        console.log(typeof(chats_data))
+        if (false){
+            const chats =  chats_data
+            const container = document.getElementById("private-chats")
+            container.innerHTML = ''
+            chats.forEach(chat => {
+                container.appendChild(createChat(chat))
+            });
+            if(chats.length == 0){
+                container.innerHTML = `
+                <div  class="p-4 flex flex-col justify-center items-center">
+                    <img src="/static/svg/no-chats.svg" alt="no-chats" class="h-24 w-24" >
+                    Aucune conversation privé pour le moment 
+                </div>
+                `
+            }
+        }else{
+            $.ajax({
+                url: `/chats/{{request.user.username}}`,
+                type: 'GET',
+                data: {csrfmiddlewaretoken:"{{ csrf_token }}"},
+                beforeSend: function(){
+                    // $("#loading-overlay").toggleClass('active')
+                },
+                success: function(res){
+                    if(res.status === 'success'){
+                        const chats =  res.chats
+                        const container = document.getElementById("private-chats")
+                        container.innerHTML = ''
+                        chats.forEach(chat => {
+                            container.appendChild(createChat(chat))
+                        });
+                        if(chats.length == 0){
+                            container.innerHTML = `
+                            <div  class="p-4 flex flex-col justify-center items-center">
+                                <img src="/static/svg/no-chats.svg" alt="no-chats" class="h-24 w-24" >
+                                Aucune conversation privé pour le moment 
+                            </div>
+                            `
+                        }
+                        
+                    }else{
+                        showMyToast(res.message)
+                    }
+                },
+                complete: function(){
+                    // $("#loading-overlay").toggleClass('active')
+                },
+                error: function(jqXHR, textstatus,  errorThrown){
+                    showMyToast('an error occured','error')
+                }
+            })
+        }
+        
+        }
+    
+    document.addEventListener('DOMContentLoaded', getchats);
+
+    
+
+</script>
 
 <script>
     function searchChats() {
@@ -285,6 +421,25 @@
 </script>
 
 <script>
+
+    function disableButton(id){
+        const button =  document.getElementById(id);
+        button.setAttribute('disabled', true);
+        button.classList.add('disabled');
+        
+    }
+
+    function enableButton(id){
+        const button =  document.getElementById(id);
+        button.removeAttribute('disabled');
+        button.classList.remove('disabled');
+    }
+    function hideConnectionMessage(state="connecting"){
+        const p = document.getElementById('connection-message')
+        console.log(p)
+        p.style.display = "none";
+        
+    }
  // Reference to the reply container and its elements
  const replyContainer = document.getElementById('replyContainer');
         const replyText = document.getElementById('replyText');
@@ -384,7 +539,7 @@ function messageOptionsListener(){
                 }
             })
         }
-        function deletePrivateMessage(element, messageId){
+    function deletePrivateMessage(element, messageId){
         
         $.ajax({
                 url: `/chats/messages/delete/private/${messageId}`,

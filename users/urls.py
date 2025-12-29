@@ -60,6 +60,8 @@ urlpatterns = [
     path('players/rankings', views.players_ranking, name = 'players_rankings'),    
 
     path('player/favorites',views.favorites, name = "favorites"),
+
+    path('<str:username>/special-character',views.special_character, name = "special_character"),
     path('<str:name>',views.player,name='player'),
 
     

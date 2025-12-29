@@ -1,5 +1,5 @@
 from .models import Player,referall_points,Family
-from core.models import models
+from core.models import Notification, models
 from django.shortcuts import redirect
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
@@ -15,6 +15,7 @@ def get_player(user:User):
         player = Player.objects.get(user = user)
         
         #player.profile_picture.url = "https://i.pinimg.com/736x/60/1b/04/601b0478fe7f09eda50d8e478f847e58.jpg"
+        player.init_duel_character()
         player.save()
         return player
     except:
@@ -47,6 +48,11 @@ def refer_player(referall_code, new_player:Player = None):
             },
             player.user
         )
+        Notification.objects.create(target = player,
+                                    content = f'Tu as gagné {referall_points} de jetons et des credits RP en parrainant un ami!',
+                                    url = f'/users/{new_player.user.username}'
+                                    )
+
         #send email to player congratulating him for the referall points
         # emails.send_email(
         #     recipient_email = player.user.email,
@@ -59,6 +65,19 @@ def refer_player(referall_code, new_player:Player = None):
         #     """,
         #     language = player.user.language
         # )
+        
+        #Update creator link data if player is a creator
+        # creator = Creator.objects.filter(player = player).first() 
+        # if creator:
+        #     url = f"https://roleplayverse.live/?rc={referall_code}"
+        #     link,created = CreatorLink.objects.get_or_create(link = url, creator = creator)
+        #     data = {
+        #         'clicks' : int(link.data.get("clicks",0)) + 1,
+        #         'signups' : int(link.data.get("signups",0)) + 1,
+        #         'active_users' : link.data.get("active_users",0)
+        #     }
+        #     link.data = data
+        #     link.save()
 
         
 

@@ -1,0 +1,1360 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %} {{initiator_data.name}} VS {{opponent_data.name}} {% endblock title %}
+{% block meta_description%}Duel de combat naruto pvp en temp reel {% endblock meta_description%}
+
+{% block toast %}
+
+<div id="toast-container" class="items-center  w-full fixed top-6 right-4 z-50 flex flex-col gap-3 items-end"></div>
+<style>
+  .toast {
+    min-width: 220px;
+    max-width: 320px;
+    padding: 1rem 1.25rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.25);
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+    transform: translateY(-20px) scale(0.98);
+    pointer-events: auto;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .toast.toast-show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .toast-info    { background: linear-gradient(90deg,#2563eb,#38bdf8); color: #fff; }
+  .toast-success { background: linear-gradient(90deg,#22c55e,#16a34a); color: #fff; }
+  .toast-error   { background: linear-gradient(90deg,#ef4444,#b91c1c); color: #fff; }
+  .toast-warning { background: linear-gradient(90deg,#f59e42,#fbbf24); color: #fff; }
+  .toast-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.25rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .toast-close:hover { opacity: 1; }
+</style>
+</div>
+<script>
+/**
+ * Show a toast notification.
+ * @param {string} message - The message to display.
+ * @param {'info'|'success'|'error'|'warning'} [type='info'] - The type of toast.
+ * @param {number} [duration=3500] - Duration in ms before auto-dismiss.
+ */
+function showToast(message, type = 'info', duration) {
+  const container = document.getElementById('toast-container');
+  let timeout;
+  if (!container) return;
+
+  document.querySelectorAll('.toast').forEach(el =>{
+            el.remove()
+        })
+
+  // Icons for each type
+  const icons = {
+    info:    '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-width="2" d="M12 16v-4m0-4h.01"/></svg>',
+    success: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-width="2" d="M9 12l2 2l4-4"/></svg>',
+    error:   '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-width="2" d="M15 9l-6 6m0-6l6 6"/></svg>',
+    warning: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-width="2" d="M12 8v4m0 4h.01"/></svg>',
+  };
+
+  // Create toast element
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.innerHTML = `
+    ${icons[type] || icons.info}
+    <span style="flex:1">${message}</span>
+    <button class="toast-close" aria-label="Fermer">&times;</button>
+  `;
+
+  // Close button handler
+  toast.querySelector('.toast-close').onclick = () => {
+    hideToast(toast);
+  };
+
+  // Add to DOM
+  container.appendChild(toast);
+  // Animate in
+  setTimeout(() => toast.classList.add('toast-show'), 10);
+
+  // Auto-remove after duration
+  if (duration){
+    timeout = setTimeout(() => hideToast(toast), duration);
+    // Remove on click
+    toast.onclick = (e) => {
+      if (e.target !== toast.querySelector('.toast-close')) hideToast(toast);
+      // Hide function
+    };
+    }
+  
+  function hideToast(toastEl) {
+      toastEl.classList.remove('toast-show');
+      setTimeout(() => {
+        if (toastEl.parentNode) toastEl.parentNode.removeChild(toastEl);
+      }, 300);
+      if(timeout){clearTimeout(timeout);}
+      
+    }
+}
+
+function hideToasts(){
+  document.querySelectorAll('.toast').forEach(el =>{
+            el.remove()
+        })
+}
+</script>
+{% endblock toast %}
+
+
+{% block content %}
+<style>
+    body {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1002%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='url(%26quot%3b%23SvgjsLinearGradient1003%26quot%3b)'%3e%3c/rect%3e%3cpath d='M699.274%2c465.429C732.524%2c465.51%2c765.719%2c449.357%2c780.167%2c419.41C793.306%2c392.176%2c776.449%2c363.065%2c761.281%2c336.906C746.186%2c310.874%2c729.264%2c282.379%2c699.274%2c279.903C665.742%2c277.135%2c633.383%2c295.814%2c616.577%2c324.962C599.787%2c354.082%2c602.011%2c390.049%2c619.064%2c419.016C635.861%2c447.547%2c666.166%2c465.348%2c699.274%2c465.429' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M1050.666%2c299.247C1095.378%2c299.228%2c1140.217%2c279.45%2c1160.765%2c239.739C1180.072%2c202.427%2c1164.086%2c159.152%2c1141.48%2c123.742C1120.922%2c91.541%2c1088.814%2c69.343%2c1050.666%2c67.281C1008.323%2c64.993%2c963.927%2c77.179%2c941.094%2c112.912C916.678%2c151.122%2c917.421%2c200.744%2c940.406%2c239.832C963.088%2c278.404%2c1005.919%2c299.266%2c1050.666%2c299.247' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M1087.255%2c115.396C1116.034%2c115.902%2c1144.301%2c103.458%2c1158.978%2c78.698C1173.927%2c53.479%2c1173.559%2c21.272%2c1157.645%2c-3.35C1142.887%2c-26.184%2c1114.425%2c-33.273%2c1087.255%2c-32.271C1062.063%2c-31.342%2c1038.627%2c-19.88%2c1025.315%2c1.528C1011.18%2c24.26%2c1006.984%2c52.735%2c1019.775%2c76.249C1033.093%2c100.732%2c1059.388%2c114.906%2c1087.255%2c115.396' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M739.23%2c632.445C788.902%2c631.688%2c840.133%2c613.789%2c863.427%2c569.911C885.671%2c528.012%2c864.598%2c480.58%2c841.995%2c438.874C817.807%2c394.245%2c789.987%2c341.488%2c739.23%2c340.754C687.818%2c340.01%2c656.369%2c390.999%2c631.184%2c435.825C606.709%2c479.387%2c584.233%2c530.009%2c608.297%2c573.8C632.982%2c618.72%2c687.98%2c633.226%2c739.23%2c632.445' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M1204.088%2c599.207C1239.701%2c596.798%2c1259.465%2c561.029%2c1275.129%2c528.956C1288.43%2c501.721%2c1292.969%2c471.53%2c1279.766%2c444.248C1264.532%2c412.767%2c1239.05%2c383.027%2c1204.088%2c382.155C1168.036%2c381.256%2c1139.439%2c408.975%2c1121.578%2c440.304C1103.917%2c471.283%2c1097.756%2c508.196%2c1114.189%2c539.844C1131.925%2c574.002%2c1165.688%2c601.805%2c1204.088%2c599.207' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M1165.304%2c558.537C1208.829%2c557.051%2c1237.275%2c517.908%2c1258.367%2c479.807C1278.591%2c443.273%2c1291.319%2c401.418%2c1273.078%2c363.855C1252.525%2c321.53%2c1212.338%2c289.41%2c1165.304%2c288.164C1116.314%2c286.866%2c1070.046%2c314.533%2c1047.163%2c357.869C1025.579%2c398.745%2c1037.092%2c446.727%2c1060.544%2c486.561C1083.582%2c525.693%2c1119.92%2c560.086%2c1165.304%2c558.537' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M1014.127%2c266.2C1029.875%2c266.027%2c1042.709%2c255.28%2c1050.833%2c241.788C1059.276%2c227.767%2c1064.068%2c210.656%2c1056.221%2c196.293C1048.11%2c181.446%2c1031.041%2c174.967%2c1014.127%2c174.605C996.453%2c174.226%2c977.432%2c179%2c968.787%2c194.42C960.274%2c209.604%2c966.704%2c227.891%2c976%2c242.609C984.554%2c256.152%2c998.11%2c266.376%2c1014.127%2c266.2' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float2'%3e%3c/path%3e%3cpath d='M1076.636%2c261.589C1135.304%2c263.218%2c1183.127%2c217.841%2c1209.997%2c165.662C1234.581%2c117.921%2c1228.729%2c62.831%2c1203.359%2c15.503C1176.255%2c-35.062%2c1133.93%2c-80.166%2c1076.636%2c-83.131C1014.736%2c-86.334%2c952.728%2c-54.319%2c924.961%2c1.097C899.284%2c52.342%2c926.674%2c109.062%2c955.515%2c158.595C984.097%2c207.682%2c1019.856%2c260.012%2c1076.636%2c261.589' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M441.798%2c498.692C466.903%2c497.54%2c488.415%2c481.43%2c499.939%2c459.097C510.549%2c438.536%2c507.471%2c414.326%2c495.574%2c394.482C484.044%2c375.249%2c464.186%2c363.391%2c441.798%2c362.115C416.7%2c360.684%2c390.139%2c366.732%2c376.242%2c387.681C360.984%2c410.681%2c359.583%2c441.127%2c373.618%2c464.893C387.442%2c488.303%2c414.64%2c499.938%2c441.798%2c498.692' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float1'%3e%3c/path%3e%3cpath d='M1310.806%2c339.447C1327.907%2c339.379%2c1342.375%2c327.679%2c1350.429%2c312.593C1358.01%2c298.394%2c1357.094%2c281.577%2c1349.188%2c267.557C1341.128%2c253.264%2c1327.205%2c242.908%2c1310.806%2c242.331C1293.389%2c241.719%2c1276.066%2c249.537%2c1267.445%2c264.683C1258.903%2c279.69%2c1261.969%2c297.974%2c1270.632%2c312.912C1279.262%2c327.792%2c1293.605%2c339.516%2c1310.806%2c339.447' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float3'%3e%3c/path%3e%3cpath d='M1159.312%2c284.581C1201.18%2c282.702%2c1231.009%2c248.943%2c1251.983%2c212.659C1272.982%2c176.332%2c1286.641%2c133.984%2c1268.134%2c96.326C1247.552%2c54.446%2c1205.918%2c21.759%2c1159.312%2c24.094C1115.423%2c26.293%2c1088.989%2c67.825%2c1067.868%2c106.36C1047.856%2c142.872%2c1032.008%2c184.634%2c1051.016%2c221.679C1071.441%2c261.488%2c1114.614%2c286.587%2c1159.312%2c284.581' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float1'%3e%3c/path%3e%3cpath d='M427.051%2c337.736C476.111%2c334.211%2c510.407%2c294.294%2c534.138%2c251.212C556.827%2c210.023%2c568.756%2c161.829%2c546.876%2c120.204C523.577%2c75.88%2c477.105%2c46.028%2c427.051%2c47.493C379.109%2c48.896%2c344.104%2c86.142%2c318.787%2c126.879C291.462%2c170.846%2c265.876%2c222.738%2c289.52%2c268.789C314.625%2c317.685%2c372.228%2c341.675%2c427.051%2c337.736' fill='rgba(28%2c 83%2c 142%2c 0.4)' class='triangle-float3'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1002'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3clinearGradient x1='50%25' y1='100%25' x2='50%25' y2='0%25' gradientUnits='userSpaceOnUse' id='SvgjsLinearGradient1003'%3e%3cstop stop-color='%230e2a47' offset='0'%3e%3c/stop%3e%3cstop stop-color='rgba(0%2c 0%2c 0%2c 1)' offset='0.87'%3e%3c/stop%3e%3cstop stop-color='rgba(0%2c 0%2c 0%2c 1)' offset='1'%3e%3c/stop%3e%3c/linearGradient%3e%3cstyle%3e %40keyframes float1 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(-10px%2c 0)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float1 %7b animation: float1 5s infinite%3b %7d %40keyframes float2 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(-5px%2c -5px)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float2 %7b animation: float2 4s infinite%3b %7d %40keyframes float3 %7b 0%25%7btransform: translate(0%2c 0)%7d 50%25%7btransform: translate(0%2c -10px)%7d 100%25%7btransform: translate(0%2c 0)%7d %7d .triangle-float3 %7b animation: float3 6s infinite%3b %7d %3c/style%3e%3c/defs%3e%3c/svg%3e");  
+    background-size: cover;
+    }
+  </style>
+<style>
+    .fade-enter {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    .fade-enter-active {
+      opacity: 1;
+      transform: scale(1);
+      transition: all 3s ease-in-out;
+    }
+    .fade-exit {
+      opacity: 1;
+    }
+    .fade-exit-active {
+      opacity: 0;
+      transition: opacity 3s ease-in-out;
+    }
+
+    #player-hp-bar,
+    #player-chakra-bar,
+    #player-stamina-bar,
+    #opponent-hp-bar,
+    #opponent-chakra-bar,
+    #opponent-stamina-bar {
+    transition: width 0.5s ease-in-out;
+}
+  </style>
+<style>
+  .action-btn {
+    @apply flex flex-col items-center justify-center px-3 py-2 rounded-xl shadow-lg border-2 border-transparent transition-all duration-200 cursor-pointer relative;
+    min-width: 110px;
+    min-height: 80px;
+    background: linear-gradient(135deg, #23272f 60%, #1e293b 100%);
+    /* background: url("https://i.pinimg.com/736x/8c/a1/79/8ca179686d34b725f93527060257ceca.jpg");
+    background-size: cover; */
+    box-shadow: 0 4px 24px 0 rgba(255,140,0,0.10);
+    position: relative;
+    overflow: hidden;
+  }
+  .action-btn .chakra-cost {
+    @apply absolute top-2 right-2 text-xs font-bold px-2 py-0.5 rounded-full;
+    background: linear-gradient(90deg,#f59e42,#fbbf24);
+    color: #fff;
+    box-shadow: 0 2px 8px 0 rgba(255,140,0,0.15);
+  }
+  .action-btn .action-icon  {
+    @apply mb-1;
+    font-size: 2rem;
+    filter: drop-shadow(0 2px 8px #fbbf24aa);
+    transition: transform 0.2s;
+  }
+  .action-btn .action-label {
+    @apply font-bold text-base tracking-wide;
+    color: #fff;
+    text-shadow: 0 2px 8px #0008;
+  }
+  .action-btn:hover, .action-btn:focus {
+    border-color: #f59e42;
+    background: linear-gradient(135deg, #2d3748 60%, #f59e42 100%);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 8px 32px 0 rgba(255,140,0,0.18);
+    z-index: 2;
+  }
+  .action-btn:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 8px 0 rgba(255,140,0,0.10);
+  }
+</style>
+
+
+
+
+  <div class="mt-20 mb-8 h-screen p-4">
+    <div id="action-slide-overlay" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+    <div id="action-slide" class="fixed left-1/2 top-1/2 z-40 pointer-events-none" style="transform: translateX(-50%);">
+  <!-- Content will be injected by JS -->
+  </div>
+ </div>
+
+    <div id="duelBattleApp" class="flex select-none">
+
+      <div id="character-select-screen" class="mx-auto mb-16 fade-enter-active animate-scaleIn">
+        <div class="bg-gray-900 rounded-xl p-6 shadow-xl space-y-6">
+            <div class="flex items-center" >
+                <i onclick="showScreen('intro-screen')" class="fas fa-arrow-left text-orange-500 cursor-pointer mr-2" ></i>
+                <h2 class="text-2xl font-semibold text-center text-gray-200">🧙 Choisis ton personnage</h2>
+            </div>
+          
+          <p class="text-sm text-gray-400 text-center">
+            Sélectionne un personnage pour commencer le combat. Chaque personnage a des compétences uniques !
+          </p>
+
+          <div class="text-center">
+            <button onclick="initBattle()"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition">
+              Démarrer le combat
+            </button>
+          </div>
+
+          
+      
+          <!-- Character Grid -->
+          <div id="characters" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 cursor-pointer gap-6">
+            <div onclick="selectCharacter(this,'{{ d_character.name }}')"
+              class="group relative bg-gray-800 border border-green-700 border-tr-orange-700 rounded-lg p-4 shadow-md hover:shadow-lg transition duration-300">
+              <!-- <div class="relative">
+                <button class="info-icon text-gray-400 hover:text-orange-500 focus:outline-none">
+                    <i class="fas fa-question-circle"></i>i
+                </button>
+                <div class="info-text hidden absolute right-0 mt-2 bg-gray-800 text-gray-300 text-sm p-2 rounded-lg shadow-lg w-64">
+                    Sur RPV, vous recevez des memes d'anime tous les jours pour vous divertir !
+                </div>
+              </div> -->
+              <img  onload="replacePlaceholder(this, `{{d_character.image}}`);" src="{% static 'images/loaders/img-loader.gif' %}" alt="{{ d_character.name }}"
+                class="w-24 h-24 object-cover mx-auto rounded-full border-4 border-gray-900 group-hover:scale-105 transition duration-300">
+              <p class="mt-3 text-center text-sm font-semibold text-gray-200">{{ d_character.name }}</p>
+              
+              <span class = "bg-orange-500 absolute top-2 right-2 text-xs font-bold px-2 py-0.5 rounded-full">XP: {{d_character.xp}}</span>
+              
+              <div
+                class="character-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 rounded-lg">
+                <button
+                  class="bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded-lg font-semibold">
+                  Sélectionner
+                </button>
+              </div>
+            </div>
+
+            {% for character in characters %}
+            <div onclick="selectCharacter(this,'{{ character.name }}')"
+              class="group relative bg-gray-800 border border-gray-700 rounded-lg p-4 shadow-md hover:shadow-lg transition duration-300">
+              <img  onload="replacePlaceholder(this, `{{character.image}}`);" src="{% static 'images/loaders/img-loader.gif' %}" alt="{{ character.name }}"
+                class="w-24 h-24 object-cover mx-auto rounded-full border-4 border-gray-900 group-hover:scale-105 transition duration-300">
+              <p class="mt-3 text-center text-sm font-semibold text-gray-200">{{ character.name }}</p>
+
+              <div
+                class="character-overlay absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 rounded-lg">
+                <button
+                  class="bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded-lg font-semibold">
+                  Sélectionner
+                </button>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+      
+          
+        </div>
+      </div>
+
+    <div id="loading-screen" class="hidden h-full  w-full fade-enter-active animate-scaleIn">
+    <div class="flex flex-col items-center mt-8 justify-center h-full space-y-6">
+      <h2 class="text-2xl font-semibold text-gray-200">⚔️ Connexion au Duel...</h2>
+      <div class="flex items-center space-x-4">
+        <!-- Animated Character Cards -->
+        <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+        <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+        <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div>
+      </div>
+      <p class="text-sm text-gray-400">Connexion a la salle de combat...</p>
+      <p class="text-sm text-gray-400">Ne pas quitter cette page</p>
+    </div>
+   </div>
+
+   <div id="fallback-screen" class="hidden h-full  w-full fade-enter-active animate-scaleIn">
+    <div class="flex flex-col items-center mt-8 justify-center h-full space-y-6">
+      <h2 class="text-2xl font-semibold text-gray-200">⚔️ Connecté au Duel...</h2>
+      <div class="flex items-center space-x-4">
+        <!-- Animated Character Cards -->
+        <!-- <div class="w-24 h-24 bg-gray-700 rounded-full animate-pulse"></div> -->
+        
+        <svg class="h-16 w-16 my-4" xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 1024 1024"><path fill="#31a639" d="M512 0C229.232 0 0 229.232 0 512c0 282.784 229.232 512 512 512c282.784 0 512-229.216 512-512C1024 229.232 794.784 0 512 0zm0 961.008c-247.024 0-448-201.984-448-449.01c0-247.024 200.976-448 448-448s448 200.977 448 448s-200.976 449.01-448 449.01zm204.336-636.352L415.935 626.944l-135.28-135.28c-12.496-12.496-32.752-12.496-45.264 0c-12.496 12.496-12.496 32.752 0 45.248l158.384 158.4c12.496 12.48 32.752 12.48 45.264 0c1.44-1.44 2.673-3.009 3.793-4.64l318.784-320.753c12.48-12.496 12.48-32.752 0-45.263c-12.512-12.496-32.768-12.496-45.28 0z"/></svg>
+      </div>
+      <p class="text-sm text-gray-400">Connecté a la salle de combat.</p>
+      <p class="text-sm text-gray-400">En attente de connexion d'un adversaire...</p>
+      <div class="flex items-center space-x-4">
+        <!-- Animated Character Cards -->
+        <div class="w-4 h-4 bg-gray-700 rounded-full animate-pulse"></div>
+        <div class="w-4 h-4 bg-gray-700 rounded-full animate-pulse"></div>
+        <div class="w-4 h-4 bg-gray-700 rounded-full animate-pulse"></div>
+      </div>
+
+      
+    </div>
+   </div>
+
+
+      <!-- Battle Screen -->
+      <div id="battle-screen" class="hidden mx-auto md:max-w-2xl h-full w-full hidden fade-enter-active animate__fadeInLeftBig ">
+        <div id="turn-timer-container" class="flex justify-center items-center mb-4 animate-scaleIn hidden">
+          <div class="flex items-center gap-2 bg-gray-800 px-4 py-2 rounded-full shadow border border-orange-500">
+            <svg class="w-5 h-5 text-orange-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+              <path stroke="currentColor" stroke-width="2" d="M12 6v6l4 2"/>
+            </svg>
+            <span class="text-orange-300 font-semibold text-sm">Temps restant :</span>
+            <span id="turn-timer" class="text-orange-400 font-bold text-lg">--</span>
+            <span class="text-orange-300 font-semibold text-sm">sec</span>
+          </div>
+        </div>
+
+
+        <div class="bg-opacity-50  rounded-xl space-y-4">
+          <div class="flex relative justify-between overflow-y-auto ">
+            <div class="text-center">
+              <img id="player-character-img" src="{% static 'images/loaders/img-loader.gif' %}" class="w-16 h-16 mx-auto rounded-full border-2 object-cover border-orange-500" />
+              <p id = "player-character" class="text-sm font-semibold mt-1">Naruto</p>
+              <div class="flex justify-between text-gray-500 text-xs">
+                <span>HP</span>
+                <span id="player-hp-count" class="transition ease-in-out" ><span>100</span>/100</span>
+              </div>
+              <div class="flex items-center bg-gray-700 h-2 w-32 md:w-44 rounded-full mt-1 space-x-2 " >
+                <div id="player-hp-bar" class="bg-green-500 h-full w-24 rounded-full"></div>
+              </div>
+              
+              <div class="flex justify-between text-gray-500 mt-1 text-xs">
+                <span>Chakra</span>
+                <span id="player-chakra-count" class="transition ease-in-out" ><span>100</span>/100</span>
+              </div>
+              <div class="flex space-x-2  bg-gray-700 rounded-full h-2 w-32 md:w-44 mt-1" >
+                <div id="player-chakra-bar" class="bg-red-500 text-center flex justify-center items-center text-xs h-full rounded-full transition ease-in-out"></div>
+              </div>
+              
+             <div id="player1-data" class="flex items-center gap-2 mt-4 bg-gray-800 px-4 py-2 rounded-full shadow border border-orange-500">
+              <img id="player1-img" src="{{initiator_data.profile_picture}}" class="w-5 h-5 rounded-full border-2 object-cover border-orange-500" />  
+                <span id="player1-name" class="block max-w-32 text-orange-300 font-semibold truncate text-sm">{{initiator_data.display_name}}</span>
+            </div>
+              
+            </div>
+            
+            <div class="flex flex-col items-end self-end flex-end h-full">
+            <div class="">
+              <button id = "" onclick="showbattleChatpopup()" class='relative text-gray-300 px-4 py-2'>
+              <svg class = "w-8 h-8" xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24"><path fill="none" stroke="#ffffff" stroke-width="2" d="M19 1H5a4 4 0 0 0-4 4v8a4 4 0 0 0 4 4h12l6 5V5a4 4 0 0 0-4-4Zm0 6H6m13 4h-9"/></svg>
+              Discussion
+              <div id="bcnm-indicator" class="hidden notifier absolute top-[-10px] right-0 rounded-full translate-middle bg-red-500 text-gray-200  w-3 h-3 flex items-center justify-center"></div>
+            </button>
+            </div>
+            </div>
+            
+            
+            
+
+            
+
+            <div class="text-center">
+              <img id="opponent-character-img" src="{% static 'images/loaders/img-loader.gif' %}" class="w-16 h-16 mx-auto rounded-full object-cover border-2 border-gray-500" />
+              <p id="opponent-character" class="text-sm font-semibold mt-1">Kakashi</p>
+              <div class="flex justify-between text-gray-500 text-xs">
+                <span>HP</span>
+                <span id="opponent-hp-count"><span>100</span>/100</span>
+              </div>
+              <div class="flex  bg-gray-700 rounded-full h-2 w-32 md:w-44 items-center items-end mt-1 space-x-2 ">
+                <div id="opponent-hp-bar" class="bg-green-500 h-full rounded-full"></div>
+              </div>
+
+
+              <div class="flex justify-between mt-1 text-gray-500 text-xs">
+                <span>Chakra</span>
+                <span id="opponent-chakra-count"><span>100</span>/100</span>
+              </div>
+              <div class="flex space-x-2 items-end rounded-full bg-gray-700 h-2 w-32 md:w-44 mt-1">
+                <div id="opponent-chakra-bar" class="bg-red-500 h-2 rounded-full"></div>
+              </div>
+              <div id="player2-data" class="flex items-center mt-4 gap-2 bg-gray-800 px-4 py-2 rounded-full shadow border border-orange-500">
+              <img id="player2-img" src="{{opponent_data.profile_picture}}" class="w-5 h-5 rounded-full border-2 object-cover border-orange-500" />  
+                <span id="player2-name" class="block max-w-32  text-orange-300 font-semibold truncate text-sm">{{opponent_data.display_name}}</span>
+            </div>
+              
+              
+            </div>
+          </div>
+
+          <div class="bg-black/60 border border-gray-700 p-3 rounded-lg text-sm h-32 overflow-y-auto" id="battle-log">
+          </div>
+
+          <div id="action-buttons" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+           
+          </div>
+
+          <div class="text-center mt-4">
+            <button class="text-sm text-orange-600 hover:underline">Abandonner</button>
+          </div>
+        </div>
+        
+      </div>
+
+     
+
+<!-- Add this near your battle screen, e.g. just inside #duelBattleApp -->
+<div id="action-slide" class="fixed left-1/2 top-24 z-40 pointer-events-none" style="transform: translateX(-50%);">
+  <!-- Content will be injected by JS -->
+</div>
+
+
+
+
+
+<style>
+  @keyframes bgMove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
+  .animate-bgMove {
+    background-size: 200% 200%;
+    animation: bgMove 20s linear infinite;
+  }
+  .arena-circle {
+    box-shadow: 0 0 60px 10px rgba(255,140,0,0.15), 0 0 0 4px rgba(255,255,255,0.05) inset;
+  }
+  .player-panel {
+    min-width: 180px;
+    max-width: 220px;
+    min-height: 270px;
+  }
+</style>
+
+
+    </div>
+    
+    <div class="mx-auto ml-8 mt-8" >
+      
+    </div>
+  </div>
+
+  <!-- Battle End Popup -->
+<div id="battle-end-popup" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+  <div class="bg-gray-900 rounded-2xl p-8 max-w-md w-full text-center space-y-6 shadow-2xl animate__slideInUp">
+    <h2 id="battle-end-title" class="text-3xl font-bold text-orange-400">Fin du Duel</h2>
+    <div id="winner-section" class="flex flex-col items-center space-y-2">
+      <span id="winner-label" class="text-lg font-semibold text-green-400">Vainqueur</span>
+      <img id="winner-character-img" src="" alt="Gagnant" class="w-20 h-20 rounded-full border-4 border-orange-500 object-cover shadow mb-2" style="display:none;">
+      <div id="winner-character-name" class="text-lg font-bold text-orange-300"></div>
+    
+      <div class="flex items-center mt-4 gap-2 bg-gray-800 px-4 py-2 rounded-full shadow border border-orange-500">
+          <img id="winner-profilepicture" src="" class="w-5 h-5 rounded-full border-2 object-cover border-orange-500" />  
+          <span id="winner-player-name" class="block max-w-32  text-orange-300 font-semibold truncate text-sm"></span>
+      </div>
+    </div>
+    <div id="battle-reward" class="text-base text-gray-300">
+      <p class="font-semibold text-orange-300 mb-1">Récompenses :</p>
+      <ul class="list-disc list-inside text-left mx-auto w-fit space-y-1">
+        <li id="reward-xp">XP: 5</li>
+        <!-- <li id="reward-items">Items: --</li> -->
+      </ul>
+    </div>
+    <div class="flex justify-center space-x-4 pt-2">
+      <button onclick="gotoPage('/duels/new')" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg font-semibold">
+        Rejouer
+      </button>
+      <button onclick="gotoPage('/duels')" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-semibold">
+        Quitter
+      </button>
+    </div>
+  </div>
+</div>
+<!-- <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24"><path fill="none" stroke="#000000" stroke-width="2" d="M19 1H5a4 4 0 0 0-4 4v8a4 4 0 0 0 4 4h12l6 5V5a4 4 0 0 0-4-4Zm0 6H6m13 4h-9"/></svg> -->
+
+
+<div id="battle-chat-popup" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+  <div id="battle-chat-popup-content" class="bg-gray-900 rounded-2xl p-8 max-w-md w-full space-y-6 shadow-2xl animate__slideInUp">
+    <h2 id="" class="text-3xl font-bold text-orange-400">Chat</h2>
+    <div id="battle-chat-messages" class="flex flex-col w-full  space-y-2 max-h-96 overflow-y-auto">
+      <p class="text-gray-300 w-full min-w-32 inline-block">Envoie un message rapide a ton adversaire</p>
+    </div>
+    
+    <div class="relative flex justify-center space-x-4 pt-2">
+      <div class="mt-6 fixed md:relative w-full bottom-0 left-0 border-t bg-gray-900 py-4 px-2 border-gray-800">
+        <form onsubmit='sendChatMessage(this, event);' id="battle-chat-form" data-content-id = "" parent-id = '' class="flex gap-2">
+          <textarea oninput="autoExpand(this)" id="battle-chat-input" type="text" placeholder="Envoie un message a ton adversaire..." rows="1"  class="w-full bg-transparent px-4 py-2 text-white rounded-3xl border border-gray-700 focus:outline-none resize-none" ></textarea>
+          <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-full"><i class="fa-regular fa-paper-plane"></i></button>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+{{ request.user.username|json_script:"username" }}
+<style>
+  #action-slide .slide-message {
+    min-width: 260px;
+    max-width: 420px;
+    padding: 1.2rem 2.2rem;
+    font-size: 1.35rem;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(90deg, rgba(30,41,59,0.85) 0%, rgba(255,140,0,0.15) 50%, rgba(30,41,59,0.85) 100%);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(255,140,0,0.18);
+    border: 2px solid #f88305;
+    text-align: center;
+    letter-spacing: 0.03em;
+    opacity: 0;
+    transform: translateY(-40px) scale(0.98);
+    transition: all 0.7s cubic-bezier(.4,0,.2,1);
+    backdrop-filter: blur(4px);
+    position: relative;
+  }
+  #action-slide .slide-message.slide-in {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  #action-slide .slide-message.slide-out {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+    transition: all 0.5s cubic-bezier(.4,0,.2,1);
+  }
+  /* Optional: glowing edge effect */
+  #action-slide .slide-message::before, #action-slide .slide-message::after {
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 32px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  #action-slide .slide-message::before {
+    left: 0;
+    background: linear-gradient(90deg, rgba(255,140,0,0.18) 0%, transparent 100%);
+    border-radius: 1.5rem 0 0 1.5rem;
+  }
+  #action-slide .slide-message::after {
+    right: 0;
+    background: linear-gradient(270deg, rgba(255,140,0,0.18) 0%, transparent 100%);
+    border-radius: 0 1.5rem 1.5rem 0;
+  }
+</style>
+
+
+<script>
+  
+/**
+ * Slides in a battle action message, then fades out.
+ * @param {string} message - The action text to display.
+ * @param {number} [duration=1800] - How long to show before fading out (ms).
+ */
+function showActionSlide(message, type="info", duration = 1800) {
+  const overlay = document.getElementById('action-slide-overlay');
+  overlay.classList.remove('hidden')
+  const container = document.getElementById('action-slide');
+  // Remove any previous message
+  container.innerHTML = '';
+  // Create message element
+  const msg = document.createElement('div');
+  const typeClass = type === 'info' ? 'text-gray-300' : type === 'success' ? 'text-green-500' : type === 'player' ? 'text-blue-500' : type === 'opponent' ? 'text-orange-500' : type === 'danger' ? 'text-red-500' : 'text-yellow-500';
+
+  msg.className = 'slide-message ' + typeClass;
+  msg.textContent = message;
+  container.appendChild(msg);
+
+  const sound = new Howl({
+    src: ['/static/audio/duels/sword.mp3'],
+    volume: 0.3,
+  });
+  sound.play();
+  // Animate in
+  setTimeout(() => msg.classList.add('slide-in'), 10);
+  // Animate out after duration
+  setTimeout(() => {
+    msg.classList.remove('slide-in');
+    msg.classList.add('slide-out');
+    //overlay.classList.add('hidden')
+    setTimeout(() => {
+      if (msg.parentNode) msg.parentNode.removeChild(msg);
+      overlay.classList.add('hidden')
+    }, 600);
+  }, duration);
+}
+
+// Example usage:
+//showActionSlide("Naruto utilise Rasengan !");
+
+
+// showActionSlide("Sasuke se défend !");
+// ...existing code...
+
+// Action Slide Queue System
+const actionSlideQueue = [];
+let actionSlideActive = false;
+
+/**
+ * Queue a message to be shown in the action slide.
+ * @param {string} message
+ * @param {number} [duration=1800]
+ */
+function queueActionSlide(message,type, duration = 1800) {
+  actionSlideQueue.push({ message, type, duration });
+  processActionSlideQueue();
+}
+
+/**
+ * Internal function to process the queue.
+ */
+function processActionSlideQueue() {
+  if (actionSlideActive || actionSlideQueue.length === 0) return;
+  actionSlideActive = true;
+  const { message, type, duration } = actionSlideQueue.shift();
+  showActionSlide(message, type, duration);
+  setTimeout(() => {
+    actionSlideActive = false;
+    processActionSlideQueue();
+  }, duration + 700); // Wait for fade out transition
+}
+// ...existing code..
+
+</script>
+  <script>
+    const username = JSON.parse(document.getElementById('username').textContent);
+
+    let playerCharacter = '';
+    let currentChakra;
+    
+
+    // Add these functions to your script section
+    let timerInterval = null;
+
+    function showTurnTimer(seconds) {
+  const timerContainer = document.getElementById('turn-timer-container');
+  const timerDisplay = document.getElementById('turn-timer');
+  timerContainer.classList.remove('hidden');
+  timerDisplay.textContent = seconds;
+  let timeLeft = seconds;
+
+  if (timerInterval) clearInterval(timerInterval);
+
+  timerInterval = setInterval(() => {
+    timeLeft -= 1;
+    timerDisplay.textContent = timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      timerDisplay.textContent = "0";
+      timerContainer.classList.add('hidden');
+      duelSocket.send(JSON.stringify({
+        type : 'duel_action',
+        action: "Defend"
+      }))   
+      // Optionally: auto-end turn or show timeout message
+    }
+  }, 1000);
+}
+
+    function hideTurnTimer() {
+  const timerContainer = document.getElementById('turn-timer-container');
+  timerContainer.classList.add('hidden');
+  if (timerInterval) clearInterval(timerInterval);
+}
+
+    function gotoPage(url){
+      showOverlay()
+      window.location.href = url
+    }
+
+    function selectCharacter(div, characterName){
+        // Reset all character overlays and borders
+    const overlays = document.getElementsByClassName('character-overlay');
+    const images = document.querySelectorAll('#characters img');
+
+    for (let i = 0; i < overlays.length; i++) {
+        overlays[i].style.opacity = 0; // Reset overlay opacity
+    }
+
+    for (let i = 0; i < images.length; i++) {
+        images[i].classList.remove('border-orange-500'); // Remove selected border
+        images[i].classList.add('border-gray-900'); // Reset to default border
+    }
+
+    // Highlight the selected character
+    div.querySelector('.character-overlay').style.opacity = 1; // Show overlay for the selected character
+    const characterImage = div.querySelector('img'); // Get the image element
+    characterImage.classList.add('border-orange-500'); // Add selected border
+    characterImage.classList.remove('border-gray-900'); // Remove default border
+
+    // Store the selected character name
+    playerCharacter = characterName;
+    }
+
+    const showScreen = (id) => {
+      document.querySelectorAll('#duelBattleApp > div').forEach(div => div.classList.add('hidden'));
+      document.getElementById(id).classList.remove('hidden');
+      //document.getElementById(id).classList.add('animate-scaleIn');
+    };
+
+    const goToCharacterSelect = () => showScreen('character-select-screen');
+    const showLoadingScreen = () => showScreen('loading-screen');
+    const goToBattleScreen = () => {showScreen('battle-screen'); $('.top-nav').toggle() };
+
+    
+    function showBattleEndPopup(winnerInfo = null) {
+    const popup = document.getElementById('battle-end-popup');
+    const title = document.getElementById('battle-end-title');
+    const winnerLabel = document.getElementById('winner-label');
+    const winnerImg = document.getElementById('winner-character-img');
+    const winnerCharName = document.getElementById('winner-character-name');
+    const winnerPlayerName = document.getElementById('winner-player-name');
+    const winnerProfilepicture = document.getElementById('winner-profilepicture');
+    const rewardXp = document.getElementById('reward-xp');
+    const rewardItems = document.getElementById('reward-items');
+    
+
+    // winnerImg.src = winnerInfo.character.image || '';
+    // winnerImg.style.display = winnerInfo.character.image ? '' : 'none';
+    winnerCharName.textContent = winnerInfo.character.name || '';
+    winnerPlayerName.textContent = winnerInfo.player.name ? `${winnerInfo.player.name}` : '';  
+    winnerProfilepicture.src = winnerInfo.player.profile_picture    
+    
+    // Set rewards
+    // rewardXp.textContent = `XP: ${rewards.xp ?? '--'}`;
+    // rewardItems.textContent = `Items: ${rewards.items && rewards.items.length ? rewards.items.join(', ') : '--'}`;
+
+    // Show the popup
+    popup.classList.remove('hidden');
+}
+
+  //   const backgroundSound = new Howl({
+  //   src: ['/static/audio/duels/16.ogg'], // Example attack sound2
+  //   autoplay: true,
+  //   loop: true,
+  //   volume: 0.5,
+    
+  // });
+
+  const attackSound = new Howl({
+    src: ['/static/audio/duels/attack-match-5-394506.mp3'], // Example attack sound2
+    volume: 0.5,
+    sprite: {
+    blast: [0, 3000],
+    laser: [4000, 1000],
+    winner: [6000, 5000]
+  }
+  });
+  
+
+    // const wsprotocol = window.location.protocol === 'https' ? 'wss://' : 'ws://' 
+    // console.log("WS Protocol:",window.location.protocol)
+    // const duelSocket  = new WebSocket(
+    //     'ws://' + 
+    //     window.location.host + 
+    //     '/ws/duels/'+
+    //     "{{duel.code}}" +  "/"
+    // )
+
+    // showLoadingScreen()
+
+    
+    var chatmessages = []
+    
+    function showbattleChatpopup(){
+      const popup = document.getElementById('battle-chat-popup')
+      popup.classList.remove('hidden')
+      
+      populateChatMessages()
+    }
+
+    function hidebattleChatpopup(){
+      const popup = document.getElementById('battle-chat-popup')
+      const indicator = document.getElementById('bcnm-indicator')
+      indicator.classList.add('hidden')
+      popup.classList.add('hidden')
+    }
+
+    document.addEventListener('click', (e) => {
+    const popup = document.getElementById('battle-chat-popup')
+    //const content = document.querySelector('#ContentPopupContent');
+    const content = popup.querySelector('#battle-chat-popup-content');
+    
+    if (!popup.classList.contains('hidden') && !content.contains(e.target) && !e.target.closest('button[onclick^="showbattleChatpopup"]')) {
+      hidebattleChatpopup();
+    }
+  });
+
+    function createChatMessage(message){
+      const div = document.createElement('div')
+      div.className = "mt-1 border-l-2 border-orange-500 rounded-tr-xl px-3"
+      div.innerHTML =  `
+      <span  class="block max-w-32  text-orange-300 font-semibold truncate text-sm">${message.sender}</span>
+      <p class="body text-sm text-gray-300 w-full min-w-32 inline-block">${message.content}</p>
+      `
+      return div
+    }
+
+    function sendChatMessage(form, event){
+      event.preventDefault()
+
+      const textarea = document.querySelector('#battle-chat-input')
+      const content = textarea.value
+      
+      duelSocket.send(JSON.stringify({
+        type : 'chat',
+        content : content,
+      }))
+      textarea.value = "" 
+    }
+
+    function populateChatMessages(){
+      const container = document.getElementById('battle-chat-messages')
+      if(chatmessages.length > 0){
+        container.innerHTML = ''
+      chatmessages.forEach((message) => {
+        container.appendChild(createChatMessage(message))
+      })
+      }
+      
+    }
+
+    var onmessage = function(e){
+            if(data.type == 'chat'){
+              const newMessage = {
+                sender : data.user,
+                content : data.content,
+                timestamp : "",
+              }  
+              chatmessages.push(newMessage)
+              const popup = document.getElementById('battle-chat-popup')
+              const indicator = document.getElementById('bcnm-indicator')
+              if (popup.classList.contains('hidden')){
+                 indicator.classList.remove('hidden')
+                 const sound = new Howl({
+                  src: ['/static/audio/duels/tekk-kick-298401.mp3'],
+                  volume: 0.3,
+                //   sprite: {
+                //   laser: [4000, 1000],
+                // }
+                  });
+                  sound.play();
+              }else{
+                indicator.classList.add('hidden')
+              } 
+              
+              populateChatMessages()
+            }
+        
+            else if(data.type == "duel_action"){
+              if(data.status == "waiting" && data.user == username){
+                showToast(data.message)
+                return
+              }
+              if(data.status == "waiting" && data.user != username){
+                //show timer
+                showTurnTimer(15); // Show 15s timer for opponent's turn
+              }
+
+            if(data.status == "continue"){
+              hideToasts()
+              enableActionButtons()
+              const battleLog = document.getElementById('battle-log');
+              battleLog.innerHTML = ''; // Clear existing log entries
+              // addDivider(battleLog)
+              const battleLogs = data.battle_logs
+              battleLogs.forEach((log, index) => {
+                  divide = index == battleLogs.length-1
+                  updateBattleLog(log.text, log.type, log.timestamp,divide);
+                  queueActionSlide(log.text, log.type)
+              });
+              // addDivider(battleLog)
+              
+
+              //const player_character = 
+
+              const playerStats = {
+                  current_hp: data.player_character.hp,
+                  current_chakra: data.player_character.chakra,
+                  hp:  data.player_character.hp/200 * 100,      // Player HP as a percentage
+                  chakra: (data.player_character.chakra/data.player_character.chakra_pool) * 100,  // Player Chakra as a percentage
+                  chakra_pool: data.player_character.chakra_pool,
+                  stamina: data.player_character.stamina, // Player Stamina as a percentage
+              };
+
+              const opponentStats = {
+                  current_hp: data.opponent_character.hp,
+                  current_chakra: data.opponent_character.chakra,
+                  hp: data.opponent_character.hp / 200 * 100,      // opponent HP as a percentage
+                  chakra: (data.opponent_character.chakra/data.opponent_character.chakra_pool) * 100,  // opponent Chakra as a percentage
+                  chakra_pool : data.opponent_character.chakra_pool,
+                  stamina: data.opponent_character.stamina, // opponent Stamina as a percentage
+              };
+              currentChakra = username ==  data.player1.user.username ? data.player1.character.chakra : data.player2.character.chakra 
+              
+              updateStatBars(playerStats, opponentStats);
+              if(data.winner){
+                showBattleEndPopup(data.winner);
+                disableActionButtons()
+                }
+                
+            }
+            else if(data.status == "error" && data.user == username){
+              showToast(data.message, 'error')
+              enableActionButtons()
+            }
+          }
+        }
+
+    function disableActionButtons(){
+    const actionButtonsContainer = document.getElementById('action-buttons');
+    const buttons =  actionButtonsContainer.querySelectorAll('button');
+    
+    buttons.forEach(btn => {
+      btn.setAttribute('disabled', true);
+      btn.classList.add('opacity-50', 'cursor-not-allowed');
+    })
+}
+
+    function enableActionButtons(){
+  const actionButtonsContainer = document.getElementById('action-buttons');
+  const buttons =  actionButtonsContainer.querySelectorAll('button');
+
+  buttons.forEach(btn => {
+    btn.removeAttribute('disabled');
+    btn.classList.remove('opacity-50', 'cursor-not-allowed');
+  })
+}
+    function checkChakra(action){
+      console.log(currentChakra)
+      if(currentChakra < action.chakraCost){
+          showToast('Pas assez de  chakra pour cette action, utilise Focus pour recharger du chakra', 'warning') 
+          const sound = new Howl({
+          src: ['/static/audio/duels/tekk-kick-298401.mp3'],
+          volume: 0.3,
+        //   sprite: {
+        //   laser: [4000, 1000],
+        // }
+          });
+          sound.play();
+        }
+        else{
+          performAction(action)
+          attackSound.play('blast');
+        }
+
+    }
+
+    function performAction(action){
+      hideTurnTimer()
+      disableActionButtons();
+            $.ajax({
+            url : '/duels/solo/action',
+            type : 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: {
+                'action': action.name,
+                'character': playerCharacter,
+                'chakra_cost': action.chakraCost,
+                // 'new_log' : {
+                //     'text': `Vous utilisez ${action.name}...`,
+                //     'type' : 'info',
+                // }
+            },
+            beforeSend: function() {
+                disableActionButtons();
+                // Show loading spinner or overlay
+                // document.getElementById('battle-log').innerHTML = '<p class="text-gray-600 dark:text-gray-300">Loading...</p>';
+                // updateBattleLog(`Vous utilisez ${action.name}...`)
+            },
+            success: function(data) {
+              hideToasts()
+              enableActionButtons()
+              const battleLog = document.getElementById('battle-log');
+              battleLog.innerHTML = ''; // Clear existing log entries
+              // addDivider(battleLog)
+              const battleLogs = data.battle_logs
+              battleLogs.forEach((log, index) => {
+                  divide = index == battleLogs.length-1
+                  updateBattleLog(log.text, log.type, log.timestamp,divide);
+                  queueActionSlide(log.text, log.type)
+              });
+              // addDivider(battleLog)
+              
+
+              //const player_character = 
+
+              const playerStats = {
+                  current_hp: data.player_character.hp,
+                  current_chakra: data.player_character.chakra,
+                  hp:  data.player_character.hp/200 * 100,      // Player HP as a percentage
+                  chakra: (data.player_character.chakra/data.player_character.chakra_pool) * 100,  // Player Chakra as a percentage
+                  chakra_pool: data.player_character.chakra_pool,
+                  stamina: data.player_character.stamina, // Player Stamina as a percentage
+              };
+
+              const opponentStats = {
+                  current_hp: data.opponent_character.hp,
+                  current_chakra: data.opponent_character.chakra,
+                  hp: data.opponent_character.hp / 200 * 100,      // opponent HP as a percentage
+                  chakra: (data.opponent_character.chakra/data.opponent_character.chakra_pool) * 100,  // opponent Chakra as a percentage
+                  chakra_pool : data.opponent_character.chakra_pool,
+                  stamina: data.opponent_character.stamina, // opponent Stamina as a percentage
+              };
+              
+              currentChakra = data.player_character.chakra;
+              
+              updateStatBars(playerStats, opponentStats);
+              if(data.winner){
+                showBattleEndPopup(data.winner);
+                disableActionButtons()
+                }
+            },
+          error: function(xhr, status, error) {
+              // Handle error
+              console.error('Error:', error);
+              showToast('An error occurred while performing the action. Please try again.', 'error');
+          }
+        })  
+                
+          
+      
+    }
+
+    function updateCharacterImages(playerCharacterImgSrc, opponentCharacterImgSrc){
+        const playerCharacterImage = document.getElementById('player-character-img').setAttribute('src', playerCharacterImgSrc)
+        const opponentCharacterImage = document.getElementById('opponent-character-img').setAttribute('src', opponentCharacterImgSrc)
+    }
+
+    function updateStatBars(playerStats, opponentStats, current_chakra=0) {
+    // Update Player Stats
+    const playerHpBar = document.getElementById('player-hp-bar');
+    const playerChakraBar = document.getElementById('player-chakra-bar');
+    const playerStaminaBar = document.getElementById('player-stamina-bar');
+
+    const playerHpCountText = document.getElementById('player-hp-count');
+    const playerChakraCountText = document.getElementById('player-chakra-count');
+
+    playerHpBar.style.width = `${playerStats.hp}%`;
+    playerChakraBar.style.width = `${playerStats.chakra}%`;
+    playerHpCountText.innerHTML = `${playerStats.current_hp}/200`;
+    playerChakraCountText.innerHTML = `${playerStats.current_chakra}/${playerStats.chakra_pool}`;
+    // playerStaminaBar.style.width = `${playerStats.stamina}%`;
+
+    // Update opponent Stats
+    const opponentHpBar = document.getElementById('opponent-hp-bar');
+    const opponentChakraBar = document.getElementById('opponent-chakra-bar');
+    const opponentStaminaBar = document.getElementById('opponent-stamina-bar');
+    
+    const opponentHpCountText = document.getElementById('opponent-hp-count');
+    const opponentChakraCountText = document.getElementById('opponent-chakra-count');
+    opponentHpCountText.innerHTML = `${opponentStats.current_hp}/200`;
+    opponentChakraCountText.innerHTML = `${opponentStats.current_chakra}/${opponentStats.chakra_pool}`;
+
+    opponentHpBar.style.width = `${opponentStats.hp}%`;
+    opponentChakraBar.style.width = `${opponentStats.chakra}%`;
+    // opponentStaminaBar.style.width = `${opponentStats.stamina}%`;
+
+    // currentChakra = current_chakra;
+    // Update the chakra bar color based on the current chakra level
+
+    if (currentChakra < 50) {
+        playerChakraBar.classList.remove('bg-red-500', 'bg-yellow-500', 'bg-blue-500');
+        playerChakraBar.classList.add('bg-red-500');
+    } else if (currentChakra < 80) {
+        playerChakraBar.classList.remove('bg-red-500', 'bg-yellow-500', 'bg-blue-500');
+        playerChakraBar.classList.add('bg-yellow-500');
+    } else {
+        playerChakraBar.classList.remove('bg-red-500', 'bg-yellow-500', 'bg-blue-500');
+        playerChakraBar.classList.add('bg-blue-500');
+    }
+} 
+    
+    function createActionbutton(action) {
+    
+    const button = document.createElement('button');
+    button.type = "button";
+    button.className = "action-btn group flex flex-col items-center justify-center px-3 py-2 rounded-xl shadow-lg border-2 border-transparent transition-all duration-200 cursor-pointer relative";
+    button.tabIndex = 0;
+
+    // Chakra cost badge
+    const chakraCost = document.createElement('span');
+    chakraCost.className = "chakra-cost absolute top-2 right-2 text-xs font-bold px-2 py-0.5 rounded-full";
+    chakraCost.textContent = action.chakraCost;
+
+    // Icon
+    const iconWrapper = document.createElement('span');
+    iconWrapper.className = "action-icon mb-1";
+    iconWrapper.innerHTML = action.icon;
+
+    // Label
+    const label = document.createElement('span');
+    label.className = "action-label font-bold text-base tracking-wide";
+    label.textContent = String(action.name).charAt(0).toUpperCase() + action.name.slice(1, 12);
+
+    // Append
+    button.appendChild(chakraCost);
+    button.appendChild(iconWrapper);
+    button.appendChild(label);
+
+    // Tooltip (optional)
+    button.title = action.description || action.name;
+
+    // Click handler
+    button.onclick = () => {
+      
+      checkChakra(action);
+    }
+
+    return button;
+}
+
+    function fillActionButtons(actions){
+        const actionButtonsContainer = document.getElementById('action-buttons');
+        actionButtonsContainer.innerHTML = ''; // Clear existing buttons
+        
+        actions.forEach(action => {
+            
+            const button = createActionbutton(action);
+            actionButtonsContainer.appendChild(button);
+        });
+    }
+
+    function updateBattleLog(message, type = 'info', timestamp="", divide=false) {
+        const battleLog = document.getElementById('battle-log');
+
+        // Create a new log entry
+        const logEntry = document.createElement('p');
+        const typeClass = type === 'info' ? 'text-gray-300' : type === 'success' ? 'text-green-500' : type === 'player' ? 'text-blue-500' : type === 'opponent' ? 'text-orange-500' : type === 'danger' ? 'text-red-500' : 'text-yellow-500';
+        logEntry.className =  typeClass  + " py-2 border-t border-gray-400"
+        logEntry.innerHTML = `[${timestamp}] ${message}`;
+
+        // Append the new log entry to the battle log
+        battleLog.appendChild(logEntry);
+        // if(divide){
+        //   addDivider(battleLog)
+        // }
+
+        // Scroll to the opponenttom of the log
+        battleLog.scrollTop = battleLog.scrollHeight;
+    }
+
+    function displayPlayerData(container, player){
+      container.querySelector('span').textContent = player.display_name
+      container.querySelector('img').src = player.profile_picture
+    }
+
+    function selectCharacter(div, characterName){
+        // Reset all character overlays and borders
+      const overlays = document.getElementsByClassName('character-overlay');
+      const images = document.querySelectorAll('#characters img');
+
+      for (let i = 0; i < overlays.length; i++) {
+          overlays[i].style.opacity = 0; // Reset overlay opacity
+      }
+
+      for (let i = 0; i < images.length; i++) {
+          images[i].classList.remove('border-orange-500'); // Remove selected border
+          images[i].classList.add('border-gray-900'); // Reset to default border
+      }
+
+      // Highlight the selected character
+      div.querySelector('.character-overlay').style.opacity = 1; // Show overlay for the selected character
+      const characterImage = div.querySelector('img'); // Get the image element
+      characterImage.classList.add('border-orange-500'); // Add selected border
+      characterImage.classList.remove('border-gray-900'); // Remove default border
+
+      // Store the selected character name
+      playerCharacter = characterName;
+    }
+    
+    function initBattle(){
+            
+          document.querySelector('.bottom-nav').classList.add('hidden')
+          if(playerCharacter != ""){
+              $.ajax({
+            url : '/duels/solo/init',
+            type : 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: {
+                'action': 'init_battle',
+                'character' : playerCharacter
+            },
+            beforeSend: function() {
+                // Show loading spinner or overlay
+                // document.getElementById('battle-log').innerHTML = '<p class="text-gray-600 dark:text-gray-300">Loading...</p>';
+                showLoadingScreen()
+            },
+            success: function(data) {
+                // Hide loading spinner or overlay
+                // document.getElementById('battle-log').innerHTML = data.battle_log;
+                console.log(data)
+                
+
+
+                if (data.status == 'fallback'){
+                  showScreen('fallback-screen');
+                  return
+                }
+                displayPlayerData(document.getElementById('player1-data'), data.player1)
+                displayPlayerData(document.getElementById('player2-data'), data.player2)
+                
+                const basicActions = [
+                    { name: 'Attack', chakraCost: 10, bgColor: 'orange', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-3.197m1.414-1.414a2.828 2.828 0 114 4L12 21l-4-4 7.97-7.97z" />
+                    </svg>
+                    ` },
+                    { name: 'Defend', chakraCost: 0, bgColor: 'gray', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 2l9 4.5v5c0 5.25-3.75 9.75-9 11-5.25-1.25-9-5.75-9-11v-5L12 2z" />
+                    </svg>
+                    ` },
+                    { name: 'Focus', chakraCost: 0, bgColor: 'blue', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    ` },
+                    { name: 'Heal', chakraCost: 20, bgColor: 'green', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                  </svg>
+                    ` },
+                    { name: 'Substitution', chakraCost: 5, bgColor: 'red', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l-6.5 6.5m0 0L3 21l4.75-.25m-4.5-4.5l6.5-6.5m6.5 6.5l6.5-6.5m0 0L21 3l-4.75.25m4.5 4.5l-6.5 6.5" />
+                    </svg>          
+                    ` },
+                ]
+
+                const specialActions = data.current_character.jutsus.map(action => {
+                    return { name: action.name, chakraCost: action.chakra_cost, bgColor: 'purple', icon: `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 floatingx text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-3.197m1.414-1.414a2.828 2.828 0 114 4L12 21l-4-4 7.97-7.97z" />
+                    </svg>
+                    ` };
+                });
+
+                CharacterActions = basicActions.concat(specialActions);
+                fillActionButtons(CharacterActions);
+
+                // Update character names and health bars
+                document.getElementById('player-character').innerHTML = data.player_character.name;
+                document.getElementById('opponent-character').innerHTML = data.opponent_character.name;
+                
+                const playerStats = {
+                    current_hp: data.player_character.hp,
+                    current_chakra: data.player_character.chakra,
+                    hp:  100,      // Player HP as a percentage
+                    chakra: (data.player_character.chakra/data.player_character.chakra_pool) * 100,  // Player Chakra as a percentage
+                    chakra_pool: data.player_character.chakra_pool,
+                    stamina: 100, // Player Stamina as a percentage
+                };
+
+                const opponentStats = {
+                    current_hp: data.opponent_character.hp,
+                    current_chakra: data.opponent_character.chakra,
+                    hp: 100,      // opponent HP as a percentage
+                    chakra: (data.opponent_character.chakra/data.opponent_character.chakra_pool) * 100,  // opponent Chakra as a percentage
+                    chakra_pool : data.opponent_character.chakra_pool,
+                    stamina: 100, // opponent Stamina as a percentage
+                };
+
+                currentChakra = data.player_character.chakra;
+                // console.log("loaded chakra:",currentChakra)
+                
+                updateCharacterImages(data.player_character.image, data.opponent_character.image)
+                updateStatBars(playerStats, opponentStats);
+
+                const battleLogs = data.logs ? data.logs : [
+                  {
+                    text: 'battle started',
+                    type: 'info',
+                    timestamp : new Date().toLocaleTimeString()
+                  }
+                ]
+                
+                const battleLogContainer = document.getElementById('battle-log');
+                
+                battleLogs.forEach(log => {
+                    updateBattleLog(log.text, log.type, log.timestamp);
+                });
+                //addDivider(battleLogContainer)
+                
+                battleLogContainer.scrollTop = battleLogContainer.scrollHeight;
+                
+                // Update the battle log with the initial message
+                setTimeout(() => {
+                    // document.getElementById('battle-log').innerHTML = data.battle_log;
+                    goToBattleScreen()
+
+                }, 2000);
+                
+                //backgroundSound.play()
+
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error('Error:', error);
+                showToast('An error occurred while initializing the battle. Please try again.', 'error');
+                //goToCharacterSelect()
+            }   
+        })
+      }else{
+        showToast('Selectionne un perso.');
+      }  
+          
+
+        
+    }
+
+    function addDivider(container){
+  const div = document.createElement('div');
+  div.className =  "w-full h-[1px] bg-white my-2"
+
+  // Append the new log entry to the battle log
+  container.appendChild(div);
+}  
+
+    function hideBattleEndPopup() {
+    const popup = document.getElementById('battle-end-popup');
+    popup.classList.add('hidden');
+}
+
+    function restartBattle() {
+    hideBattleEndPopup();
+    const battleLog = document.getElementById('battle-log').innerHTML = ''; // Clear existing log entries
+    updateBattleLog('Battle restarted. Choose your actions wisely!', 'info', new Date().toLocaleTimeString());
+    goToCharacterSelect(); // Redirect to character selection screen
+}
+
+    function quitBattle() {
+    hideBattleEndPopup();
+    window.location.href = '/battles'; // Redirect to battles page or home
+}
+
+    document.addEventListener('DOMContentLoaded',()=>{
+        initBattle()  
+})
+
+  </script>
+
+
+{% endblock content %}
+
+{% block adscripts %}
+
+{% endblock adscripts %}

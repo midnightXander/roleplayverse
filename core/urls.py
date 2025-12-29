@@ -4,9 +4,9 @@ from . import views
 app_name = 'core'
 
 urlpatterns = [
-    path('',views.index,name='index'),
+    path('home',views.index,name='index'),
     path('onboarding',views.onboarding,name='onboarding'),
-    path('home',views.home,name='home'),
+    path('',views.home,name='home'),
     path('search/<str:scope>',views.search_all,name = "search"),
     path('feed',views.get_posts,name='feed'),
     path('post/new',views.create_post, name='create_post'),
@@ -17,6 +17,7 @@ urlpatterns = [
     path('comment/<int:id>',views.comment, name = 'comment_action'),
     path('posts/<int:id>',views.post_page, name = 'post_page'),
     path('post/favorite/<int:id>',views.favorite, name = "favorite"),
+    path('posts/reactors/<int:post_id>',views.post_reactors),
 
     
     path('post/react/<int:post_id>',views.react_post,name="react"),
@@ -27,6 +28,8 @@ urlpatterns = [
     path('contents/<int:content_id>/comments',views.get_content_comments, name = 'content_comments'),
     path('contents/<int:content_id>/comments/add',views.add_content_comment, name = 'content_comments'),
     path('contents/react/<int:content_id>',views.react_to_content, name='react_to_content'),
+    path('contents/reactors/<int:content_id>',views.content_reactors),
+    
     
     path('notifications', views.notifications, name='notifications'),
     path('notifications/all',views.get_notifications, name='all_notifications'),

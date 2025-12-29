@@ -64,17 +64,17 @@
   </div>
   
 
-  <div id="affiliate-ad-container" class="rounded-lg border-t border-orange-500 mb-6">
+  <div id="affiliate-ad-container" class="rounded-lg border-t border-orange-500 mb-6 mt-2">
             <div class="flex items-center mb-2">
                 <img alt="Logo de Roleplayverse" src="{% static 'images/logo/logo_1_nobg.png' %}" class="h-8 w-8 mr-2">
                 <span class="text-sm text-gray-600">Sponsorisé </span>
             </div>
-            <div class="flex gap-4">
+            <div class="flex flex-col gap-4">
+              <h4 id="product-title" class="font-bold text-sm">{{affiliate_products.0.title}}</h4>
               <a onclick="adClick('{{affiliate_products.0.link}}')" target="_blank" href="{{affiliate_products.0.link}}">
-                <img id="product-image" alt="{{affiliate_products.0.title}} Couverture" src="{{affiliate_products.0.image}}" class="h-24 w-24 object-cover rounded" />
+                <img id="product-image" alt="{{affiliate_products.0.title}} Couverture" src="{{affiliate_products.0.image}}" class="w-full object-cover rounded" />
               </a>
                 <div>
-                    <h4 id="product-title" class="font-bold text-sm">{{affiliate_products.0.title}}</h4>
                     <p id="product-description" class="text-xs text-gray-500">{{affiliate_products.0.description}}</p>
                     <a id="product-link" onclick="adClick('{{affiliate_products.0.link}}')" target="_blank" href="{{affiliate_products.0.link}}" class="text-sm text-orange-600 hover:underline">Voir</a>
                 </div>
@@ -83,11 +83,22 @@
 
   <!-- Recent Fights -->
   <div class="mb-10">
+    <div class="flex items-center justify-between mb-6">
     <h2 class="text-xl font-semibold text-orange-400 mb-4">Duels Récents</h2>
+    <a href="/users/{{request.user.username}}?tab=duels" class="text-sm text-orange-400 hover:underline">Voir tout</a>
+  </div>
+    
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       {% for duel in recent_duels %}
-      <div class="bg-gradient-to-br from-gray-900 via-gray-800 to-orange-900 rounded-xl shadow p-5 flex flex-col sm:flex-row items-center gap-4">
-        <img src="{{ duel.player1.profile_picture }}" alt="{{ duel.player1.name }}" class="w-14 h-14 rounded-full border-2 border-orange-400 object-cover shadow" onerror="this.style.display='none'">
+      <div class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-950 rounded-xl shadow p-5 flex flex-col sm:flex-row items-center gap-4">
+        <div class = "flex items-center justify-between gap-2">
+          <img src="{{ duel.player1.profile_picture }}" alt="{{ duel.player1.username }}" class="w-16 h-16 rounded-full border-2 border-orange-400 object-cover shadow" onerror="this.style.display='none'">
+          {% if duel.player2 %}
+          <span class="text-gray-400 font-bold">VS</span>
+          <img src="{{ duel.player2.profile_picture }}" alt="{{ duel.player2.username }}" class="w-16 h-16 rounded-full border-2 border-orange-400 object-cover shadow" onerror="this.style.display='none'">
+          {% endif %}
+        </div>
+        
         <div class="flex-1">
           <div class="flex items-center gap-2 mb-1">
             <span class="font-bold truncate text-orange-300">{{ duel.player1.name }}</span>
@@ -108,7 +119,7 @@
             <input id="success-duel-link" onfocus="copyLink('https:\/\/roleplayverse.live/duels/{{ duel.code }}')" type="text" readonly value="https://roleplayverse.live/duels/{{ duel.code }}" class="w-full mt-1 px-3 py-2 rounded-lg border border-gray-700 bg-gray-800 text-sm" />
           </div>
         </div>
-        <a onclick="showOverlay()" href="/duels/{{duel.code}}" class="ml-2 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-full font-semibold shadow transition text-sm">Entrer</a>
+        <a onclick="showOverlay()" href="/duels/{{duel.code}}" class="ml-2 button-smooth bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-full font-semibold shadow transition text-sm">Entrer</a>
       </div>
       {% empty %}
       <div class="col-span-2 text-center text-gray-500 py-8">Aucun duel récent pour le moment.</div>
@@ -138,7 +149,7 @@
               <span class="font-bold text-orange-300">{{ d_player.name }}</span>
             </td>
             <td class="py-2 px-3">{{ d_player.wins }}</td>
-            <td class="py-2 px-3">--</td>
+            <td class="py-2 px-3">{{ d_player.losses }}</td>
             <td class="py-2 px-3">
               <!-- {{forloop.counter}}  -->
               {{ d_player.rank|default:"-" }}
@@ -151,7 +162,7 @@
               <span class="font-bold text-orange-300">{{ d_player.name }}</span>
             </td>
             <td class="py-2 px-3">{{ d_player.wins }}</td>
-            <td class="py-2 px-3">--</td>
+            <td class="py-2 px-3">{{ d_player.losses }}</td>
             <td class="py-2 px-3">
               <!-- {{forloop.counter}}  -->
               {{ d_player.rank|default:"-" }}
@@ -167,8 +178,40 @@
       </table>
     </div>
   </div>
+
+  <div id="discordPopup" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
+  <div class="bg-gray-900 rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center border-2 border-orange-500 animate__animated animate__fadeInDown">
+    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Discord Logo" class="w-16 h-16 mx-auto mb-4">
+    <h2 class="text-2xl font-bold text-orange-400 mb-2">Rejoins notre Discord !</h2>
+    <p class="text-gray-300 mb-6">Discute avec la communauté, participe aux événements et ne rate aucune annonce exclusive.</p>
+    <a href="https://discord.gg/a2wmy5jn" target="_blank" class="bg-gradient-to-r from-orange-500 to-purple-600 text-white font-semibold px-6 py-2 rounded-full shadow hover:scale-105 transition">Rejoindre le Discord</a>
+    <button onclick="closeDiscordPopup()" class="mt-6 text-gray-400 hover:text-red-500 text-xl font-bold">&times;</button>
+  </div>
 </div>
 
+</div>
+
+<script>
+  $(()=>{
+        
+        $('.bottom-nav-link').removeClass('bg-gray-700')
+        $('.bottom-nav-link').eq(3).addClass('border-b-2 border-orange-500')
+    })
+</script>
+
+<script>
+function showDiscordPopup() {
+  document.getElementById('discordPopup').classList.remove('hidden');
+}
+function closeDiscordPopup() {
+  document.getElementById('discordPopup').classList.add('hidden');
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  //showDiscordPopup()
+})
+
+</script>
 <script>
   function join_random_duel(){
     $.ajax({
@@ -188,7 +231,8 @@
                   showOverlay()
                   window.location.href = `/duels/${data.duel.code}`
                 }else{
-                  showMyToast("Aucun Duel trouvé actuellement, crée un nouveau duel.")
+                  showMyToast("Connexion a une salle de duel...", "success")
+                  window.location.href = `/duels/solo`
                 }
             },
             complete: function(){

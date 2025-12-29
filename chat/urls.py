@@ -4,6 +4,7 @@ app_name = 'chat'
 
 urlpatterns = [
     path('',views.chats,name = "all"),
+    path('<str:username>',views.fetch_chats),
     path('search',views.search,name="search"),
     path('dm/<str:receiver_name>',views.private_chat,name="private_chat"),
     path('get_messages/<int:receiver_id>',views.get_messages,name="get_messages"),

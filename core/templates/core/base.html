@@ -31,7 +31,7 @@
         <meta name="description" content="{% block meta_description %} page d'acceuille de la plateforme roleplay verse  {% endblock meta_description %}">
         
         <meta name="keywords" content="{% block meta_keywords %} 
-        Naruto Text Pave Anime Manga RPG jeux en ligne communauté messagerie privée jeu de role naruto shippuden réseau social RPG Anime role-playing rolleur community {% endblock meta_keywords %}">
+        Naruto, jeu en ligne, jeu naruto, jeu en ligne gratuit,réseau social, Amino, RPG, MMORPG, communauté naruto,jeu de role,  naruto shippuden, jeu pvp, wattpad, anime fanfiction, fanfiction anime, histoire {% endblock meta_keywords %}">
         <meta property = "og:image" content = "{% static 'images/logo/logo_1.png' %}" >
         <meta property = "og:url" content = "https://roleplayverse.live">
         <link rel="icon" type="image/x-icon" href="{% static 'images/logo/logo_1.png' %}">
@@ -57,7 +57,8 @@
         <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Edu+AU+VIC+WA+NT+Arrows:wght@400..700&family=Gluten:wght@100..900&family=Noto+Sans+JP:wght@100..900&family=Quicksand:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
 
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="{% static 'css/output.css' %}" >
+        <!-- <link rel="stylesheet" href="{% static 'css/output.css' %}" > -->
+         <link rel="stylesheet" href="{% static 'css/testoutput.css' %}" >
         <link rel="stylesheet" href="{% static 'css/effects.css' %}" >
         <link rel="stylesheet" href="{% static 'css/ads.css' %}" >
         <link rel="stylesheet" href="{% static 'css/styles.css' %}" >
@@ -66,7 +67,10 @@
         <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/howlerjs/src/howler.core.js' %}"></script>
         
-        <script src="https://cdn.tailwindcss.com"></script>
+        <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+
+        <!-- eye:  <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24"><path fill="#ffffff" d="M21.92 11.6C19.9 6.91 16.1 4 12 4s-7.9 2.91-9.92 7.6a1 1 0 0 0 0 .8C4.1 17.09 7.9 20 12 20s7.9-2.91 9.92-7.6a1 1 0 0 0 0-.8ZM12 18c-3.17 0-6.17-2.29-7.9-6C5.83 8.29 8.83 6 12 6s6.17 2.29 7.9 6c-1.73 3.71-4.73 6-7.9 6Zm0-10a4 4 0 1 0 4 4a4 4 0 0 0-4-4Zm0 6a2 2 0 1 1 2-2a2 2 0 0 1-2 2Z"/></svg> -->
+
         <!--Google ads-->
         <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7259227698391457"
      crossorigin="anonymous"></script> -->
@@ -83,7 +87,14 @@
         {% block styles %}
         {% endblock styles %}
         
-
+<style>
+    .background-overlay-50{
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    .background-overlay-70{
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+</style>
 
 <style>
     /* .post{
@@ -266,6 +277,11 @@
     }
 </style>
 <style>
+    .glass {
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      backdrop-filter: blur(6px);
+    }
+
      .dropdown-menu {
       display: none;
       position: absolute;
@@ -310,17 +326,13 @@
       .notifications-content {
         width: 33%;
       }
+      #createPostPopup #popupContent {
+        height: 70%;
+      }
     }
   
     /* Slide-in Animation */
-    @keyframes slideIn {
-      from {
-        transform: translateX(100%);
-      }
-      to {
-        transform: translateX(0);
-      }
-    }
+   
   
     /* Slide-out Animation */
     @keyframes slideOut {
@@ -331,6 +343,55 @@
         transform: translateX(100%);
       }
     }
+
+    @keyframes slideIn {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.7;
+        }
+    }
+
+    @keyframes bounce {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-5px);
+        }
+    }
+
+  </style>
+
+  <style>
+    .btn-smooth {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-smooth:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+    .reaction-button{
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+  .reaction-button:hover{
+    transform: scale(2.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
   </style>
 
 
@@ -448,14 +509,16 @@ function setupExpandableText() {
 
 
     <!-- Navigation style ='background: transparent;'  -->
-    <nav class="top-nav bg-gray-950 fixed bg-opacity-50 w-full z-10 py-2" style="margin-bottom: 1rem;">
+    <nav class="top-nav glass fixed  w-full z-10 py-2" style="margin-bottom: 1rem;">
         
         <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Left side: Logo and Search -->
                 <div class="flex items-center">
-                    <a href="/home" class="logo-container flex-shrink-0">    
-                    <img class="h-20 w-auto" src="{% static 'images/logo/logo_1_nobg.png' %}" alt="Roleplay Verse Logo">
+                    <a href="/" class="logo-container flex-shrink-0">    
+                        <!-- <h1 class="text-2xl text-orange-500" >RPVerse</h1> -->
+                    <!-- <img class="h-20 w-auto" src="{% static 'images/logo/logo_1_nobg.png' %}" alt="Roleplay Verse Logo"> -->
+                     <img class="h-20 w-20" src="{% static 'images/logo/logo_20.png' %}" alt="Roleplay Verse Logo">
                     </a>
                     <div id="mobile-search" class="hidden md:block ml-4 ">
                         <div class="relative">
@@ -464,7 +527,8 @@ function setupExpandableText() {
                                 <!-- <i class="fas fa-search"></i> -->
                                 <!-- <svg class="h-6 w-6 " xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg> -->
+                                </svg> 
+                                -->
                                 
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" width="24" height="24" viewBox="0 0 512 512"><path fill="currentColor" d="m479.6 399.716l-81.084-81.084l-62.368-25.767A175.014 175.014 0 0 0 368 192c0-97.047-78.953-176-176-176S16 94.953 16 192s78.953 176 176 176a175.034 175.034 0 0 0 101.619-32.377l25.7 62.2l81.081 81.088a56 56 0 1 0 79.2-79.195ZM48 192c0-79.4 64.6-144 144-144s144 64.6 144 144s-64.6 144-144 144S48 271.4 48 192Zm408.971 264.284a24.028 24.028 0 0 1-33.942 0l-76.572-76.572l-23.894-57.835l57.837 23.894l76.573 76.572a24.028 24.028 0 0 1-.002 33.941Z"/></svg>
                             </button>
@@ -483,7 +547,6 @@ function setupExpandableText() {
                                     <div id="searchLoader" class="text-center py-4 hidden">
                                         <i style="font-size: 20pt;" class="fas fa-spinner fa-spin text-orange-500"></i> 
                                     </div> 
-                                
                            </div>
                         </div>
                     </div>
@@ -507,9 +570,11 @@ function setupExpandableText() {
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 10.5h.01m-4.01 0h.01M8 10.5h.01M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-6.6a1 1 0 0 0-.69.275l-2.866 2.723A.5.5 0 0 1 8 18.635V17a1 1 0 0 0-1-1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
                     </svg> {% trans "Inbox" %}</a>
                     <a href="/duels" class="flex items-center text-gray-300 hover:text-white"><svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16 20c3.72-2 6-4.73 6-8c0-2.66-1.54-5.1-4.11-7h-.07a7.533 7.533 0 0 1 1.86 5c0 3-1.68 5-4.18 6.83c0 .01-1.12.71-2.5 1.58v-1.08L15 16s-.2-.6-.42-1.54C16.6 13.58 18 11.69 18 9.5c0-2.16-1.36-4.03-3.35-4.93C14.84 3.63 15 3 15 3l-3-2l-3 2s.16.63.35 1.57C7.37 5.47 6 7.34 6 9.5c0 2.19 1.4 4.08 3.42 4.96C9.2 15.4 9 16 9 16l2 1.33v1.08c-1.38-.87-2.5-1.57-2.5-1.58C6 15 4.32 13 4.32 10c0-1.91.68-3.65 1.86-5h-.06C3.54 6.9 2 9.34 2 12c0 3.27 2.29 6 6 8l1-1.5l1.92 1.23L7.34 22L8 23l3-1.93V23h2v-1.93L16 23l.66-1l-3.58-2.27L15 18.5l1 1.5m.75-10.5c0 1.59-.99 2.96-2.44 3.69c-.17-.96-.31-2.07-.31-3.19c0-1.33.2-2.85.42-4.14c1.39.74 2.33 2.09 2.33 3.64m-9.5 0c0-1.55.94-2.9 2.34-3.64C9.8 7.15 10 8.67 10 10c0 1.12-.14 2.23-.31 3.19c-1.45-.73-2.44-2.1-2.44-3.69Z"/></svg> {% trans "Combats" %} </a>
+                    <!-- <a href="/story" class="flex items-center text-gray-300 hover:text-white"><svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16 20c3.72-2 6-4.73 6-8c0-2.66-1.54-5.1-4.11-7h-.07a7.533 7.533 0 0 1 1.86 5c0 3-1.68 5-4.18 6.83c0 .01-1.12.71-2.5 1.58v-1.08L15 16s-.2-.6-.42-1.54C16.6 13.58 18 11.69 18 9.5c0-2.16-1.36-4.03-3.35-4.93C14.84 3.63 15 3 15 3l-3-2l-3 2s.16.63.35 1.57C7.37 5.47 6 7.34 6 9.5c0 2.19 1.4 4.08 3.42 4.96C9.2 15.4 9 16 9 16l2 1.33v1.08c-1.38-.87-2.5-1.57-2.5-1.58C6 15 4.32 13 4.32 10c0-1.91.68-3.65 1.86-5h-.06C3.54 6.9 2 9.34 2 12c0 3.27 2.29 6 6 8l1-1.5l1.92 1.23L7.34 22L8 23l3-1.93V23h2v-1.93L16 23l.66-1l-3.58-2.27L15 18.5l1 1.5m.75-10.5c0 1.59-.99 2.96-2.44 3.69c-.17-.96-.31-2.07-.31-3.19c0-1.33.2-2.85.42-4.14c1.39.74 2.33 2.09 2.33 3.64m-9.5 0c0-1.55.94-2.9 2.34-3.64C9.8 7.15 10 8.67 10 10c0 1.12-.14 2.23-.31 3.19c-1.45-.73-2.44-2.1-2.44-3.69Z"/></svg> Story </a> -->
                 </div>
     
                 <!-- Right: Notifications, Profile, and Battle Points -->
+                {% if player %}
                 <div class="flex items-center">
                     <div class="flex space-x-1 items-center">
                         <a onclick="openNotificationsScreen()" class="cursor-pointer">
@@ -533,16 +598,16 @@ function setupExpandableText() {
                                 <img class="h-8 w-8 rounded-full" src="{{player.profile_picture.url}}" alt="{{player}} profile">
                             </button>
                             <div class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 hidden" id="profileMenu">
-                                <a href="{% url 'users:player' player.user.username %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-user mr-2"></i>  Profile</a>
+                                <a onclick="showOverlay()" href="{% url 'users:player' player.user.username %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-user mr-2"></i>  Profile</a>
                                 
                                 <!-- <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><i class="fas fa-gear mr-2"></i>Settings</a> -->
-                                <a href="{% url 'users:logout' %}" class="block px-4 py-2 text-sm text-orange-600 hover:bg-gray-100"><i class="fas fa-sign-out mr-2"></i>Se déconnecter</a>
+                                <a onclick="showOverlay()" href="{% url 'users:logout' %}" class="block px-4 py-2 text-sm text-orange-600 hover:bg-gray-100"><i class="fas fa-sign-out mr-2"></i>Se déconnecter</a>
                             </div>
                         </div>
                     </div>
                     <div class="ml-4 flex items-center bg-gray-900 border border-gray-700 rounded-full px-2 py-1">
                         <span class="text-orange-500 text-sm font-bold truncate mr-2">{{player.battle_points}} JC</span>
-                        <a href="{% url 'core:battle_points' %}">
+                        <a onclick="showOverlay()" href="{% url 'core:battle_points' %}">
                             <button class="bg-orange-500 text-white rounded-full px-2 py-1 text-xs hover:bg-orange-600 transition duration-300">
                             <i class="fas fa-plus text-xs"></i>
                         </button>
@@ -550,6 +615,16 @@ function setupExpandableText() {
                         
                     </div>
                 </div>
+                {% else %}
+                <div class="flex items-center">
+                    <a href="{% url 'users:login' %}">
+                        <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+                           Se Connecter
+                        </button>
+                    </a>
+                </div>
+
+                {% endif %}
     
                 <!-- Mobile menu button -->
                 <!-- <div class="md:hidden flex items-center">
@@ -740,7 +815,9 @@ function setupExpandableText() {
 {% endblock toast %}
 <script>
 
-    
+
+
+
 function updateNotificationCount(count){
 
 const notifier = document.getElementById('notifier');
@@ -959,15 +1036,14 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
 
     
 </script>
-<script>
 
-</script>
 
      {% block content %}
     {% endblock content %}
         
+    
         <!-- Postfeed comments popup -->
-  <div id="commentPopup" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-end  sm:items-center animate__animated  justify-center z-50">
+  <div id="commentPopup" class="hidden fixed inset-0 background-overlay-50  flex items-end  sm:items-center animate__animated  justify-center z-50">
     <div id="popupContent" class="relative w-full sm:w-3/5 h-[70vh] md:min-h-[30vh]    bg-gray-900 rounded-t-3xl sm:rounded-xl p-4">
       <!-- Header -->
       <div class="flex justify-between items-center border-b pb-3 border-gray-800">
@@ -991,8 +1067,8 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
     </div>
   </div>
 
-  <div id="contentCommentPopup" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-end  sm:items-center animate__animated  justify-center z-50">
-    <div id="ContentPopupContent" class="relative w-full sm:w-3/5 h-[70vh] md:min-h-[30vh]    bg-gray-900 rounded-t-3xl sm:rounded-xl p-4">
+  <div id="contentCommentPopup" class="hidden fixed inset-0 background-overlay-70 flex items-end  sm:items-center animate__animated  justify-center z-50">
+    <div id="ContentPopupContent" class="relative w-full sm:w-3/5 h-[70vh] md:h-[30vh] bg-gray-900 rounded-t-3xl sm:rounded-xl p-4">
       <!-- Header -->
       <div class="flex justify-between items-center border-b pb-3 border-gray-800">
         <h2 class="text-lg font-semibold">💬 Commentaires</h2>
@@ -1012,6 +1088,50 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
     </div>
   </div>
 
+   <div id="createPostPopup" class="hidden fixed inset-0 background-overlay-70 flex items-end  sm:items-center animate__animated  justify-center z-50">
+    <div id="popupContent" class="relative w-full sm:w-3/5 h-full lg:h-3/4 sm:h-3/4 md:h-3/4 bg-gray-900  sm:rounded-xl p-4">
+      <!-- Header -->
+      <div class="flex justify-between items-center border-b pb-3 border-gray-800">
+        <button onclick="closeCreatePostPopup();" class="text-gray-500 hover:text-red-500 text-xl font-bold">&times;</button>
+
+        <h2 class="text-lg font-semibold">Nouvelle publication</h2>
+        
+        <button id="submitPostButton" type="submit" class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition duration-300">
+            <i class="fas fa-upload mr-2"></i>Publier
+        </button>
+      </div>
+    
+    
+        <form id="createPostForm" class="flex flex-col">
+            <div class="space-y-2 mb-4">
+                <label class="block text-sm font-medium">Categorie</label>
+                <select title="category" id="postCategory" name="category" class="w-full px-4 py-2 rounded-lg border border-gray-700 bg-gray-800">
+                    <option value = "divers">Divers</option>
+                    <option value = "discussion">Discussion</option>
+                    <option value = "meme">Meme</option>
+                    <option value = "question">Question</option>
+                </select>
+            </div>
+
+            <textarea id="postContent" class="bg-transparent focus:outline-none text-white p-2 mb-4" rows="8" placeholder="Pose une question, partage un avis, ou alors post un meme..."></textarea>
+
+        </form>
+        <div id="create-post-actions" class="flex justify-between items-center mt-6 absolute  w-full bottom-0 left-0 border-t  py-4 px-2 border-gray-800">
+                <label for="imageUpload" class="cursor-pointer text-white px-4 py-2 rounded-lg transition duration-300">
+                    <i class="fas fa-image mr-2"></i><span class="hidden">Ajouter une image</span>
+                </label>
+                <input type="file" id="imageUpload" accept="image/*" class="hidden">
+                
+            </div>
+    </div>
+  </div>
+  
+<div id="reactorsPopup" class="fixed inset-0 background-overlay-70 flex items-center justify-center z-50 hidden">
+  <div id="reactorsPopupContent" class="bg-gray-900 rounded-2xl shadow-lg p-6 max-w-md w-full relative">
+    <div id="reactorsSpace" class="space-y-4 relative overflow-y-auto max-h-96 my-4 pb-4">
+    </div>
+  </div>
+</div>
 
   <script>
 
@@ -1135,6 +1255,22 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
         </div>
     </div>
 </div>
+<div id="signin-popup" class="fixed hidden animate-scaleIn inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+        <div id="signin-popup-content" class="bg-gray-900 rounded-2xl p-8 max-w-md w-full space-y-6 shadow-2xl animate__slideInUp">
+            <h2 id="" class="text-3xl font-bold text-orange-400">Connecte-toi</h2>
+            <div id="signin-messages" class="flex flex-col w-full  space-y-2 max-h-96">
+            <p class="text-gray-300 w-full min-w-32 inline-block">Connecte-toi pour profiter de l'experience au maximum</p>
+            <a href="{% url 'users:login' %}">
+                <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110">
+                    Se Connecter
+                </button>
+            </a>
+            
+            </div>
+            
+            
+        </div>
+        </div> 
 
 
 
@@ -1142,31 +1278,45 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
         <div class="mb-4 md:hidden">
             <span class="opacity-0">element to create margin</span>
         </div>
-         <div class="bottom-nav border-t border-gray-700 bg-gray-950 flex justify-center  space-x-6 bg-opacity-90 fixed bottom-0 w-full z-10 py-2 md:hidden animate-scaleIn">
-            <a onclick="showOverlay()" href="{% url 'core:home' %}" class="bottom-nav-link text-gray-300 px-4 py-2 rounded-full hover:bg-gray-700 bg-opacity-50 ">
+         <div class="bottom-nav border-t border-gray-700 glass flex justify-center  space-x-6  fixed bottom-0 w-full z-10 py-2 md:hidden animate-scaleIn">
+            <a onclick="showOverlay()" href="{% url 'core:home' %}" class="bottom-nav-link text-gray-300 px-4 py-2  bg-opacity-50 ">
                 <svg class=" text-orange-500 text-4xl" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5"/>
                 </svg>
             </a>
-            <a onclick="showOverlay()" href="{% url 'chats:all' %}" class="bottom-nav-link relative text-gray-300 px-4 py-2 rounded-full hover:bg-gray-700 bg-opacity-50">
+            <a onclick="showOverlay()" href="{% url 'chats:all' %}" class="bottom-nav-link relative text-gray-300 px-4 py-2  bg-opacity-50">
                 <svg class=" text-orange-500 text-4xl" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 10.5h.01m-4.01 0h.01M8 10.5h.01M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-6.6a1 1 0 0 0-.69.275l-2.866 2.723A.5.5 0 0 1 8 18.635V17a1 1 0 0 0-1-1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
                 </svg>
                 {% if player.unread_messages > 0 %}
-                <div class="notifier absolute top-[-10px] right-0  translate-middle bg-red-500 text-gray-200  rounded-full w-6 h-6 flex items-center justify-center"> {{player.unread_messages}}</div>
+                <div class="notifier absolute top-[-10px] right-0 rounded-full text-xs translate-middle bg-red-500 text-gray-200  w-6 h-6 flex items-center justify-center"> {{player.unread_messages}}</div>
                 {% endif %}
             </a>
-            <a onclick="showOverlay()" href="/duels" class="bottom-nav-link text-orange-500 px-4 py-2 rounded-full hover:bg-gray-700 bg-opacity-50">
+
+            <div class="bottom-nav-link relative bottom-8 text-gray-300 bg-opacity-50" >
+                <button onclick="loginDecorator(openCreatePostPopup, '{{ request.user.is_authenticated }}')" class="bg-orange-500 z-50 p-3 rounded-full hover:bg-orange-600 text-white shadow-lg">
+                <svg class="w-7 h-7 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/>
+                </svg>
+            </button>
+            </div>
+            
+            <a onclick="showOverlay()" href="/duels" class="bottom-nav-link text-orange-500 px-4 py-2  bg-opacity-50">
                 <!-- <i class="fas fa-khanda text-xl"></i> -->
                 <svg class=" text-orange-500 text-4xl" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16 20c3.72-2 6-4.73 6-8c0-2.66-1.54-5.1-4.11-7h-.07a7.533 7.533 0 0 1 1.86 5c0 3-1.68 5-4.18 6.83c0 .01-1.12.71-2.5 1.58v-1.08L15 16s-.2-.6-.42-1.54C16.6 13.58 18 11.69 18 9.5c0-2.16-1.36-4.03-3.35-4.93C14.84 3.63 15 3 15 3l-3-2l-3 2s.16.63.35 1.57C7.37 5.47 6 7.34 6 9.5c0 2.19 1.4 4.08 3.42 4.96C9.2 15.4 9 16 9 16l2 1.33v1.08c-1.38-.87-2.5-1.57-2.5-1.58C6 15 4.32 13 4.32 10c0-1.91.68-3.65 1.86-5h-.06C3.54 6.9 2 9.34 2 12c0 3.27 2.29 6 6 8l1-1.5l1.92 1.23L7.34 22L8 23l3-1.93V23h2v-1.93L16 23l.66-1l-3.58-2.27L15 18.5l1 1.5m.75-10.5c0 1.59-.99 2.96-2.44 3.69c-.17-.96-.31-2.07-.31-3.19c0-1.33.2-2.85.42-4.14c1.39.74 2.33 2.09 2.33 3.64m-9.5 0c0-1.55.94-2.9 2.34-3.64C9.8 7.15 10 8.67 10 10c0 1.12-.14 2.23-.31 3.19c-1.45-.73-2.44-2.1-2.44-3.69Z"/></svg>
             </a>
-            <a onclick="showOverlay()" href="{% url 'users:player' player.user.username %}" class="bottom-nav-link text-gray-300 bottom-nav-link px-4 py-2 rounded-full hover:bg-gray-700 bg-opacity-50">
-                <svg class=" text-orange-500 text-4xl" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            
+            <a onclick="showOverlay()" href="/story" class="bottom-nav-link text-gray-300 bottom-nav-link px-4 py-2  bg-opacity-50">
+                <!-- <svg class=" text-orange-500 text-4xl" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-                </svg>
+                </svg> -->
+                <svg xmlns="http://www.w3.org/2000/svg" class=" text-orange-500 text-4xl" width="24" height="24" viewBox="0 0 1024 1024"><path fill="#fc6a2c" d="m512 863.36l384-54.848v-638.72L525.568 222.72a96 96 0 0 1-27.136 0L128 169.792v638.72l384 54.848zM137.024 106.432l370.432 52.928a32 32 0 0 0 9.088 0l370.432-52.928A64 64 0 0 1 960 169.792v638.72a64 64 0 0 1-54.976 63.36l-388.48 55.488a32 32 0 0 1-9.088 0l-388.48-55.488A64 64 0 0 1 64 808.512v-638.72a64 64 0 0 1 73.024-63.36z"/><path fill="#fc6a2c" d="M480 192h64v704h-64z"/></svg>
+                <!-- <svg class=" text-orange-500 w-7 h-7 text-4xl" xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 1024 1024"><path fill="#fa4e03" d="m512 863.36l384-54.848v-638.72L525.568 222.72a96 96 0 0 1-27.136 0L128 169.792v638.72l384 54.848zM137.024 106.432l370.432 52.928a32 32 0 0 0 9.088 0l370.432-52.928A64 64 0 0 1 960 169.792v638.72a64 64 0 0 1-54.976 63.36l-388.48 55.488a32 32 0 0 1-9.088 0l-388.48-55.488A64 64 0 0 1 64 808.512v-638.72a64 64 0 0 1 73.024-63.36z"/><path fill="#fa4e03" d="M480 192h64v704h-64z"/></svg>
+             -->
             </a>
-    
-        </div>     
+
+        </div>  
+          
 
         {% block main_active %}
         {% endblock main_active  %}
@@ -1212,6 +1362,8 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
       }, 300); // Match the CSS transition duration
     }
   </script> -->
+
+
 <script>
             
     //document.addEventListener('DOMContentLoaded', );
@@ -1268,6 +1420,126 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
             </script>
 
 
+<!-- Create New Post -->
+<script>
+function openCreatePostPopup() {
+    
+    const popup = document.getElementById('createPostPopup');
+    popup.classList.remove('hidden');
+    popup.classList.remove('fade-out-down');
+    popup.classList.add('fade-in-up');
+
+  }
+function closeCreatePostPopup() {
+    const popup = document.getElementById('createPostPopup');
+    popup.classList.remove('fade-in-up');
+    popup.classList.add('fade-out-down');
+    setTimeout(() => {
+      popup.classList.add('hidden');
+    }, 300);
+  }
+
+document.getElementById('imageUpload').addEventListener('change', (e) => {
+const file = e.target.files[0];
+if (file) {
+    
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const img = document.createElement('img');
+        img.src = event.target.result;
+        img.className = 'myImg w-full rounded-lg mb-4 post-image';
+        
+
+        const previewContainer = document.createElement('div');
+        previewContainer.id = 'imagePreview';
+        previewContainer.className = 'mt-2';
+
+        //button to remove the preview
+        const removePreviewBtn = document.createElement('button')
+        removePreviewBtn.className = 'px-4 py-2 mb-2 border rounded-full'
+        const timesIcon = document.createElement('i')
+        timesIcon.className = 'fas fa-times'
+        removePreviewBtn.appendChild(timesIcon)
+        removePreviewBtn.onclick = () =>{
+            document.getElementById('imagePreview').remove()
+            document.getElementById('imageUpload').value = ''
+        }        
+        
+        previewContainer.appendChild(removePreviewBtn)
+        previewContainer.appendChild(img);
+        imgModalListener()
+    
+        const existingPreview = document.getElementById('imagePreview');
+        
+        
+        if (existingPreview) {
+            existingPreview.replaceWith(previewContainer);
+        } else {
+            
+            // document.getElementById('createPostForm').insertBefore(previewContainer, document.querySelector('#create-post-actions'));
+            document.getElementById('createPostForm').appendChild(previewContainer);
+        }
+    };
+    reader.readAsDataURL(file);
+}
+});
+
+
+
+document.getElementById('submitPostButton').addEventListener('click', async (e)  => {
+e.preventDefault();
+const loader = document.getElementById('loading-overlay');
+
+const content = document.getElementById('postContent').value.trim();
+const category = document.getElementById('postCategory').value;
+const imageInput = document.getElementById('imageUpload');
+const file = imageInput.files[0];
+
+
+if (content || file) {
+
+    const formData = new FormData()
+    formData.append('body',content)
+    formData.append('category',category)
+    formData.append('csrfmiddlewaretoken','{{csrf_token}}')
+
+    if (file) {
+        formData.append('image',file)
+    } 
+    $.ajax({
+        url:'/post/new',
+        type: 'POST',
+        data:formData,
+        contentType: false,
+        processData: false,
+        beforeSend: function(){
+            loader.classList.toggle('active');
+        },
+        success: function(res){
+            
+            closeCreatePostPopup()
+            showMyToast('Publié','success')
+            //addNewPost(res.post)
+            document.getElementById('postContent').value = '';
+            imageInput.value = '';
+            if(document.getElementById('imagePreview')){
+            document.getElementById('imagePreview').remove()
+            }
+        },
+        complete: function(){
+            loader.classList.toggle('active');
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            showMyToast('Une erreur est survenu','error')
+        }
+    })
+}else{
+    showMyToast('Ajoute du contenu a ta publication')
+}
+})
+
+
+</script> 
 
 <!--Sending Comments-->            
 <script>
@@ -1294,7 +1566,7 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
     //const content = document.querySelector('#ContentPopupContent');
     const content = popup.querySelector('#ContentPopupContent');
     
-    if (!popup.classList.contains('hidden') && !content.contains(e.target) && !e.target.closest('button[onclick^="openContentCommentPopup"]')) {
+    if (!popup.classList.contains('hidden') && !content.contains(e.target) && !e.target.closest('button[onclick^="loginDecorator"]') && !e.target.closest('button[onclick^="openContentCommentPopup"]')) {
       closeContentCommentPopup();
     }
   });
@@ -1617,7 +1889,7 @@ function reactToContent(contentId, reaction,button){
             })
         }
 
-    function createMemeElement(meme) {
+function createMemeElement(meme) {
     const memeElement = document.createElement('div');
     memeElement.className = 'post bg-gray-900  rounded-xl shadow overflow-hidden';
 
@@ -1645,20 +1917,20 @@ function reactToContent(contentId, reaction,button){
         -->
         <div class='flex justify-between p-3' >
             <div class = 'flex space-x-2' >
-            <button id='contentReactions-${meme.id}' class="text-orange-500 text-xl hover:text-orange-600 focus:outline-none">
+            <button id='contentReactions-${meme.id}' onclick="openReactorsPopup('/contents/reactors/${meme.id}')" class="text-orange-500 text-xl hover:text-orange-600 focus:outline-none">
                 ${meme.most_reaction} ${meme.reactions}
             </button>
-            <button onclick = "openContentCommentPopup('${meme.id}')" class="text-xl text-green-500 hover:text-green-600 focus:outline-none">
+            <button onclick = "loginDecorator(openContentCommentPopup,null,'${meme.id}')" class="text-xl text-green-500 hover:text-green-600 focus:outline-none">
                 <i class="fa-regular fa-comment mr-2"></i> ${meme.comments}
             </button>
             </div>
 
             <div class="reactions flex space-x-2  mx-2 right-0  border border-gray-700 text-gray-300 text-sm p-2 rounded-3xl shadow-lg">
-                <button class='hover:scale-105 text-xl reaction-button' onclick = "reactToContent(${meme.id}, '😂', this)" >😂</button>
-                <button class='hover:scale-105 text-xl reaction-button' onclick = "reactToContent('${meme.id}', '👍', this)">👍</button>
-                <button class='hover:scale-105 text-xl reaction-button' onclick = "reactToContent(${meme.id}, '👎', this)" >👎</button>
-                <button class='hover:scale-105 text-xl reaction-button' onclick = "reactToContent(${meme.id}, '😲', this)" >😲</button>
-                <button class='hover:scale-105 text-xl reaction-button' onclick = "reactToContent(${meme.id}, '☹️', this)" >☹️</button>
+                <button class='hover:scale-105 text-xl reaction-button' onclick = "loginDecorator(reactToContent,null,${meme.id}, '😂', this)" >😂</button>
+                <button class='hover:scale-105 text-xl reaction-button' onclick = "loginDecorator(reactToContent,null,'${meme.id}', '👍', this)">👍</button>
+                <button class='hover:scale-105 text-xl reaction-button' onclick = "loginDecorator(reactToContent,null,${meme.id}, '👎', this)" >👎</button>
+                <button class='hover:scale-105 text-xl reaction-button' onclick = "loginDecorator(reactToContent,null,${meme.id}, '😲', this)" >😲</button>
+                <button class='hover:scale-105 text-xl reaction-button' onclick = "loginDecorator(reactToContent,null,${meme.id}, '☹️', this)" >☹️</button>
             </div>                      
         </div>
     `;
@@ -1746,7 +2018,7 @@ function adClick(url, image){
     })
 }
 
-    function createAdElement(url="#", image = null){
+function createAdElement(url="#", image = null){
     const addElement = document.createElement('div')
     addElement.className = 'ad-container relative animate-fadeIn'
     addElement.innerHTML = `
@@ -1754,10 +2026,8 @@ function adClick(url, image){
             <button onclick = 'closeAd(this)' class="ad-close">&times;</button>
             <a href='${url}' onclick = "adClick('${url}', '${image}')" target='_blank' class="ad-content">
                 ${image ?  `<img class = 'absolute w-full  object-cover z-50' src = '${image}'>`:  ''}
-               
                 <p class="text-center">Your ad content here (300x90)</p>
             </a>
-
     `  
     return addElement
 }
@@ -1791,10 +2061,31 @@ function createProductSocialAdElement(product){
                 <span class="text-sm text-gray-600">Sponsorisé</span>
                 </div>
                 <div class="flex gap-4">
-                <img src="/static/images/loaders/img-loader.gif" onload = "replacePlaceholder(this, '${product.image}')" class="h-24 min-w-32 object-cover rounded" />
+                <a onclick="adClick('${product.link}')" target="_blank" href="${product.link}"><img src="/static/images/loaders/img-loader.gif" onload = "replacePlaceholder(this, '${product.image}')" class="max-w-32 h-24 object-cover rounded" /></a>
                 <div>
-                    <h4 class="font-bold text-sm">${product.title}</h4>
-                    <p class="text-xs text-gray-500">${product.description}</p>
+                    <h4 class="font-bold text-sm">${product.title}</h4> 
+                    <p class="text-xs text-gray-300">${product.description}</p>
+                    <a onclick="adClick('${product.link}')" target="_blank" href="${product.link}" class="text-sm text-orange-600 hover:underline">Voir</a>
+                </div>
+            </div>
+        `
+
+        return adElement
+    }
+
+    function createFeedAffiliateProductAdElement(product){
+        const adElement = document.createElement('div')
+        adElement.className = "rounded-lg py-3 px-1  border-t border-b border-orange-500 mb-6";
+        adElement.innerHTML = `
+            <div class="flex items-center mb-2">
+                <img src="{% static 'images/logo/logo_1_nobg.png' %}" class="h-6 w-6 mr-2">
+                <span class="text-sm text-gray-600">Sponsorisé</span>
+                </div>
+                <div class="flex flex-col gap-4">
+                <h4 class="font-bold text-sm">${product.title}</h4> 
+                <a onclick="adClick('${product.link}')" target="_blank" href="${product.link}"><img src="/static/images/loaders/img-loader.gif" onload = "replacePlaceholder(this, '${product.image}')" class="w-full object-cover rounded" /></a>
+                <div>
+                    <p class="text-xs text-gray-300">${product.description}</p>
                     <a onclick="adClick('${product.link}')" target="_blank" href="${product.link}" class="text-sm text-orange-600 hover:underline">Voir</a>
                 </div>
             </div>
@@ -1804,6 +2095,25 @@ function createProductSocialAdElement(product){
     }
 
 
+    function toggleElement(button, targetId){
+        const element = document.getElementById(targetId)
+        element.classList.toggle('hidden')
+
+        if(element.classList.contains('hidden')){
+            
+            document.removeEventListener('click', (e) => {
+                if (!element.classList.contains('hidden') && !element.contains(e.target) && !e.target.closest('button[onclick^="toggleElement"]')) {
+                    element.classList.toggle('hidden')
+                }
+            });
+        }else{
+            document.addEventListener('click', (e) => {
+                if (!element.classList.contains('hidden') && !element.contains(e.target) && !e.target.closest('button[onclick^="toggleElement"]')) {
+                    element.classList.toggle('hidden')
+                }
+            });
+        }
+    }
 
         function toggleDropdown(toggle){  
               
@@ -2048,6 +2358,101 @@ function deleteComment(element, id){
 }
 </script>
 
+<script>
+    function openReactorsPopup(route) {
+    const popup = document.getElementById('reactorsPopup');
+    popup.classList.remove('hidden');
+    popup.classList.remove('fade-out-down');
+    popup.classList.add('fade-in-up');
+
+    getReactors(route)
+  }
+  function closeReactorsPopup() {
+    const popup = document.getElementById('reactorsPopup');
+    popup.classList.remove('fade-in-up');
+    popup.classList.add('fade-out-down');
+    setTimeout(() => {
+      popup.classList.add('hidden');
+    }, 300);
+  }
+
+  
+    document.addEventListener('click', (e) => {
+    const popup = document.getElementById('reactorsPopup');
+    //const content = document.querySelector('#ContentPopupContent');
+    const content = popup.querySelector('#reactorsPopupContent');
+    
+    if (!popup.classList.contains('hidden') && !content.contains(e.target) && !e.target.closest('button[onclick^="loginDecorator"]') && !e.target.closest('button[onclick^="openReactorsPopup"]')) {
+      closeReactorsPopup();
+    }
+  });
+
+  function createReactorElement(player){
+    const div = document.createElement('div')
+    div.className = "p-2 cursor-pointer transition duration-300"
+    div.innerHTML = `
+            <div class="flex fade-in-up items-center ">
+                <a href = '/users/${player.user.username}' >
+                <img src="${player.profile_picture}" alt="${player.user.username} profile picture" class="w-8 h-8 rounded-full mr-4">
+                </a>
+                <div class="flex-grow">
+                    <h3 class="font-semibold">${player.name}  ${player.last_seen == "en ligne" ? '<span id="" class="text-green-500">en ligne</span>':""} </h3>
+                </div>
+                <span class="text-xl font-bold text-gray-200">${player.reaction}</span>
+            </div>
+    `
+
+    return div;
+  }
+
+
+
+  function getReactors(route){
+    // const popupContent = document.getElementById('reactorsPopupContent');
+
+    const reactorsContainer = document.querySelector('#reactorsSpace')
+    const loader = document.createElement("div")
+    loader.classname = 'text-center flex space-x-2 w-full justify-center items-center'
+    loader.innerHTML = `
+    <i class="fas fa-spinner fa-spin text-orange-500"></i> 
+    <span class="text-gray-400 text-sm "> Loading...</span>
+    `
+    $.ajax({
+        url: route,
+        type: 'GET',
+        data: {
+            'Content-Type': 'application/json'
+        },
+        beforeSend: function(){
+            reactorsContainer.innerHTML = ''
+            reactorsContainer.append(loader);
+        },
+        success: function(res){
+            
+            const reactors = res.reactors
+            if(reactors.length > 0){
+                reactors.forEach(reactor => {
+                reactorsContainer.append(createReactorElement(reactor))
+            });
+            }else{
+                reactorsContainer.innerHTML = `
+                    <p class = 'text-gray-500 text-center px-4 py-8'>
+                        Aucune reaction pour le moment
+                    </p>
+                `
+            }
+        },
+        complete: function(){
+            loader.remove()
+        },
+        error: function(jqXHR, textstatus, errorThrown){
+            showMyToast('An Error occurred, please try again','error')
+        }
+    })    
+
+  }
+</script>
+
 
     
         <!--Navbar script-->
@@ -2165,9 +2570,9 @@ function deleteComment(element, id){
         <script>
             $(()=>{
                 const wsprotocol = window.location.protocol === 'https' ? 'wss://' : 'ws://'
-                console.log(window.location.protocol) 
+                console.log(wsprotocol) 
                 const notificationSocket = new WebSocket(
-                'wss://' + window.location.host + '/ws/notifications/'
+                wsprotocol + window.location.host + '/ws/notifications/'
             )
             
             
@@ -2600,6 +3005,47 @@ function copyLink(link){
         new google.translate.TranslateElement({pageLanguage: 'fr'}, 'google_translate_element');
     }
 </script> 
+<script>
+    function showSigninPopup(){
+      const popup = document.getElementById('signin-popup');
+      popup.classList.remove('hidden');
+    //   popup.classList.remove('fade-out-down');
+    //   popup.classList.add('fade-in-up');
+
+      
+    }
+ 
+    function hideSigninPopup(){
+      const popup = document.getElementById('signin-popup')
+      popup.classList.add('hidden')
+    //   popup.classList.remove('fade-in-up');
+    // popup.classList.add('fade-out-down');
+    // setTimeout(() => {
+    //   popup.classList.add('hidden');
+    // }, 300);
+      
+    }
+
+    document.addEventListener('click', (e) => {
+    const popup = document.getElementById('signin-popup')
+    const content = popup.querySelector('#signin-popup-content');
+    
+    if (!popup.classList.contains('hidden') && !content.contains(e.target) && !e.target.closest('button[onclick^="loginDecorator"]')) {
+      hideSigninPopup();
+    }
+  });
+
+    const loginDecorator = (action, is_authenticated = null,...args) => {
+        authenticated = is_authenticated ? is_authenticated : '{{request.user.is_authenticated}}' == 'False' ? false : true
+        console.log(authenticated)
+        if(authenticated == false || authenticated  === 'False'){
+            showSigninPopup()
+        }else{
+            action(...args)
+        }
+    }
+</script>
+
 {% block adscripts %}
 {% endblock adscripts %}
 <!-- <div id="toast-container" class="fixed top-6 right-4 z-50 flex flex-col gap-3 items-end"></div> -->

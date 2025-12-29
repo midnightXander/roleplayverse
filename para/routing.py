@@ -16,6 +16,7 @@ websocket_urlpatterns = [
     #    r"ws/chat/(?P<chat_box_name>\w+)/$", consumers.ChatRoomConsumer.as_asgi(),
         #r"ws/chat/", consumers.ChatRoomConsumer.as_asgi()
     #),
+    re_path(r"ws/chats/(?P<username>\w+)/$", consumers.ChatsConsumer.as_asgi()),
     re_path(r"ws/chat/private/(?P<room_name>\w+)/$", consumers.PrivateChatConsumer.as_asgi()),
     re_path(r"ws/chat/group/(?P<family_name>\w+)/$", consumers.GroupChatConsumer.as_asgi()),
     re_path(r"ws/notifications/$", NotificationConsumer.as_asgi()),

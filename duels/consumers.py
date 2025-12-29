@@ -119,6 +119,31 @@ class DuelConsumer(AsyncWebsocketConsumer):
         return {'status': 'continue', 'battle_logs': turn_logs, 'player1': player1, 'player2':player2, 'player_character': fighter1_character, 'opponent_character': fighter2_character, 'winner': winner_data, 'rewards': []}
 
     @database_sync_to_async
+    def abandon_duel(self, duel_code):
+        player = get_object_or_404(Player, user=self.scope["user"])
+        duel = Duel.objects.filter(code = duel_code).first()
+        current_fighter = DuelFighter.objects.filter(duel = duel, player = player).first() if duel else None
+        opponent_fighter = DuelFighter.objects.filter(duel = duel).exclude(player = player).first() if duel else None
+        message = ""
+        if not duel.winner:
+            winner_fighter = opponent_fighter
+            duel.winner = winner_fighter.player
+            duel.status = "finished"
+            duel.ended_at = datetime.now()
+            # rewards = _reward_player(winner_fighter.player,winner_fighter.character, 5)
+            duel.save()
+            # rewards = {'xp' : 0, }
+            winner_data = { 'player' : _player_data(winner_fighter.player) }  
+            if winner_data:
+                winner_data['character'] = winner_fighter.character
+            message = f"{player} a abandoné"    
+
+            return {'status':'success','message':message, 'winner' : winner_data}
+        else:
+            message = "Ce combat est deja terminé"
+            return {'status':'error', 'message': message}
+
+    @database_sync_to_async
     def duel_data(self, duel_code):
         duel = Duel.objects.filter(code=duel_code).first()
         return _duel_data(duel)
@@ -169,6 +194,27 @@ class DuelConsumer(AsyncWebsocketConsumer):
                         'user': self.user.username,
                     }
                 ) 
+        elif action_type == 'chat':
+            #dispatch chat
+            print("content: ",data.get('content'))
+            await self.channel_layer.group_send(
+                    self.group_name,{
+                        "type": "chat",
+                        'user': self.user.username,
+                        'content' : data.get('content')
+                    }
+                )  
+        elif action_type == 'abandoned':
+             result = await self.abandon_duel(self.duel_code)
+             await self.channel_layer.group_send(
+                    self.group_name,{
+                        "type": "abandoned",
+                        'user': self.user.username,
+                        'status' : result.get('status','error'),
+                        'message' : result.get('message', ''),
+                        'winner' : result.get('winner')
+                    }
+                )         
         elif action_type == "duel_action":    
             action = data.get('action')
             
@@ -221,6 +267,7 @@ class DuelConsumer(AsyncWebsocketConsumer):
             "player2": event.get('player2', {}),
             "winner": event.get('winner'),
             "rewards": event.get('rewards', []),
+            "parry_challenge" : "parry"
 
         }))
 
@@ -230,7 +277,27 @@ class DuelConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             "type" : 'joined',
             "user": user,
-        }))    
+        }))
+
+    async def chat(self,event):
+        user = event['user']
+
+        await self.send(text_data=json.dumps({
+            "type" : 'chat',
+            "user": user,
+            'content' : event['content'],
+            'timestamp': ''
+        }))
+
+    async def abandoned(self,event):
+        user = event['user']
+        await self.send(text_data=json.dumps({
+            "type" : 'abandoned',
+            "user": user,
+            "status" : event['status'],
+            'message' : event['message'],
+            'winner' : event.get('winner')
+        }))                
            
 
         

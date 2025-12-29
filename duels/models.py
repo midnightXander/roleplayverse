@@ -20,6 +20,7 @@ class Duel(models.Model):
     ended_at = models.DateTimeField(blank=True, null=True)
     log = models.TextField(blank=True, default = "[]")
     fighters = models.ManyToManyField(Player, through='DuelFighter', related_name='duel_fighters')
+    target = models.ForeignKey(Player, on_delete=models.SET_NULL,blank=True, null=True, related_name = "duel_target")
     winner = models.ForeignKey(Player, on_delete=models.SET_NULL,blank=True, null=True)
 
     def __str__(self):

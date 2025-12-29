@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect,JsonResponse,Http404
 from django.contrib.auth import logout,login,authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+
+from users.views import _player_data
 from .models import *
 from django.db.models import Q
 from users.models import Player,Family,FamilyMember
@@ -15,7 +17,7 @@ import uuid
 from datetime import datetime
 import json
 from django.views.decorators.csrf import csrf_exempt
-from utility import decrypt_message,_date_time,_time_since,_parse_number,_time_since_last_seen
+from utility import decrypt_message,_date_time,_chat_date_time,_time_since,_parse_number,_time_since_last_seen
 from cryptography.fernet import Fernet
 from api.models import PushSubscription
 from api.utility import send_push_notification
@@ -36,7 +38,7 @@ def get_last_message(chat,chat_type='private'):
             "receiver":last_message.receiver.user.username,
             "content":decrypt_message(last_message.content),
             'image': last_message.image.url if last_message.image else None, 
-            'date_sent': _date_time(last_message.date_sent)
+            'date_sent': _chat_date_time(last_message.date_sent)
             }
     else:
         return ""
@@ -59,6 +61,20 @@ def _get_family_unreads(player:Player):
     else:
         return 0    
 
+def _chat_data(chat: Chat,player:Player):
+    
+    return {
+        "initiator" : _player_data(chat.initiator),
+        "recipient" : _player_data(chat.recipient),
+        "last_message": get_last_message(chat,"private"),
+        'unreads': {
+                'number':_parse_number(chat.unreads(player)),
+                'label':'unread' if _parse_number(chat.unreads(player)) != '' else ''
+            },
+            
+
+    }
+
 
 @login_required
 def chats(request):
@@ -68,29 +84,7 @@ def chats(request):
     
     message_list=[]
     receivers = []
-    
-    chats = Chat.objects.filter(
-        Q(initiator = current_player) | Q(recipient = current_player)
-    ).order_by("-last_message_time_sent")
-    
-    #delete chats with no messages
-    for chat in chats:
-        chat_messages = Message.objects.filter(chat = chat)
-        if not chat_messages.exists():
-            chat.delete()
 
-    chats_data = [
-        {
-            "chat": chat,
-            "last_message": get_last_message(chat,"private"),
-            'unreads': {
-                'number':_parse_number(chat.unreads(current_player)),
-                'label':'unread' if _parse_number(chat.unreads(current_player)) != '' else ''
-            }
-
-        }
-        for chat in chats
-    ]
 
     family_last_message = FamilyMessage.objects.filter(family = current_player.family).order_by('-date_sent').first()
         
@@ -110,14 +104,31 @@ def chats(request):
             
         }
     else:
-        fl_message_data = ''    
+        fl_message_data = ''
 
-    context = {"chats":chats_data,
+    active_players = Player.objects.exclude(id = current_player.id).order_by('-last_seen')[:5]
+    active_players = [ _player_data(player) for player in active_players ]      
+
+    context = {"chats":[],
+               "active_players" : active_players,
                "player":current_player,
                "family_last_message":fl_message_data,
                "n_notifs": core_views.get_notifs(current_player),
                }
     return render(request,"chat/chats.html",context)
+
+def fetch_chats(request, username):
+    user = User.objects.get(username = username)
+    player = get_player(user)
+    if player:
+        chats = Chat.objects.filter(
+            Q(initiator = player) | Q(recipient = player)
+        ).order_by("-last_message_time_sent")
+
+        chats = [ _chat_data(chat,player) for chat in chats ]
+        return JsonResponse({'status':'success','chats':chats})
+    else:
+        return JsonResponse({'status':'error'})
 
 def getchats(player):
     chats = Chat.objects.filter(
@@ -231,7 +242,7 @@ def private_chat(request,receiver_name):
         receiver = Player.objects.get(user=receiver_user)
         sender = Player.objects.get(user=request.user)
     except:
-        return JsonResponse({"status":"error"}) 
+        return redirect('/')
        
     sent_messages = Message.objects.filter(sender = sender,receiver=receiver)
     sent_by_user = [x for x in sent_messages if x.sender==request.user]
@@ -261,10 +272,14 @@ def private_chat(request,receiver_name):
             # }
         }
     else:
-        fl_message_data = ''    
+        fl_message_data = ''  
+
+    active_players = Player.objects.exclude(id = player.id).order_by('-last_seen')[:5]
+    active_players = [ _player_data(player) for player in active_players ]      
         
 
     context = {"receiver":receiver,
+               "active_players":active_players,
                'last_seen': get_player_last_seen(receiver),
                "sent_messages":sent_messages,               
                 "sent":sent_by_user,

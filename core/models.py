@@ -45,6 +45,7 @@ class ContentComment(models.Model):
         return f"{self.author}: {self.text[:20]}..."
 
 REACTIONS = [
+        ('🔥', 'Fire'),
         ('👍', 'Like'),
         ('👎', 'Unlike'),
         ('😂','Laugh'),
@@ -76,6 +77,14 @@ class ContentCommentReactor(models.Model):
 
 
 class Post(models.Model):
+    POST_CATEGORIES = [
+        ('discussion', 'Discussion'),
+        ('divers','Divers'),
+        ('meme','Meme'),
+        ('question','Question'),
+
+    ]
+    category = models.CharField(max_length=50, choices = POST_CATEGORIES, default='divers')
     # id = models.BigAutoField(primary_key=True)
     author = models.ForeignKey(Player, on_delete=models.CASCADE)
     body = models.TextField(blank=True, null=True)
@@ -84,9 +93,34 @@ class Post(models.Model):
     image = models.ImageField(upload_to='posts/',blank=True,null=True)
     #video = models.FileField(upload_to='posts/videos/',blank=True,null=True)    
     custom_id = models.CharField(max_length=20, default=generate_custom_id)
+    views = models.PositiveIntegerField(default = 0)
+    viewers = models.ManyToManyField(Player, through='PostViewer', related_name="post_viewer")
+
+    def most_made_reaction(self):
+        # Count the reactions for this Post
+        reactions = Reaction.objects.filter(post=self).values('type').annotate(count=models.Count('type')).order_by('-count')
+        if reactions:
+            return reactions[0]  # Return the most made reaction
+        return None  # No reactions found
+    
 
     def __str__(self):
+
         return f"{self.author}: {self.body[:20]}..."
+
+class PostViewer(models.Model):
+    player = models.ForeignKey(Player, on_delete = models.CASCADE)
+    post = models.ForeignKey(Post, on_delete = models.CASCADE)
+    date_viewed = models.DateTimeField(auto_now_add = True)
+    LOCATIONS = [
+        ('post_page', 'POST_PAGE'),
+        ('feed', 'Feed')
+    ]
+    location = models.CharField(max_length=250, choices=LOCATIONS, default='feed')
+    
+    class Meta:
+        unique_together = ('player','date_viewed')
+
 
 class SavedPost(models.Model):
     player =  models.ForeignKey(Player, on_delete=models.CASCADE)    
@@ -116,9 +150,7 @@ class Comment(models.Model):
 class Reaction(models.Model):
     id = models.BigAutoField(primary_key=True)
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
-    type = models.CharField(max_length=15, choices=[
-        (i,i) for i in reaction_list
-    ])
+    type = models.CharField(max_length=15, choices=REACTIONS, default = "🔥")
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
     def __str__(self):

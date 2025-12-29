@@ -3,6 +3,9 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.utils.text import get_valid_filename
 from channels.generic.websocket import AsyncWebsocketConsumer,WebsocketConsumer
+
+from chat.views import _chat_data, _message_data
+from users.users_utility import get_player
 from .models import Message,Chat,FamilyMessage
 from users.models import Player,Family,PlayerNotification,notification_types
 from django.contrib.auth.models import User
@@ -11,7 +14,7 @@ from channels.db import database_sync_to_async
 from core.views import _time_since
 from core.models import Notification
 
-from utility import encrypt_message
+from utility import _date_time, decrypt_message, encrypt_message
 from api.models import PushSubscription
 from api.utility import send_push_notification
 
@@ -119,8 +122,29 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
         new_notif.save()
         return new_msg
     
+    @database_sync_to_async
+    def message_data(self, message:Message):
+        return {
+            "id":message.id,
+            "sender":{
+                'username':message.sender.user.username,
+                'profile_picture': message.sender.profile_picture.url
+                },
+            "receiver":{
+                'username':message.receiver.user.username,
+                'profile_picture': message.sender.profile_picture.url,
+                },
+            "parent":_message_data(message.parent) if message.parent else None,    
+            "content":decrypt_message(message.content),
+            'image': message.image.url if message.image else None, 
+            'date_sent': _date_time(message.date_sent),
+            'read': message.read,
+            'day': message.date_sent.strftime("%A"),
+            'date': message.date_sent.strftime("%d %b %Y"),
+            
+            }
     
-
+    
     async def connect(self):
         print("connecting...")
         self.chat_name = self.scope["url_route"]["kwargs"]["room_name"]
@@ -168,6 +192,7 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
                 "content": message,
                 "date_sent":_time_since(messageObj.date_sent),
                 "profile_picture_url":  messageObj.sender.profile_picture.url,
+                "message_data" : await self.message_data(messageObj)
 
             },
         )
@@ -188,28 +213,38 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
             }
         )
 
+        #transfer to recipient chats consumer for the recipient
+        await self.channel_layer.group_send(
+            f'{receiver_name}_chats',
+            {
+                'type':'update_chats',
+            }
+        )
+        await self.channel_layer.group_send(
+            f'{sender_name}_chats',
+            {
+                'type':'update_chats',
+            }
+        )
+
+
 
     async def private_message(self,event):
         print("preparing...")
         sender_name = event["sender_name"]
         receiver_name = event["receiver_name"]
         content = event["content"]
-       
-        print("sending...")
-
+        message_data = event["message_data"]
 
         await self.send(text_data = json.dumps({ #convert data into json
             "sender_name": sender_name,
             "receiver_name": receiver_name,
             "content": content,
-            
-
+            "message_data" : message_data
             #"date_sent": messageObj.date_sent
         })
         )
-        print("message sent")
-    
-
+        
 class ChatRoomConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         print("connecting...")
@@ -254,7 +289,6 @@ class ChatRoomConsumer(AsyncWebsocketConsumer):
         )    
 
     pass
-
 
 class GroupChatConsumer(AsyncWebsocketConsumer):
 
@@ -391,4 +425,62 @@ class GroupChatConsumer(AsyncWebsocketConsumer):
             "message":message,
             "sender":sender
         }))    
-          
+
+class ChatsConsumer(AsyncWebsocketConsumer):
+    
+    @database_sync_to_async
+    def fetch_chats(self, username):
+        user = User.objects.get(username = username)
+        player = Player.objects.get(user = user)
+        if player:
+            chats = Chat.objects.filter(
+                Q(initiator = player) | Q(recipient = player)
+            ).order_by("-last_message_time_sent")
+
+            chats = [ _chat_data(chat,player) for chat in chats ]
+            return {'status':'success','chats':chats}
+        else:
+            return {'status':'error'}
+    
+    async def connect(self):
+        print("connecting...")
+        self.user = self.scope["user"]
+        #self.chat_box_name = "room1"
+        self.group_name = f"{self.user}_chats"
+        print(self.group_name) 
+
+        await self.channel_layer.group_add(self.group_name, self.channel_name)
+
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(self.group_name,self.channel_name)
+
+    #function to receive messages from WebSocket.
+    async def receive(self, text_data):
+        text_data_json = json.loads(text_data)
+        # chats = await self.fetch_chats(self.user)
+        # print("fetched chats:", chats)
+
+        await self.channel_layer.group_send(
+           self.group_name,
+           {
+                "type":"update_chats",
+                # "chats" : chats
+           }
+       ) 
+
+    
+    async def update_chats(self, event):
+        # chats = event["chats"]
+        # print("sending chats: ",chats)
+        
+        await self.send(
+            text_data = json.dumps( #convert into json
+                {
+                    # "chats": chats,
+                    "status" :"success"
+                }
+            )
+        )    
+

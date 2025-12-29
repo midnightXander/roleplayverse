@@ -1,8 +1,43 @@
+function likePost(likeButton, postId, reaction = "🔥"){
+        $(likeButton).toggleClass('animate__animated animate__heartBeat')
+        $.ajax({
+            url:  `/post/react/${postId}`,
+            type:'POST',
+            data: { reaction : reaction },
+            beforeSend: function(){
+                
+            },
+            success: function(res){
+                
+                document.querySelector(`#like-count-${postId}`).textContent = res.likes
+                if(res.message == 'liked'){
+                    // if(!document.querySelector(`#like-button-${postId}`).classList.contains('liked')){
+                    //     document.querySelector(`#like-button-${postId}`).classList.add('liked');
+                    // }
+
+                }else if(res.message == 'unliked'){
+                    likeButton.classList.remove('liked');
+                }
+            },
+            complete: function(){
+                
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                
+                showMyToast('an error occured please try again', 'error')
+            }
+            
+        })
+    }
+
 function openCommentPopup(postId) {
+
     const popup = document.getElementById('commentPopup');
     popup.classList.remove('hidden');
     popup.classList.remove('fade-out-down');
     popup.classList.add('fade-in-up');
+
+    
 
     getPostData(postId)
 
@@ -21,7 +56,7 @@ function openCommentPopup(postId) {
   document.addEventListener('click', (e) => {
     const popup = document.getElementById('commentPopup');
     const content = document.getElementById('popupContent');
-    if (!popup.classList.contains('hidden') && !content.contains(e.target) && !e.target.closest('button[onclick^="openCommentPopup"]')) {
+    if (!popup.classList.contains('hidden') && !content.contains(e.target) && !e.target.closest('button[onclick^="loginDecorator"]') && !e.target.closest('button[onclick^="openCommentPopup"]')) {
       closeCommentPopup();
     }
   });
@@ -248,20 +283,22 @@ function createPostElement(post) {
     
     postElement2.innerHTML = `
     <div class="flex items-start  gap-4">
-            <img src="${post.author.profile_picture}" alt="${post.author.player}" class="myImg w-10 h-10 rounded-full" />
+            <img src="${post.author.profile_picture}" alt="${post.author.name}" class="myImg w-10 h-10 rounded-full" />
             <div class="flex-1">
-              <div class="flex justify-between text-sm text-gray-400">
-                <div>
-                  <a onlick = 'showOverlay()' href = "/users/${post.author.name}" class="inline-block font-semibold hover:text-orange-600 text-white">${post.author.player}</a> @${post.author.nickname}
+              <div class="flex justify-between relative text-sm text-gray-400">
+                <div class="sm:truncate inline-block">
+                  <a onclick = 'showOverlay()' href = "/users/${post.author.name}" class="inline-block  font-semibold hover:text-orange-600 text-white">${post.author.name}</a> @${post.author.nickname}
                 </div>
                 
     
                  <div class="relative flex space-x-2 ">
-                  <span>${post.time_posted}</span>
+                 <span class="text-xs">${post.time_posted}</span>   
+                 <span class="px-2 py-1 bg-gray-800 text-gray-200 text-xs rounded-full border border-gray-700 font-semibold shadow">${ post.category }</span>
+                  
                   <button onclick = 'togglePostDropdown(this)'  class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
                       <i class="fas fa-ellipsis-v"></i>
                   </button>
-                  <div class="post-dropdown-menu rounded-xl bg-opacity-80 bg-gray-900 border border-gray-700 w-48 py-2">
+                  <div class="post-dropdown-menu fade-in rounded-xl bg-opacity-80 bg-gray-900 border border-gray-700 w-48 py-2">
                         
                         <div class="block px-4 py-2 text-sm text-gray-300 cursor-pointer hover:bg-gray-600" onclick="toggleToFavorites('${post.id}')">
                         ${post.is_favorite ? "<i class = 'fas fa-bookmark mr-2'></i>retirer des favoris":"<i class = 'far fa-bookmark mr-2'></i>ajouter aux favoris"}
@@ -292,18 +329,24 @@ function createPostElement(post) {
               </div>
                 ` : ''}
               
-              <div class="flex justify-between mt-4 text-gray-400 text-sm">
-                <button class="like-button flex items-center space-x-1 hover:text-orange-500 ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
-                <i class="far fa-heart"></i>
-                <span class="like-count">${post.likes}</span>
-                </button>
-                <button onclick = 'openCommentPopup(${post.id});' class="comment-button flex items-center space-x-1 hover:text-blue-500">            
+              <div class="flex relative justify-between mt-4 text-gray-400 text-sm">
+                <div id = "${post.id}-post-reactions" class="reactions bg-gray-800 fade-in-up absolute left-0 top-0 hidden flex space-x-2  mx-2 right-0  border border-gray-700 text-gray-300 text-sm p-2 rounded-3xl shadow-lg">
+                    <button class='hover:scale-105 text-xl reaction-button' onclick = "loginDecorator(likePost,null,this, ${post.id},'🔥')">🔥</button>
+                    <button class='hover:scale-105 text-xl reaction-button' onclick = "loginDecorator(likePost,null,this, ${post.id},'😂')" >😂</button>
+                    <button class='hover:scale-105 text-xl reaction-button' onclick = "loginDecorator(likePost,null,this, ${post.id},'😲')" >😲</button>
+                    <button class='hover:scale-105 text-xl reaction-button' onclick = "loginDecorator(likePost,null,this, ${post.id},'☹️')" >☹️</button>
+                </div>
+                <div  class="flex items-center space-x-1 hover:text-orange-500 ${post.liked ? 'liked' : ''}" data-post-id="${post.id}">
+                <button onclick = "toggleElement(this,'${post.id}-post-reactions')" class = "" >${post.most_reaction}</button>
+                <button onclick="openReactorsPopup('/posts/reactors/${post.id}')" class="like-count" id="like-count-${post.id}">${post.likes}</button>
+                </div>
+                <button onclick = "loginDecorator(openCommentPopup,null,'${post.id}')" class="comment-button flex items-center space-x-1 hover:text-blue-500">            
                 <i class="far fa-comment"></i>
                 <span class = 'comment-count'>${post.n_comments}</span>
                 </button>
 
                 
-                <button class="flex items-center space-x-1 hover:text-orange-500" onclick="toggleToFavorites('${post.id}')">
+                <button class="flex items-center space-x-1 hover:text-orange-500" onclick="loginDecorator(toggleToFavorites,null,'${post.id}')">
                   <i class = 'far fa-bookmark'></i>
                 </button>
                 

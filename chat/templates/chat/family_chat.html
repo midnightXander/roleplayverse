@@ -82,7 +82,7 @@
 
     </div>
 </div>
-
+<p id="connection-message" class="text-sm"><i class="fas fa-spinner mr-2 fa-spin text-orange-500"></i>Connection...</p>
 <div class="message-loader hidden">
     <i class="fas fa-spinner fa-spin text-orange-500"></i>
 </div>
@@ -121,7 +121,7 @@
         </label>
         <input type="file" id="imageUpload" accept="image/*" class="hidden">
 
-        <button type="submit" class=" opacity-8 self-end text-white px-6 py-2 rounded-full  transition duration-300">
+        <button id="sendButton" disabled type="submit" class="disabled opacity-8 self-end text-white px-6 py-2 rounded-full  transition duration-300">
             <i class="fa fa-paper-plane"></i>
         </button>
     </form>
@@ -157,7 +157,7 @@
     const wsprotocol = window.location.protocol === 'https' ? 'wss://' : 'ws://' 
     console.log("WS Protocol:",wsprotocol)
     const groupChatSocket = new WebSocket(
-            'wss://' + 
+            wsprotocol + 
             window.location.host + 
             '/ws/chat/group/'+
             family_name +  "/"
@@ -474,8 +474,6 @@
                }
            })
        }
-    
-        get_messages()
 
         fileInput.on('change',(e)=>{
             const file = fileInput[0].files[0]
@@ -539,13 +537,29 @@
         
         })
 
-    groupChatSocket.onmessage = function(e){
+    groupChatSocket.onopen = function(e){
+        get_messages()
+        enableButton("sendButton")
+        hideConnectionMessage()
+
+       }
+    
+        groupChatSocket.onmessage = function(e){
         const data = JSON.parse(e.data) 
         // console.log(data)
         get_messages()
     }
-    groupChatSocket.onerror = function(e){
-        showMyToast('An error occured during sending, please try again','error')
+    groupChatSocket.onclose = function(e){
+        showMyToast("Connection perdu. recharge la page",'error')
+        disableButton("sendButton")
+        hideConnectionMessage()
+        //window.location.reload()
+      }
+
+        groupChatSocket.onerror = function(e){
+            showMyToast('An error occured during sending, please try again','error')
+            disableButton("sendButton")
+            hideConnectionMessage()
         }
         
 

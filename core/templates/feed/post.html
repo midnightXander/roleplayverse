@@ -43,9 +43,20 @@
   }
 </style>
 
-
-<div id="postContainer" class="max-w-2xl mx-auto px-4 py-32 space-y-6 text-white flex flex-col items-center justify-center"  >
+<div class = "p-4 w-full mt-20">
+            <div class="bg-blue-600 text-white text-center rounded-lg p-3 flex items-center justify-center space-x-2">
+                <span class="font-medium">Rejoignez la communauté sur Discord!</span>
+                <a href="https://discord.gg/a2wmy5jn" target="_blank" class="bg-white text-black px-3 py-1 rounded-full hover:bg-gray-200 transition duration-300">Rejoindre</a>
+                <button id="closeBanner" class="text-white hover:text-gray-200 focus:outline-none">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+    </div>
+<div id="postContainer" class="mx-auto h-[100vh] px-0 pt-8 space-y-6 text-white flex flex-col items-center justify-center"  >
 </div>
+
+
+
 <!-- <div class="mb-4">
     <span class="opacity-0">element to create margin</span>
 </div> -->
@@ -53,6 +64,7 @@
 
 {{ playerName|json_script:'player' }}
 {{ player.user.username | json_script:'username' }}
+{{ post | json_script:'post' }}
 <script>
            
     // Get the modal
@@ -72,6 +84,7 @@
     
             const currentPlayer = JSON.parse(document.getElementById('player').textContent)
             const currentPlayerUsername = JSON.parse(document.getElementById('username').textContent)
+            const post = JSON.parse(document.getElementById('post').textContent)
           
     function addDropdownListeners() {
           document.querySelectorAll('.post-dropdown-toggle').forEach(toggle => {
@@ -106,11 +119,24 @@
 //     `
 // }
 
-
-   
+    function renderPost(){
+        const postElement = createPostElement(post);
+        const postContainer = document.getElementById('postContainer');
+        postContainer.appendChild(postElement);
+        addDropdownListeners()
+        commentListener()
+        
+            document.querySelectorAll('.body').forEach((element)=>{
+            element.innerHTML = linkifyHtml(element.textContent, {
+                target:"_blank",
+                className: 'link'
+            })
+            
+        })
+    }
     
     // Function to render posts
-    function renderPost() {
+    function renderContent() {
     
         const postContainer = document.getElementById('postContainer');
         const loader = document.getElementById('loading-overlay');
@@ -122,30 +148,31 @@
                 csrfmiddlewaretoken: '{{csrf_token}}'
             },
             beforeSend: function(){
-                loader.classList.toggle('active');
+                // loader.classList.toggle('active');
             },
             success: function(res){
                 if(res.status == 'success'){
                     post = res.post
-                    const adElement = createAdElement('https://sophisticatedappearance.com/b/3KVh0.P/3VpuvzbOmpVEJBZND_0O1bNTj/Yx0/NzTtAE4oLLT-Ur2ONAjoQt1/M/DFkB', "{% static 'images/avatars/avatar-2.jpg' %}")
+                    //const adElement = createAdElement('https://sophisticatedappearance.com/b/3KVh0.P/3VpuvzbOmpVEJBZND_0O1bNTj/Yx0/NzTtAE4oLLT-Ur2ONAjoQt1/M/DFkB', "{% static 'images/avatars/avatar-2.jpg' %}")
+                    const adElement = createAffiliateProductAdElement(res.product)
                     const postElement = createPostElement(post);
-                    postContainer.appendChild(adElement);
                     postContainer.appendChild(postElement);
+                    // postContainer.appendChild(adElement);
                     
 
                 }
             },
             complete: function(){
-                addDropdownListeners()
-                commentListener()
+                // addDropdownListeners()
+                // commentListener()
                 
-                    document.querySelectorAll('.body').forEach((element)=>{
-                    element.innerHTML = linkifyHtml(element.textContent, {
-                        target:"_blank",
-                        className: 'link'
-                    })
+                //     document.querySelectorAll('.body').forEach((element)=>{
+                //     element.innerHTML = linkifyHtml(element.textContent, {
+                //         target:"_blank",
+                //         className: 'link'
+                //     })
                     
-                })
+                // })
     
                 //ad close listener
             //     if(document.querySelector('.ad-container')){
@@ -153,7 +180,7 @@
             //     this.closest('.ad-container').style.display = 'none';
             //     });
             // }
-                loader.classList.toggle('active');
+                // loader.classList.toggle('active');
                 
     
             },
@@ -165,28 +192,63 @@
         })
     
     // Animate posts appearance
-    gsap.from('.post', {
-        y: 50,
-        opacity: 0,
-        duration: 0.5,
-        stagger: 0.2,
-        ease: 'power2.out'
-    });
+    // gsap.from('.post', {
+    //     y: 50,
+    //     opacity: 0,
+    //     duration: 0.5,
+    //     stagger: 0.2,
+    //     ease: 'power2.out'
+    // });
     }
     
-    // Render initial posts
+    // Render initial post
     renderPost();
     
-    // Infinite scrolling
+   document.addEventListener('DOMContentLoaded', renderContent);
    
-   
-    
+    function likePost(likeButton, postId){
+        console.log("QU")
+        $(likeButton).toggleClass('animate__animated animate__heartBeat')
+        $.ajax({
+            url:  `/post/react/${postId}`,
+            type:'POST',
+            beforeSend: function(){
+                
+            },
+            success: function(res){
+                
+                likeButton.querySelector('.like-count').textContent = res.likes
+                if(res.message == 'liked'){
+                    if(!likeButton.classList.contains('liked')){
+                        likeButton.classList.add('liked');
+                    } 
+                    
+                }else if(res.message == 'unliked'){
+                    likeButton.classList.remove('liked');
+                }
+            },
+            complete: function(){
+                
+            },
+            error: function(jqXHR, textstatus, errorThrown){
+                
+                showMyToast('an error occured please try again', 'error')
+            }
+            
+        })
+    }
   
     // Event delegation for like buttons
     document.getElementById('postContainer').addEventListener('click', (e) => {
-    if (e.target.closest('.like-button')) {
+    if (e.target.closest('.like-buttons')) {
+        console.log("QU")
         const likeButton = e.target.closest('.like-button');
         const postId = likeButton.dataset.postId;
+        if('{{request.user.is_authenticated}}'  === 'False'){
+            showSigninPopup()
+            return
+        }
+
         $(e.target).toggleClass('animate__animated animate__heartBeat')
         $.ajax({
             url:  `/post/react/${postId}`,
@@ -252,17 +314,6 @@
     
 }
     });
-    
-    // Event delegation for comment buttons
-    // document.getElementById('postContainer').addEventListener('click', (e) => {
-    // if (e.target.closest('.comment-button')) {
-    //     const commentForm = e.target.closest('.post').querySelector('.comment-form');
-    //     commentForm.classList.toggle('active');
-    //     if (commentForm.classList.contains('active')) {
-    //         commentForm.querySelector('input').focus();
-    //     }
-    // }
-    // });
     
     function commentListener(){
         const commentForm = $('.comment-form')

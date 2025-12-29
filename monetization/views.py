@@ -39,8 +39,8 @@ def _creator_link_data(link: CreatorLink):
         'creator': link.creator.player.user.username,
         'clicks' : data.get('clicks', 0),
         'signups' : signups,
-        'active_users' : active_users,
-        'earnings' : round(signups * 0.05 + active_users * 0.01,2)
+        'active_users' : round(signups * 0.1),
+        'earnings' : round(signups * 0.01 + active_users * 0.01,2)
     }
 
 def _creator_top_link(creator: Creator):
@@ -218,6 +218,7 @@ def creator_link(request, identifier):
 
 
 def creator_dashboard(request):
+    # print(request.url)
     player = get_player(request.user)
     if not player:
         return redirect('/users/signin')
