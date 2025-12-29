@@ -235,7 +235,7 @@
           <p class="text-xs text-gray-300 mt-2">Invite des gens a rejoindre la plate-forme par ce lien et obtiens des Jétons de combats, des credits RP et pleins d'autres récompense</p>
         </div>
         <a href="/onboarding" class="inline-block w-full text-center bg-white text-black py-2 rounded-xl font-semibold  transition">👻 Bienvenue sur RPV</a>
-        <a href="/blog" target="_blank" class="inline-block w-full text-center bg-[#d45822] text-white py-2 rounded-xl font-semibold hover:bg-orange-600 transition">Blog 📘 Guide RPV</a>
+        <a href="/blog" target="_blank" class="inline-block w-full text-center bg-[#d45822] text-white py-2 rounded-xl font-semibold hover:bg-orange-600 transition">Blog • Guide RPV</a>
       </div>
 
     <!-- Quick Access Links -->
@@ -256,7 +256,10 @@
     <div class="flex justify-between space-x-2 pb-2 overflow-y-auto w-full">
         
       <button id="posts-tab-btn" onclick="gotoTab(this,'posts')" class = "tab-button transition-all ease-in-out  border-gray-700   text-sm px-4 py-1.5 ">Publications</button>
-      <button id="special_characters-tab-btn" onclick="gotoTab(this,'special_characters')" class = "tab-button transition ease-in-out  border-gray-700   text-sm px-4 py-1.5">Personnage special</button>
+      {% if req_player == player %}
+       <button id="special_characters-tab-btn" onclick="gotoTab(this,'special_characters')" class = "tab-button transition ease-in-out  border-gray-700   text-sm px-4 py-1.5">Personnage special</button>
+      {% endif %}
+     
       <button id="duels-tab-btn" onclick="gotoTab(this,'duels')" class = "tab-button transition ease-in-out  border-gray-700   text-sm px-4 py-1.5">Duels</button>
       <button id="characters-tab-btn" onclick="gotoTab(this,'characters')" class = "tab-button transition ease-in-out  border-gray-700   text-sm px-4 py-1.5">Personnages(story)</button>
       

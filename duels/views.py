@@ -455,14 +455,16 @@ def init_solo_duel(request):
     player = get_object_or_404(Player, user = request.user)
     if request.method == "POST":
         player_character = request.POST.get('character', 'Naruto Uzumaki')
+        characters = get_solo_battle_characters()
+        bot_character = characters[random.randint(0, len(characters)-1)]
+        if bot_character['name'] == player_character : 
+            bot_character = characters[random.randint(0, len(characters)-1)]
         
-        battle = SoloBattle.objects.filter(player = player).order_by('-date_started')[0]
-        
-
-        
-        bot_character = battle.bot_character
         player_character = _solo_battle_character(player_character)
+
         if not player_character: player_character = duel_character(player)
+        battle = SoloBattle.objects.create(player = player, player_character = pslayer_character, bot_character = bot_character)
+
         player_character['hp'] = battle.player_character.get('hp',200)
         bot_character['hp'] = battle.bot_character.get('hp',200)
         player_character['chakra'] = battle.player_character.get('chakra',player_character.get('chakra_pool',100))

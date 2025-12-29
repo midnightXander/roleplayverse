@@ -249,11 +249,13 @@
 
 
 <script>
+    
     const allChatSocket =  new WebSocket(
-            'ws://' + 
+            window.location.host === 'roleplayverse.live' ? 'wss://' : 'ws://'  + 
             window.location.host + 
             '/ws/chats/{{request.user.username}}/'
         )
+        
     allChatSocket.onopen = function(e){
         // console.log("connected to all chats web socket")
     }

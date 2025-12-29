@@ -287,13 +287,13 @@ function createPostElement(post) {
             <div class="flex-1">
               <div class="flex justify-between relative text-sm text-gray-400">
                 <div class="sm:truncate inline-block">
-                  <a onclick = 'showOverlay()' href = "/users/${post.author.name}" class="inline-block  font-semibold hover:text-orange-600 text-white">${post.author.name}</a> @${post.author.nickname}
+                  <a onclick = 'showOverlay()' href = "/users/${post.author.name}" class="inline-block  font-semibold hover:text-orange-600 truncate text-white">${post.author.name}</a> @${post.author.nickname}
                 </div>
                 
     
                  <div class="relative flex space-x-2 ">
                  <span class="text-xs">${post.time_posted}</span>   
-                 <span class="px-2 py-1 bg-gray-800 text-gray-200 text-xs rounded-full border border-gray-700 font-semibold shadow">${ post.category }</span>
+                 <span class="text-gray-200 text-xs  font-semibold text-orange-500">#${ post.category }</span>
                   
                   <button onclick = 'togglePostDropdown(this)'  class="text-gray-300 hover:text-white focus:outline-none post-dropdown-toggle" data-post-id="${post.id}">
                       <i class="fas fa-ellipsis-v"></i>

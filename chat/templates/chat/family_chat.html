@@ -154,7 +154,7 @@
     const messageInput = $('#messageInput');
     const fileInput = $('#imageUpload')
 
-    const wsprotocol = window.location.protocol === 'https' ? 'wss://' : 'ws://' 
+    const wsprotocol = window.location.host === 'roleplayverse.live' ? 'wss://' : 'ws://' 
     console.log("WS Protocol:",wsprotocol)
     const groupChatSocket = new WebSocket(
             wsprotocol + 

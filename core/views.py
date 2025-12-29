@@ -239,9 +239,9 @@ def home(request):
         'question',
     ]
 
-    # for r in Reaction.objects.all():
-    #     r.type = "🔥"
-    #     r.save()
+    for r in Reaction.objects.all():
+        r.type = "🔥"
+        r.save()
     
     
 
@@ -318,7 +318,7 @@ def home(request):
         random_posts_data = []
         for post in random_posts:
             random_posts_data.append(_post_data(player,post))
-            # feed.posts.add(post)
+            feed.posts.add(post)
         
         feed.save()
         
