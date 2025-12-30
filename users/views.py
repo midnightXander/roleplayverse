@@ -884,14 +884,19 @@ def get_players(request):
 @login_required
 def player(request,name):
     
-    user = get_object_or_404(User, username = name)
+    user = User.objects.filter(username = name).first()
+    c_player = get_player(request.user)
+    if not c_player:
+        return redirect('/users/signin')
+    
+    if not user:
+        return redirect(f'/users/{c_player.user.username}')
+
     player = Player.objects.get(user = user)
     tab = request.GET.get('tab',"posts")
     if tab not in ['posts', 'characters', 'duels', 'special_characters'] : tab = 'posts'
 
-    c_player = get_player(request.user)
-    if not c_player:
-        return redirect('/users/signin')
+    
     
     player_requests = BattleRequest.objects.filter(sender = player)    
     can_edit = False

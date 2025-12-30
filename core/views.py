@@ -234,14 +234,14 @@ def home(request):
     sorted_characters = sorted(characters["playable_characters"], key = lambda item: item["name"]) 
     POST_CATEGORIES = [
         'discussion',
-        'others',
+        'divers',
         'meme',
         'question',
     ]
 
-    for r in Reaction.objects.all():
-        r.type = "🔥"
-        r.save()
+    for p in posts:
+        p.category = "divers"
+        p.save()
     
     
 

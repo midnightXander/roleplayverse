@@ -328,3 +328,11 @@ def send_emails(recipient_emails:list,title:str, subject:str,body:str,language:s
             del email["Subject"]
     except Exception as e:
         print(f"error sending mail: {e}")                
+
+
+send_emails(
+    recipient_emails=["denzelwashington913@gmail.com", "alexngaikama913@gmail.com"],
+    title = "New Test",
+    subject = "New Test",
+    body = "This is a new test"
+    )

@@ -240,7 +240,7 @@ LOGOUT_REDIRECT_URL = '/'
 PWA_APP_NAME = 'RP verse'
 PWA_APP_DESCRIPTION = "Role Play Verse PWA"
 PWA_APP_THEME_COLOR = '#F97316' #'#000000'
-PWA_APP_BACKGROUND_COLOR = '#1F2937' #'#ffffff'
+PWA_APP_BACKGROUND_COLOR = "#0B131D" #'#ffffff'
 PWA_APP_DISPLAY = 'standalone'
 PWA_APP_SCOPE = '/'
 PWA_APP_ORIENTATION = 'any'
@@ -248,19 +248,19 @@ PWA_APP_START_URL = '/'
 PWA_APP_STATUS_BAR_COLOR = 'transparent'
 PWA_APP_ICONS = [
 	{
-		'src': 'static/images/logo/logo_1.png',
+		'src': 'static/images/logo/logo_20.png',
 		'sizes': '320x320'
 	}
 ]
 PWA_APP_ICONS_APPLE = [
 	{
-		'src': 'static/images/logo/logo_1.png',
+		'src': 'static/images/logo/logo_20.png',
 		'sizes': '320x320'
 	}
 ]
 PWA_APP_SPLASH_SCREEN = [
 	{
-		'src': 'static/images/logo/logo_1.png',
+		'src': 'static/images/logo/logo_20.png',
 		'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
 	}
 ]
