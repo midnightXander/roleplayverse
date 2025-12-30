@@ -1335,7 +1335,7 @@ if (window.scrollY + window.innerHeight >= document.body.offsetHeight - 100) {
             // const memeElement = createMemeElement('https://preview.redd.it/son-im-proud-of-you-s-v0-fjola4lkoyqd1.jpeg?width=640&crop=smart&auto=webp&s=85eeee3624f8d331e864f68337cb9e6cb1ee42b3')
             // postsFeed.appendChild(memeElement)
 
-            const adElement = createAffiliateProductAdElement(res.product)
+            const adElement = createFeedAffiliateProductAdElement(res.product)
             if(posts.length>0){
             postsFeed.appendChild(adElement)
             posts.forEach(post =>{

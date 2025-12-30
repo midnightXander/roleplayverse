@@ -239,9 +239,9 @@ def home(request):
         'question',
     ]
 
-    for p in posts:
-        p.category = "divers"
-        p.save()
+    # for p in posts:
+    #     p.category = "divers"
+    #     p.save()
     
     
 
