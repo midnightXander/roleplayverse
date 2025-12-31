@@ -249,7 +249,7 @@
         const wsprotocol = window.location.host === 'roleplayverse.live' ? 'wss://' : 'ws://' 
         console.log("WS Protocol:",window.location.protocol, window.location.host)
         const chatSocket  = new WebSocket(
-            'wss://' + 
+            wsprotocol + 
             window.location.host + 
             '/ws/chat/private/'+
             room +  "/"

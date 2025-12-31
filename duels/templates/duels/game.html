@@ -1000,9 +1000,9 @@ function hideTurnTimer() {
   
 
     const wsprotocol = window.location.host === 'roleplayverse.live' ? 'wss://' : 'ws://'  
-    console.log("WS Protocol:",window.location.protocol)
+    console.log("WS Protocol:", wsprotocol)
     const duelSocket  = new WebSocket(
-        'wss://' + 
+        wsprotocol + 
         window.location.host + 
         '/ws/duels/'+
         "{{duel.code}}" +  "/"

@@ -249,9 +249,9 @@
 
 
 <script>
-    
+    const chats_wsprotocol = window.location.host === 'roleplayverse.live' ? 'wss://' : 'ws://';
     const allChatSocket =  new WebSocket(
-            window.location.host === 'roleplayverse.live' ? 'wss://' : 'ws://'  + 
+            chats_wsprotocol + 
             window.location.host + 
             '/ws/chats/{{request.user.username}}/'
         )

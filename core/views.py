@@ -42,6 +42,7 @@ from api.views import export_battle_data
 from store.views import affiliate_product_data, product_data
 import requests
 BASE_DIR = Path(__file__).resolve().parent.parent
+from ipware import get_client_ip
 
 def get_characters():
     characters_file = os.path.join(BASE_DIR,"characters/playable_characters.json")
@@ -327,8 +328,12 @@ def home(request):
         
         player.country = get_country(request)
         print(player.country)
-        print(f"{player} IP: ",request.META.get('REMOTE_ADDR'))
-        player.ip_adress = request.META.get('REMOTE_ADDR')
+        client_ip, is_routable = get_client_ip(request)
+        print(f"{player} IP: ", client_ip)
+        player.ip_adress = client_ip
+
+        print("Client IP:", client_ip, is_routable)
+
         player.save()
 
         #export_battle_data()  

@@ -157,7 +157,7 @@
     const wsprotocol = window.location.host === 'roleplayverse.live' ? 'wss://' : 'ws://' 
     console.log("WS Protocol:",wsprotocol)
     const groupChatSocket = new WebSocket(
-            'wss://' + 
+            wsprotocol + 
             window.location.host + 
             '/ws/chat/group/'+
             family_name +  "/"
