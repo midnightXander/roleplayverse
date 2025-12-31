@@ -200,13 +200,7 @@ def home(request):
     battles = Battle.objects.filter(status = "finished")
     
     g = GeoIP2()
-    # ip = "134.201.250.155"
-    # try:
-    #     country = g.country(ip)
-    # except Exception as e:
-    #     print(f"Country error: {e}")
-    #     country = 'unknown'    
-    # print("Country: ", country)
+    
 
     characters = get_characters()  
 
@@ -326,12 +320,20 @@ def home(request):
         # if not Duel.objects.filter(Q(duelfighter__player = player)).exists():
         #     return redirect('duels:index')
         
-        player.country = get_country(request)
-        print(player.country)
+        #player.country = get_country(request)
+        
+        #get player's country from IP
         client_ip, is_routable = get_client_ip(request)
         print(f"{player} IP: ", client_ip)
         player.ip_adress = client_ip
 
+        try:
+            country = g.country(client_ip)
+        except Exception as e:
+            print(f"Country error: {e}")
+            country = 'unknown'    
+        player.country = country
+        print("Country: ", country)
         print("Client IP:", client_ip, is_routable)
 
         player.save()
