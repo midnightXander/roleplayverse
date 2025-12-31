@@ -388,7 +388,7 @@ def home(request):
         last_story_textpad = StoryTextPad.objects.filter(player = player).order_by('-created_at').first()
         last_story = ""
         if last_story_textpad: last_story = _story_character(last_story_textpad.challenge.character)
-        print("last story: ",last_story, last_story_textpad)
+        
           
 
         context = {
