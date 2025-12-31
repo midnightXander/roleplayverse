@@ -2572,7 +2572,7 @@ function deleteComment(element, id){
                 const wsprotocol = window.location.host === 'roleplayverse.live' ? 'wss://' : 'ws://' 
                 console.log(wsprotocol) 
                 const notificationSocket = new WebSocket(
-                wsprotocol + window.location.host + '/ws/notifications/'
+                'wss://' + window.location.host + '/ws/notifications/'
             )
             
             
