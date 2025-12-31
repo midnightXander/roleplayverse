@@ -328,7 +328,7 @@ def home(request):
         player.ip_adress = client_ip
 
         try:
-            country = g.country(client_ip)
+            country = g.country("165.211.32.51")['country_name']
         except Exception as e:
             print(f"Country error: {e}")
             country = 'unknown'    
