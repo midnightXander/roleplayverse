@@ -471,6 +471,10 @@
         <i class="fas fa-shield mr-2"></i> Voir</button>
     </a>  
     {% endfor %}  -->
+    <a href="/duels/solo" onclick="showOverlay()" class="mobile-scroll-item flex justify-center solo-battle-link items-center shine-effect bg-gray-500 rounded-2xl mb-4 covered">    
+        <button class="bg-gray-900 hover:bg-gray-800 text-orange-500 px-2 py-2 rounded-xl">
+            <i class="fas fa-rocket mr-2"></i>Combat Solo <span class="bg-black text-white rounded-lg py-1 px-2 mx-2">Beta</span></button>
+    </a> 
      <div class="mobile-scroll-item bg-gray-900 rounded-2xl shadow-md p-5 space-y-4">
         <h2 class="text-xl font-semibold">🏆 Top joueurs de la semaine(Duel)</h2>
         <div class="space-y-3">
@@ -502,10 +506,7 @@
     </div> 
    
     
-    <a href="/duels/solo" onclick="showOverlay()" class="mobile-scroll-item flex justify-center solo-battle-link items-center shine-effect bg-gray-500 rounded-2xl mb-4 covered">    
-        <button class="bg-gray-900 hover:bg-gray-800 text-orange-500 px-2 py-2 rounded-xl">
-            <i class="fas fa-rocket mr-2"></i>Combat Solo <span class="bg-black text-white rounded-lg py-1 px-2 mx-2">Beta</span></button>
-    </a> 
+    
     <!-- <a href="{% url 'battles:index' %}" class="mobile-scroll-item shine-effect bg-gray-500 rounded-xl mb-4 covered start-battle" style="display: flex;justify-content: center; align-items: center; ">    
         <button class="bg-gray-900 hover:bg-gray-800 text-orange-500 px-2 py-2 rounded-xl">
             <i class = "fas fa-fire mr-2"></i> Nouveau Combat<i class="fas fa-fire ml-2"></i></button>

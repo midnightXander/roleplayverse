@@ -463,7 +463,7 @@ def init_solo_duel(request):
         player_character = _solo_battle_character(player_character)
 
         if not player_character: player_character = duel_character(player)
-        battle = SoloBattle.objects.create(player = player, player_character = pslayer_character, bot_character = bot_character)
+        battle = SoloBattle.objects.create(player = player, player_character = player_character, bot_character = bot_character)
 
         player_character['hp'] = battle.player_character.get('hp',200)
         bot_character['hp'] = battle.bot_character.get('hp',200)
