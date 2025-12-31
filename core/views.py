@@ -381,9 +381,9 @@ def home(request):
         random.shuffle(opponent_suggestions)
 
         #Run before going live
-        # for t in StoryTextPad.objects.all():
-        #     t.player = t.challenge.character.player
-        #     t.save()
+        for t in StoryTextPad.objects.all():
+            t.player = t.challenge.character.player
+            t.save()
 
         last_story_textpad = StoryTextPad.objects.filter(player = player).order_by('-created_at').first()
         last_story = ""
