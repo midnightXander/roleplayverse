@@ -292,7 +292,7 @@ def game(request,character_id):
     story_status = get_story_status(story_challenge)
     status_message = "L'aventure n'a pas encore commencé" if story_status == "not_started" else "L'aventure est  terminé, tu peux en commencer une autre"
     show_ads = not(NoAdsPass.objects.filter(player = player).exists() or StoryPass.objects.filter(player = player, all = True).exists())
-    affiliate_products = [  affiliate_product_data(product) for product in AffiliateProduct.objects.order_by("?") ] 
+    affiliate_products = [  affiliate_product_data(product) for product in AffiliateProduct.objects.filter(is_active=True).order_by("?") ] 
 
     if request.method == "POST":
         if character.player == player:

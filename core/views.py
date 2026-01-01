@@ -707,7 +707,7 @@ def get_posts(request):
     feed.save()
     # posts_data = _posts_data(player,posts)
     # battles_data = battle_views._battles_data(player,battles)
-    product = random.choice(AffiliateProduct.objects.all())
+    product = random.choice(AffiliateProduct.objects.filter(is_active=True))
     _product_data = affiliate_product_data(product)
     
     # print("FEED",feed_data,len(feed_data))
@@ -876,7 +876,7 @@ def post_page(request, id):
 
     if request.method == "POST":
         data = post_data
-        product_ad  = random.choice(AffiliateProduct.objects.all()) 
+        product_ad  = random.choice(AffiliateProduct.objects.filter(is_active=True)) 
         _product = affiliate_product_data(product_ad) if product_ad else None
         return JsonResponse({'status':'success', 'post':data, "product":_product})
 
@@ -967,7 +967,7 @@ def post(request,id):
             return JsonResponse({'status':'success','message':'Publication Supprimé'})
         return JsonResponse({'status':'error','message':"l'utlisateur n'est pas l'auteur de cette publication"})
     elif request.method == 'GET':
-        product_ad  = random.choice(AffiliateProduct.objects.all()) 
+        product_ad  = random.choice(AffiliateProduct.objects.filter(is_active=True)) 
         _product = affiliate_product_data(product_ad) if product_ad else None
         post_data = _post_data(player, post)
         return JsonResponse({"status":"success","post":post_data, "product":_product})
@@ -1347,7 +1347,7 @@ def content_post_page(request, id):
         return redirect('/users/signin')
     
     content = get_object_or_404(ContentPost,id= id)
-    product_ad  = random.choice(AffiliateProduct.objects.all()) 
+    product_ad  = random.choice(AffiliateProduct.objects.filter(is_active=True)) 
     n_notifs = get_notifs(player)
 
     content_data =  _daily_content_data(player, content)

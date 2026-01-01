@@ -228,7 +228,7 @@
 </div> -->
 
 <!-- Popup Modal -->
-<div id="howToPlayPopup" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+<div id="howToPlayPopup" class="fixed inset-0 background-overlay-70 flex items-center justify-center z-50 hidden">
   <div class="bg-gray-900 rounded-2xl shadow-lg p-6 max-w-md w-full relative">
     <button onclick="hideHowToPlayPopup()" class="absolute top-2 right-3 text-gray-400 hover:text-orange-500 text-2xl font-bold">&times;</button>
     <h2 class="text-xl font-bold text-orange-400 mb-3">Comment jouer au mode Story ?</h2>
@@ -243,7 +243,7 @@
   </div>
 </div>
 
-<div id="storyPassPopup" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+<div id="storyPassPopup" class="fixed inset-0 background-overlay-70 flex items-center justify-center z-50 hidden">
   <div class="bg-gray-900 rounded-2xl shadow-lg p-6 max-w-md w-full relative">
     <button onclick="hideStoryPassPopup()" class="absolute top-2 right-3 text-gray-400 hover:text-orange-500 text-2xl font-bold">&times;</button>
     <h2 class="text-xl font-bold text-orange-500 mb-3">Obtenir un story pass</h2>
@@ -278,7 +278,7 @@
 </div>
 </div>
 
-<div id="removeAdsPopup" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+<div id="removeAdsPopup" class="fixed inset-0 background-overlay-70 flex items-center justify-center z-50 hidden">
   <div class="bg-gray-900 rounded-2xl shadow-lg p-6 max-w-md w-full relative">
     <button onclick="hideRemoveAdsPopup()" class="text-gray-400 hover:text-orange-500 text-2xl font-bold">&times;</button>
     <h2 class="text-xl font-bold text-orange-500 mb-3">Retirer les pub</h2>
@@ -302,7 +302,7 @@
 </div>
 </div>
 
-<div id="adPopup" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 hidden">
+<div id="adPopup" class="fixed inset-0 background-overlay-70 flex items-center justify-center z-50 hidden">
     <button   onclick = 'hideAdPopup()' class="ad-close absolute top-2 right-3">&times;</button>
     
     <div class="rounded-2xl shadow-lg  max-w-md w-full relative">
@@ -318,7 +318,7 @@
 
 </div>
 
-<div id="storyTextpadCommentPopup" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-end  sm:items-center animate__animated  justify-center z-50">
+<div id="storyTextpadCommentPopup" class="hidden fixed inset-0 background-overlay-70 flex items-end  sm:items-center animate__animated  justify-center z-50">
     <div id="storyTextpadPopupContent" class="relative w-full sm:w-3/5 h-[70vh] md:h-[30vh] bg-gray-900 rounded-t-3xl sm:rounded-xl p-4">
       <!-- Header -->
       <div class="flex justify-between items-center border-b pb-3 border-gray-800">
@@ -656,17 +656,17 @@ document.addEventListener("DOMContentLoaded", function() {
             success : function(res){
                 if(res.status == "success"){
                     hideStoryPassPopup();
-                    showMyToast(res.message, 'success')
+                    showToast(res.message, 'success')
                 }
                 else{
-                    showMyToast(res.message)
+                    showToast(res.message)
                 }
             },
             complete : function(){
                 $('#loading-overlay').toggleClass('active')
             },
             error: function(jqXHR, textstatus, errorThrown){
-                showMyToast(textstatus, "error")
+                showToast(textstatus, "error")
             }
 
         })
@@ -685,18 +685,18 @@ document.addEventListener("DOMContentLoaded", function() {
             success : function(res){
                 if(res.status == "success"){
                     hideRemoveAdsPopup();
-                    showMyToast(res.message, 'success')
+                    showToast(res.message, 'success')
                     window.location.reload()
                 }
                 else{
-                    showMyToast(res.message)
+                    showToast(res.message)
                 }
             },
             complete : function(){
                 $('#loading-overlay').toggleClass('active')
             },
             error: function(jqXHR, textstatus, errorThrown){
-                showMyToast(textstatus, "error")
+                showToast(textstatus, "error")
             }
 
         })
@@ -727,7 +727,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     showStoryPassPopup();
                 }
                 else{
-                    showMyToast(res.message)
+                    showToast(res.message)
                 }
             },
             complete : function(){
@@ -735,7 +735,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 enableActionButtons()
             },
             error: function(jqXHR, textstatus, errorThrown){
-                showMyToast(textstatus, "error")
+                showToast(textstatus, "error")
             }
 
         })
@@ -760,7 +760,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     addText(narrationContainer, textpad)
                     window.location.reload()
                 }else{
-                    showMyToast(res.message)
+                    showToast(res.message)
                 }
             },
             complete : function(){
@@ -768,7 +768,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 enableActionButtons()
             },
             error: function(jqXHR, textstatus, errorThrown){
-                showMyToast(textstatus, "error")
+                showToast(textstatus, "error")
             }
 
         })
@@ -857,7 +857,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }else if(res.message == 'subscription'){
                     showStoryPassPopup();
                 }else{
-                    showMyToast(res.message, "info", 5000)
+                    showToast(res.message, "info", 5000)
                 }
             },
             complete : function(){
@@ -865,7 +865,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 $('#loading-overlay').toggleClass('active')
             },
             error: function(jqXHR, textstatus, errorThrown){
-                showMyToast(textstatus, "error")
+                showToast(textstatus, "error")
             }
 
         })
@@ -957,7 +957,7 @@ function getStoryTextpadData(storyTextpadId){
             loader.remove()
         },
         error: function(jqXHR, textstatus, errorThrown){
-            showMyToast('An Error occurred, please try again','error')
+            showToast('An Error occurred, please try again','error')
         }
     })
 
@@ -999,12 +999,12 @@ function sendStoryTextpadComment(element, e){
                 })
             },
             error: function(jqXHR, textstatus, errorThrown){
-                showMyToast('An Error occurred, please try again','error')
+                showToast('An Error occurred, please try again','error')
             }
         })
        
     }else{
-        showMyToast('Ajoute du contenu', 'info')
+        showToast('Ajoute du contenu', 'info')
     }
 
 }
@@ -1058,7 +1058,7 @@ function addStoryTextpadCommentReply(parentId, storyTextpadId) {
                 $(topParentReplySection).animate({
                 scrollTop: topParentReplySection.scrollHeight,
                 },'smooth')
-                showMyToast('reponse ajouté','success')
+                showToast('reponse ajouté','success')
             },
             complete: function(){
                 $('#loading-overlay').toggleClass('active')
@@ -1070,11 +1070,11 @@ function addStoryTextpadCommentReply(parentId, storyTextpadId) {
                 })
             },
             error: function(jqXHR, textstatus, errorThrown){
-                showMyToast('An Error occurred, please try again','error')
+                showToast('An Error occurred, please try again','error')
             }
         })
     }else{
-        showMyToast('Ajoute du contenu a ta reponse')
+        showToast('Ajoute du contenu a ta reponse')
     }
         
 }
@@ -1197,7 +1197,7 @@ function reactToStoryTextpad(storyTextpadId, reaction,button){
                     container.classList.remove('bg-opacity-50')
                 },
                 error: function(jqXHR, textstatus, errorThrown){
-                    showMyToast("Une erreur s'est produite", 'error')
+                    showToast("Une erreur s'est produite", 'error')
                 }
             })
         }

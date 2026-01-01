@@ -357,27 +357,27 @@
             if(validator == "name"){
                 name = document.getElementById('name').value
                 if(!name){
-                    showMyToast('Choisi un nom')
+                    showToast('Choisi un nom')
                     return
                 }
             }
             if(validator == "gender"){
                 gender = document.getElementById('genderInput').value
                 if(!gender){
-                    showMyToast('Choisi un genre')
+                    showToast('Choisi un genre')
                     return
                 }
             }
             if(validator == "origin"){
                 origin = document.getElementById('origin').value
                 if(!origin){
-                    showMyToast('Choisi une origine')
+                    showToast('Choisi une origine')
                     return
                 }
             }
             if(validator == "affinity"){
                 if(!affinity){
-                    showMyToast('Choisi une affinité')
+                    showToast('Choisi une affinité')
                     return
                 }
             }
@@ -385,7 +385,7 @@
             if (validator === 'jutsu') {
                 if (selectedJutsus.length !== 2) {
                     showJutsuWarning(true);
-                    showMyToast("Sélectionne exactement 2 jutsus")
+                    showToast("Sélectionne exactement 2 jutsus")
                     return;
                 }
                 showJutsuWarning(false);
@@ -427,7 +427,7 @@
     function generateAvatars(){
         description =  document.getElementById('description').value;
         if(!description){
-            showMyToast("Décris ton perosnnage")
+            showToast("Décris ton perosnnage")
             return
         }
         $.ajax({
@@ -455,7 +455,7 @@
                     })
                     
                 }else{
-                    showMyToast(res.message, 'error')
+                    showToast(res.message, 'error')
                     showScreen('description-screen')
                 }
             },
@@ -466,7 +466,7 @@
             },
             error : function(jqXHR, textstatus, errorThrown){
                 showScreen('description-screen')
-                showMyToast(textstatus, "error")
+                showToast(textstatus, "error")
             }
         })
     }
@@ -609,7 +609,7 @@ document.getElementById('jutsu-warning').classList.toggle('hidden', !show);
     if (validator === 'personality') {
       if (selectedTraits.length !== 2) {
         showPersonalityWarning(true);
-        showMyToast("Sélectionne exactement 2 traits de personalité")
+        showToast("Sélectionne exactement 2 traits de personalité")
         return;
       }
       showPersonalityWarning(false);
@@ -681,7 +681,7 @@ document.getElementById('jutsu-warning').classList.toggle('hidden', !show);
                     // })
                     showCharacterInfoScreen(res.character)
                 }else{
-                    showMyToast(res.message)
+                    showToast(res.message)
                     showScreen('avatars-screen')
                 }
             },
@@ -690,7 +690,7 @@ document.getElementById('jutsu-warning').classList.toggle('hidden', !show);
             },
             error : function(jqXHR, textstatus, errorThrown){
                 showScreen('avatars-screen')
-                showMyToast(textstatus, "error")
+                showToast(textstatus, "error")
             }
         })
   }
