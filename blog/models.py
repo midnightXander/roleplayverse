@@ -6,7 +6,7 @@ categories = ['News','Updates','Tutorials','Stories']
 
 class Category(models.Model):
     """ """
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
     slug = models.SlugField(blank = True)
     description = models.TextField()
 
@@ -23,7 +23,7 @@ class Category(models.Model):
 
 class BlogPost(models.Model):
     # category = models.ForeignKey(Category, models.CASCADE, null=True)
-    category = models.CharField(max_length=150, null=True)
+    category = models.CharField(max_length=150, null=True, blank = True)
     title = models.CharField(max_length=150)
     slug = models.SlugField(blank=True)
     leading = models.CharField(max_length=200)
