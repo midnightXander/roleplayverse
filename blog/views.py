@@ -6,6 +6,9 @@ from .models import BlogPost
 
 def index(request):
     posts = BlogPost.objects.all().order_by('-date_added')
+    for post in posts:
+        post.category = None
+        post.save()
     is_moderator = False
     if request.user.is_authenticated:
         is_moderator = Moderator.objects.filter(user=request.user).exists() 

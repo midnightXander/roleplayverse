@@ -58,10 +58,10 @@ def _story_character(character:StoryCharacter):
     data['affinity_icon'] = getAffinityIcon(data.get('affinity'))
     data['player'] = _player_data(character.player)
     data['last_entry'] = ""
-    
-    challenge = StoryChallenge.objects.filter(character = character).first()
+
+    challenge,created = StoryChallenge.objects.get_or_create(character = character)
     last_textpad = StoryTextPad.objects.filter(challenge = challenge).last()
-    data['reads'] = challenge.reads + challenge.readers.count() + 10
+    data['reads'] = challenge.reads + challenge.readers.count() + 20 if challenge else 0
     if last_textpad:
         data['last_textpad'] = last_textpad.text
         data['last_entry'] = last_textpad.entry if last_textpad.entry else ""
@@ -157,7 +157,11 @@ def create_character(request):
                 character = character,
                 character_data = character_data,
             )
+            challenge = StoryChallenge.objects.create(
+                character = character,
+            )
             new_character.save()
+            challenge.save()
             player.battle_points -= 1
             player.save()
             return JsonResponse({'status':'success', 'character' : character_data})

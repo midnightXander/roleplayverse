@@ -1,15 +1,31 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
+categories = ['News','Updates','Tutorials','Stories']
 
-categories = ['News','Updates','Tutorials']
-#new category: 'Stories'
+class Category(models.Model):
+    """ """
+    name = models.CharField(max_length=20)
+    slug = models.SlugField(blank = True)
+    description = models.TextField()
+
+    class Meta:
+        verbose_name_plural = "Categories"
+
+    def __str__(self):
+        return self.name 
+
+    def save(self, *args, **kwargs):
+        if not self.slug:  # Only generate slug if it doesn't already exist
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)  
 
 class BlogPost(models.Model):
-    category = models.CharField(choices = [
-        (i,i) for i in categories
-    ], max_length=30)
+    # category = models.ForeignKey(Category, models.CASCADE, null=True)
+    category = models.CharField(max_length=150, null=True)
     title = models.CharField(max_length=150)
+    slug = models.SlugField(blank=True)
     leading = models.CharField(max_length=200)
     text = models.TextField()
     keywords = models.TextField(blank=True, null=True)
@@ -30,3 +46,7 @@ class BlogPost(models.Model):
     def __str__(self):
         """string representation of the blog's post"""
         return self.title
+    def save(self, *args, **kwargs):
+        if not self.slug:  # Only generate slug if it doesn't already exist
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)

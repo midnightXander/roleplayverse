@@ -1,91 +1,78 @@
 {% extends "blog/base.html" %}
 
-    {% block content %}
+{% block title %}RolePlayVerse — Derniers articles{% endblock title %}
+{% block meta_description %}Les dernières actualités, guides et tutoriels de RolePlayVerse.{% endblock meta_description %}
 
-    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-300 mb-8">Latest Posts</h1>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10">
-            <!-- Blog cards will be dynamically inserted here -->
-             {% for post in posts %}
-                <div class="blog-card  S rounded-lg overflow-hidden ">
-                    <a href="{% url 'blog:blog_post' post.id %}"  >
-                        <img src="{{post.image.url}}" alt="{{post.leading}}" class="blog-image rounded-lg">
-                    </a>
-                    
-                <div class="py-6">
-                    <!-- <div class="flex items-center justify-between mb-4">
-                        <span class="text-sm font-semibold text-gray-500 dark:text-gray-400">{{post.category}}</span>
-                        <span class="text-2xl">dddd</span>
-                    </div> -->
-                    <h2 class="text-xl font-bold text-gray-900  mb-2">{{post.title}}</h2>
-                    <small class="text-sm text-gray-500">{{post.leading}}</small>
-                    
-                </div>
-                <a href="{% url 'blog:blog_post' post.id %}" class="text-primary-color hover:underline">
-                    <i class="fas fa-search mr-2" ></i>Lire plus</a>
-                <!-- <div class="px-6 py-4 bg-gray-100">
-                   
-                </div> -->
-                <div class="mt-4 flex items-center justify-between">
-                    <span class="text-sm text-[#5A0B29] font-medium">{{post.category}}</span>
-                    <span class="text-sm text-gray-500">{{post.date_added |date:'M d, Y'}}</span>
-                </div>
-                {% if is_moderator %}
-                <div class="mt-2">
-                    <span class="text-sm text-gray-500">Views: {{ post.views }}</span>
-                </div>
-                {% endif %}
-                
-                </div>
-             {% empty %}
-                <div>No posts</div>
-             {% endfor %}
+{% block content %}
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <header class="mb-8 flex items-center justify-between">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">Derniers articles</h1>
+    <div class="text-sm text-gray-500 hidden sm:block">Retrouvez les actualités, tutoriels et mises à jour.</div>
+  </header>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
+    {% for post in posts %}
+      <article class="transition p-0 overflow-hidden ">
+        <a href="{% url 'blog:blog_post' post.id %}" class="block">
+          {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-96 rounded-2xl object-cover">
+          {% else %}
+            <div class="w-full h-48 bg-gradient-to-br from-gray-200 to-gray-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center text-gray-400">
+              <i class="fas fa-image text-2xl"></i>
+            </div>
+          {% endif %}
+        </a>
+
+        <div class="py-6">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-orange-50 text-orange-700 dark:bg-orange-900/20 dark:text-orange-300">
+                {{ post.category }}
+              </span>
+              <span class="text-xs text-gray-400">{{ post.author }}</span>
+            </div>
+            <time class="text-xs text-gray-400">{{ post.date_added|date:"d M Y" }}</time>
+          </div>
+
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 leading-tight">
+            <a href="{% url 'blog:blog_post' post.id %}" class="hover:underline">{{ post.title }}</a>
+          </h2>
+
+          <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+            {{ post.leading }}
+          </p>
+
+          <div class="flex items-center justify-between">
+            <a href="{% url 'blog:blog_post' post.id %}" class="inline-flex items-center gap-2 text-sm font-semibold text-white bg-orange-600 hover:bg-orange-700 px-3 py-2 rounded-full shadow-sm">
+              <i class="fas fa-search"></i> Lire plus
+            </a>
+
+            <div class="text-sm text-gray-400 flex items-center gap-4">
+              {% if is_moderator %}
+                <span class="text-xs text-gray-500">Vues: {{ post.views }}</span>
+              {% endif %}
+              <span class="text-xs text-gray-400">{{ post.read_time|default:"—" }} min</span>
+            </div>
+          </div>
         </div>
-    </main>
+      </article>
+    {% empty %}
+      <div class="col-span-1 sm:col-span-2 text-center py-12 text-gray-500">
+        Aucun article trouvé pour le moment.
+      </div>
+    {% endfor %}
+  </div>
 
-    <script>
-        const blogPosts = [
-            { title: "New Jutsu System Released!", category: "Update", date: "2023-05-15", image: "https://wallpaperaccess.com/full/1805816.jpg" },
-            { title: "Top 10 Strategies for Clan Wars", category: "Tutorial", date: "2023-05-10", image: "https://wallpaperaccess.com/full/117042.jpg" },
-            { title: "Upcoming Ninja Tournament", category: "News", date: "2023-05-05", image: "https://wallpaperaccess.com/full/12886.jpg" },
-            { title: "Character Customization Guide", category: "Tutorial", date: "2023-04-30", image: "https://wallpaperaccess.com/full/1121370.jpg" },
-            { title: "Balance Changes: Ninjutsu Tweaks", category: "Update", date: "2023-04-25", image: "https://wallpaperaccess.com/full/117042.jpg" },
-            { title: "Community Spotlight: Best Artworks", category: "News", date: "2023-04-20", image: "https://wallpaperaccess.com/full/117042.jpg" }
-        ];
-
-        function createBlogCard(post) {
-            const card = document.createElement('div');
-            card.className = 'blog-card bg-white S rounded-lg overflow-hidden shadow-lg';
-            card.innerHTML = `
-                <img src="${post.image}" alt="${post.title}" class="blog-image">
-                <div class="p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="text-sm font-semibold text-gray-500 dark:text-gray-400">${post.category}</span>
-                        <span class="text-2xl"></span>
-                    </div>
-                    <h2 class="text-xl font-bold text-gray-900  mb-2">${post.title}</h2>
-                    <p class="text-gray-600 dark:text-gray-300 text-sm">${post.date}</p>
-                </div>
-                <div class="px-6 py-4 bg-gray-100">
-                    <a href="#" class="text-primary-color hover:underline">Read more</a>
-                </div>
-            `;
-            return card;
-        }
-
-        function populateBlogPosts() {
-            const container = document.querySelector('main > div');
-            blogPosts.forEach(post => {
-                container.appendChild(createBlogCard(post));
-            });
-        }
-
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        darkModeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark');
-        });
-
-        //populateBlogPosts();
-    </script>
+  {% if page_obj and page_obj.has_other_pages %}
+    <nav class="mt-8 flex items-center justify-center gap-2" aria-label="Pagination">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-1 rounded-md bg-gray-100 dark:bg-gray-800 text-sm">Précédent</a>
+      {% endif %}
+      <span class="text-sm text-gray-500 px-3 py-1">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-1 rounded-md bg-gray-100 dark:bg-gray-800 text-sm">Suivant</a>
+      {% endif %}
+    </nav>
+  {% endif %}
+</main>
 {% endblock content %}
