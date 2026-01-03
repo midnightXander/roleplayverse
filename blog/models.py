@@ -22,8 +22,8 @@ class Category(models.Model):
         super().save(*args, **kwargs)  
 
 class BlogPost(models.Model):
-    # category = models.ForeignKey(Category, models.CASCADE, null=True)
-    category = models.CharField(max_length=150, null=True, blank = True)
+    category = models.ForeignKey(Category, models.CASCADE, null=True)
+    # category = models.CharField(max_length=150, null=True, blank = True)
     title = models.CharField(max_length=150)
     slug = models.SlugField(blank=True)
     leading = models.CharField(max_length=200)
@@ -39,6 +39,7 @@ class BlogPost(models.Model):
         (i,i) for i in ['fr', 'en']
     ],  default= 'fr')
     meta_description = models.TextField(blank=True, null=True, default = "")
+    visible = models.BooleanField(default=False)
 
     views = models.IntegerField(default=0)
 

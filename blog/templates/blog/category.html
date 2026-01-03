@@ -4,34 +4,55 @@
 
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-300 mb-8">{{category}}</h1>
-        
+        <p class="mb-4">{{category.description}}</p>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10">
             <!-- Blog cards will be dynamically inserted here -->
              {% for post in posts %}
-             <div class="blog-card  S rounded-lg overflow-hidden ">
-                <a href="{% url 'blog:blog_post' post.id %}"  >
-                    <img src="{{post.image.url}}" alt="{{post.leading}}" class="blog-image rounded-lg">
+             <article class="transition p-0 overflow-hidden ">
+                <a href="{% url 'blog:blog_post' post.slug %}" class="block">
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-96 rounded-2xl object-cover">
+                {% else %}
+                    <div class="w-full h-48 bg-gradient-to-br from-gray-200 to-gray-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center text-gray-400">
+                    <i class="fas fa-image text-2xl"></i>
+                    </div>
+                {% endif %}
                 </a>
-                
-            <div class="py-6">
-                <!-- <div class="flex items-center justify-between mb-4">
-                    <span class="text-sm font-semibold text-gray-500 dark:text-gray-400">{{post.category}}</span>
-                    <span class="text-2xl">dddd</span>
-                </div> -->
-                <h2 class="text-xl font-bold text-gray-900  mb-2">{{post.title}}</h2>
-                <small class="text-sm text-gray-500">{{post.leading}}</small>
-                
-            </div>
-            <a href="{% url 'blog:blog_post' post.id %}" class="text-primary-color hover:underline">
-                <i class="fas fa-search mr-2" ></i>Lire plus</a>
-            <!-- <div class="px-6 py-4 bg-gray-100">
-               
-            </div> -->
-            <div class="mt-4 flex items-center justify-between">
-                <span class="text-sm text-[#5A0B29] font-medium">{{post.category}}</span>
-                <span class="text-sm text-gray-500">{{post.date_added |date:'M d, Y'}}</span>
-            </div>
-            </div>
+
+                <div class="py-6">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-3">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-orange-50 text-orange-700 dark:bg-orange-900/20 dark:text-orange-300">
+                        {{ post.category }}
+                    </span>
+                    <span class="text-xs text-gray-400">{{ post.author }}</span>
+                    </div>
+                    <time class="text-xs text-gray-400">{{ post.date_added|date:"d M Y" }}</time>
+                </div>
+
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 leading-tight">
+                    <a href="{% url 'blog:blog_post' post.slug %}" class="hover:underline">{{ post.title }}</a>
+                </h2>
+
+                <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+                    {{ post.leading }}
+                </p>
+
+                <div class="flex items-center justify-between">
+                    <a href="{% url 'blog:blog_post' post.slug %}" class="inline-flex items-center gap-2 text-sm font-semibold text-white bg-orange-600 hover:bg-orange-700 px-3 py-2 rounded-full shadow-sm">
+                    <i class="fas fa-search"></i> Lire plus
+                    </a>
+
+                    <div class="text-sm text-gray-400 flex items-center gap-4">
+                    {% if is_moderator %}
+                        <span class="text-xs text-gray-500">Vues: {{ post.views }}</span>
+                    {% endif %}
+                    <span class="text-xs text-gray-400">{{ post.read_time|default:"—" }} min</span>
+                    </div>
+                </div>
+                </div>
+        </article>
              {% empty %}
                 <div>No posts</div>
              {% endfor %}

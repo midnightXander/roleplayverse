@@ -9,7 +9,7 @@
 
   {# Primary SEO tags - make them overridable in child templates #}
   <title>{% block title %}RolePlayVerse — Blog{% endblock title %}</title>
-  <meta name="description" content="{% block meta_description %}Role Play Verse — actualités, guides et tutoriels pour la communauté Naruto RP.{% endblock meta_description %}">
+  <meta name="description" content="{% block meta_description %}Role Play Verse — actualités, tutoriels et sujets passionants pour la communauté Naruto et Naruto RP.{% endblock meta_description %}">
   <meta name="keywords" content="{% block meta_keywords %}Role Play Verse, Naruto, RP, guide, tutoriel, news{% endblock meta_keywords %}">
   <meta name="author" content="{% block meta_author %}Role Play Verse{% endblock meta_author %}">
 
@@ -21,7 +21,7 @@
   <meta property="og:locale" content="fr_FR">
   <meta property="og:site_name" content="RolePlayVerse">
   <meta property="og:title" content="{% block og_title %}RolePlayVerse — Blog{% endblock og_title %}">
-  <meta property="og:description" content="{% block og_description %}Role Play Verse — actualités, guides et tutoriels pour la communauté Naruto RP.{% endblock og_description %}">
+  <meta property="og:description" content="{% block og_description %}Role Play Verse — actualités, tutoriels et sujets passionants pour la communauté Naruto RP.{% endblock og_description %}">
   <meta property="og:type" content="{% block og_type %}website{% endblock og_type %}">
   <meta property="og:url" content="{{ request.build_absolute_uri }}">
   <meta property="og:image" content="{% block og_image %}{{ request.build_absolute_uri }}{% static 'images/logo/logo_22.png' %}{% endblock og_image %}">
@@ -29,7 +29,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@RolePlayVerse">
   <meta name="twitter:title" content="{% block twitter_title %}RolePlayVerse — Blog{% endblock twitter_title %}">
-  <meta name="twitter:description" content="{% block twitter_description %}Role Play Verse — actualités, guides et tutoriels pour la communauté Naruto RP.{% endblock twitter_description %}">
+  <meta name="twitter:description" content="{% block twitter_description %}Role Play Verse — actualités, tutoriels et tutoriels pour la communauté Naruto RP.{% endblock twitter_description %}">
   <meta name="twitter:image" content="{% block twitter_image %}{{ request.build_absolute_uri }}{% static 'images/logo/logo_22.png' %}{% endblock twitter_image %}">
 
   {# Structured data: Organization + WebSite (improves SEO & rich results) #}
@@ -39,7 +39,7 @@
     "@type": "WebSite",
     "name": "RolePlayVerse",
     "url": "{{ request.build_absolute_uri|slice:"://"|add:request.get_host|cut:'/' }}",
-    "description": "Role Play Verse — actualités, guides et tutoriels pour la communauté Naruto RP.",
+    "description": "Role Play Verse — actualités, tutoriels, sujets passionants pour la communauté Naruto RP.",
     "publisher": {
       "@type": "Organization",
       "name": "RolePlayVerse",
@@ -116,21 +116,21 @@
   <header class="site-nav py-3 shadow-sm">
     <div class="container d-flex align-items-center justify-content-between">
       <div class="d-flex align-items-center brand">
-        <a href="/home" aria-label="RolePlayVerse Home">
+        <a href="/blog" aria-label="RolePlayVerse Home">
           <img class="logo-sm" src="{% static 'images/logo/logo_20.png' %}" alt="RPV">
         </a>
         <nav class="nav-links d-none d-md-flex align-items-center" aria-label="Main navigation">
           <a href="{% url 'blog:index' %}">Tous</a>
-          <a href="{% url 'blog:category' 'News' %}">Infos</a>
-          <a href="{% url 'blog:category' 'Updates' %}">Nouveautés</a>
-          <a href="{% url 'blog:category' 'Tutorials' %}">Tutoriels</a>
+          {% for category in categories %}
+          <a href="{% url 'blog:category' category.slug %}">{{category}}</a>
+          {% endfor %}
         </nav>
       </div>
 
       <div class="d-flex align-items-center gap-3">
         <form action="/" method="get" class="d-none px-2 d-md-flex site-search" role="search">
-          <i class="fa fa-search muted"></i>
-          <input name="q" class="form-control border-0 bg-transparent" placeholder="Rechercher des articles..." aria-label="Recherche">
+          <i class="fa fa-search muted ml-4"></i>
+          <input name="q" class="form-control border-0" placeholder="Rechercher des articles..." aria-label="Recherche">
         </form>
 
         {% if not request.user.is_authenticated %}
@@ -139,7 +139,7 @@
           <a href="/" class="muted me-2" title="Tableau de bord">
             <i class="fa fa-house"></i>
           </a>
-          <button onclick="toggleTheme()" class="btn btn-sm border-0 bg-transparent muted" aria-label="Basculer thème">
+          <button onclick="toggleTheme()" class="btn btn-sm border-0  muted" aria-label="Basculer thème">
             <i class="fa fa-moon"></i>
           </button>
         {% endif %}
@@ -156,9 +156,9 @@
       <div class="row g-4">
         <div class="col-md-4">
           <h4 class="text-light">Role Play Verse</h4>
-          <p class="muted small">Plongez dans l'univers des ninjas — news, guides et communauté RP.</p>
+          <p class="muted small">Vivez l'expérience Roleplay comme jamais sous le thème Naruto. Duels en temps reel, story, tournois et </p>
           <div class="mt-3">
-            <a href="https://chat.whatsapp.com/JZERUyrdHXbEfgiMAx64Vu" target="_blank" class="cta-btn">Rejoindre</a>
+            <a href="/" class="cta-btn">Rejoindre</a>
           </div>
         </div>
 
@@ -176,7 +176,7 @@
           <h5 class="text-light">Communauté</h5>
           <ul class="list-unstyled muted small">
             <li><a target="_blank" rel="noopener" href="https://discord.gg/a2wmy5jn">Discord</a></li>
-            <li><a target="_blank" rel="noopener" href="https://www.facebook.com/">Facebook</a></li>
+            <li><a target="_blank" rel="noopener" href="https://www.facebook.com/profile.php?id=61575299972749">Facebook</a></li>
             <li><a href="/characters">Fan Art</a></li>
           </ul>
         </div>
@@ -184,7 +184,7 @@
         <div class="col-md-3">
           <h5 class="text-light">Contact</h5>
           <p class="muted small">Support: <a href="mailto:roleplayverse.live@gmail.com">roleplayverse.live@gmail.com</a></p>
-          <p class="muted small">© 2025 Role Play Verse</p>
+          <p class="muted small">© 2026 Role Play Verse</p>
         </div>
       </div>
     </div>

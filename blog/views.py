@@ -1,45 +1,75 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404, redirect
 
 from moderator.models import Moderator
-from .models import BlogPost
+from .models import BlogPost, Category
 
 
 def index(request):
-    posts = BlogPost.objects.all().order_by('-date_added')
-    for post in posts:
-        post.category = None
-        post.save()
+    posts = BlogPost.objects.filter(visible = True).order_by('-date_added')
+    categories = Category.objects.all()
+    # for post in posts:
+    #     post.category = None
+    #     post.save()
     is_moderator = False
     if request.user.is_authenticated:
-        is_moderator = Moderator.objects.filter(user=request.user).exists() 
-    return render(request, "blog/index.html",{
+        is_moderator = Moderator.objects.filter(user=request.user).exists()
+    return render(request, "blog/index.html", {
         'posts':posts,
+        'categories':categories,
         "is_moderator": is_moderator
     })
 
 
-def blog_post(request,post_id):
-    post = get_object_or_404(BlogPost, id = post_id)
+def blog_post(request,post_slug):
+    post = BlogPost.objects.filter(slug = post_slug).first()
+    categories = Category.objects.all()
+    if not post:
+        return redirect('/blog')
+        # return render(request, "blog/404.html",{})
     post.views += 1
     post.save()
     
     if request.method == 'POST':
         pass
     return render(request, "blog/post.html",{
-        'post':post
+        'post':post,
+        'categories':categories,
+    })
+
+def blog_post_preview(request,post_slug):
+    categories = Category.objects.all()
+    post = BlogPost.objects.filter(slug = post_slug).first()
+    return render(request, "blog/post_preview.html",{
+        'categories':categories,
+        'post':post,
     })
 
 
 
-def category(request,category):
-    posts = BlogPost.objects.filter(category = category)
+def category(request,category_slug):
+    category = Category.objects.filter(slug = category_slug).first()
+    categories = Category.objects.all()
+    if not category:
+        return redirect('/blog')
+        # return render(request, "blog/404.html",{})
+    posts = BlogPost.objects.filter(category = category, visible=True).order_by('-date_added')
     if request.method == 'POST':
         pass
     return render(request, "blog/category.html",{
-        'posts':posts
+        'posts':posts,
+        'category' : category,
+        'categories':categories,
     })
 
 
 def createPost(request):
     if request.method == 'POST':
-        pass
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        category_slug = request.POST.get('category')
+        category = Category.objects.filter(slug=category_slug).first()
+        if not category:
+            return redirect('/blog')
+        post = BlogPost.objects.create(title=title, content=content, category=category)
+        return redirect('blog:blog_post', post_slug=post.slug)
+    return render(request, "blog/create_post.html")

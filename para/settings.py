@@ -248,19 +248,19 @@ PWA_APP_START_URL = '/'
 PWA_APP_STATUS_BAR_COLOR = 'transparent'
 PWA_APP_ICONS = [
 	{
-		'src': 'static/images/logo/logo_20.png',
+		'src': 'static/images/logo/logo_22.png',
 		'sizes': '320x320'
 	}
 ]
 PWA_APP_ICONS_APPLE = [
 	{
-		'src': 'static/images/logo/logo_20.png',
+		'src': 'static/images/logo/logo_22.png',
 		'sizes': '320x320'
 	}
 ]
 PWA_APP_SPLASH_SCREEN = [
 	{
-		'src': 'static/images/logo/logo_20.png',
+		'src': 'static/images/logo/logo_22.png',
 		'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
 	}
 ]

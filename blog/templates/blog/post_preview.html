@@ -5,7 +5,7 @@
 {% block meta_author %} {{post.owner}} {% endblock meta_author %}
 {% block meta_image %} {{post.image.url}} {% endblock meta_image %}
 {% block canonical_url %} {{request.build_absolute_uri}} {% endblock canonical_url %}
-{% block language %}{{post.language}}{% endblock language %}
+{% block language %}fr{% endblock language %}
 {% load static %}
 {% load i18n %}
 
@@ -43,18 +43,47 @@
 
 <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <article class="rounded-lg overflow-hidden">
-        <img id="coverImage" src="{{post.image.url}}" alt="silhouette dominante d’un chef militaire stylisé (armure légère, masque partiel, posture droite) en arrière‑plan, silhouette d’un seigneur féodal civil élégant (kimono long, éventail, posture confiante) au premier plan, disposition en légère superposition pour suggérer influence et contrôle. l'image est bien representative de  la relation entre les Daimyo et les ninja dans Naruto." class="w-full max-h-96 object-cover">
+        <img id="coverImage" src="https://videos.openai.com/az/vg-assets/task_01kdzrswgff4ytchmjya950z5z%2F1767371570_img_0.webp?se=2026-01-07T00%3A00%3A00Z&sp=r&sv=2024-08-04&sr=b&skoid=3d249c53-07fa-4ba4-9b65-0bf8eb4ea46a&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-01-02T01%3A22%3A51Z&ske=2026-01-09T01%3A27%3A51Z&sks=b&skv=2024-08-04&sig=WqOUkozX1Ymgnyc21PhThHYwa4bYJLulMLwnxdQruI4%3D&ac=oaivgprodscus2" alt="silhouette dominante d’un chef militaire stylisé (armure légère, masque partiel, posture droite) en arrière‑plan, silhouette d’un seigneur féodal civil élégant (kimono long, éventail, posture confiante) au premier plan, disposition en légère superposition pour suggérer influence et contrôle. l'image est bien representative de  la relation entre les Daimyo et les ninja dans Naruto." class="w-full max-h-96 object-cover">
         <div class="py-6">
-            <h1 id="blogTitle" class="text-3xl text-orange-500 font-bold mb-2">{{post.title}}</h1>
-            <p class="italic text-3xl mb-4">{{post.leading}}</p>
-            
+            <h1 id="blogTitle" class="text-3xl font-bold text-orange-500 mb-2">Le Mythe du Kage Tout-Puissant</h1>
+            <p class="italic text-3xl mb-4">Pourquoi les Seigneurs Féodaux tiennent vraiment les rênes</p>
             <div class="flex items-center text-sm mb-4">
                 <span id="authorName" class="mr-4 text-gray-400">{{post.owner}}</span>
                 <span id="publishDate" class="text-gray-400" >{{post.date_added |date:'M d, Y'}}</span>
             </div>
-            <!-- <p id="leadingText" class="text-xl text-gray-700 mb-6">{{post.leading}}</p> -->
+            
             <div id="blogContent" class="blog-content prose max-w-none">
-                {{post.text | safe}}
+            <p class="text-xl mb-6">Nous admirons leur puissance destructrice, mais nous oublions qui signe leurs chèques. Plongée dans la realpolitik du monde Shinobi, où le chakra ne fait pas le poids face à l'économie.</p>
+            <p>Lorsque nous pensons au pouvoir dans le monde de Naruto, une image nous vient immédiatement en tête : un Hokage, surplombant son village, capable de fendre des montagnes ou d'invoquer des forêts entières. Le titre de "Kage" est synonyme de sommet de la hiérarchie. Ce sont les héros, les protecteurs, les décideurs ultimes.</p>
+                <p>C'est du moins l'histoire que l'on raconte aux jeunes genins à l'Académie.</p>
+                <p>Mais si nous grattons la surface de cette propagande militaire, une réalité bien plus froide émerge. Une réalité où le ninja le plus puissant du monde, capable de raser une nation, doit s'incliner respectueusement devant un petit homme bedonnant en robe de soie qui n'a jamais lancé un shuriken de sa vie : le Daimyo (Seigneur Féodal).</p>
+
+                <p>Bienvenue dans le <a href="/blog/le-journal-de-lombre/posts">"Journal de l'Ombre"</a>. Aujourd'hui, nous déconstruisons l'illusion du pouvoir absolu des Kage.</p>
+                <img id="coverImage" src="https://cdn.shopify.com/s/files/1/0046/2779/1960/files/kage_naruto.jpg?v=1583259637" alt="Des Silhouettes des 5 principaux kage de l'anime Naruto avec leurs tunique blanche" class="w-full rounded-xl max-h-96 object-cover">
+
+                <h4 class="font-bold text-xl mb-2">L'erreur fondamentale : Le Village n'est pas le Pays</h4>
+                <p>Pour comprendre la géopolitique de cet univers, il faut saisir une distinction cruciale que l'anime survole souvent. Konoha n'est pas un pays. Suna n'est pas une nation.</p>
+                <p>Ce sont des <a href="#">Villages Cachés</a>. Des cités-États militaires, des bases d'opérations géantes remplies de mercenaires d'élite. Mais Konoha n'est que le bras armé du "Pays du Feu". Et le Pays du Feu est dirigé par le Daimyo du Feu.</p>
+                <p>Hashirama Senju, dans son génie (ou sa naïveté politique), a créé un système où la force militaire est concentrée en un point, au service d'une nation civile plus vaste. Le pacte est simple : le Village protège le Pays, et le Pays finance le Village.</p>
+
+                <h4 class="font-bold text-xl mb-2">Le nerf de la guerre : Qui paie le Ramen ?</h4>
+                <p>C'est ici que le bât blesse pour nos fiers guerriers. Un village caché ne produit rien. Il ne cultive pas de vastes champs de riz, il ne possède pas d'industries lourdes civiles. Son seul produit d'exportation, c'est la violence.</p>
+                <p>Les missions de rang D à S sont la source de revenus visible. Mais qui paie pour les infrastructures ? Qui finance la reconstruction après l'attaque de Pain ? Qui paie les salaires des milliers de chunins qui ne sont pas en mission ?</p>
+
+                <p>C'est le Daimyo. Il contrôle les taxes sur les populations civiles, le commerce, l'agriculture. Il détient les cordons de la bourse. Sans l'apport financier massif et constant de la capitale féodale, Konoha ferait faillite en un mois. Les ninjas, aussi puissants soient-ils, ne peuvent pas manger du chakra.</p>
+                <img id="coverImage" src="https://upload.wikimedia.org/wikipedia/commons/0/05/Ii_Naosuke_Portrait_by_Ii_Naoyasu.jpg" alt="Un seigneur feudal japonais des temps anciens, habillées en vêtements traditionnels noir et arborant des sabres en accessoires" class="w-full rounded-xl max-h-96 object-cover">
+                <h4 class="font-bold text-xl mb-2">La laisse dorée</h4>
+                <p>C'est cette dépendance économique qui explique pourquoi les Daimyos ont le dernier mot. Nous l'avons vu lors des sommets : les Kages proposent, les Daimyos disposent. Ils peuvent opposer leur veto à la nomination d'un Hokage (comme Danzô l'a bien compris en manipulant le Daimyo du Feu). Ils décident de la formation des Alliances.</p>
+                <p>Le Kage est un général cinq étoiles. Le Daimyo est le Président et le Ministre des Finances réunis.</p>
+
+                <p>Pourquoi les ninjas ne prennent-ils pas simplement le pouvoir ? C'est la question à un million de Ryôs. La réponse réside probablement dans la légitimité. Un régime purement militaire est instable et terrifiant pour la population civile qui génère la richesse. Le Daimyo offre une façade de stabilité traditionnelle, une légitimité historique nécessaire pour gouverner des millions de non-combattants.</p>
+
+                <h4 class="font-bold text-xl">Conclusion : Le vrai visage du pouvoir</h4>
+                <p>La prochaine fois que vous verrez <a href="/characters">Naruto</a> ou <a href="/characters">Sasuke</a> déployer une puissance divine capable de redessiner les cartes géographiques, rappelez-vous ceci : leur existence même en tant que force organisée dépend du bon vouloir d'aristocrates qui les considèrent comme des outils très coûteux, mais nécessaires.</p>
+                <p>Dans le monde Shinobi, le Jutsu le plus puissant n'est pas le Rasengan ou le Chidori. C'est le budget prévisionnel.</p>
+
+                <em class="mt-4">— L'Analyste de l'Ombre.</em>
+
             </div>
         </div>
     </article>

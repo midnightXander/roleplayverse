@@ -5,6 +5,7 @@ app_name = 'blog'
 
 urlpatterns = [
     path('',views.index,name='index'),
-    path('<str:category>/posts',views.category, name='category'),
-    path('posts/321<int:post_id>',views.blog_post, name='blog_post'),
+    path('<str:category_slug>/posts',views.category, name='category'),
+    path('posts/aws-xyz-preview-<str:post_slug>',views.blog_post_preview, name='blog_post_preview'),
+    path('posts/<str:post_slug>',views.blog_post, name='blog_post'),
 ]
