@@ -1,9 +1,10 @@
 {% extends "blog/base.html" %}
-
-    {% block content %}
+{% block title %} {{category.name}} {% endblock title %}
+{% block meta_description %} {{category.description}} {% endblock meta_description %}
+{% block content %}
 
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-300 mb-8">{{category}}</h1>
+        <h1 class="text-3xl font-bold  mb-8">{{category}}</h1>
         <p class="mb-4">{{category.description}}</p>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10">
@@ -31,11 +32,11 @@
                     <time class="text-xs text-gray-400">{{ post.date_added|date:"d M Y" }}</time>
                 </div>
 
-                <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 leading-tight">
+                <h2 class="text-lg font-semibold mb-2 leading-tight">
                     <a href="{% url 'blog:blog_post' post.slug %}" class="hover:underline">{{ post.title }}</a>
                 </h2>
 
-                <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+                <p class="text-sm mb-4 line-clamp-3">
                     {{ post.leading }}
                 </p>
 

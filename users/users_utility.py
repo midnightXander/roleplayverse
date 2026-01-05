@@ -9,6 +9,9 @@ from django.contrib.gis.geoip2 import GeoIP2
 from core import emails
 from api.utility import send_push_notification
 from api.models import PushSubscription
+from ipware import get_client_ip
+
+g = GeoIP2()
 
 def get_player(user:User):
     try:
@@ -21,7 +24,7 @@ def get_player(user:User):
     except:
         return None
 def get_country(request):
-    g = GeoIP2()
+    
     ip = request.META.get('REMOTE_ADDR')
     try:
         country = g.country(ip)
@@ -30,6 +33,16 @@ def get_country(request):
         country = 'unknown'    
 
     return country       
+
+def get_client_ip_and_country(request):
+    #get player's country from IP
+    client_ip, is_routable = get_client_ip(request)
+    try:
+        country = g.country(client_ip)['country_name']
+    except Exception as e:
+        country = 'unknown'
+
+    return client_ip, country
 
 def refer_player(referall_code, new_player:Player = None):
     try:

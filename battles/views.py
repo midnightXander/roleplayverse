@@ -2083,10 +2083,7 @@ def answer_challenge(request, challenge_id):
                     'icon' : '/static/images/logo/logo_1.png',
                     },
                     challenge.sender.user
-                    
-                    
                 )
-
                 #challenge.delete()
                 __notify_referees()
                 new_battle.save()

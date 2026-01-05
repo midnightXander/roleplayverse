@@ -173,7 +173,7 @@
   // monthly_signups_data expected as list of { month: "Jan", count: N } ordered oldest->newest
   try {
     const raw = JSON.parse(document.getElementById('monthly_signups_data').textContent || '[]');
-    const data = Array.isArray(raw) ? raw : [];
+    const data = Array.isArray(raw) ? raw.slice(0,7) : [];
     if (!data.length) {
       document.getElementById('signup-bar-chart').innerHTML = '<div class="text-gray-500">Aucune donnée</div>';
       return;

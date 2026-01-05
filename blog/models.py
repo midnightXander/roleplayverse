@@ -40,8 +40,9 @@ class BlogPost(models.Model):
     ],  default= 'fr')
     meta_description = models.TextField(blank=True, null=True, default = "")
     visible = models.BooleanField(default=False)
-
+    cover_image_alt = models.TextField(blank=True, null=True, default = "")
     views = models.IntegerField(default=0)
+    viewers = models.ManyToManyField(User, through="BlogPostViewer", related_name='blog_post_viewers', blank=True)
 
 
     def __str__(self):
@@ -51,3 +52,10 @@ class BlogPost(models.Model):
         if not self.slug:  # Only generate slug if it doesn't already exist
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
+class BlogPostViewer(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    post =  models.ForeignKey(BlogPost, on_delete=models.CASCADE)
+    viewer_ip = models.CharField(max_length=45)  # To accommodate IPv6 addresses
+    viewed_at = models.DateTimeField(auto_now_add=True)
+    country = models.CharField(max_length=100, null=True, blank=True)

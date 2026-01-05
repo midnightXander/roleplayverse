@@ -1,8 +1,9 @@
 from django.shortcuts import render,get_object_or_404, redirect
 
 from moderator.models import Moderator
-from .models import BlogPost, Category
-
+from users.users_utility import get_client_ip_and_country
+from .models import BlogPost, BlogPostViewer, Category
+from ipware import get_client_ip
 
 def index(request):
     posts = BlogPost.objects.filter(visible = True).order_by('-date_added')
@@ -19,9 +20,24 @@ def index(request):
         "is_moderator": is_moderator
     })
 
+def _update_post_viewers(request, post:BlogPost):
+    
+    user = None
+    if request.user.is_authenticated:
+        user = request.user
+    viewer_ip, country = get_client_ip_and_country(request)
+    BlogPostViewer.objects.update_or_create(
+        user=user,
+        post=post,
+        defaults={
+            'viewer_ip': viewer_ip,
+            'country': country,
+        }
+    )
 
 def blog_post(request,post_slug):
     post = BlogPost.objects.filter(slug = post_slug).first()
+    _update_post_viewers(request, post)
     categories = Category.objects.all()
     if not post:
         return redirect('/blog')
