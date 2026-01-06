@@ -8,4 +8,5 @@ urlpatterns = [
     path('<str:category_slug>/posts',views.category, name='category'),
     path('posts/aws-xyz-preview-<str:post_slug>',views.blog_post_preview, name='blog_post_preview'),
     path('posts/<str:post_slug>',views.blog_post, name='blog_post'),
+    path('posts/<int:post_id>/comments/add',views.createComment),
 ]

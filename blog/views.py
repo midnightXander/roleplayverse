@@ -1,8 +1,9 @@
+from django.http import JsonResponse
 from django.shortcuts import render,get_object_or_404, redirect
 
 from moderator.models import Moderator
 from users.users_utility import get_client_ip_and_country
-from .models import BlogPost, BlogPostViewer, Category
+from .models import BlogPost, BlogPostViewer, Category, BlogComment
 from ipware import get_client_ip
 
 def index(request):
@@ -44,12 +45,14 @@ def blog_post(request,post_slug):
         # return render(request, "blog/404.html",{})
     post.views += 1
     post.save()
-    
+    comments = BlogComment.objects.filter(post=post).order_by('-created_at')
+
     if request.method == 'POST':
         pass
     return render(request, "blog/post.html",{
         'post':post,
         'categories':categories,
+        'comments' : comments,
     })
 
 def blog_post_preview(request,post_slug):
@@ -89,3 +92,26 @@ def createPost(request):
         post = BlogPost.objects.create(title=title, content=content, category=category)
         return redirect('blog:blog_post', post_slug=post.slug)
     return render(request, "blog/create_post.html")
+
+def createComment(request, post_id):
+    if request.method == 'POST':
+        user = None
+        if request.user.is_authenticated:
+            user = request.user
+
+        author = user.username if user else request.POST.get('author')
+        content = request.POST.get('content')
+        post = BlogPost.objects.get(id = post_id)
+        comment = BlogComment.objects.create(
+            author=author,
+            content=content,
+            user = user,
+            post = post)
+        comment.save()
+        comment_dict = {
+            'author' : author,
+            'created_at' : comment.created_at.strftime('%M %d, %Y'),
+            'content' : comment.content,
+        }
+        return JsonResponse({'comment':comment_dict, 'status' : 'success'})
+    return JsonResponse({'status' : 'error'})

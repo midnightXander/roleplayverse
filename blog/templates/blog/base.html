@@ -93,6 +93,14 @@
 
     /* small helpers */
     .muted { color:var(--muted); }
+
+    /* mobile menu slide down */
+    .slide-down { animation: slideDown 0.3s ease-out forwards; }
+    @keyframes slideDown {
+      from { opacity:0; transform:translateY(-10px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+
   </style>
 
   <script>
@@ -128,9 +136,8 @@
       </div>
 
       <div class="d-flex align-items-center gap-3">
-        <form action="/" method="get" class="d-none px-2 d-md-flex site-search" role="search">
-          <i class="fa fa-search muted ml-4"></i>
-          <input name="q" class="form-control border-0" placeholder="Rechercher des articles..." aria-label="Recherche">
+        <form action="/" method="get" class="hidden md:flex items-center bg-transparent border border-gray-200 rounded-full px-3 py-1 site-search" role="search">
+          <input name="q" class="text-sm outline-none bg-transparent" placeholder="Rechercher des articles..." aria-label="Recherche">
         </form>
 
         {% if not request.user.is_authenticated %}
@@ -139,10 +146,34 @@
           <a href="/" class="muted me-2" title="Tableau de bord">
             <i class="fa fa-house"></i>
           </a>
+
           <button onclick="toggleTheme()" class="btn btn-sm border-0  muted" aria-label="Basculer thème">
             <i class="fa fa-moon"></i>
           </button>
+
+          <!-- Mobile menu button -->
+          <button id="mobile-menu-button" aria-expanded="false" aria-controls="mobile-menu" class="md:hidden inline-flex p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-300">
+            <span class="sr-only">Open menu</span>
+            <svg id="menu-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            <svg id="menu-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
         {% endif %}
+      </div>
+    </div>
+    <!-- Mobile nav panel -->
+    <div id="mobile-menu" class="md:hidden hidden slide-down border-t border-gray-100">
+      <div class="px-4 pt-4 pb-6 space-y-3">
+        {% for category in categories %}
+        <a href="{% url 'blog:category' category.slug %}" class="block text-base font-medium">{{ category.name }}</a>
+        {% endfor %}
+        <!-- <form class="mt-2 flex items-center bg-white border border-gray-200 rounded-full px-3 py-1">
+          <input type="search" placeholder="Search players, quotes..." class="w-full text-sm outline-none placeholder-gray-400" />
+          <button type="submit" class="ml-2 text-sm text-gray-600">Go</button>
+        </form> -->
+        <form action="/" method="get" class="flex items-center bg-transparent border border-gray-200 rounded-full px-3 py-1 site-search" role="search">
+          <!-- <i class="fa fa-search muted ml-4"></i> -->
+          <input name="q" class="text-sm outline-none bg-transparent w-full" placeholder="Rechercher des articles..." aria-label="Recherche">
+        </form>
       </div>
     </div>
   </header>
@@ -195,6 +226,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.0/gsap.min.js"></script>
 
   <script>
+    // mobile menu toggle
+    const mobileBtn = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuOpen = document.getElementById('menu-open');
+    const menuClose = document.getElementById('menu-close');
+
+    mobileBtn.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('hidden');
+      // swap icons
+      menuOpen.classList.toggle('hidden');
+      menuClose.classList.toggle('hidden');
+      const expanded = mobileBtn.getAttribute('aria-expanded') === 'true';
+      mobileBtn.setAttribute('aria-expanded', (!expanded).toString());
+    });
     // improve focus outlines for keyboard users
     document.addEventListener('keydown', function(e){
       if(e.key === 'Tab') document.documentElement.classList.add('user-is-tabbing');

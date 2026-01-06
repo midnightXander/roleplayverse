@@ -71,9 +71,25 @@
     </div>
 </div>
 
+    <!-- add comment input -->
+     <form onsubmit="addComment(event)" class="flex flex-col space-y-4" id="commentForm">
+        <h2 class="text-2xl font-bold mb-4">Laisser un commentaire</h2>
+         <input type="text" id="authorInput" class="border border-gray-300 bg-transparent p-2 rounded" placeholder="Ton nom" required>
+         <textarea id="contentInput" class="border border-gray-300 bg-transparent p-2 rounded" placeholder="Ton Commentaire" required></textarea>
+         <button type="submit" class="bg-gray-900 hover:bg-gray-800 text-white font-semibold px-4 py-2 rounded">Ajouter commentaire</button>
+     </form>
+
     <div class="mt-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-4"></h2>
-        <div id="commentsSection" class="space-y-4"></div>
+        <h2 class="text-2xl font-bold mb-4">Commentaires</h2>
+        <div id="commentsSection" class="space-y-4">
+            {% for comment in comments %}
+                <div class="border border-gray-300 p-4 rounded-xl">
+                    <h3 class="font-bold">{{ comment.author }}</h3>
+                    <p>{{ comment.content }}</p>
+                    <span class="text-sm text-gray-500">{{ comment.created_at|date:"M d, Y" }}</span>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 </main>
 
@@ -122,13 +138,52 @@
     const commentsSection = document.getElementById('commentsSection');
     blogPost.comments.forEach(comment => {
         const commentElement = document.createElement('div');
-        commentElement.className = 'bg-gray-50 p-4 rounded-lg';
+        commentElement.className = 'p-4 rounded-lg';
         commentElement.innerHTML = `
             <p class="font-semibold">${comment.author}</p>
             <p>${comment.content}</p>
         `;
         commentsSection.appendChild(commentElement);
     });
+
+    function addComment(e){
+        e.preventDefault()
+        author = $('#authorInput').val()
+        content = $('#contentInput').val()
+        if(author && content){
+            $.ajax({
+            url : '/blog/posts/{{post.id}}/comments/add',
+            type : 'POST',
+            data : {
+                author : author,
+                content : content,
+                csrfmiddlewaretoken : '{{ csrf_token }}'
+            },
+            success : function(response){
+                if(response.status === 'success'){
+                    // Append the new comment to the comments section
+                    const newComment = response.comment;
+                    const commentElement = document.createElement('div');
+                    commentElement.className = 'border border-gray-300 p-4 rounded-lg';
+                    commentElement.innerHTML = `
+                        <p class="font-semibold">${newComment.author}</p>
+                        <p>${newComment.content}</p>
+                        <span class="text-sm">${newComment.created_at}</span>
+                    `;
+                    commentsSection.appendChild(commentElement);
+                    $('#authorInput').val('')
+                    $('#contentInput').val('')
+                    alert('Commentaire ajouté avec succès!');
+                }else{
+                    alert('Error adding comment');
+                }
+            }
+        })
+    }else{
+        alert('Remplie tous les champs.')
+    }
+        
+    }
 </script>
 
 {% endblock content %}

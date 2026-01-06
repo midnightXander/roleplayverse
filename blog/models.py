@@ -24,9 +24,9 @@ class Category(models.Model):
 class BlogPost(models.Model):
     category = models.ForeignKey(Category, models.CASCADE, null=True)
     # category = models.CharField(max_length=150, null=True, blank = True)
-    title = models.CharField(max_length=150)
+    title = models.CharField(max_length=255)
     slug = models.SlugField(blank=True)
-    leading = models.CharField(max_length=200)
+    leading = models.CharField(max_length=255)
     text = models.TextField()
     keywords = models.TextField(blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
@@ -43,6 +43,7 @@ class BlogPost(models.Model):
     cover_image_alt = models.TextField(blank=True, null=True, default = "")
     views = models.IntegerField(default=0)
     viewers = models.ManyToManyField(User, through="BlogPostViewer", related_name='blog_post_viewers', blank=True)
+    comments = models.ManyToManyField(User, through="BlogComment", related_name='blog_post_comments', blank=True)
 
 
     def __str__(self):
@@ -59,3 +60,13 @@ class BlogPostViewer(models.Model):
     viewer_ip = models.CharField(max_length=45)  # To accommodate IPv6 addresses
     viewed_at = models.DateTimeField(auto_now_add=True)
     country = models.CharField(max_length=100, null=True, blank=True)
+
+class BlogComment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    post = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='post_comments')
+    author = models.CharField(max_length=100)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Comment by {self.author} on {self.post.title}'
