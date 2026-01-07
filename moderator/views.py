@@ -23,6 +23,8 @@ from dotenv import load_dotenv
 from django.views.decorators.csrf import csrf_exempt
 from battles.views import add_refree, player_progress, update_points, update_rank
 from events.views import _update_round,init_tournament
+from story.models import *
+from story.views import get_story_status
 load_dotenv()
 import json
 
@@ -202,8 +204,33 @@ def notify_all_players(request):
             'url': url,
             'icon': '/static/images/logo/logo_1.png'
         }
-
         players = User.objects.all().order_by('?')
+        
+        filter = request.POST.get('filter', 'all')
+        if filter == 'active':
+            players = Player.objects.all()
+            active_player_emails = []
+            for player in players:
+                last_seen = player.last_seen
+                now  = timezone.now()
+                difference = now - last_seen
+                if difference.days <= 3:
+                    active_player_emails.append(player.user.email)
+            players = User.objects.filter(email__in = active_player_emails).order_by('?')
+
+        if filter == 'story_not_started':
+            players = [] 
+            for challenge in StoryChallenge.objects.all():
+                if get_story_status(challenge) == 'not_started':
+                    players.append(challenge.character.player.user)
+
+        if filter == 'story_ongoing':
+            players = [] 
+            for challenge in StoryChallenge.objects.all():
+                if get_story_status(challenge) == 'ongoing':
+                    players.append(challenge.character.player.user)            
+            
+        
         for player in players:
             send_push_notification(
                 subscription = PushSubscription.objects.filter(user=player).last(),
@@ -212,6 +239,7 @@ def notify_all_players(request):
             )
         messages.success(request, "Notification envoyée à tous les joueurs.")
         return JsonResponse({'status': 'success', 'message': 'Notification envoyée à tous les joueurs.'})
+    
     
 @csrf_exempt
 def notify_player(request, identifier):
@@ -242,6 +270,8 @@ def notify_player(request, identifier):
         )
         messages.success(request, f"Notification envoyée à {user}.")
         return JsonResponse({'status': 'success', 'message': 'Notification envoyée à tous les joueurs.'})    
+
+
 
 @csrf_exempt
 def add_player_as_refree(request, email):

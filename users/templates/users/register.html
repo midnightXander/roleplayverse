@@ -168,7 +168,6 @@
 
         //email verification
         emailInput.on("input",(e)=>{
-        console.log(emailInput.val())
         $.ajax({
             url: "/users/verify_email",
             type: "POST",

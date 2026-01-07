@@ -9,7 +9,7 @@ from django.db.models import Q,QuerySet
 
 rankings = ['E','D','C','B','B+','A','A+','S','SS','SSS']
 FAMILYROLES = ['challenge_head','recruiter', 'casual','fighter']
-referall_points = 450
+referall_points = 250
 MONTHLY_POINTS = 1000
 ENTRY_POINTS =  1000
 characters_list = get_characters()

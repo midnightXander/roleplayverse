@@ -164,6 +164,14 @@
             </button>
         </div>
     </form>
+    {% if status == 'not_started' %}
+    <!--Prompt player to press the start story button-->
+    <div class="flex justify-center">
+        <button onclick="startStory()" type="button" class="action-btn bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-2xl transition duration-300">
+            Commencer l'histoire
+        </button>
+    </div>
+    {% endif %}
     <!-- Input utilisateur -->
     <div id="actions" class="flex  justify-center overflow-x-auto p-4 space-x-4 bg-opacity-90  w-full">
       <!-- <input type="text" id="action-input" class="flex-1 px-4 py-2 rounded bg-gray-700 text-white focus:outline-none" placeholder="Que fais-tu ?" required />
@@ -199,6 +207,11 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" width="200" height="200" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linejoin="round"><path d="M7 13.732c-1.333-.77-1.333-2.694 0-3.464l9-5.196c1.333-.77 3 .192 3 1.732v10.392c0 1.54-1.667 2.502-3 1.732l-9-5.196Z"/><path stroke-linecap="round" d="M4 19V5"/></g></svg>
             </button>
         </div>
+        <button onclick="showHowToPlayPopup()" type="button" class="action-btn hover:bg-orange-700 truncate border border-gray-400 text-gray-400 font-bold py-2 px-4 rounded-full transition duration-300">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 192 512">
+                <path fill="currentColor" d="M48 80a48 48 0 1 1 96 0a48 48 0 1 1-96 0zM0 224c0-17.7 14.3-32 32-32h64c17.7 0 32 14.3 32 32v224h32c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32h32V256H32c-17.7 0-32-14.3-32-32z"/>
+            </svg>
+        </button>
         {% endif %}
 
         <button type="button" onclick="socialShare(this,'https:\/\/roleplayverse.live/story/game/{{character.id}}?utm_source=share&utm_medium=roleplayverse&utm_campaign=storymode_referal')" class="action-btn hover:bg-blue-700 hover:text-white truncate border border-blue-500 text-blue-500 font-bold py-2 px-4 rounded-full transition duration-300">

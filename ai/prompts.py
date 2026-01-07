@@ -102,7 +102,7 @@ def story_character_background_prompt(character_data, isshinobi = True, language
         jutsus de depart : {character_data.get('jutsus')},
         description globale du personnage : {character_data.get('description')},
         traits et personalite : {character_data.get('personality')} 
-        Fais une description immersive de son enfance, ses aspirations et sa situation actuelle, puis introduis un événement déclencheur pour son aventure. soit créatif dans la génération, le personnage pourrait tres bien etre un méchant qu'un gentille.
+        Fais une description de moins de 300 mots immersive de son enfance, ses aspirations et sa situation actuelle, puis introduis un événement déclencheur pour son aventure. soit créatif dans la génération, le personnage pourrait tres bien etre un méchant qu'un gentille.
         """
     if not isshinobi:
         prompt = f"""
@@ -110,7 +110,7 @@ def story_character_background_prompt(character_data, isshinobi = True, language
             genre : {character_data.get('gender')},
             description globale du personnage : {character_data.get('description')},
             Le personnage n'est pas un shinobi, décris une histoire de civile suivant la description mais toute fois interessante, avec possibilité d'avoir des évenements aléatoire de vie réelle. Puis introduis une situation qui va le faire démarrer son histoire. Soit créatif et varié
-
+            moins de 300 mots
             """
 
     return [

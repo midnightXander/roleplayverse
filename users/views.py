@@ -341,6 +341,7 @@ def register(request):
         email = request.POST['email']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
+        print("registering...")
             
 
         if(password1 == password2):
@@ -387,10 +388,10 @@ def register(request):
                 )
                 new_notif.save()
 
-                #Reward the referer if there is one
+                # Reward the referer if there is one
                 referall_code = set_session_rc(request)
                 if referall_code:
-                    refer_player(referall_code, new_player)
+                    refer_player(referall_code, Player.objects.get(id=2)) #temporarily set to admin player
 
                 # return HttpResponseRedirect(reverse("users:player",args=[new_user.username])) 
                 return HttpResponseRedirect(reverse("core:onboarding"))   

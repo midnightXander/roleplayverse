@@ -10,6 +10,7 @@ from core import emails
 from api.utility import send_push_notification
 from api.models import PushSubscription
 from ipware import get_client_ip
+import random
 
 g = GeoIP2()
 
@@ -47,22 +48,23 @@ def get_client_ip_and_country(request):
 def refer_player(referall_code, new_player:Player = None):
     try:
         player = Player.objects.get(referall_code = referall_code)
-        player.battle_points += referall_points
-        player.rp_credits += 10
+        added_points = random.randint(150, referall_points)
+        player.battle_points += added_points
+        player.rp_credits += 5
         new_player.godfather = player
         new_player.save()
         player.save()
         send_push_notification(
-            PushSubscription.objects.filter(player = player.user).first(),
+            PushSubscription.objects.filter(user = player.user).first(),
             {
                 'title': 'Recompense',
-                'body': f'Tu as gagné {referall_points} de jetons et des credits RP en parrainant un ami!',
+                'body': f'Tu as gagné {added_points} jetons et des credits RP en parrainant un ami!',
                 'icon': '/static/images/logo/logo_1.png',
             },
             player.user
         )
         Notification.objects.create(target = player,
-                                    content = f'Tu as gagné {referall_points} de jetons et des credits RP en parrainant un ami!',
+                                    content = f'Tu as gagné {added_points} jetons et des credits RP en parrainant un ami!',
                                     url = f'/users/{new_player.user.username}'
                                     )
 
