@@ -223,6 +223,7 @@ def notify_all_players(request):
             for challenge in StoryChallenge.objects.all():
                 if get_story_status(challenge) == 'not_started':
                     players.append(challenge.character.player.user)
+                    player = challenge.character.player.user
                     character_data = _story_character(challenge.character)
                     send_push_notification(
                         subscription = PushSubscription.objects.filter(user=player).last(),
@@ -243,6 +244,7 @@ def notify_all_players(request):
                 if get_story_status(challenge) == 'ongoing':
                     players.append(challenge.character.player.user)
                     character_data = _story_character(challenge.character)
+                    player = challenge.character.player.user
                     send_push_notification(
                         subscription = PushSubscription.objects.filter(user=player).last(),
                         message = {
