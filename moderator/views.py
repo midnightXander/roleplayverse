@@ -24,7 +24,7 @@ from django.views.decorators.csrf import csrf_exempt
 from battles.views import add_refree, player_progress, update_points, update_rank
 from events.views import _update_round,init_tournament
 from story.models import *
-from story.views import get_story_status
+from story.views import _story_character, get_story_status
 load_dotenv()
 import json
 
@@ -223,12 +223,37 @@ def notify_all_players(request):
             for challenge in StoryChallenge.objects.all():
                 if get_story_status(challenge) == 'not_started':
                     players.append(challenge.character.player.user)
+                    character_data = _story_character(challenge.character)
+                    send_push_notification(
+                        subscription = PushSubscription.objects.filter(user=player).last(),
+                        message = {
+                            'title': f"{character_data['name']} est crée !",
+                            'body': f"Ton histoire peut commencer ! connecte toi pour commencer ton aventure avec {character_data['name']} !",
+                            'url': f"/story/game/{character_data['id']}",
+                            'icon': '/static/images/logo/logo_1.png'
+                        },
+                        user = player
+                    ) 
+            return JsonResponse({'status': 'success', 'message': "Notification envoyée à tous les joueurs n'ayant pas commencé leur story."})        
+
 
         if filter == 'story_ongoing':
             players = [] 
             for challenge in StoryChallenge.objects.all():
                 if get_story_status(challenge) == 'ongoing':
-                    players.append(challenge.character.player.user)            
+                    players.append(challenge.character.player.user)
+                    character_data = _story_character(challenge.character)
+                    send_push_notification(
+                        subscription = PushSubscription.objects.filter(user=player).last(),
+                        message = {
+                            'title': "Continue ta story !",
+                            'body': f"{character_data['name']}, ton aventure continue !",
+                            'url': f"/story/game/{character_data['id']}",
+                            'icon': '/static/images/logo/logo_1.png'
+                        },
+                        user = player
+                    )    
+            return JsonResponse({'status': 'success', 'message': 'Notification envoyée à tous les joueurs en pleine story.'})                
             
         
         for player in players:

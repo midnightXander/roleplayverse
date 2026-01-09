@@ -46,6 +46,7 @@ def blog_post(request,post_slug):
     post.views += 1
     post.save()
     comments = BlogComment.objects.filter(post=post).order_by('-created_at')
+    other_posts = BlogPost.objects.filter(category=post.category).exclude(id=post.id).order_by('-date_added')[:5]
 
     if request.method == 'POST':
         pass
@@ -53,6 +54,7 @@ def blog_post(request,post_slug):
         'post':post,
         'categories':categories,
         'comments' : comments,
+        'other_posts': other_posts,
     })
 
 def blog_post_preview(request,post_slug):

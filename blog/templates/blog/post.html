@@ -91,6 +91,20 @@
             {% endfor %}
         </div>
     </div>
+
+    <!--Other posts from this category-->
+    <div class="mt-8">
+        <h2 class="text-2xl font-bold mb-4">Autres articles de cette catégorie</h2>
+        <ul class="space-y-2">
+            {% for post in other_posts %}
+            <li>
+                <a href="{% url 'blog:blog_post' post.slug %}" class="text-blue-600 hover:underline">{{post.title}}</a>
+                <p>{{post.leading}}</p>
+            </li>
+            {% empty %}
+            {% endfor %}
+        </ul>
+    </div>
 </main>
 
 <script>
