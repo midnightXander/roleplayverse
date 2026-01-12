@@ -24,7 +24,7 @@ class Category(models.Model):
 class BlogPost(models.Model):
     category = models.ForeignKey(Category, models.CASCADE, null=True)
     # category = models.CharField(max_length=150, null=True, blank = True)
-    title = models.CharField(max_length=255)
+    title = models.TextField(max_length=255)
     slug = models.SlugField(blank=True)
     leading = models.CharField(max_length=255)
     text = models.TextField()

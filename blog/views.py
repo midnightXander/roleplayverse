@@ -2,9 +2,12 @@ from django.http import JsonResponse
 from django.shortcuts import render,get_object_or_404, redirect
 
 from moderator.models import Moderator
+from store.models import AffiliateProduct
+from store.views import affiliate_product_data
 from users.users_utility import get_client_ip_and_country
 from .models import BlogPost, BlogPostViewer, Category, BlogComment
 from ipware import get_client_ip
+import random
 
 def index(request):
     posts = BlogPost.objects.filter(visible = True).order_by('-date_added')
@@ -47,6 +50,9 @@ def blog_post(request,post_slug):
     post.save()
     comments = BlogComment.objects.filter(post=post).order_by('-created_at')
     other_posts = BlogPost.objects.filter(category=post.category).exclude(id=post.id).order_by('-date_added')[:5]
+    
+    product = random.choice(AffiliateProduct.objects.filter(is_active=True))
+    _product_data = affiliate_product_data(product)
 
     if request.method == 'POST':
         pass
@@ -55,6 +61,7 @@ def blog_post(request,post_slug):
         'categories':categories,
         'comments' : comments,
         'other_posts': other_posts,
+        'affiliate_product': _product_data,
     })
 
 def blog_post_preview(request,post_slug):

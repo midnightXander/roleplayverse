@@ -43,7 +43,7 @@
 
 <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <article class="rounded-lg overflow-hidden">
-        <img id="coverImage" src="{{post.image.url}}" alt="{{post.cover_image_alt}}" class="w-full max-h-96 object-cover">
+        <img id="coverImage" src="{{post.image.url}}" alt="{{post.cover_image_alt}}" class="w-full  object-cover">
         <div class="py-6">
             <h1 id="blogTitle" class="text-3xl text-orange-500 font-bold mb-2">{{post.title}}</h1>
             <p class="italic text-3xl mb-4">{{post.leading}}</p>
@@ -71,6 +71,25 @@
     </div>
 </div>
 
+    <div id="affiliate-ad-container" class="border-t border-b border-orange-500 pb-4 mb-4">
+            <div class="flex items-center mb-2">
+                <img alt="Logo de Roleplayverse" src="{% static 'images/logo/logo_20.png' %}" class="h-8 w-8 mr-2">
+                <span class="text-sm text-gray-600">Sponsorisé</span>
+            </div>
+            <div class="flex flex-col gap-4">
+                <a onclick="adClick('{{affiliate_product.link}}')" target="_blank" href="{{affiliate_product.link}}">
+                    <img id="product-image" alt="{{affiliate_product.title}} Couverture" src="{{affiliate_product.image}}" class="w-full object-cover rounded" />
+                </a>
+                
+                <div>
+                    <h4 id="product-title" class="font-bold text-xl">{{affiliate_product.title}}</h4>
+                    <p id="product-description" class="text-sm">Tu as toujours rêvé de créer ton propres <span class="font-bold text-orange-500">jeu</span> ? apprends a créer et a monétiser des jeux vidéos <span class="font-bold text-orange-500">sans coder</span> en 30 Jours grâce a la formation ultra pratique Game Dev No-code</p>
+                    <p class="text-sm" >jeu d'aventure, jeu de tir, jeu de plateforme et plus encore...libère ta créativité. </p>
+                    <a id="product-link" onclick="adClick('{{affiliate_product.link}}')" target="_blank" href="{{affiliate_product.link}}" class="text-sm text-orange-600 hover:underline">Voir</a>
+                </div>
+            </div>
+    </div>
+
     <!-- add comment input -->
      <form onsubmit="addComment(event)" class="flex flex-col space-y-4" id="commentForm">
         <h2 class="text-2xl font-bold mb-4">Laisser un commentaire</h2>
@@ -97,11 +116,16 @@
         <h2 class="text-2xl font-bold mb-4">Autres articles de cette catégorie</h2>
         <ul class="space-y-2">
             {% for post in other_posts %}
-            <li>
-                <a href="{% url 'blog:blog_post' post.slug %}" class="text-blue-600 hover:underline">{{post.title}}</a>
-                <p>{{post.leading}}</p>
+            <li class="flex space-x-2 items-center">
+                <img src="{{post.image.url}}" alt="{{post.cover_image_alt}}" class="w-24 h-24 rounded object-cover">
+                <div>
+                    <a href="{% url 'blog:blog_post' post.slug %}" class="text-blue-600 hover:underline">{{post.title}}</a>
+                    <p>{{post.leading}}</p>
+                </div>
+                
             </li>
             {% empty %}
+            
             {% endfor %}
         </ul>
     </div>
